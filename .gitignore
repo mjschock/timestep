@@ -1,3 +1,7 @@
+__pycache__
+.local
+.pants.d
+.pids
 .venv
 .terraform
 docs
