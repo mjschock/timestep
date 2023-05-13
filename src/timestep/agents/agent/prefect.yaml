@@ -1,0 +1,16 @@
+build:
+- prefect_docker.projects.steps.build_docker_image:
+    dockerfile: auto
+    image_name: ros
+    push: false
+    requires: prefect-docker>0.1.0
+    tag: humble-ros-core-jammy
+
+name: agent
+prefect-version: 2.10.8
+
+pull:
+- prefect.projects.steps.set_working_directory:
+    directory: /opt/prefect/agent
+
+push: null
