@@ -8,7 +8,7 @@
     "namecheap/namecheap@~> 2.1"
   ],
   "terraformModules": [],
-  "codeMakerOutput": "src/imports",
+  "codeMakerOutput": "src/lib/imports",
   "context": {
     "excludeStackIdFromLogicalIds": "true",
     "allowSepCharsInLogicalIds": "true"

@@ -3,9 +3,9 @@ import typer
 from constructs import Construct
 from cdktf import App, TerraformOutput, TerraformProvider, TerraformStack
 
-from imports.multipass.provider import MultipassProvider as MultipassTerraformProvider
-from imports.multipass.instance import Instance as MultipassTerraformResource
-from imports.multipass.data_multipass_instance import DataMultipassInstance as MultipassTerraformDataSource
+from lib.imports.multipass.provider import MultipassProvider as MultipassTerraformProvider
+from lib.imports.multipass.instance import Instance as MultipassTerraformResource
+from lib.imports.multipass.data_multipass_instance import DataMultipassInstance as MultipassTerraformDataSource
 
 class MainTerraformStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, target: str):
@@ -46,7 +46,7 @@ class MainTerraformStack(TerraformStack):
         assert isinstance(data_source, MultipassTerraformDataSource)
 
         output = TerraformOutput(
-            id=f"{id}-{target}-ipv4-output",
+            id=f"{target}-ipv4",
             value=data_source.ipv4,
             scope=self,
         )
