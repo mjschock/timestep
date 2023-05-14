@@ -17,7 +17,7 @@ fullnameOverride: ""
 
 # Default values for the caddy ingress controller.
 ingressController:
-  watchNamespace: "caddy-system"
+  watchNamespace: ""
   verbose: false
   rbac:
     create: true

@@ -1,53 +1,42 @@
 load('ext://dotenv', 'dotenv')
+load('ext://git_resource', 'git_checkout')
+
 dotenv()
 
-local_resource('install-arkade',
-    cmd='which ark > /dev/null || echo "Install arkade"',
-    labels=['requirements'],
-    links=['https://github.com/alexellis/arkade#getting-arkade'],
-)
 
-local_resource('install-cdktf',
-    cmd='which cdktf > /dev/null || echo "Install CDKTF"',
-    labels=['requirements'],
-    links=['https://developer.hashicorp.com/terraform/tutorials/cdktf/cdktf-install#install-cdktf'],
-)
+# Organize logic into functions
+#   Tiltfiles are written in Starlark, a Python-inspired language, so
+#   you can use functions, conditionals, loops, and more.
+#
+#   More info: https://docs.tilt.dev/tiltfile_concepts.html
+#
+def src_lib():
+    # Tilt provides many useful portable built-ins
+    # https://docs.tilt.dev/api.html#modules.os.path.exists
+    if os.path.exists('src/lib/Tiltfile'):
+        # It's possible to load other Tiltfiles to further organize
+        # your logic in large projects
+        # https://docs.tilt.dev/multiple_repos.html
+        load_dynamic('src/lib/Tiltfile')
 
-local_resource('install-hostctl',
-    cmd='ark get hostctl',
-    labels=['requirements'],
-    links=[
-        'https://github.com/guumaster/hostctl',
-        'https://guumaster.github.io/hostctl',
-    ],
-    resource_deps=['install-arkade'],
-)
+    watch_file('src/lib/Tiltfile')
+    # git_checkout('https://github.com/tilt-dev/tilt-avatars.git',
+    #              checkout_dir='src/docs/reference/tilt-dev/tilt-avatars')
 
-local_resource('install-k3sup',
-    cmd='which k3sup > /dev/null || echo "Install k3sup"', # arkade get k3sup
-    labels=['requirements'],
-    links=['https://github.com/alexellis/k3sup#download-k3sup-tldr'],
-    resource_deps=['install-arkade'],
-)
 
-local_resource('install-multipass',
-    cmd='which multipasses > /dev/null || echo "Install Multipass"',
-    labels=['requirements'],
-    links=['https://multipass.run/install'],
-)
-
-local_resource('install-terraform',
-    cmd='which terraform > /dev/null || echo "Install Terraform"', # arkade get terraform
-    labels=['requirements'],
-    links=['https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform'],
-    resource_deps=['install-arkade'],
-)
+# Edit your Tiltfile without restarting Tilt
+#   While running `tilt up`, Tilt watches the Tiltfile on disk and
+#   automatically re-evaluates it on change.
+#
+#   To see it in action, try uncommenting the following line with
+#   Tilt running.
+src_lib()
 
 local_resource('cdktf-deploy',
-    auto_init=False,
+    auto_init=True,
     cmd='cdktf deploy --auto-approve --outputs-file dist/deploy/infra/outputs.json',
-    labels=['cdktf'],
-    resource_deps=['install-cdktf', 'install-multipass', 'install-terraform'],
+    labels=['deploy'],
+    resource_deps=['cdktf', 'multipass', 'terraform'],
     trigger_mode=TRIGGER_MODE_MANUAL,
 )
 
@@ -55,18 +44,18 @@ local_resource('k3sup-install',
     auto_init=False,
     cmd='PRIVATE_SSH_KEY_PATH=./.ssh/id_rsa ./src/lib/tools/k3sup-install.sh',
     deps=['dist/deploy/infra/outputs.json', 'src/lib/tools/k3sup-install.sh'],
-    labels=['k3sup'],
-    resource_deps=['cdktf-deploy', 'install-k3sup'],
+    labels=['deploy'],
+    resource_deps=['cdktf-deploy', 'k3sup'],
     trigger_mode=TRIGGER_MODE_AUTO,
 )
 
-local_resource('kompose-convert',
-    auto_init=True,
-    cmd='docker run --rm --name kompose -v $PWD:/src femtopixel/kompose convert --chart --out /src/dist/deploy/k8s/charts/timestep --secrets-as-files --verbose --file docker-compose.yaml',
-    deps=['docker-compose.yaml'],
-    labels=['kompose'],
-    trigger_mode=TRIGGER_MODE_AUTO,
-)
+# local_resource('kompose-convert',
+#     auto_init=True,
+#     cmd='docker run --rm --name kompose -v $PWD:/src femtopixel/kompose convert --chart --out /src/dist/deploy/k8s/charts/timestep --secrets-as-files --verbose --file docker-compose.yaml',
+#     deps=['docker-compose.yaml'],
+#     labels=['kompose'],
+#     trigger_mode=TRIGGER_MODE_AUTO,
+# )
 
 allow_k8s_contexts('timestep-k3s-cluster')
 local('kubectl config use-context timestep-k3s-cluster')
@@ -79,8 +68,17 @@ local('kubectl config use-context timestep-k3s-cluster')
 #     namespace='caddy-system',
 # )
 
-k8s_yaml(helm('src/docs/reference/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', values='values-dev.yaml'))
+k8s_yaml(listdir('dist/deploy/k8s/manifests'))
+k8s_yaml(helm('src/docs/reference/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='values-dev.yaml'))
 k8s_yaml(listdir('src/docs/reference/caddyserver/ingress/kubernetes/sample'))
+
+local('src/lib/tools/hostsctl-add.sh') # TODO: pass in the IP address
+
+# k8s_resource("caddy-ingress-controller",
+#     # port_forwards=['timestep.local:80:80', 'timestep.local:443:443'],
+#     port_forwards=['0.0.0.0:80:80', '0.0.0.0:443:443'],
+#     trigger_mode=TRIGGER_MODE_AUTO,
+# )
 
 # Welcome to Tilt!
 #   To get you started as quickly as possible, we have created a
@@ -182,7 +180,7 @@ k8s_yaml(listdir('src/docs/reference/caddyserver/ingress/kubernetes/sample'))
 #
 #   More info: https://github.com/tilt-dev/tilt-extensions
 #
-load('ext://git_resource', 'git_checkout')
+# load('ext://git_resource', 'git_checkout')
 
 
 # Organize logic into functions
