@@ -1,6 +1,6 @@
 resource "multipass_instance" "dev" {
   name  = "timestep"
-  cpus  = 1
+  cpus  = 2
   image = "ros2-humble"
 }
 

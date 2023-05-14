@@ -1,0 +1,76 @@
+#cloud-config
+# See documentation for more configuration examples
+# https://cloudinit.readthedocs.io/en/latest/reference/examples.html
+---
+disable_root: true
+package_reboot_if_required: true
+package_update: true
+package_upgrade: true
+packages:
+  - build-essential
+  - curl
+  - default-jdk
+  - direnv
+  - figlet
+  - jq
+  - libbz2-dev
+  - libffi-dev
+  - liblzma-dev
+  - libncursesw5-dev
+  - libreadline-dev
+  - libsqlite3-dev
+  - libssl-dev
+  - libxml2-dev
+  - libxmlsec1-dev
+  - net-tools
+  - tk-dev
+  - unzip
+  - xz-utils
+  - zlib1g-dev
+runcmd:
+  -  # Installing and configuring Oh My Bash...
+  - runuser -l ubuntu -c 'bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"'
+  - runuser -l ubuntu -c 'echo "" >> $HOME/.oh-my-bash/custom/example.sh'
+  - runuser -l ubuntu -c 'echo OSH_THEME=\"zork\" >> $HOME/.oh-my-bash/custom/example.sh'
+  -  # Installing anyenv and **envs...
+  - runuser -l ubuntu -c 'git clone https://github.com/anyenv/anyenv ~/.anyenv'
+  - runuser -l ubuntu -c 'echo "" >> $HOME/.bashrc'
+  - runuser -l ubuntu -c 'echo export PATH=\$HOME/.anyenv/bin:\$PATH >> $HOME/.bashrc'
+  - runuser -l ubuntu -c 'echo "eval \"\$(anyenv init -)\"" >> $HOME/.bashrc'
+  - runuser -l ubuntu -c '$HOME/.anyenv/bin/anyenv install --force-init'
+  - runuser -l ubuntu -c '$HOME/.anyenv/bin/anyenv install jenv'
+  - runuser -l ubuntu -c '$HOME/.anyenv/bin/anyenv install nodenv'
+  - runuser -l ubuntu -c '$HOME/.anyenv/bin/anyenv install goenv'
+  - runuser -l ubuntu -c '$HOME/.anyenv/bin/anyenv install pyenv'
+  -  # Configuring direnv bash hook...
+  - runuser -l ubuntu -c 'echo "eval \"\$(direnv hook bash)\"" >> $HOME/.bashrc'
+  -  # Creating app directory...
+  - runuser -l ubuntu -c 'mkdir $HOME/app'
+users:
+  - default
+  - groups: sudo
+    name: ubuntu
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDXjzgOKpR1Lm7pexJxq8W+/93Vbn6w+SCPlkVZTt+C0vA5vF11OmUsaicxaCCX2mYpVptTzpic6bSQzDcXwZuFK2mcTpHzBi1KltPv/PZLYyCRa2RC7eegRETbF5q3/LVC+U8FEKSrXTKnGO9yHxse1Wn3TG847E38iyn7c18qNHcZRiRJDVt7W6OPu5YbwVbgzKKO6DzAAOw2q8Ym16Subdd+cPN13xMv/bMfLaA3iuR1goSDLGCesldjUsP+pC4npP7ONtYtIoGMe0aISBO3mRGq8OkQNXf3CrGOWodjkvDGCLgf+aQrqxkV8mDwKh+QqfMWakrZZkBYagriwnkEKt3qPSHrLwpDwAD4UCBSg2n3Aq47JdRN5FKwJTZDjt4TIW1prU0I8Q75VPUhxl7+2Q9LvOc56UDkkjV1cwZOr2gKiIxmDzHr7qu+qHlDYiJN7peBXFns/Bujafy06JecOHvK3MsxKeuCMggyo+tizKR7toIleKOMaMO85qA2GaU= m@mjschock.com
+    sudo: ALL=(ALL) NOPASSWD:ALL
+write_files:
+  - content: |
+      #!/bin/sh
+      [ -r /etc/lsb-release ] && . /etc/lsb-release
+
+      if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
+            # Fall back to using the very slow lsb_release utility
+            DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+      fi
+
+      printf "Welcome to \n%s\nv%s\nrunning on %s (%s %s %s).\n" "$(figlet Timestep AI)" "$(date +'%Y.%m.%d')" "$DISTRIB_DESCRIPTION" "$(uname -o)" "$(uname -r)" "$(uname -m)"
+    path: /etc/update-motd.d/00-header
+    permissions: "0755"
+  - content: |
+      mirrors:
+        registry.localhost:
+          endpoint:
+            - "http://registry:5000"
+    path: /etc/rancher/k3s/registries.yaml
+    permissions: "0644"

@@ -1,27 +1,31 @@
 services:
-  # postgres:
-  #   environment:
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=postgres
-  #     - POSTGRES_DB=postgres
-  #   image: postgres:latest
-  #   ports:
-  #     - "5432:5432"
-  # prefect-server:
-  #   build: .
-  #   depends_on:
-  #     - postgres
-  #   ports:
-  #     - "4200:4200"
+  listener:
+    build: src/timestep/envs/env
+    command: ros2 run demo_nodes_py listener
+
+  postgres:
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+
+  prefect-server:
+    build: .
+    command: tail -f /dev/null
+    depends_on:
+      - postgres
+    ports:
+      - "4200:4200"
 
   talker:
-    build: ./
-    command: ros2 run demo_nodes_cpp talker
+    build: src/timestep/agents/agent
+    command: ros2 run demo_nodes_py talker
 
-  listener:
-    build: ./
-    command: ros2 run demo_nodes_py listener
-    environment:
-      - "PYTHONUNBUFFERED=1"
+  underlay:
+    build: .
+    command: tail -f /dev/null
 
 version: "3"

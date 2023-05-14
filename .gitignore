@@ -3,6 +3,14 @@ __pycache__
 .pants.d
 .pids
 .venv
+.ssh
 .terraform
 docs
 dist
+
+imports/*
+!imports/__init__.py
+.terraform
+cdktf.out
+cdktf.log
+*terraform.*.tfstate*
