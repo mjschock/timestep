@@ -50,7 +50,7 @@ class MainTerraformStack(TerraformStack):
             value=data_source.ipv4,
             scope=self,
         )
-        print(f"output: {output}")
+        # print(f"output: {output}")
 
 def main(app_name: str="timestep", env: str="localhost"):
     print(f"Running {app_name} in {env} mode")
