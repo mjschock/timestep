@@ -12,8 +12,8 @@ installK3sPrimaryNode() {
 
     k3sup install \
         --context "$context" \
-        --no-extras \
         --ip "$PRIMARY_IP" \
+        --k3s-extra-args '--disable traefik' \
         --local-path ./dist/deploy/k8s/conf/kube.yaml \
         --ssh-key "${PRIVATE_SSH_KEY_PATH}" \
         --user ubuntu

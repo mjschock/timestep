@@ -18,7 +18,7 @@ fullnameOverride: ""
 # Default values for the caddy ingress controller.
 ingressController:
   watchNamespace: ""
-  verbose: false
+  verbose: true
   rbac:
     create: true
   className: "caddy"
@@ -28,13 +28,13 @@ ingressController:
     acmeEABKeyId: ""
     acmeEABMacKey: ""
     # -- Acme Server URL
-    acmeCA: ""
-    debug: false
-    email: ""
+    acmeCA: "https://acme-staging-v02.api.letsencrypt.org/directory"
+    debug: true
+    email: "m@mjschock.com"
     metrics: true
     proxyProtocol: false
     experimentalSmartSort: false
-    onDemandTLS: false
+    onDemandTLS: true
     # onDemandRateLimitInterval:
     # onDemandRateLimitBurst:
     # onDemandAsk:

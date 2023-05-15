@@ -58,21 +58,23 @@ local_resource('k3sup-install',
 # )
 
 allow_k8s_contexts('timestep-k3s-cluster')
-local('kubectl config use-context timestep-k3s-cluster')
+# local('kubectl config use-context timestep-k3s-cluster')
 
-# load('ext://helm_resource', 'helm_resource', 'helm_repo')
-# helm_repo('caddy-ingress-controller', 'https://caddyserver.github.io/ingress/')
-# helm_resource(
-#     name='mycaddy',
-#     chart='caddy-ingress-controller',
-#     namespace='caddy-system',
-# )
+if k8s_context() == 'timestep-k3s-cluster':
+    # local_resource('k3s-deploy',
+    #     auto_init=True,
+    #     cmd='k3s kubectl apply -f dist/deploy/k8s/manifests',
+    #     deps=['dist/deploy/k8s/manifests'],
+    #     labels=['deploy'],
+    #     resource_deps=['k3sup-install'],
+    #     trigger_mode=TRIGGER_MODE_AUTO,
+    # )
 
-k8s_yaml(listdir('dist/deploy/k8s/manifests'))
-k8s_yaml(helm('src/docs/reference/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='values-dev.yaml'))
-k8s_yaml(listdir('src/docs/reference/caddyserver/ingress/kubernetes/sample'))
+    k8s_yaml(listdir('dist/deploy/k8s/manifests'))
+    k8s_yaml(helm('src/docs/reference/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='values-dev.yaml'))
+    # k8s_yaml(listdir('src/docs/reference/caddyserver/ingress/kubernetes/sample'))
 
-local('src/lib/tools/hostsctl-add.sh') # TODO: pass in the IP address
+    local('src/lib/tools/hostsctl-add.sh') # TODO: pass in the IP address
 
 # k8s_resource("caddy-ingress-controller",
 #     # port_forwards=['timestep.local:80:80', 'timestep.local:443:443'],
