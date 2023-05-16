@@ -49,13 +49,21 @@ local_resource('k3sup-install',
     trigger_mode=TRIGGER_MODE_AUTO,
 )
 
-# local_resource('kompose-convert',
-#     auto_init=True,
-#     cmd='docker run --rm --name kompose -v $PWD:/src femtopixel/kompose convert --chart --out /src/dist/deploy/k8s/charts/timestep --secrets-as-files --verbose --file docker-compose.yaml',
-#     deps=['docker-compose.yaml'],
-#     labels=['kompose'],
-#     trigger_mode=TRIGGER_MODE_AUTO,
-# )
+local_resource('clean',
+    auto_init=False,
+    cmd='rm -rf dist/deploy/k8s/charts/timestep',
+    deps=['docker-compose.yaml'],
+    labels=['clean'],
+    trigger_mode=TRIGGER_MODE_MANUAL,
+)
+
+local_resource('kompose-convert',
+    auto_init=True,
+    cmd='docker run --rm --name kompose -v $PWD:/src femtopixel/kompose convert --chart --out /src/dist/deploy/k8s/charts/timestep --secrets-as-files --verbose --file docker-compose.yaml',
+    deps=['docker-compose.yaml'],
+    labels=['build'],
+    trigger_mode=TRIGGER_MODE_AUTO,
+)
 
 allow_k8s_contexts('timestep-k3s-cluster')
 # local('kubectl config use-context timestep-k3s-cluster')
@@ -73,6 +81,7 @@ if k8s_context() == 'timestep-k3s-cluster':
     k8s_yaml(listdir('dist/deploy/k8s/manifests'))
     k8s_yaml(helm('src/docs/reference/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='values-dev.yaml'))
     # k8s_yaml(listdir('src/docs/reference/caddyserver/ingress/kubernetes/sample'))
+    k8s_yaml(helm('dist/deploy/k8s/charts/timestep', name='timestep', namespace='default'))
 
     local('src/lib/tools/hostsctl-add.sh') # TODO: pass in the IP address
 

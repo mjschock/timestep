@@ -1,0 +1,17 @@
+127.0.0.1 localhost
+::1 localhost
+127.0.1.1 oryp7.localdomain
+# Added by Docker Desktop
+# To allow the same kube context to work on the host and the container:
+127.0.0.1 kubernetes.docker.internal
+
+##################################################################
+# Content under this line is handled by hostctl. DO NOT EDIT.
+##################################################################
+
+# profile.on timestep-ai
+10.159.189.195 example1.kubernetes.local
+10.159.189.195 example2.kubernetes.local
+10.159.189.195 foxglove-studio.timestep.local
+10.159.189.195 prefect-server.timestep.local
+# end

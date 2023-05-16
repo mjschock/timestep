@@ -1,7 +1,12 @@
 services:
-  listener:
-    build: src/timestep/envs/env
-    command: ros2 run demo_nodes_py listener
+  # foxglove-studio:
+  #   image: ghcr.io/foxglove/studio:latest
+  #   ports:
+  #     - "8080:8080"
+
+  # listener:
+  #   build: src/timestep/envs/env
+  #   command: ros2 run demo_nodes_py listener
 
   postgres:
     environment:
@@ -10,22 +15,27 @@ services:
       - POSTGRES_DB=postgres
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - 5432
 
   prefect-server:
-    build: .
-    command: tail -f /dev/null
+    command: ["prefect", "server", "start", "--host", "0.0.0.0", "--log-level", "WARNING"]
     depends_on:
       - postgres
+    environment:
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql://postgres:postgres@postgres:5432/postgres
+      - PREFECT_SERVER_API_HOST=0.0.0.0
+      - PREFECT_SERVER_API_PORT=4200
+      - PREFECT_LOGGING_SERVER_LEVEL=WARNING
+    image: prefecthq/prefect:2.10.8-python3.9
     ports:
-      - "4200:4200"
+      - 4200
 
-  talker:
-    build: src/timestep/agents/agent
-    command: ros2 run demo_nodes_py talker
+  # talker:
+  #   build: src/timestep/agents/agent
+  #   command: ros2 run demo_nodes_py talker
 
-  underlay:
-    build: .
-    command: tail -f /dev/null
+  # underlay:
+  #   build: .
+  #   command: tail -f /dev/null
 
 version: "3"

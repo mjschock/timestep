@@ -13,6 +13,7 @@ typer = {extras = ["all"], version = "^0.9.0"}
 cdktf-cdktf-provider-vault = "^7.0.2"
 cdktf-cdktf-provider-digitalocean = "^6.0.2"
 cdktf = "^0.16.1"
+hydra-core = "^1.3.2"
 
 
 [tool.poetry.group.dev.dependencies]

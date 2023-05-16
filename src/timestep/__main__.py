@@ -2,6 +2,8 @@ import typer
 
 from constructs import Construct
 from cdktf import App, TerraformOutput, TerraformProvider, TerraformStack
+import hydra
+from omegaconf import DictConfig, OmegaConf
 
 from lib.imports.multipass.provider import MultipassProvider as MultipassTerraformProvider
 from lib.imports.multipass.instance import Instance as MultipassTerraformResource
@@ -61,6 +63,12 @@ def main(app_name: str="timestep", env: str="localhost"):
 
     app.synth()
 
+@hydra.main(version_base=None, config_path="envs/env", config_name="config")
+def my_app(cfg : DictConfig) -> None:
+    print(OmegaConf.to_yaml(cfg))
+
+    typer.run(main)
 
 if __name__ == "__main__":
-    typer.run(main)
+    # typer.run(main)
+    my_app()
