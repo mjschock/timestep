@@ -58,3 +58,8 @@ timestep = "timestep.__main__:app"
 [virtualenvs]
 path = ".venv"
 in-project = true
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]

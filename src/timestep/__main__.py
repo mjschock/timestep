@@ -1,3 +1,4 @@
+from timestep.agents.petting_zoo_agent.agent import PettingZooAgent
 from timestep.envs.no_limit_texas_holdem.env import texas_holdem_no_limit
 from timestep.envs.rock_paper_scissors.env import rock_paper_scissors
 from timestep.envs.tic_tac_toe.env import tic_tac_toe
