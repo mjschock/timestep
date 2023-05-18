@@ -79,7 +79,7 @@ if k8s_context() == 'timestep-k3s-cluster':
     # )
 
     k8s_yaml(listdir('dist/deploy/k8s/manifests'))
-    k8s_yaml(helm('src/docs/reference/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='values-dev.yaml'))
+    k8s_yaml(helm('src/docs/reference/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='conf/base/caddy-ingress-controller.yaml'))
     # k8s_yaml(listdir('src/docs/reference/caddyserver/ingress/kubernetes/sample'))
     k8s_yaml(helm('dist/deploy/k8s/charts/timestep', name='timestep', namespace='default'))
 
