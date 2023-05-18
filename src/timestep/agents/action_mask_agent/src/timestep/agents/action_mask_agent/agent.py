@@ -1,6 +1,5 @@
 from langchain.schema import HumanMessage, SystemMessage
 import collections
-import inspect
 
 
 from timestep.agents.petting_zoo_agent.agent import PettingZooAgent

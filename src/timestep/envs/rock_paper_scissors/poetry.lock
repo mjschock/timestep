@@ -1326,7 +1326,7 @@ files = []
 develop = true
 
 [package.dependencies]
-timestep-agents-gymnasium-agent = {path = "../gymnasium_agent", develop = true}
+timestep-agents-gymnasium-agent = "^0.1.0"
 
 [package.source]
 type = "directory"
@@ -1485,4 +1485,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "0d0ee4cecd1be71314d55252e61a1dbaecea8947e32d25a5816c8f8a3dc8d585"
+content-hash = "e39421bfe4339a6b1580a374f7ebde9e9f1a49b37679703b1934adc9fb50aace"

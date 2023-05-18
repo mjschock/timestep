@@ -966,7 +966,7 @@ files = []
 develop = true
 
 [package.dependencies]
-timestep-agents-gymnasium-agent = {path = "../gymnasium_agent", develop = true}
+timestep-agents-gymnasium-agent = "^0.1.0"
 
 [package.source]
 type = "directory"
@@ -1109,4 +1109,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "4a7d46be88a9b923b32c209aaf94e588a195e7ee649ae7bc00d26c80ff884156"
+content-hash = "aa2521f2ec1a038447fb86193fe9e8314a078799e26f98ba7df1febdc530b3bb"

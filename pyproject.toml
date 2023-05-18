@@ -14,17 +14,23 @@ cdktf-cdktf-provider-vault = "^7.0.2"
 cdktf-cdktf-provider-digitalocean = "^6.0.2"
 cdktf = "^0.16.1"
 hydra-core = "^1.3.2"
+timestep-agents-gymnasium-agent = "^0.1.0"
+timestep-agents-petting-zoo-agent = "^0.1.0"
+timestep-agents-action-mask-agent = "^0.1.0"
+timestep-envs-no-limit-texas-holdem = "^0.1.0"
+timestep-envs-rock-paper-scissors = "^0.1.0"
+timestep-envs-tic-tac-toe = "^0.1.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+isort = "^5.12.0"
+toml-sort = "^0.23.1"
 timestep-envs-rock-paper-scissors = {path = "src/timestep/envs/rock_paper_scissors", develop = true}
 timestep-envs-no-limit-texas-holdem = {path = "src/timestep/envs/no_limit_texas_holdem", develop = true}
 timestep-envs-tic-tac-toe = {path = "src/timestep/envs/tic_tac_toe", develop = true}
 timestep-agents-action-mask-agent = {path = "src/timestep/agents/action_mask_agent", develop = true}
 timestep-agents-gymnasium-agent = {path = "src/timestep/agents/gymnasium_agent", develop = true}
 timestep-agents-petting-zoo-agent = {path = "src/timestep/agents/petting_zoo_agent", develop = true}
-
-[tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
-isort = "^5.12.0"
-toml-sort = "^0.23.1"
 
 
 [tool.poetry.group.test.dependencies]

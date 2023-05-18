@@ -2946,7 +2946,7 @@ develop = true
 
 [package.dependencies]
 langchain = "^0.0.173"
-timestep-agents-petting-zoo-agent = {path = "../petting_zoo_agent", develop = true}
+timestep-agents-petting-zoo-agent = "^0.1.0"
 
 [package.source]
 type = "directory"
@@ -2981,7 +2981,7 @@ files = []
 develop = true
 
 [package.dependencies]
-timestep-agents-gymnasium-agent = {path = "../gymnasium_agent", develop = true}
+timestep-agents-gymnasium-agent = "^0.1.0"
 
 [package.source]
 type = "directory"
@@ -3000,7 +3000,7 @@ develop = true
 [package.dependencies]
 langchain = "^0.0.173"
 pettingzoo = {version = "^1.23.0", extras = ["classic"]}
-timestep-agents-action-mask-agent = {path = "../../agents/action_mask_agent", develop = true}
+timestep-agents-action-mask-agent = "^0.1.0"
 
 [package.source]
 type = "directory"
@@ -3019,7 +3019,7 @@ develop = true
 [package.dependencies]
 langchain = "^0.0.173"
 pettingzoo = {version = "^1.23.0", extras = ["classic"]}
-timestep-agents-petting-zoo-agent = {path = "../../agents/petting_zoo_agent", develop = true}
+timestep-agents-petting-zoo-agent = "^0.1.0"
 
 [package.source]
 type = "directory"
@@ -3038,7 +3038,7 @@ develop = true
 [package.dependencies]
 langchain = "^0.0.173"
 pettingzoo = {version = "^1.23.0", extras = ["classic"]}
-timestep-agents-action-mask-agent = {path = "../../agents/action_mask_agent", develop = true}
+timestep-agents-action-mask-agent = "^0.1.0"
 
 [package.source]
 type = "directory"
@@ -3435,4 +3435,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "0b848f5774f33f5a87b4405c3f51ca3329aacb69c8251610585953f7d17297f9"
+content-hash = "ec9cba0cf68acb559886445d6faae927ed812cf17f8fefc840455e0b931fa99f"

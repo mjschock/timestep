@@ -1309,7 +1309,7 @@ develop = true
 
 [package.dependencies]
 langchain = "^0.0.173"
-timestep-agents-petting-zoo-agent = {path = "../petting_zoo_agent", develop = true}
+timestep-agents-petting-zoo-agent = "^0.1.0"
 
 [package.source]
 type = "directory"
@@ -1503,4 +1503,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "8b7c66b940cd270537525ec4d4af6535360db8e6578f8613b74affed1acac2d4"
+content-hash = "31f2cecb9d1c452f445cc9c7e81d3ee009a055818110af7d20c358eaffa00699"

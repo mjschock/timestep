@@ -8,6 +8,9 @@ packages = [{include = "timestep", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+timestep-agents-gymnasium-agent = "^0.1.0"
+
+[tool.poetry.group.dev.dependencies]
 timestep-agents-gymnasium-agent = {path = "../gymnasium_agent", develop = true}
 
 

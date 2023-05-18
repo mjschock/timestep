@@ -9,6 +9,9 @@ packages = [{include = "timestep", from = "src"}]
 [tool.poetry.dependencies]
 python = "^3.9"
 langchain = "^0.0.173"
+timestep-agents-petting-zoo-agent = "^0.1.0"
+
+[tool.poetry.group.dev.dependencies]
 timestep-agents-petting-zoo-agent = {path = "../petting_zoo_agent", develop = true}
 
 
