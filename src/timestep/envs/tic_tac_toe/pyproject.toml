@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "timestep-envs-tic-tac-toe"
+version = "0.1.0"
+description = ""
+authors = ["Michael Schock <m@mjschock.com>"]
+readme = "README.md"
+packages = [{include = "timestep", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pettingzoo = {extras = ["classic"], version = "^1.23.0"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

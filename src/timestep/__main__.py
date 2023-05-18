@@ -9,6 +9,14 @@ from lib.imports.multipass.provider import MultipassProvider as MultipassTerrafo
 from lib.imports.multipass.instance import Instance as MultipassTerraformResource
 from lib.imports.multipass.data_multipass_instance import DataMultipassInstance as MultipassTerraformDataSource
 
+from timestep.agents.agent.agent import ActionMaskAgent, PettingZooAgent
+from langchain.chat_models import ChatOpenAI
+
+# from timestep.envs.no_limit_texas_holdem.src.timestep.envs.no_limit_texas_holdem.env import texas_holdem_no_limit
+# from timestep.envs.no_limit_texas_holdem
+# from timestep_envs_no_limit_texas_holdem.env import texas_holdem_no_limit
+from timestep_envs_no_limit_texas_holdem import *
+
 class MainTerraformStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, target: str):
         super().__init__(scope, id)
@@ -54,7 +62,7 @@ class MainTerraformStack(TerraformStack):
         )
         # print(f"output: {output}")
 
-def main(app_name: str="timestep", env: str="localhost"):
+def main(app_name: str="timestep", env: str="localhost", openai_api_key: str=""):
     print(f"Running {app_name} in {env} mode")
 
     app = App()
@@ -63,12 +71,80 @@ def main(app_name: str="timestep", env: str="localhost"):
 
     app.synth()
 
-@hydra.main(version_base=None, config_path="envs/env", config_name="config")
-def my_app(cfg : DictConfig) -> None:
-    print(OmegaConf.to_yaml(cfg))
+    env_iter = {
+        "rock_paper_scissors": rock_paper_scissors,
+        "tic_tac_toe": tic_tac_toe,
+        "texas_holdem_no_limit": texas_holdem_no_limit,
+    }
 
-    typer.run(main)
+    for env_name, env_func in env_iter.items():
+        print(f"Running {env_name} environment")
+        env, agents = env_func(openai_api_key=openai_api_key)
+
+        env.reset()
+
+        for name, agent in agents.items():
+            agent.reset()
+
+        for agent_name in env.agent_iter():
+            observation, reward, termination, truncation, info = env.last()
+            obs_message = agents[agent_name].observe(
+                observation, reward, termination, truncation, info
+            )
+            print(obs_message)
+            if termination or truncation:
+                action = None
+            else:
+                action = agents[agent_name].act()
+            print(f"Action: {action}")
+            env.step(action)
+
+        env.close()
+
+
+def rock_paper_scissors(openai_api_key):
+    from pettingzoo.classic import rps_v2
+
+    env = rps_v2.env(max_cycles=3, render_mode="human")
+    agents = {
+        name: PettingZooAgent(name=name, model=ChatOpenAI(openai_api_key=openai_api_key, temperature=1), env=env)
+        for name in env.possible_agents
+    }
+
+    return env, agents
+
+
+def tic_tac_toe(openai_api_key):
+    from pettingzoo.classic import tictactoe_v3
+
+    env = tictactoe_v3.env(render_mode="human")
+    agents = {
+        name: ActionMaskAgent(name=name, model=ChatOpenAI(openai_api_key=openai_api_key, temperature=0.2), env=env)
+        for name in env.possible_agents
+    }
+
+    return env, agents
+
+
+app = typer.Typer()
+
+@app.callback()
+def callback():
+    """
+    Timestep AI
+    """
+
+@app.command()
+def loop():
+    """
+    Run the main loop
+    """
+    typer.echo("Running the loop")
+
+    MARVIN_OPENAI_API_KEY='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'
+
+    main(openai_api_key=MARVIN_OPENAI_API_KEY)
+
 
 if __name__ == "__main__":
-    # typer.run(main)
-    my_app()
+    app()

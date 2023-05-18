@@ -14,7 +14,13 @@ cdktf-cdktf-provider-vault = "^7.0.2"
 cdktf-cdktf-provider-digitalocean = "^6.0.2"
 cdktf = "^0.16.1"
 hydra-core = "^1.3.2"
-
+pettingzoo = {extras = ["classic"], version = "^1.23.0"}
+langchain = "^0.0.171"
+openai = "^0.27.6"
+tenacity = "^8.2.2"
+timestep-envs-rock-paper-scissors = {path = "src/timestep/envs/rock_paper_scissors", develop = true}
+timestep-envs-no-limit-texas-holdem = {path = "src/timestep/envs/no_limit_texas_holdem", develop = true}
+timestep-envs-tic-tac-toe = {path = "src/timestep/envs/tic_tac_toe", develop = true}
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
@@ -40,3 +46,10 @@ line-length = 100
 namespace_packages = true
 explicit_package_bases = true
 mypy_path = "src/timestep"
+
+[tool.poetry.scripts]
+timestep = "timestep.__main__:app"
+
+[virtualenvs]
+path = ".venv"
+in-project = true

@@ -1,3 +1,20 @@
+# hydra:
+#   run:
+#     dir: output/${hydra.job.override_dirname}/seed=${seed}
+#   job:
+#     config:
+#       override_dirname:
+#         exclude_keys:
+#           - seed
+
+hydra:
+  run:
+    dir: ./dist/hydra/outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+
+app_name: timestep
+env: localhost
+openai_api_key: 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
+
 db:
   driver: mysql
   pass: secret
