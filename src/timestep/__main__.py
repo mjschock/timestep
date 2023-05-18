@@ -1,21 +1,15 @@
+from timestep.envs.no_limit_texas_holdem.env import texas_holdem_no_limit
+from timestep.envs.rock_paper_scissors.env import rock_paper_scissors
+from timestep.envs.tic_tac_toe.env import tic_tac_toe
 import typer
 
 from constructs import Construct
 from cdktf import App, TerraformOutput, TerraformProvider, TerraformStack
-import hydra
-from omegaconf import DictConfig, OmegaConf
 
 from lib.imports.multipass.provider import MultipassProvider as MultipassTerraformProvider
 from lib.imports.multipass.instance import Instance as MultipassTerraformResource
 from lib.imports.multipass.data_multipass_instance import DataMultipassInstance as MultipassTerraformDataSource
 
-from timestep.agents.agent.agent import ActionMaskAgent, PettingZooAgent
-from langchain.chat_models import ChatOpenAI
-
-# from timestep.envs.no_limit_texas_holdem.src.timestep.envs.no_limit_texas_holdem.env import texas_holdem_no_limit
-# from timestep.envs.no_limit_texas_holdem
-# from timestep_envs_no_limit_texas_holdem.env import texas_holdem_no_limit
-from timestep_envs_no_limit_texas_holdem import *
 
 class MainTerraformStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, target: str):
@@ -100,30 +94,6 @@ def main(app_name: str="timestep", env: str="localhost", openai_api_key: str="")
             env.step(action)
 
         env.close()
-
-
-def rock_paper_scissors(openai_api_key):
-    from pettingzoo.classic import rps_v2
-
-    env = rps_v2.env(max_cycles=3, render_mode="human")
-    agents = {
-        name: PettingZooAgent(name=name, model=ChatOpenAI(openai_api_key=openai_api_key, temperature=1), env=env)
-        for name in env.possible_agents
-    }
-
-    return env, agents
-
-
-def tic_tac_toe(openai_api_key):
-    from pettingzoo.classic import tictactoe_v3
-
-    env = tictactoe_v3.env(render_mode="human")
-    agents = {
-        name: ActionMaskAgent(name=name, model=ChatOpenAI(openai_api_key=openai_api_key, temperature=0.2), env=env)
-        for name in env.possible_agents
-    }
-
-    return env, agents
 
 
 app = typer.Typer()

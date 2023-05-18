@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "timestep-envs-no-limit-texas-holdem"
+name = "timestep-agents-gymnasium-agent"
 version = "0.1.0"
 description = ""
 authors = ["Michael Schock <m@mjschock.com>"]
@@ -8,9 +8,8 @@ packages = [{include = "timestep", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pettingzoo = {extras = ["classic"], version = "^1.23.0"}
-timestep-agents-action-mask-agent = {path = "../../agents/action_mask_agent", develop = true}
 langchain = "^0.0.173"
+tenacity = "^8.2.2"
 
 
 [build-system]
