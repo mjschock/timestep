@@ -21,14 +21,14 @@ jobs:
     # - run: python my_script.py
 
     - name: Install dependencies
-      run: pipx run poetry install
+      run: poetry install
 
     - name: Generate module and provider bindings
-      run: pipx run poetry run cdktf-cli get
+      run: poetry run cdktf get
 
     # Remove this step if you don't have any
     - name: Run unit tests
-      run: pipx run poetry run pytest
+      run: poetry run pytest
 
     - name: Run Terraform CDK
       uses: hashicorp/terraform-cdk-action@v0.1.0
