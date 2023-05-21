@@ -12,28 +12,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Install poetry
-      run: pipx install poetry
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-        cache: 'poetry' # cache virtualenv directories -- one for each poetry project found
-    # - run: python my_script.py
 
-    - name: Install dependencies
-      run: poetry install
+    - name: Installing anyenv and **envs...
+      run: |
+        git clone https://github.com/anyenv/anyenv ~/.anyenv
+        echo "" >> $HOME/.bashrc
+        echo export PATH=\$HOME/.anyenv/bin:\$PATH >> $HOME/.bashrc
+        echo "eval \"\$(anyenv init -)\"" >> $HOME/.bashrc
+        $HOME/.anyenv/bin/anyenv install --force-init
+        $HOME/.anyenv/bin/anyenv install jenv
+        $HOME/.anyenv/bin/anyenv install nodenv
+        $HOME/.anyenv/bin/anyenv install goenv
 
-    - name: List poetry config
-      run: poetry config --list
+    # - name: Install poetry
+    #   run: pipx install poetry
+    # - uses: actions/setup-python@v4
+    #   with:
+    #     python-version: '3.9'
+    #     cache: 'poetry' # cache virtualenv directories -- one for each poetry project found
+    # # - run: python my_script.py
 
-    - name: Generate module and provider bindings
-      # run: poetry run cdktf get
-      run: poetry run cdktf get
+    # - name: Configure poetry
+    #   run: poetry config virtualenvs.create true
 
-    # Remove this step if you don't have any
-    - name: Run unit tests
-      # run: poetry run pytest
-      run: poetry run toml-sort -ai --check pyproject.toml
+    # - name: Install dependencies
+    #   run: poetry install
+
+    # - name: List poetry config
+    #   run: poetry config --list
+
+    # - name: Generate module and provider bindings
+    #   # run: poetry run cdktf get
+    #   run: poetry run cdktf get
+
+    # # Remove this step if you don't have any
+    # - name: Run unit tests
+    #   # run: poetry run pytest
+    #   run: poetry run toml-sort -ai --check pyproject.toml
 
     - name: Run Terraform CDK
       uses: hashicorp/terraform-cdk-action@v0.1.0
