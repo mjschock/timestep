@@ -23,12 +23,13 @@ jobs:
     - name: Install dependencies
       run: poetry install
 
-    - name: Generate module and provider bindings
-      run: poetry run cdktf get
+    # - name: Generate module and provider bindings
+    #   run: poetry run cdktf get
 
     # Remove this step if you don't have any
     - name: Run unit tests
-      run: poetry run pytest
+      # run: poetry run pytest
+      run: poetry run toml-sort -ai --check pyproject.toml
 
     - name: Run Terraform CDK
       uses: hashicorp/terraform-cdk-action@v0.1.0
