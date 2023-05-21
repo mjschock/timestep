@@ -23,9 +23,6 @@ jobs:
         anyenv install nodenv
         anyenv install goenv
         anyenv install pyenv
-
-    - name: Check versions
-      run: |
         anyenv versions
         jenv versions
         nodenv versions
