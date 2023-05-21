@@ -16,9 +16,8 @@ jobs:
     - name: Installing anyenv and **envs...
       run: |
         git clone https://github.com/anyenv/anyenv ~/.anyenv
-        echo "" >> $HOME/.bashrc
-        echo export PATH=\$HOME/.anyenv/bin:\$PATH >> $HOME/.bashrc
-        echo "eval \"\$(anyenv init -)\"" >> $HOME/.bashrc
+        export PATH=\$HOME/.anyenv/bin:\$PATH
+        eval \"\$(anyenv init -)\"
         $HOME/.anyenv/bin/anyenv install --force-init
         $HOME/.anyenv/bin/anyenv install jenv
         $HOME/.anyenv/bin/anyenv install nodenv
