@@ -23,9 +23,12 @@ jobs:
     - name: Install dependencies
       run: poetry install
 
+    - name: List poetry config
+      run: poetry config --list
+
     - name: Generate module and provider bindings
       # run: poetry run cdktf get
-      run: cdktf get
+      run: poetry run cdktf get
 
     # Remove this step if you don't have any
     - name: Run unit tests
