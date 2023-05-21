@@ -1,4 +1,4 @@
-default: agents envs
+default: up
 
 agents:
 	poetry new --name=timestep.agents.action_mask_agent --src src/timestep/agents/action_mask_agent || true
@@ -15,3 +15,6 @@ envs:
 	poetry add -e src/timestep/envs/rock_paper_scissors
 	poetry new --name=timestep.envs.tic_tac_toe --src src/timestep/envs/tic_tac_toe || true
 	poetry add -e src/timestep/envs/tic_tac_toe
+
+up:
+	tilt up

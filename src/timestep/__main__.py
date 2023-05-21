@@ -1,7 +1,7 @@
-from timestep.agents.petting_zoo_agent.agent import PettingZooAgent
-from timestep.envs.no_limit_texas_holdem.env import texas_holdem_no_limit
-from timestep.envs.rock_paper_scissors.env import rock_paper_scissors
-from timestep.envs.tic_tac_toe.env import tic_tac_toe
+# from timestep.agents.petting_zoo_agent.agent import PettingZooAgent
+# from timestep.envs.no_limit_texas_holdem.env import texas_holdem_no_limit
+# from timestep.envs.rock_paper_scissors.env import rock_paper_scissors
+# from timestep.envs.tic_tac_toe.env import tic_tac_toe
 import typer
 
 from constructs import Construct
@@ -26,7 +26,7 @@ class MainTerraformStack(TerraformStack):
         cwd = os.getcwd()
         print(f"cwd: {cwd}")
 
-        cloudinit_file = f"{cwd}/src/timestep/envs/env/cloud.yaml"
+        cloudinit_file = f"{cwd}/conf/base/cloud.yaml"
 
         resource = MultipassTerraformResource(
             cloudinit_file=cloudinit_file,
@@ -66,35 +66,35 @@ def main(app_name: str="timestep", env: str="localhost", openai_api_key: str="")
 
     app.synth()
 
-    env_iter = {
-        "rock_paper_scissors": rock_paper_scissors,
-        "tic_tac_toe": tic_tac_toe,
-        "texas_holdem_no_limit": texas_holdem_no_limit,
-    }
+    # env_iter = {
+    #     "rock_paper_scissors": rock_paper_scissors,
+    #     "tic_tac_toe": tic_tac_toe,
+    #     "texas_holdem_no_limit": texas_holdem_no_limit,
+    # }
 
-    for env_name, env_func in env_iter.items():
-        print(f"Running {env_name} environment")
-        env, agents = env_func(openai_api_key=openai_api_key)
+    # for env_name, env_func in env_iter.items():
+    #     print(f"Running {env_name} environment")
+    #     env, agents = env_func(openai_api_key=openai_api_key)
 
-        env.reset()
+    #     env.reset()
 
-        for name, agent in agents.items():
-            agent.reset()
+    #     for name, agent in agents.items():
+    #         agent.reset()
 
-        for agent_name in env.agent_iter():
-            observation, reward, termination, truncation, info = env.last()
-            obs_message = agents[agent_name].observe(
-                observation, reward, termination, truncation, info
-            )
-            print(obs_message)
-            if termination or truncation:
-                action = None
-            else:
-                action = agents[agent_name].act()
-            print(f"Action: {action}")
-            env.step(action)
+    #     for agent_name in env.agent_iter():
+    #         observation, reward, termination, truncation, info = env.last()
+    #         obs_message = agents[agent_name].observe(
+    #             observation, reward, termination, truncation, info
+    #         )
+    #         print(obs_message)
+    #         if termination or truncation:
+    #             action = None
+    #         else:
+    #             action = agents[agent_name].act()
+    #         print(f"Action: {action}")
+    #         env.step(action)
 
-        env.close()
+    #     env.close()
 
 
 app = typer.Typer()

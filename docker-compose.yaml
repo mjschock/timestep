@@ -8,34 +8,67 @@ services:
   #   build: src/timestep/envs/env
   #   command: ros2 run demo_nodes_py listener
 
-  postgres:
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-    image: postgres:latest
-    ports:
-      - 5432
+  # postgres:
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #     - POSTGRES_DB=postgres
+  #   image: postgres:latest
+  #   ports:
+  #     - 5432
 
-  prefect-server:
-    command: ["prefect", "server", "start", "--host", "0.0.0.0", "--log-level", "WARNING"]
-    depends_on:
-      - postgres
-    environment:
-      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql://postgres:postgres@postgres:5432/postgres
-      - PREFECT_SERVER_API_HOST=0.0.0.0
-      - PREFECT_SERVER_API_PORT=4200
-      - PREFECT_LOGGING_SERVER_LEVEL=WARNING
-    image: prefecthq/prefect:2.10.8-python3.9
-    ports:
-      - 4200
+  # prefect-server:
+  #   command: ["prefect", "server", "start", "--host", "0.0.0.0"]
+  #   depends_on:
+  #     - postgres
+  #   environment:
+  #     - PREFECT_API_DATABASE_CONNECTION_URL=postgresql://postgres:postgres@postgres:5432/postgres
+  #     - PREFECT_SERVER_API_HOST=0.0.0.0
+  #     - PREFECT_SERVER_API_PORT=4200
+  #     - PREFECT_LOGGING_SERVER_LEVEL=WARNING
+  #   image: prefecthq/prefect:2.10.10-python3.9
+  #   ports:
+  #     - 4200
 
   # talker:
   #   build: src/timestep/agents/agent
   #   command: ros2 run demo_nodes_py talker
 
-  # underlay:
-  #   build: .
-  #   command: tail -f /dev/null
+  agent-overlay:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # command: tail -f /dev/null
+    command: ros2 run demo_nodes_cpp talker
+    container_name: timestep-ai-agent-overlay
+    env_file:
+      - .env
+    image: timestep-ai/agent-overlay:latest
+
+  env-overlay:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # command: tail -f /dev/null
+    command: ros2 run demo_nodes_cpp listener
+    container_name: timestep-ai-env-overlay
+    depends_on:
+      - agent-overlay
+    env_file:
+      - .env
+    image: timestep-ai/env-overlay:latest
+
+  underlay:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: tail -f /dev/null
+    # command: ros2 run demo_nodes_cpp talker
+    container_name: timestep-ai-underlay
+    depends_on:
+      - env-overlay
+    env_file:
+      - .env
+    image: timestep-ai/underlay:latest
 
 version: "3"

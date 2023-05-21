@@ -32,58 +32,75 @@ def src_lib():
 #   Tilt running.
 src_lib()
 
-local_resource('cdktf-deploy',
-    auto_init=True,
-    cmd='cdktf deploy --auto-approve --outputs-file dist/deploy/infra/outputs.json',
-    labels=['deploy'],
-    resource_deps=['cdktf', 'multipass', 'terraform'],
-    trigger_mode=TRIGGER_MODE_MANUAL,
+# local_resource('clean',
+#     auto_init=False,
+#     cmd='rm -rf dist/deploy/k8s/charts/timestep',
+#     deps=['docker-compose.yaml'],
+#     labels=['clean'],
+#     trigger_mode=TRIGGER_MODE_MANUAL,
+# )
+
+# default_registry('ttl.sh/mjschock-4ab9f843-ed84-4602-8501-c68f050202af')
+# docker_build('timestep-ai/underlay', '.')
+
+docker_compose(
+    configPaths=[
+        'docker-compose.yaml',
+    ],
+    env_file='.env',
+    project_name='timestep-ai',
 )
 
-local_resource('k3sup-install',
-    auto_init=False,
-    cmd='PRIVATE_SSH_KEY_PATH=./.ssh/id_rsa ./src/lib/tools/k3sup-install.sh',
-    deps=['dist/deploy/infra/outputs.json', 'src/lib/tools/k3sup-install.sh'],
-    labels=['deploy'],
-    resource_deps=['cdktf-deploy', 'k3sup'],
-    trigger_mode=TRIGGER_MODE_AUTO,
-)
+# local_resource('kompose-convert',
+#     auto_init=True,
+#     cmd='rm -rf dist/deploy/k8s/charts/timestep && docker run --rm --name kompose -v $PWD:/src femtopixel/kompose convert --chart --out /src/dist/deploy/k8s/charts/timestep --secrets-as-files --verbose --file docker-compose.yaml',
+#     deps=['docker-compose.yaml'],
+#     labels=['build'],
+#     trigger_mode=TRIGGER_MODE_AUTO,
+# )
 
-local_resource('clean',
-    auto_init=False,
-    cmd='rm -rf dist/deploy/k8s/charts/timestep',
-    deps=['docker-compose.yaml'],
-    labels=['clean'],
-    trigger_mode=TRIGGER_MODE_MANUAL,
-)
+# local_resource('cdktf-deploy',
+#     auto_init=True,
+#     cmd='pipx run poetry run cdktf deploy --auto-approve --outputs-file dist/deploy/infra/outputs.json',
+#     labels=['deploy'],
+#     resource_deps=['multipass', 'terraform'],
+#     trigger_mode=TRIGGER_MODE_AUTO,
+# )
 
-local_resource('kompose-convert',
-    auto_init=True,
-    cmd='docker run --rm --name kompose -v $PWD:/src femtopixel/kompose convert --chart --out /src/dist/deploy/k8s/charts/timestep --secrets-as-files --verbose --file docker-compose.yaml',
-    deps=['docker-compose.yaml'],
-    labels=['build'],
-    trigger_mode=TRIGGER_MODE_AUTO,
-)
+# local_resource('k3sup-install',
+#     auto_init=True,
+#     cmd='PRIVATE_SSH_KEY_PATH=./.ssh/id_rsa ./src/lib/tools/k3sup-install.sh',
+#     deps=['dist/deploy/infra/outputs.json', 'src/lib/tools/k3sup-install.sh'],
+#     labels=['deploy'],
+#     resource_deps=['cdktf-deploy', 'k3sup'],
+#     trigger_mode=TRIGGER_MODE_AUTO,
+# )
 
-allow_k8s_contexts('timestep-k3s-cluster')
-# local('kubectl config use-context timestep-k3s-cluster')
+# allow_k8s_contexts('timestep-k3s-cluster')
+# # # local('kubectl config use-context timestep-k3s-cluster')
 
-if k8s_context() == 'timestep-k3s-cluster':
-    # local_resource('k3s-deploy',
-    #     auto_init=True,
-    #     cmd='k3s kubectl apply -f dist/deploy/k8s/manifests',
-    #     deps=['dist/deploy/k8s/manifests'],
-    #     labels=['deploy'],
-    #     resource_deps=['k3sup-install'],
-    #     trigger_mode=TRIGGER_MODE_AUTO,
-    # )
+# # if k8s_context() == 'timestep-k3s-cluster':
+# #     # local_resource('k3s-deploy',
+# #     #     auto_init=True,
+# #     #     cmd='k3s kubectl apply -f dist/deploy/k8s/manifests',
+# #     #     deps=['dist/deploy/k8s/manifests'],
+# #     #     labels=['deploy'],
+# #     #     resource_deps=['k3sup-install'],
+# #     #     trigger_mode=TRIGGER_MODE_AUTO,
+# #     # )
 
-    k8s_yaml(listdir('dist/deploy/k8s/manifests'))
-    k8s_yaml(helm('src/docs/reference/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='conf/base/caddy-ingress-controller.yaml'))
-    # k8s_yaml(listdir('src/docs/reference/caddyserver/ingress/kubernetes/sample'))
-    k8s_yaml(helm('dist/deploy/k8s/charts/timestep', name='timestep', namespace='default'))
+# default_registry('ttl.sh/mjschock-4ab9f843-ed84-4602-8501-c68f050202af')
+# docker_build('timestep-ai/underlay', '.')
 
-    local('src/lib/tools/hostsctl-add.sh') # TODO: pass in the IP address
+# k8s_yaml('dist/deploy/k8s/manifests/namespace-caddy-system.yaml')
+# k8s_yaml(helm('src/lib/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='conf/base/caddy-ingress-controller.yaml'))
+
+# k8s_yaml(listdir('dist/deploy/k8s/manifests'))
+#     k8s_yaml(helm('src/lib/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='conf/base/caddy-ingress-controller.yaml'))
+#     # k8s_yaml(listdir('src/docs/reference/caddyserver/ingress/kubernetes/sample'))
+#     k8s_yaml(helm('dist/deploy/k8s/charts/timestep', name='timestep', namespace='default'))
+
+#     local('src/lib/tools/hostsctl-add.sh') # TODO: pass in the IP address
 
 # k8s_resource("caddy-ingress-controller",
 #     # port_forwards=['timestep.local:80:80', 'timestep.local:443:443'],

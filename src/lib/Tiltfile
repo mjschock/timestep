@@ -9,11 +9,11 @@ local_resource('arkade',
     links=['https://github.com/alexellis/arkade#getting-arkade'],
 )
 
-local_resource('cdktf',
-    cmd='which cdktf > /dev/null',
-    labels=['requirements'],
-    links=['https://developer.hashicorp.com/terraform/tutorials/cdktf/cdktf-install#install-cdktf'],
-)
+# local_resource('cdktf',
+#     cmd='which cdktf > /dev/null',
+#     labels=['requirements'],
+#     links=['https://developer.hashicorp.com/terraform/tutorials/cdktf/cdktf-install#install-cdktf'],
+# )
 
 local_resource('multipass',
     cmd='which multipass > /dev/null',
