@@ -3,9 +3,13 @@
 # from timestep.envs.rock_paper_scissors.env import rock_paper_scissors
 # from timestep.envs.tic_tac_toe.env import tic_tac_toe
 import typer
+import os
 
 from constructs import Construct
-from cdktf import App, TerraformOutput, TerraformProvider, TerraformStack
+from cdktf import App, TerraformDataSource, TerraformOutput, TerraformProvider, TerraformResource, TerraformStack
+from cdktf_cdktf_provider_digitalocean.provider import DigitaloceanProvider as DigitaloceanTerraformProvider
+from cdktf_cdktf_provider_digitalocean.droplet import Droplet as DigitaloceanTerraformResource
+from cdktf_cdktf_provider_digitalocean.data_digitalocean_droplet import DataDigitaloceanDroplet as DigitaloceanTerraformDataSource
 
 from lib.imports.multipass.provider import MultipassProvider as MultipassTerraformProvider
 from lib.imports.multipass.instance import Instance as MultipassTerraformResource
@@ -16,46 +20,106 @@ class MainTerraformStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, target: str):
         super().__init__(scope, id)
 
-        provider = MultipassTerraformProvider(
-            id=f"{id}-{target}-provider",
-            scope=self,
-        )
+        provider = self.get_provider(id, target)
+
+        resource = self.get_resource(id, target, provider)
+
+        data_source = self.get_data_source(id, target, provider, resource)
+
+        output = self.get_output(target, data_source)
+
+    def get_provider(self, id, target):
+        if target == "localhost":
+            provider = MultipassTerraformProvider(
+                id=f"{id}-{target}-provider",
+                scope=self,
+            )
+
+        elif target == "prod":
+            do_token = os.environ.get("DO_TOKEN", "")
+
+            provider = DigitaloceanTerraformProvider(
+                id=f"{id}-{target}-provider",
+                scope=self,
+                token=do_token,
+            )
+
         assert isinstance(provider, TerraformProvider)
+        return provider
 
-        import os
-        cwd = os.getcwd()
-        print(f"cwd: {cwd}")
+    def get_resource(self, id, target, provider):
+        if target == "localhost":
+            cwd = os.getcwd()
+            cloudinit_file = f"{cwd}/conf/base/cloud.yaml"
 
-        cloudinit_file = f"{cwd}/conf/base/cloud.yaml"
+            resource = MultipassTerraformResource(
+                cloudinit_file=cloudinit_file,
+                cpus=2,
+                disk="40G",
+                id=f"{id}-{target}-resource",
+                image="22.04", # "ros2-humble",
+                # image="ros2-humble",
+                # memory="4G",
+                name=f"{id}",
+                provider=provider,
+                scope=self,
+            )
 
-        resource = MultipassTerraformResource(
-            cloudinit_file=cloudinit_file,
-            cpus=2,
-            disk="40G",
-            id=f"{id}-{target}-resource",
-            image="22.04", # "ros2-humble",
-            # image="ros2-humble",
-            # memory="4G",
-            name=f"{id}",
-            provider=provider,
-            scope=self,
-        )
-        assert isinstance(resource, MultipassTerraformResource)
+        elif target == "prod":
+            cwd = os.getcwd()
+            cloudinit_file = f"{cwd}/conf/base/cloud.yaml"
 
-        data_source = MultipassTerraformDataSource(
-            id=f"{id}-{target}-data_source",
-            name=resource.name,
-            provider=provider,
-            scope=self,
-        )
-        assert isinstance(data_source, MultipassTerraformDataSource)
+            resource = DigitaloceanTerraformResource(
+                id_=f"{id}-{target}-resource",
+                image="ubuntu-22-04-x64",
+                name=f"{id}",
+                provider=provider,
+                region='sfo3',
+                scope=self,
+                size='s-1vcpu-512mb-10gb',
+                user_data=cloudinit_file,
+            )
 
-        output = TerraformOutput(
-            id=f"{target}-ipv4",
-            value=data_source.ipv4,
-            scope=self,
-        )
-        # print(f"output: {output}")
+        assert isinstance(resource, TerraformResource)
+        return resource
+
+    def get_data_source(self, id, target, provider, resource):
+        if target == "localhost":
+            data_source = MultipassTerraformDataSource(
+                id=f"{id}-{target}-data_source",
+                name=resource.name,
+                provider=provider,
+                scope=self,
+            )
+
+        elif target == "prod":
+            data_source = DigitaloceanTerraformDataSource(
+                id_=f"{id}-{target}-data_source",
+                name=resource.name,
+                provider=provider,
+                scope=self,
+            )
+
+        assert isinstance(data_source, TerraformDataSource)
+        return data_source
+
+    def get_output(self, target, data_source):
+        if target == "localhost":
+            output = TerraformOutput(
+                id=f"{target}-ipv4",
+                value=data_source.ipv4,
+                scope=self,
+            )
+
+        elif target == "prod":
+            output = TerraformOutput(
+                id=f"{target}-ipv4",
+                value=data_source.ipv4_address,
+                scope=self,
+            )
+
+        assert isinstance(output, TerraformOutput)
+        return output
 
 def main(app_name: str="timestep", env: str="localhost", openai_api_key: str=""):
     print(f"Running {app_name} in {env} mode")
@@ -113,8 +177,9 @@ def loop():
     typer.echo("Running the loop")
 
     MARVIN_OPENAI_API_KEY='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'
+    TARGET=os.environ.get("TARGET", "localhost")
 
-    main(openai_api_key=MARVIN_OPENAI_API_KEY)
+    main(env=TARGET, openai_api_key=MARVIN_OPENAI_API_KEY)
 
 
 if __name__ == "__main__":
