@@ -23,6 +23,7 @@ jobs:
         $HOME/.anyenv/bin/anyenv install jenv
         $HOME/.anyenv/bin/anyenv install nodenv
         $HOME/.anyenv/bin/anyenv install goenv
+        exec $SHELL -l
 
     - name: Check versions
       run: |
