@@ -24,6 +24,13 @@ jobs:
         $HOME/.anyenv/bin/anyenv install nodenv
         $HOME/.anyenv/bin/anyenv install goenv
 
+    - name: Check versions
+      run: |
+        anyenv versions
+        jenv versions
+        nodenv versions
+        goenv versions
+
     # - name: Install poetry
     #   run: pipx install poetry
     # - uses: actions/setup-python@v4
