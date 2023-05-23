@@ -19,14 +19,8 @@ jobs:
         export PATH="$HOME/.anyenv/bin:$PATH"
         eval "$(anyenv init -)"
         anyenv install --force-init
-        anyenv install jenv
-        anyenv install nodenv
-        anyenv install goenv
         anyenv install pyenv
         anyenv versions
-        jenv versions
-        nodenv versions
-        goenv versions
 
     # - name: Install poetry
     #   run: pipx install poetry

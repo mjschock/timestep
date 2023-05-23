@@ -76,7 +76,7 @@ docker_compose(
 #     trigger_mode=TRIGGER_MODE_AUTO,
 # )
 
-# allow_k8s_contexts('timestep-k3s-cluster')
+allow_k8s_contexts('timestep-k3s-cluster')
 # # # local('kubectl config use-context timestep-k3s-cluster')
 
 # # if k8s_context() == 'timestep-k3s-cluster':
@@ -208,7 +208,7 @@ docker_compose(
 #
 #   More info: https://github.com/tilt-dev/tilt-extensions
 #
-# load('ext://git_resource', 'git_checkout')
+load('ext://git_resource', 'git_checkout')
 
 
 # Organize logic into functions

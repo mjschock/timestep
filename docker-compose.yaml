@@ -58,6 +58,13 @@ services:
       - .env
     image: timestep-ai/env-overlay:latest
 
+  frontend:
+    build: src/frontend/timestep-ai
+    environment:
+      - VITE_CLIENT_PORT=5735
+    ports:
+      - 9000
+
   underlay:
     build:
       context: .
