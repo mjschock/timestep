@@ -1,1 +1,0 @@
-# timestep-envs-tic-tac-toe
