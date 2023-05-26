@@ -1,7 +1,0 @@
-{
-  "cdktf": "0.15.5",
-  "providers": {
-    "digitalocean": "~> 2.28",
-    "multipass": "~> 1.4"
-  }
-}
