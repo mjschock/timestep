@@ -1,9 +1,2 @@
-data
-dist
-.terraform
-cdktf.out
-cdktf.log
-*terraform.*.tfstate*
 .secrets
-tmp
-.venv
+dist
