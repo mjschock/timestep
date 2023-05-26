@@ -1,6 +1,5 @@
-dist/
-imports/*
-!imports/__init__.py
+data
+dist
 .terraform
 cdktf.out
 cdktf.log
