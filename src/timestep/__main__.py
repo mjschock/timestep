@@ -1,18 +1,17 @@
-import typer
 import os
 
 from constructs import Construct
 from cdktf import App, TerraformDataSource, TerraformOutput, TerraformProvider, TerraformResource, TerraformStack
-from cdktf_cdktf_provider_digitalocean.provider import DigitaloceanProvider as DigitaloceanTerraformProvider
-from cdktf_cdktf_provider_digitalocean.droplet import Droplet as DigitaloceanTerraformResource
-from cdktf_cdktf_provider_digitalocean.data_digitalocean_droplet import DataDigitaloceanDroplet as DigitaloceanTerraformDataSource
 
 from omegaconf import DictConfig, OmegaConf
 import hydra
 
-from lib.imports.multipass.provider import MultipassProvider as MultipassTerraformProvider
-from lib.imports.multipass.instance import Instance as MultipassTerraformResource
-from lib.imports.multipass.data_multipass_instance import DataMultipassInstance as MultipassTerraformDataSource
+from timestep.infra.imports.digitalocean.provider import DigitaloceanProvider as DigitaloceanTerraformProvider
+from timestep.infra.imports.digitalocean.droplet import Droplet as DigitaloceanTerraformResource
+from timestep.infra.imports.digitalocean.data_digitalocean_droplet import DataDigitaloceanDroplet as DigitaloceanTerraformDataSource
+from timestep.infra.imports.multipass.provider import MultipassProvider as MultipassTerraformProvider
+from timestep.infra.imports.multipass.instance import Instance as MultipassTerraformResource
+from timestep.infra.imports.multipass.data_multipass_instance import DataMultipassInstance as MultipassTerraformDataSource
 
 
 class MainTerraformStack(TerraformStack):
