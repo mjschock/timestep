@@ -1,0 +1,16 @@
+{
+  "language": "python",
+  "app": "./bin/poetry run python -m timestep",
+  "projectId": "68b963d4-6feb-4c02-8c49-c6d4eddc23a3",
+  "sendCrashReports": "false",
+  "terraformProviders": [
+    "digitalocean/digitalocean@~> 2.28",
+    "larstobi/multipass@~> 1.4"
+  ],
+  "terraformModules": [],
+  "codeMakerOutput": "src/timestep/infra/imports",
+  "context": {
+    "excludeStackIdFromLogicalIds": "true",
+    "allowSepCharsInLogicalIds": "true"
+  }
+}
