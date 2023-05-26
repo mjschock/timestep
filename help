@@ -5,7 +5,7 @@
   cat help                Prints this message
 
   Compile:
-    python3 ./main.py     Compile and run the python code.
+    dist/bin/poetry run python -m timestep     Compile and run the python code.
 
   Synthesize:
     cdktf synth [stack]   Synthesize Terraform resources to cdktf.out/
