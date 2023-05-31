@@ -1,4 +1,5 @@
 import os
+from typing import Dict, List
 
 from constructs import Construct
 from cdktf import App, TerraformDataSource, TerraformElement, TerraformOutput, TerraformProvider, TerraformResource, TerraformStack
@@ -20,17 +21,21 @@ class TerraformElementFactory():
         self.stack_id = stack_id
         self.config = config
 
-    def build_element(self, *args, **kwargs) -> TerraformElement:
+    def build(self, *args, **kwargs) -> Dict[str, TerraformElement]:
         raise NotImplementedError()
 
 
 class TerraformProviderFactory(TerraformElementFactory):
-    def build_element(self) -> TerraformProvider:
+    def build(self) -> Dict[str, TerraformProvider]:
+        providers = {}
+
         if self.config.target.env == "local":
             provider = MultipassTerraformProvider(
                 id=f"{self.stack_id}-provider",
                 scope=self.scope,
             )
+
+            providers["multipass"] = provider
 
         elif self.config.target.env == "prod":
             provider = DigitaloceanTerraformProvider(
@@ -39,15 +44,20 @@ class TerraformProviderFactory(TerraformElementFactory):
                 token=self.config.target.do_token,
             )
 
+            providers["digitalocean"] = provider
+
         else:
             raise ValueError(f"Unknown env: {self.config.target.env}")
 
-        assert isinstance(provider, TerraformProvider)
-        return provider
+        for provider in providers:
+            assert isinstance(providers[provider], TerraformProvider)
+
+        return providers
 
 
 class TerraformResourceFactory(TerraformElementFactory):
-    def build_element(self, provider: TerraformProvider) -> TerraformResource:
+    def build(self, providers: Dict[str, TerraformProvider]) -> Dict[str, TerraformResource]:
+        resources = {}
         cwd = os.getcwd()
         cloudinit_file = f"{cwd}/src/timestep/conf/base/cloud-config.yaml"
 
@@ -63,6 +73,8 @@ class TerraformResourceFactory(TerraformElementFactory):
                 scope=self.scope,
             )
 
+            resources["multipass"] = resource
+
         elif self.config.target.env == "prod":
             resource = DigitaloceanTerraformResource(
                 id_=f"{self.stack_id}-resource",
@@ -75,15 +87,21 @@ class TerraformResourceFactory(TerraformElementFactory):
                 user_data=cloudinit_file,
             )
 
+            resources["digitalocean"] = resource
+
         else:
             raise ValueError(f"Unknown env: {self.config.target.env}")
 
-        assert isinstance(resource, TerraformResource)
-        return resource
+        for resource in resources:
+            assert isinstance(resources[resource], TerraformResource)
+        
+        return resources
 
 
 class TerraformDataSourceFactory(TerraformElementFactory):
-    def build_element(self, provider: TerraformProvider, resource: TerraformResource) -> TerraformDataSource:
+    def build(self, providers: Dict[str, TerraformProvider], resources: Dict[str, TerraformResource]) -> Dict[str, TerraformDataSource]:
+        data_sources = {}
+
         if self.config.target.env == "local":
             data_source = MultipassTerraformDataSource(
                 id=f"{self.stack_id}-data_source",
@@ -91,6 +109,8 @@ class TerraformDataSourceFactory(TerraformElementFactory):
                 provider=provider,
                 scope=self.scope,
             )
+
+            data_sources["multipass"] = data_source
 
         elif self.config.target.env == "prod":
             data_source = DigitaloceanTerraformDataSource(
@@ -100,21 +120,29 @@ class TerraformDataSourceFactory(TerraformElementFactory):
                 scope=self.scope,
             )
 
+            data_sources["digitalocean"] = data_source
+
         else:
             raise ValueError(f"Unknown env: {self.config.target.env}")
 
-        assert isinstance(data_source, TerraformDataSource)
-        return data_source
+        for data_source in data_sources:
+            assert isinstance(data_sources[data_source], TerraformDataSource)
+
+        return data_sources
 
 
 class TerraformOutputFactory(TerraformElementFactory):
-    def build_element(self, data_source: TerraformDataSource) -> TerraformOutput:
+    def build(self, data_sources: Dict[str, TerraformDataSource]) -> Dict[str, TerraformOutput]:
+        outputs = {}
+
         if self.config.target.env == "local":
             output = TerraformOutput(
                 id=f"{self.stack_id}-output-ipv4",
                 value=data_source.ipv4,
                 scope=self.scope,
             )
+
+            outputs["multipass"] = output
 
         elif self.config.target.env == "prod":
             output = TerraformOutput(
@@ -123,32 +151,50 @@ class TerraformOutputFactory(TerraformElementFactory):
                 scope=self.scope,
             )
 
+            outputs["digitalocean"] = output
+
         else:
             raise ValueError(f"Unknown env: {self.config.target.env}")
 
-        assert isinstance(output, TerraformOutput)
-        return output
+        for output in outputs:
+            assert isinstance(outputs[output], TerraformOutput)
+  
+        return outputs
 
 
 class MainTerraformStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, config: DictConfig, **kwargs) -> None:
         super().__init__(scope, id)
 
-        provider: TerraformProvider = TerraformProviderFactory(scope=self, stack_id=id, config=config).build_element()
-        assert isinstance(provider, TerraformElement)
+        providers = TerraformProviderFactory(scope=self, stack_id=id, config=config).build()
 
-        resource: TerraformResource = TerraformResourceFactory(scope=self, stack_id=id, config=config).build_element(provider=provider)
-        assert isinstance(resource, TerraformElement)
+        for provider in providers:
+            assert isinstance(providers[provider], TerraformElement)
+            assert isinstance(providers[provider], TerraformProvider)
 
-        data_source: TerraformDataSource = TerraformDataSourceFactory(scope=self, stack_id=id, config=config).build_element(provider=provider, resource=resource)
-        assert isinstance(data_source, TerraformElement)
+        resources = TerraformResourceFactory(scope=self, stack_id=id, config=config).build(providers=providers)
 
-        output: TerraformOutput = TerraformOutputFactory(scope=self, stack_id=id, config=config).build_element(data_source=data_source)
-        assert isinstance(output, TerraformElement)
+        for resource in resources:        
+            assert isinstance(resources[resource], TerraformElement)
+            assert isinstance(resources[resource], TerraformResource)
+
+        data_sources = TerraformDataSourceFactory(scope=self, stack_id=id, config=config).build(providers=providers, resources=resources)
+
+        for data_source in data_sources:
+            assert isinstance(data_sources[data_source], TerraformElement)
+            assert isinstance(data_sources[data_source], TerraformDataSource)
+
+        outputs = TerraformOutputFactory(scope=self, stack_id=id, config=config).build(data_sources=data_sources)
+
+        for output in outputs:
+            assert isinstance(outputs[output], TerraformElement)
+            assert isinstance(output[output], TerraformOutput)
 
 
 @hydra.main(config_name="config", config_path="conf", version_base=None)
 def main(config: DictConfig) -> None:
+    print(f"config: {config}")
+
     app_name = config.target.app_name
     env = config.target.env
     id = f"{app_name}-{env}"
