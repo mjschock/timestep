@@ -1,7 +1,7 @@
 import os
 
 from constructs import Construct
-from cdktf import App, TerraformDataSource, TerraformOutput, TerraformProvider, TerraformResource, TerraformStack
+from cdktf import App, TerraformDataSource, TerraformElement, TerraformOutput, TerraformProvider, TerraformResource, TerraformStack
 
 from omegaconf import DictConfig, OmegaConf
 import hydra
@@ -14,134 +14,148 @@ from timestep.infra.imports.multipass.instance import Instance as MultipassTerra
 from timestep.infra.imports.multipass.data_multipass_instance import DataMultipassInstance as MultipassTerraformDataSource
 
 
-class MainTerraformStack(TerraformStack):
-    def __init__(self, scope: Construct, id: str, target: str):
-        super().__init__(scope, id)
+class TerraformElementFactory():
+    def __init__(self, scope: Construct, stack_id: str, config: DictConfig) -> None:
+        self.scope = scope
+        self.stack_id = stack_id
+        self.config = config
 
-        provider = self.get_provider(id, target)
+    def build_element(self, *args, **kwargs) -> TerraformElement:
+        raise NotImplementedError()
 
-        resource = self.get_resource(id, target, provider)
 
-        data_source = self.get_data_source(id, target, provider, resource)
-
-        output = self.get_output(target, data_source)
-
-    def get_provider(self, id, target):
-        if target in ["localhost", "multipass"]:
+class TerraformProviderFactory(TerraformElementFactory):
+    def build_element(self) -> TerraformProvider:
+        if self.config.target.env == "local":
             provider = MultipassTerraformProvider(
-                id=f"{id}-{target}-provider",
-                scope=self,
+                id=f"{self.stack_id}-provider",
+                scope=self.scope,
             )
 
-        elif target == "prod":
-            do_token = os.environ.get("DO_TOKEN", "")
-
+        elif self.config.target.env == "prod":
             provider = DigitaloceanTerraformProvider(
-                id=f"{id}-{target}-provider",
-                scope=self,
-                token=do_token,
+                id=f"{self.stack_id}-provider",
+                scope=self.scope,
+                token=self.config.target.do_token,
             )
 
         else:
-            raise ValueError(f"Unknown target: {target}")
+            raise ValueError(f"Unknown env: {self.config.target.env}")
 
         assert isinstance(provider, TerraformProvider)
         return provider
 
-    def get_resource(self, id, target, provider):
-        if target in ["localhost", "multipass"]:
-            cwd = os.getcwd()
-            cloudinit_file = f"{cwd}/conf/base/cloud.yaml"
 
+class TerraformResourceFactory(TerraformElementFactory):
+    def build_element(self, provider: TerraformProvider) -> TerraformResource:
+        cwd = os.getcwd()
+        cloudinit_file = f"{cwd}/src/timestep/conf/base/cloud-config.yaml"
+
+        if self.config.target.env == "local":
             resource = MultipassTerraformResource(
                 cloudinit_file=cloudinit_file,
                 cpus=2,
                 disk="40G",
-                id=f"{id}-{target}-resource",
-                image="22.04", # "ros2-humble",
-                # image="ros2-humble",
-                # memory="4G",
-                name=f"{id}",
+                id=f"{self.stack_id}-resource",
+                image="22.04",
+                name=f"{self.stack_id}",
                 provider=provider,
-                scope=self,
+                scope=self.scope,
             )
 
-        elif target == "prod":
-            cwd = os.getcwd()
-            cloudinit_file = f"{cwd}/conf/base/cloud.yaml"
-
+        elif self.config.target.env == "prod":
             resource = DigitaloceanTerraformResource(
-                id_=f"{id}-{target}-resource",
+                id_=f"{self.stack_id}-resource",
                 image="ubuntu-22-04-x64",
-                name=f"{id}",
+                name=f"{self.stack_id}",
                 provider=provider,
                 region='sfo3',
-                scope=self,
+                scope=self.scope,
                 size='s-1vcpu-512mb-10gb',
                 user_data=cloudinit_file,
             )
 
         else:
-            raise ValueError(f"Unknown target: {target}")
+            raise ValueError(f"Unknown env: {self.config.target.env}")
 
         assert isinstance(resource, TerraformResource)
         return resource
 
-    def get_data_source(self, id, target, provider, resource):
-        if target in ["localhost", "multipass"]:
+
+class TerraformDataSourceFactory(TerraformElementFactory):
+    def build_element(self, provider: TerraformProvider, resource: TerraformResource) -> TerraformDataSource:
+        if self.config.target.env == "local":
             data_source = MultipassTerraformDataSource(
-                id=f"{id}-{target}-data_source",
+                id=f"{self.stack_id}-data_source",
                 name=resource.name,
                 provider=provider,
-                scope=self,
+                scope=self.scope,
             )
 
-        elif target == "prod":
+        elif self.config.target.env == "prod":
             data_source = DigitaloceanTerraformDataSource(
-                id_=f"{id}-{target}-data_source",
+                id_=f"{self.stack_id}-data_source",
                 name=resource.name,
                 provider=provider,
-                scope=self,
+                scope=self.scope,
             )
 
         else:
-            raise ValueError(f"Unknown target: {target}")
+            raise ValueError(f"Unknown env: {self.config.target.env}")
 
         assert isinstance(data_source, TerraformDataSource)
         return data_source
 
-    def get_output(self, target, data_source):
-        if target in ["localhost", "multipass"]:
+
+class TerraformOutputFactory(TerraformElementFactory):
+    def build_element(self, data_source: TerraformDataSource) -> TerraformOutput:
+        if self.config.target.env == "local":
             output = TerraformOutput(
-                id=f"{target}-ipv4",
+                id=f"{self.stack_id}-output-ipv4",
                 value=data_source.ipv4,
-                scope=self,
+                scope=self.scope,
             )
 
-        elif target == "prod":
+        elif self.config.target.env == "prod":
             output = TerraformOutput(
-                id=f"{target}-ipv4",
+                id=f"{self.stack_id}-output-ipv4",
                 value=data_source.ipv4_address,
-                scope=self,
+                scope=self.scope,
             )
 
         else:
-            raise ValueError(f"Unknown target: {target}")
+            raise ValueError(f"Unknown env: {self.config.target.env}")
 
         assert isinstance(output, TerraformOutput)
         return output
 
 
-@hydra.main(config_name="config", config_path="conf", version_base=None)
-def main(cfg: DictConfig) -> None:
-    app_name = cfg.target.app_name
-    env = cfg.target.env
+class MainTerraformStack(TerraformStack):
+    def __init__(self, scope: Construct, id: str, config: DictConfig, **kwargs) -> None:
+        super().__init__(scope, id)
 
-    print(f"Running {app_name} app in {env} mode")
+        provider: TerraformProvider = TerraformProviderFactory(scope=self, stack_id=id, config=config).build_element()
+        assert isinstance(provider, TerraformElement)
+
+        resource: TerraformResource = TerraformResourceFactory(scope=self, stack_id=id, config=config).build_element(provider=provider)
+        assert isinstance(resource, TerraformElement)
+
+        data_source: TerraformDataSource = TerraformDataSourceFactory(scope=self, stack_id=id, config=config).build_element(provider=provider, resource=resource)
+        assert isinstance(data_source, TerraformElement)
+
+        output: TerraformOutput = TerraformOutputFactory(scope=self, stack_id=id, config=config).build_element(data_source=data_source)
+        assert isinstance(output, TerraformElement)
+
+
+@hydra.main(config_name="config", config_path="conf", version_base=None)
+def main(config: DictConfig) -> None:
+    app_name = config.target.app_name
+    env = config.target.env
+    id = f"{app_name}-{env}"
 
     app = App()
 
-    MainTerraformStack(scope=app, id=app_name, target=env)
+    MainTerraformStack(scope=app, id=id, config=config)
 
     app.synth()
 

@@ -1,3 +1,4 @@
 app_name: timestep-ai
+do_token: dop_v1_5ce680d34df7574234e8c4e77fb11b730fbf66f3fb819469d9a8b175e85fbb25
 env: prod
 openai_api_key: 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
