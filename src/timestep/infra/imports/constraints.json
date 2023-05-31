@@ -1,6 +1,7 @@
 {
   "cdktf": "0.15.5",
   "providers": {
+    "cloudinit": "~> 2.3",
     "digitalocean": "~> 2.28",
     "multipass": "~> 1.4"
   }

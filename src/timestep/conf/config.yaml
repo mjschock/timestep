@@ -1,6 +1,6 @@
 defaults:
   - _self_
-  - target: multipass
+  - target: local
 
 hydra:
   run:

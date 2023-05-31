@@ -6,6 +6,7 @@
   "sendCrashReports": "false",
   "terraformProviders": [
     "digitalocean/digitalocean@~> 2.28",
+    "hashicorp/cloudinit@~> 2.3",
     "larstobi/multipass@~> 1.4"
   ],
   "terraformModules": [],

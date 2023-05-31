@@ -44,18 +44,18 @@ attrs = ">=20"
 
 [[package]]
 name = "cdktf"
-version = "0.16.1"
+version = "0.15.5"
 description = "Cloud Development Kit for Terraform"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "cdktf-0.16.1-py3-none-any.whl", hash = "sha256:40bb6ace7d12826e33af6460cd6d5b2c5acc23143aee4843aef7ad6aa3689ae8"},
-    {file = "cdktf-0.16.1.tar.gz", hash = "sha256:ffe2e5b45a90a0b6eb42c071b6ce36963e22e5ef8aecf4d949045efd1dcdbaa5"},
+    {file = "cdktf-0.15.5-py3-none-any.whl", hash = "sha256:a6b0819a4c276e152997d5d8624488331706e483a7fc348f9ffcbe471912dc44"},
+    {file = "cdktf-0.15.5.tar.gz", hash = "sha256:26799fc86c0d43d3178493dd155adc58dfa9d391db7b27d1209ba27496cba615"},
 ]
 
 [package.dependencies]
 constructs = ">=10.0.25,<11.0.0"
-jsii = ">=1.79.0,<2.0.0"
+jsii = ">=1.75.0,<2.0.0"
 publication = ">=0.0.3"
 typeguard = ">=2.13.3,<2.14.0"
 
@@ -323,4 +323,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7520d77cbfdc39db78db797b7ade917f9fe1b72f5ceb50995c80e3ae0cab799b"
+content-hash = "e71610265d660e8c51cf7bfbbb3d49c5f894c1083fce1f5d80a3d005977b38fc"
