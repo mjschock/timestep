@@ -1,7 +1,7 @@
 '''
 # `digitalocean_firewall`
 
-Refer to the Terraform Registory for docs: [`digitalocean_firewall`](https://www.terraform.io/docs/providers/digitalocean/r/firewall).
+Refer to the Terraform Registory for docs: [`digitalocean_firewall`](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class Firewall(
     metaclass=jsii.JSIIMeta,
     jsii_type="digitalocean.firewall.Firewall",
 ):
-    '''Represents a {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall digitalocean_firewall}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall digitalocean_firewall}.'''
 
     def __init__(
         self,
@@ -40,23 +40,23 @@ class Firewall(
         outbound_rule: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["FirewallOutboundRule", typing.Dict[builtins.str, typing.Any]]]]] = None,
         tags: typing.Optional[typing.Sequence[builtins.str]] = None,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall digitalocean_firewall} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall digitalocean_firewall} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param name: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#name Firewall#name}.
-        :param droplet_ids: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#droplet_ids Firewall#droplet_ids}.
-        :param id: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#id Firewall#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param inbound_rule: inbound_rule block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#inbound_rule Firewall#inbound_rule}
-        :param outbound_rule: outbound_rule block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#outbound_rule Firewall#outbound_rule}
-        :param tags: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#tags Firewall#tags}.
+        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#name Firewall#name}.
+        :param droplet_ids: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#droplet_ids Firewall#droplet_ids}.
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#id Firewall#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param inbound_rule: inbound_rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#inbound_rule Firewall#inbound_rule}
+        :param outbound_rule: outbound_rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#outbound_rule Firewall#outbound_rule}
+        :param tags: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#tags Firewall#tags}.
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -274,7 +274,7 @@ class FirewallConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         self,
         *,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -295,12 +295,12 @@ class FirewallConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param name: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#name Firewall#name}.
-        :param droplet_ids: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#droplet_ids Firewall#droplet_ids}.
-        :param id: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#id Firewall#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param inbound_rule: inbound_rule block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#inbound_rule Firewall#inbound_rule}
-        :param outbound_rule: outbound_rule block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#outbound_rule Firewall#outbound_rule}
-        :param tags: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#tags Firewall#tags}.
+        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#name Firewall#name}.
+        :param droplet_ids: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#droplet_ids Firewall#droplet_ids}.
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#id Firewall#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param inbound_rule: inbound_rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#inbound_rule Firewall#inbound_rule}
+        :param outbound_rule: outbound_rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#outbound_rule Firewall#outbound_rule}
+        :param tags: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#tags Firewall#tags}.
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -358,12 +358,14 @@ class FirewallConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
-    def count(self) -> typing.Optional[jsii.Number]:
+    def count(
+        self,
+    ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
         '''
         :stability: experimental
         '''
         result = self._values.get("count")
-        return typing.cast(typing.Optional[jsii.Number], result)
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
@@ -411,20 +413,20 @@ class FirewallConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#name Firewall#name}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#name Firewall#name}.'''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def droplet_ids(self) -> typing.Optional[typing.List[jsii.Number]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#droplet_ids Firewall#droplet_ids}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#droplet_ids Firewall#droplet_ids}.'''
         result = self._values.get("droplet_ids")
         return typing.cast(typing.Optional[typing.List[jsii.Number]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#id Firewall#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#id Firewall#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -438,7 +440,7 @@ class FirewallConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["FirewallInboundRule"]]]:
         '''inbound_rule block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#inbound_rule Firewall#inbound_rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#inbound_rule Firewall#inbound_rule}
         '''
         result = self._values.get("inbound_rule")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["FirewallInboundRule"]]], result)
@@ -449,14 +451,14 @@ class FirewallConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["FirewallOutboundRule"]]]:
         '''outbound_rule block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#outbound_rule Firewall#outbound_rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#outbound_rule Firewall#outbound_rule}
         '''
         result = self._values.get("outbound_rule")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["FirewallOutboundRule"]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#tags Firewall#tags}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#tags Firewall#tags}.'''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
@@ -498,13 +500,13 @@ class FirewallInboundRule:
         source_tags: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param protocol: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#protocol Firewall#protocol}.
-        :param port_range: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#port_range Firewall#port_range}.
-        :param source_addresses: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#source_addresses Firewall#source_addresses}.
-        :param source_droplet_ids: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#source_droplet_ids Firewall#source_droplet_ids}.
-        :param source_kubernetes_ids: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#source_kubernetes_ids Firewall#source_kubernetes_ids}.
-        :param source_load_balancer_uids: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#source_load_balancer_uids Firewall#source_load_balancer_uids}.
-        :param source_tags: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#source_tags Firewall#source_tags}.
+        :param protocol: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#protocol Firewall#protocol}.
+        :param port_range: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#port_range Firewall#port_range}.
+        :param source_addresses: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#source_addresses Firewall#source_addresses}.
+        :param source_droplet_ids: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#source_droplet_ids Firewall#source_droplet_ids}.
+        :param source_kubernetes_ids: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#source_kubernetes_ids Firewall#source_kubernetes_ids}.
+        :param source_load_balancer_uids: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#source_load_balancer_uids Firewall#source_load_balancer_uids}.
+        :param source_tags: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#source_tags Firewall#source_tags}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c850b93898f14fc39ef334349101452206b1b0abdf77f8a0aef9c33386f095b0)
@@ -533,44 +535,44 @@ class FirewallInboundRule:
 
     @builtins.property
     def protocol(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#protocol Firewall#protocol}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#protocol Firewall#protocol}.'''
         result = self._values.get("protocol")
         assert result is not None, "Required property 'protocol' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def port_range(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#port_range Firewall#port_range}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#port_range Firewall#port_range}.'''
         result = self._values.get("port_range")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def source_addresses(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#source_addresses Firewall#source_addresses}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#source_addresses Firewall#source_addresses}.'''
         result = self._values.get("source_addresses")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def source_droplet_ids(self) -> typing.Optional[typing.List[jsii.Number]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#source_droplet_ids Firewall#source_droplet_ids}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#source_droplet_ids Firewall#source_droplet_ids}.'''
         result = self._values.get("source_droplet_ids")
         return typing.cast(typing.Optional[typing.List[jsii.Number]], result)
 
     @builtins.property
     def source_kubernetes_ids(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#source_kubernetes_ids Firewall#source_kubernetes_ids}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#source_kubernetes_ids Firewall#source_kubernetes_ids}.'''
         result = self._values.get("source_kubernetes_ids")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def source_load_balancer_uids(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#source_load_balancer_uids Firewall#source_load_balancer_uids}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#source_load_balancer_uids Firewall#source_load_balancer_uids}.'''
         result = self._values.get("source_load_balancer_uids")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def source_tags(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#source_tags Firewall#source_tags}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#source_tags Firewall#source_tags}.'''
         result = self._values.get("source_tags")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
@@ -851,13 +853,13 @@ class FirewallInboundRuleOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[FirewallInboundRule, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[FirewallInboundRule, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, FirewallInboundRule]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, FirewallInboundRule]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[FirewallInboundRule, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, FirewallInboundRule]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4eb4e5bf9e59da7da4f7414bd2824bfc396df1adf2c45f781e17115a865d7ecc)
@@ -891,13 +893,13 @@ class FirewallOutboundRule:
         port_range: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param protocol: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#protocol Firewall#protocol}.
-        :param destination_addresses: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#destination_addresses Firewall#destination_addresses}.
-        :param destination_droplet_ids: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#destination_droplet_ids Firewall#destination_droplet_ids}.
-        :param destination_kubernetes_ids: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#destination_kubernetes_ids Firewall#destination_kubernetes_ids}.
-        :param destination_load_balancer_uids: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#destination_load_balancer_uids Firewall#destination_load_balancer_uids}.
-        :param destination_tags: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#destination_tags Firewall#destination_tags}.
-        :param port_range: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#port_range Firewall#port_range}.
+        :param protocol: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#protocol Firewall#protocol}.
+        :param destination_addresses: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#destination_addresses Firewall#destination_addresses}.
+        :param destination_droplet_ids: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#destination_droplet_ids Firewall#destination_droplet_ids}.
+        :param destination_kubernetes_ids: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#destination_kubernetes_ids Firewall#destination_kubernetes_ids}.
+        :param destination_load_balancer_uids: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#destination_load_balancer_uids Firewall#destination_load_balancer_uids}.
+        :param destination_tags: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#destination_tags Firewall#destination_tags}.
+        :param port_range: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#port_range Firewall#port_range}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c276892f629148e40548e0f13588d9795fe7dde4a52446b94a4b1c9d030d0d00)
@@ -926,26 +928,26 @@ class FirewallOutboundRule:
 
     @builtins.property
     def protocol(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#protocol Firewall#protocol}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#protocol Firewall#protocol}.'''
         result = self._values.get("protocol")
         assert result is not None, "Required property 'protocol' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def destination_addresses(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#destination_addresses Firewall#destination_addresses}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#destination_addresses Firewall#destination_addresses}.'''
         result = self._values.get("destination_addresses")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def destination_droplet_ids(self) -> typing.Optional[typing.List[jsii.Number]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#destination_droplet_ids Firewall#destination_droplet_ids}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#destination_droplet_ids Firewall#destination_droplet_ids}.'''
         result = self._values.get("destination_droplet_ids")
         return typing.cast(typing.Optional[typing.List[jsii.Number]], result)
 
     @builtins.property
     def destination_kubernetes_ids(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#destination_kubernetes_ids Firewall#destination_kubernetes_ids}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#destination_kubernetes_ids Firewall#destination_kubernetes_ids}.'''
         result = self._values.get("destination_kubernetes_ids")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
@@ -953,19 +955,19 @@ class FirewallOutboundRule:
     def destination_load_balancer_uids(
         self,
     ) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#destination_load_balancer_uids Firewall#destination_load_balancer_uids}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#destination_load_balancer_uids Firewall#destination_load_balancer_uids}.'''
         result = self._values.get("destination_load_balancer_uids")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def destination_tags(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#destination_tags Firewall#destination_tags}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#destination_tags Firewall#destination_tags}.'''
         result = self._values.get("destination_tags")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def port_range(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/firewall#port_range Firewall#port_range}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/firewall#port_range Firewall#port_range}.'''
         result = self._values.get("port_range")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -1250,13 +1252,13 @@ class FirewallOutboundRuleOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[FirewallOutboundRule, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[FirewallOutboundRule, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, FirewallOutboundRule]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, FirewallOutboundRule]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[FirewallOutboundRule, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, FirewallOutboundRule]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__620d8fae1eccc9400af7d6b641783a31c98e53a4509a547c3d62b1f0070945d8)
@@ -1439,7 +1441,7 @@ def _typecheckingstub__06c9a9a2487be772a5aa63b915a9ff83462b784ed047e3d747e97b03b
     outbound_rule: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[FirewallOutboundRule, typing.Dict[builtins.str, typing.Any]]]]] = None,
     tags: typing.Optional[typing.Sequence[builtins.str]] = None,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1488,7 +1490,7 @@ def _typecheckingstub__26132bef5a37f8285a77fe67d903d6ba2fcfd581c41a3b581cdb5945c
 def _typecheckingstub__921ee68b8d0c2c0acbcf20ce4f61bfa36e5b0a6bbaee1d1587b6ce77534b8596(
     *,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1607,7 +1609,7 @@ def _typecheckingstub__015c41bf9483afce4c2639c4a4ef21a1148bb8b6e16c053083da71482
     pass
 
 def _typecheckingstub__4eb4e5bf9e59da7da4f7414bd2824bfc396df1adf2c45f781e17115a865d7ecc(
-    value: typing.Optional[typing.Union[FirewallInboundRule, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, FirewallInboundRule]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1715,7 +1717,7 @@ def _typecheckingstub__a4c4a9726e714eda1c618ef5b77957fddef3ab19d56a0bd3a102ed161
     pass
 
 def _typecheckingstub__620d8fae1eccc9400af7d6b641783a31c98e53a4509a547c3d62b1f0070945d8(
-    value: typing.Optional[typing.Union[FirewallOutboundRule, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, FirewallOutboundRule]],
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1,7 +1,7 @@
 '''
 # `digitalocean_uptime_alert`
 
-Refer to the Terraform Registory for docs: [`digitalocean_uptime_alert`](https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert).
+Refer to the Terraform Registory for docs: [`digitalocean_uptime_alert`](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class UptimeAlert(
     metaclass=jsii.JSIIMeta,
     jsii_type="digitalocean.uptimeAlert.UptimeAlert",
 ):
-    '''Represents a {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert digitalocean_uptime_alert}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert digitalocean_uptime_alert}.'''
 
     def __init__(
         self,
@@ -41,24 +41,24 @@ class UptimeAlert(
         period: typing.Optional[builtins.str] = None,
         threshold: typing.Optional[jsii.Number] = None,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert digitalocean_uptime_alert} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert digitalocean_uptime_alert} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param check_id: A unique identifier for a check. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#check_id UptimeAlert#check_id}
-        :param name: A human-friendly display name for the alert. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#name UptimeAlert#name}
-        :param notifications: notifications block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#notifications UptimeAlert#notifications}
-        :param type: The type of health check to perform. Enum: 'latency' 'down' 'down_global' 'ssl_expiry'. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#type UptimeAlert#type}
-        :param comparison: The comparison operator used against the alert's threshold. Enum: 'greater_than' 'less_than. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#comparison UptimeAlert#comparison}
-        :param period: Period of time the threshold must be exceeded to trigger the alert. Enum '2m' '3m' '5m' '10m' '15m' '30m' '1h' Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#period UptimeAlert#period}
-        :param threshold: The threshold at which the alert will enter a trigger state. The specific threshold is dependent on the alert type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#threshold UptimeAlert#threshold}
+        :param check_id: A unique identifier for a check. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#check_id UptimeAlert#check_id}
+        :param name: A human-friendly display name for the alert. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#name UptimeAlert#name}
+        :param notifications: notifications block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#notifications UptimeAlert#notifications}
+        :param type: The type of health check to perform. Enum: 'latency' 'down' 'down_global' 'ssl_expiry'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#type UptimeAlert#type}
+        :param comparison: The comparison operator used against the alert's threshold. Enum: 'greater_than' 'less_than. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#comparison UptimeAlert#comparison}
+        :param period: Period of time the threshold must be exceeded to trigger the alert. Enum '2m' '3m' '5m' '10m' '15m' '30m' '1h' Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#period UptimeAlert#period}
+        :param threshold: The threshold at which the alert will enter a trigger state. The specific threshold is dependent on the alert type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#threshold UptimeAlert#threshold}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -269,7 +269,7 @@ class UptimeAlertConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         self,
         *,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -291,13 +291,13 @@ class UptimeAlertConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param check_id: A unique identifier for a check. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#check_id UptimeAlert#check_id}
-        :param name: A human-friendly display name for the alert. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#name UptimeAlert#name}
-        :param notifications: notifications block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#notifications UptimeAlert#notifications}
-        :param type: The type of health check to perform. Enum: 'latency' 'down' 'down_global' 'ssl_expiry'. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#type UptimeAlert#type}
-        :param comparison: The comparison operator used against the alert's threshold. Enum: 'greater_than' 'less_than. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#comparison UptimeAlert#comparison}
-        :param period: Period of time the threshold must be exceeded to trigger the alert. Enum '2m' '3m' '5m' '10m' '15m' '30m' '1h' Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#period UptimeAlert#period}
-        :param threshold: The threshold at which the alert will enter a trigger state. The specific threshold is dependent on the alert type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#threshold UptimeAlert#threshold}
+        :param check_id: A unique identifier for a check. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#check_id UptimeAlert#check_id}
+        :param name: A human-friendly display name for the alert. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#name UptimeAlert#name}
+        :param notifications: notifications block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#notifications UptimeAlert#notifications}
+        :param type: The type of health check to perform. Enum: 'latency' 'down' 'down_global' 'ssl_expiry'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#type UptimeAlert#type}
+        :param comparison: The comparison operator used against the alert's threshold. Enum: 'greater_than' 'less_than. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#comparison UptimeAlert#comparison}
+        :param period: Period of time the threshold must be exceeded to trigger the alert. Enum '2m' '3m' '5m' '10m' '15m' '30m' '1h' Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#period UptimeAlert#period}
+        :param threshold: The threshold at which the alert will enter a trigger state. The specific threshold is dependent on the alert type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#threshold UptimeAlert#threshold}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -355,12 +355,14 @@ class UptimeAlertConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
-    def count(self) -> typing.Optional[jsii.Number]:
+    def count(
+        self,
+    ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
         '''
         :stability: experimental
         '''
         result = self._values.get("count")
-        return typing.cast(typing.Optional[jsii.Number], result)
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
@@ -410,7 +412,7 @@ class UptimeAlertConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def check_id(self) -> builtins.str:
         '''A unique identifier for a check.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#check_id UptimeAlert#check_id}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#check_id UptimeAlert#check_id}
         '''
         result = self._values.get("check_id")
         assert result is not None, "Required property 'check_id' is missing"
@@ -420,7 +422,7 @@ class UptimeAlertConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def name(self) -> builtins.str:
         '''A human-friendly display name for the alert.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#name UptimeAlert#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#name UptimeAlert#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -432,7 +434,7 @@ class UptimeAlertConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["UptimeAlertNotifications"]]:
         '''notifications block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#notifications UptimeAlert#notifications}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#notifications UptimeAlert#notifications}
         '''
         result = self._values.get("notifications")
         assert result is not None, "Required property 'notifications' is missing"
@@ -442,7 +444,7 @@ class UptimeAlertConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def type(self) -> builtins.str:
         '''The type of health check to perform. Enum: 'latency' 'down' 'down_global' 'ssl_expiry'.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#type UptimeAlert#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#type UptimeAlert#type}
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -452,7 +454,7 @@ class UptimeAlertConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def comparison(self) -> typing.Optional[builtins.str]:
         '''The comparison operator used against the alert's threshold. Enum: 'greater_than' 'less_than.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#comparison UptimeAlert#comparison}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#comparison UptimeAlert#comparison}
         '''
         result = self._values.get("comparison")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -463,7 +465,7 @@ class UptimeAlertConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
         Enum '2m' '3m' '5m' '10m' '15m' '30m' '1h'
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#period UptimeAlert#period}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#period UptimeAlert#period}
         '''
         result = self._values.get("period")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -474,7 +476,7 @@ class UptimeAlertConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
         The specific threshold is dependent on the alert type.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#threshold UptimeAlert#threshold}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#threshold UptimeAlert#threshold}
         '''
         result = self._values.get("threshold")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -504,8 +506,8 @@ class UptimeAlertNotifications:
         slack: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["UptimeAlertNotificationsSlack", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param email: List of email addresses to sent notifications to. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#email UptimeAlert#email}
-        :param slack: slack block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#slack UptimeAlert#slack}
+        :param email: List of email addresses to sent notifications to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#email UptimeAlert#email}
+        :param slack: slack block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#slack UptimeAlert#slack}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9eab64033296ac1d162c65dffb40dfd154f1150ed2899e64804a2c1208167abc)
@@ -521,7 +523,7 @@ class UptimeAlertNotifications:
     def email(self) -> typing.Optional[typing.List[builtins.str]]:
         '''List of email addresses to sent notifications to.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#email UptimeAlert#email}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#email UptimeAlert#email}
         '''
         result = self._values.get("email")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -532,7 +534,7 @@ class UptimeAlertNotifications:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["UptimeAlertNotificationsSlack"]]]:
         '''slack block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#slack UptimeAlert#slack}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#slack UptimeAlert#slack}
         '''
         result = self._values.get("slack")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["UptimeAlertNotificationsSlack"]]], result)
@@ -719,13 +721,13 @@ class UptimeAlertNotificationsOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[UptimeAlertNotifications, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[UptimeAlertNotifications, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, UptimeAlertNotifications]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, UptimeAlertNotifications]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[UptimeAlertNotifications, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, UptimeAlertNotifications]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ef2639bed254d658cb3c9b3b8e770ef325b0c4a82063ef296a799541c46a2eeb)
@@ -741,8 +743,8 @@ class UptimeAlertNotificationsOutputReference(
 class UptimeAlertNotificationsSlack:
     def __init__(self, *, channel: builtins.str, url: builtins.str) -> None:
         '''
-        :param channel: The Slack channel to send alerts to. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#channel UptimeAlert#channel}
-        :param url: The webhook URL for Slack. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#url UptimeAlert#url}
+        :param channel: The Slack channel to send alerts to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#channel UptimeAlert#channel}
+        :param url: The webhook URL for Slack. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#url UptimeAlert#url}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4bac7f3ac5543428eef0068642b6657996a9e8de1331541f3cffde1c7ae8f62b)
@@ -757,7 +759,7 @@ class UptimeAlertNotificationsSlack:
     def channel(self) -> builtins.str:
         '''The Slack channel to send alerts to.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#channel UptimeAlert#channel}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#channel UptimeAlert#channel}
         '''
         result = self._values.get("channel")
         assert result is not None, "Required property 'channel' is missing"
@@ -767,7 +769,7 @@ class UptimeAlertNotificationsSlack:
     def url(self) -> builtins.str:
         '''The webhook URL for Slack.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/uptime_alert#url UptimeAlert#url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/uptime_alert#url UptimeAlert#url}
         '''
         result = self._values.get("url")
         assert result is not None, "Required property 'url' is missing"
@@ -939,13 +941,13 @@ class UptimeAlertNotificationsSlackOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[UptimeAlertNotificationsSlack, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[UptimeAlertNotificationsSlack, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, UptimeAlertNotificationsSlack]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, UptimeAlertNotificationsSlack]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[UptimeAlertNotificationsSlack, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, UptimeAlertNotificationsSlack]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4393354d0d6fab5dce10cdd81ac4c7a94823f3d3a22478204f7b8ba22ca49795)
@@ -978,7 +980,7 @@ def _typecheckingstub__bdbafca4cdd070aa8cb65d8c185255af22f0754c063b5178f1b90feeb
     period: typing.Optional[builtins.str] = None,
     threshold: typing.Optional[jsii.Number] = None,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1033,7 +1035,7 @@ def _typecheckingstub__3eab012d2ba1012f3005dc65596efbb1ad2abbb4f566f31ab3f9c9f3d
 def _typecheckingstub__1785329ca2fa080ba550210e67198aba8807aa6b27188cf18bd76ce63b2af978(
     *,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1118,7 +1120,7 @@ def _typecheckingstub__e3ca581abc8e90b625f680381e058cf006c2dfd5953d5c87742bc47aa
     pass
 
 def _typecheckingstub__ef2639bed254d658cb3c9b3b8e770ef325b0c4a82063ef296a799541c46a2eeb(
-    value: typing.Optional[typing.Union[UptimeAlertNotifications, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, UptimeAlertNotifications]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1191,7 +1193,7 @@ def _typecheckingstub__7569fb4b37ae548b101d4449b05737864753d7986ae1feb866b33e05b
     pass
 
 def _typecheckingstub__4393354d0d6fab5dce10cdd81ac4c7a94823f3d3a22478204f7b8ba22ca49795(
-    value: typing.Optional[typing.Union[UptimeAlertNotificationsSlack, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, UptimeAlertNotificationsSlack]],
 ) -> None:
     """Type checking stubs"""
     pass

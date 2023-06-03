@@ -1,7 +1,7 @@
 '''
 # `provider`
 
-Refer to the Terraform Registory for docs: [`digitalocean`](https://www.terraform.io/docs/providers/digitalocean).
+Refer to the Terraform Registory for docs: [`digitalocean`](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class DigitaloceanProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="digitalocean.provider.DigitaloceanProvider",
 ):
-    '''Represents a {@link https://www.terraform.io/docs/providers/digitalocean digitalocean}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs digitalocean}.'''
 
     def __init__(
         self,
@@ -44,20 +44,20 @@ class DigitaloceanProvider(
         spaces_secret_key: typing.Optional[builtins.str] = None,
         token: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''Create a new {@link https://www.terraform.io/docs/providers/digitalocean digitalocean} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs digitalocean} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#alias DigitaloceanProvider#alias}
-        :param api_endpoint: The URL to use for the DigitalOcean API. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#api_endpoint DigitaloceanProvider#api_endpoint}
-        :param http_retry_max: The maximum number of retries on a failed API request. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#http_retry_max DigitaloceanProvider#http_retry_max}
-        :param http_retry_wait_max: The maximum wait time (in seconds) between failed API requests. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#http_retry_wait_max DigitaloceanProvider#http_retry_wait_max}
-        :param http_retry_wait_min: The minimum wait time (in seconds) between failed API requests. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#http_retry_wait_min DigitaloceanProvider#http_retry_wait_min}
-        :param requests_per_second: The rate of requests per second to limit the HTTP client. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#requests_per_second DigitaloceanProvider#requests_per_second}
-        :param spaces_access_id: The access key ID for Spaces API operations. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#spaces_access_id DigitaloceanProvider#spaces_access_id}
-        :param spaces_endpoint: The URL to use for the DigitalOcean Spaces API. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#spaces_endpoint DigitaloceanProvider#spaces_endpoint}
-        :param spaces_secret_key: The secret access key for Spaces API operations. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#spaces_secret_key DigitaloceanProvider#spaces_secret_key}
-        :param token: The token key for API operations. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#token DigitaloceanProvider#token}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#alias DigitaloceanProvider#alias}
+        :param api_endpoint: The URL to use for the DigitalOcean API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#api_endpoint DigitaloceanProvider#api_endpoint}
+        :param http_retry_max: The maximum number of retries on a failed API request. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#http_retry_max DigitaloceanProvider#http_retry_max}
+        :param http_retry_wait_max: The maximum wait time (in seconds) between failed API requests. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#http_retry_wait_max DigitaloceanProvider#http_retry_wait_max}
+        :param http_retry_wait_min: The minimum wait time (in seconds) between failed API requests. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#http_retry_wait_min DigitaloceanProvider#http_retry_wait_min}
+        :param requests_per_second: The rate of requests per second to limit the HTTP client. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#requests_per_second DigitaloceanProvider#requests_per_second}
+        :param spaces_access_id: The access key ID for Spaces API operations. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#spaces_access_id DigitaloceanProvider#spaces_access_id}
+        :param spaces_endpoint: The URL to use for the DigitalOcean Spaces API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#spaces_endpoint DigitaloceanProvider#spaces_endpoint}
+        :param spaces_secret_key: The secret access key for Spaces API operations. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#spaces_secret_key DigitaloceanProvider#spaces_secret_key}
+        :param token: The token key for API operations. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#token DigitaloceanProvider#token}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__37aca39c60bf013192f0de47b37cf69c010976b0230411789b839f95129d385c)
@@ -330,16 +330,16 @@ class DigitaloceanProviderConfig:
         token: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#alias DigitaloceanProvider#alias}
-        :param api_endpoint: The URL to use for the DigitalOcean API. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#api_endpoint DigitaloceanProvider#api_endpoint}
-        :param http_retry_max: The maximum number of retries on a failed API request. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#http_retry_max DigitaloceanProvider#http_retry_max}
-        :param http_retry_wait_max: The maximum wait time (in seconds) between failed API requests. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#http_retry_wait_max DigitaloceanProvider#http_retry_wait_max}
-        :param http_retry_wait_min: The minimum wait time (in seconds) between failed API requests. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#http_retry_wait_min DigitaloceanProvider#http_retry_wait_min}
-        :param requests_per_second: The rate of requests per second to limit the HTTP client. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#requests_per_second DigitaloceanProvider#requests_per_second}
-        :param spaces_access_id: The access key ID for Spaces API operations. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#spaces_access_id DigitaloceanProvider#spaces_access_id}
-        :param spaces_endpoint: The URL to use for the DigitalOcean Spaces API. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#spaces_endpoint DigitaloceanProvider#spaces_endpoint}
-        :param spaces_secret_key: The secret access key for Spaces API operations. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#spaces_secret_key DigitaloceanProvider#spaces_secret_key}
-        :param token: The token key for API operations. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#token DigitaloceanProvider#token}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#alias DigitaloceanProvider#alias}
+        :param api_endpoint: The URL to use for the DigitalOcean API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#api_endpoint DigitaloceanProvider#api_endpoint}
+        :param http_retry_max: The maximum number of retries on a failed API request. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#http_retry_max DigitaloceanProvider#http_retry_max}
+        :param http_retry_wait_max: The maximum wait time (in seconds) between failed API requests. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#http_retry_wait_max DigitaloceanProvider#http_retry_wait_max}
+        :param http_retry_wait_min: The minimum wait time (in seconds) between failed API requests. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#http_retry_wait_min DigitaloceanProvider#http_retry_wait_min}
+        :param requests_per_second: The rate of requests per second to limit the HTTP client. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#requests_per_second DigitaloceanProvider#requests_per_second}
+        :param spaces_access_id: The access key ID for Spaces API operations. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#spaces_access_id DigitaloceanProvider#spaces_access_id}
+        :param spaces_endpoint: The URL to use for the DigitalOcean Spaces API. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#spaces_endpoint DigitaloceanProvider#spaces_endpoint}
+        :param spaces_secret_key: The secret access key for Spaces API operations. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#spaces_secret_key DigitaloceanProvider#spaces_secret_key}
+        :param token: The token key for API operations. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#token DigitaloceanProvider#token}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2024831e6f341e4c23b2b485c0754309455893369abf4845e11f68b5ee6ba8f6)
@@ -379,7 +379,7 @@ class DigitaloceanProviderConfig:
     def alias(self) -> typing.Optional[builtins.str]:
         '''Alias name.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#alias DigitaloceanProvider#alias}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#alias DigitaloceanProvider#alias}
         '''
         result = self._values.get("alias")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -388,7 +388,7 @@ class DigitaloceanProviderConfig:
     def api_endpoint(self) -> typing.Optional[builtins.str]:
         '''The URL to use for the DigitalOcean API.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#api_endpoint DigitaloceanProvider#api_endpoint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#api_endpoint DigitaloceanProvider#api_endpoint}
         '''
         result = self._values.get("api_endpoint")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -397,7 +397,7 @@ class DigitaloceanProviderConfig:
     def http_retry_max(self) -> typing.Optional[jsii.Number]:
         '''The maximum number of retries on a failed API request.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#http_retry_max DigitaloceanProvider#http_retry_max}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#http_retry_max DigitaloceanProvider#http_retry_max}
         '''
         result = self._values.get("http_retry_max")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -406,7 +406,7 @@ class DigitaloceanProviderConfig:
     def http_retry_wait_max(self) -> typing.Optional[jsii.Number]:
         '''The maximum wait time (in seconds) between failed API requests.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#http_retry_wait_max DigitaloceanProvider#http_retry_wait_max}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#http_retry_wait_max DigitaloceanProvider#http_retry_wait_max}
         '''
         result = self._values.get("http_retry_wait_max")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -415,7 +415,7 @@ class DigitaloceanProviderConfig:
     def http_retry_wait_min(self) -> typing.Optional[jsii.Number]:
         '''The minimum wait time (in seconds) between failed API requests.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#http_retry_wait_min DigitaloceanProvider#http_retry_wait_min}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#http_retry_wait_min DigitaloceanProvider#http_retry_wait_min}
         '''
         result = self._values.get("http_retry_wait_min")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -424,7 +424,7 @@ class DigitaloceanProviderConfig:
     def requests_per_second(self) -> typing.Optional[jsii.Number]:
         '''The rate of requests per second to limit the HTTP client.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#requests_per_second DigitaloceanProvider#requests_per_second}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#requests_per_second DigitaloceanProvider#requests_per_second}
         '''
         result = self._values.get("requests_per_second")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -433,7 +433,7 @@ class DigitaloceanProviderConfig:
     def spaces_access_id(self) -> typing.Optional[builtins.str]:
         '''The access key ID for Spaces API operations.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#spaces_access_id DigitaloceanProvider#spaces_access_id}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#spaces_access_id DigitaloceanProvider#spaces_access_id}
         '''
         result = self._values.get("spaces_access_id")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -442,7 +442,7 @@ class DigitaloceanProviderConfig:
     def spaces_endpoint(self) -> typing.Optional[builtins.str]:
         '''The URL to use for the DigitalOcean Spaces API.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#spaces_endpoint DigitaloceanProvider#spaces_endpoint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#spaces_endpoint DigitaloceanProvider#spaces_endpoint}
         '''
         result = self._values.get("spaces_endpoint")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -451,7 +451,7 @@ class DigitaloceanProviderConfig:
     def spaces_secret_key(self) -> typing.Optional[builtins.str]:
         '''The secret access key for Spaces API operations.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#spaces_secret_key DigitaloceanProvider#spaces_secret_key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#spaces_secret_key DigitaloceanProvider#spaces_secret_key}
         '''
         result = self._values.get("spaces_secret_key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -460,7 +460,7 @@ class DigitaloceanProviderConfig:
     def token(self) -> typing.Optional[builtins.str]:
         '''The token key for API operations.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean#token DigitaloceanProvider#token}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs#token DigitaloceanProvider#token}
         '''
         result = self._values.get("token")
         return typing.cast(typing.Optional[builtins.str], result)

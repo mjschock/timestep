@@ -1,13 +1,15 @@
 {
   "language": "python",
-  "app": "poetry run python -m timestep",
+  "app": "poetry run python -m timestep target=$TARGET_ENVIRONMENT",
   "output": "dist/cdktf.out",
   "projectId": "68b963d4-6feb-4c02-8c49-c6d4eddc23a3",
   "sendCrashReports": "false",
   "terraformProviders": [
     "digitalocean/digitalocean@~> 2.28",
     "hashicorp/cloudinit@~> 2.3",
-    "larstobi/multipass@~> 1.4"
+    "larstobi/multipass@~> 1.4",
+    "hashicorp/helm@~> 2.10",
+    "hashicorp/kubernetes@~> 2.20"
   ],
   "terraformModules": [],
   "codeMakerOutput": "src/timestep/infra/imports",
