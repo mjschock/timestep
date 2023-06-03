@@ -1,0 +1,8 @@
+app_name: timestep-ai
+domain: timestep.local
+env: local
+multipass_instance_cpus: 2
+multipass_instance_disk: 40G
+multipass_instance_image: "22.04"
+multipass_instance_name: timestep-ai
+openai_api_key: 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

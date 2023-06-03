@@ -1,7 +1,7 @@
 '''
 # `data_digitalocean_sizes`
 
-Refer to the Terraform Registory for docs: [`data_digitalocean_sizes`](https://www.terraform.io/docs/providers/digitalocean/d/sizes).
+Refer to the Terraform Registory for docs: [`data_digitalocean_sizes`](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class DataDigitaloceanSizes(
     metaclass=jsii.JSIIMeta,
     jsii_type="digitalocean.dataDigitaloceanSizes.DataDigitaloceanSizes",
 ):
-    '''Represents a {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes digitalocean_sizes}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes digitalocean_sizes}.'''
 
     def __init__(
         self,
@@ -37,20 +37,20 @@ class DataDigitaloceanSizes(
         id: typing.Optional[builtins.str] = None,
         sort: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["DataDigitaloceanSizesSort", typing.Dict[builtins.str, typing.Any]]]]] = None,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes digitalocean_sizes} Data Source.
+        '''Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes digitalocean_sizes} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param filter: filter block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#filter DataDigitaloceanSizes#filter}
-        :param id: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#id DataDigitaloceanSizes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param sort: sort block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#sort DataDigitaloceanSizes#sort}
+        :param filter: filter block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#filter DataDigitaloceanSizes#filter}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#id DataDigitaloceanSizes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param sort: sort block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#sort DataDigitaloceanSizes#sort}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -193,7 +193,7 @@ class DataDigitaloceanSizesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         self,
         *,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -211,9 +211,9 @@ class DataDigitaloceanSizesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param filter: filter block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#filter DataDigitaloceanSizes#filter}
-        :param id: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#id DataDigitaloceanSizes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param sort: sort block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#sort DataDigitaloceanSizes#sort}
+        :param filter: filter block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#filter DataDigitaloceanSizes#filter}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#id DataDigitaloceanSizes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param sort: sort block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#sort DataDigitaloceanSizes#sort}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -262,12 +262,14 @@ class DataDigitaloceanSizesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
-    def count(self) -> typing.Optional[jsii.Number]:
+    def count(
+        self,
+    ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
         '''
         :stability: experimental
         '''
         result = self._values.get("count")
-        return typing.cast(typing.Optional[jsii.Number], result)
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
@@ -319,14 +321,14 @@ class DataDigitaloceanSizesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DataDigitaloceanSizesFilter"]]]:
         '''filter block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#filter DataDigitaloceanSizes#filter}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#filter DataDigitaloceanSizes#filter}
         '''
         result = self._values.get("filter")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DataDigitaloceanSizesFilter"]]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#id DataDigitaloceanSizes#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#id DataDigitaloceanSizes#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -340,7 +342,7 @@ class DataDigitaloceanSizesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DataDigitaloceanSizesSort"]]]:
         '''sort block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#sort DataDigitaloceanSizes#sort}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#sort DataDigitaloceanSizes#sort}
         '''
         result = self._values.get("sort")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DataDigitaloceanSizesSort"]]], result)
@@ -377,10 +379,10 @@ class DataDigitaloceanSizesFilter:
         match_by: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param key: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#key DataDigitaloceanSizes#key}.
-        :param values: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#values DataDigitaloceanSizes#values}.
-        :param all: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#all DataDigitaloceanSizes#all}.
-        :param match_by: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#match_by DataDigitaloceanSizes#match_by}.
+        :param key: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#key DataDigitaloceanSizes#key}.
+        :param values: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#values DataDigitaloceanSizes#values}.
+        :param all: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#all DataDigitaloceanSizes#all}.
+        :param match_by: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#match_by DataDigitaloceanSizes#match_by}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f5e7afc7d93cc2881052d7e0aa7909ef50f37cfaf8bdc3f9e87d2d1455319836)
@@ -399,14 +401,14 @@ class DataDigitaloceanSizesFilter:
 
     @builtins.property
     def key(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#key DataDigitaloceanSizes#key}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#key DataDigitaloceanSizes#key}.'''
         result = self._values.get("key")
         assert result is not None, "Required property 'key' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def values(self) -> typing.List[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#values DataDigitaloceanSizes#values}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#values DataDigitaloceanSizes#values}.'''
         result = self._values.get("values")
         assert result is not None, "Required property 'values' is missing"
         return typing.cast(typing.List[builtins.str], result)
@@ -415,13 +417,13 @@ class DataDigitaloceanSizesFilter:
     def all(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#all DataDigitaloceanSizes#all}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#all DataDigitaloceanSizes#all}.'''
         result = self._values.get("all")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
     @builtins.property
     def match_by(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#match_by DataDigitaloceanSizes#match_by}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#match_by DataDigitaloceanSizes#match_by}.'''
         result = self._values.get("match_by")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -638,13 +640,13 @@ class DataDigitaloceanSizesFilterOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[DataDigitaloceanSizesFilter, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[DataDigitaloceanSizesFilter, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSizesFilter]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSizesFilter]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[DataDigitaloceanSizesFilter, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSizesFilter]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__863a4ccd9bf67309b5f5517619daa263dd931b108f50d064d1a5746a3ace2be1)
@@ -846,8 +848,8 @@ class DataDigitaloceanSizesSort:
         direction: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param key: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#key DataDigitaloceanSizes#key}.
-        :param direction: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#direction DataDigitaloceanSizes#direction}.
+        :param key: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#key DataDigitaloceanSizes#key}.
+        :param direction: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#direction DataDigitaloceanSizes#direction}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__502b950f998d84abcb2f9aa0d97dfee20c89092f703a814c08c1335910a427cb)
@@ -861,14 +863,14 @@ class DataDigitaloceanSizesSort:
 
     @builtins.property
     def key(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#key DataDigitaloceanSizes#key}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#key DataDigitaloceanSizes#key}.'''
         result = self._values.get("key")
         assert result is not None, "Required property 'key' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def direction(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/sizes#direction DataDigitaloceanSizes#direction}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/sizes#direction DataDigitaloceanSizes#direction}.'''
         result = self._values.get("direction")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -1042,13 +1044,13 @@ class DataDigitaloceanSizesSortOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[DataDigitaloceanSizesSort, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[DataDigitaloceanSizesSort, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSizesSort]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSizesSort]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[DataDigitaloceanSizesSort, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSizesSort]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4f08f1be8ec3f197227ae77a93e2b83a07d5189a958cc4b875a23f2b4e543b17)
@@ -1080,7 +1082,7 @@ def _typecheckingstub__3e8df342cd6e3a686df0111c6a2963c5a153d86fb38ba1ef416946bd7
     id: typing.Optional[builtins.str] = None,
     sort: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[DataDigitaloceanSizesSort, typing.Dict[builtins.str, typing.Any]]]]] = None,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1111,7 +1113,7 @@ def _typecheckingstub__da7080f6ec3bdc42d8f5abd906725547f9f75c4ca2569e3e971d5e9b6
 def _typecheckingstub__ce2312324be7370e7a5ee32eac51f101317dc6c1ee96b5a7e7cccfc41165a84d(
     *,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1206,7 +1208,7 @@ def _typecheckingstub__6483e7412e5e7373f9f7b24ddbfb722557a877f42eac9c4ba4ae36bfb
     pass
 
 def _typecheckingstub__863a4ccd9bf67309b5f5517619daa263dd931b108f50d064d1a5746a3ace2be1(
-    value: typing.Optional[typing.Union[DataDigitaloceanSizesFilter, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSizesFilter]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1326,7 +1328,7 @@ def _typecheckingstub__60b0a4f70d8f28532ce472a7bc88b59f3e8c766d93124e7d8b1fd0e62
     pass
 
 def _typecheckingstub__4f08f1be8ec3f197227ae77a93e2b83a07d5189a958cc4b875a23f2b4e543b17(
-    value: typing.Optional[typing.Union[DataDigitaloceanSizesSort, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSizesSort]],
 ) -> None:
     """Type checking stubs"""
     pass

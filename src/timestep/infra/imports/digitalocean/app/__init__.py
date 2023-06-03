@@ -1,7 +1,7 @@
 '''
 # `digitalocean_app`
 
-Refer to the Terraform Registory for docs: [`digitalocean_app`](https://www.terraform.io/docs/providers/digitalocean/r/app).
+Refer to the Terraform Registory for docs: [`digitalocean_app`](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class App(
     metaclass=jsii.JSIIMeta,
     jsii_type="digitalocean.app.App",
 ):
-    '''Represents a {@link https://www.terraform.io/docs/providers/digitalocean/r/app digitalocean_app}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app digitalocean_app}.'''
 
     def __init__(
         self,
@@ -37,20 +37,20 @@ class App(
         spec: typing.Optional[typing.Union["AppSpec", typing.Dict[builtins.str, typing.Any]]] = None,
         timeouts: typing.Optional[typing.Union["AppTimeouts", typing.Dict[builtins.str, typing.Any]]] = None,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://www.terraform.io/docs/providers/digitalocean/r/app digitalocean_app} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app digitalocean_app} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param id: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#id App#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param spec: spec block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#spec App#spec}
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#timeouts App#timeouts}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#id App#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#spec App#spec}
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#timeouts App#timeouts}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -96,18 +96,18 @@ class App(
         worker: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["AppSpecWorker", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param name: The name of the app. Must be unique across all apps in the same account. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param alert: alert block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
-        :param database: database block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#database App#database}
-        :param domain: domain block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#domain App#domain}
-        :param domains: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#domains App#domains}.
-        :param env: env block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
-        :param function: function block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#function App#function}
-        :param job: job block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#job App#job}
-        :param region: The slug for the DigitalOcean data center region hosting the app. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#region App#region}
-        :param service: service block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#service App#service}
-        :param static_site: static_site block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#static_site App#static_site}
-        :param worker: worker block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#worker App#worker}
+        :param name: The name of the app. Must be unique across all apps in the same account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param alert: alert block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
+        :param database: database block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#database App#database}
+        :param domain: domain block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#domain App#domain}
+        :param domains: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#domains App#domains}.
+        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
+        :param function: function block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#function App#function}
+        :param job: job block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#job App#job}
+        :param region: The slug for the DigitalOcean data center region hosting the app. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#region App#region}
+        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#service App#service}
+        :param static_site: static_site block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#static_site App#static_site}
+        :param worker: worker block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#worker App#worker}
         '''
         value = AppSpec(
             name=name,
@@ -129,7 +129,7 @@ class App(
     @jsii.member(jsii_name="putTimeouts")
     def put_timeouts(self, *, create: typing.Optional[builtins.str] = None) -> None:
         '''
-        :param create: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#create App#create}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#create App#create}.
         '''
         value = AppTimeouts(create=create)
 
@@ -210,8 +210,8 @@ class App(
     @jsii.member(jsii_name="timeoutsInput")
     def timeouts_input(
         self,
-    ) -> typing.Optional[typing.Union["AppTimeouts", _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union["AppTimeouts", _cdktf_9a9027ec.IResolvable]], jsii.get(self, "timeoutsInput"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, "AppTimeouts"]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, "AppTimeouts"]], jsii.get(self, "timeoutsInput"))
 
     @builtins.property
     @jsii.member(jsii_name="id")
@@ -247,7 +247,7 @@ class AppConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         self,
         *,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -265,9 +265,9 @@ class AppConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param id: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#id App#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param spec: spec block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#spec App#spec}
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#timeouts App#timeouts}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#id App#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#spec App#spec}
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#timeouts App#timeouts}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -320,12 +320,14 @@ class AppConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
-    def count(self) -> typing.Optional[jsii.Number]:
+    def count(
+        self,
+    ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
         '''
         :stability: experimental
         '''
         result = self._values.get("count")
-        return typing.cast(typing.Optional[jsii.Number], result)
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
@@ -373,7 +375,7 @@ class AppConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#id App#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#id App#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -385,7 +387,7 @@ class AppConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def spec(self) -> typing.Optional["AppSpec"]:
         '''spec block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#spec App#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#spec App#spec}
         '''
         result = self._values.get("spec")
         return typing.cast(typing.Optional["AppSpec"], result)
@@ -394,7 +396,7 @@ class AppConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def timeouts(self) -> typing.Optional["AppTimeouts"]:
         '''timeouts block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#timeouts App#timeouts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#timeouts App#timeouts}
         '''
         result = self._values.get("timeouts")
         return typing.cast(typing.Optional["AppTimeouts"], result)
@@ -447,18 +449,18 @@ class AppSpec:
         worker: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["AppSpecWorker", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param name: The name of the app. Must be unique across all apps in the same account. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param alert: alert block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
-        :param database: database block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#database App#database}
-        :param domain: domain block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#domain App#domain}
-        :param domains: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#domains App#domains}.
-        :param env: env block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
-        :param function: function block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#function App#function}
-        :param job: job block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#job App#job}
-        :param region: The slug for the DigitalOcean data center region hosting the app. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#region App#region}
-        :param service: service block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#service App#service}
-        :param static_site: static_site block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#static_site App#static_site}
-        :param worker: worker block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#worker App#worker}
+        :param name: The name of the app. Must be unique across all apps in the same account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param alert: alert block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
+        :param database: database block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#database App#database}
+        :param domain: domain block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#domain App#domain}
+        :param domains: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#domains App#domains}.
+        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
+        :param function: function block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#function App#function}
+        :param job: job block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#job App#job}
+        :param region: The slug for the DigitalOcean data center region hosting the app. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#region App#region}
+        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#service App#service}
+        :param static_site: static_site block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#static_site App#static_site}
+        :param worker: worker block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#worker App#worker}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1b82fb39ffdc69d3d1d97267325ac05b7b7483d5f92437033f065d32d94adc21)
@@ -504,7 +506,7 @@ class AppSpec:
     def name(self) -> builtins.str:
         '''The name of the app. Must be unique across all apps in the same account.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -516,7 +518,7 @@ class AppSpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecAlert"]]]:
         '''alert block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
         '''
         result = self._values.get("alert")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecAlert"]]], result)
@@ -527,7 +529,7 @@ class AppSpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecDatabase"]]]:
         '''database block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#database App#database}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#database App#database}
         '''
         result = self._values.get("database")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecDatabase"]]], result)
@@ -538,14 +540,14 @@ class AppSpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecDomain"]]]:
         '''domain block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#domain App#domain}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#domain App#domain}
         '''
         result = self._values.get("domain")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecDomain"]]], result)
 
     @builtins.property
     def domains(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#domains App#domains}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#domains App#domains}.'''
         result = self._values.get("domains")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
@@ -555,7 +557,7 @@ class AppSpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecEnv"]]]:
         '''env block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
         '''
         result = self._values.get("env")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecEnv"]]], result)
@@ -566,7 +568,7 @@ class AppSpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecFunction"]]]:
         '''function block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#function App#function}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#function App#function}
         '''
         result = self._values.get("function")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecFunction"]]], result)
@@ -577,7 +579,7 @@ class AppSpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecJob"]]]:
         '''job block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#job App#job}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#job App#job}
         '''
         result = self._values.get("job")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecJob"]]], result)
@@ -586,7 +588,7 @@ class AppSpec:
     def region(self) -> typing.Optional[builtins.str]:
         '''The slug for the DigitalOcean data center region hosting the app.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#region App#region}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#region App#region}
         '''
         result = self._values.get("region")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -597,7 +599,7 @@ class AppSpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecService"]]]:
         '''service block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#service App#service}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#service App#service}
         '''
         result = self._values.get("service")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecService"]]], result)
@@ -608,7 +610,7 @@ class AppSpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecStaticSite"]]]:
         '''static_site block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#static_site App#static_site}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#static_site App#static_site}
         '''
         result = self._values.get("static_site")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecStaticSite"]]], result)
@@ -619,7 +621,7 @@ class AppSpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecWorker"]]]:
         '''worker block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#worker App#worker}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#worker App#worker}
         '''
         result = self._values.get("worker")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecWorker"]]], result)
@@ -649,8 +651,8 @@ class AppSpecAlert:
         disabled: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param rule: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#rule App#rule}.
-        :param disabled: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#disabled App#disabled}.
+        :param rule: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#rule App#rule}.
+        :param disabled: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#disabled App#disabled}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ec82ed85c3a33e2c09dd2fa5c47d4918f72627511d49328ba566d27c48b3d8ae)
@@ -664,7 +666,7 @@ class AppSpecAlert:
 
     @builtins.property
     def rule(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#rule App#rule}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#rule App#rule}.'''
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
         return typing.cast(builtins.str, result)
@@ -673,7 +675,7 @@ class AppSpecAlert:
     def disabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#disabled App#disabled}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#disabled App#disabled}.'''
         result = self._values.get("disabled")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
@@ -852,13 +854,13 @@ class AppSpecAlertOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecAlert, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecAlert, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecAlert]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecAlert]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecAlert, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecAlert]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__459d322eb90b8c00b0607ba22f19329272aff18b9521097116e4cc6e0c4dfce2)
@@ -892,13 +894,13 @@ class AppSpecDatabase:
         version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param cluster_name: The name of the underlying DigitalOcean DBaaS cluster. This is required for production databases. For dev databases, if cluster_name is not set, a new cluster will be provisioned. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#cluster_name App#cluster_name}
-        :param db_name: The name of the MySQL or PostgreSQL database to configure. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#db_name App#db_name}
-        :param db_user: The name of the MySQL or PostgreSQL user to configure. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#db_user App#db_user}
-        :param engine: The database engine to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#engine App#engine}
-        :param name: The name of the component. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param production: Whether this is a production or dev database. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#production App#production}
-        :param version: The version of the database engine. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#version App#version}
+        :param cluster_name: The name of the underlying DigitalOcean DBaaS cluster. This is required for production databases. For dev databases, if cluster_name is not set, a new cluster will be provisioned. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#cluster_name App#cluster_name}
+        :param db_name: The name of the MySQL or PostgreSQL database to configure. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#db_name App#db_name}
+        :param db_user: The name of the MySQL or PostgreSQL user to configure. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#db_user App#db_user}
+        :param engine: The database engine to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#engine App#engine}
+        :param name: The name of the component. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param production: Whether this is a production or dev database. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#production App#production}
+        :param version: The version of the database engine. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#version App#version}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__804a3918707e409695bb5d473660cede76ed37be4a7066c79971549c2750e2d6)
@@ -931,7 +933,7 @@ class AppSpecDatabase:
 
         This is required for production databases. For dev databases, if cluster_name is not set, a new cluster will be provisioned.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#cluster_name App#cluster_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#cluster_name App#cluster_name}
         '''
         result = self._values.get("cluster_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -940,7 +942,7 @@ class AppSpecDatabase:
     def db_name(self) -> typing.Optional[builtins.str]:
         '''The name of the MySQL or PostgreSQL database to configure.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#db_name App#db_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#db_name App#db_name}
         '''
         result = self._values.get("db_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -949,7 +951,7 @@ class AppSpecDatabase:
     def db_user(self) -> typing.Optional[builtins.str]:
         '''The name of the MySQL or PostgreSQL user to configure.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#db_user App#db_user}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#db_user App#db_user}
         '''
         result = self._values.get("db_user")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -958,7 +960,7 @@ class AppSpecDatabase:
     def engine(self) -> typing.Optional[builtins.str]:
         '''The database engine to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#engine App#engine}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#engine App#engine}
         '''
         result = self._values.get("engine")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -967,7 +969,7 @@ class AppSpecDatabase:
     def name(self) -> typing.Optional[builtins.str]:
         '''The name of the component.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -978,7 +980,7 @@ class AppSpecDatabase:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether this is a production or dev database.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#production App#production}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#production App#production}
         '''
         result = self._values.get("production")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -987,7 +989,7 @@ class AppSpecDatabase:
     def version(self) -> typing.Optional[builtins.str]:
         '''The version of the database engine.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#version App#version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#version App#version}
         '''
         result = self._values.get("version")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1276,13 +1278,13 @@ class AppSpecDatabaseOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecDatabase, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecDatabase, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecDatabase]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecDatabase]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecDatabase, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecDatabase]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__29b7117840a44e728fbf14edad792eb2d3d345b2b2d00a419d89bc95939c2b3a)
@@ -1310,10 +1312,10 @@ class AppSpecDomain:
         zone: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param name: The hostname for the domain. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param type: The type of the domain. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
-        :param wildcard: Indicates whether the domain includes all sub-domains, in addition to the given domain. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#wildcard App#wildcard}
-        :param zone: If the domain uses DigitalOcean DNS and you would like App Platform to automatically manage it for you, set this to the name of the domain on your account. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#zone App#zone}
+        :param name: The hostname for the domain. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param type: The type of the domain. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
+        :param wildcard: Indicates whether the domain includes all sub-domains, in addition to the given domain. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#wildcard App#wildcard}
+        :param zone: If the domain uses DigitalOcean DNS and you would like App Platform to automatically manage it for you, set this to the name of the domain on your account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#zone App#zone}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a0a95514109e9fb1e07266429b86e0b1b2a420182e790096cb1c80e9c9f5cebb)
@@ -1335,7 +1337,7 @@ class AppSpecDomain:
     def name(self) -> builtins.str:
         '''The hostname for the domain.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1345,7 +1347,7 @@ class AppSpecDomain:
     def type(self) -> typing.Optional[builtins.str]:
         '''The type of the domain.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
         '''
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1356,7 +1358,7 @@ class AppSpecDomain:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Indicates whether the domain includes all sub-domains, in addition to the given domain.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#wildcard App#wildcard}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#wildcard App#wildcard}
         '''
         result = self._values.get("wildcard")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -1365,7 +1367,7 @@ class AppSpecDomain:
     def zone(self) -> typing.Optional[builtins.str]:
         '''If the domain uses DigitalOcean DNS and you would like App Platform to automatically manage it for you, set this to the name of the domain on your account.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#zone App#zone}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#zone App#zone}
         '''
         result = self._values.get("zone")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1587,13 +1589,13 @@ class AppSpecDomainOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecDomain, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecDomain, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecDomain]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecDomain]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecDomain, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecDomain]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__920f281cd80602722b26402cfb3e7b5f4a561a59093f66c9afee1f8c1b1a6e69)
@@ -1616,10 +1618,10 @@ class AppSpecEnv:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
-        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
-        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
-        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
+        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
+        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
+        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3448b16d9cfd75574e259daa9e29e7357a98db7c1adfbbfb1372e7355259960c)
@@ -1641,7 +1643,7 @@ class AppSpecEnv:
     def key(self) -> typing.Optional[builtins.str]:
         '''The name of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1650,7 +1652,7 @@ class AppSpecEnv:
     def scope(self) -> typing.Optional[builtins.str]:
         '''The visibility scope of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
         '''
         result = self._values.get("scope")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1659,7 +1661,7 @@ class AppSpecEnv:
     def type(self) -> typing.Optional[builtins.str]:
         '''The type of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
         '''
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1668,7 +1670,7 @@ class AppSpecEnv:
     def value(self) -> typing.Optional[builtins.str]:
         '''The value of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1889,13 +1891,13 @@ class AppSpecEnvOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecEnv, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecEnv, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecEnv]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecEnv]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecEnv, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecEnv]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__97f8448ae3d9db7b24c92a79d2e834236f0f3c8bf7dae209a15fa7f3a90454eb)
@@ -1935,16 +1937,16 @@ class AppSpecFunction:
         source_dir: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param name: The name of the component. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param alert: alert block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
-        :param cors: cors block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#cors App#cors}
-        :param env: env block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
-        :param git: git block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#git App#git}
-        :param github: github block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#github App#github}
-        :param gitlab: gitlab block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#gitlab App#gitlab}
-        :param log_destination: log_destination block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#log_destination App#log_destination}
-        :param routes: routes block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#routes App#routes}
-        :param source_dir: An optional path to the working directory to use for the build. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#source_dir App#source_dir}
+        :param name: The name of the component. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param alert: alert block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
+        :param cors: cors block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#cors App#cors}
+        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
+        :param git: git block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#git App#git}
+        :param github: github block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#github App#github}
+        :param gitlab: gitlab block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#gitlab App#gitlab}
+        :param log_destination: log_destination block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#log_destination App#log_destination}
+        :param routes: routes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#routes App#routes}
+        :param source_dir: An optional path to the working directory to use for the build. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#source_dir App#source_dir}
         '''
         if isinstance(cors, dict):
             cors = AppSpecFunctionCors(**cors)
@@ -1992,7 +1994,7 @@ class AppSpecFunction:
     def name(self) -> builtins.str:
         '''The name of the component.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -2004,7 +2006,7 @@ class AppSpecFunction:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecFunctionAlert"]]]:
         '''alert block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
         '''
         result = self._values.get("alert")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecFunctionAlert"]]], result)
@@ -2013,7 +2015,7 @@ class AppSpecFunction:
     def cors(self) -> typing.Optional["AppSpecFunctionCors"]:
         '''cors block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#cors App#cors}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#cors App#cors}
         '''
         result = self._values.get("cors")
         return typing.cast(typing.Optional["AppSpecFunctionCors"], result)
@@ -2024,7 +2026,7 @@ class AppSpecFunction:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecFunctionEnv"]]]:
         '''env block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
         '''
         result = self._values.get("env")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecFunctionEnv"]]], result)
@@ -2033,7 +2035,7 @@ class AppSpecFunction:
     def git(self) -> typing.Optional["AppSpecFunctionGit"]:
         '''git block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#git App#git}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#git App#git}
         '''
         result = self._values.get("git")
         return typing.cast(typing.Optional["AppSpecFunctionGit"], result)
@@ -2042,7 +2044,7 @@ class AppSpecFunction:
     def github(self) -> typing.Optional["AppSpecFunctionGithub"]:
         '''github block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#github App#github}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#github App#github}
         '''
         result = self._values.get("github")
         return typing.cast(typing.Optional["AppSpecFunctionGithub"], result)
@@ -2051,7 +2053,7 @@ class AppSpecFunction:
     def gitlab(self) -> typing.Optional["AppSpecFunctionGitlab"]:
         '''gitlab block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#gitlab App#gitlab}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#gitlab App#gitlab}
         '''
         result = self._values.get("gitlab")
         return typing.cast(typing.Optional["AppSpecFunctionGitlab"], result)
@@ -2062,7 +2064,7 @@ class AppSpecFunction:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecFunctionLogDestination"]]]:
         '''log_destination block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#log_destination App#log_destination}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#log_destination App#log_destination}
         '''
         result = self._values.get("log_destination")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecFunctionLogDestination"]]], result)
@@ -2073,7 +2075,7 @@ class AppSpecFunction:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecFunctionRoutes"]]]:
         '''routes block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#routes App#routes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#routes App#routes}
         '''
         result = self._values.get("routes")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecFunctionRoutes"]]], result)
@@ -2082,7 +2084,7 @@ class AppSpecFunction:
     def source_dir(self) -> typing.Optional[builtins.str]:
         '''An optional path to the working directory to use for the build.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#source_dir App#source_dir}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#source_dir App#source_dir}
         '''
         result = self._values.get("source_dir")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2121,11 +2123,11 @@ class AppSpecFunctionAlert:
         disabled: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param operator: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#operator App#operator}.
-        :param rule: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#rule App#rule}.
-        :param value: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}.
-        :param window: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#window App#window}.
-        :param disabled: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#disabled App#disabled}.
+        :param operator: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#operator App#operator}.
+        :param rule: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#rule App#rule}.
+        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}.
+        :param window: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#window App#window}.
+        :param disabled: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#disabled App#disabled}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__143e3ca6aac49eadbd075154e477f46a13154364bc4e84774f7521f00d6b9431)
@@ -2145,28 +2147,28 @@ class AppSpecFunctionAlert:
 
     @builtins.property
     def operator(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#operator App#operator}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#operator App#operator}.'''
         result = self._values.get("operator")
         assert result is not None, "Required property 'operator' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def rule(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#rule App#rule}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#rule App#rule}.'''
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def value(self) -> jsii.Number:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}.'''
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
         return typing.cast(jsii.Number, result)
 
     @builtins.property
     def window(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#window App#window}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#window App#window}.'''
         result = self._values.get("window")
         assert result is not None, "Required property 'window' is missing"
         return typing.cast(builtins.str, result)
@@ -2175,7 +2177,7 @@ class AppSpecFunctionAlert:
     def disabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#disabled App#disabled}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#disabled App#disabled}.'''
         result = self._values.get("disabled")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
@@ -2405,13 +2407,13 @@ class AppSpecFunctionAlertOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecFunctionAlert, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecFunctionAlert, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionAlert]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionAlert]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecFunctionAlert, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionAlert]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b0ee4f59e39d16e75b06c1d29021a655331629369ae8aef5d797de243d8f34af)
@@ -2443,12 +2445,12 @@ class AppSpecFunctionCors:
         max_age: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_credentials App#allow_credentials}
-        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_headers App#allow_headers}
-        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_methods App#allow_methods}
-        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_origins App#allow_origins}
-        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#expose_headers App#expose_headers}
-        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#max_age App#max_age}
+        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_credentials App#allow_credentials}
+        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_headers App#allow_headers}
+        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_methods App#allow_methods}
+        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_origins App#allow_origins}
+        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#expose_headers App#expose_headers}
+        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#max_age App#max_age}
         '''
         if isinstance(allow_origins, dict):
             allow_origins = AppSpecFunctionCorsAllowOrigins(**allow_origins)
@@ -2482,7 +2484,7 @@ class AppSpecFunctionCors:
 
         This configures the Access-Control-Allow-Credentials header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_credentials App#allow_credentials}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_credentials App#allow_credentials}
         '''
         result = self._values.get("allow_credentials")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -2491,7 +2493,7 @@ class AppSpecFunctionCors:
     def allow_headers(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_headers App#allow_headers}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_headers App#allow_headers}
         '''
         result = self._values.get("allow_headers")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2500,7 +2502,7 @@ class AppSpecFunctionCors:
     def allow_methods(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_methods App#allow_methods}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_methods App#allow_methods}
         '''
         result = self._values.get("allow_methods")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2509,7 +2511,7 @@ class AppSpecFunctionCors:
     def allow_origins(self) -> typing.Optional["AppSpecFunctionCorsAllowOrigins"]:
         '''allow_origins block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_origins App#allow_origins}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_origins App#allow_origins}
         '''
         result = self._values.get("allow_origins")
         return typing.cast(typing.Optional["AppSpecFunctionCorsAllowOrigins"], result)
@@ -2518,7 +2520,7 @@ class AppSpecFunctionCors:
     def expose_headers(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#expose_headers App#expose_headers}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#expose_headers App#expose_headers}
         '''
         result = self._values.get("expose_headers")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2529,7 +2531,7 @@ class AppSpecFunctionCors:
 
         This configures the Access-Control-Max-Age header. Example: ``5h30m``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#max_age App#max_age}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#max_age App#max_age}
         '''
         result = self._values.get("max_age")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2560,9 +2562,9 @@ class AppSpecFunctionCorsAllowOrigins:
         regex: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param exact: Exact string match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#exact App#exact}
-        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#prefix App#prefix}
-        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#regex App#regex}
+        :param exact: Exact string match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#exact App#exact}
+        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#prefix App#prefix}
+        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#regex App#regex}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f1428671654e83ce5ba5594c3eefe8119fecf7d0980c6d551be82117c8a895dc)
@@ -2581,7 +2583,7 @@ class AppSpecFunctionCorsAllowOrigins:
     def exact(self) -> typing.Optional[builtins.str]:
         '''Exact string match.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#exact App#exact}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#exact App#exact}
         '''
         result = self._values.get("exact")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2590,7 +2592,7 @@ class AppSpecFunctionCorsAllowOrigins:
     def prefix(self) -> typing.Optional[builtins.str]:
         '''Prefix-based match.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#prefix App#prefix}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#prefix App#prefix}
         '''
         result = self._values.get("prefix")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2599,7 +2601,7 @@ class AppSpecFunctionCorsAllowOrigins:
     def regex(self) -> typing.Optional[builtins.str]:
         '''RE2 style regex-based match.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#regex App#regex}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#regex App#regex}
         '''
         result = self._values.get("regex")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2744,9 +2746,9 @@ class AppSpecFunctionCorsOutputReference(
         regex: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param exact: Exact string match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#exact App#exact}
-        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#prefix App#prefix}
-        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#regex App#regex}
+        :param exact: Exact string match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#exact App#exact}
+        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#prefix App#prefix}
+        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#regex App#regex}
         '''
         value = AppSpecFunctionCorsAllowOrigins(
             exact=exact, prefix=prefix, regex=regex
@@ -2908,10 +2910,10 @@ class AppSpecFunctionEnv:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
-        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
-        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
-        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
+        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
+        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
+        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__af94710578d3426c78190364e5810cdff1b3a6eaa6837efc4418e25bf83ea1c2)
@@ -2933,7 +2935,7 @@ class AppSpecFunctionEnv:
     def key(self) -> typing.Optional[builtins.str]:
         '''The name of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2942,7 +2944,7 @@ class AppSpecFunctionEnv:
     def scope(self) -> typing.Optional[builtins.str]:
         '''The visibility scope of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
         '''
         result = self._values.get("scope")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2951,7 +2953,7 @@ class AppSpecFunctionEnv:
     def type(self) -> typing.Optional[builtins.str]:
         '''The type of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
         '''
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2960,7 +2962,7 @@ class AppSpecFunctionEnv:
     def value(self) -> typing.Optional[builtins.str]:
         '''The value of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3181,13 +3183,13 @@ class AppSpecFunctionEnvOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecFunctionEnv, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecFunctionEnv, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionEnv]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionEnv]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecFunctionEnv, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionEnv]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__49415869a5c9d54dfe64a83b98f14cb7af2b07826da26cdfb43189ab808f47e2)
@@ -3208,8 +3210,8 @@ class AppSpecFunctionGit:
         repo_clone_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__221635171c00a66deb1f01fdd951431a67f6ff6d470933cce4e81d6ec850cb04)
@@ -3225,7 +3227,7 @@ class AppSpecFunctionGit:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3234,7 +3236,7 @@ class AppSpecFunctionGit:
     def repo_clone_url(self) -> typing.Optional[builtins.str]:
         '''The clone URL of the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         result = self._values.get("repo_clone_url")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3344,9 +3346,9 @@ class AppSpecFunctionGithub:
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__88d863275bccaed956728532b717debe2ae77a1edf58892ab6d085156ba84b75)
@@ -3365,7 +3367,7 @@ class AppSpecFunctionGithub:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3376,7 +3378,7 @@ class AppSpecFunctionGithub:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy new commits made to the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -3385,7 +3387,7 @@ class AppSpecFunctionGithub:
     def repo(self) -> typing.Optional[builtins.str]:
         '''The name of the repo in the format ``owner/repo``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         result = self._values.get("repo")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3523,9 +3525,9 @@ class AppSpecFunctionGitlab:
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7c3b6bb8fa457815dda961523dbce54696cb0f816f45d6af02b3610a27563c36)
@@ -3544,7 +3546,7 @@ class AppSpecFunctionGitlab:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3555,7 +3557,7 @@ class AppSpecFunctionGitlab:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy new commits made to the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -3564,7 +3566,7 @@ class AppSpecFunctionGitlab:
     def repo(self) -> typing.Optional[builtins.str]:
         '''The name of the repo in the format ``owner/repo``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         result = self._values.get("repo")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3794,10 +3796,10 @@ class AppSpecFunctionLogDestination:
         papertrail: typing.Optional[typing.Union["AppSpecFunctionLogDestinationPapertrail", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param name: Name of the log destination. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param datadog: datadog block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#datadog App#datadog}
-        :param logtail: logtail block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#logtail App#logtail}
-        :param papertrail: papertrail block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#papertrail App#papertrail}
+        :param name: Name of the log destination. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param datadog: datadog block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#datadog App#datadog}
+        :param logtail: logtail block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#logtail App#logtail}
+        :param papertrail: papertrail block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#papertrail App#papertrail}
         '''
         if isinstance(datadog, dict):
             datadog = AppSpecFunctionLogDestinationDatadog(**datadog)
@@ -3825,7 +3827,7 @@ class AppSpecFunctionLogDestination:
     def name(self) -> builtins.str:
         '''Name of the log destination.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -3835,7 +3837,7 @@ class AppSpecFunctionLogDestination:
     def datadog(self) -> typing.Optional["AppSpecFunctionLogDestinationDatadog"]:
         '''datadog block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#datadog App#datadog}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#datadog App#datadog}
         '''
         result = self._values.get("datadog")
         return typing.cast(typing.Optional["AppSpecFunctionLogDestinationDatadog"], result)
@@ -3844,7 +3846,7 @@ class AppSpecFunctionLogDestination:
     def logtail(self) -> typing.Optional["AppSpecFunctionLogDestinationLogtail"]:
         '''logtail block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#logtail App#logtail}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#logtail App#logtail}
         '''
         result = self._values.get("logtail")
         return typing.cast(typing.Optional["AppSpecFunctionLogDestinationLogtail"], result)
@@ -3853,7 +3855,7 @@ class AppSpecFunctionLogDestination:
     def papertrail(self) -> typing.Optional["AppSpecFunctionLogDestinationPapertrail"]:
         '''papertrail block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#papertrail App#papertrail}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#papertrail App#papertrail}
         '''
         result = self._values.get("papertrail")
         return typing.cast(typing.Optional["AppSpecFunctionLogDestinationPapertrail"], result)
@@ -3883,8 +3885,8 @@ class AppSpecFunctionLogDestinationDatadog:
         endpoint: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
-        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
+        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8192b195c034b5f8867de43a7d87b2f47d1d08b3b5f7ff9a1f753651f2fcfcda)
@@ -3900,7 +3902,7 @@ class AppSpecFunctionLogDestinationDatadog:
     def api_key(self) -> builtins.str:
         '''Datadog API key.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
         '''
         result = self._values.get("api_key")
         assert result is not None, "Required property 'api_key' is missing"
@@ -3910,7 +3912,7 @@ class AppSpecFunctionLogDestinationDatadog:
     def endpoint(self) -> typing.Optional[builtins.str]:
         '''Datadog HTTP log intake endpoint.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         result = self._values.get("endpoint")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4099,7 +4101,7 @@ class AppSpecFunctionLogDestinationList(
 class AppSpecFunctionLogDestinationLogtail:
     def __init__(self, *, token: builtins.str) -> None:
         '''
-        :param token: Logtail token. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        :param token: Logtail token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b72858795d854a40729964ca2e6092e34ef03a952a8e034ae5a47b0e295f6401)
@@ -4112,7 +4114,7 @@ class AppSpecFunctionLogDestinationLogtail:
     def token(self) -> builtins.str:
         '''Logtail token.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         result = self._values.get("token")
         assert result is not None, "Required property 'token' is missing"
@@ -4217,8 +4219,8 @@ class AppSpecFunctionLogDestinationOutputReference(
         endpoint: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
-        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
+        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         value = AppSpecFunctionLogDestinationDatadog(
             api_key=api_key, endpoint=endpoint
@@ -4229,7 +4231,7 @@ class AppSpecFunctionLogDestinationOutputReference(
     @jsii.member(jsii_name="putLogtail")
     def put_logtail(self, *, token: builtins.str) -> None:
         '''
-        :param token: Logtail token. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        :param token: Logtail token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         value = AppSpecFunctionLogDestinationLogtail(token=token)
 
@@ -4238,7 +4240,7 @@ class AppSpecFunctionLogDestinationOutputReference(
     @jsii.member(jsii_name="putPapertrail")
     def put_papertrail(self, *, endpoint: builtins.str) -> None:
         '''
-        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         value = AppSpecFunctionLogDestinationPapertrail(endpoint=endpoint)
 
@@ -4309,13 +4311,13 @@ class AppSpecFunctionLogDestinationOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecFunctionLogDestination, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecFunctionLogDestination, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionLogDestination]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionLogDestination]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecFunctionLogDestination, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionLogDestination]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__15a885846594c2ad1bd27b17194bcc4167cc6bcd540ea4327b618996db97bed6)
@@ -4331,7 +4333,7 @@ class AppSpecFunctionLogDestinationOutputReference(
 class AppSpecFunctionLogDestinationPapertrail:
     def __init__(self, *, endpoint: builtins.str) -> None:
         '''
-        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1f5c2cd5e2992724cafc2f8b1a4308888e4cf5176699803440507f16b0e71907)
@@ -4344,7 +4346,7 @@ class AppSpecFunctionLogDestinationPapertrail:
     def endpoint(self) -> builtins.str:
         '''Papertrail syslog endpoint.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         result = self._values.get("endpoint")
         assert result is not None, "Required property 'endpoint' is missing"
@@ -4468,12 +4470,12 @@ class AppSpecFunctionOutputReference(
         max_age: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_credentials App#allow_credentials}
-        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_headers App#allow_headers}
-        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_methods App#allow_methods}
-        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_origins App#allow_origins}
-        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#expose_headers App#expose_headers}
-        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#max_age App#max_age}
+        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_credentials App#allow_credentials}
+        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_headers App#allow_headers}
+        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_methods App#allow_methods}
+        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_origins App#allow_origins}
+        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#expose_headers App#expose_headers}
+        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#max_age App#max_age}
         '''
         value = AppSpecFunctionCors(
             allow_credentials=allow_credentials,
@@ -4507,8 +4509,8 @@ class AppSpecFunctionOutputReference(
         repo_clone_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         value = AppSpecFunctionGit(branch=branch, repo_clone_url=repo_clone_url)
 
@@ -4523,9 +4525,9 @@ class AppSpecFunctionOutputReference(
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         value = AppSpecFunctionGithub(
             branch=branch, deploy_on_push=deploy_on_push, repo=repo
@@ -4542,9 +4544,9 @@ class AppSpecFunctionOutputReference(
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         value = AppSpecFunctionGitlab(
             branch=branch, deploy_on_push=deploy_on_push, repo=repo
@@ -4740,13 +4742,13 @@ class AppSpecFunctionOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecFunction, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecFunction, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunction]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunction]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecFunction, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunction]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b8fd0fa32e34c5068a3d57d43410943f197a5ab20dc7af3120ffd4d0fc688f9e)
@@ -4767,8 +4769,8 @@ class AppSpecFunctionRoutes:
         preserve_path_prefix: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param path: Path specifies an route by HTTP path prefix. Paths must start with / and must be unique within the app. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#path App#path}
-        :param preserve_path_prefix: An optional flag to preserve the path that is forwarded to the backend service. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#preserve_path_prefix App#preserve_path_prefix}
+        :param path: Path specifies an route by HTTP path prefix. Paths must start with / and must be unique within the app. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#path App#path}
+        :param preserve_path_prefix: An optional flag to preserve the path that is forwarded to the backend service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#preserve_path_prefix App#preserve_path_prefix}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6ca2d14868e49a58de2b505913734d01086cafee7a1f944392f551761cb0bf47)
@@ -4786,7 +4788,7 @@ class AppSpecFunctionRoutes:
 
         Paths must start with / and must be unique within the app.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#path App#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#path App#path}
         '''
         result = self._values.get("path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4797,7 +4799,7 @@ class AppSpecFunctionRoutes:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''An optional flag to preserve the path that is forwarded to the backend service.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#preserve_path_prefix App#preserve_path_prefix}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#preserve_path_prefix App#preserve_path_prefix}
         '''
         result = self._values.get("preserve_path_prefix")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -4983,13 +4985,13 @@ class AppSpecFunctionRoutesOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecFunctionRoutes, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecFunctionRoutes, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionRoutes]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionRoutes]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecFunctionRoutes, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionRoutes]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__091da90aeef315345b881fa909a8b09469ef98d42681f323b24bc81bc6913497)
@@ -5041,22 +5043,22 @@ class AppSpecJob:
         source_dir: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param name: The name of the component. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param alert: alert block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
-        :param build_command: An optional build command to run while building this component from source. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#build_command App#build_command}
-        :param dockerfile_path: The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#dockerfile_path App#dockerfile_path}
-        :param env: env block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
-        :param environment_slug: An environment slug describing the type of this app. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#environment_slug App#environment_slug}
-        :param git: git block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#git App#git}
-        :param github: github block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#github App#github}
-        :param gitlab: gitlab block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#gitlab App#gitlab}
-        :param image: image block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#image App#image}
-        :param instance_count: The amount of instances that this component should be scaled to. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_count App#instance_count}
-        :param instance_size_slug: The instance size to use for this component. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_size_slug App#instance_size_slug}
-        :param kind: The type of job and when it will be run during the deployment process. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#kind App#kind}
-        :param log_destination: log_destination block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#log_destination App#log_destination}
-        :param run_command: An optional run command to override the component's default. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#run_command App#run_command}
-        :param source_dir: An optional path to the working directory to use for the build. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#source_dir App#source_dir}
+        :param name: The name of the component. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param alert: alert block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
+        :param build_command: An optional build command to run while building this component from source. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#build_command App#build_command}
+        :param dockerfile_path: The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#dockerfile_path App#dockerfile_path}
+        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
+        :param environment_slug: An environment slug describing the type of this app. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#environment_slug App#environment_slug}
+        :param git: git block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#git App#git}
+        :param github: github block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#github App#github}
+        :param gitlab: gitlab block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#gitlab App#gitlab}
+        :param image: image block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#image App#image}
+        :param instance_count: The amount of instances that this component should be scaled to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_count App#instance_count}
+        :param instance_size_slug: The instance size to use for this component. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_size_slug App#instance_size_slug}
+        :param kind: The type of job and when it will be run during the deployment process. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#kind App#kind}
+        :param log_destination: log_destination block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#log_destination App#log_destination}
+        :param run_command: An optional run command to override the component's default. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#run_command App#run_command}
+        :param source_dir: An optional path to the working directory to use for the build. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#source_dir App#source_dir}
         '''
         if isinstance(git, dict):
             git = AppSpecJobGit(**git)
@@ -5122,7 +5124,7 @@ class AppSpecJob:
     def name(self) -> builtins.str:
         '''The name of the component.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -5134,7 +5136,7 @@ class AppSpecJob:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecJobAlert"]]]:
         '''alert block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
         '''
         result = self._values.get("alert")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecJobAlert"]]], result)
@@ -5143,7 +5145,7 @@ class AppSpecJob:
     def build_command(self) -> typing.Optional[builtins.str]:
         '''An optional build command to run while building this component from source.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#build_command App#build_command}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#build_command App#build_command}
         '''
         result = self._values.get("build_command")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5152,7 +5154,7 @@ class AppSpecJob:
     def dockerfile_path(self) -> typing.Optional[builtins.str]:
         '''The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#dockerfile_path App#dockerfile_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#dockerfile_path App#dockerfile_path}
         '''
         result = self._values.get("dockerfile_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5163,7 +5165,7 @@ class AppSpecJob:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecJobEnv"]]]:
         '''env block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
         '''
         result = self._values.get("env")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecJobEnv"]]], result)
@@ -5172,7 +5174,7 @@ class AppSpecJob:
     def environment_slug(self) -> typing.Optional[builtins.str]:
         '''An environment slug describing the type of this app.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#environment_slug App#environment_slug}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#environment_slug App#environment_slug}
         '''
         result = self._values.get("environment_slug")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5181,7 +5183,7 @@ class AppSpecJob:
     def git(self) -> typing.Optional["AppSpecJobGit"]:
         '''git block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#git App#git}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#git App#git}
         '''
         result = self._values.get("git")
         return typing.cast(typing.Optional["AppSpecJobGit"], result)
@@ -5190,7 +5192,7 @@ class AppSpecJob:
     def github(self) -> typing.Optional["AppSpecJobGithub"]:
         '''github block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#github App#github}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#github App#github}
         '''
         result = self._values.get("github")
         return typing.cast(typing.Optional["AppSpecJobGithub"], result)
@@ -5199,7 +5201,7 @@ class AppSpecJob:
     def gitlab(self) -> typing.Optional["AppSpecJobGitlab"]:
         '''gitlab block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#gitlab App#gitlab}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#gitlab App#gitlab}
         '''
         result = self._values.get("gitlab")
         return typing.cast(typing.Optional["AppSpecJobGitlab"], result)
@@ -5208,7 +5210,7 @@ class AppSpecJob:
     def image(self) -> typing.Optional["AppSpecJobImage"]:
         '''image block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#image App#image}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#image App#image}
         '''
         result = self._values.get("image")
         return typing.cast(typing.Optional["AppSpecJobImage"], result)
@@ -5217,7 +5219,7 @@ class AppSpecJob:
     def instance_count(self) -> typing.Optional[jsii.Number]:
         '''The amount of instances that this component should be scaled to.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_count App#instance_count}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_count App#instance_count}
         '''
         result = self._values.get("instance_count")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -5226,7 +5228,7 @@ class AppSpecJob:
     def instance_size_slug(self) -> typing.Optional[builtins.str]:
         '''The instance size to use for this component.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_size_slug App#instance_size_slug}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_size_slug App#instance_size_slug}
         '''
         result = self._values.get("instance_size_slug")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5235,7 +5237,7 @@ class AppSpecJob:
     def kind(self) -> typing.Optional[builtins.str]:
         '''The type of job and when it will be run during the deployment process.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#kind App#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#kind App#kind}
         '''
         result = self._values.get("kind")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5246,7 +5248,7 @@ class AppSpecJob:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecJobLogDestination"]]]:
         '''log_destination block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#log_destination App#log_destination}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#log_destination App#log_destination}
         '''
         result = self._values.get("log_destination")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecJobLogDestination"]]], result)
@@ -5255,7 +5257,7 @@ class AppSpecJob:
     def run_command(self) -> typing.Optional[builtins.str]:
         '''An optional run command to override the component's default.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#run_command App#run_command}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#run_command App#run_command}
         '''
         result = self._values.get("run_command")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5264,7 +5266,7 @@ class AppSpecJob:
     def source_dir(self) -> typing.Optional[builtins.str]:
         '''An optional path to the working directory to use for the build.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#source_dir App#source_dir}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#source_dir App#source_dir}
         '''
         result = self._values.get("source_dir")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5303,11 +5305,11 @@ class AppSpecJobAlert:
         disabled: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param operator: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#operator App#operator}.
-        :param rule: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#rule App#rule}.
-        :param value: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}.
-        :param window: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#window App#window}.
-        :param disabled: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#disabled App#disabled}.
+        :param operator: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#operator App#operator}.
+        :param rule: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#rule App#rule}.
+        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}.
+        :param window: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#window App#window}.
+        :param disabled: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#disabled App#disabled}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e63017acee2aa06d0b579073323e25dee85d5f0469b147aa05b0cfd60b519b43)
@@ -5327,28 +5329,28 @@ class AppSpecJobAlert:
 
     @builtins.property
     def operator(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#operator App#operator}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#operator App#operator}.'''
         result = self._values.get("operator")
         assert result is not None, "Required property 'operator' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def rule(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#rule App#rule}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#rule App#rule}.'''
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def value(self) -> jsii.Number:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}.'''
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
         return typing.cast(jsii.Number, result)
 
     @builtins.property
     def window(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#window App#window}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#window App#window}.'''
         result = self._values.get("window")
         assert result is not None, "Required property 'window' is missing"
         return typing.cast(builtins.str, result)
@@ -5357,7 +5359,7 @@ class AppSpecJobAlert:
     def disabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#disabled App#disabled}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#disabled App#disabled}.'''
         result = self._values.get("disabled")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
@@ -5587,13 +5589,13 @@ class AppSpecJobAlertOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecJobAlert, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecJobAlert, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobAlert]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobAlert]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecJobAlert, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobAlert]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b5712c6b65600e43d811cfd4bce20b8e7427573166844990c4ead91e642e65ea)
@@ -5616,10 +5618,10 @@ class AppSpecJobEnv:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
-        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
-        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
-        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
+        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
+        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
+        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__15ae820b7b6ecf88c3f3273fd65ed44d6a0056e159a8ab5c0da82c3d78cc9910)
@@ -5641,7 +5643,7 @@ class AppSpecJobEnv:
     def key(self) -> typing.Optional[builtins.str]:
         '''The name of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5650,7 +5652,7 @@ class AppSpecJobEnv:
     def scope(self) -> typing.Optional[builtins.str]:
         '''The visibility scope of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
         '''
         result = self._values.get("scope")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5659,7 +5661,7 @@ class AppSpecJobEnv:
     def type(self) -> typing.Optional[builtins.str]:
         '''The type of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
         '''
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5668,7 +5670,7 @@ class AppSpecJobEnv:
     def value(self) -> typing.Optional[builtins.str]:
         '''The value of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5889,13 +5891,13 @@ class AppSpecJobEnvOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecJobEnv, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecJobEnv, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobEnv]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobEnv]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecJobEnv, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobEnv]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__98978b77a0d12a3f99bcca511aadd9f29c0e0fa4e89439f5375858425b2ebd9f)
@@ -5916,8 +5918,8 @@ class AppSpecJobGit:
         repo_clone_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__363565efc96ba7ac31265ae54fae2dcb14d0580bc6ec894ae8a414c374a0cd35)
@@ -5933,7 +5935,7 @@ class AppSpecJobGit:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5942,7 +5944,7 @@ class AppSpecJobGit:
     def repo_clone_url(self) -> typing.Optional[builtins.str]:
         '''The clone URL of the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         result = self._values.get("repo_clone_url")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6052,9 +6054,9 @@ class AppSpecJobGithub:
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__adafad65266c8df1cea1469bd85c0b4d2afcae151a1e52ec7322d0d948ebfd21)
@@ -6073,7 +6075,7 @@ class AppSpecJobGithub:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6084,7 +6086,7 @@ class AppSpecJobGithub:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy new commits made to the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -6093,7 +6095,7 @@ class AppSpecJobGithub:
     def repo(self) -> typing.Optional[builtins.str]:
         '''The name of the repo in the format ``owner/repo``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         result = self._values.get("repo")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6231,9 +6233,9 @@ class AppSpecJobGitlab:
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f294692bf3f83b2735ab554c382eff16ac8c0bd117fbc97a31bf6215bfd2121d)
@@ -6252,7 +6254,7 @@ class AppSpecJobGitlab:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6263,7 +6265,7 @@ class AppSpecJobGitlab:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy new commits made to the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -6272,7 +6274,7 @@ class AppSpecJobGitlab:
     def repo(self) -> typing.Optional[builtins.str]:
         '''The name of the repo in the format ``owner/repo``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         result = self._values.get("repo")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6414,11 +6416,11 @@ class AppSpecJobImage:
         tag: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry_type App#registry_type}
-        :param repository: The repository name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repository App#repository}
-        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry App#registry}
-        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#tag App#tag}
+        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry_type App#registry_type}
+        :param repository: The repository name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repository App#repository}
+        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry App#registry}
+        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#tag App#tag}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a4c21f141fa35fff02299d45a74c7c196ddef153232893a1d894287801be6f9f)
@@ -6442,7 +6444,7 @@ class AppSpecJobImage:
     def registry_type(self) -> builtins.str:
         '''The registry type.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry_type App#registry_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry_type App#registry_type}
         '''
         result = self._values.get("registry_type")
         assert result is not None, "Required property 'registry_type' is missing"
@@ -6452,7 +6454,7 @@ class AppSpecJobImage:
     def repository(self) -> builtins.str:
         '''The repository name.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repository App#repository}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repository App#repository}
         '''
         result = self._values.get("repository")
         assert result is not None, "Required property 'repository' is missing"
@@ -6464,7 +6466,7 @@ class AppSpecJobImage:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecJobImageDeployOnPush"]]]:
         '''deploy_on_push block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecJobImageDeployOnPush"]]], result)
@@ -6473,7 +6475,7 @@ class AppSpecJobImage:
     def registry(self) -> typing.Optional[builtins.str]:
         '''The registry name. Must be left empty for the DOCR registry type.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry App#registry}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry App#registry}
         '''
         result = self._values.get("registry")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6482,7 +6484,7 @@ class AppSpecJobImage:
     def tag(self) -> typing.Optional[builtins.str]:
         '''The repository tag. Defaults to latest if not provided.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#tag App#tag}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#tag App#tag}
         '''
         result = self._values.get("tag")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6511,7 +6513,7 @@ class AppSpecJobImageDeployOnPush:
         enabled: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param enabled: Whether to automatically deploy images pushed to DOCR. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#enabled App#enabled}
+        :param enabled: Whether to automatically deploy images pushed to DOCR. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#enabled App#enabled}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__896407ad426a72e4f16b3b0f944e3cf0c56b7007060486fe2f51d5d1a01c9f91)
@@ -6526,7 +6528,7 @@ class AppSpecJobImageDeployOnPush:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy images pushed to DOCR.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#enabled App#enabled}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#enabled App#enabled}
         '''
         result = self._values.get("enabled")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -6689,13 +6691,13 @@ class AppSpecJobImageDeployOnPushOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecJobImageDeployOnPush, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecJobImageDeployOnPush, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobImageDeployOnPush]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobImageDeployOnPush]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecJobImageDeployOnPush, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobImageDeployOnPush]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c315e7c1d80053a10766459b6d53704bec457bcb761552f86631f80e63dad4f3)
@@ -6951,10 +6953,10 @@ class AppSpecJobLogDestination:
         papertrail: typing.Optional[typing.Union["AppSpecJobLogDestinationPapertrail", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param name: Name of the log destination. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param datadog: datadog block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#datadog App#datadog}
-        :param logtail: logtail block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#logtail App#logtail}
-        :param papertrail: papertrail block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#papertrail App#papertrail}
+        :param name: Name of the log destination. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param datadog: datadog block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#datadog App#datadog}
+        :param logtail: logtail block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#logtail App#logtail}
+        :param papertrail: papertrail block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#papertrail App#papertrail}
         '''
         if isinstance(datadog, dict):
             datadog = AppSpecJobLogDestinationDatadog(**datadog)
@@ -6982,7 +6984,7 @@ class AppSpecJobLogDestination:
     def name(self) -> builtins.str:
         '''Name of the log destination.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -6992,7 +6994,7 @@ class AppSpecJobLogDestination:
     def datadog(self) -> typing.Optional["AppSpecJobLogDestinationDatadog"]:
         '''datadog block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#datadog App#datadog}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#datadog App#datadog}
         '''
         result = self._values.get("datadog")
         return typing.cast(typing.Optional["AppSpecJobLogDestinationDatadog"], result)
@@ -7001,7 +7003,7 @@ class AppSpecJobLogDestination:
     def logtail(self) -> typing.Optional["AppSpecJobLogDestinationLogtail"]:
         '''logtail block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#logtail App#logtail}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#logtail App#logtail}
         '''
         result = self._values.get("logtail")
         return typing.cast(typing.Optional["AppSpecJobLogDestinationLogtail"], result)
@@ -7010,7 +7012,7 @@ class AppSpecJobLogDestination:
     def papertrail(self) -> typing.Optional["AppSpecJobLogDestinationPapertrail"]:
         '''papertrail block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#papertrail App#papertrail}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#papertrail App#papertrail}
         '''
         result = self._values.get("papertrail")
         return typing.cast(typing.Optional["AppSpecJobLogDestinationPapertrail"], result)
@@ -7040,8 +7042,8 @@ class AppSpecJobLogDestinationDatadog:
         endpoint: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
-        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
+        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__06a982958a79b209a9a2b14b446abd7b94f4311dab9061a8eae6079962971d88)
@@ -7057,7 +7059,7 @@ class AppSpecJobLogDestinationDatadog:
     def api_key(self) -> builtins.str:
         '''Datadog API key.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
         '''
         result = self._values.get("api_key")
         assert result is not None, "Required property 'api_key' is missing"
@@ -7067,7 +7069,7 @@ class AppSpecJobLogDestinationDatadog:
     def endpoint(self) -> typing.Optional[builtins.str]:
         '''Datadog HTTP log intake endpoint.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         result = self._values.get("endpoint")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -7256,7 +7258,7 @@ class AppSpecJobLogDestinationList(
 class AppSpecJobLogDestinationLogtail:
     def __init__(self, *, token: builtins.str) -> None:
         '''
-        :param token: Logtail token. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        :param token: Logtail token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8ed52d800368c9b1b72a702a890ca03102941e4f44990219cb166a2f95df0167)
@@ -7269,7 +7271,7 @@ class AppSpecJobLogDestinationLogtail:
     def token(self) -> builtins.str:
         '''Logtail token.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         result = self._values.get("token")
         assert result is not None, "Required property 'token' is missing"
@@ -7374,8 +7376,8 @@ class AppSpecJobLogDestinationOutputReference(
         endpoint: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
-        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
+        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         value = AppSpecJobLogDestinationDatadog(api_key=api_key, endpoint=endpoint)
 
@@ -7384,7 +7386,7 @@ class AppSpecJobLogDestinationOutputReference(
     @jsii.member(jsii_name="putLogtail")
     def put_logtail(self, *, token: builtins.str) -> None:
         '''
-        :param token: Logtail token. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        :param token: Logtail token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         value = AppSpecJobLogDestinationLogtail(token=token)
 
@@ -7393,7 +7395,7 @@ class AppSpecJobLogDestinationOutputReference(
     @jsii.member(jsii_name="putPapertrail")
     def put_papertrail(self, *, endpoint: builtins.str) -> None:
         '''
-        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         value = AppSpecJobLogDestinationPapertrail(endpoint=endpoint)
 
@@ -7462,13 +7464,13 @@ class AppSpecJobLogDestinationOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecJobLogDestination, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecJobLogDestination, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobLogDestination]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobLogDestination]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecJobLogDestination, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobLogDestination]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__58ec58c175dd35b46cd91de81d9fd930796b6414099b2516b1f6ba5a0d90d36b)
@@ -7484,7 +7486,7 @@ class AppSpecJobLogDestinationOutputReference(
 class AppSpecJobLogDestinationPapertrail:
     def __init__(self, *, endpoint: builtins.str) -> None:
         '''
-        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bf3ce00e9a6fd024b7e9da6212944d2cb1783588baf59d69f7885ba0b88aa196)
@@ -7497,7 +7499,7 @@ class AppSpecJobLogDestinationPapertrail:
     def endpoint(self) -> builtins.str:
         '''Papertrail syslog endpoint.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         result = self._values.get("endpoint")
         assert result is not None, "Required property 'endpoint' is missing"
@@ -7628,8 +7630,8 @@ class AppSpecJobOutputReference(
         repo_clone_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         value = AppSpecJobGit(branch=branch, repo_clone_url=repo_clone_url)
 
@@ -7644,9 +7646,9 @@ class AppSpecJobOutputReference(
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         value = AppSpecJobGithub(
             branch=branch, deploy_on_push=deploy_on_push, repo=repo
@@ -7663,9 +7665,9 @@ class AppSpecJobOutputReference(
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         value = AppSpecJobGitlab(
             branch=branch, deploy_on_push=deploy_on_push, repo=repo
@@ -7684,11 +7686,11 @@ class AppSpecJobOutputReference(
         tag: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry_type App#registry_type}
-        :param repository: The repository name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repository App#repository}
-        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry App#registry}
-        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#tag App#tag}
+        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry_type App#registry_type}
+        :param repository: The repository name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repository App#repository}
+        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry App#registry}
+        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#tag App#tag}
         '''
         value = AppSpecJobImage(
             registry_type=registry_type,
@@ -8006,13 +8008,13 @@ class AppSpecJobOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecJob, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecJob, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJob]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJob]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecJob, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJob]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1d2e7ee21465e443d732df4adf091345ff1d803ca466a98fde19dfb80218068f)
@@ -8425,26 +8427,26 @@ class AppSpecService:
         source_dir: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param name: The name of the component. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param alert: alert block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
-        :param build_command: An optional build command to run while building this component from source. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#build_command App#build_command}
-        :param cors: cors block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#cors App#cors}
-        :param dockerfile_path: The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#dockerfile_path App#dockerfile_path}
-        :param env: env block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
-        :param environment_slug: An environment slug describing the type of this app. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#environment_slug App#environment_slug}
-        :param git: git block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#git App#git}
-        :param github: github block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#github App#github}
-        :param gitlab: gitlab block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#gitlab App#gitlab}
-        :param health_check: health_check block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#health_check App#health_check}
-        :param http_port: The internal port on which this service's run command will listen. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#http_port App#http_port}
-        :param image: image block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#image App#image}
-        :param instance_count: The amount of instances that this component should be scaled to. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_count App#instance_count}
-        :param instance_size_slug: The instance size to use for this component. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_size_slug App#instance_size_slug}
-        :param internal_ports: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#internal_ports App#internal_ports}.
-        :param log_destination: log_destination block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#log_destination App#log_destination}
-        :param routes: routes block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#routes App#routes}
-        :param run_command: An optional run command to override the component's default. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#run_command App#run_command}
-        :param source_dir: An optional path to the working directory to use for the build. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#source_dir App#source_dir}
+        :param name: The name of the component. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param alert: alert block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
+        :param build_command: An optional build command to run while building this component from source. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#build_command App#build_command}
+        :param cors: cors block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#cors App#cors}
+        :param dockerfile_path: The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#dockerfile_path App#dockerfile_path}
+        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
+        :param environment_slug: An environment slug describing the type of this app. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#environment_slug App#environment_slug}
+        :param git: git block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#git App#git}
+        :param github: github block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#github App#github}
+        :param gitlab: gitlab block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#gitlab App#gitlab}
+        :param health_check: health_check block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#health_check App#health_check}
+        :param http_port: The internal port on which this service's run command will listen. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#http_port App#http_port}
+        :param image: image block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#image App#image}
+        :param instance_count: The amount of instances that this component should be scaled to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_count App#instance_count}
+        :param instance_size_slug: The instance size to use for this component. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_size_slug App#instance_size_slug}
+        :param internal_ports: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#internal_ports App#internal_ports}.
+        :param log_destination: log_destination block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#log_destination App#log_destination}
+        :param routes: routes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#routes App#routes}
+        :param run_command: An optional run command to override the component's default. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#run_command App#run_command}
+        :param source_dir: An optional path to the working directory to use for the build. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#source_dir App#source_dir}
         '''
         if isinstance(cors, dict):
             cors = AppSpecServiceCors(**cors)
@@ -8526,7 +8528,7 @@ class AppSpecService:
     def name(self) -> builtins.str:
         '''The name of the component.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -8538,7 +8540,7 @@ class AppSpecService:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecServiceAlert"]]]:
         '''alert block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
         '''
         result = self._values.get("alert")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecServiceAlert"]]], result)
@@ -8547,7 +8549,7 @@ class AppSpecService:
     def build_command(self) -> typing.Optional[builtins.str]:
         '''An optional build command to run while building this component from source.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#build_command App#build_command}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#build_command App#build_command}
         '''
         result = self._values.get("build_command")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8556,7 +8558,7 @@ class AppSpecService:
     def cors(self) -> typing.Optional["AppSpecServiceCors"]:
         '''cors block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#cors App#cors}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#cors App#cors}
         '''
         result = self._values.get("cors")
         return typing.cast(typing.Optional["AppSpecServiceCors"], result)
@@ -8565,7 +8567,7 @@ class AppSpecService:
     def dockerfile_path(self) -> typing.Optional[builtins.str]:
         '''The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#dockerfile_path App#dockerfile_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#dockerfile_path App#dockerfile_path}
         '''
         result = self._values.get("dockerfile_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8576,7 +8578,7 @@ class AppSpecService:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecServiceEnv"]]]:
         '''env block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
         '''
         result = self._values.get("env")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecServiceEnv"]]], result)
@@ -8585,7 +8587,7 @@ class AppSpecService:
     def environment_slug(self) -> typing.Optional[builtins.str]:
         '''An environment slug describing the type of this app.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#environment_slug App#environment_slug}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#environment_slug App#environment_slug}
         '''
         result = self._values.get("environment_slug")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8594,7 +8596,7 @@ class AppSpecService:
     def git(self) -> typing.Optional["AppSpecServiceGit"]:
         '''git block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#git App#git}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#git App#git}
         '''
         result = self._values.get("git")
         return typing.cast(typing.Optional["AppSpecServiceGit"], result)
@@ -8603,7 +8605,7 @@ class AppSpecService:
     def github(self) -> typing.Optional["AppSpecServiceGithub"]:
         '''github block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#github App#github}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#github App#github}
         '''
         result = self._values.get("github")
         return typing.cast(typing.Optional["AppSpecServiceGithub"], result)
@@ -8612,7 +8614,7 @@ class AppSpecService:
     def gitlab(self) -> typing.Optional["AppSpecServiceGitlab"]:
         '''gitlab block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#gitlab App#gitlab}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#gitlab App#gitlab}
         '''
         result = self._values.get("gitlab")
         return typing.cast(typing.Optional["AppSpecServiceGitlab"], result)
@@ -8621,7 +8623,7 @@ class AppSpecService:
     def health_check(self) -> typing.Optional["AppSpecServiceHealthCheck"]:
         '''health_check block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#health_check App#health_check}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#health_check App#health_check}
         '''
         result = self._values.get("health_check")
         return typing.cast(typing.Optional["AppSpecServiceHealthCheck"], result)
@@ -8630,7 +8632,7 @@ class AppSpecService:
     def http_port(self) -> typing.Optional[jsii.Number]:
         '''The internal port on which this service's run command will listen.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#http_port App#http_port}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#http_port App#http_port}
         '''
         result = self._values.get("http_port")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -8639,7 +8641,7 @@ class AppSpecService:
     def image(self) -> typing.Optional["AppSpecServiceImage"]:
         '''image block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#image App#image}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#image App#image}
         '''
         result = self._values.get("image")
         return typing.cast(typing.Optional["AppSpecServiceImage"], result)
@@ -8648,7 +8650,7 @@ class AppSpecService:
     def instance_count(self) -> typing.Optional[jsii.Number]:
         '''The amount of instances that this component should be scaled to.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_count App#instance_count}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_count App#instance_count}
         '''
         result = self._values.get("instance_count")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -8657,14 +8659,14 @@ class AppSpecService:
     def instance_size_slug(self) -> typing.Optional[builtins.str]:
         '''The instance size to use for this component.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_size_slug App#instance_size_slug}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_size_slug App#instance_size_slug}
         '''
         result = self._values.get("instance_size_slug")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def internal_ports(self) -> typing.Optional[typing.List[jsii.Number]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#internal_ports App#internal_ports}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#internal_ports App#internal_ports}.'''
         result = self._values.get("internal_ports")
         return typing.cast(typing.Optional[typing.List[jsii.Number]], result)
 
@@ -8674,7 +8676,7 @@ class AppSpecService:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecServiceLogDestination"]]]:
         '''log_destination block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#log_destination App#log_destination}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#log_destination App#log_destination}
         '''
         result = self._values.get("log_destination")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecServiceLogDestination"]]], result)
@@ -8685,7 +8687,7 @@ class AppSpecService:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecServiceRoutes"]]]:
         '''routes block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#routes App#routes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#routes App#routes}
         '''
         result = self._values.get("routes")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecServiceRoutes"]]], result)
@@ -8694,7 +8696,7 @@ class AppSpecService:
     def run_command(self) -> typing.Optional[builtins.str]:
         '''An optional run command to override the component's default.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#run_command App#run_command}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#run_command App#run_command}
         '''
         result = self._values.get("run_command")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8703,7 +8705,7 @@ class AppSpecService:
     def source_dir(self) -> typing.Optional[builtins.str]:
         '''An optional path to the working directory to use for the build.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#source_dir App#source_dir}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#source_dir App#source_dir}
         '''
         result = self._values.get("source_dir")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8742,11 +8744,11 @@ class AppSpecServiceAlert:
         disabled: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param operator: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#operator App#operator}.
-        :param rule: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#rule App#rule}.
-        :param value: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}.
-        :param window: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#window App#window}.
-        :param disabled: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#disabled App#disabled}.
+        :param operator: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#operator App#operator}.
+        :param rule: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#rule App#rule}.
+        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}.
+        :param window: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#window App#window}.
+        :param disabled: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#disabled App#disabled}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c4af67c565d3ecf565000872cc7f0b50b1be73dad5369ad84e71700456d9c4f7)
@@ -8766,28 +8768,28 @@ class AppSpecServiceAlert:
 
     @builtins.property
     def operator(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#operator App#operator}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#operator App#operator}.'''
         result = self._values.get("operator")
         assert result is not None, "Required property 'operator' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def rule(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#rule App#rule}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#rule App#rule}.'''
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def value(self) -> jsii.Number:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}.'''
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
         return typing.cast(jsii.Number, result)
 
     @builtins.property
     def window(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#window App#window}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#window App#window}.'''
         result = self._values.get("window")
         assert result is not None, "Required property 'window' is missing"
         return typing.cast(builtins.str, result)
@@ -8796,7 +8798,7 @@ class AppSpecServiceAlert:
     def disabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#disabled App#disabled}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#disabled App#disabled}.'''
         result = self._values.get("disabled")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
@@ -9026,13 +9028,13 @@ class AppSpecServiceAlertOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecServiceAlert, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecServiceAlert, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceAlert]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceAlert]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecServiceAlert, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceAlert]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__446fffd3481f66760097a870c317922839dd2d4309bab6c952316b60fb0baca2)
@@ -9064,12 +9066,12 @@ class AppSpecServiceCors:
         max_age: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_credentials App#allow_credentials}
-        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_headers App#allow_headers}
-        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_methods App#allow_methods}
-        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_origins App#allow_origins}
-        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#expose_headers App#expose_headers}
-        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#max_age App#max_age}
+        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_credentials App#allow_credentials}
+        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_headers App#allow_headers}
+        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_methods App#allow_methods}
+        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_origins App#allow_origins}
+        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#expose_headers App#expose_headers}
+        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#max_age App#max_age}
         '''
         if isinstance(allow_origins, dict):
             allow_origins = AppSpecServiceCorsAllowOrigins(**allow_origins)
@@ -9103,7 +9105,7 @@ class AppSpecServiceCors:
 
         This configures the Access-Control-Allow-Credentials header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_credentials App#allow_credentials}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_credentials App#allow_credentials}
         '''
         result = self._values.get("allow_credentials")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -9112,7 +9114,7 @@ class AppSpecServiceCors:
     def allow_headers(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_headers App#allow_headers}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_headers App#allow_headers}
         '''
         result = self._values.get("allow_headers")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -9121,7 +9123,7 @@ class AppSpecServiceCors:
     def allow_methods(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_methods App#allow_methods}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_methods App#allow_methods}
         '''
         result = self._values.get("allow_methods")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -9130,7 +9132,7 @@ class AppSpecServiceCors:
     def allow_origins(self) -> typing.Optional["AppSpecServiceCorsAllowOrigins"]:
         '''allow_origins block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_origins App#allow_origins}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_origins App#allow_origins}
         '''
         result = self._values.get("allow_origins")
         return typing.cast(typing.Optional["AppSpecServiceCorsAllowOrigins"], result)
@@ -9139,7 +9141,7 @@ class AppSpecServiceCors:
     def expose_headers(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#expose_headers App#expose_headers}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#expose_headers App#expose_headers}
         '''
         result = self._values.get("expose_headers")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -9150,7 +9152,7 @@ class AppSpecServiceCors:
 
         This configures the Access-Control-Max-Age header. Example: ``5h30m``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#max_age App#max_age}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#max_age App#max_age}
         '''
         result = self._values.get("max_age")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9181,9 +9183,9 @@ class AppSpecServiceCorsAllowOrigins:
         regex: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param exact: Exact string match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#exact App#exact}
-        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#prefix App#prefix}
-        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#regex App#regex}
+        :param exact: Exact string match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#exact App#exact}
+        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#prefix App#prefix}
+        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#regex App#regex}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3f3bae7413bd4ea8f84765c2e59e334a7d4cd60a5115dcbb197b8fd5bde6004b)
@@ -9202,7 +9204,7 @@ class AppSpecServiceCorsAllowOrigins:
     def exact(self) -> typing.Optional[builtins.str]:
         '''Exact string match.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#exact App#exact}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#exact App#exact}
         '''
         result = self._values.get("exact")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9211,7 +9213,7 @@ class AppSpecServiceCorsAllowOrigins:
     def prefix(self) -> typing.Optional[builtins.str]:
         '''Prefix-based match.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#prefix App#prefix}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#prefix App#prefix}
         '''
         result = self._values.get("prefix")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9220,7 +9222,7 @@ class AppSpecServiceCorsAllowOrigins:
     def regex(self) -> typing.Optional[builtins.str]:
         '''RE2 style regex-based match.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#regex App#regex}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#regex App#regex}
         '''
         result = self._values.get("regex")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9365,9 +9367,9 @@ class AppSpecServiceCorsOutputReference(
         regex: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param exact: Exact string match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#exact App#exact}
-        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#prefix App#prefix}
-        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#regex App#regex}
+        :param exact: Exact string match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#exact App#exact}
+        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#prefix App#prefix}
+        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#regex App#regex}
         '''
         value = AppSpecServiceCorsAllowOrigins(exact=exact, prefix=prefix, regex=regex)
 
@@ -9527,10 +9529,10 @@ class AppSpecServiceEnv:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
-        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
-        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
-        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
+        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
+        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
+        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b06788a5fa960e4b3569062bf0ce4f5a53174a96f3e4f99884d4ebde9580af50)
@@ -9552,7 +9554,7 @@ class AppSpecServiceEnv:
     def key(self) -> typing.Optional[builtins.str]:
         '''The name of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9561,7 +9563,7 @@ class AppSpecServiceEnv:
     def scope(self) -> typing.Optional[builtins.str]:
         '''The visibility scope of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
         '''
         result = self._values.get("scope")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9570,7 +9572,7 @@ class AppSpecServiceEnv:
     def type(self) -> typing.Optional[builtins.str]:
         '''The type of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
         '''
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9579,7 +9581,7 @@ class AppSpecServiceEnv:
     def value(self) -> typing.Optional[builtins.str]:
         '''The value of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9800,13 +9802,13 @@ class AppSpecServiceEnvOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecServiceEnv, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecServiceEnv, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceEnv]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceEnv]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecServiceEnv, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceEnv]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d23fa9d5559b0c0467106bfe338cf21aeee669630491cce4af175cc33cd0de6)
@@ -9827,8 +9829,8 @@ class AppSpecServiceGit:
         repo_clone_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a3d809b374a928f9a114d06fc6e3d82c080acc129540a81ddbc33bedb4293016)
@@ -9844,7 +9846,7 @@ class AppSpecServiceGit:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9853,7 +9855,7 @@ class AppSpecServiceGit:
     def repo_clone_url(self) -> typing.Optional[builtins.str]:
         '''The clone URL of the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         result = self._values.get("repo_clone_url")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9963,9 +9965,9 @@ class AppSpecServiceGithub:
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d76e5963b8e57cb236d19f379e1a8ec98e0fa7387c915c9395718f082be8a8ab)
@@ -9984,7 +9986,7 @@ class AppSpecServiceGithub:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9995,7 +9997,7 @@ class AppSpecServiceGithub:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy new commits made to the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -10004,7 +10006,7 @@ class AppSpecServiceGithub:
     def repo(self) -> typing.Optional[builtins.str]:
         '''The name of the repo in the format ``owner/repo``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         result = self._values.get("repo")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -10142,9 +10144,9 @@ class AppSpecServiceGitlab:
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e0cc73984d23f9785affd45db84939817f88ce3f2260d5504ada613b8f7b631d)
@@ -10163,7 +10165,7 @@ class AppSpecServiceGitlab:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -10174,7 +10176,7 @@ class AppSpecServiceGitlab:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy new commits made to the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -10183,7 +10185,7 @@ class AppSpecServiceGitlab:
     def repo(self) -> typing.Optional[builtins.str]:
         '''The name of the repo in the format ``owner/repo``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         result = self._values.get("repo")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -10327,12 +10329,12 @@ class AppSpecServiceHealthCheck:
         timeout_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param failure_threshold: The number of failed health checks before considered unhealthy. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#failure_threshold App#failure_threshold}
-        :param http_path: The route path used for the HTTP health check ping. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#http_path App#http_path}
-        :param initial_delay_seconds: The number of seconds to wait before beginning health checks. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#initial_delay_seconds App#initial_delay_seconds}
-        :param period_seconds: The number of seconds to wait between health checks. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#period_seconds App#period_seconds}
-        :param success_threshold: The number of successful health checks before considered healthy. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#success_threshold App#success_threshold}
-        :param timeout_seconds: The number of seconds after which the check times out. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#timeout_seconds App#timeout_seconds}
+        :param failure_threshold: The number of failed health checks before considered unhealthy. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#failure_threshold App#failure_threshold}
+        :param http_path: The route path used for the HTTP health check ping. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#http_path App#http_path}
+        :param initial_delay_seconds: The number of seconds to wait before beginning health checks. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#initial_delay_seconds App#initial_delay_seconds}
+        :param period_seconds: The number of seconds to wait between health checks. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#period_seconds App#period_seconds}
+        :param success_threshold: The number of successful health checks before considered healthy. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#success_threshold App#success_threshold}
+        :param timeout_seconds: The number of seconds after which the check times out. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#timeout_seconds App#timeout_seconds}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b767c27332ca812d9f0df3d6802bb7e6272798b94978ebed1ea0cab9584cd340)
@@ -10360,7 +10362,7 @@ class AppSpecServiceHealthCheck:
     def failure_threshold(self) -> typing.Optional[jsii.Number]:
         '''The number of failed health checks before considered unhealthy.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#failure_threshold App#failure_threshold}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#failure_threshold App#failure_threshold}
         '''
         result = self._values.get("failure_threshold")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -10369,7 +10371,7 @@ class AppSpecServiceHealthCheck:
     def http_path(self) -> typing.Optional[builtins.str]:
         '''The route path used for the HTTP health check ping.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#http_path App#http_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#http_path App#http_path}
         '''
         result = self._values.get("http_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -10378,7 +10380,7 @@ class AppSpecServiceHealthCheck:
     def initial_delay_seconds(self) -> typing.Optional[jsii.Number]:
         '''The number of seconds to wait before beginning health checks.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#initial_delay_seconds App#initial_delay_seconds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#initial_delay_seconds App#initial_delay_seconds}
         '''
         result = self._values.get("initial_delay_seconds")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -10387,7 +10389,7 @@ class AppSpecServiceHealthCheck:
     def period_seconds(self) -> typing.Optional[jsii.Number]:
         '''The number of seconds to wait between health checks.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#period_seconds App#period_seconds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#period_seconds App#period_seconds}
         '''
         result = self._values.get("period_seconds")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -10396,7 +10398,7 @@ class AppSpecServiceHealthCheck:
     def success_threshold(self) -> typing.Optional[jsii.Number]:
         '''The number of successful health checks before considered healthy.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#success_threshold App#success_threshold}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#success_threshold App#success_threshold}
         '''
         result = self._values.get("success_threshold")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -10405,7 +10407,7 @@ class AppSpecServiceHealthCheck:
     def timeout_seconds(self) -> typing.Optional[jsii.Number]:
         '''The number of seconds after which the check times out.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#timeout_seconds App#timeout_seconds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#timeout_seconds App#timeout_seconds}
         '''
         result = self._values.get("timeout_seconds")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -10603,11 +10605,11 @@ class AppSpecServiceImage:
         tag: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry_type App#registry_type}
-        :param repository: The repository name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repository App#repository}
-        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry App#registry}
-        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#tag App#tag}
+        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry_type App#registry_type}
+        :param repository: The repository name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repository App#repository}
+        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry App#registry}
+        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#tag App#tag}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__472885621ee51253e9bed11e8f3463b86855779804a76f767840f7d7ff85bc0b)
@@ -10631,7 +10633,7 @@ class AppSpecServiceImage:
     def registry_type(self) -> builtins.str:
         '''The registry type.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry_type App#registry_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry_type App#registry_type}
         '''
         result = self._values.get("registry_type")
         assert result is not None, "Required property 'registry_type' is missing"
@@ -10641,7 +10643,7 @@ class AppSpecServiceImage:
     def repository(self) -> builtins.str:
         '''The repository name.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repository App#repository}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repository App#repository}
         '''
         result = self._values.get("repository")
         assert result is not None, "Required property 'repository' is missing"
@@ -10653,7 +10655,7 @@ class AppSpecServiceImage:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecServiceImageDeployOnPush"]]]:
         '''deploy_on_push block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecServiceImageDeployOnPush"]]], result)
@@ -10662,7 +10664,7 @@ class AppSpecServiceImage:
     def registry(self) -> typing.Optional[builtins.str]:
         '''The registry name. Must be left empty for the DOCR registry type.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry App#registry}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry App#registry}
         '''
         result = self._values.get("registry")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -10671,7 +10673,7 @@ class AppSpecServiceImage:
     def tag(self) -> typing.Optional[builtins.str]:
         '''The repository tag. Defaults to latest if not provided.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#tag App#tag}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#tag App#tag}
         '''
         result = self._values.get("tag")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -10700,7 +10702,7 @@ class AppSpecServiceImageDeployOnPush:
         enabled: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param enabled: Whether to automatically deploy images pushed to DOCR. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#enabled App#enabled}
+        :param enabled: Whether to automatically deploy images pushed to DOCR. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#enabled App#enabled}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__11169000a9e7bd85e601514117245942c84bb1e5011aa9275132228f8509dd6e)
@@ -10715,7 +10717,7 @@ class AppSpecServiceImageDeployOnPush:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy images pushed to DOCR.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#enabled App#enabled}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#enabled App#enabled}
         '''
         result = self._values.get("enabled")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -10881,13 +10883,13 @@ class AppSpecServiceImageDeployOnPushOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecServiceImageDeployOnPush, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecServiceImageDeployOnPush, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceImageDeployOnPush]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceImageDeployOnPush]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecServiceImageDeployOnPush, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceImageDeployOnPush]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__84b79cdfb41f63704a241764e64075b84cbcc7611c8e89a988325b9452d92270)
@@ -11143,10 +11145,10 @@ class AppSpecServiceLogDestination:
         papertrail: typing.Optional[typing.Union["AppSpecServiceLogDestinationPapertrail", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param name: Name of the log destination. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param datadog: datadog block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#datadog App#datadog}
-        :param logtail: logtail block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#logtail App#logtail}
-        :param papertrail: papertrail block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#papertrail App#papertrail}
+        :param name: Name of the log destination. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param datadog: datadog block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#datadog App#datadog}
+        :param logtail: logtail block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#logtail App#logtail}
+        :param papertrail: papertrail block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#papertrail App#papertrail}
         '''
         if isinstance(datadog, dict):
             datadog = AppSpecServiceLogDestinationDatadog(**datadog)
@@ -11174,7 +11176,7 @@ class AppSpecServiceLogDestination:
     def name(self) -> builtins.str:
         '''Name of the log destination.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -11184,7 +11186,7 @@ class AppSpecServiceLogDestination:
     def datadog(self) -> typing.Optional["AppSpecServiceLogDestinationDatadog"]:
         '''datadog block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#datadog App#datadog}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#datadog App#datadog}
         '''
         result = self._values.get("datadog")
         return typing.cast(typing.Optional["AppSpecServiceLogDestinationDatadog"], result)
@@ -11193,7 +11195,7 @@ class AppSpecServiceLogDestination:
     def logtail(self) -> typing.Optional["AppSpecServiceLogDestinationLogtail"]:
         '''logtail block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#logtail App#logtail}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#logtail App#logtail}
         '''
         result = self._values.get("logtail")
         return typing.cast(typing.Optional["AppSpecServiceLogDestinationLogtail"], result)
@@ -11202,7 +11204,7 @@ class AppSpecServiceLogDestination:
     def papertrail(self) -> typing.Optional["AppSpecServiceLogDestinationPapertrail"]:
         '''papertrail block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#papertrail App#papertrail}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#papertrail App#papertrail}
         '''
         result = self._values.get("papertrail")
         return typing.cast(typing.Optional["AppSpecServiceLogDestinationPapertrail"], result)
@@ -11232,8 +11234,8 @@ class AppSpecServiceLogDestinationDatadog:
         endpoint: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
-        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
+        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__46dc76ba433e1242c0cc53c37209411e16678267917cc16b122455d1c006413b)
@@ -11249,7 +11251,7 @@ class AppSpecServiceLogDestinationDatadog:
     def api_key(self) -> builtins.str:
         '''Datadog API key.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
         '''
         result = self._values.get("api_key")
         assert result is not None, "Required property 'api_key' is missing"
@@ -11259,7 +11261,7 @@ class AppSpecServiceLogDestinationDatadog:
     def endpoint(self) -> typing.Optional[builtins.str]:
         '''Datadog HTTP log intake endpoint.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         result = self._values.get("endpoint")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -11448,7 +11450,7 @@ class AppSpecServiceLogDestinationList(
 class AppSpecServiceLogDestinationLogtail:
     def __init__(self, *, token: builtins.str) -> None:
         '''
-        :param token: Logtail token. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        :param token: Logtail token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f7b33b38ac6f4ebf95705a326e1d91c27a1c84fed972bb7a006aa4754727a8fc)
@@ -11461,7 +11463,7 @@ class AppSpecServiceLogDestinationLogtail:
     def token(self) -> builtins.str:
         '''Logtail token.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         result = self._values.get("token")
         assert result is not None, "Required property 'token' is missing"
@@ -11566,8 +11568,8 @@ class AppSpecServiceLogDestinationOutputReference(
         endpoint: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
-        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
+        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         value = AppSpecServiceLogDestinationDatadog(api_key=api_key, endpoint=endpoint)
 
@@ -11576,7 +11578,7 @@ class AppSpecServiceLogDestinationOutputReference(
     @jsii.member(jsii_name="putLogtail")
     def put_logtail(self, *, token: builtins.str) -> None:
         '''
-        :param token: Logtail token. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        :param token: Logtail token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         value = AppSpecServiceLogDestinationLogtail(token=token)
 
@@ -11585,7 +11587,7 @@ class AppSpecServiceLogDestinationOutputReference(
     @jsii.member(jsii_name="putPapertrail")
     def put_papertrail(self, *, endpoint: builtins.str) -> None:
         '''
-        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         value = AppSpecServiceLogDestinationPapertrail(endpoint=endpoint)
 
@@ -11656,13 +11658,13 @@ class AppSpecServiceLogDestinationOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecServiceLogDestination, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecServiceLogDestination, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceLogDestination]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceLogDestination]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecServiceLogDestination, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceLogDestination]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0f8cf359fd49fc792dbe817eac453cd033ce98c35acff7df33367fa2a02eb03c)
@@ -11678,7 +11680,7 @@ class AppSpecServiceLogDestinationOutputReference(
 class AppSpecServiceLogDestinationPapertrail:
     def __init__(self, *, endpoint: builtins.str) -> None:
         '''
-        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1cc51bcbbe7caac89a4feb641da1f8b030a81b186ee60906e6bd2a000e0215a2)
@@ -11691,7 +11693,7 @@ class AppSpecServiceLogDestinationPapertrail:
     def endpoint(self) -> builtins.str:
         '''Papertrail syslog endpoint.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         result = self._values.get("endpoint")
         assert result is not None, "Required property 'endpoint' is missing"
@@ -11813,12 +11815,12 @@ class AppSpecServiceOutputReference(
         max_age: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_credentials App#allow_credentials}
-        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_headers App#allow_headers}
-        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_methods App#allow_methods}
-        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_origins App#allow_origins}
-        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#expose_headers App#expose_headers}
-        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#max_age App#max_age}
+        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_credentials App#allow_credentials}
+        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_headers App#allow_headers}
+        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_methods App#allow_methods}
+        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_origins App#allow_origins}
+        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#expose_headers App#expose_headers}
+        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#max_age App#max_age}
         '''
         value = AppSpecServiceCors(
             allow_credentials=allow_credentials,
@@ -11852,8 +11854,8 @@ class AppSpecServiceOutputReference(
         repo_clone_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         value = AppSpecServiceGit(branch=branch, repo_clone_url=repo_clone_url)
 
@@ -11868,9 +11870,9 @@ class AppSpecServiceOutputReference(
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         value = AppSpecServiceGithub(
             branch=branch, deploy_on_push=deploy_on_push, repo=repo
@@ -11887,9 +11889,9 @@ class AppSpecServiceOutputReference(
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         value = AppSpecServiceGitlab(
             branch=branch, deploy_on_push=deploy_on_push, repo=repo
@@ -11909,12 +11911,12 @@ class AppSpecServiceOutputReference(
         timeout_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param failure_threshold: The number of failed health checks before considered unhealthy. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#failure_threshold App#failure_threshold}
-        :param http_path: The route path used for the HTTP health check ping. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#http_path App#http_path}
-        :param initial_delay_seconds: The number of seconds to wait before beginning health checks. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#initial_delay_seconds App#initial_delay_seconds}
-        :param period_seconds: The number of seconds to wait between health checks. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#period_seconds App#period_seconds}
-        :param success_threshold: The number of successful health checks before considered healthy. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#success_threshold App#success_threshold}
-        :param timeout_seconds: The number of seconds after which the check times out. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#timeout_seconds App#timeout_seconds}
+        :param failure_threshold: The number of failed health checks before considered unhealthy. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#failure_threshold App#failure_threshold}
+        :param http_path: The route path used for the HTTP health check ping. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#http_path App#http_path}
+        :param initial_delay_seconds: The number of seconds to wait before beginning health checks. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#initial_delay_seconds App#initial_delay_seconds}
+        :param period_seconds: The number of seconds to wait between health checks. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#period_seconds App#period_seconds}
+        :param success_threshold: The number of successful health checks before considered healthy. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#success_threshold App#success_threshold}
+        :param timeout_seconds: The number of seconds after which the check times out. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#timeout_seconds App#timeout_seconds}
         '''
         value = AppSpecServiceHealthCheck(
             failure_threshold=failure_threshold,
@@ -11938,11 +11940,11 @@ class AppSpecServiceOutputReference(
         tag: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry_type App#registry_type}
-        :param repository: The repository name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repository App#repository}
-        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry App#registry}
-        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#tag App#tag}
+        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry_type App#registry_type}
+        :param repository: The repository name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repository App#repository}
+        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry App#registry}
+        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#tag App#tag}
         '''
         value = AppSpecServiceImage(
             registry_type=registry_type,
@@ -12338,13 +12340,13 @@ class AppSpecServiceOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecService, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecService, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecService]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecService]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecService, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecService]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ec40edbd6a6514ab44a64659976a477c8d524c6cabd296ed76fad8feb152f10d)
@@ -12365,8 +12367,8 @@ class AppSpecServiceRoutes:
         preserve_path_prefix: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param path: Path specifies an route by HTTP path prefix. Paths must start with / and must be unique within the app. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#path App#path}
-        :param preserve_path_prefix: An optional flag to preserve the path that is forwarded to the backend service. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#preserve_path_prefix App#preserve_path_prefix}
+        :param path: Path specifies an route by HTTP path prefix. Paths must start with / and must be unique within the app. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#path App#path}
+        :param preserve_path_prefix: An optional flag to preserve the path that is forwarded to the backend service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#preserve_path_prefix App#preserve_path_prefix}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__036b51f32cb5e1b6647d371ad0e32cbc9227721a6e4ec0c29b0fa11eb124d5bb)
@@ -12384,7 +12386,7 @@ class AppSpecServiceRoutes:
 
         Paths must start with / and must be unique within the app.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#path App#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#path App#path}
         '''
         result = self._values.get("path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -12395,7 +12397,7 @@ class AppSpecServiceRoutes:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''An optional flag to preserve the path that is forwarded to the backend service.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#preserve_path_prefix App#preserve_path_prefix}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#preserve_path_prefix App#preserve_path_prefix}
         '''
         result = self._values.get("preserve_path_prefix")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -12581,13 +12583,13 @@ class AppSpecServiceRoutesOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecServiceRoutes, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecServiceRoutes, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceRoutes]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceRoutes]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecServiceRoutes, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceRoutes]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__790f603b6fb1462c24f6b7e4d91cc1ba8087df8ac36eaf426ab31ae97a3405cc)
@@ -12637,21 +12639,21 @@ class AppSpecStaticSite:
         source_dir: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param name: The name of the component. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param build_command: An optional build command to run while building this component from source. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#build_command App#build_command}
-        :param catchall_document: The name of the document to use as the fallback for any requests to documents that are not found when serving this static site. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#catchall_document App#catchall_document}
-        :param cors: cors block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#cors App#cors}
-        :param dockerfile_path: The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#dockerfile_path App#dockerfile_path}
-        :param env: env block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
-        :param environment_slug: An environment slug describing the type of this app. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#environment_slug App#environment_slug}
-        :param error_document: The name of the error document to use when serving this static site. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#error_document App#error_document}
-        :param git: git block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#git App#git}
-        :param github: github block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#github App#github}
-        :param gitlab: gitlab block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#gitlab App#gitlab}
-        :param index_document: The name of the index document to use when serving this static site. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#index_document App#index_document}
-        :param output_dir: An optional path to where the built assets will be located, relative to the build context. If not set, App Platform will automatically scan for these directory names: ``_static``, ``dist``, ``public``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#output_dir App#output_dir}
-        :param routes: routes block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#routes App#routes}
-        :param source_dir: An optional path to the working directory to use for the build. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#source_dir App#source_dir}
+        :param name: The name of the component. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param build_command: An optional build command to run while building this component from source. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#build_command App#build_command}
+        :param catchall_document: The name of the document to use as the fallback for any requests to documents that are not found when serving this static site. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#catchall_document App#catchall_document}
+        :param cors: cors block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#cors App#cors}
+        :param dockerfile_path: The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#dockerfile_path App#dockerfile_path}
+        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
+        :param environment_slug: An environment slug describing the type of this app. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#environment_slug App#environment_slug}
+        :param error_document: The name of the error document to use when serving this static site. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#error_document App#error_document}
+        :param git: git block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#git App#git}
+        :param github: github block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#github App#github}
+        :param gitlab: gitlab block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#gitlab App#gitlab}
+        :param index_document: The name of the index document to use when serving this static site. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#index_document App#index_document}
+        :param output_dir: An optional path to where the built assets will be located, relative to the build context. If not set, App Platform will automatically scan for these directory names: ``_static``, ``dist``, ``public``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#output_dir App#output_dir}
+        :param routes: routes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#routes App#routes}
+        :param source_dir: An optional path to the working directory to use for the build. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#source_dir App#source_dir}
         '''
         if isinstance(cors, dict):
             cors = AppSpecStaticSiteCors(**cors)
@@ -12714,7 +12716,7 @@ class AppSpecStaticSite:
     def name(self) -> builtins.str:
         '''The name of the component.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -12724,7 +12726,7 @@ class AppSpecStaticSite:
     def build_command(self) -> typing.Optional[builtins.str]:
         '''An optional build command to run while building this component from source.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#build_command App#build_command}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#build_command App#build_command}
         '''
         result = self._values.get("build_command")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -12733,7 +12735,7 @@ class AppSpecStaticSite:
     def catchall_document(self) -> typing.Optional[builtins.str]:
         '''The name of the document to use as the fallback for any requests to documents that are not found when serving this static site.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#catchall_document App#catchall_document}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#catchall_document App#catchall_document}
         '''
         result = self._values.get("catchall_document")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -12742,7 +12744,7 @@ class AppSpecStaticSite:
     def cors(self) -> typing.Optional["AppSpecStaticSiteCors"]:
         '''cors block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#cors App#cors}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#cors App#cors}
         '''
         result = self._values.get("cors")
         return typing.cast(typing.Optional["AppSpecStaticSiteCors"], result)
@@ -12751,7 +12753,7 @@ class AppSpecStaticSite:
     def dockerfile_path(self) -> typing.Optional[builtins.str]:
         '''The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#dockerfile_path App#dockerfile_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#dockerfile_path App#dockerfile_path}
         '''
         result = self._values.get("dockerfile_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -12762,7 +12764,7 @@ class AppSpecStaticSite:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecStaticSiteEnv"]]]:
         '''env block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
         '''
         result = self._values.get("env")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecStaticSiteEnv"]]], result)
@@ -12771,7 +12773,7 @@ class AppSpecStaticSite:
     def environment_slug(self) -> typing.Optional[builtins.str]:
         '''An environment slug describing the type of this app.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#environment_slug App#environment_slug}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#environment_slug App#environment_slug}
         '''
         result = self._values.get("environment_slug")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -12780,7 +12782,7 @@ class AppSpecStaticSite:
     def error_document(self) -> typing.Optional[builtins.str]:
         '''The name of the error document to use when serving this static site.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#error_document App#error_document}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#error_document App#error_document}
         '''
         result = self._values.get("error_document")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -12789,7 +12791,7 @@ class AppSpecStaticSite:
     def git(self) -> typing.Optional["AppSpecStaticSiteGit"]:
         '''git block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#git App#git}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#git App#git}
         '''
         result = self._values.get("git")
         return typing.cast(typing.Optional["AppSpecStaticSiteGit"], result)
@@ -12798,7 +12800,7 @@ class AppSpecStaticSite:
     def github(self) -> typing.Optional["AppSpecStaticSiteGithub"]:
         '''github block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#github App#github}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#github App#github}
         '''
         result = self._values.get("github")
         return typing.cast(typing.Optional["AppSpecStaticSiteGithub"], result)
@@ -12807,7 +12809,7 @@ class AppSpecStaticSite:
     def gitlab(self) -> typing.Optional["AppSpecStaticSiteGitlab"]:
         '''gitlab block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#gitlab App#gitlab}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#gitlab App#gitlab}
         '''
         result = self._values.get("gitlab")
         return typing.cast(typing.Optional["AppSpecStaticSiteGitlab"], result)
@@ -12816,7 +12818,7 @@ class AppSpecStaticSite:
     def index_document(self) -> typing.Optional[builtins.str]:
         '''The name of the index document to use when serving this static site.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#index_document App#index_document}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#index_document App#index_document}
         '''
         result = self._values.get("index_document")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -12827,7 +12829,7 @@ class AppSpecStaticSite:
 
         If not set, App Platform will automatically scan for these directory names: ``_static``, ``dist``, ``public``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#output_dir App#output_dir}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#output_dir App#output_dir}
         '''
         result = self._values.get("output_dir")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -12838,7 +12840,7 @@ class AppSpecStaticSite:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecStaticSiteRoutes"]]]:
         '''routes block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#routes App#routes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#routes App#routes}
         '''
         result = self._values.get("routes")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecStaticSiteRoutes"]]], result)
@@ -12847,7 +12849,7 @@ class AppSpecStaticSite:
     def source_dir(self) -> typing.Optional[builtins.str]:
         '''An optional path to the working directory to use for the build.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#source_dir App#source_dir}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#source_dir App#source_dir}
         '''
         result = self._values.get("source_dir")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -12888,12 +12890,12 @@ class AppSpecStaticSiteCors:
         max_age: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_credentials App#allow_credentials}
-        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_headers App#allow_headers}
-        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_methods App#allow_methods}
-        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_origins App#allow_origins}
-        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#expose_headers App#expose_headers}
-        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#max_age App#max_age}
+        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_credentials App#allow_credentials}
+        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_headers App#allow_headers}
+        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_methods App#allow_methods}
+        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_origins App#allow_origins}
+        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#expose_headers App#expose_headers}
+        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#max_age App#max_age}
         '''
         if isinstance(allow_origins, dict):
             allow_origins = AppSpecStaticSiteCorsAllowOrigins(**allow_origins)
@@ -12927,7 +12929,7 @@ class AppSpecStaticSiteCors:
 
         This configures the Access-Control-Allow-Credentials header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_credentials App#allow_credentials}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_credentials App#allow_credentials}
         '''
         result = self._values.get("allow_credentials")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -12936,7 +12938,7 @@ class AppSpecStaticSiteCors:
     def allow_headers(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_headers App#allow_headers}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_headers App#allow_headers}
         '''
         result = self._values.get("allow_headers")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -12945,7 +12947,7 @@ class AppSpecStaticSiteCors:
     def allow_methods(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_methods App#allow_methods}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_methods App#allow_methods}
         '''
         result = self._values.get("allow_methods")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -12954,7 +12956,7 @@ class AppSpecStaticSiteCors:
     def allow_origins(self) -> typing.Optional["AppSpecStaticSiteCorsAllowOrigins"]:
         '''allow_origins block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_origins App#allow_origins}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_origins App#allow_origins}
         '''
         result = self._values.get("allow_origins")
         return typing.cast(typing.Optional["AppSpecStaticSiteCorsAllowOrigins"], result)
@@ -12963,7 +12965,7 @@ class AppSpecStaticSiteCors:
     def expose_headers(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#expose_headers App#expose_headers}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#expose_headers App#expose_headers}
         '''
         result = self._values.get("expose_headers")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -12974,7 +12976,7 @@ class AppSpecStaticSiteCors:
 
         This configures the Access-Control-Max-Age header. Example: ``5h30m``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#max_age App#max_age}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#max_age App#max_age}
         '''
         result = self._values.get("max_age")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13005,9 +13007,9 @@ class AppSpecStaticSiteCorsAllowOrigins:
         regex: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param exact: Exact string match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#exact App#exact}
-        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#prefix App#prefix}
-        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#regex App#regex}
+        :param exact: Exact string match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#exact App#exact}
+        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#prefix App#prefix}
+        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#regex App#regex}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0d3d129ae1ab2c13538e75b6e7c622878dff3538b0901b3e6f9df3544cec39fa)
@@ -13026,7 +13028,7 @@ class AppSpecStaticSiteCorsAllowOrigins:
     def exact(self) -> typing.Optional[builtins.str]:
         '''Exact string match.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#exact App#exact}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#exact App#exact}
         '''
         result = self._values.get("exact")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13035,7 +13037,7 @@ class AppSpecStaticSiteCorsAllowOrigins:
     def prefix(self) -> typing.Optional[builtins.str]:
         '''Prefix-based match.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#prefix App#prefix}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#prefix App#prefix}
         '''
         result = self._values.get("prefix")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13044,7 +13046,7 @@ class AppSpecStaticSiteCorsAllowOrigins:
     def regex(self) -> typing.Optional[builtins.str]:
         '''RE2 style regex-based match.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#regex App#regex}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#regex App#regex}
         '''
         result = self._values.get("regex")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13189,9 +13191,9 @@ class AppSpecStaticSiteCorsOutputReference(
         regex: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param exact: Exact string match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#exact App#exact}
-        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#prefix App#prefix}
-        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#regex App#regex}
+        :param exact: Exact string match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#exact App#exact}
+        :param prefix: Prefix-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#prefix App#prefix}
+        :param regex: RE2 style regex-based match. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#regex App#regex}
         '''
         value = AppSpecStaticSiteCorsAllowOrigins(
             exact=exact, prefix=prefix, regex=regex
@@ -13353,10 +13355,10 @@ class AppSpecStaticSiteEnv:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
-        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
-        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
-        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
+        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
+        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
+        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__784217f468dfa7bf6719640908c5488add706720cb7c17ef0f2781858b0c046a)
@@ -13378,7 +13380,7 @@ class AppSpecStaticSiteEnv:
     def key(self) -> typing.Optional[builtins.str]:
         '''The name of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13387,7 +13389,7 @@ class AppSpecStaticSiteEnv:
     def scope(self) -> typing.Optional[builtins.str]:
         '''The visibility scope of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
         '''
         result = self._values.get("scope")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13396,7 +13398,7 @@ class AppSpecStaticSiteEnv:
     def type(self) -> typing.Optional[builtins.str]:
         '''The type of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
         '''
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13405,7 +13407,7 @@ class AppSpecStaticSiteEnv:
     def value(self) -> typing.Optional[builtins.str]:
         '''The value of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13626,13 +13628,13 @@ class AppSpecStaticSiteEnvOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecStaticSiteEnv, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecStaticSiteEnv, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSiteEnv]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSiteEnv]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecStaticSiteEnv, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSiteEnv]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d8eb7e61d177fe68d5f83e48aefa12d734a51e5eaaed5b995a1a240267c586bc)
@@ -13653,8 +13655,8 @@ class AppSpecStaticSiteGit:
         repo_clone_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b9002649e7632089484374e5d404acb76ad7d877f8d2e5c95c4a9ef2842bb3cf)
@@ -13670,7 +13672,7 @@ class AppSpecStaticSiteGit:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13679,7 +13681,7 @@ class AppSpecStaticSiteGit:
     def repo_clone_url(self) -> typing.Optional[builtins.str]:
         '''The clone URL of the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         result = self._values.get("repo_clone_url")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13789,9 +13791,9 @@ class AppSpecStaticSiteGithub:
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c4501ee5477a4201414c6c43489ac369a1ef476228b14dfda38a7d8f253569dd)
@@ -13810,7 +13812,7 @@ class AppSpecStaticSiteGithub:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13821,7 +13823,7 @@ class AppSpecStaticSiteGithub:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy new commits made to the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -13830,7 +13832,7 @@ class AppSpecStaticSiteGithub:
     def repo(self) -> typing.Optional[builtins.str]:
         '''The name of the repo in the format ``owner/repo``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         result = self._values.get("repo")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -13968,9 +13970,9 @@ class AppSpecStaticSiteGitlab:
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0355eb619dfbe825eaca7a401fba1661eb87b0187e71856722ec03a330b55365)
@@ -13989,7 +13991,7 @@ class AppSpecStaticSiteGitlab:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -14000,7 +14002,7 @@ class AppSpecStaticSiteGitlab:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy new commits made to the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -14009,7 +14011,7 @@ class AppSpecStaticSiteGitlab:
     def repo(self) -> typing.Optional[builtins.str]:
         '''The name of the repo in the format ``owner/repo``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         result = self._values.get("repo")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -14257,12 +14259,12 @@ class AppSpecStaticSiteOutputReference(
         max_age: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_credentials App#allow_credentials}
-        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_headers App#allow_headers}
-        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_methods App#allow_methods}
-        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#allow_origins App#allow_origins}
-        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#expose_headers App#expose_headers}
-        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#max_age App#max_age}
+        :param allow_credentials: Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is ``include``. This configures the Access-Control-Allow-Credentials header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_credentials App#allow_credentials}
+        :param allow_headers: The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_headers App#allow_headers}
+        :param allow_methods: The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_methods App#allow_methods}
+        :param allow_origins: allow_origins block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#allow_origins App#allow_origins}
+        :param expose_headers: The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#expose_headers App#expose_headers}
+        :param max_age: An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: ``5h30m``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#max_age App#max_age}
         '''
         value = AppSpecStaticSiteCors(
             allow_credentials=allow_credentials,
@@ -14296,8 +14298,8 @@ class AppSpecStaticSiteOutputReference(
         repo_clone_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         value = AppSpecStaticSiteGit(branch=branch, repo_clone_url=repo_clone_url)
 
@@ -14312,9 +14314,9 @@ class AppSpecStaticSiteOutputReference(
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         value = AppSpecStaticSiteGithub(
             branch=branch, deploy_on_push=deploy_on_push, repo=repo
@@ -14331,9 +14333,9 @@ class AppSpecStaticSiteOutputReference(
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         value = AppSpecStaticSiteGitlab(
             branch=branch, deploy_on_push=deploy_on_push, repo=repo
@@ -14631,13 +14633,13 @@ class AppSpecStaticSiteOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecStaticSite, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecStaticSite, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSite]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSite]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecStaticSite, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSite]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__979640ecb296ba8269762b13b71a45283b615fa0984f0e6de58b29712bf17211)
@@ -14658,8 +14660,8 @@ class AppSpecStaticSiteRoutes:
         preserve_path_prefix: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param path: Path specifies an route by HTTP path prefix. Paths must start with / and must be unique within the app. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#path App#path}
-        :param preserve_path_prefix: An optional flag to preserve the path that is forwarded to the backend service. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#preserve_path_prefix App#preserve_path_prefix}
+        :param path: Path specifies an route by HTTP path prefix. Paths must start with / and must be unique within the app. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#path App#path}
+        :param preserve_path_prefix: An optional flag to preserve the path that is forwarded to the backend service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#preserve_path_prefix App#preserve_path_prefix}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__94eb801d912cbb47eb67786aceacb609dfd17e6d754dd9ea87a12355a9b4c18b)
@@ -14677,7 +14679,7 @@ class AppSpecStaticSiteRoutes:
 
         Paths must start with / and must be unique within the app.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#path App#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#path App#path}
         '''
         result = self._values.get("path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -14688,7 +14690,7 @@ class AppSpecStaticSiteRoutes:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''An optional flag to preserve the path that is forwarded to the backend service.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#preserve_path_prefix App#preserve_path_prefix}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#preserve_path_prefix App#preserve_path_prefix}
         '''
         result = self._values.get("preserve_path_prefix")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -14874,13 +14876,13 @@ class AppSpecStaticSiteRoutesOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecStaticSiteRoutes, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecStaticSiteRoutes, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSiteRoutes]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSiteRoutes]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecStaticSiteRoutes, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSiteRoutes]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3c79c25e10b04e79be890695efb72d665035ef409c1ec7dedf582fcdc0ca8d67)
@@ -14930,21 +14932,21 @@ class AppSpecWorker:
         source_dir: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param name: The name of the component. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param alert: alert block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
-        :param build_command: An optional build command to run while building this component from source. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#build_command App#build_command}
-        :param dockerfile_path: The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#dockerfile_path App#dockerfile_path}
-        :param env: env block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
-        :param environment_slug: An environment slug describing the type of this app. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#environment_slug App#environment_slug}
-        :param git: git block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#git App#git}
-        :param github: github block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#github App#github}
-        :param gitlab: gitlab block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#gitlab App#gitlab}
-        :param image: image block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#image App#image}
-        :param instance_count: The amount of instances that this component should be scaled to. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_count App#instance_count}
-        :param instance_size_slug: The instance size to use for this component. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_size_slug App#instance_size_slug}
-        :param log_destination: log_destination block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#log_destination App#log_destination}
-        :param run_command: An optional run command to override the component's default. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#run_command App#run_command}
-        :param source_dir: An optional path to the working directory to use for the build. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#source_dir App#source_dir}
+        :param name: The name of the component. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param alert: alert block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
+        :param build_command: An optional build command to run while building this component from source. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#build_command App#build_command}
+        :param dockerfile_path: The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#dockerfile_path App#dockerfile_path}
+        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
+        :param environment_slug: An environment slug describing the type of this app. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#environment_slug App#environment_slug}
+        :param git: git block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#git App#git}
+        :param github: github block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#github App#github}
+        :param gitlab: gitlab block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#gitlab App#gitlab}
+        :param image: image block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#image App#image}
+        :param instance_count: The amount of instances that this component should be scaled to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_count App#instance_count}
+        :param instance_size_slug: The instance size to use for this component. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_size_slug App#instance_size_slug}
+        :param log_destination: log_destination block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#log_destination App#log_destination}
+        :param run_command: An optional run command to override the component's default. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#run_command App#run_command}
+        :param source_dir: An optional path to the working directory to use for the build. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#source_dir App#source_dir}
         '''
         if isinstance(git, dict):
             git = AppSpecWorkerGit(**git)
@@ -15007,7 +15009,7 @@ class AppSpecWorker:
     def name(self) -> builtins.str:
         '''The name of the component.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -15019,7 +15021,7 @@ class AppSpecWorker:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecWorkerAlert"]]]:
         '''alert block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#alert App#alert}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#alert App#alert}
         '''
         result = self._values.get("alert")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecWorkerAlert"]]], result)
@@ -15028,7 +15030,7 @@ class AppSpecWorker:
     def build_command(self) -> typing.Optional[builtins.str]:
         '''An optional build command to run while building this component from source.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#build_command App#build_command}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#build_command App#build_command}
         '''
         result = self._values.get("build_command")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15037,7 +15039,7 @@ class AppSpecWorker:
     def dockerfile_path(self) -> typing.Optional[builtins.str]:
         '''The path to a Dockerfile relative to the root of the repo. If set, overrides usage of buildpacks.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#dockerfile_path App#dockerfile_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#dockerfile_path App#dockerfile_path}
         '''
         result = self._values.get("dockerfile_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15048,7 +15050,7 @@ class AppSpecWorker:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecWorkerEnv"]]]:
         '''env block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#env App#env}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#env App#env}
         '''
         result = self._values.get("env")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecWorkerEnv"]]], result)
@@ -15057,7 +15059,7 @@ class AppSpecWorker:
     def environment_slug(self) -> typing.Optional[builtins.str]:
         '''An environment slug describing the type of this app.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#environment_slug App#environment_slug}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#environment_slug App#environment_slug}
         '''
         result = self._values.get("environment_slug")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15066,7 +15068,7 @@ class AppSpecWorker:
     def git(self) -> typing.Optional["AppSpecWorkerGit"]:
         '''git block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#git App#git}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#git App#git}
         '''
         result = self._values.get("git")
         return typing.cast(typing.Optional["AppSpecWorkerGit"], result)
@@ -15075,7 +15077,7 @@ class AppSpecWorker:
     def github(self) -> typing.Optional["AppSpecWorkerGithub"]:
         '''github block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#github App#github}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#github App#github}
         '''
         result = self._values.get("github")
         return typing.cast(typing.Optional["AppSpecWorkerGithub"], result)
@@ -15084,7 +15086,7 @@ class AppSpecWorker:
     def gitlab(self) -> typing.Optional["AppSpecWorkerGitlab"]:
         '''gitlab block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#gitlab App#gitlab}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#gitlab App#gitlab}
         '''
         result = self._values.get("gitlab")
         return typing.cast(typing.Optional["AppSpecWorkerGitlab"], result)
@@ -15093,7 +15095,7 @@ class AppSpecWorker:
     def image(self) -> typing.Optional["AppSpecWorkerImage"]:
         '''image block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#image App#image}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#image App#image}
         '''
         result = self._values.get("image")
         return typing.cast(typing.Optional["AppSpecWorkerImage"], result)
@@ -15102,7 +15104,7 @@ class AppSpecWorker:
     def instance_count(self) -> typing.Optional[jsii.Number]:
         '''The amount of instances that this component should be scaled to.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_count App#instance_count}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_count App#instance_count}
         '''
         result = self._values.get("instance_count")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -15111,7 +15113,7 @@ class AppSpecWorker:
     def instance_size_slug(self) -> typing.Optional[builtins.str]:
         '''The instance size to use for this component.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#instance_size_slug App#instance_size_slug}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#instance_size_slug App#instance_size_slug}
         '''
         result = self._values.get("instance_size_slug")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15122,7 +15124,7 @@ class AppSpecWorker:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecWorkerLogDestination"]]]:
         '''log_destination block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#log_destination App#log_destination}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#log_destination App#log_destination}
         '''
         result = self._values.get("log_destination")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecWorkerLogDestination"]]], result)
@@ -15131,7 +15133,7 @@ class AppSpecWorker:
     def run_command(self) -> typing.Optional[builtins.str]:
         '''An optional run command to override the component's default.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#run_command App#run_command}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#run_command App#run_command}
         '''
         result = self._values.get("run_command")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15140,7 +15142,7 @@ class AppSpecWorker:
     def source_dir(self) -> typing.Optional[builtins.str]:
         '''An optional path to the working directory to use for the build.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#source_dir App#source_dir}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#source_dir App#source_dir}
         '''
         result = self._values.get("source_dir")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15179,11 +15181,11 @@ class AppSpecWorkerAlert:
         disabled: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param operator: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#operator App#operator}.
-        :param rule: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#rule App#rule}.
-        :param value: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}.
-        :param window: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#window App#window}.
-        :param disabled: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#disabled App#disabled}.
+        :param operator: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#operator App#operator}.
+        :param rule: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#rule App#rule}.
+        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}.
+        :param window: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#window App#window}.
+        :param disabled: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#disabled App#disabled}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__83c3a523ab2ac6e9cc50b24d907f7079136ca006914f1bb2d74f20b6c8bfafbb)
@@ -15203,28 +15205,28 @@ class AppSpecWorkerAlert:
 
     @builtins.property
     def operator(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#operator App#operator}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#operator App#operator}.'''
         result = self._values.get("operator")
         assert result is not None, "Required property 'operator' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def rule(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#rule App#rule}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#rule App#rule}.'''
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def value(self) -> jsii.Number:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}.'''
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
         return typing.cast(jsii.Number, result)
 
     @builtins.property
     def window(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#window App#window}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#window App#window}.'''
         result = self._values.get("window")
         assert result is not None, "Required property 'window' is missing"
         return typing.cast(builtins.str, result)
@@ -15233,7 +15235,7 @@ class AppSpecWorkerAlert:
     def disabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#disabled App#disabled}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#disabled App#disabled}.'''
         result = self._values.get("disabled")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
@@ -15463,13 +15465,13 @@ class AppSpecWorkerAlertOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecWorkerAlert, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecWorkerAlert, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerAlert]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerAlert]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecWorkerAlert, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerAlert]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__419d9312fea3b26941f4a6d8aa5f3d95fcaf377c7f8601fa1fb61eb447702fcd)
@@ -15492,10 +15494,10 @@ class AppSpecWorkerEnv:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
-        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
-        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
-        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        :param key: The name of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
+        :param scope: The visibility scope of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
+        :param type: The type of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
+        :param value: The value of the environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a645c0b33bca8c7a59bbadb6bd839fbc625126dfe7e536bbeb3abfdf1736547f)
@@ -15517,7 +15519,7 @@ class AppSpecWorkerEnv:
     def key(self) -> typing.Optional[builtins.str]:
         '''The name of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#key App#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#key App#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15526,7 +15528,7 @@ class AppSpecWorkerEnv:
     def scope(self) -> typing.Optional[builtins.str]:
         '''The visibility scope of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#scope App#scope}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#scope App#scope}
         '''
         result = self._values.get("scope")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15535,7 +15537,7 @@ class AppSpecWorkerEnv:
     def type(self) -> typing.Optional[builtins.str]:
         '''The type of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#type App#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#type App#type}
         '''
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15544,7 +15546,7 @@ class AppSpecWorkerEnv:
     def value(self) -> typing.Optional[builtins.str]:
         '''The value of the environment variable.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#value App#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#value App#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15765,13 +15767,13 @@ class AppSpecWorkerEnvOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecWorkerEnv, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecWorkerEnv, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerEnv]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerEnv]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecWorkerEnv, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerEnv]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2bb73294e08973a2d5e33cde5a34a06fa4714ed666b3e8305d5830a5fa816f4b)
@@ -15792,8 +15794,8 @@ class AppSpecWorkerGit:
         repo_clone_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__65ed3bd4be20a855935f6f40017b704e2d37416b9ce9d16c7783fe19c39dd57f)
@@ -15809,7 +15811,7 @@ class AppSpecWorkerGit:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15818,7 +15820,7 @@ class AppSpecWorkerGit:
     def repo_clone_url(self) -> typing.Optional[builtins.str]:
         '''The clone URL of the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         result = self._values.get("repo_clone_url")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15928,9 +15930,9 @@ class AppSpecWorkerGithub:
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e510330fb3616d9be716a83a171c95c65ddbebe16e9f39db1469cff8cce1c05e)
@@ -15949,7 +15951,7 @@ class AppSpecWorkerGithub:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -15960,7 +15962,7 @@ class AppSpecWorkerGithub:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy new commits made to the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -15969,7 +15971,7 @@ class AppSpecWorkerGithub:
     def repo(self) -> typing.Optional[builtins.str]:
         '''The name of the repo in the format ``owner/repo``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         result = self._values.get("repo")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -16107,9 +16109,9 @@ class AppSpecWorkerGitlab:
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__092c69f3ef1099eda4c776fa1708e3338d5e43c4cb2f0aa26cb43b9b3014dde4)
@@ -16128,7 +16130,7 @@ class AppSpecWorkerGitlab:
     def branch(self) -> typing.Optional[builtins.str]:
         '''The name of the branch to use.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
         '''
         result = self._values.get("branch")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -16139,7 +16141,7 @@ class AppSpecWorkerGitlab:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy new commits made to the repo.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -16148,7 +16150,7 @@ class AppSpecWorkerGitlab:
     def repo(self) -> typing.Optional[builtins.str]:
         '''The name of the repo in the format ``owner/repo``.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         result = self._values.get("repo")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -16290,11 +16292,11 @@ class AppSpecWorkerImage:
         tag: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry_type App#registry_type}
-        :param repository: The repository name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repository App#repository}
-        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry App#registry}
-        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#tag App#tag}
+        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry_type App#registry_type}
+        :param repository: The repository name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repository App#repository}
+        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry App#registry}
+        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#tag App#tag}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__07ceda44d34c848103d56190074ef0646e3b5ae00d3a952277de75fe5fd2f738)
@@ -16318,7 +16320,7 @@ class AppSpecWorkerImage:
     def registry_type(self) -> builtins.str:
         '''The registry type.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry_type App#registry_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry_type App#registry_type}
         '''
         result = self._values.get("registry_type")
         assert result is not None, "Required property 'registry_type' is missing"
@@ -16328,7 +16330,7 @@ class AppSpecWorkerImage:
     def repository(self) -> builtins.str:
         '''The repository name.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repository App#repository}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repository App#repository}
         '''
         result = self._values.get("repository")
         assert result is not None, "Required property 'repository' is missing"
@@ -16340,7 +16342,7 @@ class AppSpecWorkerImage:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecWorkerImageDeployOnPush"]]]:
         '''deploy_on_push block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
         '''
         result = self._values.get("deploy_on_push")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["AppSpecWorkerImageDeployOnPush"]]], result)
@@ -16349,7 +16351,7 @@ class AppSpecWorkerImage:
     def registry(self) -> typing.Optional[builtins.str]:
         '''The registry name. Must be left empty for the DOCR registry type.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry App#registry}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry App#registry}
         '''
         result = self._values.get("registry")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -16358,7 +16360,7 @@ class AppSpecWorkerImage:
     def tag(self) -> typing.Optional[builtins.str]:
         '''The repository tag. Defaults to latest if not provided.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#tag App#tag}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#tag App#tag}
         '''
         result = self._values.get("tag")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -16387,7 +16389,7 @@ class AppSpecWorkerImageDeployOnPush:
         enabled: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param enabled: Whether to automatically deploy images pushed to DOCR. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#enabled App#enabled}
+        :param enabled: Whether to automatically deploy images pushed to DOCR. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#enabled App#enabled}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bb1e78017d6a19cca2b6ca4f4305afdfdb24297bccf8a359ec9ad69e74518a9d)
@@ -16402,7 +16404,7 @@ class AppSpecWorkerImageDeployOnPush:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether to automatically deploy images pushed to DOCR.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#enabled App#enabled}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#enabled App#enabled}
         '''
         result = self._values.get("enabled")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -16568,13 +16570,13 @@ class AppSpecWorkerImageDeployOnPushOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecWorkerImageDeployOnPush, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecWorkerImageDeployOnPush, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerImageDeployOnPush]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerImageDeployOnPush]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecWorkerImageDeployOnPush, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerImageDeployOnPush]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ce2ded9e15de3e36519b44651f02dac2a99f7a60d8ea5ee026ac1433691e4c7d)
@@ -16830,10 +16832,10 @@ class AppSpecWorkerLogDestination:
         papertrail: typing.Optional[typing.Union["AppSpecWorkerLogDestinationPapertrail", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param name: Name of the log destination. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
-        :param datadog: datadog block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#datadog App#datadog}
-        :param logtail: logtail block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#logtail App#logtail}
-        :param papertrail: papertrail block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#papertrail App#papertrail}
+        :param name: Name of the log destination. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
+        :param datadog: datadog block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#datadog App#datadog}
+        :param logtail: logtail block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#logtail App#logtail}
+        :param papertrail: papertrail block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#papertrail App#papertrail}
         '''
         if isinstance(datadog, dict):
             datadog = AppSpecWorkerLogDestinationDatadog(**datadog)
@@ -16861,7 +16863,7 @@ class AppSpecWorkerLogDestination:
     def name(self) -> builtins.str:
         '''Name of the log destination.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#name App#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#name App#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -16871,7 +16873,7 @@ class AppSpecWorkerLogDestination:
     def datadog(self) -> typing.Optional["AppSpecWorkerLogDestinationDatadog"]:
         '''datadog block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#datadog App#datadog}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#datadog App#datadog}
         '''
         result = self._values.get("datadog")
         return typing.cast(typing.Optional["AppSpecWorkerLogDestinationDatadog"], result)
@@ -16880,7 +16882,7 @@ class AppSpecWorkerLogDestination:
     def logtail(self) -> typing.Optional["AppSpecWorkerLogDestinationLogtail"]:
         '''logtail block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#logtail App#logtail}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#logtail App#logtail}
         '''
         result = self._values.get("logtail")
         return typing.cast(typing.Optional["AppSpecWorkerLogDestinationLogtail"], result)
@@ -16889,7 +16891,7 @@ class AppSpecWorkerLogDestination:
     def papertrail(self) -> typing.Optional["AppSpecWorkerLogDestinationPapertrail"]:
         '''papertrail block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#papertrail App#papertrail}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#papertrail App#papertrail}
         '''
         result = self._values.get("papertrail")
         return typing.cast(typing.Optional["AppSpecWorkerLogDestinationPapertrail"], result)
@@ -16919,8 +16921,8 @@ class AppSpecWorkerLogDestinationDatadog:
         endpoint: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
-        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
+        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__735f21f93267e274392256fe922af284aeb6fd9a329e67cd886738061aac9d4f)
@@ -16936,7 +16938,7 @@ class AppSpecWorkerLogDestinationDatadog:
     def api_key(self) -> builtins.str:
         '''Datadog API key.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
         '''
         result = self._values.get("api_key")
         assert result is not None, "Required property 'api_key' is missing"
@@ -16946,7 +16948,7 @@ class AppSpecWorkerLogDestinationDatadog:
     def endpoint(self) -> typing.Optional[builtins.str]:
         '''Datadog HTTP log intake endpoint.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         result = self._values.get("endpoint")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -17135,7 +17137,7 @@ class AppSpecWorkerLogDestinationList(
 class AppSpecWorkerLogDestinationLogtail:
     def __init__(self, *, token: builtins.str) -> None:
         '''
-        :param token: Logtail token. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        :param token: Logtail token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b548b79b793340ff4a7573a993ea626801381f91924f873dbc759f11005fcc20)
@@ -17148,7 +17150,7 @@ class AppSpecWorkerLogDestinationLogtail:
     def token(self) -> builtins.str:
         '''Logtail token.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         result = self._values.get("token")
         assert result is not None, "Required property 'token' is missing"
@@ -17253,8 +17255,8 @@ class AppSpecWorkerLogDestinationOutputReference(
         endpoint: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#api_key App#api_key}
-        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param api_key: Datadog API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#api_key App#api_key}
+        :param endpoint: Datadog HTTP log intake endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         value = AppSpecWorkerLogDestinationDatadog(api_key=api_key, endpoint=endpoint)
 
@@ -17263,7 +17265,7 @@ class AppSpecWorkerLogDestinationOutputReference(
     @jsii.member(jsii_name="putLogtail")
     def put_logtail(self, *, token: builtins.str) -> None:
         '''
-        :param token: Logtail token. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#token App#token}
+        :param token: Logtail token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#token App#token}
         '''
         value = AppSpecWorkerLogDestinationLogtail(token=token)
 
@@ -17272,7 +17274,7 @@ class AppSpecWorkerLogDestinationOutputReference(
     @jsii.member(jsii_name="putPapertrail")
     def put_papertrail(self, *, endpoint: builtins.str) -> None:
         '''
-        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         value = AppSpecWorkerLogDestinationPapertrail(endpoint=endpoint)
 
@@ -17343,13 +17345,13 @@ class AppSpecWorkerLogDestinationOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecWorkerLogDestination, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecWorkerLogDestination, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerLogDestination]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerLogDestination]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecWorkerLogDestination, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerLogDestination]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0dad53b84e891f17f58002b215e86bf5909949eae69d836034d2798f3543dddd)
@@ -17365,7 +17367,7 @@ class AppSpecWorkerLogDestinationOutputReference(
 class AppSpecWorkerLogDestinationPapertrail:
     def __init__(self, *, endpoint: builtins.str) -> None:
         '''
-        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        :param endpoint: Papertrail syslog endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f1e5075457fe41ac61a4969d21bd2938de80094ee5fbece592d15094094bb8a4)
@@ -17378,7 +17380,7 @@ class AppSpecWorkerLogDestinationPapertrail:
     def endpoint(self) -> builtins.str:
         '''Papertrail syslog endpoint.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#endpoint App#endpoint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#endpoint App#endpoint}
         '''
         result = self._values.get("endpoint")
         assert result is not None, "Required property 'endpoint' is missing"
@@ -17509,8 +17511,8 @@ class AppSpecWorkerOutputReference(
         repo_clone_url: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo_clone_url App#repo_clone_url}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param repo_clone_url: The clone URL of the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo_clone_url App#repo_clone_url}
         '''
         value = AppSpecWorkerGit(branch=branch, repo_clone_url=repo_clone_url)
 
@@ -17525,9 +17527,9 @@ class AppSpecWorkerOutputReference(
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         value = AppSpecWorkerGithub(
             branch=branch, deploy_on_push=deploy_on_push, repo=repo
@@ -17544,9 +17546,9 @@ class AppSpecWorkerOutputReference(
         repo: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#branch App#branch}
-        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repo App#repo}
+        :param branch: The name of the branch to use. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#branch App#branch}
+        :param deploy_on_push: Whether to automatically deploy new commits made to the repo. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param repo: The name of the repo in the format ``owner/repo``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repo App#repo}
         '''
         value = AppSpecWorkerGitlab(
             branch=branch, deploy_on_push=deploy_on_push, repo=repo
@@ -17565,11 +17567,11 @@ class AppSpecWorkerOutputReference(
         tag: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry_type App#registry_type}
-        :param repository: The repository name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#repository App#repository}
-        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#deploy_on_push App#deploy_on_push}
-        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#registry App#registry}
-        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#tag App#tag}
+        :param registry_type: The registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry_type App#registry_type}
+        :param repository: The repository name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#repository App#repository}
+        :param deploy_on_push: deploy_on_push block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#deploy_on_push App#deploy_on_push}
+        :param registry: The registry name. Must be left empty for the DOCR registry type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#registry App#registry}
+        :param tag: The repository tag. Defaults to latest if not provided. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#tag App#tag}
         '''
         value = AppSpecWorkerImage(
             registry_type=registry_type,
@@ -17866,13 +17868,13 @@ class AppSpecWorkerOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppSpecWorker, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppSpecWorker, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorker]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorker]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppSpecWorker, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorker]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bcbeed2d3c449b58623f2ccfe05554031ebcb697e5ee31ae451b3c58624aa655)
@@ -17888,7 +17890,7 @@ class AppSpecWorkerOutputReference(
 class AppTimeouts:
     def __init__(self, *, create: typing.Optional[builtins.str] = None) -> None:
         '''
-        :param create: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#create App#create}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#create App#create}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__30ad37303995ea1d7133866ab2a23a3500d973dc3c8ba80685023b04b46dd585)
@@ -17899,7 +17901,7 @@ class AppTimeouts:
 
     @builtins.property
     def create(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/r/app#create App#create}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/app#create App#create}.'''
         result = self._values.get("create")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -17960,13 +17962,13 @@ class AppTimeoutsOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[AppTimeouts, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[AppTimeouts, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppTimeouts]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppTimeouts]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[AppTimeouts, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppTimeouts]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b91a02aa6070fd052e12784bede6620fa82cdfd2ce89c035170f2bb5480e258d)
@@ -18151,7 +18153,7 @@ def _typecheckingstub__9719f48172aa2035f5d9938d6776537bfc7bd94d5f0cad4489626d8a6
     spec: typing.Optional[typing.Union[AppSpec, typing.Dict[builtins.str, typing.Any]]] = None,
     timeouts: typing.Optional[typing.Union[AppTimeouts, typing.Dict[builtins.str, typing.Any]]] = None,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -18170,7 +18172,7 @@ def _typecheckingstub__25462453e965bf4db9f29422031d45d834c773a920451b794e537ca23
 def _typecheckingstub__c779963e1fbb744b09c3c12e83b9b8eab3501d9a5e78f0f17e085df2e8dfc651(
     *,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -18269,7 +18271,7 @@ def _typecheckingstub__a8cffe9b6053184a9748da50fda5a2322578ecee660a5fc6a5d0b7133
     pass
 
 def _typecheckingstub__459d322eb90b8c00b0607ba22f19329272aff18b9521097116e4cc6e0c4dfce2(
-    value: typing.Optional[typing.Union[AppSpecAlert, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecAlert]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18377,7 +18379,7 @@ def _typecheckingstub__dc0c68e218284c8b1fd2f2123a172c060e2ef6227abca7372a31c6c0b
     pass
 
 def _typecheckingstub__29b7117840a44e728fbf14edad792eb2d3d345b2b2d00a419d89bc95939c2b3a(
-    value: typing.Optional[typing.Union[AppSpecDatabase, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecDatabase]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18464,7 +18466,7 @@ def _typecheckingstub__d663669895832d1dc718c326d048d85eb61a985a7d33ff8c5049d0d1b
     pass
 
 def _typecheckingstub__920f281cd80602722b26402cfb3e7b5f4a561a59093f66c9afee1f8c1b1a6e69(
-    value: typing.Optional[typing.Union[AppSpecDomain, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecDomain]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18551,7 +18553,7 @@ def _typecheckingstub__cc9d3432d58173aab9315d021a9d4fc8e5dbe51779fa1db75e837fc00
     pass
 
 def _typecheckingstub__97f8448ae3d9db7b24c92a79d2e834236f0f3c8bf7dae209a15fa7f3a90454eb(
-    value: typing.Optional[typing.Union[AppSpecEnv, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecEnv]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18661,7 +18663,7 @@ def _typecheckingstub__afbbd96dd643cb031d86f90d56bb643923a0a59ee25edd11db1fb6301
     pass
 
 def _typecheckingstub__b0ee4f59e39d16e75b06c1d29021a655331629369ae8aef5d797de243d8f34af(
-    value: typing.Optional[typing.Union[AppSpecFunctionAlert, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionAlert]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18843,7 +18845,7 @@ def _typecheckingstub__3059b1eaee6ea047170a6b0314f3672aa7aa7fc29a797240138b8b165
     pass
 
 def _typecheckingstub__49415869a5c9d54dfe64a83b98f14cb7af2b07826da26cdfb43189ab808f47e2(
-    value: typing.Optional[typing.Union[AppSpecFunctionEnv, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionEnv]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19122,7 +19124,7 @@ def _typecheckingstub__642eeca52178449887b09e2c25a985a38e07046e8ccb6ffca2072370d
     pass
 
 def _typecheckingstub__15a885846594c2ad1bd27b17194bcc4167cc6bcd540ea4327b618996db97bed6(
-    value: typing.Optional[typing.Union[AppSpecFunctionLogDestination, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionLogDestination]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19199,7 +19201,7 @@ def _typecheckingstub__c0efc4ee34c5cb64b53db0ab4fb24c3255cc0c3239ef3d6d845e332d4
     pass
 
 def _typecheckingstub__b8fd0fa32e34c5068a3d57d43410943f197a5ab20dc7af3120ffd4d0fc688f9e(
-    value: typing.Optional[typing.Union[AppSpecFunction, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunction]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19272,7 +19274,7 @@ def _typecheckingstub__45f9e437debbe2898df0afacd83a48ff104000089a91f4a814a25e24d
     pass
 
 def _typecheckingstub__091da90aeef315345b881fa909a8b09469ef98d42681f323b24bc81bc6913497(
-    value: typing.Optional[typing.Union[AppSpecFunctionRoutes, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecFunctionRoutes]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19388,7 +19390,7 @@ def _typecheckingstub__cb796d2cb46d38c278beaeedd52b35ce5a13e7f857cfa40625145eb1b
     pass
 
 def _typecheckingstub__b5712c6b65600e43d811cfd4bce20b8e7427573166844990c4ead91e642e65ea(
-    value: typing.Optional[typing.Union[AppSpecJobAlert, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobAlert]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19475,7 +19477,7 @@ def _typecheckingstub__14f573e68a8b9a469e640c7bfc25e4a4e9ee2422a8d90d2d20594d5d8
     pass
 
 def _typecheckingstub__98978b77a0d12a3f99bcca511aadd9f29c0e0fa4e89439f5375858425b2ebd9f(
-    value: typing.Optional[typing.Union[AppSpecJobEnv, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobEnv]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19665,7 +19667,7 @@ def _typecheckingstub__85f326684634192cf8386c41cb0f187cce26eab03ca1813edf58ebc59
     pass
 
 def _typecheckingstub__c315e7c1d80053a10766459b6d53704bec457bcb761552f86631f80e63dad4f3(
-    value: typing.Optional[typing.Union[AppSpecJobImageDeployOnPush, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobImageDeployOnPush]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19874,7 +19876,7 @@ def _typecheckingstub__f3f01dcba16fd9e01fc8557d63220e2e5f6df5fbc3c7935059d7d5201
     pass
 
 def _typecheckingstub__58ec58c175dd35b46cd91de81d9fd930796b6414099b2516b1f6ba5a0d90d36b(
-    value: typing.Optional[typing.Union[AppSpecJobLogDestination, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJobLogDestination]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19987,7 +19989,7 @@ def _typecheckingstub__4d84bf95f3fd7f54c67bb186f5f8450b1f36a1c0bdd44bd69b7c10659
     pass
 
 def _typecheckingstub__1d2e7ee21465e443d732df4adf091345ff1d803ca466a98fde19dfb80218068f(
-    value: typing.Optional[typing.Union[AppSpecJob, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecJob]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20192,7 +20194,7 @@ def _typecheckingstub__a6a875b2bf26ec0c9730deec09f855a81af48cc1b37065e2fd6a3bf01
     pass
 
 def _typecheckingstub__446fffd3481f66760097a870c317922839dd2d4309bab6c952316b60fb0baca2(
-    value: typing.Optional[typing.Union[AppSpecServiceAlert, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceAlert]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20374,7 +20376,7 @@ def _typecheckingstub__328a6deff925fd01eb4215c12f9e060640c6b5953523081a4e803be86
     pass
 
 def _typecheckingstub__6d23fa9d5559b0c0467106bfe338cf21aeee669630491cce4af175cc33cd0de6(
-    value: typing.Optional[typing.Union[AppSpecServiceEnv, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceEnv]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20625,7 +20627,7 @@ def _typecheckingstub__f34f5fc4bf6688f559d14b96e1d6ce4c7427ff2f743b6020597355cd4
     pass
 
 def _typecheckingstub__84b79cdfb41f63704a241764e64075b84cbcc7611c8e89a988325b9452d92270(
-    value: typing.Optional[typing.Union[AppSpecServiceImageDeployOnPush, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceImageDeployOnPush]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20834,7 +20836,7 @@ def _typecheckingstub__59ea8c6283dea0f4d7d25d9c0de15ace727b2ab4a3b0c07f9e4e0536d
     pass
 
 def _typecheckingstub__0f8cf359fd49fc792dbe817eac453cd033ce98c35acff7df33367fa2a02eb03c(
-    value: typing.Optional[typing.Union[AppSpecServiceLogDestination, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceLogDestination]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20959,7 +20961,7 @@ def _typecheckingstub__05df0f6fb1adbfe948b5f0c759bec4542c049e8042aeb4b33bbfd9582
     pass
 
 def _typecheckingstub__ec40edbd6a6514ab44a64659976a477c8d524c6cabd296ed76fad8feb152f10d(
-    value: typing.Optional[typing.Union[AppSpecService, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecService]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21032,7 +21034,7 @@ def _typecheckingstub__867e825d94b4ee38522d9471d8b6cdc9455fe6b30e23862b877976527
     pass
 
 def _typecheckingstub__790f603b6fb1462c24f6b7e4d91cc1ba8087df8ac36eaf426ab31ae97a3405cc(
-    value: typing.Optional[typing.Union[AppSpecServiceRoutes, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecServiceRoutes]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21235,7 +21237,7 @@ def _typecheckingstub__2403dfe6f56dc187c5469236c4aa9e57ff73e8a4b56501162136962e0
     pass
 
 def _typecheckingstub__d8eb7e61d177fe68d5f83e48aefa12d734a51e5eaaed5b995a1a240267c586bc(
-    value: typing.Optional[typing.Union[AppSpecStaticSiteEnv, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSiteEnv]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21467,7 +21469,7 @@ def _typecheckingstub__ff723c3b6ab07d6a5bc2f36d4889afd3b17e34660c3141d0d65024a0a
     pass
 
 def _typecheckingstub__979640ecb296ba8269762b13b71a45283b615fa0984f0e6de58b29712bf17211(
-    value: typing.Optional[typing.Union[AppSpecStaticSite, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSite]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21540,7 +21542,7 @@ def _typecheckingstub__dcd78a15bec8ec5213a816153ab2014659172e0f6cc63477e0d4372a4
     pass
 
 def _typecheckingstub__3c79c25e10b04e79be890695efb72d665035ef409c1ec7dedf582fcdc0ca8d67(
-    value: typing.Optional[typing.Union[AppSpecStaticSiteRoutes, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecStaticSiteRoutes]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21655,7 +21657,7 @@ def _typecheckingstub__7abe109f4cb2067b8c9a5e016ddb09e09578b8e30abdbde188dab72f4
     pass
 
 def _typecheckingstub__419d9312fea3b26941f4a6d8aa5f3d95fcaf377c7f8601fa1fb61eb447702fcd(
-    value: typing.Optional[typing.Union[AppSpecWorkerAlert, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerAlert]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21742,7 +21744,7 @@ def _typecheckingstub__e81073cbb140a782514f5c5126cfbe67bc30a264cc271603f065174c3
     pass
 
 def _typecheckingstub__2bb73294e08973a2d5e33cde5a34a06fa4714ed666b3e8305d5830a5fa816f4b(
-    value: typing.Optional[typing.Union[AppSpecWorkerEnv, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerEnv]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21932,7 +21934,7 @@ def _typecheckingstub__28d1bc095393a8976a186ede97716a5675f9691f8970bf62e1731b82d
     pass
 
 def _typecheckingstub__ce2ded9e15de3e36519b44651f02dac2a99f7a60d8ea5ee026ac1433691e4c7d(
-    value: typing.Optional[typing.Union[AppSpecWorkerImageDeployOnPush, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerImageDeployOnPush]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22141,7 +22143,7 @@ def _typecheckingstub__7a95d3f41d95a8aefd2e379c7a946cbbba0994c4ac04e16f0d556283f
     pass
 
 def _typecheckingstub__0dad53b84e891f17f58002b215e86bf5909949eae69d836034d2798f3543dddd(
-    value: typing.Optional[typing.Union[AppSpecWorkerLogDestination, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorkerLogDestination]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22248,7 +22250,7 @@ def _typecheckingstub__1d038b0ef4e8361a2cee9db23a500a842984b59271cba195f5b857184
     pass
 
 def _typecheckingstub__bcbeed2d3c449b58623f2ccfe05554031ebcb697e5ee31ae451b3c58624aa655(
-    value: typing.Optional[typing.Union[AppSpecWorker, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppSpecWorker]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22274,7 +22276,7 @@ def _typecheckingstub__00e8b50d51ddcf2fe5d7d805e656fd92e710089f352eca95db4f16b96
     pass
 
 def _typecheckingstub__b91a02aa6070fd052e12784bede6620fa82cdfd2ce89c035170f2bb5480e258d(
-    value: typing.Optional[typing.Union[AppTimeouts, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, AppTimeouts]],
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1,7 +1,7 @@
 '''
 # `data_digitalocean_droplet_snapshot`
 
-Refer to the Terraform Registory for docs: [`data_digitalocean_droplet_snapshot`](https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot).
+Refer to the Terraform Registory for docs: [`data_digitalocean_droplet_snapshot`](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class DataDigitaloceanDropletSnapshot(
     metaclass=jsii.JSIIMeta,
     jsii_type="digitalocean.dataDigitaloceanDropletSnapshot.DataDigitaloceanDropletSnapshot",
 ):
-    '''Represents a {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot digitalocean_droplet_snapshot}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot digitalocean_droplet_snapshot}.'''
 
     def __init__(
         self,
@@ -39,22 +39,22 @@ class DataDigitaloceanDropletSnapshot(
         name_regex: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot digitalocean_droplet_snapshot} Data Source.
+        '''Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot digitalocean_droplet_snapshot} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param id: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#id DataDigitaloceanDropletSnapshot#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param most_recent: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#most_recent DataDigitaloceanDropletSnapshot#most_recent}.
-        :param name: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#name DataDigitaloceanDropletSnapshot#name}.
-        :param name_regex: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#name_regex DataDigitaloceanDropletSnapshot#name_regex}.
-        :param region: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#region DataDigitaloceanDropletSnapshot#region}.
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#id DataDigitaloceanDropletSnapshot#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param most_recent: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#most_recent DataDigitaloceanDropletSnapshot#most_recent}.
+        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#name DataDigitaloceanDropletSnapshot#name}.
+        :param name_regex: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#name_regex DataDigitaloceanDropletSnapshot#name_regex}.
+        :param region: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#region DataDigitaloceanDropletSnapshot#region}.
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -252,7 +252,7 @@ class DataDigitaloceanDropletSnapshotConfig(_cdktf_9a9027ec.TerraformMetaArgumen
         self,
         *,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -272,11 +272,11 @@ class DataDigitaloceanDropletSnapshotConfig(_cdktf_9a9027ec.TerraformMetaArgumen
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param id: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#id DataDigitaloceanDropletSnapshot#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param most_recent: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#most_recent DataDigitaloceanDropletSnapshot#most_recent}.
-        :param name: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#name DataDigitaloceanDropletSnapshot#name}.
-        :param name_regex: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#name_regex DataDigitaloceanDropletSnapshot#name_regex}.
-        :param region: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#region DataDigitaloceanDropletSnapshot#region}.
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#id DataDigitaloceanDropletSnapshot#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param most_recent: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#most_recent DataDigitaloceanDropletSnapshot#most_recent}.
+        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#name DataDigitaloceanDropletSnapshot#name}.
+        :param name_regex: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#name_regex DataDigitaloceanDropletSnapshot#name_regex}.
+        :param region: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#region DataDigitaloceanDropletSnapshot#region}.
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -331,12 +331,14 @@ class DataDigitaloceanDropletSnapshotConfig(_cdktf_9a9027ec.TerraformMetaArgumen
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
-    def count(self) -> typing.Optional[jsii.Number]:
+    def count(
+        self,
+    ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
         '''
         :stability: experimental
         '''
         result = self._values.get("count")
-        return typing.cast(typing.Optional[jsii.Number], result)
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
@@ -384,7 +386,7 @@ class DataDigitaloceanDropletSnapshotConfig(_cdktf_9a9027ec.TerraformMetaArgumen
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#id DataDigitaloceanDropletSnapshot#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#id DataDigitaloceanDropletSnapshot#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -396,25 +398,25 @@ class DataDigitaloceanDropletSnapshotConfig(_cdktf_9a9027ec.TerraformMetaArgumen
     def most_recent(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#most_recent DataDigitaloceanDropletSnapshot#most_recent}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#most_recent DataDigitaloceanDropletSnapshot#most_recent}.'''
         result = self._values.get("most_recent")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#name DataDigitaloceanDropletSnapshot#name}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#name DataDigitaloceanDropletSnapshot#name}.'''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def name_regex(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#name_regex DataDigitaloceanDropletSnapshot#name_regex}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#name_regex DataDigitaloceanDropletSnapshot#name_regex}.'''
         result = self._values.get("name_regex")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/droplet_snapshot#region DataDigitaloceanDropletSnapshot#region}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/droplet_snapshot#region DataDigitaloceanDropletSnapshot#region}.'''
         result = self._values.get("region")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -447,7 +449,7 @@ def _typecheckingstub__22bb64f90f4b98b0b47e989f2ed16f155b79be9fd575c81b952780277
     name_regex: typing.Optional[builtins.str] = None,
     region: typing.Optional[builtins.str] = None,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -490,7 +492,7 @@ def _typecheckingstub__6f82773a108aba78fd933a585c636f1f57e5e97ea92708e61e23292db
 def _typecheckingstub__fff7c559bd00a325defcff37c9bb2729e168a40c01548ad8903f71c15d0bd919(
     *,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,

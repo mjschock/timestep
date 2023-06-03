@@ -1,6 +1,6 @@
 defaults:
   - _self_
-  - target: local
+  - target: development
 
 hydra:
   run:

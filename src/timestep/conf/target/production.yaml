@@ -1,0 +1,9 @@
+app_name: timestep-ai
+do_droplet_image: ubuntu-22-04-x64
+do_droplet_name: timestep-ai
+do_droplet_region: sfo3
+do_droplet_size: s-1vcpu-512mb-10gb
+do_token: dop_v1_733fa9e49f5996b01a20a1b2142696e0a43ca027edae0a4b699ec45a16dacd65
+domain: timestep.ai
+env: prod
+openai_api_key: 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

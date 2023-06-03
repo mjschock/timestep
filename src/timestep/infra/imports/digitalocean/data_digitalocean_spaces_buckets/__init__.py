@@ -1,7 +1,7 @@
 '''
 # `data_digitalocean_spaces_buckets`
 
-Refer to the Terraform Registory for docs: [`data_digitalocean_spaces_buckets`](https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets).
+Refer to the Terraform Registory for docs: [`data_digitalocean_spaces_buckets`](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class DataDigitaloceanSpacesBuckets(
     metaclass=jsii.JSIIMeta,
     jsii_type="digitalocean.dataDigitaloceanSpacesBuckets.DataDigitaloceanSpacesBuckets",
 ):
-    '''Represents a {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets digitalocean_spaces_buckets}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets digitalocean_spaces_buckets}.'''
 
     def __init__(
         self,
@@ -37,20 +37,20 @@ class DataDigitaloceanSpacesBuckets(
         id: typing.Optional[builtins.str] = None,
         sort: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["DataDigitaloceanSpacesBucketsSort", typing.Dict[builtins.str, typing.Any]]]]] = None,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets digitalocean_spaces_buckets} Data Source.
+        '''Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets digitalocean_spaces_buckets} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param filter: filter block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#filter DataDigitaloceanSpacesBuckets#filter}
-        :param id: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#id DataDigitaloceanSpacesBuckets#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param sort: sort block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#sort DataDigitaloceanSpacesBuckets#sort}
+        :param filter: filter block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#filter DataDigitaloceanSpacesBuckets#filter}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#id DataDigitaloceanSpacesBuckets#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param sort: sort block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#sort DataDigitaloceanSpacesBuckets#sort}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -357,7 +357,7 @@ class DataDigitaloceanSpacesBucketsConfig(_cdktf_9a9027ec.TerraformMetaArguments
         self,
         *,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -375,9 +375,9 @@ class DataDigitaloceanSpacesBucketsConfig(_cdktf_9a9027ec.TerraformMetaArguments
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param filter: filter block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#filter DataDigitaloceanSpacesBuckets#filter}
-        :param id: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#id DataDigitaloceanSpacesBuckets#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param sort: sort block. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#sort DataDigitaloceanSpacesBuckets#sort}
+        :param filter: filter block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#filter DataDigitaloceanSpacesBuckets#filter}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#id DataDigitaloceanSpacesBuckets#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param sort: sort block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#sort DataDigitaloceanSpacesBuckets#sort}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -426,12 +426,14 @@ class DataDigitaloceanSpacesBucketsConfig(_cdktf_9a9027ec.TerraformMetaArguments
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
-    def count(self) -> typing.Optional[jsii.Number]:
+    def count(
+        self,
+    ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
         '''
         :stability: experimental
         '''
         result = self._values.get("count")
-        return typing.cast(typing.Optional[jsii.Number], result)
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
@@ -483,14 +485,14 @@ class DataDigitaloceanSpacesBucketsConfig(_cdktf_9a9027ec.TerraformMetaArguments
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DataDigitaloceanSpacesBucketsFilter"]]]:
         '''filter block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#filter DataDigitaloceanSpacesBuckets#filter}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#filter DataDigitaloceanSpacesBuckets#filter}
         '''
         result = self._values.get("filter")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DataDigitaloceanSpacesBucketsFilter"]]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#id DataDigitaloceanSpacesBuckets#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#id DataDigitaloceanSpacesBuckets#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -504,7 +506,7 @@ class DataDigitaloceanSpacesBucketsConfig(_cdktf_9a9027ec.TerraformMetaArguments
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DataDigitaloceanSpacesBucketsSort"]]]:
         '''sort block.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#sort DataDigitaloceanSpacesBuckets#sort}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#sort DataDigitaloceanSpacesBuckets#sort}
         '''
         result = self._values.get("sort")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DataDigitaloceanSpacesBucketsSort"]]], result)
@@ -541,10 +543,10 @@ class DataDigitaloceanSpacesBucketsFilter:
         match_by: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param key: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#key DataDigitaloceanSpacesBuckets#key}.
-        :param values: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#values DataDigitaloceanSpacesBuckets#values}.
-        :param all: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#all DataDigitaloceanSpacesBuckets#all}.
-        :param match_by: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#match_by DataDigitaloceanSpacesBuckets#match_by}.
+        :param key: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#key DataDigitaloceanSpacesBuckets#key}.
+        :param values: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#values DataDigitaloceanSpacesBuckets#values}.
+        :param all: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#all DataDigitaloceanSpacesBuckets#all}.
+        :param match_by: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#match_by DataDigitaloceanSpacesBuckets#match_by}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__42a15721d3940505bf371e0d79a1a5a78e7a595a161d13e947eef74494e5a185)
@@ -563,14 +565,14 @@ class DataDigitaloceanSpacesBucketsFilter:
 
     @builtins.property
     def key(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#key DataDigitaloceanSpacesBuckets#key}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#key DataDigitaloceanSpacesBuckets#key}.'''
         result = self._values.get("key")
         assert result is not None, "Required property 'key' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def values(self) -> typing.List[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#values DataDigitaloceanSpacesBuckets#values}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#values DataDigitaloceanSpacesBuckets#values}.'''
         result = self._values.get("values")
         assert result is not None, "Required property 'values' is missing"
         return typing.cast(typing.List[builtins.str], result)
@@ -579,13 +581,13 @@ class DataDigitaloceanSpacesBucketsFilter:
     def all(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#all DataDigitaloceanSpacesBuckets#all}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#all DataDigitaloceanSpacesBuckets#all}.'''
         result = self._values.get("all")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
     @builtins.property
     def match_by(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#match_by DataDigitaloceanSpacesBuckets#match_by}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#match_by DataDigitaloceanSpacesBuckets#match_by}.'''
         result = self._values.get("match_by")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -805,13 +807,13 @@ class DataDigitaloceanSpacesBucketsFilterOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[DataDigitaloceanSpacesBucketsFilter, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[DataDigitaloceanSpacesBucketsFilter, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSpacesBucketsFilter]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSpacesBucketsFilter]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[DataDigitaloceanSpacesBucketsFilter, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSpacesBucketsFilter]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0757b5ac2edd2600d1b0fcd3ca518114a5ff4002e878c69366385eee30ee25c6)
@@ -832,8 +834,8 @@ class DataDigitaloceanSpacesBucketsSort:
         direction: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param key: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#key DataDigitaloceanSpacesBuckets#key}.
-        :param direction: Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#direction DataDigitaloceanSpacesBuckets#direction}.
+        :param key: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#key DataDigitaloceanSpacesBuckets#key}.
+        :param direction: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#direction DataDigitaloceanSpacesBuckets#direction}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b31c000d6c28ea0367e008fb1252c75e3984bec8f611dbe9701a77f895529115)
@@ -847,14 +849,14 @@ class DataDigitaloceanSpacesBucketsSort:
 
     @builtins.property
     def key(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#key DataDigitaloceanSpacesBuckets#key}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#key DataDigitaloceanSpacesBuckets#key}.'''
         result = self._values.get("key")
         assert result is not None, "Required property 'key' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def direction(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/digitalocean/d/spaces_buckets#direction DataDigitaloceanSpacesBuckets#direction}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/spaces_buckets#direction DataDigitaloceanSpacesBuckets#direction}.'''
         result = self._values.get("direction")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -1031,13 +1033,13 @@ class DataDigitaloceanSpacesBucketsSortOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[DataDigitaloceanSpacesBucketsSort, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[DataDigitaloceanSpacesBucketsSort, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSpacesBucketsSort]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSpacesBucketsSort]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[DataDigitaloceanSpacesBucketsSort, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSpacesBucketsSort]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__65fa36f3ea780b1b84d69b11f5cc6bb213297777348788fc5afbe7e7a6d0138a)
@@ -1069,7 +1071,7 @@ def _typecheckingstub__4af4c661260d6a52618a341e0e954d6737b86128b81bdb3a0a361d5bb
     id: typing.Optional[builtins.str] = None,
     sort: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[DataDigitaloceanSpacesBucketsSort, typing.Dict[builtins.str, typing.Any]]]]] = None,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1147,7 +1149,7 @@ def _typecheckingstub__89b056c6647d56037aafe13162e02c573bc67cf12ff83d1b63c286714
 def _typecheckingstub__af6992e98878857e0b130eb367c9cdc147818857589d4a4d045250406d025194(
     *,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1242,7 +1244,7 @@ def _typecheckingstub__4334e71239b1eabcffd887bc90437246be00ecd815ecfbd50f73b15c3
     pass
 
 def _typecheckingstub__0757b5ac2edd2600d1b0fcd3ca518114a5ff4002e878c69366385eee30ee25c6(
-    value: typing.Optional[typing.Union[DataDigitaloceanSpacesBucketsFilter, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSpacesBucketsFilter]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1315,7 +1317,7 @@ def _typecheckingstub__763614b473972ca1281ab0816b45fe19f7ee51aad2679d0e7bab15c18
     pass
 
 def _typecheckingstub__65fa36f3ea780b1b84d69b11f5cc6bb213297777348788fc5afbe7e7a6d0138a(
-    value: typing.Optional[typing.Union[DataDigitaloceanSpacesBucketsSort, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DataDigitaloceanSpacesBucketsSort]],
 ) -> None:
     """Type checking stubs"""
     pass

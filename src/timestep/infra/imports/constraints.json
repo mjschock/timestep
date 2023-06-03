@@ -1,8 +1,10 @@
 {
-  "cdktf": "0.15.5",
+  "cdktf": "0.16.3",
   "providers": {
     "cloudinit": "~> 2.3",
     "digitalocean": "~> 2.28",
+    "helm": "~> 2.10",
+    "kubernetes": "~> 2.20",
     "multipass": "~> 1.4"
   }
 }

@@ -1,7 +1,7 @@
 '''
 # `data_multipass_instance`
 
-Refer to the Terraform Registory for docs: [`data_multipass_instance`](https://www.terraform.io/docs/providers/multipass/d/instance).
+Refer to the Terraform Registory for docs: [`data_multipass_instance`](https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class DataMultipassInstance(
     metaclass=jsii.JSIIMeta,
     jsii_type="multipass.dataMultipassInstance.DataMultipassInstance",
 ):
-    '''Represents a {@link https://www.terraform.io/docs/providers/multipass/d/instance multipass_instance}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance multipass_instance}.'''
 
     def __init__(
         self,
@@ -35,18 +35,18 @@ class DataMultipassInstance(
         *,
         name: builtins.str,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://www.terraform.io/docs/providers/multipass/d/instance multipass_instance} Data Source.
+        '''Create a new {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance multipass_instance} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param name: Instance name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/multipass/d/instance#name DataMultipassInstance#name}
+        :param name: Instance name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance#name DataMultipassInstance#name}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -138,7 +138,7 @@ class DataMultipassInstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         self,
         *,
         connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[jsii.Number] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
         depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
         lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -154,7 +154,7 @@ class DataMultipassInstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param name: Instance name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/multipass/d/instance#name DataMultipassInstance#name}
+        :param name: Instance name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance#name DataMultipassInstance#name}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -197,12 +197,14 @@ class DataMultipassInstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
-    def count(self) -> typing.Optional[jsii.Number]:
+    def count(
+        self,
+    ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
         '''
         :stability: experimental
         '''
         result = self._values.get("count")
-        return typing.cast(typing.Optional[jsii.Number], result)
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
@@ -252,7 +254,7 @@ class DataMultipassInstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def name(self) -> builtins.str:
         '''Instance name.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/multipass/d/instance#name DataMultipassInstance#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance#name DataMultipassInstance#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -283,7 +285,7 @@ def _typecheckingstub__34fa68386d898f26e3450a17eb2b5a5b58cfa2897397d691a442a0c65
     *,
     name: builtins.str,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -302,7 +304,7 @@ def _typecheckingstub__bcf7cf3291406f97680a93b88f11b9a9b9c752853821081831013ae76
 def _typecheckingstub__cb5654ee70774e5ec11f1f0011e54d1f01682dfaf4ff1c9ca8e33fa1e0e9cf1c(
     *,
     connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[jsii.Number] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
     depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,

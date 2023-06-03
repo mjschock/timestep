@@ -1,7 +1,7 @@
 '''
 # `provider`
 
-Refer to the Terraform Registory for docs: [`multipass`](https://www.terraform.io/docs/providers/multipass).
+Refer to the Terraform Registory for docs: [`multipass`](https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class MultipassProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="multipass.provider.MultipassProvider",
 ):
-    '''Represents a {@link https://www.terraform.io/docs/providers/multipass multipass}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs multipass}.'''
 
     def __init__(
         self,
@@ -35,11 +35,11 @@ class MultipassProvider(
         *,
         alias: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''Create a new {@link https://www.terraform.io/docs/providers/multipass multipass} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs multipass} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/multipass#alias MultipassProvider#alias}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs#alias MultipassProvider#alias}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e1f94d75d367044a5687d31d87490ca6ef27d410e65a2b3c574ca66776de6d89)
@@ -88,7 +88,7 @@ class MultipassProvider(
 class MultipassProviderConfig:
     def __init__(self, *, alias: typing.Optional[builtins.str] = None) -> None:
         '''
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/multipass#alias MultipassProvider#alias}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs#alias MultipassProvider#alias}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b713be3a6889bc8e1233255dd9189fa318357c8ea2a6abd150b6bd3f65c93ccc)
@@ -101,7 +101,7 @@ class MultipassProviderConfig:
     def alias(self) -> typing.Optional[builtins.str]:
         '''Alias name.
 
-        Docs at Terraform Registry: {@link https://www.terraform.io/docs/providers/multipass#alias MultipassProvider#alias}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs#alias MultipassProvider#alias}
         '''
         result = self._values.get("alias")
         return typing.cast(typing.Optional[builtins.str], result)
