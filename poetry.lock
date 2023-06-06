@@ -645,6 +645,20 @@ files = [
 colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
+name = "cloud-init-gen"
+version = "1.2.0"
+description = "Simplified generation of cloud-init user-data content"
+optional = false
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "cloud-init-gen-1.2.0.tar.gz", hash = "sha256:5fce051b4291b3ff8bfc469949aa50ddb57b8914ca760646257131057983f730"},
+    {file = "cloud_init_gen-1.2.0-py3-none-any.whl", hash = "sha256:43376f2db0449799bbe38c628cb8cffd15e57db12021f3d82ea4ced7a9d70bf6"},
+]
+
+[package.dependencies]
+PyYAML = ">=6.0,<7.0"
+
+[[package]]
 name = "cloudpickle"
 version = "2.2.1"
 description = "Extended pickling support for Python objects"
@@ -4200,4 +4214,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "da76d5577f8bd8b7e4907eb8db2f88f434f706879c3be951224d1b207b165a9c"
+content-hash = "886ed948292e528cd54fc84585284a38ae87ead9205786535cca3c1c430c52ec"
