@@ -12,6 +12,7 @@ cdktf = "^0.16.3"
 hydra-core = "^1.3.2"
 prefect = "^2.10.12"
 marvin = "^0.9.2"
+cloud-init-gen = "^1.2.0"
 
 
 [tool.poetry.group.test.dependencies]
