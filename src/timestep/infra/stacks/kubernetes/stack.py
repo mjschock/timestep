@@ -19,10 +19,13 @@ class KubernetesTerraformStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, config: KubernetesTerraformStackConfig, **kwargs) -> None:
         super().__init__(scope, id)
 
+        cwd = os.getcwd()
+        KUBECONFIG = os.getenv('KUBECONFIG')
+
         self.kubernetes_provider = KubernetesTerraformProvider(
             id="kubernetes_provider",
             config_context="timestep-ai-k3s-cluster",
-            config_path = "~/.kube/config",
+            config_path=f"{cwd}/{KUBECONFIG}",
             scope=self,
         )
 

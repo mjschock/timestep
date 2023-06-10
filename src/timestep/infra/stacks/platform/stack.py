@@ -1,3 +1,4 @@
+import os
 from constructs import Construct
 from cdktf import TerraformStack
 
@@ -7,20 +8,26 @@ from timestep.infra.imports.helm.provider import HelmProvider as HelmTerraformPr
 from timestep.infra.imports.helm.release import Release as HelmReleaseTerraformResource
 from timestep.infra.imports.kubernetes.provider import KubernetesProvider as KubernetesTerraformProvider
 from timestep.infra.stacks.kubernetes.stack import KubernetesTerraformStack
+from timestep.infra.stacks.base.stack import BaseTerraformStack, BaseTerraformStackConfig
 
 
-class PlatformTerraformStackConfig:
-    def __init__(self, config: DictConfig, k8s_stack: KubernetesTerraformStack) -> None:
-        pass
+class PlatformTerraformStackConfig(BaseTerraformStackConfig):
+    pass
+
 
 class PlatformTerraformStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, config: PlatformTerraformStackConfig, **kwargs) -> None:
         super().__init__(scope, id)
 
+        cwd = os.getcwd()
+        KUBECONFIG = os.getenv('KUBECONFIG')
+        config_path = f"{cwd}/{KUBECONFIG}"
+        chart_path = f"{cwd}/dist/deploy/k8s/charts/timestep-ai-platform"
+
         platform_kubernetes_provider = KubernetesTerraformProvider(
             id="platform_kubernetes_provider",
             config_context="timestep-ai-k3s-cluster",
-            config_path = "~/.kube/config",
+            config_path=config_path,
             scope=self,
         )
 
@@ -49,7 +56,7 @@ class PlatformTerraformStack(TerraformStack):
         platform_helm_release_resource = HelmReleaseTerraformResource(
             id_="platform_helm_release_resource",
             atomic=True,
-            chart="/home/mjschock/Projects/timestep-ai/timestep/dist/deploy/k8s/charts/timestep-ai-platform",
+            chart=chart_path,
             force_update=True,
             name="timestep-ai-platform",
             # namespace=k8s_stack.metadata.name,

@@ -1,3 +1,5 @@
 FROM caddy:latest
 
-RUN whoami
+# RUN whoami
+
+COPY ./Caddyfile /etc/caddy/Caddyfile

@@ -1,21 +1,15 @@
 services:
   caddy:
-    # image: caddy:latest
-    build:
-      context: .
-      dockerfile: ./src/timestep/services/caddy/Dockerfile
+    build: ./src/timestep/services/caddy
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
     restart: always
     volumes:
-      # - ./src/timestep/conf/base/Caddyfile:/etc/caddy/Caddyfile
-      # - $PWD/src/timestep/services/client/site:/srv
       - caddy_data:/data
-      - caddy_config:/config
+      - caddy_conf:/config
 version: "3.7"
 volumes:
-  caddy_config:
+  caddy_conf:
   caddy_data:
-    external: true
