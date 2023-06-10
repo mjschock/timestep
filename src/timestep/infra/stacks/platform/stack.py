@@ -4,11 +4,19 @@ from cdktf import TerraformStack
 
 from omegaconf import DictConfig
 
-from timestep.infra.imports.helm.provider import HelmProvider as HelmTerraformProvider, HelmProviderKubernetes
+from timestep.infra.imports.helm.provider import (
+    HelmProvider as HelmTerraformProvider,
+    HelmProviderKubernetes,
+)
 from timestep.infra.imports.helm.release import Release as HelmReleaseTerraformResource
-from timestep.infra.imports.kubernetes.provider import KubernetesProvider as KubernetesTerraformProvider
+from timestep.infra.imports.kubernetes.provider import (
+    KubernetesProvider as KubernetesTerraformProvider,
+)
 from timestep.infra.stacks.kubernetes.stack import KubernetesTerraformStack
-from timestep.infra.stacks.base.stack import BaseTerraformStack, BaseTerraformStackConfig
+from timestep.infra.stacks.base.stack import (
+    BaseTerraformStack,
+    BaseTerraformStackConfig,
+)
 
 
 class PlatformTerraformStackConfig(BaseTerraformStackConfig):
@@ -16,11 +24,13 @@ class PlatformTerraformStackConfig(BaseTerraformStackConfig):
 
 
 class PlatformTerraformStack(TerraformStack):
-    def __init__(self, scope: Construct, id: str, config: PlatformTerraformStackConfig, **kwargs) -> None:
+    def __init__(
+        self, scope: Construct, id: str, config: PlatformTerraformStackConfig, **kwargs
+    ) -> None:
         super().__init__(scope, id)
 
         cwd = os.getcwd()
-        KUBECONFIG = os.getenv('KUBECONFIG')
+        KUBECONFIG = os.getenv("KUBECONFIG")
         config_path = f"{cwd}/{KUBECONFIG}"
         chart_path = f"{cwd}/dist/deploy/k8s/charts/timestep-ai-platform"
 
