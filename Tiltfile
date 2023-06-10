@@ -138,27 +138,6 @@ if os.path.exists('dist/deploy/k8s/charts/timestep-ai-platform'):
         )
     )
 
-k8s_yaml(
-    listdir('src/timestep/ingress')
-)
-
-# # k8s_resource allows customization where necessary such as adding port forwards and labels
-# # https://docs.tilt.dev/api.html#api.k8s_resource
-# k8s_resource(
-#     'api',
-#     port_forwards='5734:5000',
-#     labels=['backend']
-# )
-
-# # k8s_yaml automatically creates resources in Tilt for the entities
-# # and will inject any images referenced in the Tiltfile when deploying
-# # https://docs.tilt.dev/api.html#api.k8s_yaml
-# k8s_yaml('deploy/web.yaml')
-
-# # k8s_resource allows customization where necessary such as adding port forwards and labels
-# # https://docs.tilt.dev/api.html#api.k8s_resource
-# k8s_resource(
-#     'web',
-#     port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
-#     labels=['frontend']
+# k8s_yaml(
+#     listdir('src/timestep/ingress')
 # )

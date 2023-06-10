@@ -2,22 +2,45 @@ import os
 import yaml
 
 from constructs import Construct
-from cdktf import TerraformDataSource, TerraformElement, TerraformOutput, TerraformProvider, TerraformResource, TerraformStack
+from cdktf import (
+    TerraformDataSource,
+    TerraformElement,
+    TerraformOutput,
+    TerraformProvider,
+    TerraformResource,
+    TerraformStack,
+)
 from cloud_init_gen import CloudInitDoc
 from omegaconf import DictConfig
 from pydantic import BaseModel
 
-from timestep.infra.imports.digitalocean.provider import DigitaloceanProvider as DigitaloceanTerraformProvider
-from timestep.infra.imports.digitalocean.domain import Domain as DigitaloceanDomainTerraformResource
-from timestep.infra.imports.digitalocean.droplet import Droplet as DigitaloceanDropletTerraformResource
-from timestep.infra.imports.digitalocean.data_digitalocean_droplet import DataDigitaloceanDroplet as DigitaloceanDropletTerraformDataSource
-from timestep.infra.imports.digitalocean.data_digitalocean_domain import DataDigitaloceanDomain as DigitaloceanDomainTerraformDataSource
-from timestep.infra.imports.multipass.provider import MultipassProvider as MultipassTerraformProvider
-from timestep.infra.imports.multipass.instance import Instance as MultipassInstanceTerraformResource
-from timestep.infra.imports.multipass.data_multipass_instance import DataMultipassInstance as MultipassInstanceTerraformDataSource
+from timestep.infra.imports.digitalocean.provider import (
+    DigitaloceanProvider as DigitaloceanTerraformProvider,
+)
+from timestep.infra.imports.digitalocean.domain import (
+    Domain as DigitaloceanDomainTerraformResource,
+)
+from timestep.infra.imports.digitalocean.droplet import (
+    Droplet as DigitaloceanDropletTerraformResource,
+)
+from timestep.infra.imports.digitalocean.data_digitalocean_droplet import (
+    DataDigitaloceanDroplet as DigitaloceanDropletTerraformDataSource,
+)
+from timestep.infra.imports.digitalocean.data_digitalocean_domain import (
+    DataDigitaloceanDomain as DigitaloceanDomainTerraformDataSource,
+)
+from timestep.infra.imports.multipass.provider import (
+    MultipassProvider as MultipassTerraformProvider,
+)
+from timestep.infra.imports.multipass.instance import (
+    Instance as MultipassInstanceTerraformResource,
+)
+from timestep.infra.imports.multipass.data_multipass_instance import (
+    DataMultipassInstance as MultipassInstanceTerraformDataSource,
+)
 
 
-class TerraformElementFactory():
+class TerraformElementFactory:
     def __init__(self, scope: Construct, config: DictConfig) -> None:
         self.scope = scope
         self.config = config
@@ -57,7 +80,9 @@ class TerraformProviderFactory(TerraformElementFactory):
 
 
 class TerraformResourceFactory(TerraformElementFactory):
-    def build(self, providers: dict[str, TerraformProvider]) -> dict[str, TerraformResource]:
+    def build(
+        self, providers: dict[str, TerraformProvider]
+    ) -> dict[str, TerraformResource]:
         resources = {}
         cwd = os.getcwd()
         cloudinit_file = f"{cwd}/dist/cloud-config.yaml"
@@ -110,7 +135,11 @@ class TerraformResourceFactory(TerraformElementFactory):
 
 
 class TerraformDataSourceFactory(TerraformElementFactory):
-    def build(self, providers: dict[str, TerraformProvider], resources: dict[str, TerraformResource]) -> dict[str, TerraformDataSource]:
+    def build(
+        self,
+        providers: dict[str, TerraformProvider],
+        resources: dict[str, TerraformResource],
+    ) -> dict[str, TerraformDataSource]:
         data_sources = {}
 
         if self.config.target.env == "local":
@@ -152,7 +181,9 @@ class TerraformDataSourceFactory(TerraformElementFactory):
 
 
 class TerraformOutputFactory(TerraformElementFactory):
-    def build(self, data_sources: dict[str, TerraformDataSource]) -> dict[str, TerraformOutput]:
+    def build(
+        self, data_sources: dict[str, TerraformDataSource]
+    ) -> dict[str, TerraformOutput]:
         outputs = {}
 
         if self.config.target.env == "local":
@@ -179,14 +210,16 @@ class TerraformOutputFactory(TerraformElementFactory):
                 scope=self.scope,
             )
 
-            outputs["digitalocean_domain_zone_file"] = digitalocean_domain_zone_file_output
+            outputs[
+                "digitalocean_domain_zone_file"
+            ] = digitalocean_domain_zone_file_output
 
         else:
             raise ValueError(f"Unknown env: {self.config.target.env}")
 
         for output in outputs:
             assert isinstance(outputs[output], TerraformOutput)
-  
+
         return outputs
 
 
@@ -209,7 +242,7 @@ class DigitaloceanTargetConfig(TargetConfig):
     do_droplet_name: str
     do_droplet_region: str
     do_droplet_size: str
-    do_token: str # TODO: Use secret
+    do_token: str  # TODO: Use secret
 
 
 class BaseTerraformStackConfig(BaseModel):
@@ -217,7 +250,9 @@ class BaseTerraformStackConfig(BaseModel):
 
 
 class BaseTerraformStack(TerraformStack):
-    def __init__(self, scope: Construct, id: str, config: BaseTerraformStackConfig) -> None:
+    def __init__(
+        self, scope: Construct, id: str, config: BaseTerraformStackConfig
+    ) -> None:
         super().__init__(scope, id)
 
         self.config = config
@@ -228,11 +263,11 @@ class BaseTerraformStack(TerraformStack):
             ssh_authorized_key = file.read().strip()
 
         cloud_cfg = dict(
-            disable_root = True,
-            package_reboot_if_required = True,
-            package_update = True,
-            package_upgrade = True,
-            packages = [
+            disable_root=True,
+            package_reboot_if_required=True,
+            package_update=True,
+            package_upgrade=True,
+            packages=[
                 "build-essential",
                 "curl",
                 "default-jdk",
@@ -254,32 +289,128 @@ class BaseTerraformStack(TerraformStack):
                 "xz-utils",
                 "zlib1g-dev",
             ],
-            runcmd = [
-                ["runuser", "-l", "ubuntu", "-c", 'bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"'],
-                ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.oh-my-bash/custom/example.sh'],
-                ["runuser", "-l", "ubuntu", "-c", 'echo OSH_THEME=\"zork\" >> $HOME/.oh-my-bash/custom/example.sh'],
+            runcmd=[
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    'bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"',
+                ],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    'echo "" >> $HOME/.oh-my-bash/custom/example.sh',
+                ],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    'echo OSH_THEME="zork" >> $HOME/.oh-my-bash/custom/example.sh',
+                ],
                 ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.bashrc'],
                 # "runuser -l ubuntu -c 'echo \"eval \\\"\$(direnv hook bash)\\\"\" >> $HOME/.bashrc'",
-                ["runuser", "-l", "ubuntu", "-c", 'echo \"eval \\\"\$(direnv hook bash)\\\"\" >> $HOME/.bashrc'],
-                ["runuser", "-l", "ubuntu", "-c", 'git clone https://github.com/anyenv/anyenv ~/.anyenv'],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    'echo "eval \\"\$(direnv hook bash)\\"" >> $HOME/.bashrc',
+                ],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    "git clone https://github.com/anyenv/anyenv ~/.anyenv",
+                ],
                 ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.bashrc'],
-                ["runuser", "-l", "ubuntu", "-c", 'echo export PATH=\$HOME/.anyenv/bin:\$PATH >> $HOME/.bashrc'],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    "echo export PATH=\$HOME/.anyenv/bin:\$PATH >> $HOME/.bashrc",
+                ],
                 # "runuser -l ubuntu -c 'echo \"eval \\\"\$(anyenv init -)\\\"\" >> $HOME/.bashrc'",
-                ["runuser", "-l", "ubuntu", "-c", 'echo \"eval \\\"\$(anyenv init -)\\\"\" >> $HOME/.bashrc'],
-                ["runuser", "-l", "ubuntu", "-c", '$HOME/.anyenv/bin/anyenv install --force-init'],
-                ["runuser", "-l", "ubuntu", "-c", '$HOME/.anyenv/bin/anyenv install jenv'],
-                ["runuser", "-l", "ubuntu", "-c", '$HOME/.anyenv/bin/anyenv install nodenv'],
-                ["runuser", "-l", "ubuntu", "-c", '$HOME/.anyenv/bin/anyenv install goenv'],
-                ["runuser", "-l", "ubuntu", "-c", '$HOME/.anyenv/bin/anyenv install pyenv'],
-                ["runuser", "-l", "ubuntu", "-c", 'curl -sLS https://get.arkade.dev | sudo sh'],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    'echo "eval \\"\$(anyenv init -)\\"" >> $HOME/.bashrc',
+                ],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    "$HOME/.anyenv/bin/anyenv install --force-init",
+                ],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    "$HOME/.anyenv/bin/anyenv install jenv",
+                ],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    "$HOME/.anyenv/bin/anyenv install nodenv",
+                ],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    "$HOME/.anyenv/bin/anyenv install goenv",
+                ],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    "$HOME/.anyenv/bin/anyenv install pyenv",
+                ],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    "curl -sLS https://get.arkade.dev | sudo sh",
+                ],
                 ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.bashrc'],
-                ["runuser", "-l", "ubuntu", "-c", 'echo export PATH=\$HOME/.arkade/bin:\$PATH >> $HOME/.bashrc'],
-                ["runuser", "-l", "ubuntu", "-c", 'arkade get k3sup'],
-                ["runuser", "-l", "ubuntu", "-c", 'mkdir $HOME/.kube'],
-                ["runuser", "-l", "ubuntu", "-c", '$HOME/.arkade/bin/k3sup install --context timestep-ai-k3s-cluster --k3s-extra-args "--disable traefik" --local --local-path $HOME/.kube/config --user ubuntu'],
-                ["runuser", "-l", "ubuntu", "-c", 'arkade install docker-registry'], # TODO: install Helm chart using Terraform instead?
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    "echo export PATH=\$HOME/.arkade/bin:\$PATH >> $HOME/.bashrc",
+                ],
+                ["runuser", "-l", "ubuntu", "-c", "arkade get k3sup"],
+                ["runuser", "-l", "ubuntu", "-c", "mkdir $HOME/.kube"],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    '$HOME/.arkade/bin/k3sup install --context timestep-ai-k3s-cluster --k3s-extra-args "--disable traefik" --local --local-path $HOME/.kube/config --user ubuntu',
+                ],
+                [
+                    "runuser",
+                    "-l",
+                    "ubuntu",
+                    "-c",
+                    "arkade install docker-registry",
+                ],  # TODO: install Helm chart using Terraform instead?
             ],
-            users = [
+            users=[
                 "default",
                 {
                     "groups": "sudo",
@@ -289,47 +420,45 @@ class BaseTerraformStack(TerraformStack):
                         ssh_authorized_key,
                     ],
                     "sudo": "ALL=(ALL) NOPASSWD:ALL",
-                }
+                },
             ],
             # write_files = [
-#                 {
-#                     "content": f"""\
-# #!/bin/sh
-# [ -r /etc/lsb-release ] && . /etc/lsb-release
-
-# if [ -z \"$DISTRIB_DESCRIPTION\" ] && [ -x /usr/bin/lsb_release ]; then
-#         # Fall back to using the very slow lsb_release utility
-#         DISTRIB_DESCRIPTION=$(lsb_release -s -d)
-# fi
-
-# printf \"Welcome to \n%s\nv%s\nrunning on %s (%s %s %s).\n\" \"$(figlet Timestep AI)\" \"$(date +'%Y.%m.%d')\" \"$DISTRIB_DESCRIPTION\" \"$(uname -o)\" \"$(uname -r)\" \"$(uname -m)\"
-#                     """,
-#                     "path": "/etc/update-motd.d/00-header",
-#                     # "permissions": "\"0o755\"",
-#                     # "permissions": "'0755'",
-#                     "permissions": "'0755'",
-#                 },
-#                 {
-#                     "content": """\
-# mirrors:
-#   registry.timestep.local:
-#     endpoint:
-#       - "https://registry.timestep.local:5000"
-# configs:
-#   "registry.timestep.local:5000":
-#     auth:
-#       username: xxxxxx # this is the registry username
-#       password: xxxxxx # this is the registry password
-#     tls:
-#       cert_file: # path to the cert file used in the registry
-#       key_file:  # path to the key file used in the registry
-#       ca_file:   # path to the ca file used in the registry\
-# """,
-#                     "path": "/etc/rancher/k3s/registries.yaml",
-#                     "permissions": "\"0o644\""
-#                 },
+            #                 {
+            #                     "content": f"""\
+            # #!/bin/sh
+            # [ -r /etc/lsb-release ] && . /etc/lsb-release
+            # if [ -z \"$DISTRIB_DESCRIPTION\" ] && [ -x /usr/bin/lsb_release ]; then
+            #         # Fall back to using the very slow lsb_release utility
+            #         DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+            # fi
+            # printf \"Welcome to \n%s\nv%s\nrunning on %s (%s %s %s).\n\" \"$(figlet Timestep AI)\" \"$(date +'%Y.%m.%d')\" \"$DISTRIB_DESCRIPTION\" \"$(uname -o)\" \"$(uname -r)\" \"$(uname -m)\"
+            #                     """,
+            #                     "path": "/etc/update-motd.d/00-header",
+            #                     # "permissions": "\"0o755\"",
+            #                     # "permissions": "'0755'",
+            #                     "permissions": "'0755'",
+            #                 },
+            #                 {
+            #                     "content": """\
+            # mirrors:
+            #   registry.timestep.local:
+            #     endpoint:
+            #       - "https://registry.timestep.local:5000"
+            # configs:
+            #   "registry.timestep.local:5000":
+            #     auth:
+            #       username: xxxxxx # this is the registry username
+            #       password: xxxxxx # this is the registry password
+            #     tls:
+            #       cert_file: # path to the cert file used in the registry
+            #       key_file:  # path to the key file used in the registry
+            #       ca_file:   # path to the ca file used in the registry\
+            # """,
+            #                     "path": "/etc/rancher/k3s/registries.yaml",
+            #                     "permissions": "\"0o644\""
+            #                 },
             # ],
-                # content = f"""\
+            # content = f"""\
             # - content: |
             #     mirrors:
             #         registry.localhost:
@@ -339,10 +468,16 @@ class BaseTerraformStack(TerraformStack):
             #     permissions: "0o644"
         )
 
-        user_data.add(cloud_cfg)  # will be rendered as yaml with implicit MIME type text/cloud-config
+        user_data.add(
+            cloud_cfg
+        )  # will be rendered as yaml with implicit MIME type text/cloud-config
 
-        print(f"Final user-data (text):\n====================\n{user_data.render()}\n====================")
-        print(f"Final user-data (base64):\n====================\n{user_data.render_base64()}\n====================")
+        print(
+            f"Final user-data (text):\n====================\n{user_data.render()}\n===================="
+        )
+        print(
+            f"Final user-data (base64):\n====================\n{user_data.render_base64()}\n===================="
+        )
 
         with open("dist/cloud-config.yaml", "w") as file:
             file.write(user_data.render())
@@ -353,19 +488,25 @@ class BaseTerraformStack(TerraformStack):
             assert isinstance(providers[provider], TerraformElement)
             assert isinstance(providers[provider], TerraformProvider)
 
-        resources = TerraformResourceFactory(scope=self, config=self.config).build(providers=providers)
+        resources = TerraformResourceFactory(scope=self, config=self.config).build(
+            providers=providers
+        )
 
-        for resource in resources:        
+        for resource in resources:
             assert isinstance(resources[resource], TerraformElement)
             assert isinstance(resources[resource], TerraformResource)
 
-        data_sources = TerraformDataSourceFactory(scope=self, config=self.config).build(providers=providers, resources=resources)
+        data_sources = TerraformDataSourceFactory(scope=self, config=self.config).build(
+            providers=providers, resources=resources
+        )
 
         for data_source in data_sources:
             assert isinstance(data_sources[data_source], TerraformElement)
             assert isinstance(data_sources[data_source], TerraformDataSource)
 
-        self.outputs = TerraformOutputFactory(scope=self, config=self.config).build(data_sources=data_sources)
+        self.outputs = TerraformOutputFactory(scope=self, config=self.config).build(
+            data_sources=data_sources
+        )
 
         for output in self.outputs:
             assert isinstance(self.outputs[output], TerraformElement)

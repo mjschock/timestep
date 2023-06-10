@@ -18,6 +18,11 @@ cloud-init-gen = "^1.2.0"
 [tool.poetry.group.test.dependencies]
 pytest = "^7.3.1"
 
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+toml-sort = "^0.23.1"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

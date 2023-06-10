@@ -6,10 +6,9 @@ from cdktf import Testing, TerraformStack
 
 
 class TestMain:
-
     stack = TerraformStack(Testing.app(), "stack")
-    #app_abstraction = MyApplicationsAbstraction(stack, "app-abstraction")
-    #synthesized = Testing.synth(stack)
+    # app_abstraction = MyApplicationsAbstraction(stack, "app-abstraction")
+    # synthesized = Testing.synth(stack)
 
     # def test_should_contain_container(self):
     #    assert Testing.to_have_resource(self.synthesized, Container.TF_RESOURCE_TYPE)
