@@ -60,7 +60,6 @@ class TerraformResourceFactory(TerraformElementFactory):
     def build(self, providers: dict[str, TerraformProvider]) -> dict[str, TerraformResource]:
         resources = {}
         cwd = os.getcwd()
-        # cloudinit_file = f"{cwd}/src/timestep/conf/base/cloud-config.yaml"
         cloudinit_file = f"{cwd}/dist/cloud-config.yaml"
 
         if self.config.target.env == "local":
@@ -278,6 +277,7 @@ class BaseTerraformStack(TerraformStack):
                 ["runuser", "-l", "ubuntu", "-c", 'arkade get k3sup'],
                 ["runuser", "-l", "ubuntu", "-c", 'mkdir $HOME/.kube'],
                 ["runuser", "-l", "ubuntu", "-c", '$HOME/.arkade/bin/k3sup install --context timestep-ai-k3s-cluster --k3s-extra-args "--disable traefik" --local --local-path $HOME/.kube/config --user ubuntu'],
+                ["runuser", "-l", "ubuntu", "-c", 'arkade install docker-registry'], # TODO: install Helm chart using Terraform instead?
             ],
             users = [
                 "default",
@@ -291,23 +291,44 @@ class BaseTerraformStack(TerraformStack):
                     "sudo": "ALL=(ALL) NOPASSWD:ALL",
                 }
             ],
-            write_files = [
-                {
-                    "content": f"""\
-#!/bin/sh
-[ -r /etc/lsb-release ] && . /etc/lsb-release
+            # write_files = [
+#                 {
+#                     "content": f"""\
+# #!/bin/sh
+# [ -r /etc/lsb-release ] && . /etc/lsb-release
 
-if [ -z \"$DISTRIB_DESCRIPTION\" ] && [ -x /usr/bin/lsb_release ]; then
-        # Fall back to using the very slow lsb_release utility
-        DISTRIB_DESCRIPTION=$(lsb_release -s -d)
-fi
+# if [ -z \"$DISTRIB_DESCRIPTION\" ] && [ -x /usr/bin/lsb_release ]; then
+#         # Fall back to using the very slow lsb_release utility
+#         DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+# fi
 
-printf \"Welcome to \n%s\nv%s\nrunning on %s (%s %s %s).\n\" \"$(figlet Timestep AI)\" \"$(date +'%Y.%m.%d')\" \"$DISTRIB_DESCRIPTION\" \"$(uname -o)\" \"$(uname -r)\" \"$(uname -m)\"
-                    """,
-                    "path": "/etc/update-motd.d/00-header",
-                    "permissions": "\"0o755\"",
-                },
-            ],
+# printf \"Welcome to \n%s\nv%s\nrunning on %s (%s %s %s).\n\" \"$(figlet Timestep AI)\" \"$(date +'%Y.%m.%d')\" \"$DISTRIB_DESCRIPTION\" \"$(uname -o)\" \"$(uname -r)\" \"$(uname -m)\"
+#                     """,
+#                     "path": "/etc/update-motd.d/00-header",
+#                     # "permissions": "\"0o755\"",
+#                     # "permissions": "'0755'",
+#                     "permissions": "'0755'",
+#                 },
+#                 {
+#                     "content": """\
+# mirrors:
+#   registry.timestep.local:
+#     endpoint:
+#       - "https://registry.timestep.local:5000"
+# configs:
+#   "registry.timestep.local:5000":
+#     auth:
+#       username: xxxxxx # this is the registry username
+#       password: xxxxxx # this is the registry password
+#     tls:
+#       cert_file: # path to the cert file used in the registry
+#       key_file:  # path to the key file used in the registry
+#       ca_file:   # path to the ca file used in the registry\
+# """,
+#                     "path": "/etc/rancher/k3s/registries.yaml",
+#                     "permissions": "\"0o644\""
+#                 },
+            # ],
                 # content = f"""\
             # - content: |
             #     mirrors:

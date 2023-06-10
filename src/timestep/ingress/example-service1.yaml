@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: example1
+spec:
+  type: ClusterIP
+  selector:
+    app: example1
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
