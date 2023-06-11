@@ -1,8 +1,0 @@
-app_name: timestep-ai
-domain: timestep.local
-env: local
-multipass_instance_cpus: 2
-multipass_instance_disk: 40G
-multipass_instance_image: "22.04"
-multipass_instance_name: timestep-ai
-ssh_authorized_key_path: dist/.ssh/id_rsa.timestep-ai-development.pub
