@@ -1,9 +1,11 @@
 from pydantic import BaseModel
 import pathlib
+import os
 
 BASE_PATH = pathlib.Path.cwd()
 
 class AppConfig(BaseModel):
+    CDKTF_OUTDIR: str = os.environ.get("CDKTF_OUTDIR", f"{BASE_PATH}/dist/cdktf.out")
     CLOUD_INSTANCE_PROVIDER: str = "multipass"
     CLOUD_INSTANCE_NAME: str = "timestep-ai"
     CPUS: int = 1

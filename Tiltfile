@@ -3,6 +3,39 @@ load('ext://uibutton', 'cmd_button', 'bool_input', 'location', 'text_input')
 
 dotenv('.env')
 
+local_resource(
+    'poetry install',
+    cmd='poetry install',
+    deps=[
+        'pyproject.toml',
+        'poetry.lock',
+    ],
+    labels=['build'],
+)
+
+local_resource(
+    'prefect server',
+    links=[
+        'http://127.0.0.1:4200',
+    ],
+    resource_deps=['poetry install'],
+    serve_cmd='poetry run prefect server start',
+)
+
+local_resource(
+    'poetry run pytest',
+    auto_init=False,
+    cmd='poetry run pytest',
+    deps=[
+        'src/timestep/__main__.py',
+        'src/timestep/conf.py',
+        'src/timestep/infra/stacks/base',
+    ],
+    labels=['test'],
+    resource_deps=['poetry install'],
+    trigger_mode=TRIGGER_MODE_MANUAL,
+)
+
 # local_resource(
 #     'ssh-keygen',
 #     cmd='mkdir -p dist/.ssh && ssh-keygen -t rsa -C timestep-ai-$TARGET_ENVIRONMENT -f dist/.ssh/id_rsa.timestep-ai-$TARGET_ENVIRONMENT -N "" || true',
@@ -23,26 +56,28 @@ dotenv('.env')
 # )
 
 local_resource(
-    'cdktf deploy base',
+    'poetry run cdktf deploy',
     cmd='poetry run cdktf deploy --auto-approve timestep.local-base-stack',
     deps=[
         'src/timestep/__main__.py',
         'src/timestep/conf.py',
         'src/timestep/infra/stacks/base',
     ],
-    labels=['deploy']
+    labels=['deploy'],
+    resource_deps=['poetry install']
 )
 
-cmd_button('cdktf deploy base:cdktf destroy base',
-    argv=['sh', '-c', 'cdktf destroy --auto-approve timestep.local-base-stack'],
+# cmd_button('cdktf deploy base:cdktf destroy base',
+cmd_button('poetry run cdktf destroy',
+    argv=['sh', '-c', 'poetry run cdktf destroy --auto-approve timestep.local-base-stack'],
     icon_name='delete',
-    resource='cdktf deploy base',
-    text='cdktf destroy base',
+    resource='poetry run cdktf deploy',
+    text='poetry run cdktf destroy',
 )
 
-allow_k8s_contexts([
-    'timestep-ai-k3s-cluster',
-])
+# allow_k8s_contexts([
+#     'timestep-ai-k3s-cluster',
+# ])
 
 # local_resource(
 #     'k3sup get kubeconfig',
