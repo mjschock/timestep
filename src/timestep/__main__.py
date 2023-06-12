@@ -1,3 +1,4 @@
+import os
 from cdktf import App
 from dotenv import dotenv_values
 from prefect import flow, get_run_logger
@@ -22,9 +23,11 @@ from timestep.infra.stacks.base.stack import (
 )
 def main(config: AppConfig) -> None:
     logger = get_run_logger()
-    # app_name = config.target.app_name
-    # env = config.target.env
-    # id = f"{app_name}-{env}"
+    logger.info(f"CDKTF_OUTDIR: {config.CDKTF_OUTDIR}")
+
+    if not os.path.exists(config.DIST_PATH):
+        logger.info(f"Creating dist directory: {config.DIST_PATH}")
+        os.makedirs(config.DIST_PATH)
 
     app = App()
 
