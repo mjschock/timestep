@@ -650,7 +650,13 @@ def get_cloud_domain_data_source(scope: TerraformStack, config: AppConfig, cloud
         #     # provider=cloud_instance_provider,
         #     scope=self.scope,
         # )
-        cloud_domain_data_source = None
+        # cloud_domain_data_source = None
+
+        cloud_domain_data_source = LocalFileTerraformDataSource(
+            id="cloud_domain_data_source",
+            filename=cloud_instance_domain_resource.filename,
+            scope=scope,
+        )
 
     elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
         cloud_domain_data_source = DigitaloceanDomainTerraformDataSource(
@@ -696,7 +702,16 @@ def get_cloud_instance_zone_file_output(scope: TerraformStack, config: AppConfig
         #     value=Token.null_value(), # TODO: Get zone file from hostctl
         #     scope=scope,
         # )
-        cloud_instance_zone_file_output = None
+        # cloud_instance_zone_file_output = None
+
+        cloud_instance_zone_file_output = TerraformOutput(
+            id="cloud_instance_zone_file_output",
+            # value=cloud_instance_domain_data_source.zone_file,
+            value=cloud_instance_domain_data_source.filename,
+            # value = Token.null_value(),
+            # value=None,
+            scope=scope,
+        )
 
     elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
         cloud_instance_zone_file_output = TerraformOutput(
@@ -712,25 +727,84 @@ def get_cloud_instance_zone_file_output(scope: TerraformStack, config: AppConfig
 
 
 @task
-def get_kube_config(config: AppConfig, cloud_instance_ipv4: str) -> str:
-    with ShellOperation(
-        commands=[
-            # f"ssh-keygen -R {cloud_instance_ipv4}",
-            # f"ssh-keyscan -H {cloud_instance_ipv4} >> ~/.ssh/known_hosts",
-            # f"k3sup install --context {config.KUBE_CONTEXT} --ip {cloud_instance_ipv4} --user ubuntu",
-            # f"k3sup join --context {config.KUBE_CONTEXT} --ip {cloud_instance_ipv4} --server-ip {cloud_instance_ipv4} --user ubuntu",
-            # f"kubectl config use-context {config.KUBE_CONTEXT}",
-            # f"kubectl get nodes",
-            f"k3sup install --context {config.KUBE_CONTEXT} --ip {cloud_instance_ipv4} --local-path {config.KUBE_CONFIG_PATH} --skip-install --ssh-key {config.SSH_PRIVATE_KEY_PATH} --user ubuntu",
+# def get_kube_config(config: AppConfig, cloud_instance_ipv4: str) -> str:
+def get_kube_config(scope: TerraformStack, config: AppConfig, cloud_instance_data_source: TerraformDataSource) -> TerraformDataSource:
+    # with ShellOperation(
+    #     commands=[
+    #         # f"ssh-keygen -R {cloud_instance_ipv4}",
+    #         # f"ssh-keyscan -H {cloud_instance_ipv4} >> ~/.ssh/known_hosts",
+    #         # f"k3sup install --context {config.KUBE_CONTEXT} --ip {cloud_instance_ipv4} --user ubuntu",
+    #         # f"k3sup join --context {config.KUBE_CONTEXT} --ip {cloud_instance_ipv4} --server-ip {cloud_instance_ipv4} --user ubuntu",
+    #         # f"kubectl config use-context {config.KUBE_CONTEXT}",
+    #         # f"kubectl get nodes",
+    #         f"k3sup install --context {config.KUBE_CONTEXT} --ip {cloud_instance_ipv4} --local-path {config.KUBE_CONFIG_PATH} --skip-install --ssh-key {config.SSH_PRIVATE_KEY_PATH} --user ubuntu",
+    #     ],
+    # ) as shell_operation:
+    #     shell_process = shell_operation.trigger()
+    #     shell_process.wait_for_completion()
+
+    # with open(config.KUBE_CONFIG_PATH, "r") as file:
+    #     kube_config = file.read()
+
+    # return kube_config
+
+    local_exec_provisioner = LocalExecProvisioner(
+        # command=f"sudo hostctl add {config.DOMAIN} {cloud_instance_data_source.ipv4}",
+        # command=f"sudo --non-interactive hostctl add domains {config.DOMAIN} {cloud_instance_data_source.ipv4}",
+        # command=f"hostctl add domains {config.DOMAIN} {cloud_instance_data_source.ipv4} --host-file .etchosts",
+        # command=f"cat .etchosts | hostctl add ephemeral --wait 0",
+        # command=f"echo {cloud_instance_data_source.ipv4} {config.DOMAIN} > .etchosts",
+        command=f"k3sup install --context {config.KUBE_CONTEXT} --ip {cloud_instance_data_source.ipv4} --local-path {config.KUBE_CONFIG_PATH} --skip-install --ssh-key {config.SSH_PRIVATE_KEY_PATH} --user ubuntu",
+        # command="echo hello world",
+        type="local-exec",
+    )
+
+    kube_config_resource = NullTerraformResource(
+        # id="cloud_instance_domain_resource",
+        id="kube_config_resource",
+        # provider=cloud_instance_provider,
+        provider=NullTerraformProvider(
+            # alias="cloud_instance_domain_resource_provider",
+            # id="cloud_instance_domain_resource_provider",
+            alias="kube_config_provider",
+            id="kube_config_provider",
+            scope=scope,
+        ),
+        provisioners=[
+            local_exec_provisioner,
         ],
-    ) as shell_operation:
-        shell_process = shell_operation.trigger()
-        shell_process.wait_for_completion()
+        scope=scope,
+        triggers={
+            "ipv4": cloud_instance_data_source.ipv4,
+        },
+    )
 
-    with open(config.KUBE_CONFIG_PATH, "r") as file:
-        kube_config = file.read()
+    return kube_config_resource
 
-    return kube_config
+    # kube_config_local_provider = LocalTerraformProvider(
+    #     id="kube_config_local_provider",
+    #     scope=scope,
+    # )
+
+    # kube_config_local_file_resource = LocalFileTerraformResource(
+    #     id="kube_config_local_file_resource",
+    #     content=cloud_init_config.render(),
+    #     filename=config.CLOUD_CONFIG_PATH,
+    #     provider=cloud_init_config_local_provider,
+    #     scope=scope,
+    # )
+
+    # kube_config_local_file_data_source = LocalFileTerraformDataSource(
+    #     # id="cloud_init_config_local_file_data_source",
+    #     # filename=cloud_init_config_local_file_resource.filename,
+    #     id="kube_config_local_file_data_source",
+    #     # filename=config.KUBE_CONFIG_PATH,
+    #     filename=kube_config_resource.filename,
+    #     scope=scope,
+    # )
+
+    # # return kube_config_resource
+    # return kube_config_local_file_data_source
 
 
 class BaseTerraformStack(TerraformStack):
@@ -759,10 +833,10 @@ class BaseTerraformStack(TerraformStack):
 
         # Associate the Cloud Instance's ipv4 address with the Domain
         cloud_instance_domain_resource_future: PrefectFuture = get_cloud_instance_domain_resource.submit(scope=self, config=config, cloud_instance_provider=cloud_instance_provider_future, cloud_instance_resource=cloud_instance_resource_future, cloud_instance_data_source=cloud_instance_data_source_future)
-        # cloud_instance_domain_data_source_future: PrefectFuture = get_cloud_domain_data_source.submit(scope=self, config=config, cloud_instance_provider=cloud_instance_provider_future, cloud_instance_domain_resource=cloud_instance_domain_resource_future)
+        cloud_instance_domain_data_source_future: PrefectFuture = get_cloud_domain_data_source.submit(scope=self, config=config, cloud_instance_provider=cloud_instance_provider_future, cloud_instance_domain_resource=cloud_instance_domain_resource_future)
 
-        # cloud_instance_ipv4_output_future: PrefectFuture = get_cloud_instance_ipv4_output.submit(scope=self, config=config, cloud_instance_data_source=cloud_instance_data_source_future)
-        # cloud_instance_zone_file_output_future: PrefectFuture = get_cloud_instance_zone_file_output.submit(scope=self, config=config, cloud_instance_domain_data_source=cloud_instance_domain_data_source_future)
+        cloud_instance_ipv4_output_future: PrefectFuture = get_cloud_instance_ipv4_output.submit(scope=self, config=config, cloud_instance_data_source=cloud_instance_data_source_future)
+        cloud_instance_zone_file_output_future: PrefectFuture = get_cloud_instance_zone_file_output.submit(scope=self, config=config, cloud_instance_domain_data_source=cloud_instance_domain_data_source_future)
 
         # outputs = {
         #     "cloud_instance_ipv4": cloud_instance_ipv4_output_future.result().value,
@@ -772,6 +846,7 @@ class BaseTerraformStack(TerraformStack):
         # logger.info(f"outputs: {outputs}")
 
         # kube_config_future: PrefectFuture = get_kube_config.submit(config=config, cloud_instance_ipv4=cloud_instance_ipv4_output_future.result().value)
+        kube_config_future: PrefectFuture = get_kube_config.submit(scope=self, config=config, cloud_instance_data_source=cloud_instance_data_source_future)
 
         # kube_config_future: PrefectFuture = get_kube_config.submit(config=config, cloud_instance_ipv4=cloud_instance_ipv4_output_future.result().value)
 
