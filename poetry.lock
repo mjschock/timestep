@@ -2670,6 +2670,24 @@ websockets = ">=10.4"
 dev = ["cairosvg", "flaky", "ipython", "ipython (==8.12.*)", "jinja2", "mike", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings-python", "mock", "moto", "mypy", "numpy", "pillow", "pre-commit", "pytest (>7)", "pytest-asyncio (>=0.18.2)", "pytest-benchmark", "pytest-cov", "pytest-env", "pytest-flakefinder", "pytest-timeout", "pytest-xdist", "pytkdocs (>=0.14.2)", "pyyaml", "requests", "respx", "ruff", "setuptools (!=60.9.0)", "virtualenv", "watchfiles"]
 
 [[package]]
+name = "prefect-kubernetes"
+version = "0.2.8"
+description = "Prefect integrations for interacting with Kubernetes."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "prefect-kubernetes-0.2.8.tar.gz", hash = "sha256:f3db74aa620f76ec726da1b0b2fbbfbe66ebac3015757d689878e3b3d4ddcdc5"},
+    {file = "prefect_kubernetes-0.2.8-py3-none-any.whl", hash = "sha256:37eee3165a76809e8504297d501cae8350d1c2614ee7eada06ca9ec848b5da45"},
+]
+
+[package.dependencies]
+kubernetes = ">=24.2.0"
+prefect = ">=2.10.9"
+
+[package.extras]
+dev = ["black", "coverage", "flake8", "flaky", "interrogate", "isort", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings[python]", "mock", "mypy", "pillow", "pre-commit", "pytest", "pytest-asyncio"]
+
+[[package]]
 name = "prefect-shell"
 version = "0.1.5"
 description = "Prefect tasks and subflows for interacting with shell commands."
@@ -4242,4 +4260,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "45e61f17bc5778c0b5f2b2fac16c2c484a586b9293084560d8a12c9b1d83f13b"
+content-hash = "e5be820ad08f752bbb19a82b2f56e300021e3a1ea8a9ca63265ca58a6c827edc"

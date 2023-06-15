@@ -18,6 +18,7 @@ prefect = "^2.10.12"
 python = "^3.11"
 python-dotenv = "^1.0.0"
 prefect-shell = "^0.1.5"
+prefect-kubernetes = "^0.2.8"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

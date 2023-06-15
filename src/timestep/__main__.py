@@ -23,11 +23,9 @@ from timestep.infra.stacks.base.stack import (
 )
 def main(config: AppConfig) -> None:
     logger = get_run_logger()
-    logger.info(f"CDKTF_OUTDIR: {config.CDKTF_OUTDIR}")
 
-    if not os.path.exists(config.DIST_PATH):
-        logger.info(f"Creating dist directory: {config.DIST_PATH}")
-        os.makedirs(config.DIST_PATH)
+    if not os.path.exists(config.CDKTF_OUTDIR):
+        os.makedirs(os.path.dirname(config.CDKTF_OUTDIR), exist_ok=True)
 
     app = App()
 
@@ -54,7 +52,5 @@ def main(config: AppConfig) -> None:
 
 if __name__ == "__main__":
     config: dict[str, str] = dotenv_values(verbose=True)
-
-    print("Config:", config)
 
     main(config=config)
