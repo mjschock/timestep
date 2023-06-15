@@ -4,9 +4,9 @@ from prefect.futures import PrefectFuture
 from prefect.filesystems import LocalFileSystem
 from prefect.task_runners import SequentialTaskRunner
 from prefect_shell import ShellOperation
-from typing import List, Type
+from typing import Any, Dict, List, Type
 import pathlib
-
+from cdktf import LocalExecProvisioner, Token
 from constructs import Construct
 from cdktf import (
     TerraformDataSource,
@@ -45,6 +45,31 @@ from timestep.infra.imports.multipass.data_multipass_instance import (
 )
 from timestep.infra.imports.external.data_external import DataExternal as ExternalTerraformDataSource
 
+from timestep.infra.imports.helm.provider import (
+    HelmProvider as HelmTerraformProvider,
+    HelmProviderKubernetes,
+)
+from timestep.infra.imports.helm.release import Release as HelmReleaseTerraformResource
+from timestep.infra.imports.kubernetes.provider import (
+    KubernetesProvider as KubernetesTerraformProvider,
+)
+from timestep.infra.imports.kubernetes.namespace import (
+    Namespace as KubernetesNamespaceTerraformResource,
+    NamespaceMetadata,
+)
+from timestep.infra.imports.namecheap.provider import NamecheapProvider as NamecheapTerraformProvider
+from timestep.infra.imports.namecheap.domain_records import DomainRecords as NamecheapDomainRecordsTerraformResource
+
+from timestep.infra.imports.null.provider import NullProvider as NullTerraformProvider
+from timestep.infra.imports.null.data_null_data_source import DataNullDataSource as NullTerraformDataSource
+from timestep.infra.imports.null.resource import Resource as NullTerraformResource
+
+from timestep.infra.imports.cloudinit.data_cloudinit_config import DataCloudinitConfig as CloudInitConfigTerraformDataSource
+
+from timestep.infra.imports.local.data_local_file import DataLocalFile as LocalFileTerraformDataSource
+from timestep.infra.imports.local.file import File as LocalFileTerraformResource
+from timestep.infra.imports.local.provider import LocalProvider as LocalTerraformProvider
+
 from timestep.conf import AppConfig
 
 class CLOUD_INSTANCE_PROVIDERS:
@@ -53,17 +78,17 @@ class CLOUD_INSTANCE_PROVIDERS:
 
 
 @task
-def get_ssh_authorized_keys(config: AppConfig) -> List[str]:
+def get_ssh_authorized_keys(config: AppConfig) -> List[str]: # TODO: Can I use Terraform's SSHProvisionerConnection instead?
     logger = get_run_logger()
 
-    if not os.path.exists(config.SSH_AUTHORIZED_KEYS_PATH):
+    if not os.path.exists(config.SSH_AUTHORIZED_KEYS_PATH) or not os.path.exists(config.SSH_PUBLIC_KEY_PATH) or not os.path.exists(config.SSH_PRIVATE_KEY_PATH):
         logger.info('Generating new SSH keypair and adding to authorized_keys')
         os.makedirs(os.path.dirname(config.SSH_AUTHORIZED_KEYS_PATH), exist_ok=True)
 
         with ShellOperation(
             commands=[
-                f"ssh-keygen -t rsa -C $USER@$HOSTNAME -f {config.DIST_PATH}/.ssh/id_rsa -N ''",
-                f"cat {config.DIST_PATH}/.ssh/id_rsa.pub >> {config.SSH_AUTHORIZED_KEYS_PATH}",
+                f"ssh-keygen -t rsa -C $USER@$HOSTNAME -f {config.SSH_PRIVATE_KEY_PATH} -N ''",
+                f"cat {config.SSH_PUBLIC_KEY_PATH} >> {config.SSH_AUTHORIZED_KEYS_PATH}",
             ],
         ) as shell_operation:
             shell_process = shell_operation.trigger()
@@ -75,9 +100,9 @@ def get_ssh_authorized_keys(config: AppConfig) -> List[str]:
     return ssh_authorized_keys
 
 
-# @task(persist_result=True, result_storage_key="cloud-config.yaml")
 @task
-def get_user_data(config: AppConfig, ssh_authorized_keys: List[str]) -> CloudInitDoc:
+def get_cloud_init_config(config: AppConfig, ssh_authorized_keys: List[str]) -> CloudInitDoc:
+# def get_cloud_init_config_data_source(scope: TerraformStack, config: AppConfig, ssh_authorized_keys: List[str]) -> TerraformDataSource:
     user_data = CloudInitDoc()
 
     cloud_cfg = dict(
@@ -218,7 +243,7 @@ def get_user_data(config: AppConfig, ssh_authorized_keys: List[str]) -> CloudIni
                 "-l",
                 "ubuntu",
                 "-c",
-                '$HOME/.arkade/bin/k3sup install --context timestep-ai-k3s-cluster --k3s-extra-args "--disable traefik" --local --local-path $HOME/.kube/config --user ubuntu',
+                f'$HOME/.arkade/bin/k3sup install --context {config.KUBE_CONTEXT} --k3s-extra-args "--disable traefik" --local --local-path $HOME/.kube/config --user ubuntu',
             ],
             [
                 "runuser",
@@ -288,10 +313,34 @@ def get_user_data(config: AppConfig, ssh_authorized_keys: List[str]) -> CloudIni
         cloud_cfg
     )
 
-    if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
-        fs = LocalFileSystem(basepath=config.DIST_PATH)
-        fs.write_path("cloud-config.yml", user_data.render_binary())
-        fs.save("dist-block", overwrite=True)
+    # if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    #     fs = LocalFileSystem(basepath=config.DIST_PATH)
+    #     fs.write_path("cloud-config.yml", user_data.render_binary())
+    #     fs.save("dist-block", overwrite=True)
+
+    # if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    #     with open(config.CLOUD_CONFIG_PATH, "w") as file:
+    #         file.write(user_data.render())
+
+
+    # if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    #     get_cloud_init_config_data_source = LocalFileTerraformDataSource(
+    #         id="cloud_init_config_data_source",
+    #         inputs={
+    #             "cloud_init_config": cloud_init_config_resource.render(),
+    #         },
+    #         scope=scope,
+    #     )
+
+    # elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
+    #     get_cloud_init_config_data_source = CloudInitConfigTerraformDataSource(
+    #         id_="cloud_init_config_data_source",
+    #         cloud_init_config=cloud_init_config_resource.render(),
+    #         scope=scope,
+    #     )
+
+    # else:
+    #     raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
 
     return user_data
 
@@ -300,14 +349,12 @@ def get_user_data(config: AppConfig, ssh_authorized_keys: List[str]) -> CloudIni
 def get_cloud_instance_provider(scope: TerraformStack, config: AppConfig) -> TerraformProvider:
     if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
         cloud_instance_provider = MultipassTerraformProvider(
-            # id=f"{CLOUD_INSTANCE_PROVIDERS.MULTIPASS}_provider",
             id="cloud_instance_provider",
             scope=scope,
         )
 
     elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
         cloud_instance_provider = DigitaloceanTerraformProvider(
-            # id=f"{CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN}_provider",
             id="cloud_instance_provider",
             scope=scope,
             token=config.DO_TOKEN,
@@ -320,13 +367,37 @@ def get_cloud_instance_provider(scope: TerraformStack, config: AppConfig) -> Ter
 
 
 @task
-def get_cloud_instance_resource(scope: TerraformStack, config: AppConfig, user_data: CloudInitDoc, cloud_instance_provider: TerraformProvider) -> TerraformResource:
+def get_cloud_instance_resource(scope: TerraformStack, config: AppConfig, cloud_init_config: CloudInitDoc, cloud_instance_provider: TerraformProvider) -> TerraformResource: # TODO: rename CloudInitDoc to CloudInitConfig?
+# def get_cloud_instance_resource(scope: TerraformStack, config: AppConfig, cloud_init_config_data_source: TerraformDataSource, cloud_instance_provider: TerraformProvider) -> TerraformResource:
     if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+        # with open(config.CLOUD_CONFIG_PATH, "w") as file:
+        #     # file.write(user_data.render())
+        #     file.write(cloud_init_config_data_source.rendered)
+
+        cloud_init_config_local_provider = LocalTerraformProvider(
+            id="cloud_init_config_local_provider",
+            scope=scope,
+        )
+
+        cloud_init_config_local_file_resource = LocalFileTerraformResource(
+            id="cloud_init_config_local_file_resource",
+            content=cloud_init_config.render(),
+            filename=config.CLOUD_CONFIG_PATH,
+            provider=cloud_init_config_local_provider,
+            scope=scope,
+        )
+
+        cloud_init_config_local_file_data_source = LocalFileTerraformDataSource(
+            id="cloud_init_config_local_file_data_source",
+            filename=cloud_init_config_local_file_resource.filename,
+            scope=scope,
+        )
+
         cloud_instance_resource = MultipassInstanceTerraformResource(
-            cloudinit_file=f"{config.DIST_PATH}/cloud-config.yml",
+            # cloudinit_file=f"{config.CLOUD_CONFIG_PATH}",
+            cloudinit_file=cloud_init_config_local_file_data_source.filename,
             cpus=config.MULTIPASS_INSTANCE_CPUS,
             disk=config.MULTIPASS_INSTANCE_DISK,
-            # id=f"{CLOUD_INSTANCE_PROVIDERS.MULTIPASS}_instance_resource",
             id="cloud_instance_resource",
             image=config.MULTIPASS_INSTANCE_IMAGE,
             name=config.CLOUD_INSTANCE_NAME,
@@ -336,15 +407,16 @@ def get_cloud_instance_resource(scope: TerraformStack, config: AppConfig, user_d
 
     elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
         cloud_instance_resource = DigitaloceanDropletTerraformResource(
-            # id=f"{CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN}_droplet_resource",
-            id="cloud_instance_resource",
+            id_="cloud_instance_resource",
             image=config.DO_DROPLET_IMAGE,
             name=config.CLOUD_INSTANCE_NAME,
             provider=cloud_instance_provider,
             region=config.DO_DROPLET_REGION,
             scope=scope,
             size=config.DO_DROPLET_SIZE,
-            user_data=user_data,
+            user_data=cloud_init_config.render(),
+            # user_data=user_data.render(),
+            # user_data=cloud_init_config_data_source.rendered,
         )
 
     else:
@@ -354,7 +426,87 @@ def get_cloud_instance_resource(scope: TerraformStack, config: AppConfig, user_d
 
 
 @task
-def get_cloud_domain_resource(scope: TerraformStack, config: AppConfig, cloud_instance_provider: TerraformProvider, cloud_instance_resource: TerraformResource) -> TerraformResource:
+def get_domain_name_registrar_provider(scope: TerraformStack, config: AppConfig) -> TerraformProvider:
+    if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+        domain_name_registrar_provider = NullTerraformProvider(
+            id="domain_name_registrar_provider",
+            scope=scope,
+        )
+
+    elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
+        domain_name_registrar_provider = NamecheapTerraformProvider(
+            id="domain_name_registrar_provider",
+            api_key=config.NAMECHEAP_API_KEY,
+            api_user=config.NAMECHEAP_API_USER,
+            user_name=config.NAMECHEAP_USER_NAME,
+            scope=scope,
+        )
+
+    else:
+        raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
+
+    return domain_name_registrar_provider
+
+
+@task
+def get_domain_name_registrar_resource(scope: TerraformStack, config: AppConfig, domain_name_registrar_provider: TerraformProvider) -> TerraformResource:
+    if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+        domain_name_registrar_resource = NullTerraformResource(
+            id="domain_name_registrar_resource",
+            provider=domain_name_registrar_provider,
+            scope=scope,
+        )
+
+    elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
+        domain_name_registrar_resource = NamecheapDomainRecordsTerraformResource(
+            id_="domain_name_registrar_resource",
+            domain=config.DOMAIN,
+            mode="OVERWRITE",
+            nameservers=[
+                "ns1.digitalocean.com",
+                "ns2.digitalocean.com",
+                "ns3.digitalocean.com",
+            ],
+            provider=domain_name_registrar_provider,
+            scope=scope,
+        )
+
+    else:
+        raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
+
+    return domain_name_registrar_resource
+
+
+# @task
+# def get_domain_name_registra_data_source(scope: TerraformStack, config: AppConfig, domain_name_registrar_provider: TerraformProvider, domain_name_registrar_resource: TerraformResource) -> TerraformDataSource:
+#     if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+#         domain_name_registrar_data_source = NullTerraformDataSource(
+#             id="domain_name_registrar_data_source",
+#             inputs={
+#                 "domain": config.DOMAIN,
+#             },
+#             provider=domain_name_registrar_provider,
+#             scope=scope,
+#         )
+
+#     elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
+#         domain_name_registrar_data_source = NullTerraformDataSource(
+#             id_="domain_name_registrar_data_source",
+#             inputs={
+#                 "domain": config.DOMAIN,
+#             },
+#             provider=domain_name_registrar_provider,
+#             scope=scope,
+#         )
+
+#     else:
+#         raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
+
+#     return domain_name_registrar_data_source
+
+
+@task
+def get_cloud_instance_domain_resource(scope: TerraformStack, config: AppConfig, cloud_instance_provider: TerraformProvider, cloud_instance_resource: TerraformResource, cloud_instance_data_source: TerraformDataSource) -> TerraformResource:
     if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
         # TODO: use hostctl to add domain to /etc/hosts for ipv4 address
         # cloud_domain_resource = ExternalTerraformDataSource(
@@ -365,29 +517,107 @@ def get_cloud_domain_resource(scope: TerraformStack, config: AppConfig, cloud_in
         #     # provider=cloud_instance_provider,
         #     scope=self.scope,
         # )
-        cloud_domain_resource = None
+
+        # TODO: Save ipv4 and domain to .etchosts file
+        hosts_file_local_provider = LocalTerraformProvider(
+            alias="hosts_file_local_provider",
+            id="hosts_file_local_provider",
+            scope=scope,
+        )
+
+        hosts_file_local_file_resource = LocalFileTerraformResource(
+            id="hosts_file_local_file_resource",
+            content=f"{cloud_instance_data_source.ipv4} {config.DOMAIN}",
+            filename=config.HOSTS_FILE_PATH,
+            provider=hosts_file_local_provider,
+            scope=scope,
+        )
+
+        return hosts_file_local_file_resource
+
+        # cloud_instance_domain_resource = NullTerraformResource(
+        #     id="cloud_instance_domain_resource",
+        #     provider=NullTerraformProvider(
+        #         alias="cloud_instance_domain_resource_provider",
+        #         id="cloud_instance_domain_resource_provider",
+        #         scope=scope,
+        #     ),
+        #     provisioners=[
+        #         LocalExecProvisioner(
+        #             # command=f"hostctl add {config.DOMAIN} {cloud_instance_data_source.ipv4}",
+        #             command="echo hello world",
+        #             type="local-exec",
+        #         ),
+        #     ],
+        #     triggers={
+        #         "ipv4": cloud_instance_data_source.ipv4,
+        #     },
+        #     scope=scope,
+        # )
+
+        # return cloud_instance_domain_resource
+
+        # hosts_file_local_file_data_source = LocalFileTerraformDataSource(
+        #     id="hosts_file_local_file_data_source",
+        #     filename=hosts_file_local_file_resource.filename,
+        #     scope=scope,
+        # )
+
+
+        # local_exec_provisioner = LocalExecProvisioner(
+        #     # command=f"sudo hostctl add {config.DOMAIN} {cloud_instance_data_source.ipv4}",
+        #     # command=f"sudo --non-interactive hostctl add domains {config.DOMAIN} {cloud_instance_data_source.ipv4}",
+        #     # command=f"hostctl add domains {config.DOMAIN} {cloud_instance_data_source.ipv4} --host-file .etchosts",
+        #     # command=f"cat .etchosts | hostctl add ephemeral --wait 0",
+        #     command=f"echo {cloud_instance_data_source.ipv4} {config.DOMAIN} > .etchosts",
+        #     # command="echo hello world",
+        #     type="local-exec",
+        # )
+
+        # cloud_instance_domain_resource = NullTerraformResource(
+        #     id="cloud_instance_domain_resource",
+        #     # provider=cloud_instance_provider,
+        #     provider=NullTerraformProvider(
+        #         alias="cloud_instance_domain_resource_provider",
+        #         id="cloud_instance_domain_resource_provider",
+        #         scope=scope,
+        #     ),
+        #     provisioners=[
+        #         local_exec_provisioner,
+        #         # {
+        #         #     "local-exec": {
+        #         #         # "command": f"hostctl add {config.DOMAIN} {cloud_instance_resource.ipv4}",
+        #         #         "command": f"sudo hostctl add {config.DOMAIN} {cloud_instance_data_source.ipv4}",
+        #         #     }
+        #         # }
+        #     ],
+        #     scope=scope,
+        #     triggers={
+        #     #     # "ipv4_address": cloud_instance_resource.ipv4,
+        #         "ipv4": cloud_instance_data_source.ipv4,
+        #     },
+        # )
 
     elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
-        cloud_domain_resource = DigitaloceanDomainTerraformResource(
-            # id=f"{CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN}_domain_resource",
-            id="cloud_domain_resource",
-            ip_address=cloud_instance_resource.ipv4_address,
+        cloud_instance_domain_resource = DigitaloceanDomainTerraformResource(
+            id_="cloud_domain_resource",
+            # ip_address=cloud_instance_resource.ipv4_address,
+            ip_address=cloud_instance_data_source.ipv4_address,
             name=config.DOMAIN,
-            provider=cloud_instance_provider,
+            provider=cloud_instance_provider, # TODO: use cloud_instance_domain_provider instead?
             scope=scope,
         )
 
     else:
         raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
 
-    return cloud_domain_resource
+    return cloud_instance_domain_resource
 
 
 @task
 def get_cloud_instance_data_source(scope: TerraformStack, config: AppConfig, cloud_instance_provider: TerraformProvider, cloud_instance_resource: TerraformResource) -> TerraformDataSource:
     if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
         cloud_instance_data_source = MultipassInstanceTerraformDataSource(
-            # id=f"{CLOUD_INSTANCE_PROVIDERS.MULTIPASS}_instance_data_source",
             id="cloud_instance_data_source",
             name=cloud_instance_resource.name,
             provider=cloud_instance_provider,
@@ -396,8 +626,7 @@ def get_cloud_instance_data_source(scope: TerraformStack, config: AppConfig, clo
 
     elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
         cloud_instance_data_source = DigitaloceanDropletTerraformDataSource(
-            # id=f"{CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN}_instance_data_source",
-            id="cloud_instance_data_source",
+            id_="cloud_instance_data_source",
             name=cloud_instance_resource.name,
             provider=cloud_instance_provider,
             scope=scope,
@@ -410,7 +639,7 @@ def get_cloud_instance_data_source(scope: TerraformStack, config: AppConfig, clo
 
 
 @task
-def get_cloud_domain_data_source(scope: TerraformStack, config: AppConfig, cloud_instance_provider: TerraformProvider, cloud_domain_resource: TerraformResource) -> TerraformDataSource:
+def get_cloud_domain_data_source(scope: TerraformStack, config: AppConfig, cloud_instance_provider: TerraformProvider, cloud_instance_domain_resource: TerraformResource) -> TerraformDataSource:
     if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
         # TODO: use hostctl to add domain to /etc/hosts for ipv4 address
         # cloud_domain_data_source = ExternalTerraformDataSource(
@@ -425,9 +654,8 @@ def get_cloud_domain_data_source(scope: TerraformStack, config: AppConfig, cloud
 
     elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
         cloud_domain_data_source = DigitaloceanDomainTerraformDataSource(
-            # id=f"{CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN}_domain_data_source",
-            id="cloud_domain_data_source",
-            name=cloud_domain_resource.name,
+            id_="cloud_domain_data_source",
+            name=cloud_instance_domain_resource.name,
             provider=cloud_instance_provider,
             scope=scope,
         )
@@ -442,7 +670,6 @@ def get_cloud_domain_data_source(scope: TerraformStack, config: AppConfig, cloud
 def get_cloud_instance_ipv4_output(scope: TerraformStack, config: AppConfig, cloud_instance_data_source: TerraformDataSource) -> TerraformOutput:
     if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
         cloud_instance_ipv4_output = TerraformOutput(
-            # id=f"{CLOUD_INSTANCE_PROVIDERS.MULTIPASS}_instance_ipv4_output",
             id="cloud_instance_ipv4_output",
             value=cloud_instance_data_source.ipv4,
             scope=scope,
@@ -450,7 +677,6 @@ def get_cloud_instance_ipv4_output(scope: TerraformStack, config: AppConfig, clo
 
     elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
         cloud_instance_ipv4_output = TerraformOutput(
-            # id=f"{CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN}_droplet_ipv4_output",
             id="cloud_instance_ipv4_output",
             value=cloud_instance_data_source.ipv4_address,
             scope=scope,
@@ -463,15 +689,19 @@ def get_cloud_instance_ipv4_output(scope: TerraformStack, config: AppConfig, clo
 
 
 @task
-def get_cloud_instance_zone_file_output(scope: TerraformStack, config: AppConfig, cloud_domain_data_source: TerraformDataSource) -> TerraformOutput:
+def get_cloud_instance_zone_file_output(scope: TerraformStack, config: AppConfig, cloud_instance_domain_data_source: TerraformDataSource) -> TerraformOutput:
     if config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+        # cloud_instance_zone_file_output = TerraformOutput(
+        #     id="cloud_instance_zone_file_output",
+        #     value=Token.null_value(), # TODO: Get zone file from hostctl
+        #     scope=scope,
+        # )
         cloud_instance_zone_file_output = None
 
     elif config.CLOUD_INSTANCE_PROVIDER == CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
         cloud_instance_zone_file_output = TerraformOutput(
-            # id="digitalocean_domain_zone_file_output",
             id="cloud_instance_zone_file_output",
-            value=cloud_domain_data_source.zone_file,
+            value=cloud_instance_domain_data_source.zone_file,
             scope=scope,
         )
 
@@ -481,6 +711,28 @@ def get_cloud_instance_zone_file_output(scope: TerraformStack, config: AppConfig
     return cloud_instance_zone_file_output
 
 
+@task
+def get_kube_config(config: AppConfig, cloud_instance_ipv4: str) -> str:
+    with ShellOperation(
+        commands=[
+            # f"ssh-keygen -R {cloud_instance_ipv4}",
+            # f"ssh-keyscan -H {cloud_instance_ipv4} >> ~/.ssh/known_hosts",
+            # f"k3sup install --context {config.KUBE_CONTEXT} --ip {cloud_instance_ipv4} --user ubuntu",
+            # f"k3sup join --context {config.KUBE_CONTEXT} --ip {cloud_instance_ipv4} --server-ip {cloud_instance_ipv4} --user ubuntu",
+            # f"kubectl config use-context {config.KUBE_CONTEXT}",
+            # f"kubectl get nodes",
+            f"k3sup install --context {config.KUBE_CONTEXT} --ip {cloud_instance_ipv4} --local-path {config.KUBE_CONFIG_PATH} --skip-install --ssh-key {config.SSH_PRIVATE_KEY_PATH} --user ubuntu",
+        ],
+    ) as shell_operation:
+        shell_process = shell_operation.trigger()
+        shell_process.wait_for_completion()
+
+    with open(config.KUBE_CONFIG_PATH, "r") as file:
+        kube_config = file.read()
+
+    return kube_config
+
+
 class BaseTerraformStack(TerraformStack):
     def __init__(
         self, scope: Construct, id: str, config: AppConfig
@@ -488,19 +740,77 @@ class BaseTerraformStack(TerraformStack):
         super().__init__(scope, id)
         logger = get_run_logger()
 
-        ssh_authorized_keys_future: PrefectFuture = get_ssh_authorized_keys.submit(config=config)
-        user_data_future: PrefectFuture = get_user_data.submit(config=config, ssh_authorized_keys=ssh_authorized_keys_future) # app_config -> cloud_config
+        # Point the Domain Name Registrar's Domain Name Servers to the Cloud's Domain Name Servers for the Domain
+        domain_name_registrar_provider_future: PrefectFuture[TerraformProvider] = get_domain_name_registrar_provider.submit(scope=self, config=config)
+        domain_name_registrar_resource_future: PrefectFuture[TerraformResource] = get_domain_name_registrar_resource.submit(scope=self, config=config, domain_name_registrar_provider=domain_name_registrar_provider_future)
+        # domain_name_registrar_data_source_future: PrefectFuture[TerraformDataSource] = get_domain_name_registra_data_source.submit(scope=self, config=config, domain_name_registrar_provider=domain_name_registrar_provider_future, domain_name_registrar_resource=domain_name_registrar_resource_future)
+        # domain_name_registrar_data_source_outputs_future: PrefectFuture[Dict[str, Any]] = domain_name_registrar_data_source_future.result().outputs
+
+        # Prepare the Cloud Config for the Cloud Instance
+        ssh_authorized_keys_future: PrefectFuture[List[str]] = get_ssh_authorized_keys.submit(config=config)
+        cloud_init_config_future: PrefectFuture[CloudInitDoc] = get_cloud_init_config.submit(config=config, ssh_authorized_keys=ssh_authorized_keys_future) # app_config -> cloud_config
+        # TODO: Use DataCloudinitConfig instea of CloudInitDoc
+        # cloud_init_config_data_source_future: PrefectFuture = get_cloud_init_config_data_source.submit(scope=self, config=config, user_data=user_data_future)
+
+        # Create the Cloud Instance
         cloud_instance_provider_future: PrefectFuture = get_cloud_instance_provider.submit(scope=self, config=config)
-        cloud_instance_resource_future: PrefectFuture = get_cloud_instance_resource.submit(scope=self, config=config, user_data=user_data_future, cloud_instance_provider=cloud_instance_provider_future)
-        cloud_domain_resource_future: PrefectFuture = get_cloud_domain_resource.submit(scope=self, config=config, cloud_instance_provider=cloud_instance_provider_future, cloud_instance_resource=cloud_instance_resource_future)
+        cloud_instance_resource_future: PrefectFuture = get_cloud_instance_resource.submit(scope=self, config=config, cloud_init_config=cloud_init_config_future, cloud_instance_provider=cloud_instance_provider_future)
         cloud_instance_data_source_future: PrefectFuture = get_cloud_instance_data_source.submit(scope=self, config=config, cloud_instance_provider=cloud_instance_provider_future, cloud_instance_resource=cloud_instance_resource_future)
-        cloud_domain_data_source_future: PrefectFuture = get_cloud_domain_data_source.submit(scope=self, config=config, cloud_instance_provider=cloud_instance_provider_future, cloud_domain_resource=cloud_domain_resource_future)
-        cloud_instance_ipv4_output_future: PrefectFuture = get_cloud_instance_ipv4_output.submit(scope=self, config=config, cloud_instance_data_source=cloud_instance_data_source_future)
-        cloud_instance_zone_file_output_future: PrefectFuture = get_cloud_instance_zone_file_output.submit(scope=self, config=config, cloud_domain_data_source=cloud_domain_data_source_future)
 
-        outputs = {
-            "cloud_instance_ipv4": cloud_instance_ipv4_output_future.result(),
-            "cloud_instance_zone_file": cloud_instance_zone_file_output_future.result(),
-        }
+        # Associate the Cloud Instance's ipv4 address with the Domain
+        cloud_instance_domain_resource_future: PrefectFuture = get_cloud_instance_domain_resource.submit(scope=self, config=config, cloud_instance_provider=cloud_instance_provider_future, cloud_instance_resource=cloud_instance_resource_future, cloud_instance_data_source=cloud_instance_data_source_future)
+        # cloud_instance_domain_data_source_future: PrefectFuture = get_cloud_domain_data_source.submit(scope=self, config=config, cloud_instance_provider=cloud_instance_provider_future, cloud_instance_domain_resource=cloud_instance_domain_resource_future)
 
-        logger.info(f"outputs: {outputs}")
+        # cloud_instance_ipv4_output_future: PrefectFuture = get_cloud_instance_ipv4_output.submit(scope=self, config=config, cloud_instance_data_source=cloud_instance_data_source_future)
+        # cloud_instance_zone_file_output_future: PrefectFuture = get_cloud_instance_zone_file_output.submit(scope=self, config=config, cloud_instance_domain_data_source=cloud_instance_domain_data_source_future)
+
+        # outputs = {
+        #     "cloud_instance_ipv4": cloud_instance_ipv4_output_future.result().value,
+        #     # "cloud_instance_zone_file": cloud_instance_zone_file_output_future.result().value,
+        # }
+
+        # logger.info(f"outputs: {outputs}")
+
+        # kube_config_future: PrefectFuture = get_kube_config.submit(config=config, cloud_instance_ipv4=cloud_instance_ipv4_output_future.result().value)
+
+        # kube_config_future: PrefectFuture = get_kube_config.submit(config=config, cloud_instance_ipv4=cloud_instance_ipv4_output_future.result().value)
+
+        # self.kubernetes_provider = KubernetesTerraformProvider(
+        #     id="kubernetes_provider",
+        #     config_context="timestep-ai-k3s-cluster",
+        #     config_path=f"{cwd}/{KUBECONFIG}",
+        #     scope=self,
+        # )
+
+        # self.metadata = NamespaceMetadata(
+        #     name="caddy-system",
+        # )
+
+        # self.kubernetes_namespace = KubernetesNamespaceTerraformResource(
+        #     id_="kubernetes_namespace",
+        #     metadata=self.metadata,
+        #     provider=self.kubernetes_provider,
+        #     scope=self,
+        # )
+
+        # self.kubernetes = HelmProviderKubernetes(
+        #     config_context=self.kubernetes_provider.config_context,
+        #     config_path=self.kubernetes_provider.config_path,
+        # )
+
+        # self.helm_provider = HelmTerraformProvider(
+        #     id="helm_provider",
+        #     kubernetes=self.kubernetes,
+        #     scope=self,
+        # )
+
+        # self.helm_release_resource = HelmReleaseTerraformResource(
+        #     id_="helm_release_resource",
+        #     atomic=True,
+        #     chart="caddy-ingress-controller",
+        #     name="timestep-ai",
+        #     namespace=self.metadata.name,
+        #     repository="https://caddyserver.github.io/ingress",
+        #     provider=self.helm_provider,
+        #     scope=self,
+        # )

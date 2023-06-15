@@ -26,11 +26,6 @@ local_resource(
     'poetry run pytest',
     auto_init=False,
     cmd='poetry run pytest',
-    deps=[
-        'src/timestep/__main__.py',
-        'src/timestep/conf.py',
-        'src/timestep/infra/stacks/base',
-    ],
     labels=['test'],
     resource_deps=['poetry install'],
     trigger_mode=TRIGGER_MODE_MANUAL,
@@ -57,22 +52,37 @@ local_resource(
 
 local_resource(
     'poetry run cdktf deploy',
-    cmd='poetry run cdktf deploy --auto-approve timestep.local-base-stack',
+    cmd='poetry run cdktf deploy --auto-approve $DOMAIN-base-stack',
     deps=[
         'src/timestep/__main__.py',
         'src/timestep/conf.py',
-        'src/timestep/infra/stacks/base',
+        'src/timestep/infra/stacks/base/stack.py',
     ],
+    env={
+        "DOMAIN": os.getenv('DOMAIN', 'timestep.local'),
+    },
     labels=['deploy'],
     resource_deps=['poetry install']
 )
 
 # cmd_button('cdktf deploy base:cdktf destroy base',
 cmd_button('poetry run cdktf destroy',
-    argv=['sh', '-c', 'poetry run cdktf destroy --auto-approve timestep.local-base-stack'],
+    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $DOMAIN-base-stack'],
     icon_name='delete',
+    inputs=[
+        bool_input('AUTO_APPROVE', true_string='--auto-approve', false_string='', default=True),
+        text_input('DOMAIN', default=os.getenv('DOMAIN', 'timestep.local')),
+    ],
     resource='poetry run cdktf deploy',
     text='poetry run cdktf destroy',
+)
+
+local_resource(
+    'hostctl watch',
+    serve_cmd='cat dist/.etchosts | sudo $(which hostctl) add timestep-ai --wait 0',
+    deps=[
+        'dist/.etchosts',
+    ],
 )
 
 # allow_k8s_contexts([

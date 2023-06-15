@@ -6,6 +6,9 @@
     "external": "~> 2.3",
     "helm": "~> 2.10",
     "kubernetes": "~> 2.20",
-    "multipass": "~> 1.4"
+    "local": "~> 2.4",
+    "multipass": "~> 1.4",
+    "namecheap": "~> 2.1",
+    "null": "~> 3.2"
   }
 }

@@ -1,0 +1,2 @@
+default:
+	./tilt-up.sh
