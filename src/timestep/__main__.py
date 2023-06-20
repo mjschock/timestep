@@ -9,14 +9,6 @@ from timestep.infra.stacks.base.stack import (
     BaseTerraformStack,
     # BaseTerraformStackConfig,
 )
-# from timestep.infra.stacks.kubernetes.stack import (
-#     KubernetesTerraformStack,
-#     KubernetesTerraformStackConfig,
-# )
-# from timestep.infra.stacks.platform.stack import (
-#     PlatformTerraformStack,
-#     PlatformTerraformStackConfig,
-# )
 
 @flow(
     task_runner=SequentialTaskRunner(),
