@@ -1,6 +1,9 @@
 services:
   caddy:
-    build: ./src/timestep/services/caddy
+    # build: ./src/timestep/services/caddy
+    build:
+      context: ./src/timestep/services/caddy
+      dockerfile: Dockerfile
     ports:
       - "80:80"
       - "443:443"

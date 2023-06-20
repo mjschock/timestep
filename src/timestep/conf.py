@@ -26,6 +26,7 @@ class AppConfig(BaseModel): # TODO: EnvConfig instead? AppConfig is a Terraform 
     NAMECHEAP_API_KEY: str = os.environ.get("NAMECHEAP_API_KEY")
     NAMECHEAP_API_USER: str = os.environ.get("NAMECHEAP_API_USER")
     NAMECHEAP_USER_NAME: str = os.environ.get("NAMECHEAP_USER_NAME")
+    PLATFORM_CHART_PATH: str = f"{DIST_PATH}/charts/platform"
     REGISTRY_URL=f"registry.{DOMAIN}"
     SSH_AUTHORIZED_KEYS_PATH: str = f"{DIST_PATH}/.ssh/authorized_keys"
     SSH_PUBLIC_KEY_PATH: str = f"{DIST_PATH}/.ssh/id_rsa.pub"
