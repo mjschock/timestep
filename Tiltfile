@@ -40,15 +40,20 @@ local_resource(
 #     labels=['build'],
 # )
 
-# local_resource(
-#     'kompose convert',
-#     # cmd='rm -rf dist/deploy/k8s && kompose convert --build local --chart --out dist/deploy/k8s/charts/timestep-ai-platform --push-image --push-image-registry registry.timestep.local --secrets-as-files',
-#     cmd='rm -rf dist/deploy/k8s && kompose convert --build local --chart --out dist/deploy/k8s/charts/timestep-ai-platform --push-image-registry registry.timestep.local --secrets-as-files',
-#     deps=[
-#         'docker-compose.yml',
-#     ],
-#     labels=['build'],
-# )
+local_resource(
+    'kompose convert',
+    # cmd='rm -rf dist/deploy/k8s && kompose convert --build local --chart --out dist/deploy/k8s/charts/timestep-ai-platform --push-image --push-image-registry registry.timestep.local --secrets-as-files',
+    # cmd='rm -rf dist/charts && kompose convert --build local --chart --out dist/charts/timestep-ai-platform --push-image-registry registry.timestep.local --secrets-as-files',
+    # cmd='rm -rf $PLATFORM_CHART_PATH && kompose convert --build local --chart --out $PLATFORM_CHART_PATH --push-image-registry registry.timestep.local',
+    cmd='rm -rf $PLATFORM_CHART_PATH && kompose convert --build local --chart --out $PLATFORM_CHART_PATH --push-image --push-image-registry registry.timestep.local',
+    deps=[
+        'docker-compose.yml',
+    ],
+    env={
+        "PLATFORM_CHART_PATH": os.getenv('PLATFORM_CHART_PATH', 'dist/charts/platform'),
+    },
+    labels=['build'],
+)
 
 local_resource(
     'poetry run cdktf deploy',

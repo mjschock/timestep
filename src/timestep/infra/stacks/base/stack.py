@@ -850,10 +850,10 @@ class BaseTerraformStack(TerraformStack):
 
         # kube_config_future: PrefectFuture = get_kube_config.submit(config=config, cloud_instance_ipv4=cloud_instance_ipv4_output_future.result().value)
 
-        # self.kubernetes_provider = KubernetesTerraformProvider(
+        # kubernetes_provider = KubernetesTerraformProvider(
         #     id="kubernetes_provider",
-        #     config_context="timestep-ai-k3s-cluster",
-        #     config_path=f"{cwd}/{KUBECONFIG}",
+        #     config_context=config.KUBE_CONTEXT,
+        #     config_path=config.KUBE_CONFIG_PATH,
         #     scope=self,
         # )
 
@@ -868,24 +868,41 @@ class BaseTerraformStack(TerraformStack):
         #     scope=self,
         # )
 
-        # self.kubernetes = HelmProviderKubernetes(
-        #     config_context=self.kubernetes_provider.config_context,
-        #     config_path=self.kubernetes_provider.config_path,
+        # helm_provider = HelmProviderKubernetes(
+        #     # config_context=self.kubernetes_provider.config_context,
+        #     # config_path=self.kubernetes_provider.config_path,
+        #     config_context=config.KUBE_CONTEXT,
+        #     config_path=config.KUBE_CONFIG_PATH,
         # )
 
-        # self.helm_provider = HelmTerraformProvider(
-        #     id="helm_provider",
-        #     kubernetes=self.kubernetes,
-        #     scope=self,
-        # )
+        helm_provider = HelmTerraformProvider(
+            id="helm_provider",
+            kubernetes=HelmProviderKubernetes(
+                config_context=config.KUBE_CONTEXT,
+                config_path=config.KUBE_CONFIG_PATH,
+            ),
+            scope=self,
+        )
 
-        # self.helm_release_resource = HelmReleaseTerraformResource(
-        #     id_="helm_release_resource",
-        #     atomic=True,
-        #     chart="caddy-ingress-controller",
-        #     name="timestep-ai",
-        #     namespace=self.metadata.name,
-        #     repository="https://caddyserver.github.io/ingress",
-        #     provider=self.helm_provider,
-        #     scope=self,
-        # )
+        caddy_ingress_controller_helm_release_resource = HelmReleaseTerraformResource(
+            id_="caddy_ingress_controller_helm_release_resource",
+            atomic=True,
+            chart="caddy-ingress-controller",
+            create_namespace=True,
+            name="caddy-ingress-controller",
+            namespace="caddy-system",
+            repository="https://caddyserver.github.io/ingress",
+            provider=helm_provider,
+            scope=self,
+        )
+
+        platform_helm_release_resource = HelmReleaseTerraformResource(
+            id_="platform_helm_release_resource",
+            atomic=True,
+            chart=config.PLATFORM_CHART_PATH,
+            # name="timestep-ai-platform",
+            name="platform",
+            namespace="default",
+            provider=helm_provider,
+            scope=self,
+        )
