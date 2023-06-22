@@ -6,6 +6,9 @@ BASE_PATH = pathlib.Path.cwd()
 DIST_PATH: str = f"{BASE_PATH}/dist"
 
 class AppConfig(BaseModel): # TODO: EnvConfig instead? AppConfig is a Terraform concept
+    CADDY_INGRESS_CONTROLLER_EMAIL: str = "m@mjschock.com"
+    CADDY_INGRESS_CONTROLLER_CHART_PATH: str = f"{BASE_PATH}/src/timestep/infra/ingress/charts/caddy-ingress-controller"
+    DOCKER_REGISTRY_HTPASSWD: str = "admin:$2a$10$70qctd/h6OkNr4ugiFoPWuBLowf5TqRr/Y3R.6LGPCqelHG5JRa7e" # admin:BVNt6uwp95H6o4e59022
     CDKTF_OUTDIR: str = os.environ.get("CDKTF_OUTDIR", f"{DIST_PATH}/cdktf.out")
     CLOUD_CONFIG_PATH: str = f"{DIST_PATH}/cloud-config.yml"
     CLOUD_INSTANCE_PROVIDER: str = "multipass"

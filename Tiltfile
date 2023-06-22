@@ -32,20 +32,8 @@ local_resource(
 )
 
 local_resource(
-    'kompose convert',
-    cmd='rm -rf $PLATFORM_CHART_PATH && kompose convert --build local --chart --out $PLATFORM_CHART_PATH --push-image --push-image-registry registry.timestep.local',
-    deps=[
-        'docker-compose.yml',
-    ],
-    env={
-        "PLATFORM_CHART_PATH": os.getenv('PLATFORM_CHART_PATH', 'dist/charts/platform'),
-    },
-    labels=['build'],
-)
-
-local_resource(
     'poetry run cdktf deploy',
-    cmd='poetry run cdktf deploy --auto-approve $DOMAIN-base-stack',
+    cmd='poetry run cdktf deploy --auto-approve $DOMAIN-tf-stack',
     deps=[
         'src/timestep/__main__.py',
         'src/timestep/conf.py',
@@ -59,7 +47,7 @@ local_resource(
 )
 
 cmd_button('poetry run cdktf destroy',
-    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $DOMAIN-base-stack'],
+    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $DOMAIN-tf-stack'],
     icon_name='delete',
     inputs=[
         bool_input('AUTO_APPROVE', true_string='--auto-approve', false_string='', default=True),
