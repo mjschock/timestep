@@ -7,7 +7,6 @@ from timestep.conf import AppConfig
 
 from timestep.infra.stacks.base.stack import (
     BaseTerraformStack,
-    # BaseTerraformStackConfig,
 )
 
 @flow(
@@ -21,23 +20,9 @@ def main(config: AppConfig) -> None:
 
     app = App()
 
-    # base_tf_stack_config = BaseTerraformStackConfig(**config)
-    base_tf_stack = BaseTerraformStack(
-        # scope=app, id=f"{config.DOMAIN}-base-stack", config=base_tf_stack_config
-        scope=app, id=f"{config.DOMAIN}-base-stack", config=config
+    tf_stack = BaseTerraformStack(
+        scope=app, id=f"{config.DOMAIN}-tf-stack", config=config
     )
-
-    # k8s_tf_stack_config = KubernetesTerraformStackConfig(**config)
-    # k8s_tf_stack = KubernetesTerraformStack(
-    #     scope=app, id=f"{app_name}-{env}-k8s-stack", config=k8s_tf_stack_config
-    # )
-
-    # platform_tf_stack_config = PlatformTerraformStackConfig(**config)
-    # platform_tf_stack = PlatformTerraformStack(
-    #     scope=app,
-    #     id=f"{app_name}-{env}-platform-stack",
-    #     config=platform_tf_stack_config,
-    # )
 
     app.synth()
 
