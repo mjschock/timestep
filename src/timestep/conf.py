@@ -24,10 +24,10 @@ class MainConfig(BaseModel):
     CLOUD_INSTANCE_PROVIDER: str = CLOUD_INSTANCE_PROVIDERS.MULTIPASS
     # CLOUD_INSTANCE_PROVIDER: str = "multipass"
     CLOUD_INSTANCE_NAME: str = "timestep-ai"
-    # DO_DROPLET_IMAGE: str = "ubuntu-22-04-x64"
-    # DO_DROPLET_REGION: str = "sfo3"
-    # DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-512mb-{DISK_SIZE_GB}gb"
-    DO_TOKEN: str = os.environ.get("DO_TOKEN")
+    DO_DROPLET_IMAGE: str = "ubuntu-22-04-x64"
+    DO_DROPLET_REGION: str = "sfo3"
+    DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-512mb-{DISK_SIZE_GB}gb"
+    DO_TOKEN: str = None
     # DOMAIN: str = "timestep.local"
     # HOSTS_FILE_PATH: str = f"{DIST_PATH}/.etchosts"
     # KUBE_CONFIG_PATH: str = f"{DIST_PATH}/kube-config.yml"
