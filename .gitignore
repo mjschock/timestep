@@ -6,3 +6,5 @@ __pycache__
 .pytest_cache
 .ssh
 .venv
+
+src/timestep/infra/stacks/base/constructs/kubernetes_cluster_ingress/ingress/
