@@ -1,11 +1,11 @@
 {
   "version": "0.16.3",
   "stacks": {
-    "timestep.ai": {
-      "name": "timestep.ai",
-      "constructPath": "timestep.ai",
-      "workingDirectory": "stacks/timestep.ai",
-      "synthesizedStackPath": "stacks/timestep.ai/cdk.tf.json",
+    "timestep.local": {
+      "name": "timestep.local",
+      "constructPath": "timestep.local",
+      "workingDirectory": "stacks/timestep.local",
+      "synthesizedStackPath": "stacks/timestep.local/cdk.tf.json",
       "annotations": [],
       "dependencies": []
     }
