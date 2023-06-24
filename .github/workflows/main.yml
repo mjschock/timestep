@@ -32,8 +32,9 @@ jobs:
         with:
           python-version: '3.11.3'
       - run: |
-          which python
-          python --version
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade pipx
+          python -m pipx ensurepath
 
       - name: Run Terraform CDK
         uses: hashicorp/terraform-cdk-action@v0.1.27
