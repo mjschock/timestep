@@ -1,7 +1,7 @@
 import os
 from cdktf import App, TerraformStack, TerraformOutput, RemoteBackend, LocalBackend
 from constructs import Construct
-from dotenv import dotenv_values
+from dotenv import dotenv_values, load_dotenv
 from prefect import flow, get_run_logger
 from prefect.futures import PrefectFuture
 from prefect.task_runners import SequentialTaskRunner
@@ -39,7 +39,8 @@ def main(config: MainConfig) -> None:
 
 
 if __name__ == "__main__":
-    config: dict[str, str] = dotenv_values(verbose=True)
+    # config: dict[str, str] = dotenv_values(verbose=True)
+    config: dict[str, str] = load_dotenv(override=False)
     print(f"config: {config}")
 
     main(config=config)
