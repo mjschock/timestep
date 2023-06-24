@@ -43,7 +43,7 @@ jobs:
           python -m pipx ensurepath
           pipx install poetry
           poetry install
-          prefect cloud login --key ${{ secrets.PREFECT_API_KEY }} --workspace ${{ env.PREFECT_CLOUD_WORKSPACE }}
+          poetry run prefect cloud login --key ${{ secrets.PREFECT_API_KEY }} --workspace ${{ env.PREFECT_CLOUD_WORKSPACE }}
 
       - name: Run Terraform CDK
         uses: hashicorp/terraform-cdk-action@v0.1.27
