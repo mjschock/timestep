@@ -5,6 +5,7 @@ on: [pull_request]
 env:
   CLOUD_INSTANCE_PROVIDER: ${{ vars.CLOUD_INSTANCE_PROVIDER }}
   PREFECT_CLOUD_WORKSPACE: ${{ vars.PREFECT_CLOUD_WORKSPACE }}
+  SSH_PUBLIC_KEY: ${{ vars.SSH_PUBLIC_KEY }}
   STACK_ID: ${{ vars.STACK_ID }}
 
 permissions:
