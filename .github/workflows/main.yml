@@ -14,10 +14,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11.3' 
-
       - uses: actions/setup-node@v3
         with:
           node-version: "18.15.0"
@@ -31,6 +27,13 @@ jobs:
       # # Remove this step if you don't have any
       # - name: Run unit tests
       #   run: yarn test
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11.3'
+      - run: |
+          which python
+          python --version
 
       - name: Run Terraform CDK
         uses: hashicorp/terraform-cdk-action@v0.1.27
