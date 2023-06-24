@@ -39,8 +39,10 @@ def main(config: MainConfig) -> None:
 
 
 if __name__ == "__main__":
-    # config: dict[str, str] = dotenv_values(verbose=True)
-    config: dict[str, str] = load_dotenv(override=False)
+    config: dict[str, str] = {
+        **dotenv_values(verbose=True),
+        **os.environ,  # override loaded values with environment variables
+    }
     print(f"config: {config}")
 
     main(config=config)
