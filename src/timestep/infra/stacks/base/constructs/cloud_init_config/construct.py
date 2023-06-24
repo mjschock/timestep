@@ -226,11 +226,18 @@ def get_cloud_init_config_resource(scope: Construct, config: MainConfig, cloud_i
         )
 
     else:
-        cloud_init_config_resource = Resource(
+        # cloud_init_config_resource = Resource(
+        #     id="cloud_init_config_resource",
+        #     triggers={
+        #         "content": user_data.render(),
+        #     },
+        #     provider=cloud_init_config_provider,
+        #     scope=scope,
+        # )
+        cloud_init_config_resource = File(
             id="cloud_init_config_resource",
-            triggers={
-                "content": user_data.render(),
-            },
+            content=user_data.render(),
+            filename=config.CLOUD_CONFIG_PATH,
             provider=cloud_init_config_provider,
             scope=scope,
         )
@@ -252,7 +259,8 @@ def get_cloud_init_config_data_source(scope: Construct, config: MainConfig, clou
         data_cloud_init_config_part = DataCloudinitConfigPart(
             # content=cloud_init_config.render(),
             # content=cloud_init_config_resource.triggers["content"],
-            content=cloud_init_config_resource.triggers()["content"], # TODO: Fix this
+            # content=cloud_init_config_resource.triggers()["content"], # TODO: Fix this
+            content=cloud_init_config_resource.content,
             content_type="text/cloud-config",
             filename="cloud-config.yaml",
             merge_type=None,
