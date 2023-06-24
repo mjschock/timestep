@@ -226,7 +226,7 @@ def get_cloud_init_config_resource(scope: Construct, config: MainConfig, cloud_i
         )
 
     else:
-        # cloud_init_config_resource = Resource(
+        # cloud_init_config_resource = Resource( # TODO: Fix this
         #     id="cloud_init_config_resource",
         #     triggers={
         #         "content": user_data.render(),
@@ -234,6 +234,7 @@ def get_cloud_init_config_resource(scope: Construct, config: MainConfig, cloud_i
         #     provider=cloud_init_config_provider,
         #     scope=scope,
         # )
+
         cloud_init_config_resource = File(
             id="cloud_init_config_resource",
             content=user_data.render(),
@@ -256,32 +257,39 @@ def get_cloud_init_config_data_source(scope: Construct, config: MainConfig, clou
         )
 
     else:
-        data_cloud_init_config_part = DataCloudinitConfigPart(
-            # content=cloud_init_config.render(),
-            # content=cloud_init_config_resource.triggers["content"],
-            # content=cloud_init_config_resource.triggers()["content"], # TODO: Fix this
-            content=cloud_init_config_resource.content,
-            content_type="text/cloud-config",
-            filename="cloud-config.yaml",
-            merge_type=None,
-        )
+        # data_cloud_init_config_part = DataCloudinitConfigPart(
+        #     # content=cloud_init_config.render(),
+        #     # content=cloud_init_config_resource.triggers["content"],
+        #     # content=cloud_init_config_resource.triggers()["content"], # TODO: Fix this
+        #     content=cloud_init_config_resource.content,
+        #     content_type="text/cloud-config",
+        #     filename="cloud-config.yaml",
+        #     merge_type=None,
+        # )
 
-        cloud_init_config_data_source = DataCloudinitConfig(
-            scope=scope,
+        # cloud_init_config_data_source = DataCloudinitConfig(
+        #     scope=scope,
+        #     id="cloud_init_config_data_source",
+        #     base64_encode=None,
+        #     boundary=None,
+        #     gzip=None,
+        #     part=[
+        #         data_cloud_init_config_part,
+        #     ],
+        #     connection=None,
+        #     count=None,
+        #     depends_on=None,
+        #     for_each=None,
+        #     lifecycle=None,
+        #     provider=cloud_init_config_resource.provider,
+        #     provisioners=None,
+        # )
+
+        cloud_init_config_data_source = DataLocalFile(
             id="cloud_init_config_data_source",
-            base64_encode=None,
-            boundary=None,
-            gzip=None,
-            part=[
-                data_cloud_init_config_part,
-            ],
-            connection=None,
-            count=None,
-            depends_on=None,
-            for_each=None,
-            lifecycle=None,
+            filename=cloud_init_config_resource.filename,
+            scope=scope,
             provider=cloud_init_config_resource.provider,
-            provisioners=None,
         )
 
     return cloud_init_config_data_source
@@ -299,10 +307,16 @@ def get_cloud_init_config_outputs(scope: Construct, config: MainConfig, cloud_in
         )
 
     else:
-        cloud_init_config_outputs["user_data"] = TerraformOutput(
+        # cloud_init_config_outputs["user_data"] = TerraformOutput( # TODO: Fix this
+        #     scope=scope,
+        #     id="cloud_init_config_outputs_user_data",
+        #     value=cloud_init_config_data_source,
+        # )
+
+        cloud_init_config_outputs["cloudinit_file"] = TerraformOutput(
             scope=scope,
-            id="cloud_init_config_outputs_user_data",
-            value=cloud_init_config_data_source,
+            id="cloud_init_config_outputs_cloudinit_file",
+            value=cloud_init_config_data_source.filename,
         )
 
     return cloud_init_config_outputs
