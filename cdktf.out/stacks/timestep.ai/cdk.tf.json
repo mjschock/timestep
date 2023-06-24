@@ -1,0 +1,107 @@
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "timestep.ai",
+      "version": "0.16.3"
+    },
+    "outputs": {
+      "timestep.ai": {
+        "cloud_init_config_outputs_cloudinit_file": "cloud_init_config_outputs_cloudinit_file",
+        "cloud_instance_outputs_ipv4": "cloud_instance_outputs_ipv4"
+      }
+    }
+  },
+  "data": {
+    "local_file": {
+      "cloud_init_config_data_source": {
+        "//": {
+          "metadata": {
+            "path": "timestep.ai/cloud_init_config_data_source",
+            "uniqueId": "cloud_init_config_data_source"
+          }
+        },
+        "filename": "${local_file.cloud_init_config_resource.filename}",
+        "provider": "local"
+      }
+    },
+    "multipass_instance": {
+      "cloud_instance_data_source": {
+        "//": {
+          "metadata": {
+            "path": "timestep.ai/cloud_instance_data_source",
+            "uniqueId": "cloud_instance_data_source"
+          }
+        },
+        "name": "${multipass_instance.cloud_instance_resource.name}",
+        "provider": "multipass"
+      }
+    }
+  },
+  "output": {
+    "cloud_init_config_outputs_cloudinit_file": {
+      "value": "${data.local_file.cloud_init_config_data_source.filename}"
+    },
+    "cloud_instance_outputs_ipv4": {
+      "value": "${data.multipass_instance.cloud_instance_data_source.ipv4}"
+    }
+  },
+  "provider": {
+    "local": [
+      {
+      }
+    ],
+    "multipass": [
+      {
+      }
+    ]
+  },
+  "resource": {
+    "local_file": {
+      "cloud_init_config_resource": {
+        "//": {
+          "metadata": {
+            "path": "timestep.ai/cloud_init_config_resource",
+            "uniqueId": "cloud_init_config_resource"
+          }
+        },
+        "content": "#cloud-config\ndisable_root: true\npackage_reboot_if_required: true\npackage_update: true\npackage_upgrade: true\npackages: [build-essential, curl, default-jdk, direnv, figlet, jq, libbz2-dev, libffi-dev, liblzma-dev, libncursesw5-dev, libreadline-dev, libsqlite3-dev, libssl-dev, libxml2-dev, libxmlsec1-dev, net-tools, tk-dev, unzip, xz-utils, zlib1g-dev]\nruncmd:\n- [runuser, -l, ubuntu, -c, 'bash -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)\"']\n- [runuser, -l, ubuntu, -c, echo \"\" >> $HOME/.oh-my-bash/custom/example.sh]\n- [runuser, -l, ubuntu, -c, echo OSH_THEME=\"zork\" >> $HOME/.oh-my-bash/custom/example.sh]\n- [runuser, -l, ubuntu, -c, echo \"\" >> $HOME/.bashrc]\n- [runuser, -l, ubuntu, -c, echo \"eval \\\"\\$(direnv hook bash)\\\"\" >> $HOME/.bashrc]\n- [runuser, -l, ubuntu, -c, 'git clone https://github.com/anyenv/anyenv ~/.anyenv']\n- [runuser, -l, ubuntu, -c, echo \"\" >> $HOME/.bashrc]\n- [runuser, -l, ubuntu, -c, 'echo export PATH=\\$HOME/.anyenv/bin:\\$PATH >> $HOME/.bashrc']\n- [runuser, -l, ubuntu, -c, echo \"eval \\\"\\$(anyenv init -)\\\"\" >> $HOME/.bashrc]\n- [runuser, -l, ubuntu, -c, $HOME/.anyenv/bin/anyenv install --force-init]\n- [runuser, -l, ubuntu, -c, $HOME/.anyenv/bin/anyenv install jenv]\n- [runuser, -l, ubuntu, -c, $HOME/.anyenv/bin/anyenv install nodenv]\n- [runuser, -l, ubuntu, -c, $HOME/.anyenv/bin/anyenv install goenv]\n- [runuser, -l, ubuntu, -c, $HOME/.anyenv/bin/anyenv install pyenv]\n- [runuser, -l, ubuntu, -c, 'curl -sLS https://get.arkade.dev | sudo sh']\n- [runuser, -l, ubuntu, -c, echo \"\" >> $HOME/.bashrc]\n- [runuser, -l, ubuntu, -c, 'echo export PATH=\\$HOME/.arkade/bin:\\$PATH >> $HOME/.bashrc']\n- [runuser, -l, ubuntu, -c, arkade get k3sup]\n- [runuser, -l, ubuntu, -c, mkdir $HOME/.kube]\n- [runuser, -l, ubuntu, -c, $HOME/.arkade/bin/k3sup install --context default --k3s-extra-args \"--disable traefik\" --local --local-path $HOME/.kube/config --user ubuntu]\nusers:\n- default\n- groups: sudo\n  name: ubuntu\n  shell: /bin/bash\n  ssh_authorized_keys: [ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCdS0gFvs32Qm453PZ7+7ZuYksx/NN3PYGb9DjXywmXLATAc4MynPuZJXy8rMFZJ2UghYcXL7f5IYq8guVpRb021anDPfsiI1wl3QzyrKyBsXQDpSkcQKsjdC73v0bDVvSHcY0jy/CsbAnrArru0mmZLE2cJrqly8wHZmQXfmMfapvocdH6Y4GK2GljxNFCE6GIgfeABIactjFED7aEV70PExV1tpOu06MBBMBkhyWrD7BaMuLpChPyaI00lLzpoOVtYuJzmHSnywghRXd8bsXvCLEk42cWEPaWydtEqBeJzLYkV55n+DFvh5CSv7VzLqVUqlWIj37vXn3ygylbcOrHj3+Cu7kh1BfZiKIZdmutEjv9AkFAG9FKyoDLFrsWps/89eIHJLcX3pZna/gmrzmJdsXj2pO5IgFm+eIfLFWA3L72qlw/uz4TByiR+MhuWS75zQVv37PfIamRyyOU2WYHP8W2oU06zayP1AMTS/1a6XQHWWF2AC+mUzg8U3YsS8k= mjschock@oryp7]\n  sudo: ALL=(ALL) NOPASSWD:ALL\n",
+        "filename": "cloud-config.yaml",
+        "provider": "local"
+      }
+    },
+    "multipass_instance": {
+      "cloud_instance_resource": {
+        "//": {
+          "metadata": {
+            "path": "timestep.ai/cloud_instance_resource",
+            "uniqueId": "cloud_instance_resource"
+          }
+        },
+        "cloudinit_file": "${data.local_file.cloud_init_config_data_source.filename}",
+        "cpus": 1,
+        "disk": "10G",
+        "image": "22.04",
+        "name": "timestep-ai",
+        "provider": "multipass"
+      }
+    }
+  },
+  "terraform": {
+    "backend": {
+      "local": {
+        "path": "terraform.timestep.ai.tfstate"
+      }
+    },
+    "required_providers": {
+      "local": {
+        "source": "hashicorp/local",
+        "version": "2.4.0"
+      },
+      "multipass": {
+        "source": "larstobi/multipass",
+        "version": "1.4.1"
+      }
+    }
+  }
+}

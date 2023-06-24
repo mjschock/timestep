@@ -1,0 +1,34 @@
+#cloud-config
+disable_root: true
+package_reboot_if_required: true
+package_update: true
+package_upgrade: true
+packages: [build-essential, curl, default-jdk, direnv, figlet, jq, libbz2-dev, libffi-dev, liblzma-dev, libncursesw5-dev, libreadline-dev, libsqlite3-dev, libssl-dev, libxml2-dev, libxmlsec1-dev, net-tools, tk-dev, unzip, xz-utils, zlib1g-dev]
+runcmd:
+- [runuser, -l, ubuntu, -c, 'bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"']
+- [runuser, -l, ubuntu, -c, echo "" >> $HOME/.oh-my-bash/custom/example.sh]
+- [runuser, -l, ubuntu, -c, echo OSH_THEME="zork" >> $HOME/.oh-my-bash/custom/example.sh]
+- [runuser, -l, ubuntu, -c, echo "" >> $HOME/.bashrc]
+- [runuser, -l, ubuntu, -c, echo "eval \"\$(direnv hook bash)\"" >> $HOME/.bashrc]
+- [runuser, -l, ubuntu, -c, 'git clone https://github.com/anyenv/anyenv ~/.anyenv']
+- [runuser, -l, ubuntu, -c, echo "" >> $HOME/.bashrc]
+- [runuser, -l, ubuntu, -c, 'echo export PATH=\$HOME/.anyenv/bin:\$PATH >> $HOME/.bashrc']
+- [runuser, -l, ubuntu, -c, echo "eval \"\$(anyenv init -)\"" >> $HOME/.bashrc]
+- [runuser, -l, ubuntu, -c, $HOME/.anyenv/bin/anyenv install --force-init]
+- [runuser, -l, ubuntu, -c, $HOME/.anyenv/bin/anyenv install jenv]
+- [runuser, -l, ubuntu, -c, $HOME/.anyenv/bin/anyenv install nodenv]
+- [runuser, -l, ubuntu, -c, $HOME/.anyenv/bin/anyenv install goenv]
+- [runuser, -l, ubuntu, -c, $HOME/.anyenv/bin/anyenv install pyenv]
+- [runuser, -l, ubuntu, -c, 'curl -sLS https://get.arkade.dev | sudo sh']
+- [runuser, -l, ubuntu, -c, echo "" >> $HOME/.bashrc]
+- [runuser, -l, ubuntu, -c, 'echo export PATH=\$HOME/.arkade/bin:\$PATH >> $HOME/.bashrc']
+- [runuser, -l, ubuntu, -c, arkade get k3sup]
+- [runuser, -l, ubuntu, -c, mkdir $HOME/.kube]
+- [runuser, -l, ubuntu, -c, $HOME/.arkade/bin/k3sup install --context default --k3s-extra-args "--disable traefik" --local --local-path $HOME/.kube/config --user ubuntu]
+users:
+- default
+- groups: sudo
+  name: ubuntu
+  shell: /bin/bash
+  ssh_authorized_keys: [ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCdS0gFvs32Qm453PZ7+7ZuYksx/NN3PYGb9DjXywmXLATAc4MynPuZJXy8rMFZJ2UghYcXL7f5IYq8guVpRb021anDPfsiI1wl3QzyrKyBsXQDpSkcQKsjdC73v0bDVvSHcY0jy/CsbAnrArru0mmZLE2cJrqly8wHZmQXfmMfapvocdH6Y4GK2GljxNFCE6GIgfeABIactjFED7aEV70PExV1tpOu06MBBMBkhyWrD7BaMuLpChPyaI00lLzpoOVtYuJzmHSnywghRXd8bsXvCLEk42cWEPaWydtEqBeJzLYkV55n+DFvh5CSv7VzLqVUqlWIj37vXn3ygylbcOrHj3+Cu7kh1BfZiKIZdmutEjv9AkFAG9FKyoDLFrsWps/89eIHJLcX3pZna/gmrzmJdsXj2pO5IgFm+eIfLFWA3L72qlw/uz4TByiR+MhuWS75zQVv37PfIamRyyOU2WYHP8W2oU06zayP1AMTS/1a6XQHWWF2AC+mUzg8U3YsS8k= mjschock@oryp7]
+  sudo: ALL=(ALL) NOPASSWD:ALL
