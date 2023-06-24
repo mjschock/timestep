@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "18.15.0"
+      - run: |
+          npm install -g cdktf-cli@0.16.3
 
       # - name: Install dependencies
       #   run: yarn install
