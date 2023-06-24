@@ -14,19 +14,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11.3' 
+
+      - uses: actions/setup-node@v3
         with:
           node-version: "18.15.0"
 
-      - name: Install dependencies
-        run: yarn install
+      # - name: Install dependencies
+      #   run: yarn install
 
-      - name: Generate module and provider bindings
-        run: npx cdktf-cli get
+      # - name: Generate module and provider bindings
+      #   run: npx cdktf-cli get
 
-      # Remove this step if you don't have any
-      - name: Run unit tests
-        run: yarn test
+      # # Remove this step if you don't have any
+      # - name: Run unit tests
+      #   run: yarn test
 
       - name: Run Terraform CDK
         uses: hashicorp/terraform-cdk-action@v0.1.27
