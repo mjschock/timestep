@@ -27,7 +27,7 @@ class MainConfig(BaseModel):
     # DO_DROPLET_IMAGE: str = "ubuntu-22-04-x64"
     # DO_DROPLET_REGION: str = "sfo3"
     # DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-512mb-{DISK_SIZE_GB}gb"
-    # DO_TOKEN: str = os.environ.get("DO_TOKEN")
+    DO_TOKEN: str = os.environ.get("DO_TOKEN")
     # DOMAIN: str = "timestep.local"
     # HOSTS_FILE_PATH: str = f"{DIST_PATH}/.etchosts"
     # KUBE_CONFIG_PATH: str = f"{DIST_PATH}/kube-config.yml"
