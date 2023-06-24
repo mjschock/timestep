@@ -35,6 +35,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade pipx
           python -m pipx ensurepath
+          pipx install poetry
+          poetry install
 
       - name: Run Terraform CDK
         uses: hashicorp/terraform-cdk-action@v0.1.27
