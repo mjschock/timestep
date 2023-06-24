@@ -29,9 +29,15 @@ def get_cloud_init_config_provider(scope: Construct, config: MainConfig) -> Terr
         )
 
     else:
-        cloud_init_config_provider = CloudinitProvider(
-            scope=scope,
+        # cloud_init_config_provider = CloudinitProvider(
+        #     scope=scope,
+        #     id="cloud_init_config_provider",
+        #     alias=None,
+        # )
+
+        cloud_init_config_provider = LocalProvider(
             id="cloud_init_config_provider",
+            scope=scope,
             alias=None,
         )
 

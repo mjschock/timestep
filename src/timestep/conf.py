@@ -8,7 +8,7 @@ DIST_PATH: str = f"{BASE_PATH}/dist"
 CPUS: int = 1
 DISK_SIZE_GB: int = 10
 
-class MainConfig(BaseModel):
+class MainConfig(BaseModel): # TODO: Make this a Prefect Block with secrets
     class CLOUD_INSTANCE_PROVIDERS:
         MULTIPASS: str = "multipass"
         DIGITALOCEAN: str = "digitalocean"
