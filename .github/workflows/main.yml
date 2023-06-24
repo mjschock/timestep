@@ -2,6 +2,9 @@ name: "Comment a Plan on a PR"
 
 on: [pull_request]
 
+env:
+  STACK_ID: ${{ vars.STACK_ID }}
+
 permissions:
   contents: read
   pull-requests: write
@@ -45,7 +48,7 @@ jobs:
         with:
           terraformVersion: 1.3.9
           cdktfVersion: 0.16.3
-          stackName: ${{ vars.STACK_ID }}
+          stackName: ${{ env.STACK_ID }}
           mode: plan-only
           # terraformCloudToken: ${{ secrets.TF_API_TOKEN }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
