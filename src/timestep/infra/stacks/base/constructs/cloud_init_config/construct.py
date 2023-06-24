@@ -251,7 +251,8 @@ def get_cloud_init_config_data_source(scope: Construct, config: MainConfig, clou
     else:
         data_cloud_init_config_part = DataCloudinitConfigPart(
             # content=cloud_init_config.render(),
-            content=cloud_init_config_resource.triggers["content"],
+            # content=cloud_init_config_resource.triggers["content"],
+            content=cloud_init_config_resource.triggers()["content"], # TODO: Fix this
             content_type="text/cloud-config",
             filename="cloud-config.yaml",
             merge_type=None,
