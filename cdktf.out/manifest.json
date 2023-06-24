@@ -1,0 +1,13 @@
+{
+  "version": "0.16.3",
+  "stacks": {
+    "timestep.ai": {
+      "name": "timestep.ai",
+      "constructPath": "timestep.ai",
+      "workingDirectory": "stacks/timestep.ai",
+      "synthesizedStackPath": "stacks/timestep.ai/cdk.tf.json",
+      "annotations": [],
+      "dependencies": []
+    }
+  }
+}
