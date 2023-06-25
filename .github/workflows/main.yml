@@ -55,11 +55,5 @@ jobs:
           cdktfVersion: 0.16.3
           stackName: ${{ env.STACK_ID }}
           mode: plan-only
-          # terraformCloudToken: ${{ secrets.TF_API_TOKEN }}
+          terraformCloudToken: ${{ secrets.TF_API_TOKEN }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Run Terraform CDK
-      #   run: poetry run cdktf plan
-      #   env:
-      #     # TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

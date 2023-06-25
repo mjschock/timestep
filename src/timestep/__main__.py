@@ -22,11 +22,23 @@ def main(config: MainConfig) -> None:
     app: App = App()
 
     stack: TerraformStack = BaseStack(app, config.STACK_ID, config=config)
-    backend: LocalBackend = LocalBackend(
-        scope=stack,
-        path=f"terraform.{config.STACK_ID}.tfstate",
-        workspace_dir=None,
-    )
+
+    if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+        backend: LocalBackend = LocalBackend(
+            scope=stack,
+            path=f"terraform.{config.STACK_ID}.tfstate",
+            workspace_dir=None,
+        )
+
+    else:
+        backend: RemoteBackend = RemoteBackend(
+            scope=stack,
+            hostname=config.TERRAFORM_HOSTNAME,
+            organization=config.TERRAFORM_ORGANIZATION,
+            workspaces={
+                "name": config.TERRAFORM_WORKSPACE
+            },
+        )
 
     app.synth()
 
