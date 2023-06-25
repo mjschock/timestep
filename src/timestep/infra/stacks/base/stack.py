@@ -7,6 +7,7 @@ from timestep.conf import MainConfig
 from timestep.infra.stacks.base.constructs.cloud_init_config.construct import CloudInitConfigConstruct, get_cloud_init_config_data_source, get_cloud_init_config_provider, get_cloud_init_config_resource
 from timestep.infra.stacks.base.constructs.cloud_instance.construct import CloudInstanceConstruct, get_cloud_instance_provider
 from timestep.infra.stacks.base.constructs.cloud_instance_domain.construct import CloudInstanceDomainConstruct
+from timestep.infra.stacks.base.constructs.domain_name_registrar.construct import DomainNameRegistrarConstruct
 
 
 class BaseStack(TerraformStack):
@@ -29,8 +30,9 @@ class BaseStack(TerraformStack):
             self, "cloud_instance_domain_construct", config=config, cloud_instance_construct=self.cloud_instance_construct
         )
 
-        # # # domain_name_registar = DomainNameRegistarConstruct(
-        # # #     self, "domain_name_registar", config=config, 
+        self.domain_name_registar_construct = DomainNameRegistrarConstruct(
+            self, "domain_name_registar", config=config, cloud_instance_construct=self.cloud_instance_construct
+        )
 
         # # kube_config = KubeConfigConstruct(
         # #     self, "kube_config", config=config, cloud_instance=cloud_instance

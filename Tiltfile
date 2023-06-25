@@ -47,6 +47,8 @@ local_resource(
         'src/timestep/infra/stacks/base/constructs/cloud_init_config/construct.py',
         'src/timestep/infra/stacks/base/constructs/cloud_instance/construct.py',
         'src/timestep/infra/stacks/base/constructs/cloud_instance_domain/construct.py',
+        'src/timestep/infra/stacks/base/constructs/domain_name_registrar/construct.py',
+        'src/timestep/infra/stacks/base/constructs/kube_config/construct.py',
     ],
     env={
         # "CDKTF_OUTDIR": os.getenv('CDKTF_OUTDIR'),
@@ -71,7 +73,8 @@ cmd_button('poetry run cdktf destroy',
 
 local_resource(
     'hostctl watch',
-    serve_cmd='cat $HOSTS_FILE_PATH | sudo $(which hostctl) add $STACK_ID --wait 0',
+    # serve_cmd='cat $HOSTS_FILE_PATH | sudo $(which hostctl) add $STACK_ID --wait 0',
+    serve_cmd='cat cdktf.out/stacks/timestep.local/.etchosts | sudo $(which hostctl) add $STACK_ID --wait 0',
     deps=[
         '$HOSTS_FILE_PATH',
     ],
