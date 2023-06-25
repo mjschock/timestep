@@ -327,7 +327,7 @@ def get_cloud_init_config_outputs(scope: Construct, config: MainConfig, cloud_in
         cloud_init_config_outputs["user_data"] = TerraformOutput(
             scope=scope,
             id="cloud_init_config_outputs_user_data",
-            value=cloud_init_config_data_source.user_data,
+            value=cloud_init_config_data_source.outputs["user_data"],
         )
 
     return cloud_init_config_outputs
