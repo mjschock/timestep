@@ -328,7 +328,8 @@ def get_cloud_init_config_outputs(scope: Construct, config: MainConfig, cloud_in
             scope=scope,
             id="cloud_init_config_outputs_user_data",
             # value=cloud_init_config_data_source.values.outputs["user_data"],
-            value=cloud_init_config_data_source.inputs["user_data"],
+            # value=cloud_init_config_data_source.inputs["user_data"],
+            value=cloud_init_config_data_source.outputs,
         )
 
     return cloud_init_config_outputs
