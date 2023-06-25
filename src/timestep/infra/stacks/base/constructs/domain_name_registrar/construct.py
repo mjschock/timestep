@@ -130,11 +130,18 @@ def get_domain_name_registrar_resource(scope: TerraformStack, config: MainConfig
 
 @task
 def get_domain_name_registrar_data_source(scope: TerraformStack, config: MainConfig, cloud_instance_construct: CloudInstanceConstruct, domain_name_registrar_resource: TerraformResource) -> TerraformDataSource:
-    domain_name_registrar_data_source = NullTerraformDataSource(
-        id="domain_name_registrar_data_source",
-        provider=domain_name_registrar_resource.provider,
-        scope=scope,
-    )
+    if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+        domain_name_registrar_data_source = NullTerraformDataSource(
+            id="domain_name_registrar_data_source",
+            provider=domain_name_registrar_resource.provider,
+            scope=scope,
+        )
+
+    else:
+        domain_name_registrar_data_source = NullTerraformDataSource(
+            id="domain_name_registrar_data_source",
+            scope=scope,
+        )
 
     return domain_name_registrar_data_source
 
