@@ -37,6 +37,10 @@ local_resource(
     cmd='poetry run cdktf deploy --auto-approve $STACK_ID',
     deps=[
         '.env',
+        'cdktf.json',
+        'pyproject.toml',
+        'poetry.lock',
+        'src/timestep/__init__.py',
         'src/timestep/__main__.py',
         'src/timestep/conf.py',
         'src/timestep/infra/stacks/base/stack.py',
