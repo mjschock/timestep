@@ -234,22 +234,22 @@ def get_cloud_init_config_resource(scope: Construct, config: MainConfig, cloud_i
         )
 
     else:
-        # cloud_init_config_resource = Resource( # TODO: Fix this
-        #     id="cloud_init_config_resource",
-        #     triggers={
-        #         "content": user_data.render(),
-        #     },
-        #     provider=cloud_init_config_provider,
-        #     scope=scope,
-        # )
-
-        cloud_init_config_resource = File(
+        cloud_init_config_resource = Resource( # TODO: Fix this
             id="cloud_init_config_resource",
-            content=user_data.render(),
-            filename=config.CLOUD_CONFIG_PATH,
+            triggers={
+                "content": user_data.render(),
+            },
             provider=cloud_init_config_provider,
             scope=scope,
         )
+
+        # cloud_init_config_resource = File(
+        #     id="cloud_init_config_resource",
+        #     content=user_data.render(),
+        #     filename=config.CLOUD_CONFIG_PATH,
+        #     provider=cloud_init_config_provider,
+        #     scope=scope,
+        # )
 
     return cloud_init_config_resource
 
@@ -304,7 +304,9 @@ def get_cloud_init_config_data_source(scope: Construct, config: MainConfig, clou
             id="cloud_init_config_data_source",
             provider=cloud_init_config_resource.provider,
             inputs={
-                "user_data": cloud_init_config_resource.content,
+                # "user_data": cloud_init_config_resource.content,
+                # "user_data": cloud_init_config_resource.triggers["content"],
+                "user_data": cloud_init_config_resource.triggers_input["content"],
             },
             scope=scope,
         )
@@ -329,7 +331,8 @@ def get_cloud_init_config_outputs(scope: Construct, config: MainConfig, cloud_in
             id="cloud_init_config_outputs_user_data",
             # value=cloud_init_config_data_source.values.outputs["user_data"],
             # value=cloud_init_config_data_source.inputs["user_data"],
-            value=cloud_init_config_data_source.outputs,
+            # value=cloud_init_config_data_source.outputs,
+            value=cloud_init_config_data_source.inputs_input["user_data"],
         )
 
     return cloud_init_config_outputs
