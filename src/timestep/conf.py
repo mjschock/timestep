@@ -30,6 +30,7 @@ class MainConfig(BaseModel): # TODO: Make this a Prefect Block with secrets
     DO_TOKEN: str = None
     # DOMAIN: str = "timestep.local"
     # HOSTS_FILE_PATH: str = f"{DIST_PATH}/.etchosts"
+    HOSTS_FILE_PATH: str = None
     # KUBE_CONFIG_PATH: str = f"{DIST_PATH}/kube-config.yml"
     # KUBE_CONTEXT: str = "timestep-ai"
     KUBECONTEXT: str = "default"

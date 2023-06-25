@@ -3,6 +3,7 @@ dist
 node_modules
 *.pyc
 __pycache__
+.obsidian
 .pytest_cache
 .ssh
 .venv
