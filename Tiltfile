@@ -48,6 +48,7 @@ local_resource(
         'src/timestep/infra/stacks/base/constructs/cloud_instance/construct.py',
         'src/timestep/infra/stacks/base/constructs/cloud_instance_domain/construct.py',
         'src/timestep/infra/stacks/base/constructs/domain_name_registrar/construct.py',
+        'src/timestep/infra/stacks/base/constructs/kube_config/construct.py',
     ],
     env={
         # "CDKTF_OUTDIR": os.getenv('CDKTF_OUTDIR'),
