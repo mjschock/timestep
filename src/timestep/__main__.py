@@ -38,6 +38,7 @@ def main(config: MainConfig) -> None:
             scope=stack,
             hostname=config.TERRAFORM_HOSTNAME,
             organization=config.TERRAFORM_ORGANIZATION,
+            token=config.TF_API_TOKEN,
             workspaces=workspaces,
         )
 
