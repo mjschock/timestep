@@ -123,8 +123,8 @@ def get_cloud_instance_resource(scope: TerraformStack, config: MainConfig, cloud
             scope=scope,
             size=config.DO_DROPLET_SIZE,
             # user_data=cloud_init_config.render(),
-            # user_data=cloud_init_config_construct.outputs["user_data"].value,
-            user_data=cloud_init_config_construct.outputs["cloudinit_file"].value,
+            # user_data=cloud_init_config_construct.outputs["cloudinit_file"].value,
+            user_data=cloud_init_config_construct.outputs["user_data"].value,
         )
 
     else:
