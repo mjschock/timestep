@@ -92,6 +92,41 @@ def get_cloud_instance_domain_provider(scope: TerraformStack, config: MainConfig
     return cloud_instance_domain_provider
 
 
+@task
+def get_cloud_instance_domain_resource(scope: TerraformStack, config: MainConfig, cloud_instance_construct: CloudInstanceConstruct, cloud_instance_domain_provider: TerraformProvider) -> TerraformResource:
+    if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+        subdomains = [
+            "registry",
+            "www",
+        ]
+
+        cloud_instance_domain_resource = LocalFileTerraformResource(
+            id="cloud_instance_domain_resource",
+            content=f"""
+{cloud_instance_construct.outputs["ipv4"]} {subdomains[0]}.{config.STACK_ID} # TODO: use config.DOMAIN instead of config.STACK_ID? what about breaking up into domain and tld?
+{cloud_instance_construct.outputs["ipv4"]} {subdomains[1]}.{config.STACK_ID}
+{cloud_instance_construct.outputs["ipv4"]} {config.STACK_ID}
+""",
+            filename=config.HOSTS_FILE_PATH,
+            provider=cloud_instance_domain_provider,
+            scope=scope,
+        )
+
+    elif config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
+        cloud_instance_domain_resource = DigitaloceanDomainTerraformResource(
+            id_="cloud_instance_domain_resource",
+            ip_address=cloud_instance_construct.outputs["ipv4"],
+            name=config.STACK_ID,
+            provider=cloud_instance_domain_provider,
+            scope=scope,
+        )
+
+    else:
+        raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
+
+    return cloud_instance_domain_resource
+
+
 # @task
 # def get_cloud_instance_domain_zone_file_output(scope: TerraformStack, config: MainConfig, cloud_instance_domain_domain_data_source: TerraformDataSource) -> TerraformOutput:
 #     if config.cloud_instance_domain_PROVIDER == MainConfig.cloud_instance_domain_PROVIDERS.MULTIPASS:
@@ -145,11 +180,11 @@ class CloudInstanceDomainConstruct(Construct):
         logger = get_run_logger()
 
         self.cloud_instance_domain_provider_future: PrefectFuture[TerraformProvider] = get_cloud_instance_domain_provider.submit(scope=scope, config=config, cloud_instance_construct=cloud_instance_construct)
-        # self.cloud_instance_domain_resource_future: PrefectFuture[TerraformResource] = get_cloud_instance_domain_resource.submit(scope=scope, config=config, cloud_instance_construct=cloud_instance_construct, cloud_instance_domain_provider=self.cloud_instance_domain_provider_future)
+        self.cloud_instance_domain_resource_future: PrefectFuture[TerraformResource] = get_cloud_instance_domain_resource.submit(scope=scope, config=config, cloud_instance_construct=cloud_instance_construct, cloud_instance_domain_provider=self.cloud_instance_domain_provider_future)
         # self.cloud_instance_domain_data_source_future: PrefectFuture[TerraformDataSource] = get_cloud_instance_domain_data_source.submit(scope=scope, config=config, cloud_instance_construct=cloud_instance_construct, cloud_instance_domain_resource=self.cloud_instance_domain_resource_future)
         # self.cloud_instance_domain_outputs_future: PrefectFuture[Dict[str, TerraformOutput]] = get_cloud_instance_domain_outputs.submit(scope=scope, config=config, cloud_instance_construct=cloud_instance_construct, cloud_instance_domain_data_source=self.cloud_instance_domain_data_source_future)
 
         self.provider = self.cloud_instance_domain_provider_future.result()
-        # self.resource = self.cloud_instance_domain_resource_future.result()
+        self.resource = self.cloud_instance_domain_resource_future.result()
         # self.data_source = self.cloud_instance_domain_data_source_future.result()
         # self.outputs = self.cloud_instance_domain_outputs_future.result()
