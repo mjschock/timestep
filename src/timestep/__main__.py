@@ -13,7 +13,7 @@ from timestep.infra.stacks.base.stack import BaseStack
 )
 def main(config: MainConfig) -> None:
     logger = get_run_logger()
-    logger.info(f"config: {config}")
+    # logger.info(f"config: {config}")
 
     # if not os.path.exists(config.CDKTF_OUTDIR):
     #     logger.info(f"Creating {config.CDKTF_OUTDIR}")

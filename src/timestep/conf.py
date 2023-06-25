@@ -41,6 +41,9 @@ class MainConfig(BaseModel): # TODO: Make this a Prefect Block with secrets
     # NAMECHEAP_USER_NAME: str = os.environ.get("NAMECHEAP_USER_NAME")
     # PLATFORM_CHART_PATH: str = f"{DIST_PATH}/charts/platform"
     # REGISTRY_URL=f"registry.{DOMAIN}"
+    TERRAFORM_HOSTNAME: str = "app.terraform.io"
+    TERRAFORM_ORGANIZATION: str = "timestep-ai"
+    TERRAFORM_WORKSPACE: str = "timestep-ai"
     # SSH_AUTHORIZED_KEYS_PATH: str = f"{DIST_PATH}/.ssh/authorized_keys"
     SSH_PUBLIC_KEY: str = None
     # SSH_PUBLIC_KEY_PATH: str = f"{DIST_PATH}/.ssh/id_rsa.pub"
