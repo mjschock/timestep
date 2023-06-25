@@ -1,5 +1,5 @@
 import os
-from cdktf import App, TerraformStack, TerraformOutput, RemoteBackend, LocalBackend
+from cdktf import App, IRemoteWorkspace, NamedRemoteWorkspace, TerraformStack, TerraformOutput, RemoteBackend, LocalBackend
 from constructs import Construct
 from dotenv import dotenv_values, load_dotenv
 from prefect import flow, get_run_logger
@@ -31,13 +31,14 @@ def main(config: MainConfig) -> None:
         )
 
     else:
+        workspaces: IRemoteWorkspace = NamedRemoteWorkspace(
+            name=config.TERRAFORM_WORKSPACE,
+        )
         backend: RemoteBackend = RemoteBackend(
             scope=stack,
             hostname=config.TERRAFORM_HOSTNAME,
             organization=config.TERRAFORM_ORGANIZATION,
-            workspaces={
-                "name": config.TERRAFORM_WORKSPACE
-            },
+            workspaces=workspaces,
         )
 
     app.synth()
