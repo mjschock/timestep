@@ -21,9 +21,9 @@ class BaseStack(TerraformStack):
             scope=self, id="cloud_init_config_construct", config=config
         )
 
-        self.cloud_instance_construct = CloudInstanceConstruct(
-            scope=self, id="cloud_instance_construct", config=config, cloud_init_config_construct=self.cloud_init_config_construct
-        )
+        # self.cloud_instance_construct = CloudInstanceConstruct(
+        #     scope=self, id="cloud_instance_construct", config=config, cloud_init_config_construct=self.cloud_init_config_construct
+        # )
 
         # self.cloud_instance_domain_construct = CloudInstanceDomainConstruct(
         #     self, "cloud_instance_domain_construct", config=config, cloud_instance_construct=self.cloud_instance_construct
