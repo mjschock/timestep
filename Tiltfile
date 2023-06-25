@@ -1,240 +1,77 @@
 load('ext://dotenv', 'dotenv')
-load('ext://git_resource', 'git_checkout')
+load('ext://uibutton', 'cmd_button', 'bool_input', 'location', 'text_input')
 
-dotenv()
+dotenv('.env')
 
-
-# Organize logic into functions
-#   Tiltfiles are written in Starlark, a Python-inspired language, so
-#   you can use functions, conditionals, loops, and more.
-#
-#   More info: https://docs.tilt.dev/tiltfile_concepts.html
-#
-def src_lib():
-    # Tilt provides many useful portable built-ins
-    # https://docs.tilt.dev/api.html#modules.os.path.exists
-    if os.path.exists('src/lib/Tiltfile'):
-        # It's possible to load other Tiltfiles to further organize
-        # your logic in large projects
-        # https://docs.tilt.dev/multiple_repos.html
-        load_dynamic('src/lib/Tiltfile')
-
-    watch_file('src/lib/Tiltfile')
-    # git_checkout('https://github.com/tilt-dev/tilt-avatars.git',
-    #              checkout_dir='src/docs/reference/tilt-dev/tilt-avatars')
-
-
-# Edit your Tiltfile without restarting Tilt
-#   While running `tilt up`, Tilt watches the Tiltfile on disk and
-#   automatically re-evaluates it on change.
-#
-#   To see it in action, try uncommenting the following line with
-#   Tilt running.
-src_lib()
-
-# local_resource('clean',
-#     auto_init=False,
-#     cmd='rm -rf dist/deploy/k8s/charts/timestep',
-#     deps=['docker-compose.yaml'],
-#     labels=['clean'],
-#     trigger_mode=TRIGGER_MODE_MANUAL,
-# )
-
-# default_registry('ttl.sh/mjschock-4ab9f843-ed84-4602-8501-c68f050202af')
-# docker_build('timestep-ai/underlay', '.')
-
-docker_compose(
-    configPaths=[
-        'docker-compose.yaml',
+local_resource(
+    'poetry install',
+    cmd='poetry install',
+    deps=[
+        'pyproject.toml',
+        'poetry.lock',
     ],
-    env_file='.env',
-    project_name='timestep-ai',
+    labels=['build'],
 )
 
-# local_resource('kompose-convert',
-#     auto_init=True,
-#     cmd='rm -rf dist/deploy/k8s/charts/timestep && docker run --rm --name kompose -v $PWD:/src femtopixel/kompose convert --chart --out /src/dist/deploy/k8s/charts/timestep --secrets-as-files --verbose --file docker-compose.yaml',
-#     deps=['docker-compose.yaml'],
-#     labels=['build'],
-#     trigger_mode=TRIGGER_MODE_AUTO,
-# )
+local_resource(
+    'prefect server',
+    links=[
+        'http://127.0.0.1:4200',
+    ],
+    resource_deps=['poetry install'],
+    serve_cmd='poetry run prefect server start',
+)
 
-# local_resource('cdktf-deploy',
-#     auto_init=True,
-#     cmd='pipx run poetry run cdktf deploy --auto-approve --outputs-file dist/deploy/infra/outputs.json',
-#     labels=['deploy'],
-#     resource_deps=['multipass', 'terraform'],
-#     trigger_mode=TRIGGER_MODE_AUTO,
-# )
+local_resource(
+    'poetry run pytest',
+    auto_init=False,
+    cmd='poetry run pytest',
+    labels=['test'],
+    resource_deps=['poetry install'],
+    trigger_mode=TRIGGER_MODE_MANUAL,
+)
 
-# local_resource('k3sup-install',
-#     auto_init=True,
-#     cmd='PRIVATE_SSH_KEY_PATH=./.ssh/id_rsa ./src/lib/tools/k3sup-install.sh',
-#     deps=['dist/deploy/infra/outputs.json', 'src/lib/tools/k3sup-install.sh'],
-#     labels=['deploy'],
-#     resource_deps=['cdktf-deploy', 'k3sup'],
-#     trigger_mode=TRIGGER_MODE_AUTO,
-# )
+local_resource(
+    'poetry run cdktf deploy',
+    # cmd='poetry run cdktf deploy --auto-approve --output $CDKTF_OUTDIR $STACK_ID',
+    cmd='poetry run cdktf deploy --auto-approve $STACK_ID',
+    deps=[
+        '.env',
+        'src/timestep/__main__.py',
+        'src/timestep/conf.py',
+        'src/timestep/infra/stacks/base/stack.py',
+        'src/timestep/infra/stacks/base/constructs/cloud_init_config/construct.py',
+        'src/timestep/infra/stacks/base/constructs/cloud_instance/construct.py',
+    ],
+    env={
+        # "CDKTF_OUTDIR": os.getenv('CDKTF_OUTDIR'),
+        "STACK_ID": os.getenv('STACK_ID'),
+    },
+    labels=['deploy'],
+    resource_deps=['poetry install']
+)
 
-# allow_k8s_contexts('timestep-k3s-cluster')
-# # # local('kubectl config use-context timestep-k3s-cluster')
+cmd_button('poetry run cdktf destroy',
+    # argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE --output $CDKTF_OUTDIR $STACK_ID'],
+    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $STACK_ID'],
+    icon_name='delete',
+    inputs=[
+        bool_input('AUTO_APPROVE', true_string='--auto-approve', false_string='', default=True),
+        # text_input('CDKTF_OUTDIR', default=os.getenv('CDKTF_OUTDIR')),
+        text_input('STACK_ID', default=os.getenv('STACK_ID')),
+    ],
+    resource='poetry run cdktf deploy',
+    text='poetry run cdktf destroy',
+)
 
-# # if k8s_context() == 'timestep-k3s-cluster':
-# #     # local_resource('k3s-deploy',
-# #     #     auto_init=True,
-# #     #     cmd='k3s kubectl apply -f dist/deploy/k8s/manifests',
-# #     #     deps=['dist/deploy/k8s/manifests'],
-# #     #     labels=['deploy'],
-# #     #     resource_deps=['k3sup-install'],
-# #     #     trigger_mode=TRIGGER_MODE_AUTO,
-# #     # )
-
-# default_registry('ttl.sh/mjschock-4ab9f843-ed84-4602-8501-c68f050202af')
-# docker_build('timestep-ai/underlay', '.')
-
-# k8s_yaml('dist/deploy/k8s/manifests/namespace-caddy-system.yaml')
-# k8s_yaml(helm('src/lib/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='conf/base/caddy-ingress-controller.yaml'))
-
-# k8s_yaml(listdir('dist/deploy/k8s/manifests'))
-#     k8s_yaml(helm('src/lib/caddyserver/ingress/charts/caddy-ingress-controller', name='caddy-ingress-controller', namespace='caddy-system', values='conf/base/caddy-ingress-controller.yaml'))
-#     # k8s_yaml(listdir('src/docs/reference/caddyserver/ingress/kubernetes/sample'))
-#     k8s_yaml(helm('dist/deploy/k8s/charts/timestep', name='timestep', namespace='default'))
-
-#     local('src/lib/tools/hostsctl-add.sh') # TODO: pass in the IP address
-
-# k8s_resource("caddy-ingress-controller",
-#     # port_forwards=['timestep.local:80:80', 'timestep.local:443:443'],
-#     port_forwards=['0.0.0.0:80:80', '0.0.0.0:443:443'],
-#     trigger_mode=TRIGGER_MODE_AUTO,
-# )
-
-# Welcome to Tilt!
-#   To get you started as quickly as possible, we have created a
-#   starter Tiltfile for you.
-#
-#   Uncomment, modify, and delete any commands as needed for your
-#   project's configuration.
-
-
-# Output diagnostic messages
-#   You can print log messages, warnings, and fatal errors, which will
-#   appear in the (Tiltfile) resource in the web UI. Tiltfiles support
-#   multiline strings and common string operations such as formatting.
-#
-#   More info: https://docs.tilt.dev/api.html#api.warn
-# print("""
-# -----------------------------------------------------------------
-# ✨ Hello Tilt! This appears in the (Tiltfile) pane whenever Tilt
-#    evaluates this file.
-# -----------------------------------------------------------------
-# """.strip())
-# warn('ℹ️ Open {tiltfile_path} in your favorite editor to get started.'.format(
-#     tiltfile_path=config.main_path))
-
-
-# Build Docker image
-#   Tilt will automatically associate image builds with the resource(s)
-#   that reference them (e.g. via Kubernetes or Docker Compose YAML).
-#
-#   More info: https://docs.tilt.dev/api.html#api.docker_build
-#
-# docker_build('registry.example.com/my-image',
-#              context='.',
-#              # (Optional) Use a custom Dockerfile path
-#              dockerfile='./deploy/app.dockerfile',
-#              # (Optional) Filter the paths used in the build
-#              only=['./app'],
-#              # (Recommended) Updating a running container in-place
-#              # https://docs.tilt.dev/live_update_reference.html
-#              live_update=[
-#                 # Sync files from host to container
-#                 sync('./app', '/src/'),
-#                 # Execute commands inside the container when certain
-#                 # paths change
-#                 run('/src/codegen.sh', trigger=['./app/api'])
-#              ]
-# )
-
-
-# Apply Kubernetes manifests
-#   Tilt will build & push any necessary images, re-deploying your
-#   resources as they change.
-#
-#   More info: https://docs.tilt.dev/api.html#api.k8s_yaml
-#
-# k8s_yaml(['k8s/deployment.yaml', 'k8s/service.yaml'])
-
-
-# Customize a Kubernetes resource
-#   By default, Kubernetes resource names are automatically assigned
-#   based on objects in the YAML manifests, e.g. Deployment name.
-#
-#   Tilt strives for sane defaults, so calling k8s_resource is
-#   optional, and you only need to pass the arguments you want to
-#   override.
-#
-#   More info: https://docs.tilt.dev/api.html#api.k8s_resource
-#
-# k8s_resource('my-deployment',
-#              # map one or more local ports to ports on your Pod
-#              port_forwards=['5000:8080'],
-#              # change whether the resource is started by default
-#              auto_init=False,
-#              # control whether the resource automatically updates
-#              trigger_mode=TRIGGER_MODE_MANUAL
-# )
-
-
-# Run local commands
-#   Local commands can be helpful for one-time tasks like installing
-#   project prerequisites. They can also manage long-lived processes
-#   for non-containerized services or dependencies.
-#
-#   More info: https://docs.tilt.dev/local_resource.html
-#
-# local_resource('install-helm',
-#                cmd='which helm > /dev/null || brew install helm',
-#                # `cmd_bat`, when present, is used instead of `cmd` on Windows.
-#                cmd_bat=[
-#                    'powershell.exe',
-#                    '-Noninteractive',
-#                    '-Command',
-#                    '& {if (!(Get-Command helm -ErrorAction SilentlyContinue)) {scoop install helm}}'
-#                ]
-# )
-
-
-# Extensions are open-source, pre-packaged functions that extend Tilt
-#
-#   More info: https://github.com/tilt-dev/tilt-extensions
-#
-# load('ext://git_resource', 'git_checkout')
-
-
-# Organize logic into functions
-#   Tiltfiles are written in Starlark, a Python-inspired language, so
-#   you can use functions, conditionals, loops, and more.
-#
-#   More info: https://docs.tilt.dev/tiltfile_concepts.html
-#
-def tilt_demo():
-    # Tilt provides many useful portable built-ins
-    # https://docs.tilt.dev/api.html#modules.os.path.exists
-    if os.path.exists('src/docs/reference/tilt-dev/tilt-avatars/Tiltfile'):
-        # It's possible to load other Tiltfiles to further organize
-        # your logic in large projects
-        # https://docs.tilt.dev/multiple_repos.html
-        load_dynamic('src/docs/reference/tilt-dev/tilt-avatars/Tiltfile')
-
-    watch_file('src/docs/reference/tilt-dev/tilt-avatars/Tiltfile')
-    git_checkout('https://github.com/tilt-dev/tilt-avatars.git',
-                 checkout_dir='src/docs/reference/tilt-dev/tilt-avatars')
-
-
-# Edit your Tiltfile without restarting Tilt
-#   While running `tilt up`, Tilt watches the Tiltfile on disk and
-#   automatically re-evaluates it on change.
-#
-#   To see it in action, try uncommenting the following line with
-#   Tilt running.
-# tilt_demo()
+local_resource(
+    'hostctl watch',
+    serve_cmd='cat $HOSTS_FILE_PATH | sudo $(which hostctl) add $STACK_ID --wait 0',
+    deps=[
+        '$HOSTS_FILE_PATH',
+    ],
+    env={
+        "HOSTS_FILE_PATH": os.getenv('HOSTS_FILE_PATH'),
+        "STACK_ID": os.getenv('STACK_ID'),
+    },
+)
