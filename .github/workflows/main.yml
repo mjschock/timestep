@@ -3,6 +3,7 @@ name: "Comment a Plan on a PR"
 on: [pull_request]
 
 env:
+  CDKTF_LOG_LEVEL: WARNING
   CLOUD_INSTANCE_PROVIDER: ${{ vars.CLOUD_INSTANCE_PROVIDER }}
   DO_TOKEN: ${{ secrets.DO_TOKEN }}
   PREFECT_CLOUD_WORKSPACE: ${{ vars.PREFECT_CLOUD_WORKSPACE }}
