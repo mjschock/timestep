@@ -1,19 +1,24 @@
+import logging
 import os
+import sys
+
 from cdktf import App, IRemoteWorkspace, NamedRemoteWorkspace, TerraformStack, TerraformOutput, RemoteBackend, LocalBackend
 from constructs import Construct
 from dotenv import dotenv_values, load_dotenv
 from prefect import flow, get_run_logger
-from prefect.futures import PrefectFuture
-from prefect.task_runners import SequentialTaskRunner
+# from prefect.futures import PrefectFuture
+# from prefect.task_runners import SequentialTaskRunner
 from timestep.conf import MainConfig
 from timestep.infra.stacks.base.stack import BaseStack
+
 
 @flow(
     # task_runner=SequentialTaskRunner(),
 )
 def main(config: MainConfig) -> None:
     logger = get_run_logger()
-    # logger.info(f"config: {config}")
+    logger.info(f"config: {config}")
+    logger.warning(f"config: {config}")
 
     # if not os.path.exists(config.CDKTF_OUTDIR):
     #     logger.info(f"Creating {config.CDKTF_OUTDIR}")
@@ -57,6 +62,6 @@ if __name__ == "__main__":
         **dotenv_values(verbose=True),
         **os.environ,  # override loaded values with environment variables
     }
-    print(f"config: {config}")
+    # print(f"config: {config}")
 
     main(config=config)

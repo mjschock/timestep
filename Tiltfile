@@ -37,11 +37,16 @@ local_resource(
     cmd='poetry run cdktf deploy --auto-approve $STACK_ID',
     deps=[
         '.env',
+        'cdktf.json',
+        'pyproject.toml',
+        'poetry.lock',
+        'src/timestep/__init__.py',
         'src/timestep/__main__.py',
         'src/timestep/conf.py',
         'src/timestep/infra/stacks/base/stack.py',
         'src/timestep/infra/stacks/base/constructs/cloud_init_config/construct.py',
         'src/timestep/infra/stacks/base/constructs/cloud_instance/construct.py',
+        'src/timestep/infra/stacks/base/constructs/cloud_instance_domain/construct.py',
     ],
     env={
         # "CDKTF_OUTDIR": os.getenv('CDKTF_OUTDIR'),
