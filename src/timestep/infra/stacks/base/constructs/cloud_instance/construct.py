@@ -128,7 +128,8 @@ def get_cloud_instance_resource(scope: TerraformStack, config: MainConfig, cloud
             # user_data=cloud_init_config_construct.outputs["user_data"].value.outputs["user_data"].value, AttributeError: 'StringMap' object has no attribute 'outputs'
             # user_data=cloud_init_config_construct.outputs["user_data"].value["user_data"].value TypeError: 'StringMap' object is not subscriptable
             # user_data=cloud_init_config_construct.outputs["user_data"].value["user_data"],
-            user_data=cloud_init_config_construct.resource.content
+            # user_data=cloud_init_config_construct.resource.content
+            user_data=cloud_init_config_construct.outputs["user_data"].value,
         )
 
     else:
