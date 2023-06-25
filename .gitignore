@@ -1,18 +1,10 @@
-__pycache__
-.local
-.pants.d
-.pids
-.venv
-.ssh
-.terraform
-docs
-dist
-
-imports/*
-!imports/__init__.py
-.terraform
 cdktf.out
-cdktf.log
-*terraform.*.tfstate*
+dist
+node_modules
+*.pyc
+__pycache__
+.pytest_cache
+.ssh
+.venv
 
-src/OmniIsaacGymEnvs/
+src/timestep/infra/stacks/base/constructs/kubernetes_cluster_ingress/ingress/

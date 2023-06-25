@@ -1,7 +1,0 @@
-{
-  "cdktf": "0.16.1",
-  "providers": {
-    "multipass": "~> 1.4",
-    "namecheap": "~> 2.1"
-  }
-}
