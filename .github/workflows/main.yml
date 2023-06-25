@@ -5,9 +5,7 @@ on: [pull_request]
 env:
   CLOUD_INSTANCE_PROVIDER: ${{ vars.CLOUD_INSTANCE_PROVIDER }}
   DO_TOKEN: ${{ secrets.DO_TOKEN }}
-  LOG_LEVEL: INFO
   PREFECT_CLOUD_WORKSPACE: ${{ vars.PREFECT_CLOUD_WORKSPACE }}
-  PREFECT_LOGGING_ROOT_LEVEL: INFO
   SSH_PUBLIC_KEY: ${{ vars.SSH_PUBLIC_KEY }}
   STACK_ID: ${{ vars.STACK_ID }}
   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
@@ -57,7 +55,6 @@ jobs:
           terraformVersion: 1.3.9
           cdktfVersion: 0.16.3
           stackName: ${{ env.STACK_ID }}
-          # mode: plan-only
-          mode: auto-approve-destroy
+          mode: plan-only
           terraformCloudToken: ${{ secrets.TF_API_TOKEN }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
