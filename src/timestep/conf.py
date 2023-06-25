@@ -37,9 +37,9 @@ class MainConfig(BaseModel): # TODO: Make this a Prefect Block with secrets
     MULTIPASS_INSTANCE_CPUS: int = CPUS
     MULTIPASS_INSTANCE_DISK: str = f"{DISK_SIZE_GB}G"
     MULTIPASS_INSTANCE_IMAGE: str = "22.04"
-    # NAMECHEAP_API_KEY: str = os.environ.get("NAMECHEAP_API_KEY")
-    # NAMECHEAP_API_USER: str = os.environ.get("NAMECHEAP_API_USER")
-    # NAMECHEAP_USER_NAME: str = os.environ.get("NAMECHEAP_USER_NAME")
+    NAMECHEAP_API_KEY: str = os.environ.get("NAMECHEAP_API_KEY")
+    NAMECHEAP_API_USER: str = os.environ.get("NAMECHEAP_API_USER")
+    NAMECHEAP_USER_NAME: str = os.environ.get("NAMECHEAP_USER_NAME")
     # PLATFORM_CHART_PATH: str = f"{DIST_PATH}/charts/platform"
     # REGISTRY_URL=f"registry.{DOMAIN}"
     # SSH_AUTHORIZED_KEYS_PATH: str = f"{DIST_PATH}/.ssh/authorized_keys"
