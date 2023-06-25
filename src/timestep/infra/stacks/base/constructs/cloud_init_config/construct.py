@@ -18,6 +18,8 @@ from timestep.infra.imports.local.provider import LocalProvider
 
 from timestep.infra.imports.null.resource import Resource
 
+from timestep.infra.imports.null.data_null_data_source import DataNullDataSource
+
 
 @task
 def get_cloud_init_config_provider(scope: Construct, config: MainConfig) -> TerraformProvider:
@@ -291,11 +293,20 @@ def get_cloud_init_config_data_source(scope: Construct, config: MainConfig, clou
         #     provisioners=None,
         # )
 
-        cloud_init_config_data_source = DataLocalFile(
+        # cloud_init_config_data_source = DataLocalFile(
+        #     id="cloud_init_config_data_source",
+        #     filename=cloud_init_config_resource.filename,
+        #     scope=scope,
+        #     provider=cloud_init_config_resource.provider,
+        # )
+
+        cloud_init_config_data_source = DataNullDataSource(
             id="cloud_init_config_data_source",
-            filename=cloud_init_config_resource.filename,
-            scope=scope,
             provider=cloud_init_config_resource.provider,
+            inputs={
+                "user_data": cloud_init_config_resource.content,
+            },
+            scope=scope,
         )
 
     return cloud_init_config_data_source
@@ -313,16 +324,10 @@ def get_cloud_init_config_outputs(scope: Construct, config: MainConfig, cloud_in
         )
 
     else:
-        # cloud_init_config_outputs["user_data"] = TerraformOutput( # TODO: Fix this
-        #     scope=scope,
-        #     id="cloud_init_config_outputs_user_data",
-        #     value=cloud_init_config_data_source,
-        # )
-
-        cloud_init_config_outputs["cloudinit_file"] = TerraformOutput(
+        cloud_init_config_outputs["user_data"] = TerraformOutput(
             scope=scope,
-            id="cloud_init_config_outputs_cloudinit_file",
-            value=cloud_init_config_data_source.filename,
+            id="cloud_init_config_outputs_user_data",
+            value=cloud_init_config_data_source.user_data,
         )
 
     return cloud_init_config_outputs
