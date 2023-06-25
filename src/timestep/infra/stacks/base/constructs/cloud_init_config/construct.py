@@ -20,6 +20,8 @@ from timestep.infra.imports.null.resource import Resource
 
 from timestep.infra.imports.null.data_null_data_source import DataNullDataSource
 
+from timestep.infra.imports.null.provider import NullProvider
+
 
 @task
 def get_cloud_init_config_provider(scope: Construct, config: MainConfig) -> TerraformProvider:
@@ -37,9 +39,15 @@ def get_cloud_init_config_provider(scope: Construct, config: MainConfig) -> Terr
         #     alias=None,
         # )
 
-        cloud_init_config_provider = LocalProvider(
-            id="cloud_init_config_provider",
+        # cloud_init_config_provider = LocalProvider(
+        #     id="cloud_init_config_provider",
+        #     scope=scope,
+        #     alias=None,
+        # )
+
+        cloud_init_config_provider = NullProvider(
             scope=scope,
+            id="cloud_init_config_provider",
             alias=None,
         )
 
