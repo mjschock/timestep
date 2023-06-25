@@ -139,6 +139,7 @@ def get_cloud_instance_domain_data_source(scope: TerraformStack, config: MainCon
         cloud_instance_domain_data_source = LocalFileTerraformDataSource(
             id="cloud_instance_domain_data_source",
             filename=cloud_instance_domain_resource.filename,
+            provider=cloud_instance_domain_resource.provider,
             scope=scope,
         )
 
@@ -155,49 +156,29 @@ def get_cloud_instance_domain_data_source(scope: TerraformStack, config: MainCon
 
     return cloud_instance_domain_data_source
 
-# @task
-# def get_cloud_instance_domain_zone_file_output(scope: TerraformStack, config: MainConfig, cloud_instance_domain_domain_data_source: TerraformDataSource) -> TerraformOutput:
-#     if config.cloud_instance_domain_PROVIDER == MainConfig.cloud_instance_domain_PROVIDERS.MULTIPASS:
-#         cloud_instance_domain_zone_file_output = TerraformOutput(
-#             id="cloud_instance_domain_zone_file_output",
-#             value=cloud_instance_domain_domain_data_source.filename,
-#             scope=scope,
-#         )
 
-#     elif config.cloud_instance_domain_PROVIDER == MainConfig.cloud_instance_domain_PROVIDERS.DIGITALOCEAN:
-#         cloud_instance_domain_zone_file_output = TerraformOutput(
-#             id="cloud_instance_domain_zone_file_output",
-#             value=cloud_instance_domain_domain_data_source.zone_file,
-#             scope=scope,
-#         )
+@task
+def get_cloud_instance_domain_outputs(scope: TerraformStack, config: MainConfig, cloud_instance_construct: CloudInstanceConstruct, cloud_instance_domain_data_source: TerraformDataSource) -> Dict[str, TerraformOutput]:
+    cloud_instance_domain_outputs = {}
 
-#     else:
-#         raise ValueError(f"Unknown cloud_instance_domain_PROVIDER: {config.cloud_instance_domain_PROVIDER}")
+    if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+        cloud_instance_domain_outputs["hosts_file"] = TerraformOutput(
+            id="cloud_instance_domain_outputs_hosts_file",
+            value=cloud_instance_domain_data_source.filename,
+            scope=scope,
+        )
 
-#     return cloud_instance_domain_zone_file_output
+    elif config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
+        cloud_instance_domain_outputs["zone_file"] = TerraformOutput(
+            id="cloud_instance_domain_outputs_zone_file",
+            value=cloud_instance_domain_data_source.zone_file,
+            scope=scope,
+        )
 
-# @task
-# def get_cloud_instance_domain_outputs(scope: TerraformStack, config: MainConfig, cloud_init_config_construct: CloudInitConfigConstruct, cloud_instance_domain_data_source: TerraformDataSource) -> Dict[str, TerraformOutput]:
-#     cloud_instance_domain_outputs = {}
+    else:
+        raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
 
-#     if config.cloud_instance_domain_PROVIDER == MainConfig.cloud_instance_domain_PROVIDERS.MULTIPASS:
-#         cloud_instance_domain_outputs["ipv4"] = TerraformOutput(
-#             id="cloud_instance_domain_outputs_ipv4",
-#             value=cloud_instance_domain_data_source.ipv4,
-#             scope=scope,
-#         )
-
-#     elif config.cloud_instance_domain_PROVIDER == MainConfig.cloud_instance_domain_PROVIDERS.DIGITALOCEAN:
-#         cloud_instance_domain_outputs["ipv4"] = TerraformOutput(
-#             id="cloud_instance_domain_outputs_ipv4",
-#             value=cloud_instance_domain_data_source.ipv4_address,
-#             scope=scope,
-#         )
-
-#     else:
-#         raise ValueError(f"Unknown cloud_instance_domain_PROVIDER: {config.cloud_instance_domain_PROVIDER}")
-
-#     return cloud_instance_domain_outputs
+    return cloud_instance_domain_outputs
 
 
 class CloudInstanceDomainConstruct(Construct):
@@ -210,9 +191,9 @@ class CloudInstanceDomainConstruct(Construct):
         self.cloud_instance_domain_provider_future: PrefectFuture[TerraformProvider] = get_cloud_instance_domain_provider.submit(scope=scope, config=config, cloud_instance_construct=cloud_instance_construct)
         self.cloud_instance_domain_resource_future: PrefectFuture[TerraformResource] = get_cloud_instance_domain_resource.submit(scope=scope, config=config, cloud_instance_construct=cloud_instance_construct, cloud_instance_domain_provider=self.cloud_instance_domain_provider_future)
         self.cloud_instance_domain_data_source_future: PrefectFuture[TerraformDataSource] = get_cloud_instance_domain_data_source.submit(scope=scope, config=config, cloud_instance_construct=cloud_instance_construct, cloud_instance_domain_resource=self.cloud_instance_domain_resource_future)
-        # self.cloud_instance_domain_outputs_future: PrefectFuture[Dict[str, TerraformOutput]] = get_cloud_instance_domain_outputs.submit(scope=scope, config=config, cloud_instance_construct=cloud_instance_construct, cloud_instance_domain_data_source=self.cloud_instance_domain_data_source_future)
+        self.cloud_instance_domain_outputs_future: PrefectFuture[Dict[str, TerraformOutput]] = get_cloud_instance_domain_outputs.submit(scope=scope, config=config, cloud_instance_construct=cloud_instance_construct, cloud_instance_domain_data_source=self.cloud_instance_domain_data_source_future)
 
         self.provider = self.cloud_instance_domain_provider_future.result()
         self.resource = self.cloud_instance_domain_resource_future.result()
         self.data_source = self.cloud_instance_domain_data_source_future.result()
-        # self.outputs = self.cloud_instance_domain_outputs_future.result()
+        self.outputs = self.cloud_instance_domain_outputs_future.result()
