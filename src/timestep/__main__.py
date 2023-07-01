@@ -68,31 +68,31 @@ def main(config: AppConfig) -> None:
         app, config.variables.get("primary_domain_name"), config=config
     )
 
-    if (
-        config.variables.get("cloud_instance_provider")
-        == CloudInstanceProvider.MULTIPASS
-    ):
-        backend: LocalBackend = LocalBackend(
-            scope=stack,
-            path=f'terraform.{config.variables.get("primary_domain_name")}.tfstate',
-            workspace_dir=None,
-        )
+    # if (
+    #     config.variables.get("cloud_instance_provider")
+    #     == CloudInstanceProvider.MULTIPASS
+    # ):
+    backend: LocalBackend = LocalBackend(
+        scope=stack,
+        path=f'terraform.{config.variables.get("primary_domain_name")}.tfstate',
+        workspace_dir=None,
+    )
 
-    else:
-        workspaces: IRemoteWorkspace = NamedRemoteWorkspace(
-            # name=config.TERRAFORM_WORKSPACE,
-            name=config.variables.get("tf_workspace"),
-        )
-        backend: RemoteBackend = RemoteBackend(
-            scope=stack,
-            # hostname=config.TERRAFORM_HOSTNAME,
-            hostname=config.variables.get("tf_hostname"),
-            # organization=config.TERRAFORM_ORGANIZATION,
-            organization=config.variables.get("tf_organization"),
-            # token=config.TF_API_TOKEN,
-            token=config.secrets.get_secret_value().get("tf_api_token"),
-            workspaces=workspaces,
-        )
+    # else:
+    # workspaces: IRemoteWorkspace = NamedRemoteWorkspace(
+    #     # name=config.TERRAFORM_WORKSPACE,
+    #     name=config.variables.get("tf_workspace"),
+    # )
+    # backend: RemoteBackend = RemoteBackend(
+    #     scope=stack,
+    #     # hostname=config.TERRAFORM_HOSTNAME,
+    #     hostname=config.variables.get("tf_hostname"),
+    #     # organization=config.TERRAFORM_ORGANIZATION,
+    #     organization=config.variables.get("tf_organization"),
+    #     # token=config.TF_API_TOKEN,
+    #     token=config.secrets.get_secret_value().get("tf_api_token"),
+    #     workspaces=workspaces,
+    # )
 
     app.synth()
 
