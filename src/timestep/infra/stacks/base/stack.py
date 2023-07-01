@@ -1,42 +1,79 @@
-from cdktf import TerraformDataSource, TerraformOutput, TerraformProvider, TerraformResource, TerraformStack
+from cdktf import (
+    TerraformDataSource,
+    TerraformOutput,
+    TerraformProvider,
+    TerraformResource,
+    TerraformStack,
+)
 from constructs import Construct
 from prefect import get_run_logger
 from prefect.futures import PrefectFuture
 
-from timestep.conf import MainConfig
-from timestep.infra.stacks.base.constructs.cloud_init_config.construct import CloudInitConfigConstruct, get_cloud_init_config_data_source, get_cloud_init_config_provider, get_cloud_init_config_resource
-from timestep.infra.stacks.base.constructs.cloud_instance.construct import CloudInstanceConstruct, get_cloud_instance_provider
-from timestep.infra.stacks.base.constructs.cloud_instance_domain.construct import CloudInstanceDomainConstruct
-from timestep.infra.stacks.base.constructs.domain_name_registrar.construct import DomainNameRegistrarConstruct
+from timestep.conf.blocks import MainConfig
+from timestep.infra.stacks.base.constructs.cloud_init_config.blocks import (
+    CloudInitConfigConstruct,
+)
+from timestep.infra.stacks.base.constructs.cloud_instance.construct import (
+    CloudInstanceConstruct,
+    get_cloud_instance_provider,
+)
+from timestep.infra.stacks.base.constructs.cloud_instance_domain.construct import (
+    CloudInstanceDomainConstruct,
+)
+from timestep.infra.stacks.base.constructs.domain_name_registrar.construct import (
+    DomainNameRegistrarConstruct,
+)
+from timestep.infra.stacks.base.constructs.kube_config.construct import (
+    KubeConfigConstruct,
+)
 
 
 class BaseStack(TerraformStack):
-    def __init__(
-        self, scope: Construct, id: str, config: MainConfig
-    ) -> None:
+    def __init__(self, scope: Construct, id: str, config: MainConfig) -> None:
         super().__init__(scope, id)
         logger = get_run_logger()
         # logger.info(f"config: {config}")
 
         self.cloud_init_config_construct = CloudInitConfigConstruct(
             scope=self, id="cloud_init_config_construct", config=config
-        )
+        )  # TODO: just make this a block and pass it to the cloud instance construct
 
         self.cloud_instance_construct = CloudInstanceConstruct(
-            scope=self, id="cloud_instance_construct", config=config, cloud_init_config_construct=self.cloud_init_config_construct
+            scope=self,
+            id="cloud_instance_construct",
+            config=config,
+            cloud_init_config_construct=self.cloud_init_config_construct,
         )
 
         self.cloud_instance_domain_construct = CloudInstanceDomainConstruct(
-            self, "cloud_instance_domain_construct", config=config, cloud_instance_construct=self.cloud_instance_construct
+            self,
+            "cloud_instance_domain_construct",
+            config=config,
+            cloud_instance_construct=self.cloud_instance_construct,
         )
 
         self.domain_name_registar_construct = DomainNameRegistrarConstruct(
-            self, "domain_name_registar", config=config, cloud_instance_construct=self.cloud_instance_construct
+            self,
+            "domain_name_registar",
+            config=config,
+            cloud_instance_construct=self.cloud_instance_construct,
         )
 
-        # # kube_config = KubeConfigConstruct(
-        # #     self, "kube_config", config=config, cloud_instance=cloud_instance
-        # # )
+        # ip = self.cloud_instance_construct.data_source.ipv4
+        # ip = self.cloud_instance_construct.outputs.get("ipv4").value
+        # logger.info(f"ip: {ip}")
+
+        # kube_config_block = KubeConfig(
+        #     private_key=config.secrets.get_secret_value()["ssh_private_key"],
+        #     ip=ip,
+        # )
+
+        self.kube_config_construct = KubeConfigConstruct(
+            self,
+            "kube_config",
+            config=config,
+            cloud_instance_construct=self.cloud_instance_construct,
+        )
 
         # # kubernetes_cluster = KubernetesClusterConstruct(
         # #     self, "kubernetes_cluster", config=config, kube_config=kube_config
