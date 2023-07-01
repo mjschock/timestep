@@ -1,5 +1,5 @@
-cdktf.out
 dist
+!dist/.gitkeep
 node_modules
 *.pyc
 __pycache__
@@ -9,3 +9,4 @@ __pycache__
 .venv
 
 src/timestep/infra/stacks/base/constructs/kubernetes_cluster_ingress/ingress/
+src/timestep/projects
