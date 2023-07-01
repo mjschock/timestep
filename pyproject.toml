@@ -23,6 +23,7 @@ prefect-kubernetes = "^0.2.8"
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
 toml-sort = "^0.23.1"
+pre-commit = "^3.3.3"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.3.1"

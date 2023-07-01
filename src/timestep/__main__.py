@@ -3,16 +3,31 @@ import pathlib
 import os
 import sys
 
-from cdktf import App, IRemoteWorkspace, NamedRemoteWorkspace, TerraformStack, TerraformOutput, RemoteBackend, LocalBackend
+from cdktf import (
+    App,
+    IRemoteWorkspace,
+    NamedRemoteWorkspace,
+    TerraformStack,
+    TerraformOutput,
+    RemoteBackend,
+    LocalBackend,
+)
 from constructs import Construct
 from dotenv import dotenv_values, load_dotenv
 from prefect import flow, get_run_logger
-from timestep.conf.blocks import AppConfig, CloudInstanceProvider, SecureShellCredentials, CloudInitConfig, CloudInstanceConfig
+from timestep.conf.blocks import (
+    AppConfig,
+    CloudInstanceProvider,
+    SecureShellCredentials,
+    CloudInitConfig,
+    CloudInstanceConfig,
+)
 from timestep.infra.stacks.base.stack import BaseStack
 from prefect_shell import ShellOperation
 
 BASE_PATH = pathlib.Path.cwd()
 DIST_PATH: str = f"{BASE_PATH}/dist"
+
 
 @flow()
 def main(config: AppConfig) -> None:
@@ -36,7 +51,6 @@ def main(config: AppConfig) -> None:
 
     # ssh_credentials.run()
 
-
     # ssh_credentials_block.save(
     #     name="ssh-credentials",
     #     overwrite=True,
@@ -50,9 +64,14 @@ def main(config: AppConfig) -> None:
 
     app: App = App()
 
-    stack: TerraformStack = BaseStack(app, config.variables.get("primary_domain_name"), config=config)
+    stack: TerraformStack = BaseStack(
+        app, config.variables.get("primary_domain_name"), config=config
+    )
 
-    if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS:
+    if (
+        config.variables.get("cloud_instance_provider")
+        == CloudInstanceProvider.MULTIPASS
+    ):
         backend: LocalBackend = LocalBackend(
             scope=stack,
             path=f'terraform.{config.variables.get("primary_domain_name")}.tfstate',
@@ -62,14 +81,14 @@ def main(config: AppConfig) -> None:
     else:
         workspaces: IRemoteWorkspace = NamedRemoteWorkspace(
             # name=config.TERRAFORM_WORKSPACE,
-            name=config.variables.get("terraform_workspace"),
+            name=config.variables.get("tf_workspace"),
         )
         backend: RemoteBackend = RemoteBackend(
             scope=stack,
             # hostname=config.TERRAFORM_HOSTNAME,
-            hostname=config.variables.get("terraform_hostname"),
+            hostname=config.variables.get("tf_hostname"),
             # organization=config.TERRAFORM_ORGANIZATION,
-            organization=config.variables.get("terraform_organization"),
+            organization=config.variables.get("tf_organization"),
             # token=config.TF_API_TOKEN,
             token=config.secrets.get_secret_value().get("tf_api_token"),
             workspaces=workspaces,
@@ -163,6 +182,7 @@ if __name__ == "__main__":
         secrets={
             "do_token": config.get("DO_TOKEN", None),
             "ssh_private_key": ssh_credentials_block.private_key,
+            "tf_api_token": config.get("TF_API_TOKEN", None),
         },
         variables={
             "cloud_instance_name": config.get("CLOUD_INSTANCE_NAME", None),
@@ -170,14 +190,25 @@ if __name__ == "__main__":
             "do_droplet_image": config.get("DO_DROPLET_IMAGE", DO_DROPLET_IMAGE),
             "do_droplet_region": config.get("DO_DROPLET_REGION", DO_DROPLET_REGION),
             "do_droplet_size": config.get("DO_DROPLET_SIZE", DO_DROPLET_SIZE),
-            "domain_name_registrar_provider": config.get("DOMAIN_NAME_REGISTRAR_PROVIDER", None),
-            "multipass_instance_cpus": config.get("MULTIPASS_INSTANCE_CPUS", MULTIPASS_INSTANCE_CPUS),
-            "multipass_instance_disk": config.get("MULTIPASS_INSTANCE_DISK", MULTIPASS_INSTANCE_DISK),
-            "multipass_instance_image": config.get("MULTIPASS_INSTANCE_IMAGE", MULTIPASS_INSTANCE_IMAGE),
+            "domain_name_registrar_provider": config.get(
+                "DOMAIN_NAME_REGISTRAR_PROVIDER", None
+            ),
+            "multipass_instance_cpus": config.get(
+                "MULTIPASS_INSTANCE_CPUS", MULTIPASS_INSTANCE_CPUS
+            ),
+            "multipass_instance_disk": config.get(
+                "MULTIPASS_INSTANCE_DISK", MULTIPASS_INSTANCE_DISK
+            ),
+            "multipass_instance_image": config.get(
+                "MULTIPASS_INSTANCE_IMAGE", MULTIPASS_INSTANCE_IMAGE
+            ),
             "kubecontext": config.get("KUBECONTEXT", None),
             "primary_domain_name": config.get("PRIMARY_DOMAIN_NAME", None),
             "ssh_public_key": ssh_credentials_block.public_key,
-        }
+            "tf_hostname": config.get("TF_HOSTNAME", None),
+            "tf_organization": config.get("TF_ORGANIZATION", None),
+            "tf_workspace": config.get("TF_WORKSPACE", None),
+        },
     )
 
     main(config=app_config_block)
