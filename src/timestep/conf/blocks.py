@@ -18,6 +18,7 @@ import tempfile
 BASE_PATH = pathlib.Path.cwd()
 DIST_PATH: str = f"{BASE_PATH}/dist"
 
+
 class SecureShellCredentials(Block):
     _block_type_slug: str = "ssh-credentials"
 
@@ -63,30 +64,28 @@ class SecureShellCredentials(Block):
         #     )
 
     # def save_private_key_to_tempfile(self):
-        # with tempfile.NamedTemporaryFile(
-        #     delete=False,
-        #     dir=DIST_PATH,
-        # ) as fp:
-        #     fp.write(self.private_key.get_secret_value().encode())
-        #     fp.flush()
+    # with tempfile.NamedTemporaryFile(
+    #     delete=False,
+    #     dir=DIST_PATH,
+    # ) as fp:
+    #     fp.write(self.private_key.get_secret_value().encode())
+    #     fp.flush()
 
-        #     return fp.name
+    #     return fp.name
 
+    # if not os.path.exists(f"{DIST_PATH}/.ssh"):
+    #     os.makedirs(f"{DIST_PATH}/.ssh")
+    # if not os.path.exists(self.output_keyfile):
 
+    # shell_output = ShellOperation(
+    #     commands=[
+    #         f"ssh-keygen -t ed25519 -f {DIST_PATH}/.ssh/id_ed25519 -N ''",
+    #     ],
+    #     shell="bash",
+    # ).run()
 
-            # if not os.path.exists(f"{DIST_PATH}/.ssh"):
-            #     os.makedirs(f"{DIST_PATH}/.ssh")
-            # if not os.path.exists(self.output_keyfile):
-
-            # shell_output = ShellOperation(
-            #     commands=[
-            #         f"ssh-keygen -t ed25519 -f {DIST_PATH}/.ssh/id_ed25519 -N ''",
-            #     ],
-            #     shell="bash",
-            # ).run()
-
-            # self.public_key = pathlib.Path(f"{DIST_PATH}/.ssh/id_ed25519.pub").read_text()
-            # self.private_key = SecretStr(pathlib.Path(f"{DIST_PATH}/.ssh/id_ed25519").read_text())
+    # self.public_key = pathlib.Path(f"{DIST_PATH}/.ssh/id_ed25519.pub").read_text()
+    # self.private_key = SecretStr(pathlib.Path(f"{DIST_PATH}/.ssh/id_ed25519").read_text())
 
     #     comment = f"{os.environ.get('USER')}@{socket.gethostname()}"
     #     key_type = "ed25519"
@@ -103,6 +102,7 @@ class SecureShellCredentials(Block):
 
     #     self.ssh_public_key = pathlib.Path(f"{output_keyfile}.pub").read_text()
     #     self.ssh_private_key = SecretStr(pathlib.Path(output_keyfile).read_text())
+
 
 # class KubeConfig(Block):
 #     _block_type_slug: str = "kube-config"
@@ -127,8 +127,8 @@ class SecureShellCredentials(Block):
 #                 shell_process = shell_operation.trigger()
 #                 shell_process.wait_for_completion()
 
-            # self.public_key = pathlib.Path(f"{output_keyfile}.pub").read_text()
-            # self.private_key = SecretStr(pathlib.Path(output_keyfile).read_text())
+# self.public_key = pathlib.Path(f"{output_keyfile}.pub").read_text()
+# self.private_key = SecretStr(pathlib.Path(output_keyfile).read_text())
 
 
 # ssh_credentials_block = SecureShellCredentials(
@@ -140,6 +140,7 @@ class SecureShellCredentials(Block):
 #     name="ssh-credentials",
 #     overwrite=True,
 # )
+
 
 class CloudInitConfig(Block):
     _block_type_slug: str = "cloud-init-config"

@@ -4,13 +4,21 @@ from cloud_init_gen import CloudInitDoc
 from prefect_shell import ShellOperation
 
 import os
-from cdktf import TerraformDataSource, TerraformOutput, TerraformProvider, TerraformResource
+from cdktf import (
+    TerraformDataSource,
+    TerraformOutput,
+    TerraformProvider,
+    TerraformResource,
+)
 from constructs import Construct
 from prefect import get_run_logger, task
 
 from timestep.conf.blocks import AppConfig
 from timestep.infra.imports.cloudinit.provider import CloudinitProvider
-from timestep.infra.imports.cloudinit.data_cloudinit_config import DataCloudinitConfigPart, DataCloudinitConfig
+from timestep.infra.imports.cloudinit.data_cloudinit_config import (
+    DataCloudinitConfigPart,
+    DataCloudinitConfig,
+)
 
 from timestep.infra.imports.local.data_local_file import DataLocalFile
 from timestep.infra.imports.local.file import File
@@ -22,21 +30,44 @@ from timestep.infra.imports.null.data_null_data_source import DataNullDataSource
 
 from timestep.infra.imports.null.provider import NullProvider
 
-from timestep.infra.stacks.base.constructs.cloud_init_config.tasks import get_cloud_init_config_provider, get_cloud_init_config_resource, get_cloud_init_config_data_source, get_cloud_init_config_outputs
+from timestep.infra.stacks.base.constructs.cloud_init_config.tasks import (
+    get_cloud_init_config_provider,
+    get_cloud_init_config_resource,
+    get_cloud_init_config_data_source,
+    get_cloud_init_config_outputs,
+)
 
 
 class CloudInitConfigConstruct(Construct):
-    def __init__(
-        self, scope: Construct, id: str, config: AppConfig
-    ) -> None:
+    def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
         super().__init__(scope, id)
         logger = get_run_logger()
 
-        self.cloud_init_config_provider_future: PrefectFuture[TerraformProvider] = get_cloud_init_config_provider.submit(scope=scope, config=config)
-        self.cloud_init_config_resource_future: PrefectFuture[TerraformResource] = get_cloud_init_config_resource.submit(scope=scope, config=config, cloud_init_config_provider=self.cloud_init_config_provider_future)
-        self.cloud_init_config_data_source_future: PrefectFuture[TerraformDataSource] = get_cloud_init_config_data_source.submit(scope=scope, config=config, cloud_init_config_resource=self.cloud_init_config_resource_future)
+        self.cloud_init_config_provider_future: PrefectFuture[
+            TerraformProvider
+        ] = get_cloud_init_config_provider.submit(scope=scope, config=config)
+        self.cloud_init_config_resource_future: PrefectFuture[
+            TerraformResource
+        ] = get_cloud_init_config_resource.submit(
+            scope=scope,
+            config=config,
+            cloud_init_config_provider=self.cloud_init_config_provider_future,
+        )
+        self.cloud_init_config_data_source_future: PrefectFuture[
+            TerraformDataSource
+        ] = get_cloud_init_config_data_source.submit(
+            scope=scope,
+            config=config,
+            cloud_init_config_resource=self.cloud_init_config_resource_future,
+        )
         # self.cloud_init_config_data_source_future: PrefectFuture[TerraformDataSource] = get_cloud_init_config_data_source.submit(scope=scope, config=config, cloud_init_config_provider=self.cloud_init_config_provider_future)
-        self.cloud_init_config_outputs_future: PrefectFuture[Dict[str, TerraformOutput]] = get_cloud_init_config_outputs.submit(scope=scope, config=config, cloud_init_config_data_source=self.cloud_init_config_data_source_future)
+        self.cloud_init_config_outputs_future: PrefectFuture[
+            Dict[str, TerraformOutput]
+        ] = get_cloud_init_config_outputs.submit(
+            scope=scope,
+            config=config,
+            cloud_init_config_data_source=self.cloud_init_config_data_source_future,
+        )
 
         self.provider = self.cloud_init_config_provider_future.result()
         self.resource = self.cloud_init_config_resource_future.result()
