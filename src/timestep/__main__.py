@@ -149,7 +149,7 @@ if __name__ == "__main__":
 
     # main_config_block = MainConfig.load("main-config")
 
-    CPUS: int = 2
+    CPUS: int = 1
     DISK_SIZE_GB: int = 10
 
     # BASE_PATH: str = f"{BASE_PATH}"
