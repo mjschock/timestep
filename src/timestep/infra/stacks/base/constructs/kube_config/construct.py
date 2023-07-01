@@ -112,7 +112,11 @@ def get_kube_config_resource(scope: TerraformStack, config: AppConfig, cloud_ins
     BASE_PATH = pathlib.Path.cwd()
     DIST_PATH: str = f"{BASE_PATH}/dist"
 
-    ip = cloud_instance_construct.data_source.ipv4 # TODO: can I use the output
+    if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS:
+        ipv4 = cloud_instance_construct.data_source.ipv4 # TODO: can I use the output
+    else:
+        ipv4 = cloud_instance_construct.data_source.ipv4_address
+
     kubecontext = config.variables.get("kubecontext")
     local_path = "kube-config.yaml"
     ssh_private_key: SecretStr = config.secrets.get_secret_value().get("ssh_private_key")
@@ -125,7 +129,7 @@ def get_kube_config_resource(scope: TerraformStack, config: AppConfig, cloud_ins
         fp.flush()
 
         local_exec_provisioner = LocalExecProvisioner( # TODO: use --print-config
-            command=f"k3sup install --context {kubecontext} --ip {ip} --local-path {local_path} --skip-install --ssh-key {fp.name} --user ubuntu && rm {fp.name}",
+            command=f"k3sup install --context {kubecontext} --ip {ipv4} --local-path {local_path} --skip-install --ssh-key {fp.name} --user ubuntu && rm {fp.name}",
             type="local-exec",
         )
 
@@ -138,7 +142,7 @@ def get_kube_config_resource(scope: TerraformStack, config: AppConfig, cloud_ins
         scope=scope,
         triggers={
             # "ipv4": cloud_instance_construct.data_source.ipv4_address,
-            "ipv4": cloud_instance_construct.data_source.ipv4,
+            "ipv4": ipv4,
             # "ssh_private_key": config.secrets.get_secret_value().get("ssh_private_key")
         },
     )
