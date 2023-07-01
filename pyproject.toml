@@ -4,6 +4,7 @@ requires = ["poetry-core"]
 
 [tool.isort]
 profile = "black"
+py_version=311
 
 [tool.poetry]
 authors = ["Michael Schock <m@mjschock.com>"]
