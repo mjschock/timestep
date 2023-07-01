@@ -91,7 +91,7 @@ def main(config: AppConfig) -> None:
             organization=config.variables.get("tf_organization"),
             # token=config.TF_API_TOKEN,
             token=config.secrets.get_secret_value().get("tf_api_token"),
-            # workspaces=workspaces,
+            workspaces=workspaces,
         )
 
     app.synth()
