@@ -1,19 +1,18 @@
-from typing import Optional
-from pydantic import BaseModel, validator
-import pathlib
 import os
-from prefect.blocks.system import Secret
+import pathlib
+import socket
+import tempfile
+from enum import StrEnum, auto
+from typing import Dict, Optional
+
+from prefect import flow
 from prefect.blocks.core import Block
 from prefect.blocks.fields import SecretDict
-from prefect import flow
-from pydantic import SecretStr
-from prefect_shell import ShellOperation
-import socket
-from enum import StrEnum, auto
 from prefect.blocks.kubernetes import KubernetesClusterConfig
+from prefect.blocks.system import Secret
 from prefect.exceptions import ObjectNotFound
-from typing import Dict
-import tempfile
+from prefect_shell import ShellOperation
+from pydantic import BaseModel, SecretStr, validator
 
 BASE_PATH = pathlib.Path.cwd()
 DIST_PATH: str = f"{BASE_PATH}/dist"

@@ -1,29 +1,30 @@
 import logging
-import pathlib
 import os
+import pathlib
 import sys
 
 from cdktf import (
     App,
     IRemoteWorkspace,
-    NamedRemoteWorkspace,
-    TerraformStack,
-    TerraformOutput,
-    RemoteBackend,
     LocalBackend,
+    NamedRemoteWorkspace,
+    RemoteBackend,
+    TerraformOutput,
+    TerraformStack,
 )
 from constructs import Construct
 from dotenv import dotenv_values, load_dotenv
 from prefect import flow, get_run_logger
+from prefect_shell import ShellOperation
+
 from timestep.conf.blocks import (
     AppConfig,
-    CloudInstanceProvider,
-    SecureShellCredentials,
     CloudInitConfig,
     CloudInstanceConfig,
+    CloudInstanceProvider,
+    SecureShellCredentials,
 )
 from timestep.infra.stacks.base.stack import BaseStack
-from prefect_shell import ShellOperation
 
 BASE_PATH = pathlib.Path.cwd()
 DIST_PATH: str = f"{BASE_PATH}/dist"

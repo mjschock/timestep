@@ -1,34 +1,30 @@
-from typing import Dict
-from prefect.futures import PrefectFuture
-from cloud_init_gen import CloudInitDoc
-from prefect_shell import ShellOperation
-
 import os
+from typing import Dict
+
 from cdktf import (
     TerraformDataSource,
     TerraformOutput,
     TerraformProvider,
     TerraformResource,
 )
+from cloud_init_gen import CloudInitDoc
 from constructs import Construct
 from prefect import get_run_logger, task
+from prefect.futures import PrefectFuture
+from prefect_shell import ShellOperation
 
-from timestep.conf.blocks import MainConfig, CloudInstanceProvider
-from timestep.infra.imports.cloudinit.provider import CloudinitProvider
+from timestep.conf.blocks import CloudInstanceProvider, MainConfig
 from timestep.infra.imports.cloudinit.data_cloudinit_config import (
-    DataCloudinitConfigPart,
     DataCloudinitConfig,
+    DataCloudinitConfigPart,
 )
-
+from timestep.infra.imports.cloudinit.provider import CloudinitProvider
 from timestep.infra.imports.local.data_local_file import DataLocalFile
 from timestep.infra.imports.local.file import File
 from timestep.infra.imports.local.provider import LocalProvider
-
-from timestep.infra.imports.null.resource import Resource
-
 from timestep.infra.imports.null.data_null_data_source import DataNullDataSource
-
 from timestep.infra.imports.null.provider import NullProvider
+from timestep.infra.imports.null.resource import Resource
 
 
 @task
