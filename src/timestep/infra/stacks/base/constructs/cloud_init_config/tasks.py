@@ -8,7 +8,7 @@ from cdktf import TerraformDataSource, TerraformOutput, TerraformProvider, Terra
 from constructs import Construct
 from prefect import get_run_logger, task
 
-from timestep.conf import MainConfig
+from timestep.conf.blocks import MainConfig, CloudInstanceProvider
 from timestep.infra.imports.cloudinit.provider import CloudinitProvider
 from timestep.infra.imports.cloudinit.data_cloudinit_config import DataCloudinitConfigPart, DataCloudinitConfig
 
@@ -25,7 +25,7 @@ from timestep.infra.imports.null.provider import NullProvider
 
 @task
 def get_cloud_init_config_provider(scope: Construct, config: MainConfig) -> TerraformProvider:
-    if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS:
         cloud_init_config_provider = LocalProvider(
             id="cloud_init_config_provider",
             scope=scope,
@@ -33,46 +33,30 @@ def get_cloud_init_config_provider(scope: Construct, config: MainConfig) -> Terr
         )
 
     else:
-        # cloud_init_config_provider = CloudinitProvider(
-        #     scope=scope,
-        #     id="cloud_init_config_provider",
-        #     alias=None,
-        # )
-
-        # cloud_init_config_provider = LocalProvider(
-        #     id="cloud_init_config_provider",
-        #     scope=scope,
-        #     alias=None,
-        # )
-
-        cloud_init_config_provider = NullProvider(
+        cloud_init_config_provider = CloudinitProvider(
             scope=scope,
             id="cloud_init_config_provider",
             alias=None,
         )
 
-    return cloud_init_config_provider
+    #     # cloud_init_config_provider = LocalProvider(
+    #     #     id="cloud_init_config_provider",
+    #     #     scope=scope,
+    #     #     alias=None,
+    #     # )
 
+    # cloud_init_config_provider = NullProvider(
+    #     scope=scope,
+    #     id="cloud_init_config_provider",
+    #     alias=None,
+    # )
+
+    return cloud_init_config_provider
 
 @task
 def get_cloud_init_config_resource(scope: Construct, config: MainConfig, cloud_init_config_provider: TerraformProvider) -> TerraformResource:
-    if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS and not config.SSH_PUBLIC_KEY: # TODO: Make this reversible
-        if not os.path.exists(config.SSH_PUBLIC_KEY_PATH):
-            os.makedirs(os.path.dirname(config.SSH_PUBLIC_KEY_PATH), exist_ok=True)
-
-            with ShellOperation(
-                commands=[
-                    f"ssh-keygen -t rsa -C $USER@$HOSTNAME -f {config.SSH_PRIVATE_KEY_PATH} -N ''",
-                ],
-            ) as shell_operation:
-                shell_process = shell_operation.trigger()
-                shell_process.wait_for_completion()
-
-        with open(config.SSH_PUBLIC_KEY_PATH, "r") as file:
-            config.SSH_PUBLIC_KEY = file.read().strip()
-
-    if not config.SSH_PUBLIC_KEY:
-        raise Exception("No SSH_PUBLIC_KEY provided")
+    if not config.variables.get("ssh_public_key", None) or not config.secrets.get_secret_value().get("ssh_private_key", None):
+        raise Exception("SSH credentials not found")
 
     cloud_cfg = dict(
         disable_root=True,
@@ -210,7 +194,7 @@ def get_cloud_init_config_resource(scope: Construct, config: MainConfig, cloud_i
                 "-l",
                 "ubuntu",
                 "-c",
-                f'$HOME/.arkade/bin/k3sup install --context {config.KUBECONTEXT} --k3s-extra-args "--disable traefik" --local --local-path $HOME/.kube/config --user ubuntu',
+                f'$HOME/.arkade/bin/k3sup install --context {config.variables.get("kubecontext")} --k3s-extra-args "--disable traefik" --local --local-path $HOME/.kube/config --user ubuntu',
             ],
         ],
         users=[
@@ -220,7 +204,7 @@ def get_cloud_init_config_resource(scope: Construct, config: MainConfig, cloud_i
                 "name": "ubuntu",
                 "shell": "/bin/bash",
                 "ssh_authorized_keys": [
-                    config.SSH_PUBLIC_KEY,
+                    config.variables.get("ssh_public_key").strip(),
                 ],
                 "sudo": "ALL=(ALL) NOPASSWD:ALL",
             },
@@ -232,39 +216,93 @@ def get_cloud_init_config_resource(scope: Construct, config: MainConfig, cloud_i
         cloud_cfg
     )
 
-    if config.CLOUD_INSTANCE_PROVIDER == config.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS:
         cloud_init_config_resource = File(
             id="cloud_init_config_resource",
             content=user_data.render(),
-            filename=config.CLOUD_CONFIG_PATH,
+            # content=cloud_init_config_data_source.rendered,
+            # filename=f"{config.BASE_PATH}/{config.CLOUD_CONFIG_PATH}",
+            filename="cloud-config.yaml",
             provider=cloud_init_config_provider,
             scope=scope,
         )
 
     else:
-        cloud_init_config_resource = Resource( # TODO: Fix this
+        cloud_init_config_resource = Resource(
             id="cloud_init_config_resource",
+            provider=cloud_init_config_provider,
+            scope=scope,
             triggers={
                 "content": user_data.render(),
             },
-            provider=cloud_init_config_provider,
-            scope=scope,
         )
-
-        # cloud_init_config_resource = File(
-        #     id="cloud_init_config_resource",
-        #     content=user_data.render(),
-        #     filename=config.CLOUD_CONFIG_PATH,
-        #     provider=cloud_init_config_provider,
-        #     scope=scope,
-        # )
 
     return cloud_init_config_resource
 
-
 @task
+# def get_cloud_init_config_data_source(scope: Construct, config: MainConfig, cloud_init_config_provider: TerraformProvider) -> TerraformDataSource:
+# def get_cloud_init_config_resource(scope: Construct, config: MainConfig, cloud_init_config_provider: TerraformProvider) -> TerraformResource:
 def get_cloud_init_config_data_source(scope: Construct, config: MainConfig, cloud_init_config_resource: TerraformResource) -> TerraformDataSource:
-    if config.CLOUD_INSTANCE_PROVIDER == config.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    # if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS and not config.SSH_PUBLIC_KEY: # TODO: Make this reversible
+    #     if not os.path.exists(config.SSH_PUBLIC_KEY_PATH):
+    #         os.makedirs(os.path.dirname(config.SSH_PUBLIC_KEY_PATH), exist_ok=True)
+
+    #         with ShellOperation(
+    #             commands=[
+    #                 f"ssh-keygen -t rsa -C $USER@$HOSTNAME -f {config.SSH_PRIVATE_KEY_PATH} -N ''",
+    #             ],
+    #         ) as shell_operation:
+    #             shell_process = shell_operation.trigger()
+    #             shell_process.wait_for_completion()
+
+    #     with open(config.SSH_PUBLIC_KEY_PATH, "r") as file:
+    #         config.SSH_PUBLIC_KEY = file.read().strip()
+
+    # if not config.cloud_instance_config.cloud_init_config.ssh_credentials.public_key or not config.cloud_instance_config.cloud_init_config.ssh_credentials.private_key:
+ 
+
+    # if config.CLOUD_INSTANCE_PROVIDER == config.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    #     cloud_init_config_resource = File(
+    #         id="cloud_init_config_resource",
+    #         content=user_data.render(),
+    #         filename=f"{config.BASE_PATH}/{config.CLOUD_CONFIG_PATH}",
+    #         provider=cloud_init_config_provider,
+    #         scope=scope,
+    #     )
+
+    # else:
+    # cloud_init_config_resource = Resource( # TODO: Fix this
+    #     id="cloud_init_config_resource",
+    #     triggers={
+    #         "content": user_data.render(),
+    #     },
+    #     provider=cloud_init_config_provider,
+    #     scope=scope,
+    # )
+
+    #     # cloud_init_config_resource = File(
+    #     #     id="cloud_init_config_resource",
+    #     #     content=user_data.render(),
+    #     #     filename=config.CLOUD_CONFIG_PATH,
+    #     #     provider=cloud_init_config_provider,
+    #     #     scope=scope,
+    #     # )
+
+    # return cloud_init_config_resource
+
+
+# @task
+# def get_cloud_init_config_data_source(scope: Construct, config: MainConfig, cloud_init_config_resource: TerraformResource) -> TerraformDataSource:
+    # if config.CLOUD_INSTANCE_PROVIDER == config.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    #     cloud_init_config_data_source = DataLocalFile(
+    #         id="cloud_init_config_data_source",
+    #         filename=cloud_init_config_resource.filename,
+    #         scope=scope,
+    #         provider=cloud_init_config_resource.provider,
+    #     )
+
+    if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS:
+
         cloud_init_config_data_source = DataLocalFile(
             id="cloud_init_config_data_source",
             filename=cloud_init_config_resource.filename,
@@ -273,51 +311,47 @@ def get_cloud_init_config_data_source(scope: Construct, config: MainConfig, clou
         )
 
     else:
-        # data_cloud_init_config_part = DataCloudinitConfigPart(
-        #     # content=cloud_init_config.render(),
-        #     # content=cloud_init_config_resource.triggers["content"],
-        #     # content=cloud_init_config_resource.triggers()["content"], # TODO: Fix this
-        #     content=cloud_init_config_resource.content,
-        #     content_type="text/cloud-config",
-        #     filename="cloud-config.yaml",
-        #     merge_type=None,
-        # )
-
-        # cloud_init_config_data_source = DataCloudinitConfig(
-        #     scope=scope,
-        #     id="cloud_init_config_data_source",
-        #     base64_encode=None,
-        #     boundary=None,
-        #     gzip=None,
-        #     part=[
-        #         data_cloud_init_config_part,
-        #     ],
-        #     connection=None,
-        #     count=None,
-        #     depends_on=None,
-        #     for_each=None,
-        #     lifecycle=None,
-        #     provider=cloud_init_config_resource.provider,
-        #     provisioners=None,
-        # )
-
-        # cloud_init_config_data_source = DataLocalFile(
-        #     id="cloud_init_config_data_source",
-        #     filename=cloud_init_config_resource.filename,
-        #     scope=scope,
-        #     provider=cloud_init_config_resource.provider,
-        # )
-
-        cloud_init_config_data_source = DataNullDataSource(
-            id="cloud_init_config_data_source",
-            provider=cloud_init_config_resource.provider,
-            inputs={
-                # "user_data": cloud_init_config_resource.content,
-                # "user_data": cloud_init_config_resource.triggers["content"],
-                "user_data": cloud_init_config_resource.triggers_input["content"],
-            },
-            scope=scope,
+        data_cloud_init_config_part = DataCloudinitConfigPart(
+            # content=cloud_init_config.render(),
+            # content=cloud_init_config_resource.triggers["content"],
+            # content=cloud_init_config_resource.triggers()["content"], # TODO: Fix this
+            # content=cloud_init_config_resource.content,
+            content=cloud_init_config_resource.triggers_input["content"],
+            # content=user_data.render(),
+            content_type="text/cloud-config",
+            filename="cloud-config.yaml",
+            merge_type=None,
         )
+
+        cloud_init_config_data_source = DataCloudinitConfig(
+            scope=scope,
+            id="cloud_init_config_data_source",
+            base64_encode=False if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS else True,
+            boundary=None,
+            gzip=False if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS else True,
+            part=[
+                data_cloud_init_config_part,
+            ],
+            connection=None,
+            count=None,
+            depends_on=None,
+            for_each=None,
+            lifecycle=None,
+            provider=cloud_init_config_resource.provider,
+            # provider=cloud_init_config_provider,
+            provisioners=None,
+        )
+
+        # cloud_init_config_data_source = DataNullDataSource(
+        #     id="cloud_init_config_data_source",
+        #     provider=cloud_init_config_resource.provider,
+        #     inputs={
+        #         # "user_data": cloud_init_config_resource.content,
+        #         # "user_data": cloud_init_config_resource.triggers["content"],
+        #         "user_data": cloud_init_config_resource.triggers_input["content"],
+        #     },
+        #     scope=scope,
+        # )
 
     return cloud_init_config_data_source
 
@@ -326,7 +360,7 @@ def get_cloud_init_config_data_source(scope: Construct, config: MainConfig, clou
 def get_cloud_init_config_outputs(scope: Construct, config: MainConfig, cloud_init_config_data_source: TerraformDataSource) -> Dict[str, TerraformOutput]:
     cloud_init_config_outputs = {}
 
-    if config.CLOUD_INSTANCE_PROVIDER == config.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS:
         cloud_init_config_outputs["cloudinit_file"] = TerraformOutput(
             scope=scope,
             id="cloud_init_config_outputs_cloudinit_file",
@@ -334,31 +368,19 @@ def get_cloud_init_config_outputs(scope: Construct, config: MainConfig, cloud_in
         )
 
     else:
+    #     cloud_init_config_outputs["user_data"] = TerraformOutput(
+    #         scope=scope,
+    #         id="cloud_init_config_outputs_user_data",
+    #         # value=cloud_init_config_data_source.values.outputs["user_data"],
+    #         # value=cloud_init_config_data_source.inputs["user_data"],
+    #         # value=cloud_init_config_data_source.outputs,
+    #         value=cloud_init_config_data_source.inputs_input["user_data"],
+    #     )
+
         cloud_init_config_outputs["user_data"] = TerraformOutput(
             scope=scope,
             id="cloud_init_config_outputs_user_data",
-            # value=cloud_init_config_data_source.values.outputs["user_data"],
-            # value=cloud_init_config_data_source.inputs["user_data"],
-            # value=cloud_init_config_data_source.outputs,
-            value=cloud_init_config_data_source.inputs_input["user_data"],
+            value=cloud_init_config_data_source.rendered,
         )
 
     return cloud_init_config_outputs
-
-
-class CloudInitConfigConstruct(Construct):
-    def __init__(
-        self, scope: Construct, id: str, config: MainConfig
-    ) -> None:
-        super().__init__(scope, id)
-        logger = get_run_logger()
-
-        self.cloud_init_config_provider_future: PrefectFuture[TerraformProvider] = get_cloud_init_config_provider.submit(scope=scope, config=config)
-        self.cloud_init_config_resource_future: PrefectFuture[TerraformResource] = get_cloud_init_config_resource.submit(scope=scope, config=config, cloud_init_config_provider=self.cloud_init_config_provider_future)
-        self.cloud_init_config_data_source_future: PrefectFuture[TerraformDataSource] = get_cloud_init_config_data_source.submit(scope=scope, config=config, cloud_init_config_resource=self.cloud_init_config_resource_future)
-        self.cloud_init_config_outputs_future: PrefectFuture[Dict[str, TerraformOutput]] = get_cloud_init_config_outputs.submit(scope=scope, config=config, cloud_init_config_data_source=self.cloud_init_config_data_source_future)
-
-        self.provider = self.cloud_init_config_provider_future.result()
-        self.resource = self.cloud_init_config_resource_future.result()
-        self.data_source = self.cloud_init_config_data_source_future.result()
-        self.outputs = self.cloud_init_config_outputs_future.result()

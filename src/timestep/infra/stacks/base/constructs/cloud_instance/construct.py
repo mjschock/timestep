@@ -70,58 +70,75 @@ from timestep.infra.imports.local.data_local_file import DataLocalFile as LocalF
 from timestep.infra.imports.local.file import File as LocalFileTerraformResource
 from timestep.infra.imports.local.provider import LocalProvider as LocalTerraformProvider
 
-from timestep.conf import MainConfig, MainConfig
-from timestep.infra.stacks.base.constructs.cloud_init_config.construct import CloudInitConfigConstruct
+from timestep.conf.blocks import AppConfig, CloudInstanceProvider
+from timestep.infra.stacks.base.constructs.cloud_init_config.blocks import CloudInitConfigConstruct
 
 
 @task
-def get_cloud_instance_provider(scope: TerraformStack, config: MainConfig, cloud_init_config_construct: CloudInitConfigConstruct) -> TerraformProvider:
-    if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+def get_cloud_instance_provider(scope: TerraformStack, config: AppConfig, cloud_init_config_construct: CloudInitConfigConstruct) -> TerraformProvider:
+    # if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    # if config.cloud_instance_config.cloud_instance_provider is CloudInstanceProvider.MULTIPASS:
+    if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS:
         cloud_instance_provider = MultipassTerraformProvider(
             id="cloud_instance_provider",
             scope=scope,
         )
 
-    elif config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
+    elif config.variables.get("cloud_instance_provider") == CloudInstanceProvider.DIGITALOCEAN:
         cloud_instance_provider = DigitaloceanTerraformProvider(
             id="cloud_instance_provider",
             scope=scope,
-            token=config.DO_TOKEN,
+            # token=config.DO_TOKEN,
+            # token=config.cloud_instance_config.DO_TOKEN,
+            # token=config.variables.get("do_token"),
+            token=config.secrets.get_secret_value().get("do_token"),
         )
 
     else:
-        raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
+        raise ValueError(f'Unknown cloud_instance_provider: {config.variables.get("cloud_instance_provider")}')
 
     return cloud_instance_provider
 
 
 @task
-def get_cloud_instance_resource(scope: TerraformStack, config: MainConfig, cloud_init_config_construct: CloudInitConfigConstruct, cloud_instance_provider: TerraformProvider) -> TerraformResource:
+def get_cloud_instance_resource(scope: TerraformStack, config: AppConfig, cloud_init_config_construct: CloudInitConfigConstruct, cloud_instance_provider: TerraformProvider) -> TerraformResource:
     # cloud_init_config_data_source: TerraformDataSource = cloud_init_config_construct.cloud_init_config_data_source_future.result()
 
-    if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS:
+        
+
+
         cloud_instance_resource = MultipassInstanceTerraformResource(
             # cloudinit_file=cloud_init_config_local_file_data_source.filename,
             # cloudinit_file=cloud_init_config_data_source.filename,
             cloudinit_file=cloud_init_config_construct.outputs["cloudinit_file"].value,
-            cpus=config.MULTIPASS_INSTANCE_CPUS,
-            disk=config.MULTIPASS_INSTANCE_DISK,
+            # cloudinit_file=cloud_init_config_construct.outputs["user_data"].value,
+            # cpus=config.cloud_instance_config.MULTIPASS_INSTANCE_CPUS,
+            cpus=config.variables.get("multipass_instance_cpus"),
+            # disk=config.cloud_instance_config.MULTIPASS_INSTANCE_DISK,
+            disk=config.variables.get("multipass_instance_disk"),
             id="cloud_instance_resource",
-            image=config.MULTIPASS_INSTANCE_IMAGE,
-            name=config.CLOUD_INSTANCE_NAME,
+            # image=config.cloud_instance_config.MULTIPASS_INSTANCE_IMAGE,
+            image=config.variables.get("multipass_instance_image"),
+            # name=config.cloud_instance_config.CLOUD_INSTANCE_NAME,
+            name=config.variables.get("cloud_instance_name"),
             provider=cloud_instance_provider,
             scope=scope,
         )
 
-    elif config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
+    elif config.variables.get("cloud_instance_provider") == CloudInstanceProvider.DIGITALOCEAN:
         cloud_instance_resource = DigitaloceanDropletTerraformResource(
             id_="cloud_instance_resource",
-            image=config.DO_DROPLET_IMAGE,
-            name=config.CLOUD_INSTANCE_NAME,
+            # image=config.cloud_instance_config.DO_DROPLET_IMAGE,
+            image=config.variables.get("do_droplet_image"),
+            # name=config.cloud_instance_config.CLOUD_INSTANCE_NAME,
+            name=config.variables.get("cloud_instance_name"),
             provider=cloud_instance_provider,
-            region=config.DO_DROPLET_REGION,
+            # region=config.cloud_instance_config.DO_DROPLET_REGION,
+            region=config.variables.get("do_droplet_region"),
             scope=scope,
-            size=config.DO_DROPLET_SIZE,
+            # size=config.cloud_instance_config.DO_DROPLET_SIZE,
+            size=config.variables.get("do_droplet_size"),
             # user_data=cloud_init_config.render(),
             # user_data=cloud_init_config_construct.outputs["cloudinit_file"].value,
             # user_data=cloud_init_config_construct.outputs["user_data"].value, TypeError: type of argument user_data must be one of (str, NoneType); got cdktf.StringMap instead
@@ -133,14 +150,14 @@ def get_cloud_instance_resource(scope: TerraformStack, config: MainConfig, cloud
         )
 
     else:
-        raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
+        raise ValueError(f'Unknown cloud_instance_provider: {config.variables.get("cloud_instance_provider")}')
 
     return cloud_instance_resource
 
 
 @task
-def get_cloud_instance_data_source(scope: TerraformStack, config: MainConfig, cloud_init_config_construct: CloudInitConfigConstruct, cloud_instance_resource: TerraformResource) -> TerraformDataSource:
-    if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+def get_cloud_instance_data_source(scope: TerraformStack, config: AppConfig, cloud_init_config_construct: CloudInitConfigConstruct, cloud_instance_resource: TerraformResource) -> TerraformDataSource:
+    if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS:
         cloud_instance_data_source = MultipassInstanceTerraformDataSource(
             id="cloud_instance_data_source",
             name=cloud_instance_resource.name,
@@ -148,7 +165,7 @@ def get_cloud_instance_data_source(scope: TerraformStack, config: MainConfig, cl
             scope=scope,
         )
 
-    elif config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
+    elif config.variables.get("cloud_instance_provider") == CloudInstanceProvider.DIGITALOCEAN:
         cloud_instance_data_source = DigitaloceanDropletTerraformDataSource(
             id_="cloud_instance_data_source",
             name=cloud_instance_resource.name,
@@ -157,7 +174,7 @@ def get_cloud_instance_data_source(scope: TerraformStack, config: MainConfig, cl
         )
 
     else:
-        raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
+        raise ValueError(f'Unknown cloud_instance_provider: {config.variables.get("cloud_instance_provider")}')
 
     return cloud_instance_data_source
 
@@ -206,17 +223,17 @@ def get_cloud_instance_data_source(scope: TerraformStack, config: MainConfig, cl
 #     return cloud_instance_zone_file_output
 
 @task
-def get_cloud_instance_outputs(scope: TerraformStack, config: MainConfig, cloud_init_config_construct: CloudInitConfigConstruct, cloud_instance_data_source: TerraformDataSource) -> Dict[str, TerraformOutput]:
+def get_cloud_instance_outputs(scope: TerraformStack, config: AppConfig, cloud_init_config_construct: CloudInitConfigConstruct, cloud_instance_data_source: TerraformDataSource) -> Dict[str, TerraformOutput]:
     cloud_instance_outputs = {}
 
-    if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
+    if config.variables.get("cloud_instance_provider") == CloudInstanceProvider.MULTIPASS:
         cloud_instance_outputs["ipv4"] = TerraformOutput(
             id="cloud_instance_outputs_ipv4",
             value=cloud_instance_data_source.ipv4,
             scope=scope,
         )
 
-    elif config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
+    elif config.variables.get("cloud_instance_provider") == CloudInstanceProvider.DIGITALOCEAN:
         cloud_instance_outputs["ipv4"] = TerraformOutput(
             id="cloud_instance_outputs_ipv4",
             value=cloud_instance_data_source.ipv4_address,
@@ -224,14 +241,14 @@ def get_cloud_instance_outputs(scope: TerraformStack, config: MainConfig, cloud_
         )
 
     else:
-        raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
+        raise ValueError(f'Unknown cloud_instance_provider: {config.variables.get("cloud_instance_provider")}')
 
     return cloud_instance_outputs
 
 
 class CloudInstanceConstruct(Construct):
     def __init__(
-        self, scope: Construct, id: str, config: MainConfig, cloud_init_config_construct: CloudInitConfigConstruct
+        self, scope: Construct, id: str, config: AppConfig, cloud_init_config_construct: CloudInitConfigConstruct
     ) -> None:
         super().__init__(scope, id)
         logger = get_run_logger()

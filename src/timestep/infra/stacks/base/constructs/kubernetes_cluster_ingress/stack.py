@@ -70,7 +70,7 @@ from timestep.infra.imports.local.data_local_file import DataLocalFile as LocalF
 from timestep.infra.imports.local.file import File as LocalFileTerraformResource
 from timestep.infra.imports.local.provider import LocalProvider as LocalTerraformProvider
 
-from timestep.conf import AppConfig
+from timestep.conf.blocks import AppConfig
 
 class CLOUD_INSTANCE_PROVIDERS:
     MULTIPASS = "multipass"
