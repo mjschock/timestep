@@ -9,75 +9,70 @@ from constructs import Construct
 from prefect import get_run_logger
 from prefect.futures import PrefectFuture
 
-from timestep.conf.blocks import MainConfig
+from timestep.conf.blocks import AppConfig
 from timestep.infra.stacks.base.constructs.cloud_init_config.blocks import (
     CloudInitConfigConstruct,
 )
-from timestep.infra.stacks.base.constructs.cloud_instance.construct import (
+from timestep.infra.stacks.base.constructs.cloud_instance.blocks import (
     CloudInstanceConstruct,
-    get_cloud_instance_provider,
 )
-from timestep.infra.stacks.base.constructs.cloud_instance_domain.construct import (
+from timestep.infra.stacks.base.constructs.cloud_instance_domain.blocks import (
     CloudInstanceDomainConstruct,
 )
-from timestep.infra.stacks.base.constructs.domain_name_registrar.construct import (
+from timestep.infra.stacks.base.constructs.domain_name_registrar.blocks import (
     DomainNameRegistrarConstruct,
 )
-from timestep.infra.stacks.base.constructs.kube_config.construct import (
-    KubeConfigConstruct,
+from timestep.infra.stacks.base.constructs.kube_config.blocks import KubeConfigConstruct
+from timestep.infra.stacks.base.constructs.kubernetes_cluster.blocks import (
+    KubernetesClusterConstruct,
 )
 
 
 class BaseStack(TerraformStack):
-    def __init__(self, scope: Construct, id: str, config: MainConfig) -> None:
+    def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
         super().__init__(scope, id)
         logger = get_run_logger()
-        # logger.info(f"config: {config}")
 
         self.cloud_init_config_construct = CloudInitConfigConstruct(
-            scope=self, id="cloud_init_config_construct", config=config
-        )  # TODO: just make this a block and pass it to the cloud instance construct
+            config=config,
+            id="cloud_init_config_construct",
+            scope=self,
+        )
 
         self.cloud_instance_construct = CloudInstanceConstruct(
-            scope=self,
-            id="cloud_instance_construct",
-            config=config,
             cloud_init_config_construct=self.cloud_init_config_construct,
+            config=config,
+            id="cloud_instance_construct",
+            scope=self,
         )
 
         self.cloud_instance_domain_construct = CloudInstanceDomainConstruct(
-            self,
-            "cloud_instance_domain_construct",
-            config=config,
             cloud_instance_construct=self.cloud_instance_construct,
+            config=config,
+            id="cloud_instance_domain_construct",
+            scope=self,
         )
 
         self.domain_name_registar_construct = DomainNameRegistrarConstruct(
-            self,
-            "domain_name_registar",
-            config=config,
             cloud_instance_construct=self.cloud_instance_construct,
+            config=config,
+            id="domain_name_registar_construct",
+            scope=self,
         )
-
-        # ip = self.cloud_instance_construct.data_source.ipv4
-        # ip = self.cloud_instance_construct.outputs.get("ipv4").value
-        # logger.info(f"ip: {ip}")
-
-        # kube_config_block = KubeConfig(
-        #     private_key=config.secrets.get_secret_value()["ssh_private_key"],
-        #     ip=ip,
-        # )
 
         self.kube_config_construct = KubeConfigConstruct(
-            self,
-            "kube_config",
-            config=config,
             cloud_instance_construct=self.cloud_instance_construct,
+            config=config,
+            id="kube_config_construct",
+            scope=self,
         )
 
-        # # kubernetes_cluster = KubernetesClusterConstruct(
-        # #     self, "kubernetes_cluster", config=config, kube_config=kube_config
-        # # )
+        self.kubernetes_cluster_construct = KubernetesClusterConstruct(
+            # cloud_instance_construct=self.cloud_instance_construct,
+            # config=config,
+            id="kubernetes_cluster_construct",
+            scope=self,
+        )
 
         # # kubernetes_cluster_ingress = KubernetesClusterIngressConstruct(
         # #     self, "kubernetes_cluster_ingress", config=config, kubernetes_cluster=kubernetes_cluster

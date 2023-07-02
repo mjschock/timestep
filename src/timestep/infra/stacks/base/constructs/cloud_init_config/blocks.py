@@ -2,6 +2,7 @@ import os
 from typing import Dict
 
 from cdktf import (
+    App,
     TerraformDataSource,
     TerraformOutput,
     TerraformProvider,
@@ -9,7 +10,7 @@ from cdktf import (
 )
 from cloud_init_gen import CloudInitDoc
 from constructs import Construct
-from prefect import get_run_logger, task
+from prefect import flow, get_run_logger, task
 from prefect.futures import PrefectFuture
 from prefect_shell import ShellOperation
 
@@ -34,7 +35,8 @@ from timestep.infra.stacks.base.constructs.cloud_init_config.tasks import (
 
 
 class CloudInitConfigConstruct(Construct):
-    def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
+    # @flow()
+    def __init__(self, scope: App, id: str, config: AppConfig) -> None:
         super().__init__(scope, id)
         logger = get_run_logger()
 

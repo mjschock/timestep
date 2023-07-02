@@ -84,137 +84,15 @@ from timestep.infra.imports.null.resource import Resource as NullTerraformResour
 from timestep.infra.stacks.base.constructs.cloud_init_config.blocks import (
     CloudInitConfigConstruct,
 )
-from timestep.infra.stacks.base.constructs.cloud_instance.construct import (
+from timestep.infra.stacks.base.constructs.cloud_instance.blocks import (
     CloudInstanceConstruct,
 )
-
-
-@task
-def get_domain_name_registrar_provider(
-    scope: TerraformStack,
-    config: AppConfig,
-    cloud_instance_construct: CloudInstanceConstruct,
-) -> TerraformProvider:
-    if config.variables.get("domain_name_registrar_provider") == None:
-        domain_name_registrar_provider = NullTerraformProvider(
-            alias="domain_name_registrar_provider",
-            id="domain_name_registrar_provider",
-            scope=scope,
-        )
-
-    elif (
-        config.variables.get("domain_name_registrar_provider")
-        == DomainNameRegistrarProvider.NAMECHEAP
-    ):
-        domain_name_registrar_provider = NamecheapTerraformProvider(
-            id="domain_name_registrar_provider",
-            api_key=config.NAMECHEAP_API_KEY,
-            api_user=config.NAMECHEAP_API_USER,
-            user_name=config.NAMECHEAP_USER_NAME,
-            scope=scope,
-        )
-
-    else:
-        raise ValueError(
-            f"Unknown domain_name_registrar_provider: {config.variables.get('domain_name_registrar_provider')}"
-        )
-
-    return domain_name_registrar_provider
-
-
-@task
-def get_domain_name_registrar_resource(
-    scope: TerraformStack,
-    config: AppConfig,
-    cloud_instance_construct: CloudInstanceConstruct,
-    domain_name_registrar_provider: TerraformProvider,
-) -> TerraformResource:
-    if config.variables.get("domain_name_registrar_provider") == None:
-        domain_name_registrar_resource = NullTerraformResource(
-            id="domain_name_registrar_resource",
-            provider=domain_name_registrar_provider,
-            scope=scope,
-        )
-
-    elif (
-        config.variables.get("domain_name_registrar_provider")
-        == DomainNameRegistrarProvider.NAMECHEAP
-    ):
-        domain_name_registrar_resource = NamecheapDomainRecordsTerraformResource(
-            id_="domain_name_registrar_resource",
-            domain=config.DOMAIN,
-            mode="OVERWRITE",
-            nameservers=[
-                "ns1.digitalocean.com",  # TODO: can I get these from the cloud_instance_construct?
-                "ns2.digitalocean.com",
-                "ns3.digitalocean.com",
-            ],
-            provider=domain_name_registrar_provider,
-            scope=scope,
-        )
-
-    else:
-        raise ValueError(
-            f"Unknown domain_name_registrar_provider: {config.variables.get('domain_name_registrar_provider')}"
-        )
-
-    return domain_name_registrar_resource
-
-
-@task
-def get_domain_name_registrar_data_source(
-    scope: TerraformStack,
-    config: AppConfig,
-    cloud_instance_construct: CloudInstanceConstruct,
-    domain_name_registrar_resource: TerraformResource,
-) -> TerraformDataSource:
-    # if config.variables.get("domain_name_registrar_provider") == None:
-    # domain_name_registrar_data_source = NullTerraformDataSource(
-    #     id="domain_name_registrar_data_source",
-    #     provider=domain_name_registrar_resource.provider,
-    #     scope=scope,
-    # )
-
-    # domain_name_registrar_data_source = TerraformLocal(
-    #     id="domain_name_registrar_data_source",
-    #     expression=Token.from_str("null_data_source"),
-    #     scope=scope,
-    # )
-
-    # else:
-    # domain_name_registrar_data_source = NullTerraformDataSource(
-    #     id="domain_name_registrar_data_source",
-    #     scope=scope,
-    # )
-
-    # domain_name_registrar_data_source = TerraformLocal(
-    #     id="domain_name_registrar_data_source",
-    #     scope=scope,
-    # )
-
-    # domain_name_registrar_data_source = TerraformDataSource(
-    #     id="domain_name_registrar_data_source",
-    #     # provider=domain_name_registrar_resource.provider,
-    #     # terraform_resource_type=type(domain_name_registrar_resource).__name__,
-    #     terraform_resource_type="data_source",
-    #     scope=scope,
-    # )
-
-    domain_name_registrar_data_source = None
-
-    return domain_name_registrar_data_source
-
-
-@task
-def get_domain_name_registrar_outputs(
-    scope: TerraformStack,
-    config: AppConfig,
-    cloud_instance_construct: CloudInstanceConstruct,
-    domain_name_registrar_data_source: TerraformDataSource,
-) -> Dict[str, TerraformOutput]:
-    domain_name_registrar_outputs = {}
-
-    return domain_name_registrar_outputs
+from timestep.infra.stacks.base.constructs.domain_name_registrar.tasks import (
+    get_domain_name_registrar_data_source,
+    get_domain_name_registrar_outputs,
+    get_domain_name_registrar_provider,
+    get_domain_name_registrar_resource,
+)
 
 
 class DomainNameRegistrarConstruct(Construct):

@@ -130,25 +130,16 @@ def get_cloud_instance_resource(
     cloud_init_config_construct: CloudInitConfigConstruct,
     cloud_instance_provider: TerraformProvider,
 ) -> TerraformResource:
-    # cloud_init_config_data_source: TerraformDataSource = cloud_init_config_construct.cloud_init_config_data_source_future.result()
-
     if (
         config.variables.get("cloud_instance_provider")
         == CloudInstanceProvider.MULTIPASS
     ):
         cloud_instance_resource = MultipassInstanceTerraformResource(
-            # cloudinit_file=cloud_init_config_local_file_data_source.filename,
-            # cloudinit_file=cloud_init_config_data_source.filename,
             cloudinit_file=cloud_init_config_construct.outputs["cloudinit_file"].value,
-            # cloudinit_file=cloud_init_config_construct.outputs["user_data"].value,
-            # cpus=config.cloud_instance_config.MULTIPASS_INSTANCE_CPUS,
             cpus=config.variables.get("multipass_instance_cpus"),
-            # disk=config.cloud_instance_config.MULTIPASS_INSTANCE_DISK,
             disk=config.variables.get("multipass_instance_disk"),
             id="cloud_instance_resource",
-            # image=config.cloud_instance_config.MULTIPASS_INSTANCE_IMAGE,
             image=config.variables.get("multipass_instance_image"),
-            # name=config.cloud_instance_config.CLOUD_INSTANCE_NAME,
             name=config.variables.get("cloud_instance_name"),
             provider=cloud_instance_provider,
             scope=scope,
@@ -160,23 +151,12 @@ def get_cloud_instance_resource(
     ):
         cloud_instance_resource = DigitaloceanDropletTerraformResource(
             id_="cloud_instance_resource",
-            # image=config.cloud_instance_config.DO_DROPLET_IMAGE,
             image=config.variables.get("do_droplet_image"),
-            # name=config.cloud_instance_config.CLOUD_INSTANCE_NAME,
             name=config.variables.get("cloud_instance_name"),
             provider=cloud_instance_provider,
-            # region=config.cloud_instance_config.DO_DROPLET_REGION,
             region=config.variables.get("do_droplet_region"),
             scope=scope,
-            # size=config.cloud_instance_config.DO_DROPLET_SIZE,
             size=config.variables.get("do_droplet_size"),
-            # user_data=cloud_init_config.render(),
-            # user_data=cloud_init_config_construct.outputs["cloudinit_file"].value,
-            # user_data=cloud_init_config_construct.outputs["user_data"].value, TypeError: type of argument user_data must be one of (str, NoneType); got cdktf.StringMap instead
-            # user_data=cloud_init_config_construct.outputs["user_data"].value.outputs["user_data"].value, AttributeError: 'StringMap' object has no attribute 'outputs'
-            # user_data=cloud_init_config_construct.outputs["user_data"].value["user_data"].value TypeError: 'StringMap' object is not subscriptable
-            # user_data=cloud_init_config_construct.outputs["user_data"].value["user_data"],
-            # user_data=cloud_init_config_construct.resource.content
             user_data=cloud_init_config_construct.outputs["user_data"].value,
         )
 
@@ -225,50 +205,6 @@ def get_cloud_instance_data_source(
     return cloud_instance_data_source
 
 
-# @task
-# def get_cloud_instance_ipv4_output(scope: TerraformStack, config: MainConfig, cloud_init_config_construct: CloudInitConfigConstruct, cloud_instance_data_source: TerraformDataSource) -> TerraformOutput:
-#     if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
-#         cloud_instance_ipv4_output = TerraformOutput(
-#             id="cloud_instance_ipv4_output",
-#             value=cloud_instance_data_source.ipv4,
-#             scope=scope,
-#         )
-
-#     elif config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
-#         cloud_instance_ipv4_output = TerraformOutput(
-#             id="cloud_instance_ipv4_output",
-#             value=cloud_instance_data_source.ipv4_address,
-#             scope=scope,
-#         )
-
-#     else:
-#         raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
-
-#     return cloud_instance_ipv4_output
-
-
-# @task
-# def get_cloud_instance_zone_file_output(scope: TerraformStack, config: MainConfig, cloud_instance_domain_data_source: TerraformDataSource) -> TerraformOutput:
-#     if config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.MULTIPASS:
-#         cloud_instance_zone_file_output = TerraformOutput(
-#             id="cloud_instance_zone_file_output",
-#             value=cloud_instance_domain_data_source.filename,
-#             scope=scope,
-#         )
-
-#     elif config.CLOUD_INSTANCE_PROVIDER == MainConfig.CLOUD_INSTANCE_PROVIDERS.DIGITALOCEAN:
-#         cloud_instance_zone_file_output = TerraformOutput(
-#             id="cloud_instance_zone_file_output",
-#             value=cloud_instance_domain_data_source.zone_file,
-#             scope=scope,
-#         )
-
-#     else:
-#         raise ValueError(f"Unknown CLOUD_INSTANCE_PROVIDER: {config.CLOUD_INSTANCE_PROVIDER}")
-
-#     return cloud_instance_zone_file_output
-
-
 @task
 def get_cloud_instance_outputs(
     scope: TerraformStack,
@@ -304,57 +240,3 @@ def get_cloud_instance_outputs(
         )
 
     return cloud_instance_outputs
-
-
-class CloudInstanceConstruct(Construct):
-    def __init__(
-        self,
-        scope: Construct,
-        id: str,
-        config: AppConfig,
-        cloud_init_config_construct: CloudInitConfigConstruct,
-    ) -> None:
-        super().__init__(scope, id)
-        logger = get_run_logger()
-        # logger.info(f"config: {config}")
-
-        self.cloud_instance_provider_future: PrefectFuture[
-            TerraformProvider
-        ] = get_cloud_instance_provider.submit(
-            scope=scope,
-            config=config,
-            cloud_init_config_construct=cloud_init_config_construct,
-        )
-        self.cloud_instance_resource_future: PrefectFuture[
-            TerraformResource
-        ] = get_cloud_instance_resource.submit(
-            scope=scope,
-            config=config,
-            cloud_init_config_construct=cloud_init_config_construct,
-            cloud_instance_provider=self.cloud_instance_provider_future,
-        )
-        self.cloud_instance_data_source_future: PrefectFuture[
-            TerraformDataSource
-        ] = get_cloud_instance_data_source.submit(
-            scope=scope,
-            config=config,
-            cloud_init_config_construct=cloud_init_config_construct,
-            cloud_instance_resource=self.cloud_instance_resource_future,
-        )
-        self.cloud_instance_outputs_future: PrefectFuture[
-            Dict[str, TerraformOutput]
-        ] = get_cloud_instance_outputs.submit(
-            scope=scope,
-            config=config,
-            cloud_init_config_construct=cloud_init_config_construct,
-            cloud_instance_data_source=self.cloud_instance_data_source_future,
-        )
-
-        # self.cloud_instance_output_futures: Dict[str, PrefectFuture[TerraformOutput]] = {
-        #     "ipv4": get_cloud_instance_ipv4_output.submit(scope=scope, config=config, cloud_init_config_construct=cloud_init_config_construct, cloud_instance_data_source=self.cloud_instance_data_source_future),
-        # }
-
-        self.provider = self.cloud_instance_provider_future.result()
-        self.resource = self.cloud_instance_resource_future.result()
-        self.data_source = self.cloud_instance_data_source_future.result()
-        self.outputs = self.cloud_instance_outputs_future.result()

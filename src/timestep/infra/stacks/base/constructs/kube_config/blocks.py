@@ -1,29 +1,86 @@
-# class K3Sup(Block):
-#     _block_type_slug: str = "k3sup"
+from typing import Dict
 
-#     # comment: Optional[str] = f"{os.environ.get('USER')}@{socket.gethostname()}"
-#     # key_type: Optional[str] = "ed25519"
-#     # new_passphrase: Optional[SecretStr] = "''"
-#     # output_keyfile: Optional[str] = f"{DIST_PATH}/.ssh/id_{key_type}"
-#     # public_key: Optional[str] = None
-#     private_key: Optional[SecretStr] = None
+from cdktf import (
+    TerraformDataSource,
+    TerraformOutput,
+    TerraformProvider,
+    TerraformResource,
+)
+from constructs import Construct
+from prefect import get_run_logger
+from prefect.blocks.kubernetes import KubernetesClusterConfig
+from prefect.futures import PrefectFuture
 
-#     def block_initialization(self):
-#         if self.public_key is None or self.private_key is None:
-#             # comment = f"{os.environ.get('USER')}@{socket.gethostname()}"
-#             # key_type = "ed25519"
-#             # output_keyfile = f"{DIST_PATH}/.ssh/id_{key_type}"
+from timestep.conf.blocks import AppConfig
+from timestep.infra.stacks.base.constructs.cloud_instance.blocks import (
+    CloudInstanceConstruct,
+)
+from timestep.infra.stacks.base.constructs.kube_config.tasks import (
+    get_kube_config_data_source,
+    get_kube_config_outputs,
+    get_kube_config_provider,
+    get_kube_config_resource,
+)
 
-#             if not os.path.exists(output_keyfile):
-#                 os.makedirs(os.path.dirname(output_keyfile), exist_ok=True)
 
-#                 with ShellOperation(
-#                     commands=[
-#                         f"k3sup install --context {config.KUBE_CONTEXT} --ip {cloud_instance_construct.data_source.ipv4} --local-path {config.KUBE_CONFIG_PATH} --skip-install --ssh-key {config.SSH_PRIVATE_KEY_PATH} --user ubuntu"
-#                     ],
-#                 ) as shell_operation:
-#                     shell_process = shell_operation.trigger()
-#                     shell_process.wait_for_completion()
+class KubeConfigConstruct(Construct):
+    def __init__(
+        self,
+        scope: Construct,
+        id: str,
+        config: AppConfig,
+        cloud_instance_construct: CloudInstanceConstruct,
+    ) -> None:
+        super().__init__(scope, id)
+        logger = get_run_logger()
 
-#             # self.public_key = pathlib.Path(f"{output_keyfile}.pub").read_text()
-#             # self.private_key = SecretStr(pathlib.Path(output_keyfile).read_text())
+        self.kube_config_provider_future: PrefectFuture[
+            TerraformProvider
+        ] = get_kube_config_provider.submit(
+            scope=scope,
+            config=config,
+            cloud_instance_construct=cloud_instance_construct,
+        )
+        self.kube_config_resource_future: PrefectFuture[
+            TerraformResource
+        ] = get_kube_config_resource.submit(
+            scope=scope,
+            config=config,
+            cloud_instance_construct=cloud_instance_construct,
+            kube_config_provider=self.kube_config_provider_future,
+        )
+        self.kube_config_data_source_future: PrefectFuture[
+            TerraformDataSource
+        ] = get_kube_config_data_source.submit(
+            scope=scope,
+            config=config,
+            cloud_instance_construct=cloud_instance_construct,
+            kube_config_resource=self.kube_config_resource_future,
+        )
+        self.kube_config_outputs_future: PrefectFuture[
+            Dict[str, TerraformOutput]
+        ] = get_kube_config_outputs.submit(
+            scope=scope,
+            config=config,
+            cloud_instance_construct=cloud_instance_construct,
+            kube_config_data_source=self.kube_config_data_source_future,
+        )
+
+        self.provider = self.kube_config_provider_future.result()
+        self.resource = self.kube_config_resource_future.result()
+        self.data_source = self.kube_config_data_source_future.result()
+        self.outputs = self.kube_config_outputs_future.result()
+
+        try:
+            kube_config_block = KubernetesClusterConfig.load("kube-config")
+
+        except ValueError as e:
+            kube_config_block = KubernetesClusterConfig.from_file(
+                path=config.variables.get("kubeconfig"),
+                context_name=config.variables.get("kubecontext"),
+            )
+
+            kube_config_block.save(
+                name="kube-config",
+                overwrite=False,
+            )

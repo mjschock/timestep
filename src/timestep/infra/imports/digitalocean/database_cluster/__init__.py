@@ -1,24 +1,22 @@
-'''
+"""
 # `digitalocean_database_cluster`
 
 Refer to the Terraform Registory for docs: [`digitalocean_database_cluster`](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster).
-'''
+"""
 import abc
 import builtins
 import datetime
 import enum
 import typing
 
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
-
 from typeguard import check_type
 
 from .._jsii import *
-
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 
 
 class DatabaseCluster(
@@ -26,7 +24,7 @@ class DatabaseCluster(
     metaclass=jsii.JSIIMeta,
     jsii_type="digitalocean.databaseCluster.DatabaseCluster",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster digitalocean_database_cluster}.'''
+    """Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster digitalocean_database_cluster}."""
 
     def __init__(
         self,
@@ -38,25 +36,80 @@ class DatabaseCluster(
         node_count: jsii.Number,
         region: builtins.str,
         size: builtins.str,
-        backup_restore: typing.Optional[typing.Union["DatabaseClusterBackupRestore", typing.Dict[builtins.str, typing.Any]]] = None,
+        backup_restore: typing.Optional[
+            typing.Union[
+                "DatabaseClusterBackupRestore", typing.Dict[builtins.str, typing.Any]
+            ]
+        ] = None,
         eviction_policy: typing.Optional[builtins.str] = None,
         id: typing.Optional[builtins.str] = None,
-        maintenance_window: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["DatabaseClusterMaintenanceWindow", typing.Dict[builtins.str, typing.Any]]]]] = None,
+        maintenance_window: typing.Optional[
+            typing.Union[
+                _cdktf_9a9027ec.IResolvable,
+                typing.Sequence[
+                    typing.Union[
+                        "DatabaseClusterMaintenanceWindow",
+                        typing.Dict[builtins.str, typing.Any],
+                    ]
+                ],
+            ]
+        ] = None,
         private_network_uuid: typing.Optional[builtins.str] = None,
         project_id: typing.Optional[builtins.str] = None,
         sql_mode: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-        timeouts: typing.Optional[typing.Union["DatabaseClusterTimeouts", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeouts: typing.Optional[
+            typing.Union[
+                "DatabaseClusterTimeouts", typing.Dict[builtins.str, typing.Any]
+            ]
+        ] = None,
         version: typing.Optional[builtins.str] = None,
-        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+        connection: typing.Optional[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.SSHProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.WinrmProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ] = None,
+        count: typing.Optional[
+            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+        ] = None,
+        depends_on: typing.Optional[
+            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+        ] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+        lifecycle: typing.Optional[
+            typing.Union[
+                _cdktf_9a9027ec.TerraformResourceLifecycle,
+                typing.Dict[builtins.str, typing.Any],
+            ]
+        ] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+        provisioners: typing.Optional[
+            typing.Sequence[
+                typing.Union[
+                    typing.Union[
+                        _cdktf_9a9027ec.FileProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.LocalExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.RemoteExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                ]
+            ]
+        ] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster digitalocean_database_cluster} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster digitalocean_database_cluster} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -75,18 +128,24 @@ class DatabaseCluster(
         :param tags: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#tags DatabaseCluster#tags}.
         :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#timeouts DatabaseCluster#timeouts}
         :param version: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#version DatabaseCluster#version}.
-        :param connection: 
-        :param count: 
-        :param depends_on: 
-        :param for_each: 
-        :param lifecycle: 
-        :param provider: 
-        :param provisioners: 
-        '''
+        :param connection:
+        :param count:
+        :param depends_on:
+        :param for_each:
+        :param lifecycle:
+        :param provider:
+        :param provisioners:
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__365e4e500021a16af904c11b294c43eb3e65bece891d036248035aa845b6720c)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id_", value=id_, expected_type=type_hints["id_"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__365e4e500021a16af904c11b294c43eb3e65bece891d036248035aa845b6720c
+            )
+            check_type(
+                argname="argument scope", value=scope, expected_type=type_hints["scope"]
+            )
+            check_type(
+                argname="argument id_", value=id_, expected_type=type_hints["id_"]
+            )
         config = DatabaseClusterConfig(
             engine=engine,
             name=name,
@@ -121,10 +180,10 @@ class DatabaseCluster(
         database_name: builtins.str,
         backup_created_at: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        """
         :param database_name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#database_name DatabaseCluster#database_name}.
         :param backup_created_at: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#backup_created_at DatabaseCluster#backup_created_at}.
-        '''
+        """
         value = DatabaseClusterBackupRestore(
             database_name=database_name, backup_created_at=backup_created_at
         )
@@ -134,21 +193,33 @@ class DatabaseCluster(
     @jsii.member(jsii_name="putMaintenanceWindow")
     def put_maintenance_window(
         self,
-        value: typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["DatabaseClusterMaintenanceWindow", typing.Dict[builtins.str, typing.Any]]]],
+        value: typing.Union[
+            _cdktf_9a9027ec.IResolvable,
+            typing.Sequence[
+                typing.Union[
+                    "DatabaseClusterMaintenanceWindow",
+                    typing.Dict[builtins.str, typing.Any],
+                ]
+            ],
+        ],
     ) -> None:
-        '''
+        """
         :param value: -
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e5c389c6b1187d56769d184e66628dafefe68e2ef3682792e53bfea41a8846bd)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__e5c389c6b1187d56769d184e66628dafefe68e2ef3682792e53bfea41a8846bd
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         return typing.cast(None, jsii.invoke(self, "putMaintenanceWindow", [value]))
 
     @jsii.member(jsii_name="putTimeouts")
     def put_timeouts(self, *, create: typing.Optional[builtins.str] = None) -> None:
-        '''
+        """
         :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#create DatabaseCluster#create}.
-        '''
+        """
         value = DatabaseClusterTimeouts(create=create)
 
         return typing.cast(None, jsii.invoke(self, "putTimeouts", [value]))
@@ -195,7 +266,10 @@ class DatabaseCluster(
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
+        return typing.cast(
+            typing.Mapping[builtins.str, typing.Any],
+            jsii.invoke(self, "synthesizeAttributes", []),
+        )
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="tfResourceType")
@@ -205,7 +279,10 @@ class DatabaseCluster(
     @builtins.property
     @jsii.member(jsii_name="backupRestore")
     def backup_restore(self) -> "DatabaseClusterBackupRestoreOutputReference":
-        return typing.cast("DatabaseClusterBackupRestoreOutputReference", jsii.get(self, "backupRestore"))
+        return typing.cast(
+            "DatabaseClusterBackupRestoreOutputReference",
+            jsii.get(self, "backupRestore"),
+        )
 
     @builtins.property
     @jsii.member(jsii_name="database")
@@ -220,7 +297,9 @@ class DatabaseCluster(
     @builtins.property
     @jsii.member(jsii_name="maintenanceWindow")
     def maintenance_window(self) -> "DatabaseClusterMaintenanceWindowList":
-        return typing.cast("DatabaseClusterMaintenanceWindowList", jsii.get(self, "maintenanceWindow"))
+        return typing.cast(
+            "DatabaseClusterMaintenanceWindowList", jsii.get(self, "maintenanceWindow")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="password")
@@ -245,7 +324,9 @@ class DatabaseCluster(
     @builtins.property
     @jsii.member(jsii_name="timeouts")
     def timeouts(self) -> "DatabaseClusterTimeoutsOutputReference":
-        return typing.cast("DatabaseClusterTimeoutsOutputReference", jsii.get(self, "timeouts"))
+        return typing.cast(
+            "DatabaseClusterTimeoutsOutputReference", jsii.get(self, "timeouts")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="uri")
@@ -265,7 +346,10 @@ class DatabaseCluster(
     @builtins.property
     @jsii.member(jsii_name="backupRestoreInput")
     def backup_restore_input(self) -> typing.Optional["DatabaseClusterBackupRestore"]:
-        return typing.cast(typing.Optional["DatabaseClusterBackupRestore"], jsii.get(self, "backupRestoreInput"))
+        return typing.cast(
+            typing.Optional["DatabaseClusterBackupRestore"],
+            jsii.get(self, "backupRestoreInput"),
+        )
 
     @builtins.property
     @jsii.member(jsii_name="engineInput")
@@ -275,7 +359,9 @@ class DatabaseCluster(
     @builtins.property
     @jsii.member(jsii_name="evictionPolicyInput")
     def eviction_policy_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "evictionPolicyInput"))
+        return typing.cast(
+            typing.Optional[builtins.str], jsii.get(self, "evictionPolicyInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="idInput")
@@ -286,8 +372,20 @@ class DatabaseCluster(
     @jsii.member(jsii_name="maintenanceWindowInput")
     def maintenance_window_input(
         self,
-    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DatabaseClusterMaintenanceWindow"]]]:
-        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DatabaseClusterMaintenanceWindow"]]], jsii.get(self, "maintenanceWindowInput"))
+    ) -> typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.IResolvable, typing.List["DatabaseClusterMaintenanceWindow"]
+        ]
+    ]:
+        return typing.cast(
+            typing.Optional[
+                typing.Union[
+                    _cdktf_9a9027ec.IResolvable,
+                    typing.List["DatabaseClusterMaintenanceWindow"],
+                ]
+            ],
+            jsii.get(self, "maintenanceWindowInput"),
+        )
 
     @builtins.property
     @jsii.member(jsii_name="nameInput")
@@ -297,17 +395,23 @@ class DatabaseCluster(
     @builtins.property
     @jsii.member(jsii_name="nodeCountInput")
     def node_count_input(self) -> typing.Optional[jsii.Number]:
-        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "nodeCountInput"))
+        return typing.cast(
+            typing.Optional[jsii.Number], jsii.get(self, "nodeCountInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="privateNetworkUuidInput")
     def private_network_uuid_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "privateNetworkUuidInput"))
+        return typing.cast(
+            typing.Optional[builtins.str], jsii.get(self, "privateNetworkUuidInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="projectIdInput")
     def project_id_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "projectIdInput"))
+        return typing.cast(
+            typing.Optional[builtins.str], jsii.get(self, "projectIdInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="regionInput")
@@ -322,24 +426,37 @@ class DatabaseCluster(
     @builtins.property
     @jsii.member(jsii_name="sqlModeInput")
     def sql_mode_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "sqlModeInput"))
+        return typing.cast(
+            typing.Optional[builtins.str], jsii.get(self, "sqlModeInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="tagsInput")
     def tags_input(self) -> typing.Optional[typing.List[builtins.str]]:
-        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "tagsInput"))
+        return typing.cast(
+            typing.Optional[typing.List[builtins.str]], jsii.get(self, "tagsInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="timeoutsInput")
     def timeouts_input(
         self,
-    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, "DatabaseClusterTimeouts"]]:
-        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, "DatabaseClusterTimeouts"]], jsii.get(self, "timeoutsInput"))
+    ) -> typing.Optional[
+        typing.Union[_cdktf_9a9027ec.IResolvable, "DatabaseClusterTimeouts"]
+    ]:
+        return typing.cast(
+            typing.Optional[
+                typing.Union[_cdktf_9a9027ec.IResolvable, "DatabaseClusterTimeouts"]
+            ],
+            jsii.get(self, "timeoutsInput"),
+        )
 
     @builtins.property
     @jsii.member(jsii_name="versionInput")
     def version_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "versionInput"))
+        return typing.cast(
+            typing.Optional[builtins.str], jsii.get(self, "versionInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="engine")
@@ -349,8 +466,12 @@ class DatabaseCluster(
     @engine.setter
     def engine(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ceb187ab3d2c39e8afe875e7f030bcfccfc763b7c8ffd47394cd32ab9b0c21ed)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__ceb187ab3d2c39e8afe875e7f030bcfccfc763b7c8ffd47394cd32ab9b0c21ed
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "engine", value)
 
     @builtins.property
@@ -361,8 +482,12 @@ class DatabaseCluster(
     @eviction_policy.setter
     def eviction_policy(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f272688eb5b0af5f64554fa21c281c73e85a2180ddca40fb347669768eebaf99)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__f272688eb5b0af5f64554fa21c281c73e85a2180ddca40fb347669768eebaf99
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "evictionPolicy", value)
 
     @builtins.property
@@ -373,8 +498,12 @@ class DatabaseCluster(
     @id.setter
     def id(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c8bd86fb745d8ab5abf998d484a58145255b4f21a73b12b56e23aa0220d2e7cf)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__c8bd86fb745d8ab5abf998d484a58145255b4f21a73b12b56e23aa0220d2e7cf
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "id", value)
 
     @builtins.property
@@ -385,8 +514,12 @@ class DatabaseCluster(
     @name.setter
     def name(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8b6b45062fdffa1283da708ce2252e700d9b53d4d03e3f1a05a0bebd987ceb90)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__8b6b45062fdffa1283da708ce2252e700d9b53d4d03e3f1a05a0bebd987ceb90
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "name", value)
 
     @builtins.property
@@ -397,8 +530,12 @@ class DatabaseCluster(
     @node_count.setter
     def node_count(self, value: jsii.Number) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__df1e117dc52bd12904b48b8a377801ce3100b7e445428a75bee0ab4e564e5a6b)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__df1e117dc52bd12904b48b8a377801ce3100b7e445428a75bee0ab4e564e5a6b
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "nodeCount", value)
 
     @builtins.property
@@ -409,8 +546,12 @@ class DatabaseCluster(
     @private_network_uuid.setter
     def private_network_uuid(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__dc41f90237344bb258e8672a52a5fcda4782429dac98c568ef3fa3613679376c)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__dc41f90237344bb258e8672a52a5fcda4782429dac98c568ef3fa3613679376c
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "privateNetworkUuid", value)
 
     @builtins.property
@@ -421,8 +562,12 @@ class DatabaseCluster(
     @project_id.setter
     def project_id(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__a5efff7d2c00bbd94d18f3a5864c7538ec7284e8bf3b4dd5bf86b60fd651b705)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__a5efff7d2c00bbd94d18f3a5864c7538ec7284e8bf3b4dd5bf86b60fd651b705
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "projectId", value)
 
     @builtins.property
@@ -433,8 +578,12 @@ class DatabaseCluster(
     @region.setter
     def region(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__6420038b8882d0d174a747d1fc5f66dc5a23d00ef116b90b6353a9cc80c5429e)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__6420038b8882d0d174a747d1fc5f66dc5a23d00ef116b90b6353a9cc80c5429e
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "region", value)
 
     @builtins.property
@@ -445,8 +594,12 @@ class DatabaseCluster(
     @size.setter
     def size(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__a43a959c2ff37bdda8ce8391f8247adf4d9023f348f56aaa4f073c90f37f034a)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__a43a959c2ff37bdda8ce8391f8247adf4d9023f348f56aaa4f073c90f37f034a
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "size", value)
 
     @builtins.property
@@ -457,8 +610,12 @@ class DatabaseCluster(
     @sql_mode.setter
     def sql_mode(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__53fdf82610058b1bfa82d7b694873b1f925485333bbf39e7e80536044ecaea95)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__53fdf82610058b1bfa82d7b694873b1f925485333bbf39e7e80536044ecaea95
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "sqlMode", value)
 
     @builtins.property
@@ -469,8 +626,12 @@ class DatabaseCluster(
     @tags.setter
     def tags(self, value: typing.List[builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1353645a15fb93849d5023f6d9c08c5f58935fc32e0e64e5ec24f7d744304631)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__1353645a15fb93849d5023f6d9c08c5f58935fc32e0e64e5ec24f7d744304631
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "tags", value)
 
     @builtins.property
@@ -481,8 +642,12 @@ class DatabaseCluster(
     @version.setter
     def version(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7edf51dfb4eb5b01b96cdd9de5d207a24f5e5a13095131ee5f4375cb17a43848)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__7edf51dfb4eb5b01b96cdd9de5d207a24f5e5a13095131ee5f4375cb17a43848
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "version", value)
 
 
@@ -501,14 +666,24 @@ class DatabaseClusterBackupRestore:
         database_name: builtins.str,
         backup_created_at: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        """
         :param database_name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#database_name DatabaseCluster#database_name}.
         :param backup_created_at: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#backup_created_at DatabaseCluster#backup_created_at}.
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__85698b4f584495183a38e2792345bdec904324d4b0b0754f87a378d229bd1eee)
-            check_type(argname="argument database_name", value=database_name, expected_type=type_hints["database_name"])
-            check_type(argname="argument backup_created_at", value=backup_created_at, expected_type=type_hints["backup_created_at"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__85698b4f584495183a38e2792345bdec904324d4b0b0754f87a378d229bd1eee
+            )
+            check_type(
+                argname="argument database_name",
+                value=database_name,
+                expected_type=type_hints["database_name"],
+            )
+            check_type(
+                argname="argument backup_created_at",
+                value=backup_created_at,
+                expected_type=type_hints["backup_created_at"],
+            )
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "database_name": database_name,
         }
@@ -517,14 +692,14 @@ class DatabaseClusterBackupRestore:
 
     @builtins.property
     def database_name(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#database_name DatabaseCluster#database_name}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#database_name DatabaseCluster#database_name}."""
         result = self._values.get("database_name")
         assert result is not None, "Required property 'database_name' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def backup_created_at(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#backup_created_at DatabaseCluster#backup_created_at}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#backup_created_at DatabaseCluster#backup_created_at}."""
         result = self._values.get("backup_created_at")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -550,14 +725,24 @@ class DatabaseClusterBackupRestoreOutputReference(
         terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
         terraform_attribute: builtins.str,
     ) -> None:
-        '''
+        """
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__acb88d5ad8f55821d6b1d635caeee629695cac1fd99f9f3a32d76d6a708a75b3)
-            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
-            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__acb88d5ad8f55821d6b1d635caeee629695cac1fd99f9f3a32d76d6a708a75b3
+            )
+            check_type(
+                argname="argument terraform_resource",
+                value=terraform_resource,
+                expected_type=type_hints["terraform_resource"],
+            )
+            check_type(
+                argname="argument terraform_attribute",
+                value=terraform_attribute,
+                expected_type=type_hints["terraform_attribute"],
+            )
         jsii.create(self.__class__, self, [terraform_resource, terraform_attribute])
 
     @jsii.member(jsii_name="resetBackupCreatedAt")
@@ -567,12 +752,16 @@ class DatabaseClusterBackupRestoreOutputReference(
     @builtins.property
     @jsii.member(jsii_name="backupCreatedAtInput")
     def backup_created_at_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "backupCreatedAtInput"))
+        return typing.cast(
+            typing.Optional[builtins.str], jsii.get(self, "backupCreatedAtInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="databaseNameInput")
     def database_name_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "databaseNameInput"))
+        return typing.cast(
+            typing.Optional[builtins.str], jsii.get(self, "databaseNameInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="backupCreatedAt")
@@ -582,8 +771,12 @@ class DatabaseClusterBackupRestoreOutputReference(
     @backup_created_at.setter
     def backup_created_at(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0eedd0e1441774a90293645b9e53f46267b7c78ddf958b7a351909ce6b0d9bb7)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__0eedd0e1441774a90293645b9e53f46267b7c78ddf958b7a351909ce6b0d9bb7
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "backupCreatedAt", value)
 
     @builtins.property
@@ -594,14 +787,21 @@ class DatabaseClusterBackupRestoreOutputReference(
     @database_name.setter
     def database_name(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__4f00c04a61c020d9eff7ae7b4a19a67ecae4118dff14305c0a3b692e8ba9407d)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__4f00c04a61c020d9eff7ae7b4a19a67ecae4118dff14305c0a3b692e8ba9407d
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "databaseName", value)
 
     @builtins.property
     @jsii.member(jsii_name="internalValue")
     def internal_value(self) -> typing.Optional[DatabaseClusterBackupRestore]:
-        return typing.cast(typing.Optional[DatabaseClusterBackupRestore], jsii.get(self, "internalValue"))
+        return typing.cast(
+            typing.Optional[DatabaseClusterBackupRestore],
+            jsii.get(self, "internalValue"),
+        )
 
     @internal_value.setter
     def internal_value(
@@ -609,8 +809,12 @@ class DatabaseClusterBackupRestoreOutputReference(
         value: typing.Optional[DatabaseClusterBackupRestore],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__390e9efe436c39e089ebff18ae3ff625f505f6e334dc391d837bed873aaab0b7)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__390e9efe436c39e089ebff18ae3ff625f505f6e334dc391d837bed873aaab0b7
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "internalValue", value)
 
 
@@ -646,37 +850,92 @@ class DatabaseClusterConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def __init__(
         self,
         *,
-        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+        connection: typing.Optional[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.SSHProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.WinrmProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ] = None,
+        count: typing.Optional[
+            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+        ] = None,
+        depends_on: typing.Optional[
+            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+        ] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+        lifecycle: typing.Optional[
+            typing.Union[
+                _cdktf_9a9027ec.TerraformResourceLifecycle,
+                typing.Dict[builtins.str, typing.Any],
+            ]
+        ] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+        provisioners: typing.Optional[
+            typing.Sequence[
+                typing.Union[
+                    typing.Union[
+                        _cdktf_9a9027ec.FileProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.LocalExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.RemoteExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                ]
+            ]
+        ] = None,
         engine: builtins.str,
         name: builtins.str,
         node_count: jsii.Number,
         region: builtins.str,
         size: builtins.str,
-        backup_restore: typing.Optional[typing.Union[DatabaseClusterBackupRestore, typing.Dict[builtins.str, typing.Any]]] = None,
+        backup_restore: typing.Optional[
+            typing.Union[
+                DatabaseClusterBackupRestore, typing.Dict[builtins.str, typing.Any]
+            ]
+        ] = None,
         eviction_policy: typing.Optional[builtins.str] = None,
         id: typing.Optional[builtins.str] = None,
-        maintenance_window: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["DatabaseClusterMaintenanceWindow", typing.Dict[builtins.str, typing.Any]]]]] = None,
+        maintenance_window: typing.Optional[
+            typing.Union[
+                _cdktf_9a9027ec.IResolvable,
+                typing.Sequence[
+                    typing.Union[
+                        "DatabaseClusterMaintenanceWindow",
+                        typing.Dict[builtins.str, typing.Any],
+                    ]
+                ],
+            ]
+        ] = None,
         private_network_uuid: typing.Optional[builtins.str] = None,
         project_id: typing.Optional[builtins.str] = None,
         sql_mode: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-        timeouts: typing.Optional[typing.Union["DatabaseClusterTimeouts", typing.Dict[builtins.str, typing.Any]]] = None,
+        timeouts: typing.Optional[
+            typing.Union[
+                "DatabaseClusterTimeouts", typing.Dict[builtins.str, typing.Any]
+            ]
+        ] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
-        :param connection: 
-        :param count: 
-        :param depends_on: 
-        :param for_each: 
-        :param lifecycle: 
-        :param provider: 
-        :param provisioners: 
+        """
+        :param connection:
+        :param count:
+        :param depends_on:
+        :param for_each:
+        :param lifecycle:
+        :param provider:
+        :param provisioners:
         :param engine: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#engine DatabaseCluster#engine}.
         :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#name DatabaseCluster#name}.
         :param node_count: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#node_count DatabaseCluster#node_count}.
@@ -692,7 +951,7 @@ class DatabaseClusterConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param tags: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#tags DatabaseCluster#tags}.
         :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#timeouts DatabaseCluster#timeouts}
         :param version: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#version DatabaseCluster#version}.
-        '''
+        """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
         if isinstance(backup_restore, dict):
@@ -700,29 +959,107 @@ class DatabaseClusterConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         if isinstance(timeouts, dict):
             timeouts = DatabaseClusterTimeouts(**timeouts)
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__090be34ec23b5f07a6be61cde8159c57ffaf9a3be006f4fde2e1ea559bd403c2)
-            check_type(argname="argument connection", value=connection, expected_type=type_hints["connection"])
-            check_type(argname="argument count", value=count, expected_type=type_hints["count"])
-            check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
-            check_type(argname="argument for_each", value=for_each, expected_type=type_hints["for_each"])
-            check_type(argname="argument lifecycle", value=lifecycle, expected_type=type_hints["lifecycle"])
-            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
-            check_type(argname="argument provisioners", value=provisioners, expected_type=type_hints["provisioners"])
-            check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument node_count", value=node_count, expected_type=type_hints["node_count"])
-            check_type(argname="argument region", value=region, expected_type=type_hints["region"])
-            check_type(argname="argument size", value=size, expected_type=type_hints["size"])
-            check_type(argname="argument backup_restore", value=backup_restore, expected_type=type_hints["backup_restore"])
-            check_type(argname="argument eviction_policy", value=eviction_policy, expected_type=type_hints["eviction_policy"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__090be34ec23b5f07a6be61cde8159c57ffaf9a3be006f4fde2e1ea559bd403c2
+            )
+            check_type(
+                argname="argument connection",
+                value=connection,
+                expected_type=type_hints["connection"],
+            )
+            check_type(
+                argname="argument count", value=count, expected_type=type_hints["count"]
+            )
+            check_type(
+                argname="argument depends_on",
+                value=depends_on,
+                expected_type=type_hints["depends_on"],
+            )
+            check_type(
+                argname="argument for_each",
+                value=for_each,
+                expected_type=type_hints["for_each"],
+            )
+            check_type(
+                argname="argument lifecycle",
+                value=lifecycle,
+                expected_type=type_hints["lifecycle"],
+            )
+            check_type(
+                argname="argument provider",
+                value=provider,
+                expected_type=type_hints["provider"],
+            )
+            check_type(
+                argname="argument provisioners",
+                value=provisioners,
+                expected_type=type_hints["provisioners"],
+            )
+            check_type(
+                argname="argument engine",
+                value=engine,
+                expected_type=type_hints["engine"],
+            )
+            check_type(
+                argname="argument name", value=name, expected_type=type_hints["name"]
+            )
+            check_type(
+                argname="argument node_count",
+                value=node_count,
+                expected_type=type_hints["node_count"],
+            )
+            check_type(
+                argname="argument region",
+                value=region,
+                expected_type=type_hints["region"],
+            )
+            check_type(
+                argname="argument size", value=size, expected_type=type_hints["size"]
+            )
+            check_type(
+                argname="argument backup_restore",
+                value=backup_restore,
+                expected_type=type_hints["backup_restore"],
+            )
+            check_type(
+                argname="argument eviction_policy",
+                value=eviction_policy,
+                expected_type=type_hints["eviction_policy"],
+            )
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument maintenance_window", value=maintenance_window, expected_type=type_hints["maintenance_window"])
-            check_type(argname="argument private_network_uuid", value=private_network_uuid, expected_type=type_hints["private_network_uuid"])
-            check_type(argname="argument project_id", value=project_id, expected_type=type_hints["project_id"])
-            check_type(argname="argument sql_mode", value=sql_mode, expected_type=type_hints["sql_mode"])
-            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
-            check_type(argname="argument timeouts", value=timeouts, expected_type=type_hints["timeouts"])
-            check_type(argname="argument version", value=version, expected_type=type_hints["version"])
+            check_type(
+                argname="argument maintenance_window",
+                value=maintenance_window,
+                expected_type=type_hints["maintenance_window"],
+            )
+            check_type(
+                argname="argument private_network_uuid",
+                value=private_network_uuid,
+                expected_type=type_hints["private_network_uuid"],
+            )
+            check_type(
+                argname="argument project_id",
+                value=project_id,
+                expected_type=type_hints["project_id"],
+            )
+            check_type(
+                argname="argument sql_mode",
+                value=sql_mode,
+                expected_type=type_hints["sql_mode"],
+            )
+            check_type(
+                argname="argument tags", value=tags, expected_type=type_hints["tags"]
+            )
+            check_type(
+                argname="argument timeouts",
+                value=timeouts,
+                expected_type=type_hints["timeouts"],
+            )
+            check_type(
+                argname="argument version",
+                value=version,
+                expected_type=type_hints["version"],
+            )
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "engine": engine,
             "name": name,
@@ -768,174 +1105,225 @@ class DatabaseClusterConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     @builtins.property
     def connection(
         self,
-    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]]:
-        '''
+    ) -> typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.SSHProvisionerConnection,
+            _cdktf_9a9027ec.WinrmProvisionerConnection,
+        ]
+    ]:
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("connection")
-        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
+        return typing.cast(
+            typing.Optional[
+                typing.Union[
+                    _cdktf_9a9027ec.SSHProvisionerConnection,
+                    _cdktf_9a9027ec.WinrmProvisionerConnection,
+                ]
+            ],
+            result,
+        )
 
     @builtins.property
     def count(
         self,
     ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("count")
-        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
+        return typing.cast(
+            typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]],
+            result,
+        )
 
     @builtins.property
     def depends_on(
         self,
     ) -> typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("depends_on")
-        return typing.cast(typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result)
+        return typing.cast(
+            typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result
+        )
 
     @builtins.property
     def for_each(self) -> typing.Optional[_cdktf_9a9027ec.ITerraformIterator]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("for_each")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.ITerraformIterator], result)
 
     @builtins.property
     def lifecycle(self) -> typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("lifecycle")
-        return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result)
+        return typing.cast(
+            typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result
+        )
 
     @builtins.property
     def provider(self) -> typing.Optional[_cdktf_9a9027ec.TerraformProvider]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("provider")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformProvider], result)
 
     @builtins.property
     def provisioners(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]]:
-        '''
+    ) -> typing.Optional[
+        typing.List[
+            typing.Union[
+                _cdktf_9a9027ec.FileProvisioner,
+                _cdktf_9a9027ec.LocalExecProvisioner,
+                _cdktf_9a9027ec.RemoteExecProvisioner,
+            ]
+        ]
+    ]:
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("provisioners")
-        return typing.cast(typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]], result)
+        return typing.cast(
+            typing.Optional[
+                typing.List[
+                    typing.Union[
+                        _cdktf_9a9027ec.FileProvisioner,
+                        _cdktf_9a9027ec.LocalExecProvisioner,
+                        _cdktf_9a9027ec.RemoteExecProvisioner,
+                    ]
+                ]
+            ],
+            result,
+        )
 
     @builtins.property
     def engine(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#engine DatabaseCluster#engine}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#engine DatabaseCluster#engine}."""
         result = self._values.get("engine")
         assert result is not None, "Required property 'engine' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#name DatabaseCluster#name}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#name DatabaseCluster#name}."""
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def node_count(self) -> jsii.Number:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#node_count DatabaseCluster#node_count}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#node_count DatabaseCluster#node_count}."""
         result = self._values.get("node_count")
         assert result is not None, "Required property 'node_count' is missing"
         return typing.cast(jsii.Number, result)
 
     @builtins.property
     def region(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#region DatabaseCluster#region}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#region DatabaseCluster#region}."""
         result = self._values.get("region")
         assert result is not None, "Required property 'region' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def size(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#size DatabaseCluster#size}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#size DatabaseCluster#size}."""
         result = self._values.get("size")
         assert result is not None, "Required property 'size' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def backup_restore(self) -> typing.Optional[DatabaseClusterBackupRestore]:
-        '''backup_restore block.
+        """backup_restore block.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#backup_restore DatabaseCluster#backup_restore}
-        '''
+        """
         result = self._values.get("backup_restore")
         return typing.cast(typing.Optional[DatabaseClusterBackupRestore], result)
 
     @builtins.property
     def eviction_policy(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#eviction_policy DatabaseCluster#eviction_policy}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#eviction_policy DatabaseCluster#eviction_policy}."""
         result = self._values.get("eviction_policy")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#id DatabaseCluster#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#id DatabaseCluster#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        '''
+        """
         result = self._values.get("id")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def maintenance_window(
         self,
-    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DatabaseClusterMaintenanceWindow"]]]:
-        '''maintenance_window block.
+    ) -> typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.IResolvable, typing.List["DatabaseClusterMaintenanceWindow"]
+        ]
+    ]:
+        """maintenance_window block.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#maintenance_window DatabaseCluster#maintenance_window}
-        '''
+        """
         result = self._values.get("maintenance_window")
-        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DatabaseClusterMaintenanceWindow"]]], result)
+        return typing.cast(
+            typing.Optional[
+                typing.Union[
+                    _cdktf_9a9027ec.IResolvable,
+                    typing.List["DatabaseClusterMaintenanceWindow"],
+                ]
+            ],
+            result,
+        )
 
     @builtins.property
     def private_network_uuid(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#private_network_uuid DatabaseCluster#private_network_uuid}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#private_network_uuid DatabaseCluster#private_network_uuid}."""
         result = self._values.get("private_network_uuid")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def project_id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#project_id DatabaseCluster#project_id}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#project_id DatabaseCluster#project_id}."""
         result = self._values.get("project_id")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def sql_mode(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#sql_mode DatabaseCluster#sql_mode}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#sql_mode DatabaseCluster#sql_mode}."""
         result = self._values.get("sql_mode")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#tags DatabaseCluster#tags}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#tags DatabaseCluster#tags}."""
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def timeouts(self) -> typing.Optional["DatabaseClusterTimeouts"]:
-        '''timeouts block.
+        """timeouts block.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#timeouts DatabaseCluster#timeouts}
-        '''
+        """
         result = self._values.get("timeouts")
         return typing.cast(typing.Optional["DatabaseClusterTimeouts"], result)
 
     @builtins.property
     def version(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#version DatabaseCluster#version}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#version DatabaseCluster#version}."""
         result = self._values.get("version")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -958,14 +1346,20 @@ class DatabaseClusterConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 )
 class DatabaseClusterMaintenanceWindow:
     def __init__(self, *, day: builtins.str, hour: builtins.str) -> None:
-        '''
+        """
         :param day: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#day DatabaseCluster#day}.
         :param hour: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#hour DatabaseCluster#hour}.
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__628a00023d830e9c5fcf4a988d36b9108981d70bc1ec10856472fb5e9fafbb73)
-            check_type(argname="argument day", value=day, expected_type=type_hints["day"])
-            check_type(argname="argument hour", value=hour, expected_type=type_hints["hour"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__628a00023d830e9c5fcf4a988d36b9108981d70bc1ec10856472fb5e9fafbb73
+            )
+            check_type(
+                argname="argument day", value=day, expected_type=type_hints["day"]
+            )
+            check_type(
+                argname="argument hour", value=hour, expected_type=type_hints["hour"]
+            )
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "day": day,
             "hour": hour,
@@ -973,14 +1367,14 @@ class DatabaseClusterMaintenanceWindow:
 
     @builtins.property
     def day(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#day DatabaseCluster#day}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#day DatabaseCluster#day}."""
         result = self._values.get("day")
         assert result is not None, "Required property 'day' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def hour(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#hour DatabaseCluster#hour}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#hour DatabaseCluster#hour}."""
         result = self._values.get("hour")
         assert result is not None, "Required property 'hour' is missing"
         return typing.cast(builtins.str, result)
@@ -1008,85 +1402,143 @@ class DatabaseClusterMaintenanceWindowList(
         terraform_attribute: builtins.str,
         wraps_set: builtins.bool,
     ) -> None:
-        '''
+        """
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param wraps_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__5110652c4a16521c48e71e48a0cf5f0112da36af8b8d8beb4b382f32806d6afb)
-            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
-            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
-            check_type(argname="argument wraps_set", value=wraps_set, expected_type=type_hints["wraps_set"])
-        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, wraps_set])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__5110652c4a16521c48e71e48a0cf5f0112da36af8b8d8beb4b382f32806d6afb
+            )
+            check_type(
+                argname="argument terraform_resource",
+                value=terraform_resource,
+                expected_type=type_hints["terraform_resource"],
+            )
+            check_type(
+                argname="argument terraform_attribute",
+                value=terraform_attribute,
+                expected_type=type_hints["terraform_attribute"],
+            )
+            check_type(
+                argname="argument wraps_set",
+                value=wraps_set,
+                expected_type=type_hints["wraps_set"],
+            )
+        jsii.create(
+            self.__class__, self, [terraform_resource, terraform_attribute, wraps_set]
+        )
 
     @jsii.member(jsii_name="get")
     def get(
         self,
         index: jsii.Number,
     ) -> "DatabaseClusterMaintenanceWindowOutputReference":
-        '''
+        """
         :param index: the index of the item to return.
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2a2125c1ad4a1c50a5dae696324ddbe19d94f1d81c658aaed032815844d5072c)
-            check_type(argname="argument index", value=index, expected_type=type_hints["index"])
-        return typing.cast("DatabaseClusterMaintenanceWindowOutputReference", jsii.invoke(self, "get", [index]))
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__2a2125c1ad4a1c50a5dae696324ddbe19d94f1d81c658aaed032815844d5072c
+            )
+            check_type(
+                argname="argument index", value=index, expected_type=type_hints["index"]
+            )
+        return typing.cast(
+            "DatabaseClusterMaintenanceWindowOutputReference",
+            jsii.invoke(self, "get", [index]),
+        )
 
     @builtins.property
     @jsii.member(jsii_name="terraformAttribute")
     def _terraform_attribute(self) -> builtins.str:
-        '''The attribute on the parent resource this class is referencing.'''
+        """The attribute on the parent resource this class is referencing."""
         return typing.cast(builtins.str, jsii.get(self, "terraformAttribute"))
 
     @_terraform_attribute.setter
     def _terraform_attribute(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e44e36043026e1ec7dd16fb892d5c4f713b3757b77150bbad0578c8585ddaf14)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__e44e36043026e1ec7dd16fb892d5c4f713b3757b77150bbad0578c8585ddaf14
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "terraformAttribute", value)
 
     @builtins.property
     @jsii.member(jsii_name="terraformResource")
     def _terraform_resource(self) -> _cdktf_9a9027ec.IInterpolatingParent:
-        '''The parent resource.'''
-        return typing.cast(_cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource"))
+        """The parent resource."""
+        return typing.cast(
+            _cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource")
+        )
 
     @_terraform_resource.setter
     def _terraform_resource(self, value: _cdktf_9a9027ec.IInterpolatingParent) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__be2718325c8654d2d1a06854737f639f9ddeab52b9e8738f01ffdec8a05a5512)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__be2718325c8654d2d1a06854737f639f9ddeab52b9e8738f01ffdec8a05a5512
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "terraformResource", value)
 
     @builtins.property
     @jsii.member(jsii_name="wrapsSet")
     def _wraps_set(self) -> builtins.bool:
-        '''whether the list is wrapping a set (will add tolist() to be able to access an item via an index).'''
+        """whether the list is wrapping a set (will add tolist() to be able to access an item via an index)."""
         return typing.cast(builtins.bool, jsii.get(self, "wrapsSet"))
 
     @_wraps_set.setter
     def _wraps_set(self, value: builtins.bool) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2a5e915de3ba102ee71bcad0c1998c80e875b6b3f073d38e49876066aa7d999c)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__2a5e915de3ba102ee71bcad0c1998c80e875b6b3f073d38e49876066aa7d999c
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "wrapsSet", value)
 
     @builtins.property
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List[DatabaseClusterMaintenanceWindow]]]:
-        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List[DatabaseClusterMaintenanceWindow]]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.IResolvable, typing.List[DatabaseClusterMaintenanceWindow]
+        ]
+    ]:
+        return typing.cast(
+            typing.Optional[
+                typing.Union[
+                    _cdktf_9a9027ec.IResolvable,
+                    typing.List[DatabaseClusterMaintenanceWindow],
+                ]
+            ],
+            jsii.get(self, "internalValue"),
+        )
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List[DatabaseClusterMaintenanceWindow]]],
+        value: typing.Optional[
+            typing.Union[
+                _cdktf_9a9027ec.IResolvable,
+                typing.List[DatabaseClusterMaintenanceWindow],
+            ]
+        ],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1a694777c10c0564655f7ade8ab9fdce85c0d0314b891838d63fcbee23e92b4e)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__1a694777c10c0564655f7ade8ab9fdce85c0d0314b891838d63fcbee23e92b4e
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "internalValue", value)
 
 
@@ -1102,19 +1554,46 @@ class DatabaseClusterMaintenanceWindowOutputReference(
         complex_object_index: jsii.Number,
         complex_object_is_from_set: builtins.bool,
     ) -> None:
-        '''
+        """
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param complex_object_index: the index of this item in the list.
         :param complex_object_is_from_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c54fbbae1657505abdb9c66466e5df22d0bcdd35de254b4d6036ac5c7279120b)
-            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
-            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
-            check_type(argname="argument complex_object_index", value=complex_object_index, expected_type=type_hints["complex_object_index"])
-            check_type(argname="argument complex_object_is_from_set", value=complex_object_is_from_set, expected_type=type_hints["complex_object_is_from_set"])
-        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, complex_object_index, complex_object_is_from_set])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__c54fbbae1657505abdb9c66466e5df22d0bcdd35de254b4d6036ac5c7279120b
+            )
+            check_type(
+                argname="argument terraform_resource",
+                value=terraform_resource,
+                expected_type=type_hints["terraform_resource"],
+            )
+            check_type(
+                argname="argument terraform_attribute",
+                value=terraform_attribute,
+                expected_type=type_hints["terraform_attribute"],
+            )
+            check_type(
+                argname="argument complex_object_index",
+                value=complex_object_index,
+                expected_type=type_hints["complex_object_index"],
+            )
+            check_type(
+                argname="argument complex_object_is_from_set",
+                value=complex_object_is_from_set,
+                expected_type=type_hints["complex_object_is_from_set"],
+            )
+        jsii.create(
+            self.__class__,
+            self,
+            [
+                terraform_resource,
+                terraform_attribute,
+                complex_object_index,
+                complex_object_is_from_set,
+            ],
+        )
 
     @builtins.property
     @jsii.member(jsii_name="dayInput")
@@ -1134,8 +1613,12 @@ class DatabaseClusterMaintenanceWindowOutputReference(
     @day.setter
     def day(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__46cf48d9ee2893aeab9b3abec45390d67d2673fa94843995c5801a67ffd644be)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__46cf48d9ee2893aeab9b3abec45390d67d2673fa94843995c5801a67ffd644be
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "day", value)
 
     @builtins.property
@@ -1146,25 +1629,44 @@ class DatabaseClusterMaintenanceWindowOutputReference(
     @hour.setter
     def hour(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__156dd6168324fdd94122bfc9cb76327deda486373e92b703fe20d9a306786437)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__156dd6168324fdd94122bfc9cb76327deda486373e92b703fe20d9a306786437
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "hour", value)
 
     @builtins.property
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterMaintenanceWindow]]:
-        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterMaintenanceWindow]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[
+        typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterMaintenanceWindow]
+    ]:
+        return typing.cast(
+            typing.Optional[
+                typing.Union[
+                    _cdktf_9a9027ec.IResolvable, DatabaseClusterMaintenanceWindow
+                ]
+            ],
+            jsii.get(self, "internalValue"),
+        )
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterMaintenanceWindow]],
+        value: typing.Optional[
+            typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterMaintenanceWindow]
+        ],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f412da71e49aae124ae433e8d0ffe6ce1cf7aba5baa67edb8740433ba53b9d13)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__f412da71e49aae124ae433e8d0ffe6ce1cf7aba5baa67edb8740433ba53b9d13
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "internalValue", value)
 
 
@@ -1175,19 +1677,25 @@ class DatabaseClusterMaintenanceWindowOutputReference(
 )
 class DatabaseClusterTimeouts:
     def __init__(self, *, create: typing.Optional[builtins.str] = None) -> None:
-        '''
+        """
         :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#create DatabaseCluster#create}.
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__167a3358a672527e97ba856ed7a7f0597df1fcacc66544980232d0eeba1985c4)
-            check_type(argname="argument create", value=create, expected_type=type_hints["create"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__167a3358a672527e97ba856ed7a7f0597df1fcacc66544980232d0eeba1985c4
+            )
+            check_type(
+                argname="argument create",
+                value=create,
+                expected_type=type_hints["create"],
+            )
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if create is not None:
             self._values["create"] = create
 
     @builtins.property
     def create(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#create DatabaseCluster#create}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/resources/database_cluster#create DatabaseCluster#create}."""
         result = self._values.get("create")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -1213,14 +1721,24 @@ class DatabaseClusterTimeoutsOutputReference(
         terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
         terraform_attribute: builtins.str,
     ) -> None:
-        '''
+        """
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__3d916e7ab27e1225efb22c3dac60b85e5df56f3cfa9ee1727f456e2f097c2590)
-            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
-            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__3d916e7ab27e1225efb22c3dac60b85e5df56f3cfa9ee1727f456e2f097c2590
+            )
+            check_type(
+                argname="argument terraform_resource",
+                value=terraform_resource,
+                expected_type=type_hints["terraform_resource"],
+            )
+            check_type(
+                argname="argument terraform_attribute",
+                value=terraform_attribute,
+                expected_type=type_hints["terraform_attribute"],
+            )
         jsii.create(self.__class__, self, [terraform_resource, terraform_attribute])
 
     @jsii.member(jsii_name="resetCreate")
@@ -1240,25 +1758,42 @@ class DatabaseClusterTimeoutsOutputReference(
     @create.setter
     def create(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7d25ef3b87c0e048927a34ed540e2d7461ff61d6cf9221151cacf210c50a374f)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__7d25ef3b87c0e048927a34ed540e2d7461ff61d6cf9221151cacf210c50a374f
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "create", value)
 
     @builtins.property
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterTimeouts]]:
-        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterTimeouts]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[
+        typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterTimeouts]
+    ]:
+        return typing.cast(
+            typing.Optional[
+                typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterTimeouts]
+            ],
+            jsii.get(self, "internalValue"),
+        )
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterTimeouts]],
+        value: typing.Optional[
+            typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterTimeouts]
+        ],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__114bd978be48ca2a57f74c47cd8faad9f3f64a7bae760e4d26b583b45acae177)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__114bd978be48ca2a57f74c47cd8faad9f3f64a7bae760e4d26b583b45acae177
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "internalValue", value)
 
 
@@ -1276,6 +1811,7 @@ __all__ = [
 
 publication.publish()
 
+
 def _typecheckingstub__365e4e500021a16af904c11b294c43eb3e65bece891d036248035aa845b6720c(
     scope: _constructs_77d1e7e8.Construct,
     id_: builtins.str,
@@ -1285,32 +1821,94 @@ def _typecheckingstub__365e4e500021a16af904c11b294c43eb3e65bece891d036248035aa84
     node_count: jsii.Number,
     region: builtins.str,
     size: builtins.str,
-    backup_restore: typing.Optional[typing.Union[DatabaseClusterBackupRestore, typing.Dict[builtins.str, typing.Any]]] = None,
+    backup_restore: typing.Optional[
+        typing.Union[
+            DatabaseClusterBackupRestore, typing.Dict[builtins.str, typing.Any]
+        ]
+    ] = None,
     eviction_policy: typing.Optional[builtins.str] = None,
     id: typing.Optional[builtins.str] = None,
-    maintenance_window: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[DatabaseClusterMaintenanceWindow, typing.Dict[builtins.str, typing.Any]]]]] = None,
+    maintenance_window: typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.IResolvable,
+            typing.Sequence[
+                typing.Union[
+                    DatabaseClusterMaintenanceWindow,
+                    typing.Dict[builtins.str, typing.Any],
+                ]
+            ],
+        ]
+    ] = None,
     private_network_uuid: typing.Optional[builtins.str] = None,
     project_id: typing.Optional[builtins.str] = None,
     sql_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-    timeouts: typing.Optional[typing.Union[DatabaseClusterTimeouts, typing.Dict[builtins.str, typing.Any]]] = None,
+    timeouts: typing.Optional[
+        typing.Union[DatabaseClusterTimeouts, typing.Dict[builtins.str, typing.Any]]
+    ] = None,
     version: typing.Optional[builtins.str] = None,
-    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+    connection: typing.Optional[
+        typing.Union[
+            typing.Union[
+                _cdktf_9a9027ec.SSHProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+            typing.Union[
+                _cdktf_9a9027ec.WinrmProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+        ]
+    ] = None,
+    count: typing.Optional[
+        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+    ] = None,
+    depends_on: typing.Optional[
+        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+    ] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+    lifecycle: typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.TerraformResourceLifecycle,
+            typing.Dict[builtins.str, typing.Any],
+        ]
+    ] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+    provisioners: typing.Optional[
+        typing.Sequence[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.FileProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.LocalExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.RemoteExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ]
+    ] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__e5c389c6b1187d56769d184e66628dafefe68e2ef3682792e53bfea41a8846bd(
-    value: typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[DatabaseClusterMaintenanceWindow, typing.Dict[builtins.str, typing.Any]]]],
+    value: typing.Union[
+        _cdktf_9a9027ec.IResolvable,
+        typing.Sequence[
+            typing.Union[
+                DatabaseClusterMaintenanceWindow, typing.Dict[builtins.str, typing.Any]
+            ]
+        ],
+    ],
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__ceb187ab3d2c39e8afe875e7f030bcfccfc763b7c8ffd47394cd32ab9b0c21ed(
     value: builtins.str,
@@ -1318,11 +1916,13 @@ def _typecheckingstub__ceb187ab3d2c39e8afe875e7f030bcfccfc763b7c8ffd47394cd32ab9
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__f272688eb5b0af5f64554fa21c281c73e85a2180ddca40fb347669768eebaf99(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__c8bd86fb745d8ab5abf998d484a58145255b4f21a73b12b56e23aa0220d2e7cf(
     value: builtins.str,
@@ -1330,11 +1930,13 @@ def _typecheckingstub__c8bd86fb745d8ab5abf998d484a58145255b4f21a73b12b56e23aa022
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__8b6b45062fdffa1283da708ce2252e700d9b53d4d03e3f1a05a0bebd987ceb90(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__df1e117dc52bd12904b48b8a377801ce3100b7e445428a75bee0ab4e564e5a6b(
     value: jsii.Number,
@@ -1342,11 +1944,13 @@ def _typecheckingstub__df1e117dc52bd12904b48b8a377801ce3100b7e445428a75bee0ab4e5
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__dc41f90237344bb258e8672a52a5fcda4782429dac98c568ef3fa3613679376c(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__a5efff7d2c00bbd94d18f3a5864c7538ec7284e8bf3b4dd5bf86b60fd651b705(
     value: builtins.str,
@@ -1354,11 +1958,13 @@ def _typecheckingstub__a5efff7d2c00bbd94d18f3a5864c7538ec7284e8bf3b4dd5bf86b60fd
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__6420038b8882d0d174a747d1fc5f66dc5a23d00ef116b90b6353a9cc80c5429e(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__a43a959c2ff37bdda8ce8391f8247adf4d9023f348f56aaa4f073c90f37f034a(
     value: builtins.str,
@@ -1366,11 +1972,13 @@ def _typecheckingstub__a43a959c2ff37bdda8ce8391f8247adf4d9023f348f56aaa4f073c90f
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__53fdf82610058b1bfa82d7b694873b1f925485333bbf39e7e80536044ecaea95(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__1353645a15fb93849d5023f6d9c08c5f58935fc32e0e64e5ec24f7d744304631(
     value: typing.List[builtins.str],
@@ -1378,11 +1986,13 @@ def _typecheckingstub__1353645a15fb93849d5023f6d9c08c5f58935fc32e0e64e5ec24f7d74
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__7edf51dfb4eb5b01b96cdd9de5d207a24f5e5a13095131ee5f4375cb17a43848(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__85698b4f584495183a38e2792345bdec904324d4b0b0754f87a378d229bd1eee(
     *,
@@ -1392,6 +2002,7 @@ def _typecheckingstub__85698b4f584495183a38e2792345bdec904324d4b0b0754f87a378d22
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__acb88d5ad8f55821d6b1d635caeee629695cac1fd99f9f3a32d76d6a708a75b3(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
     terraform_attribute: builtins.str,
@@ -1399,11 +2010,13 @@ def _typecheckingstub__acb88d5ad8f55821d6b1d635caeee629695cac1fd99f9f3a32d76d6a7
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__0eedd0e1441774a90293645b9e53f46267b7c78ddf958b7a351909ce6b0d9bb7(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__4f00c04a61c020d9eff7ae7b4a19a67ecae4118dff14305c0a3b692e8ba9407d(
     value: builtins.str,
@@ -1411,39 +2024,95 @@ def _typecheckingstub__4f00c04a61c020d9eff7ae7b4a19a67ecae4118dff14305c0a3b692e8
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__390e9efe436c39e089ebff18ae3ff625f505f6e334dc391d837bed873aaab0b7(
     value: typing.Optional[DatabaseClusterBackupRestore],
 ) -> None:
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__090be34ec23b5f07a6be61cde8159c57ffaf9a3be006f4fde2e1ea559bd403c2(
     *,
-    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+    connection: typing.Optional[
+        typing.Union[
+            typing.Union[
+                _cdktf_9a9027ec.SSHProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+            typing.Union[
+                _cdktf_9a9027ec.WinrmProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+        ]
+    ] = None,
+    count: typing.Optional[
+        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+    ] = None,
+    depends_on: typing.Optional[
+        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+    ] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+    lifecycle: typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.TerraformResourceLifecycle,
+            typing.Dict[builtins.str, typing.Any],
+        ]
+    ] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+    provisioners: typing.Optional[
+        typing.Sequence[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.FileProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.LocalExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.RemoteExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ]
+    ] = None,
     engine: builtins.str,
     name: builtins.str,
     node_count: jsii.Number,
     region: builtins.str,
     size: builtins.str,
-    backup_restore: typing.Optional[typing.Union[DatabaseClusterBackupRestore, typing.Dict[builtins.str, typing.Any]]] = None,
+    backup_restore: typing.Optional[
+        typing.Union[
+            DatabaseClusterBackupRestore, typing.Dict[builtins.str, typing.Any]
+        ]
+    ] = None,
     eviction_policy: typing.Optional[builtins.str] = None,
     id: typing.Optional[builtins.str] = None,
-    maintenance_window: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[DatabaseClusterMaintenanceWindow, typing.Dict[builtins.str, typing.Any]]]]] = None,
+    maintenance_window: typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.IResolvable,
+            typing.Sequence[
+                typing.Union[
+                    DatabaseClusterMaintenanceWindow,
+                    typing.Dict[builtins.str, typing.Any],
+                ]
+            ],
+        ]
+    ] = None,
     private_network_uuid: typing.Optional[builtins.str] = None,
     project_id: typing.Optional[builtins.str] = None,
     sql_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-    timeouts: typing.Optional[typing.Union[DatabaseClusterTimeouts, typing.Dict[builtins.str, typing.Any]]] = None,
+    timeouts: typing.Optional[
+        typing.Union[DatabaseClusterTimeouts, typing.Dict[builtins.str, typing.Any]]
+    ] = None,
     version: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__628a00023d830e9c5fcf4a988d36b9108981d70bc1ec10856472fb5e9fafbb73(
     *,
@@ -1453,6 +2122,7 @@ def _typecheckingstub__628a00023d830e9c5fcf4a988d36b9108981d70bc1ec10856472fb5e9
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__5110652c4a16521c48e71e48a0cf5f0112da36af8b8d8beb4b382f32806d6afb(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
     terraform_attribute: builtins.str,
@@ -1461,11 +2131,13 @@ def _typecheckingstub__5110652c4a16521c48e71e48a0cf5f0112da36af8b8d8beb4b382f328
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__2a2125c1ad4a1c50a5dae696324ddbe19d94f1d81c658aaed032815844d5072c(
     index: jsii.Number,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__e44e36043026e1ec7dd16fb892d5c4f713b3757b77150bbad0578c8585ddaf14(
     value: builtins.str,
@@ -1473,11 +2145,13 @@ def _typecheckingstub__e44e36043026e1ec7dd16fb892d5c4f713b3757b77150bbad0578c858
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__be2718325c8654d2d1a06854737f639f9ddeab52b9e8738f01ffdec8a05a5512(
     value: _cdktf_9a9027ec.IInterpolatingParent,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__2a5e915de3ba102ee71bcad0c1998c80e875b6b3f073d38e49876066aa7d999c(
     value: builtins.bool,
@@ -1485,11 +2159,17 @@ def _typecheckingstub__2a5e915de3ba102ee71bcad0c1998c80e875b6b3f073d38e49876066a
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__1a694777c10c0564655f7ade8ab9fdce85c0d0314b891838d63fcbee23e92b4e(
-    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List[DatabaseClusterMaintenanceWindow]]],
+    value: typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.IResolvable, typing.List[DatabaseClusterMaintenanceWindow]
+        ]
+    ],
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__c54fbbae1657505abdb9c66466e5df22d0bcdd35de254b4d6036ac5c7279120b(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -1500,11 +2180,13 @@ def _typecheckingstub__c54fbbae1657505abdb9c66466e5df22d0bcdd35de254b4d6036ac5c7
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__46cf48d9ee2893aeab9b3abec45390d67d2673fa94843995c5801a67ffd644be(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__156dd6168324fdd94122bfc9cb76327deda486373e92b703fe20d9a306786437(
     value: builtins.str,
@@ -1512,11 +2194,15 @@ def _typecheckingstub__156dd6168324fdd94122bfc9cb76327deda486373e92b703fe20d9a30
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__f412da71e49aae124ae433e8d0ffe6ce1cf7aba5baa67edb8740433ba53b9d13(
-    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterMaintenanceWindow]],
+    value: typing.Optional[
+        typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterMaintenanceWindow]
+    ],
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__167a3358a672527e97ba856ed7a7f0597df1fcacc66544980232d0eeba1985c4(
     *,
@@ -1525,6 +2211,7 @@ def _typecheckingstub__167a3358a672527e97ba856ed7a7f0597df1fcacc66544980232d0eeb
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__3d916e7ab27e1225efb22c3dac60b85e5df56f3cfa9ee1727f456e2f097c2590(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
     terraform_attribute: builtins.str,
@@ -1532,14 +2219,18 @@ def _typecheckingstub__3d916e7ab27e1225efb22c3dac60b85e5df56f3cfa9ee1727f456e2f0
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__7d25ef3b87c0e048927a34ed540e2d7461ff61d6cf9221151cacf210c50a374f(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__114bd978be48ca2a57f74c47cd8faad9f3f64a7bae760e4d26b583b45acae177(
-    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterTimeouts]],
+    value: typing.Optional[
+        typing.Union[_cdktf_9a9027ec.IResolvable, DatabaseClusterTimeouts]
+    ],
 ) -> None:
     """Type checking stubs"""
     pass
