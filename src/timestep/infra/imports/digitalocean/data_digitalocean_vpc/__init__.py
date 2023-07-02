@@ -1,24 +1,22 @@
-'''
+"""
 # `data_digitalocean_vpc`
 
 Refer to the Terraform Registory for docs: [`data_digitalocean_vpc`](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc).
-'''
+"""
 import abc
 import builtins
 import datetime
 import enum
 import typing
 
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
-
 from typeguard import check_type
 
 from .._jsii import *
-
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 
 
 class DataDigitaloceanVpc(
@@ -26,7 +24,7 @@ class DataDigitaloceanVpc(
     metaclass=jsii.JSIIMeta,
     jsii_type="digitalocean.dataDigitaloceanVpc.DataDigitaloceanVpc",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc digitalocean_vpc}.'''
+    """Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc digitalocean_vpc}."""
 
     def __init__(
         self,
@@ -36,33 +34,76 @@ class DataDigitaloceanVpc(
         id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
-        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+        connection: typing.Optional[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.SSHProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.WinrmProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ] = None,
+        count: typing.Optional[
+            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+        ] = None,
+        depends_on: typing.Optional[
+            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+        ] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+        lifecycle: typing.Optional[
+            typing.Union[
+                _cdktf_9a9027ec.TerraformResourceLifecycle,
+                typing.Dict[builtins.str, typing.Any],
+            ]
+        ] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+        provisioners: typing.Optional[
+            typing.Sequence[
+                typing.Union[
+                    typing.Union[
+                        _cdktf_9a9027ec.FileProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.LocalExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.RemoteExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                ]
+            ]
+        ] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc digitalocean_vpc} Data Source.
+        """Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc digitalocean_vpc} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
         :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#id DataDigitaloceanVpc#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#name DataDigitaloceanVpc#name}.
         :param region: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#region DataDigitaloceanVpc#region}.
-        :param connection: 
-        :param count: 
-        :param depends_on: 
-        :param for_each: 
-        :param lifecycle: 
-        :param provider: 
-        :param provisioners: 
-        '''
+        :param connection:
+        :param count:
+        :param depends_on:
+        :param for_each:
+        :param lifecycle:
+        :param provider:
+        :param provisioners:
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__6f99422ae85640261ddeefa1f5f00f9a1e11b4f4f2a107a9ded23443348c4a1c)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id_", value=id_, expected_type=type_hints["id_"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__6f99422ae85640261ddeefa1f5f00f9a1e11b4f4f2a107a9ded23443348c4a1c
+            )
+            check_type(
+                argname="argument scope", value=scope, expected_type=type_hints["scope"]
+            )
+            check_type(
+                argname="argument id_", value=id_, expected_type=type_hints["id_"]
+            )
         config = DataDigitaloceanVpcConfig(
             id=id,
             name=name,
@@ -92,7 +133,10 @@ class DataDigitaloceanVpc(
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
+        return typing.cast(
+            typing.Mapping[builtins.str, typing.Any],
+            jsii.invoke(self, "synthesizeAttributes", []),
+        )
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="tfResourceType")
@@ -147,8 +191,12 @@ class DataDigitaloceanVpc(
     @id.setter
     def id(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__4478e351aa4b22d013af5e9239205830b14f78092eebe4ce93cbdbbc6e15c98b)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__4478e351aa4b22d013af5e9239205830b14f78092eebe4ce93cbdbbc6e15c98b
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "id", value)
 
     @builtins.property
@@ -159,8 +207,12 @@ class DataDigitaloceanVpc(
     @name.setter
     def name(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d3e185b1ce7894d769385c7628d7d08f6ceeaf41e4048ab19ef61d539b9563d8)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__d3e185b1ce7894d769385c7628d7d08f6ceeaf41e4048ab19ef61d539b9563d8
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "name", value)
 
     @builtins.property
@@ -171,8 +223,12 @@ class DataDigitaloceanVpc(
     @region.setter
     def region(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__55cf2d7178c3b8ce7c6c83427dbf2a87ca9913ba3c09b0df03100b7ababdbbff)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__55cf2d7178c3b8ce7c6c83427dbf2a87ca9913ba3c09b0df03100b7ababdbbff
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "region", value)
 
 
@@ -196,43 +252,114 @@ class DataDigitaloceanVpcConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def __init__(
         self,
         *,
-        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+        connection: typing.Optional[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.SSHProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.WinrmProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ] = None,
+        count: typing.Optional[
+            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+        ] = None,
+        depends_on: typing.Optional[
+            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+        ] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+        lifecycle: typing.Optional[
+            typing.Union[
+                _cdktf_9a9027ec.TerraformResourceLifecycle,
+                typing.Dict[builtins.str, typing.Any],
+            ]
+        ] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+        provisioners: typing.Optional[
+            typing.Sequence[
+                typing.Union[
+                    typing.Union[
+                        _cdktf_9a9027ec.FileProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.LocalExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.RemoteExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                ]
+            ]
+        ] = None,
         id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         region: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
-        :param connection: 
-        :param count: 
-        :param depends_on: 
-        :param for_each: 
-        :param lifecycle: 
-        :param provider: 
-        :param provisioners: 
+        """
+        :param connection:
+        :param count:
+        :param depends_on:
+        :param for_each:
+        :param lifecycle:
+        :param provider:
+        :param provisioners:
         :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#id DataDigitaloceanVpc#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#name DataDigitaloceanVpc#name}.
         :param region: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#region DataDigitaloceanVpc#region}.
-        '''
+        """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__67678816042e58199d8cc532bebd3ab9425cb6d8247146ea55dad7a130ca4fcd)
-            check_type(argname="argument connection", value=connection, expected_type=type_hints["connection"])
-            check_type(argname="argument count", value=count, expected_type=type_hints["count"])
-            check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
-            check_type(argname="argument for_each", value=for_each, expected_type=type_hints["for_each"])
-            check_type(argname="argument lifecycle", value=lifecycle, expected_type=type_hints["lifecycle"])
-            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
-            check_type(argname="argument provisioners", value=provisioners, expected_type=type_hints["provisioners"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__67678816042e58199d8cc532bebd3ab9425cb6d8247146ea55dad7a130ca4fcd
+            )
+            check_type(
+                argname="argument connection",
+                value=connection,
+                expected_type=type_hints["connection"],
+            )
+            check_type(
+                argname="argument count", value=count, expected_type=type_hints["count"]
+            )
+            check_type(
+                argname="argument depends_on",
+                value=depends_on,
+                expected_type=type_hints["depends_on"],
+            )
+            check_type(
+                argname="argument for_each",
+                value=for_each,
+                expected_type=type_hints["for_each"],
+            )
+            check_type(
+                argname="argument lifecycle",
+                value=lifecycle,
+                expected_type=type_hints["lifecycle"],
+            )
+            check_type(
+                argname="argument provider",
+                value=provider,
+                expected_type=type_hints["provider"],
+            )
+            check_type(
+                argname="argument provisioners",
+                value=provisioners,
+                expected_type=type_hints["provisioners"],
+            )
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument region", value=region, expected_type=type_hints["region"])
+            check_type(
+                argname="argument name", value=name, expected_type=type_hints["name"]
+            )
+            check_type(
+                argname="argument region",
+                value=region,
+                expected_type=type_hints["region"],
+            )
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if connection is not None:
             self._values["connection"] = connection
@@ -258,86 +385,125 @@ class DataDigitaloceanVpcConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     @builtins.property
     def connection(
         self,
-    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]]:
-        '''
+    ) -> typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.SSHProvisionerConnection,
+            _cdktf_9a9027ec.WinrmProvisionerConnection,
+        ]
+    ]:
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("connection")
-        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
+        return typing.cast(
+            typing.Optional[
+                typing.Union[
+                    _cdktf_9a9027ec.SSHProvisionerConnection,
+                    _cdktf_9a9027ec.WinrmProvisionerConnection,
+                ]
+            ],
+            result,
+        )
 
     @builtins.property
     def count(
         self,
     ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("count")
-        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
+        return typing.cast(
+            typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]],
+            result,
+        )
 
     @builtins.property
     def depends_on(
         self,
     ) -> typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("depends_on")
-        return typing.cast(typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result)
+        return typing.cast(
+            typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result
+        )
 
     @builtins.property
     def for_each(self) -> typing.Optional[_cdktf_9a9027ec.ITerraformIterator]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("for_each")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.ITerraformIterator], result)
 
     @builtins.property
     def lifecycle(self) -> typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("lifecycle")
-        return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result)
+        return typing.cast(
+            typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result
+        )
 
     @builtins.property
     def provider(self) -> typing.Optional[_cdktf_9a9027ec.TerraformProvider]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("provider")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformProvider], result)
 
     @builtins.property
     def provisioners(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]]:
-        '''
+    ) -> typing.Optional[
+        typing.List[
+            typing.Union[
+                _cdktf_9a9027ec.FileProvisioner,
+                _cdktf_9a9027ec.LocalExecProvisioner,
+                _cdktf_9a9027ec.RemoteExecProvisioner,
+            ]
+        ]
+    ]:
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("provisioners")
-        return typing.cast(typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]], result)
+        return typing.cast(
+            typing.Optional[
+                typing.List[
+                    typing.Union[
+                        _cdktf_9a9027ec.FileProvisioner,
+                        _cdktf_9a9027ec.LocalExecProvisioner,
+                        _cdktf_9a9027ec.RemoteExecProvisioner,
+                    ]
+                ]
+            ],
+            result,
+        )
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#id DataDigitaloceanVpc#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#id DataDigitaloceanVpc#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        '''
+        """
         result = self._values.get("id")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#name DataDigitaloceanVpc#name}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#name DataDigitaloceanVpc#name}."""
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def region(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#region DataDigitaloceanVpc#region}.'''
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/vpc#region DataDigitaloceanVpc#region}."""
         result = self._values.get("region")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -360,6 +526,7 @@ __all__ = [
 
 publication.publish()
 
+
 def _typecheckingstub__6f99422ae85640261ddeefa1f5f00f9a1e11b4f4f2a107a9ded23443348c4a1c(
     scope: _constructs_77d1e7e8.Construct,
     id_: builtins.str,
@@ -367,16 +534,54 @@ def _typecheckingstub__6f99422ae85640261ddeefa1f5f00f9a1e11b4f4f2a107a9ded234433
     id: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     region: typing.Optional[builtins.str] = None,
-    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+    connection: typing.Optional[
+        typing.Union[
+            typing.Union[
+                _cdktf_9a9027ec.SSHProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+            typing.Union[
+                _cdktf_9a9027ec.WinrmProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+        ]
+    ] = None,
+    count: typing.Optional[
+        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+    ] = None,
+    depends_on: typing.Optional[
+        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+    ] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+    lifecycle: typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.TerraformResourceLifecycle,
+            typing.Dict[builtins.str, typing.Any],
+        ]
+    ] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+    provisioners: typing.Optional[
+        typing.Sequence[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.FileProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.LocalExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.RemoteExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ]
+    ] = None,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__4478e351aa4b22d013af5e9239205830b14f78092eebe4ce93cbdbbc6e15c98b(
     value: builtins.str,
@@ -384,11 +589,13 @@ def _typecheckingstub__4478e351aa4b22d013af5e9239205830b14f78092eebe4ce93cbdbbc6
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__d3e185b1ce7894d769385c7628d7d08f6ceeaf41e4048ab19ef61d539b9563d8(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__55cf2d7178c3b8ce7c6c83427dbf2a87ca9913ba3c09b0df03100b7ababdbbff(
     value: builtins.str,
@@ -396,15 +603,53 @@ def _typecheckingstub__55cf2d7178c3b8ce7c6c83427dbf2a87ca9913ba3c09b0df03100b7ab
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__67678816042e58199d8cc532bebd3ab9425cb6d8247146ea55dad7a130ca4fcd(
     *,
-    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+    connection: typing.Optional[
+        typing.Union[
+            typing.Union[
+                _cdktf_9a9027ec.SSHProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+            typing.Union[
+                _cdktf_9a9027ec.WinrmProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+        ]
+    ] = None,
+    count: typing.Optional[
+        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+    ] = None,
+    depends_on: typing.Optional[
+        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+    ] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+    lifecycle: typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.TerraformResourceLifecycle,
+            typing.Dict[builtins.str, typing.Any],
+        ]
+    ] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+    provisioners: typing.Optional[
+        typing.Sequence[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.FileProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.LocalExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.RemoteExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ]
+    ] = None,
     id: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     region: typing.Optional[builtins.str] = None,

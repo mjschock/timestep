@@ -1,24 +1,22 @@
-'''
+"""
 # `kubernetes_csi_driver`
 
 Refer to the Terraform Registory for docs: [`kubernetes_csi_driver`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver).
-'''
+"""
 import abc
 import builtins
 import datetime
 import enum
 import typing
 
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
-
 from typeguard import check_type
 
 from .._jsii import *
-
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 
 
 class CsiDriver(
@@ -26,43 +24,90 @@ class CsiDriver(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.csiDriver.CsiDriver",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver kubernetes_csi_driver}.'''
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver kubernetes_csi_driver}."""
 
     def __init__(
         self,
         scope: _constructs_77d1e7e8.Construct,
         id_: builtins.str,
         *,
-        metadata: typing.Union["CsiDriverMetadata", typing.Dict[builtins.str, typing.Any]],
+        metadata: typing.Union[
+            "CsiDriverMetadata", typing.Dict[builtins.str, typing.Any]
+        ],
         id: typing.Optional[builtins.str] = None,
-        spec: typing.Optional[typing.Union["CsiDriverSpec", typing.Dict[builtins.str, typing.Any]]] = None,
-        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+        spec: typing.Optional[
+            typing.Union["CsiDriverSpec", typing.Dict[builtins.str, typing.Any]]
+        ] = None,
+        connection: typing.Optional[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.SSHProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.WinrmProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ] = None,
+        count: typing.Optional[
+            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+        ] = None,
+        depends_on: typing.Optional[
+            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+        ] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+        lifecycle: typing.Optional[
+            typing.Union[
+                _cdktf_9a9027ec.TerraformResourceLifecycle,
+                typing.Dict[builtins.str, typing.Any],
+            ]
+        ] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+        provisioners: typing.Optional[
+            typing.Sequence[
+                typing.Union[
+                    typing.Union[
+                        _cdktf_9a9027ec.FileProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.LocalExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.RemoteExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                ]
+            ]
+        ] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver kubernetes_csi_driver} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver kubernetes_csi_driver} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
         :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#metadata CsiDriver#metadata}
         :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#id CsiDriver#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#spec CsiDriver#spec}
-        :param connection: 
-        :param count: 
-        :param depends_on: 
-        :param for_each: 
-        :param lifecycle: 
-        :param provider: 
-        :param provisioners: 
-        '''
+        :param connection:
+        :param count:
+        :param depends_on:
+        :param for_each:
+        :param lifecycle:
+        :param provider:
+        :param provisioners:
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ee27875c8dc8c8c555621bcdd5fdfcb014443dac1e8dd1a34d393037ef3960fe)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id_", value=id_, expected_type=type_hints["id_"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__ee27875c8dc8c8c555621bcdd5fdfcb014443dac1e8dd1a34d393037ef3960fe
+            )
+            check_type(
+                argname="argument scope", value=scope, expected_type=type_hints["scope"]
+            )
+            check_type(
+                argname="argument id_", value=id_, expected_type=type_hints["id_"]
+            )
         config = CsiDriverConfig(
             metadata=metadata,
             id=id,
@@ -87,12 +132,12 @@ class CsiDriver(
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        """
         :param annotations: An unstructured key value map stored with the csi driver that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#annotations CsiDriver#annotations}
         :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#generate_name CsiDriver#generate_name}
         :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the csi driver. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#labels CsiDriver#labels}
         :param name: Name of the csi driver, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#name CsiDriver#name}
-        '''
+        """
         value = CsiDriverMetadata(
             annotations=annotations,
             generate_name=generate_name,
@@ -107,14 +152,16 @@ class CsiDriver(
         self,
         *,
         attach_required: typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
-        pod_info_on_mount: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
+        pod_info_on_mount: typing.Optional[
+            typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]
+        ] = None,
         volume_lifecycle_modes: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
-        '''
+        """
         :param attach_required: Indicates if the CSI volume driver requires an attach operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#attach_required CsiDriver#attach_required}
         :param pod_info_on_mount: Indicates that the CSI volume driver requires additional pod information (like podName, podUID, etc.) during mount operations. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#pod_info_on_mount CsiDriver#pod_info_on_mount}
         :param volume_lifecycle_modes: Defines what kind of volumes this CSI volume driver supports. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#volume_lifecycle_modes CsiDriver#volume_lifecycle_modes}
-        '''
+        """
         value = CsiDriverSpec(
             attach_required=attach_required,
             pod_info_on_mount=pod_info_on_mount,
@@ -133,7 +180,10 @@ class CsiDriver(
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
+        return typing.cast(
+            typing.Mapping[builtins.str, typing.Any],
+            jsii.invoke(self, "synthesizeAttributes", []),
+        )
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="tfResourceType")
@@ -143,7 +193,9 @@ class CsiDriver(
     @builtins.property
     @jsii.member(jsii_name="metadata")
     def metadata(self) -> "CsiDriverMetadataOutputReference":
-        return typing.cast("CsiDriverMetadataOutputReference", jsii.get(self, "metadata"))
+        return typing.cast(
+            "CsiDriverMetadataOutputReference", jsii.get(self, "metadata")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="spec")
@@ -158,12 +210,16 @@ class CsiDriver(
     @builtins.property
     @jsii.member(jsii_name="metadataInput")
     def metadata_input(self) -> typing.Optional["CsiDriverMetadata"]:
-        return typing.cast(typing.Optional["CsiDriverMetadata"], jsii.get(self, "metadataInput"))
+        return typing.cast(
+            typing.Optional["CsiDriverMetadata"], jsii.get(self, "metadataInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="specInput")
     def spec_input(self) -> typing.Optional["CsiDriverSpec"]:
-        return typing.cast(typing.Optional["CsiDriverSpec"], jsii.get(self, "specInput"))
+        return typing.cast(
+            typing.Optional["CsiDriverSpec"], jsii.get(self, "specInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="id")
@@ -173,8 +229,12 @@ class CsiDriver(
     @id.setter
     def id(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__6e1cb92f859054a8b93c9a40a9a77cb77538b56b507d6da31cda9be599ced0c4)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__6e1cb92f859054a8b93c9a40a9a77cb77538b56b507d6da31cda9be599ced0c4
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "id", value)
 
 
@@ -198,29 +258,70 @@ class CsiDriverConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def __init__(
         self,
         *,
-        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+        connection: typing.Optional[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.SSHProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.WinrmProvisionerConnection,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ] = None,
+        count: typing.Optional[
+            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+        ] = None,
+        depends_on: typing.Optional[
+            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+        ] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+        lifecycle: typing.Optional[
+            typing.Union[
+                _cdktf_9a9027ec.TerraformResourceLifecycle,
+                typing.Dict[builtins.str, typing.Any],
+            ]
+        ] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
-        metadata: typing.Union["CsiDriverMetadata", typing.Dict[builtins.str, typing.Any]],
+        provisioners: typing.Optional[
+            typing.Sequence[
+                typing.Union[
+                    typing.Union[
+                        _cdktf_9a9027ec.FileProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.LocalExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                    typing.Union[
+                        _cdktf_9a9027ec.RemoteExecProvisioner,
+                        typing.Dict[builtins.str, typing.Any],
+                    ],
+                ]
+            ]
+        ] = None,
+        metadata: typing.Union[
+            "CsiDriverMetadata", typing.Dict[builtins.str, typing.Any]
+        ],
         id: typing.Optional[builtins.str] = None,
-        spec: typing.Optional[typing.Union["CsiDriverSpec", typing.Dict[builtins.str, typing.Any]]] = None,
+        spec: typing.Optional[
+            typing.Union["CsiDriverSpec", typing.Dict[builtins.str, typing.Any]]
+        ] = None,
     ) -> None:
-        '''
-        :param connection: 
-        :param count: 
-        :param depends_on: 
-        :param for_each: 
-        :param lifecycle: 
-        :param provider: 
-        :param provisioners: 
+        """
+        :param connection:
+        :param count:
+        :param depends_on:
+        :param for_each:
+        :param lifecycle:
+        :param provider:
+        :param provisioners:
         :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#metadata CsiDriver#metadata}
         :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#id CsiDriver#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#spec CsiDriver#spec}
-        '''
+        """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
         if isinstance(metadata, dict):
@@ -228,17 +329,51 @@ class CsiDriverConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         if isinstance(spec, dict):
             spec = CsiDriverSpec(**spec)
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2a06787b1ac78a14c7e668ef2f73a5c90e9620fee2c92c48ac4813145ad4da91)
-            check_type(argname="argument connection", value=connection, expected_type=type_hints["connection"])
-            check_type(argname="argument count", value=count, expected_type=type_hints["count"])
-            check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
-            check_type(argname="argument for_each", value=for_each, expected_type=type_hints["for_each"])
-            check_type(argname="argument lifecycle", value=lifecycle, expected_type=type_hints["lifecycle"])
-            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
-            check_type(argname="argument provisioners", value=provisioners, expected_type=type_hints["provisioners"])
-            check_type(argname="argument metadata", value=metadata, expected_type=type_hints["metadata"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__2a06787b1ac78a14c7e668ef2f73a5c90e9620fee2c92c48ac4813145ad4da91
+            )
+            check_type(
+                argname="argument connection",
+                value=connection,
+                expected_type=type_hints["connection"],
+            )
+            check_type(
+                argname="argument count", value=count, expected_type=type_hints["count"]
+            )
+            check_type(
+                argname="argument depends_on",
+                value=depends_on,
+                expected_type=type_hints["depends_on"],
+            )
+            check_type(
+                argname="argument for_each",
+                value=for_each,
+                expected_type=type_hints["for_each"],
+            )
+            check_type(
+                argname="argument lifecycle",
+                value=lifecycle,
+                expected_type=type_hints["lifecycle"],
+            )
+            check_type(
+                argname="argument provider",
+                value=provider,
+                expected_type=type_hints["provider"],
+            )
+            check_type(
+                argname="argument provisioners",
+                value=provisioners,
+                expected_type=type_hints["provisioners"],
+            )
+            check_type(
+                argname="argument metadata",
+                value=metadata,
+                expected_type=type_hints["metadata"],
+            )
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument spec", value=spec, expected_type=type_hints["spec"])
+            check_type(
+                argname="argument spec", value=spec, expected_type=type_hints["spec"]
+            )
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "metadata": metadata,
         }
@@ -264,93 +399,132 @@ class CsiDriverConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     @builtins.property
     def connection(
         self,
-    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]]:
-        '''
+    ) -> typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.SSHProvisionerConnection,
+            _cdktf_9a9027ec.WinrmProvisionerConnection,
+        ]
+    ]:
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("connection")
-        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
+        return typing.cast(
+            typing.Optional[
+                typing.Union[
+                    _cdktf_9a9027ec.SSHProvisionerConnection,
+                    _cdktf_9a9027ec.WinrmProvisionerConnection,
+                ]
+            ],
+            result,
+        )
 
     @builtins.property
     def count(
         self,
     ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("count")
-        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
+        return typing.cast(
+            typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]],
+            result,
+        )
 
     @builtins.property
     def depends_on(
         self,
     ) -> typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("depends_on")
-        return typing.cast(typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result)
+        return typing.cast(
+            typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result
+        )
 
     @builtins.property
     def for_each(self) -> typing.Optional[_cdktf_9a9027ec.ITerraformIterator]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("for_each")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.ITerraformIterator], result)
 
     @builtins.property
     def lifecycle(self) -> typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("lifecycle")
-        return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result)
+        return typing.cast(
+            typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result
+        )
 
     @builtins.property
     def provider(self) -> typing.Optional[_cdktf_9a9027ec.TerraformProvider]:
-        '''
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("provider")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformProvider], result)
 
     @builtins.property
     def provisioners(
         self,
-    ) -> typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]]:
-        '''
+    ) -> typing.Optional[
+        typing.List[
+            typing.Union[
+                _cdktf_9a9027ec.FileProvisioner,
+                _cdktf_9a9027ec.LocalExecProvisioner,
+                _cdktf_9a9027ec.RemoteExecProvisioner,
+            ]
+        ]
+    ]:
+        """
         :stability: experimental
-        '''
+        """
         result = self._values.get("provisioners")
-        return typing.cast(typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]], result)
+        return typing.cast(
+            typing.Optional[
+                typing.List[
+                    typing.Union[
+                        _cdktf_9a9027ec.FileProvisioner,
+                        _cdktf_9a9027ec.LocalExecProvisioner,
+                        _cdktf_9a9027ec.RemoteExecProvisioner,
+                    ]
+                ]
+            ],
+            result,
+        )
 
     @builtins.property
     def metadata(self) -> "CsiDriverMetadata":
-        '''metadata block.
+        """metadata block.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#metadata CsiDriver#metadata}
-        '''
+        """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
         return typing.cast("CsiDriverMetadata", result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#id CsiDriver#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#id CsiDriver#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        '''
+        """
         result = self._values.get("id")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def spec(self) -> typing.Optional["CsiDriverSpec"]:
-        '''spec block.
+        """spec block.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#spec CsiDriver#spec}
-        '''
+        """
         result = self._values.get("spec")
         return typing.cast(typing.Optional["CsiDriverSpec"], result)
 
@@ -385,18 +559,34 @@ class CsiDriverMetadata:
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''
+        """
         :param annotations: An unstructured key value map stored with the csi driver that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#annotations CsiDriver#annotations}
         :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#generate_name CsiDriver#generate_name}
         :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the csi driver. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#labels CsiDriver#labels}
         :param name: Name of the csi driver, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#name CsiDriver#name}
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8f86669ac1cb821a8902a3ffc5c6c4a1fea0d038b3e56f6c94f02cb7feeb5af1)
-            check_type(argname="argument annotations", value=annotations, expected_type=type_hints["annotations"])
-            check_type(argname="argument generate_name", value=generate_name, expected_type=type_hints["generate_name"])
-            check_type(argname="argument labels", value=labels, expected_type=type_hints["labels"])
-            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__8f86669ac1cb821a8902a3ffc5c6c4a1fea0d038b3e56f6c94f02cb7feeb5af1
+            )
+            check_type(
+                argname="argument annotations",
+                value=annotations,
+                expected_type=type_hints["annotations"],
+            )
+            check_type(
+                argname="argument generate_name",
+                value=generate_name,
+                expected_type=type_hints["generate_name"],
+            )
+            check_type(
+                argname="argument labels",
+                value=labels,
+                expected_type=type_hints["labels"],
+            )
+            check_type(
+                argname="argument name", value=name, expected_type=type_hints["name"]
+            )
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if annotations is not None:
             self._values["annotations"] = annotations
@@ -411,43 +601,47 @@ class CsiDriverMetadata:
     def annotations(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''An unstructured key value map stored with the csi driver that may be used to store arbitrary metadata.
+        """An unstructured key value map stored with the csi driver that may be used to store arbitrary metadata.
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#annotations CsiDriver#annotations}
-        '''
+        """
         result = self._values.get("annotations")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+        return typing.cast(
+            typing.Optional[typing.Mapping[builtins.str, builtins.str]], result
+        )
 
     @builtins.property
     def generate_name(self) -> typing.Optional[builtins.str]:
-        '''Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided.
+        """Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided.
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#generate_name CsiDriver#generate_name}
-        '''
+        """
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def labels(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Map of string keys and values that can be used to organize and categorize (scope and select) the csi driver.
+        """Map of string keys and values that can be used to organize and categorize (scope and select) the csi driver.
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#labels CsiDriver#labels}
-        '''
+        """
         result = self._values.get("labels")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+        return typing.cast(
+            typing.Optional[typing.Mapping[builtins.str, builtins.str]], result
+        )
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
-        '''Name of the csi driver, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
+        """Name of the csi driver, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#name CsiDriver#name}
-        '''
+        """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -473,14 +667,24 @@ class CsiDriverMetadataOutputReference(
         terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
         terraform_attribute: builtins.str,
     ) -> None:
-        '''
+        """
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__09cd0ed8678d9ae8ce8ae408723b00fc3c5cae3390d72ba5cd95e04a1f7f9695)
-            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
-            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__09cd0ed8678d9ae8ce8ae408723b00fc3c5cae3390d72ba5cd95e04a1f7f9695
+            )
+            check_type(
+                argname="argument terraform_resource",
+                value=terraform_resource,
+                expected_type=type_hints["terraform_resource"],
+            )
+            check_type(
+                argname="argument terraform_attribute",
+                value=terraform_attribute,
+                expected_type=type_hints["terraform_attribute"],
+            )
         jsii.create(self.__class__, self, [terraform_resource, terraform_attribute])
 
     @jsii.member(jsii_name="resetAnnotations")
@@ -519,19 +723,27 @@ class CsiDriverMetadataOutputReference(
     def annotations_input(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "annotationsInput"))
+        return typing.cast(
+            typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+            jsii.get(self, "annotationsInput"),
+        )
 
     @builtins.property
     @jsii.member(jsii_name="generateNameInput")
     def generate_name_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "generateNameInput"))
+        return typing.cast(
+            typing.Optional[builtins.str], jsii.get(self, "generateNameInput")
+        )
 
     @builtins.property
     @jsii.member(jsii_name="labelsInput")
     def labels_input(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "labelsInput"))
+        return typing.cast(
+            typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+            jsii.get(self, "labelsInput"),
+        )
 
     @builtins.property
     @jsii.member(jsii_name="nameInput")
@@ -541,13 +753,19 @@ class CsiDriverMetadataOutputReference(
     @builtins.property
     @jsii.member(jsii_name="annotations")
     def annotations(self) -> typing.Mapping[builtins.str, builtins.str]:
-        return typing.cast(typing.Mapping[builtins.str, builtins.str], jsii.get(self, "annotations"))
+        return typing.cast(
+            typing.Mapping[builtins.str, builtins.str], jsii.get(self, "annotations")
+        )
 
     @annotations.setter
     def annotations(self, value: typing.Mapping[builtins.str, builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7280e0581d11fda6659fc7d5477e6065e70b4320fd69ab66c45127b4b605f2f4)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__7280e0581d11fda6659fc7d5477e6065e70b4320fd69ab66c45127b4b605f2f4
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "annotations", value)
 
     @builtins.property
@@ -558,20 +776,30 @@ class CsiDriverMetadataOutputReference(
     @generate_name.setter
     def generate_name(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__19836114b15fa3790d0eec65ce2a5578499cfbc11ce5345e2c8ce9c48bf18af8)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__19836114b15fa3790d0eec65ce2a5578499cfbc11ce5345e2c8ce9c48bf18af8
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "generateName", value)
 
     @builtins.property
     @jsii.member(jsii_name="labels")
     def labels(self) -> typing.Mapping[builtins.str, builtins.str]:
-        return typing.cast(typing.Mapping[builtins.str, builtins.str], jsii.get(self, "labels"))
+        return typing.cast(
+            typing.Mapping[builtins.str, builtins.str], jsii.get(self, "labels")
+        )
 
     @labels.setter
     def labels(self, value: typing.Mapping[builtins.str, builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__98c89b9a6b84848097302b221c2e656cc15d557fad3430dc821950cf5091221e)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__98c89b9a6b84848097302b221c2e656cc15d557fad3430dc821950cf5091221e
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "labels", value)
 
     @builtins.property
@@ -582,20 +810,30 @@ class CsiDriverMetadataOutputReference(
     @name.setter
     def name(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7c219227e7fa7d330058739f2165f9b764e0bef39cace9196026573c58309f87)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__7c219227e7fa7d330058739f2165f9b764e0bef39cace9196026573c58309f87
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "name", value)
 
     @builtins.property
     @jsii.member(jsii_name="internalValue")
     def internal_value(self) -> typing.Optional[CsiDriverMetadata]:
-        return typing.cast(typing.Optional[CsiDriverMetadata], jsii.get(self, "internalValue"))
+        return typing.cast(
+            typing.Optional[CsiDriverMetadata], jsii.get(self, "internalValue")
+        )
 
     @internal_value.setter
     def internal_value(self, value: typing.Optional[CsiDriverMetadata]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__5867ff0785245d35318e74863112051556679b0ddaa93c6455830f0f2fc090a6)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__5867ff0785245d35318e74863112051556679b0ddaa93c6455830f0f2fc090a6
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "internalValue", value)
 
 
@@ -613,19 +851,35 @@ class CsiDriverSpec:
         self,
         *,
         attach_required: typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
-        pod_info_on_mount: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
+        pod_info_on_mount: typing.Optional[
+            typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]
+        ] = None,
         volume_lifecycle_modes: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
-        '''
+        """
         :param attach_required: Indicates if the CSI volume driver requires an attach operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#attach_required CsiDriver#attach_required}
         :param pod_info_on_mount: Indicates that the CSI volume driver requires additional pod information (like podName, podUID, etc.) during mount operations. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#pod_info_on_mount CsiDriver#pod_info_on_mount}
         :param volume_lifecycle_modes: Defines what kind of volumes this CSI volume driver supports. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#volume_lifecycle_modes CsiDriver#volume_lifecycle_modes}
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__dca171bf08f164bc1f20b263ce8ddf92fd558a1ee4b2071849628b6c15448c77)
-            check_type(argname="argument attach_required", value=attach_required, expected_type=type_hints["attach_required"])
-            check_type(argname="argument pod_info_on_mount", value=pod_info_on_mount, expected_type=type_hints["pod_info_on_mount"])
-            check_type(argname="argument volume_lifecycle_modes", value=volume_lifecycle_modes, expected_type=type_hints["volume_lifecycle_modes"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__dca171bf08f164bc1f20b263ce8ddf92fd558a1ee4b2071849628b6c15448c77
+            )
+            check_type(
+                argname="argument attach_required",
+                value=attach_required,
+                expected_type=type_hints["attach_required"],
+            )
+            check_type(
+                argname="argument pod_info_on_mount",
+                value=pod_info_on_mount,
+                expected_type=type_hints["pod_info_on_mount"],
+            )
+            check_type(
+                argname="argument volume_lifecycle_modes",
+                value=volume_lifecycle_modes,
+                expected_type=type_hints["volume_lifecycle_modes"],
+            )
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "attach_required": attach_required,
         }
@@ -638,31 +892,36 @@ class CsiDriverSpec:
     def attach_required(
         self,
     ) -> typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]:
-        '''Indicates if the CSI volume driver requires an attach operation.
+        """Indicates if the CSI volume driver requires an attach operation.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#attach_required CsiDriver#attach_required}
-        '''
+        """
         result = self._values.get("attach_required")
         assert result is not None, "Required property 'attach_required' is missing"
-        return typing.cast(typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable], result)
+        return typing.cast(
+            typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable], result
+        )
 
     @builtins.property
     def pod_info_on_mount(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        '''Indicates that the CSI volume driver requires additional pod information (like podName, podUID, etc.) during mount operations.
+        """Indicates that the CSI volume driver requires additional pod information (like podName, podUID, etc.) during mount operations.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#pod_info_on_mount CsiDriver#pod_info_on_mount}
-        '''
+        """
         result = self._values.get("pod_info_on_mount")
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
+        return typing.cast(
+            typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]],
+            result,
+        )
 
     @builtins.property
     def volume_lifecycle_modes(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Defines what kind of volumes this CSI volume driver supports.
+        """Defines what kind of volumes this CSI volume driver supports.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/csi_driver#volume_lifecycle_modes CsiDriver#volume_lifecycle_modes}
-        '''
+        """
         result = self._values.get("volume_lifecycle_modes")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
@@ -688,14 +947,24 @@ class CsiDriverSpecOutputReference(
         terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
         terraform_attribute: builtins.str,
     ) -> None:
-        '''
+        """
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__55bf22184254df6195cc93093d819e3372ba80a42259cc11b6d9c77c17eb4c8b)
-            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
-            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__55bf22184254df6195cc93093d819e3372ba80a42259cc11b6d9c77c17eb4c8b
+            )
+            check_type(
+                argname="argument terraform_resource",
+                value=terraform_resource,
+                expected_type=type_hints["terraform_resource"],
+            )
+            check_type(
+                argname="argument terraform_attribute",
+                value=terraform_attribute,
+                expected_type=type_hints["terraform_attribute"],
+            )
         jsii.create(self.__class__, self, [terraform_resource, terraform_attribute])
 
     @jsii.member(jsii_name="resetPodInfoOnMount")
@@ -711,28 +980,40 @@ class CsiDriverSpecOutputReference(
     def attach_required_input(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "attachRequiredInput"))
+        return typing.cast(
+            typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]],
+            jsii.get(self, "attachRequiredInput"),
+        )
 
     @builtins.property
     @jsii.member(jsii_name="podInfoOnMountInput")
     def pod_info_on_mount_input(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "podInfoOnMountInput"))
+        return typing.cast(
+            typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]],
+            jsii.get(self, "podInfoOnMountInput"),
+        )
 
     @builtins.property
     @jsii.member(jsii_name="volumeLifecycleModesInput")
     def volume_lifecycle_modes_input(
         self,
     ) -> typing.Optional[typing.List[builtins.str]]:
-        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "volumeLifecycleModesInput"))
+        return typing.cast(
+            typing.Optional[typing.List[builtins.str]],
+            jsii.get(self, "volumeLifecycleModesInput"),
+        )
 
     @builtins.property
     @jsii.member(jsii_name="attachRequired")
     def attach_required(
         self,
     ) -> typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]:
-        return typing.cast(typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable], jsii.get(self, "attachRequired"))
+        return typing.cast(
+            typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
+            jsii.get(self, "attachRequired"),
+        )
 
     @attach_required.setter
     def attach_required(
@@ -740,8 +1021,12 @@ class CsiDriverSpecOutputReference(
         value: typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f5603760989e7f565539659d618ec4ab30d2a451ab03e332bb78275a0778d94d)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__f5603760989e7f565539659d618ec4ab30d2a451ab03e332bb78275a0778d94d
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "attachRequired", value)
 
     @builtins.property
@@ -749,7 +1034,10 @@ class CsiDriverSpecOutputReference(
     def pod_info_on_mount(
         self,
     ) -> typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]:
-        return typing.cast(typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable], jsii.get(self, "podInfoOnMount"))
+        return typing.cast(
+            typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
+            jsii.get(self, "podInfoOnMount"),
+        )
 
     @pod_info_on_mount.setter
     def pod_info_on_mount(
@@ -757,32 +1045,48 @@ class CsiDriverSpecOutputReference(
         value: typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e423239e867d9edb712d4b68c6e9170061e82374e863dcaa6e6306418856c1a4)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__e423239e867d9edb712d4b68c6e9170061e82374e863dcaa6e6306418856c1a4
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "podInfoOnMount", value)
 
     @builtins.property
     @jsii.member(jsii_name="volumeLifecycleModes")
     def volume_lifecycle_modes(self) -> typing.List[builtins.str]:
-        return typing.cast(typing.List[builtins.str], jsii.get(self, "volumeLifecycleModes"))
+        return typing.cast(
+            typing.List[builtins.str], jsii.get(self, "volumeLifecycleModes")
+        )
 
     @volume_lifecycle_modes.setter
     def volume_lifecycle_modes(self, value: typing.List[builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2bdc6bf3aaa715a627958ac8eb67a36f2671201bb0fdd6965bd704fd77c7128a)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__2bdc6bf3aaa715a627958ac8eb67a36f2671201bb0fdd6965bd704fd77c7128a
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "volumeLifecycleModes", value)
 
     @builtins.property
     @jsii.member(jsii_name="internalValue")
     def internal_value(self) -> typing.Optional[CsiDriverSpec]:
-        return typing.cast(typing.Optional[CsiDriverSpec], jsii.get(self, "internalValue"))
+        return typing.cast(
+            typing.Optional[CsiDriverSpec], jsii.get(self, "internalValue")
+        )
 
     @internal_value.setter
     def internal_value(self, value: typing.Optional[CsiDriverSpec]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__a96a9d6d08d08e1e20eaa985aaecddc94e8019d1b80108a2abbee5051bf98df5)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__a96a9d6d08d08e1e20eaa985aaecddc94e8019d1b80108a2abbee5051bf98df5
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "internalValue", value)
 
 
@@ -797,23 +1101,64 @@ __all__ = [
 
 publication.publish()
 
+
 def _typecheckingstub__ee27875c8dc8c8c555621bcdd5fdfcb014443dac1e8dd1a34d393037ef3960fe(
     scope: _constructs_77d1e7e8.Construct,
     id_: builtins.str,
     *,
     metadata: typing.Union[CsiDriverMetadata, typing.Dict[builtins.str, typing.Any]],
     id: typing.Optional[builtins.str] = None,
-    spec: typing.Optional[typing.Union[CsiDriverSpec, typing.Dict[builtins.str, typing.Any]]] = None,
-    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+    spec: typing.Optional[
+        typing.Union[CsiDriverSpec, typing.Dict[builtins.str, typing.Any]]
+    ] = None,
+    connection: typing.Optional[
+        typing.Union[
+            typing.Union[
+                _cdktf_9a9027ec.SSHProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+            typing.Union[
+                _cdktf_9a9027ec.WinrmProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+        ]
+    ] = None,
+    count: typing.Optional[
+        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+    ] = None,
+    depends_on: typing.Optional[
+        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+    ] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+    lifecycle: typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.TerraformResourceLifecycle,
+            typing.Dict[builtins.str, typing.Any],
+        ]
+    ] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+    provisioners: typing.Optional[
+        typing.Sequence[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.FileProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.LocalExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.RemoteExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ]
+    ] = None,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__6e1cb92f859054a8b93c9a40a9a77cb77538b56b507d6da31cda9be599ced0c4(
     value: builtins.str,
@@ -821,21 +1166,62 @@ def _typecheckingstub__6e1cb92f859054a8b93c9a40a9a77cb77538b56b507d6da31cda9be59
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__2a06787b1ac78a14c7e668ef2f73a5c90e9620fee2c92c48ac4813145ad4da91(
     *,
-    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
-    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
-    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
+    connection: typing.Optional[
+        typing.Union[
+            typing.Union[
+                _cdktf_9a9027ec.SSHProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+            typing.Union[
+                _cdktf_9a9027ec.WinrmProvisionerConnection,
+                typing.Dict[builtins.str, typing.Any],
+            ],
+        ]
+    ] = None,
+    count: typing.Optional[
+        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
+    ] = None,
+    depends_on: typing.Optional[
+        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
+    ] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
+    lifecycle: typing.Optional[
+        typing.Union[
+            _cdktf_9a9027ec.TerraformResourceLifecycle,
+            typing.Dict[builtins.str, typing.Any],
+        ]
+    ] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+    provisioners: typing.Optional[
+        typing.Sequence[
+            typing.Union[
+                typing.Union[
+                    _cdktf_9a9027ec.FileProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.LocalExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+                typing.Union[
+                    _cdktf_9a9027ec.RemoteExecProvisioner,
+                    typing.Dict[builtins.str, typing.Any],
+                ],
+            ]
+        ]
+    ] = None,
     metadata: typing.Union[CsiDriverMetadata, typing.Dict[builtins.str, typing.Any]],
     id: typing.Optional[builtins.str] = None,
-    spec: typing.Optional[typing.Union[CsiDriverSpec, typing.Dict[builtins.str, typing.Any]]] = None,
+    spec: typing.Optional[
+        typing.Union[CsiDriverSpec, typing.Dict[builtins.str, typing.Any]]
+    ] = None,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__8f86669ac1cb821a8902a3ffc5c6c4a1fea0d038b3e56f6c94f02cb7feeb5af1(
     *,
@@ -847,6 +1233,7 @@ def _typecheckingstub__8f86669ac1cb821a8902a3ffc5c6c4a1fea0d038b3e56f6c94f02cb7f
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__09cd0ed8678d9ae8ce8ae408723b00fc3c5cae3390d72ba5cd95e04a1f7f9695(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
     terraform_attribute: builtins.str,
@@ -854,11 +1241,13 @@ def _typecheckingstub__09cd0ed8678d9ae8ce8ae408723b00fc3c5cae3390d72ba5cd95e04a1
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__7280e0581d11fda6659fc7d5477e6065e70b4320fd69ab66c45127b4b605f2f4(
     value: typing.Mapping[builtins.str, builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__19836114b15fa3790d0eec65ce2a5578499cfbc11ce5345e2c8ce9c48bf18af8(
     value: builtins.str,
@@ -866,11 +1255,13 @@ def _typecheckingstub__19836114b15fa3790d0eec65ce2a5578499cfbc11ce5345e2c8ce9c48
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__98c89b9a6b84848097302b221c2e656cc15d557fad3430dc821950cf5091221e(
     value: typing.Mapping[builtins.str, builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__7c219227e7fa7d330058739f2165f9b764e0bef39cace9196026573c58309f87(
     value: builtins.str,
@@ -878,20 +1269,25 @@ def _typecheckingstub__7c219227e7fa7d330058739f2165f9b764e0bef39cace9196026573c5
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__5867ff0785245d35318e74863112051556679b0ddaa93c6455830f0f2fc090a6(
     value: typing.Optional[CsiDriverMetadata],
 ) -> None:
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__dca171bf08f164bc1f20b263ce8ddf92fd558a1ee4b2071849628b6c15448c77(
     *,
     attach_required: typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
-    pod_info_on_mount: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
+    pod_info_on_mount: typing.Optional[
+        typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]
+    ] = None,
     volume_lifecycle_modes: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__55bf22184254df6195cc93093d819e3372ba80a42259cc11b6d9c77c17eb4c8b(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -900,11 +1296,13 @@ def _typecheckingstub__55bf22184254df6195cc93093d819e3372ba80a42259cc11b6d9c77c1
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__f5603760989e7f565539659d618ec4ab30d2a451ab03e332bb78275a0778d94d(
     value: typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__e423239e867d9edb712d4b68c6e9170061e82374e863dcaa6e6306418856c1a4(
     value: typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
@@ -912,11 +1310,13 @@ def _typecheckingstub__e423239e867d9edb712d4b68c6e9170061e82374e863dcaa6e6306418
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__2bdc6bf3aaa715a627958ac8eb67a36f2671201bb0fdd6965bd704fd77c7128a(
     value: typing.List[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__a96a9d6d08d08e1e20eaa985aaecddc94e8019d1b80108a2abbee5051bf98df5(
     value: typing.Optional[CsiDriverSpec],

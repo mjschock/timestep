@@ -1,24 +1,22 @@
-'''
+"""
 # `provider`
 
 Refer to the Terraform Registory for docs: [`external`](https://registry.terraform.io/providers/hashicorp/external/2.3.1/docs).
-'''
+"""
 import abc
 import builtins
 import datetime
 import enum
 import typing
 
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
-
 from typeguard import check_type
 
 from .._jsii import *
-
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 
 
 class ExternalProvider(
@@ -26,7 +24,7 @@ class ExternalProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="external.provider.ExternalProvider",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/external/2.3.1/docs external}.'''
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/external/2.3.1/docs external}."""
 
     def __init__(
         self,
@@ -35,15 +33,19 @@ class ExternalProvider(
         *,
         alias: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/external/2.3.1/docs external} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/external/2.3.1/docs external} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
         :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/external/2.3.1/docs#alias ExternalProvider#alias}
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e3e19907aa569f596a6e5a3db9b08f1a3a658141a25bae78acaba35673041fb1)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__e3e19907aa569f596a6e5a3db9b08f1a3a658141a25bae78acaba35673041fb1
+            )
+            check_type(
+                argname="argument scope", value=scope, expected_type=type_hints["scope"]
+            )
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         config = ExternalProviderConfig(alias=alias)
 
@@ -55,7 +57,10 @@ class ExternalProvider(
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
+        return typing.cast(
+            typing.Mapping[builtins.str, typing.Any],
+            jsii.invoke(self, "synthesizeAttributes", []),
+        )
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="tfResourceType")
@@ -75,8 +80,12 @@ class ExternalProvider(
     @alias.setter
     def alias(self, value: typing.Optional[builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ce8bf20da2f5c43a4018086cf30bd2b3b3394f02d16ca38d8443f07f806ca457)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__ce8bf20da2f5c43a4018086cf30bd2b3b3394f02d16ca38d8443f07f806ca457
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "alias", value)
 
 
@@ -87,22 +96,26 @@ class ExternalProvider(
 )
 class ExternalProviderConfig:
     def __init__(self, *, alias: typing.Optional[builtins.str] = None) -> None:
-        '''
+        """
         :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/external/2.3.1/docs#alias ExternalProvider#alias}
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__408f5337751e679480a263f9a88f115c6c32d2e8c48d788fce5ecaa1b9009a08)
-            check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__408f5337751e679480a263f9a88f115c6c32d2e8c48d788fce5ecaa1b9009a08
+            )
+            check_type(
+                argname="argument alias", value=alias, expected_type=type_hints["alias"]
+            )
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if alias is not None:
             self._values["alias"] = alias
 
     @builtins.property
     def alias(self) -> typing.Optional[builtins.str]:
-        '''Alias name.
+        """Alias name.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/external/2.3.1/docs#alias ExternalProvider#alias}
-        '''
+        """
         result = self._values.get("alias")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -125,6 +138,7 @@ __all__ = [
 
 publication.publish()
 
+
 def _typecheckingstub__e3e19907aa569f596a6e5a3db9b08f1a3a658141a25bae78acaba35673041fb1(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -134,11 +148,13 @@ def _typecheckingstub__e3e19907aa569f596a6e5a3db9b08f1a3a658141a25bae78acaba3567
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__ce8bf20da2f5c43a4018086cf30bd2b3b3394f02d16ca38d8443f07f806ca457(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__408f5337751e679480a263f9a88f115c6c32d2e8c48d788fce5ecaa1b9009a08(
     *,

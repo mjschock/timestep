@@ -1,0 +1,60 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example
+  annotations:
+    kubernetes.io/ingress.class: caddy
+spec:
+  rules:
+  - host: timestep.local
+    http:
+      paths:
+      # - path: /hello1
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: example1
+      #       port:
+      #         number: 8080
+      # - path: /hello2
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: example2
+      #       port:
+      #         number: 8080
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: example1
+            port:
+              number: 8080
+  - host: www.timestep.local
+    http:
+      paths:
+      # - path: /hello1
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: example1
+      #       port:
+      #         number: 8080
+      # - path: /hello2
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: example2
+      #       port:
+      #         number: 8080
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: example2
+            port:
+              number: 8080
+#   tls:
+#   - secretName: ssl-example2.kubernetes.localhost
+#     hosts:
+#     - example2.caddy.dev

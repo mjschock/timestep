@@ -1,24 +1,22 @@
-'''
+"""
 # `provider`
 
 Refer to the Terraform Registory for docs: [`null`](https://registry.terraform.io/providers/hashicorp/null/3.2.1/docs).
-'''
+"""
 import abc
 import builtins
 import datetime
 import enum
 import typing
 
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
-
 from typeguard import check_type
 
 from .._jsii import *
-
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 
 
 class NullProvider(
@@ -26,7 +24,7 @@ class NullProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="null.provider.NullProvider",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/null/3.2.1/docs null}.'''
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/null/3.2.1/docs null}."""
 
     def __init__(
         self,
@@ -35,15 +33,19 @@ class NullProvider(
         *,
         alias: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/null/3.2.1/docs null} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/null/3.2.1/docs null} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
         :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/null/3.2.1/docs#alias NullProvider#alias}
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__bfa7dec9d6e6f6a6c2dd2c124e3ff7832258457b432b16485925c4746724a91d)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__bfa7dec9d6e6f6a6c2dd2c124e3ff7832258457b432b16485925c4746724a91d
+            )
+            check_type(
+                argname="argument scope", value=scope, expected_type=type_hints["scope"]
+            )
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         config = NullProviderConfig(alias=alias)
 
@@ -55,7 +57,10 @@ class NullProvider(
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
+        return typing.cast(
+            typing.Mapping[builtins.str, typing.Any],
+            jsii.invoke(self, "synthesizeAttributes", []),
+        )
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="tfResourceType")
@@ -75,8 +80,12 @@ class NullProvider(
     @alias.setter
     def alias(self, value: typing.Optional[builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__59dcf38e5474dcabf375315c0fa3b42e86865a67eaad07c6b507ee52c5e84e96)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__59dcf38e5474dcabf375315c0fa3b42e86865a67eaad07c6b507ee52c5e84e96
+            )
+            check_type(
+                argname="argument value", value=value, expected_type=type_hints["value"]
+            )
         jsii.set(self, "alias", value)
 
 
@@ -87,22 +96,26 @@ class NullProvider(
 )
 class NullProviderConfig:
     def __init__(self, *, alias: typing.Optional[builtins.str] = None) -> None:
-        '''
+        """
         :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/null/3.2.1/docs#alias NullProvider#alias}
-        '''
+        """
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f6117494101934b6b3690c586938501530a8d01e7709305781e9027411e490c2)
-            check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
+            type_hints = typing.get_type_hints(
+                _typecheckingstub__f6117494101934b6b3690c586938501530a8d01e7709305781e9027411e490c2
+            )
+            check_type(
+                argname="argument alias", value=alias, expected_type=type_hints["alias"]
+            )
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if alias is not None:
             self._values["alias"] = alias
 
     @builtins.property
     def alias(self) -> typing.Optional[builtins.str]:
-        '''Alias name.
+        """Alias name.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/null/3.2.1/docs#alias NullProvider#alias}
-        '''
+        """
         result = self._values.get("alias")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -125,6 +138,7 @@ __all__ = [
 
 publication.publish()
 
+
 def _typecheckingstub__bfa7dec9d6e6f6a6c2dd2c124e3ff7832258457b432b16485925c4746724a91d(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -134,11 +148,13 @@ def _typecheckingstub__bfa7dec9d6e6f6a6c2dd2c124e3ff7832258457b432b16485925c4746
     """Type checking stubs"""
     pass
 
+
 def _typecheckingstub__59dcf38e5474dcabf375315c0fa3b42e86865a67eaad07c6b507ee52c5e84e96(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
+
 
 def _typecheckingstub__f6117494101934b6b3690c586938501530a8d01e7709305781e9027411e490c2(
     *,

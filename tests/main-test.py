@@ -1,5 +1,5 @@
 import pytest
-from cdktf import Testing, TerraformStack
+from cdktf import TerraformStack, Testing
 
 # The tests below are example tests, you can find more information at
 # https://cdk.tf/testing

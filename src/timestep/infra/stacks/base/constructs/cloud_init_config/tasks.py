@@ -13,7 +13,7 @@ from prefect import get_run_logger, task
 from prefect.futures import PrefectFuture
 from prefect_shell import ShellOperation
 
-from timestep.conf.blocks import CloudInstanceProvider, MainConfig
+from timestep.conf.blocks import AppConfig, CloudInstanceProvider
 from timestep.infra.imports.cloudinit.data_cloudinit_config import (
     DataCloudinitConfig,
     DataCloudinitConfigPart,
@@ -29,7 +29,7 @@ from timestep.infra.imports.null.resource import Resource
 
 @task
 def get_cloud_init_config_provider(
-    scope: Construct, config: MainConfig
+    scope: Construct, config: AppConfig
 ) -> TerraformProvider:
     if (
         config.variables.get("cloud_instance_provider")
@@ -53,7 +53,7 @@ def get_cloud_init_config_provider(
 
 @task
 def get_cloud_init_config_resource(
-    scope: Construct, config: MainConfig, cloud_init_config_provider: TerraformProvider
+    scope: Construct, config: AppConfig, cloud_init_config_provider: TerraformProvider
 ) -> TerraformResource:
     if not config.variables.get(
         "ssh_public_key", None
@@ -243,7 +243,7 @@ def get_cloud_init_config_resource(
 
 @task
 def get_cloud_init_config_data_source(
-    scope: Construct, config: MainConfig, cloud_init_config_resource: TerraformResource
+    scope: Construct, config: AppConfig, cloud_init_config_resource: TerraformResource
 ) -> TerraformDataSource:
     if (
         config.variables.get("cloud_instance_provider")
@@ -294,7 +294,7 @@ def get_cloud_init_config_data_source(
 @task
 def get_cloud_init_config_outputs(
     scope: Construct,
-    config: MainConfig,
+    config: AppConfig,
     cloud_init_config_data_source: TerraformDataSource,
 ) -> Dict[str, TerraformOutput]:
     cloud_init_config_outputs = {}

@@ -8,7 +8,7 @@
     poetry run python -m timestep   Compile and run the python code.
 
   Synthesize:
-    cdktf synth [stack]   Synthesize Terraform resources to dist/cdktf.out/
+    cdktf synth [stack]   Synthesize Terraform resources to dist
 
   Diff:
     cdktf diff [stack]    Perform a diff (terraform plan) for the given stack
