@@ -69,7 +69,7 @@ class BaseStack(TerraformStack):
 
         self.kubernetes_cluster_construct = KubernetesClusterConstruct(
             # cloud_instance_construct=self.cloud_instance_construct,
-            # config=config,
+            config=config,
             id="kubernetes_cluster_construct",
             scope=self,
         )

@@ -46,6 +46,7 @@ from timestep.infra.imports.external.data_external import (
 from timestep.infra.imports.helm.provider import HelmProvider as HelmTerraformProvider
 from timestep.infra.imports.helm.provider import HelmProviderKubernetes
 from timestep.infra.imports.helm.release import Release as HelmReleaseTerraformResource
+from timestep.infra.imports.helm.release import ReleaseSet, ReleaseSetListStruct
 from timestep.infra.imports.kubernetes.deployment import Deployment
 from timestep.infra.imports.kubernetes.ingress import (
     Ingress,
@@ -119,8 +120,8 @@ from timestep.infra.imports.null.resource import Resource as NullTerraformResour
 
 
 class KubernetesClusterConstruct(Construct):
-    # def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
-    def __init__(self, id: str, scope: Construct) -> None:
+    def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
+        # def __init__(self, id: str, scope: Construct) -> None:
         super().__init__(id=id, scope=scope)
         logger = get_run_logger()
 
@@ -147,25 +148,71 @@ class KubernetesClusterConstruct(Construct):
         caddy_ingress_controller_helm_release_resource = HelmReleaseTerraformResource(
             id_="caddy_ingress_controller_helm_release_resource",
             atomic=True,
-            # chart="caddy-ingress-controller",
+            chart="caddy-ingress-controller",
             # chart=config.CADDY_INGRESS_CONTROLLER_CHART_PATH,
             # chart="ingress/charts/caddy-ingress-controller",
-            chart="/home/mjschock/Projects/timestep-ai/timestep/src/timestep/infra/stacks/base/constructs/kubernetes_cluster/ingress/charts/caddy-ingress-controller",
+            # chart="/home/mjschock/Projects/timestep-ai/timestep/src/timestep/infra/stacks/base/constructs/kubernetes_cluster/ingress/charts/caddy-ingress-controller",
             create_namespace=True,
             name="caddy-ingress-controller",
             namespace="caddy-system",
-            # repository="https://caddyserver.github.io/ingress",
+            repository="https://caddyserver.github.io/ingress",
             provider=helm_provider,
-            # set=[
-            #     {
-            #         "name": "ingressController.config.email",
-            #         "value": config.CADDY_INGRESS_CONTROLLER_EMAIL,
-            #     },
-            #     # {
-            #     #     "name": "ingressController.config.onDemandTLS",
-            #     #     "value": "true",
-            #     # },
-            # ],
+            set=[
+                # | Key | Type | Default | Description |
+                # |-----|------|---------|-------------|
+                # | affinity | object | `{}` |  |
+                # | fullnameOverride | string | `""` |  |
+                # | image.pullPolicy | string | `"IfNotPresent"` |  |
+                # | image.repository | string | `"caddy/ingress"` |  |
+                # | image.tag | string | `"latest"` |  |
+                # | imagePullSecrets | list | `[]` |  |
+                # | ingressController.config.acmeCA | string | `""` |  |
+                # | ingressController.config.acmeEABKeyId | string | `""` |  |
+                # | ingressController.config.acmeEABMacKey | string | `""` |  |
+                # | ingressController.config.debug | bool | `false` |  |
+                # | ingressController.config.email | string | `""` |  |
+                # | ingressController.config.metrics | bool | `true` |  |
+                # | ingressController.config.onDemandTLS | bool | `false` |  |
+                # | ingressController.config.proxyProtocol | bool | `false` |  |
+                # | ingressController.rbac.create | bool | `true` |  |
+                # | ingressController.verbose | bool | `false` |  |
+                # | ingressController.leaseId | string | `""` |  |
+                # | ingressController.watchNamespace | string | `""` |  |
+                # | minikube | bool | `false` |  |
+                # | nameOverride | string | `""` |  |
+                # | nodeSelector | object | `{}` |  |
+                # | podAnnotations | object | `{}` |  |
+                # | podDisruptionBudget.maxUnavailable | string | `nil` |  |
+                # | podDisruptionBudget.minAvailable | int | `1` |  |
+                # | podSecurityContext | object | `{}` |  |
+                # | replicaCount | int | `2` |  |
+                # | resources | object | `{}` |  |
+                # | securityContext.allowPrivilegeEscalation | bool | `true` |  |
+                # | securityContext.capabilities.add[0] | string | `"NET_BIND_SERVICE"` |  |
+                # | securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+                # | securityContext.runAsGroup | int | `0` |  |
+                # | securityContext.runAsUser | int | `0` |  |
+                # | serviceAccount.annotations | object | `{}` |  |
+                # | serviceAccount.create | bool | `true` |  |
+                # | serviceAccount.name | string | `"caddy-ingress-controller"` |  |
+                # | tolerations | list | `[]` |  |
+                ReleaseSet(
+                    name="ingressController.config.acmeCA",
+                    value="https://acme-staging-v02.api.letsencrypt.org/directory",
+                ),
+                ReleaseSet(
+                    name="ingressController.config.email",
+                    value="m@mjschock.com",
+                ),
+                ReleaseSet(
+                    name="ingressController.config.onDemandTLS",
+                    value="true",
+                ),
+                ReleaseSet(
+                    name="ingressController.verbose",
+                    value="false",
+                ),
+            ],
             scope=scope,
         )
 
@@ -177,6 +224,26 @@ class KubernetesClusterConstruct(Construct):
         #     }
         # )
 
+        # helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.10.1 --set installCRDs=true
+        # cert_manager_helm_release_resource = HelmReleaseTerraformResource(
+        #     id_="cert_manager_helm_release_resource",
+        #     atomic=True,
+        #     chart="cert-manager",
+        #     name="cert-manager",
+        #     namespace=caddy_ingress_controller_helm_release_resource.namespace, # cert-manager?
+        #     repository="https://charts.jetstack.io",
+        #     provider=helm_provider,
+        #     set=[
+        #         {
+        #             "name": "installCRDs",
+        #             "value": "true",
+        #         },
+        #     ],
+        #     scope=scope,
+        # )
+
+        # cert_manager_cluster_issuer_resource = ClusterIssuer
+
         docker_registry_helm_release_resource = HelmReleaseTerraformResource(
             id_="docker_registry_helm_release_resource",
             atomic=True,
@@ -185,20 +252,57 @@ class KubernetesClusterConstruct(Construct):
             namespace=caddy_ingress_controller_helm_release_resource.namespace,
             repository="https://helm.twun.io",
             provider=helm_provider,
-            set=[
-                {
-                    "name": "ingress.className",
-                    "value": "caddy",
-                },
-                {
-                    "name": "persistence.enabled",
-                    "value": "false",
-                },
-                {
-                    "name": "secrets.htpasswd",
-                    # "value": "admin:$2y$05$Z3Z1Z3Z1Z3Z1Z3Z",
-                    "value": "",
-                },
+            set=[  # https://github.com/twuni/docker-registry.helm#configuration
+                ReleaseSet(
+                    name="ingress.annotations.kubernetes\\.io/ingress\\.class",
+                    value="caddy",
+                ),
+                ReleaseSet(
+                    name="ingress.className",
+                    value="caddy",
+                ),
+                ReleaseSet(
+                    name="ingress.enabled",
+                    value="false",
+                ),
+                # {
+                #     "name": "ingress.labels",
+                #     "value": {},
+                # },
+                ReleaseSet(
+                    name="ingress.path",
+                    value="/",
+                )
+                # {
+                #     "name": "ingress.tls",
+                #     "value": []
+                # }
+                # {
+                #     "name": "persistence.enabled",
+                #     "value": "false",
+                # },
+                # {
+                #     "name": "secrets.htpasswd",
+                #     "value": "admin:$2y$05$Z3Z1Z3Z1Z3Z1Z3Z",
+                #     # "value": "",
+                # },
+            ],
+            set_list=[
+                ReleaseSetListStruct(
+                    name="ingress.hosts",
+                    value=[f"registry.{config.variables.get('primary_domain_name')}"],
+                ),
+                # {
+                #     "name": "ingress.tls",
+                #     "value": [
+                #         {
+                #             "hosts": [
+                #                 "registry.timestep.local"
+                #             ],
+                #             "secretName": "ssl-registry.timestep.local"
+                #         }
+                #     ],
+                # },
             ],
             scope=scope,
         )
@@ -238,7 +342,7 @@ class KubernetesClusterConstruct(Construct):
                     # "cert-manager.io/cluster-issuer": "letsencrypt-staging",
                 },
                 name=docker_registry_helm_release_resource.name,
-                # namespace=docker_registry_helm_release_resource.namespace,
+                namespace=docker_registry_helm_release_resource.namespace,
             ),
             spec=IngressV1Spec(
                 # default_backend=IngressV1SpecDefaultBackend(
@@ -254,10 +358,10 @@ class KubernetesClusterConstruct(Construct):
                 #         )
                 #     )
                 # ),
-                # ingress_class_name="caddy",
+                ingress_class_name="caddy",
                 rule=[
                     IngressV1SpecRule(
-                        host="registry.timestep.local",
+                        host=f"registry.{config.variables.get('primary_domain_name')}",
                         http=IngressV1SpecRuleHttp(
                             path=[
                                 IngressV1SpecRuleHttpPath(
@@ -293,70 +397,52 @@ class KubernetesClusterConstruct(Construct):
             ),
         )
 
-        # app_name = "caddy-server"
+        app_name = "caddy-server"
 
-        # caddy_server_deployment_resource  = Deployment(
-        #     scope=self,
-        #     id_='caddy_server_deployment_resource',
-        #     metadata={
-        #         'name': app_name,
-        #         'namespace': caddy_ingress_controller_helm_release_resource.namespace,
-        #         'labels': {
-        #             'app': app_name
-        #         }
-        #     },
-        #     spec={
-        #     #    'replicas': 2,
-        #         'selector': {
-        #             'match_labels': {
-        #                 'app': app_name
-        #             }
-        #         },
-        #         'template': {
-        #             'metadata': {
-        #                 'labels': {
-        #                     'app': app_name
-        #                 }
-        #             },
-        #             'spec': {
-        #                 'container': [{
-        #                     'image': 'caddy',
-        #                     'name': app_name,
-        #                     'ports': [{
-        #                             'containerPort': 80
-        #                         }, {
-        #                             'containerPort': 443
-        #                         }
-        #                     ]
-        #                 }]
-        #             }
-        #         }
-        #     })
+        caddy_server_deployment_resource = Deployment(
+            scope=self,
+            id_="caddy_server_deployment_resource",
+            metadata={
+                "name": app_name,
+                "namespace": caddy_ingress_controller_helm_release_resource.namespace,
+                "labels": {"app": app_name},
+            },
+            spec={
+                #    'replicas': 2,
+                "selector": {"match_labels": {"app": app_name}},
+                "template": {
+                    "metadata": {"labels": {"app": app_name}},
+                    "spec": {
+                        "container": [
+                            {
+                                "image": "caddy",
+                                "name": app_name,
+                                "ports": [
+                                    {"containerPort": 80},
+                                    {"containerPort": 443},
+                                ],
+                            }
+                        ]
+                    },
+                },
+            },
+        )
 
-        # caddy_server_service_resource = Service(
-        #     scope=self,
-        #     id_='caddy_server_service_resource',
-        #     metadata={
-        #         'name': app_name,
-        #         'namespace': caddy_ingress_controller_helm_release_resource.namespace,
-        #     },
-        #     spec={
-        #         'selector': {
-        #             'app': app_name
-        #         },
-        #         'port': [
-        #             {
-        #                 'name': 'http',
-        #                 'port': 80,
-        #                 'target_port': caddy_server_deployment_resource.spec.template.spec.container[0].ports[0].container_port
-        #             },
-        #             {
-        #                 'name': 'https',
-        #                 'port': 443,
-        #                 'target_port': caddy_server_deployment_resource.spec.template.spec.container[0].ports[1].container_port
-        #             },
-        #         ],
-        #     })
+        caddy_server_service_resource = Service(
+            scope=self,
+            id_="caddy_server_service_resource",
+            metadata={
+                "name": app_name,
+                "namespace": caddy_ingress_controller_helm_release_resource.namespace,
+            },
+            spec={
+                "selector": {"app": app_name},
+                "port": [
+                    {"name": "http", "port": 80, "target_port": 80},
+                    {"name": "https", "port": 443, "target_port": 443},
+                ],
+            },
+        )
 
         # caddy_server_ingress_resource = Ingress(
         #     scope=self,
@@ -370,7 +456,7 @@ class KubernetesClusterConstruct(Construct):
         #     },
         #     spec={
         #         'rule': [{
-        #             'host': 'timestep.local',
+        #             'host': config.variables.get('primary_domain_name'),
         #             'http': {
         #                 'path': [{
         #                     'path': '/',
@@ -383,6 +469,73 @@ class KubernetesClusterConstruct(Construct):
         #         }]
         #     }
         # )
+
+        caddy_server_ingress_resource = IngressV1(
+            scope=scope,
+            id_="docker_registry_ingcaddy_server_ingress_resourceress_resource",
+            metadata=IngressV1Metadata(
+                annotations={
+                    "kubernetes.io/ingress.class": "caddy",
+                    # "cert-manager.io/cluster-issuer": "letsencrypt-staging",
+                },
+                # name=docker_registry_helm_release_resource.name,
+                # namespace=docker_registry_helm_release_resource.namespace,
+                name=app_name,
+                namespace=caddy_ingress_controller_helm_release_resource.namespace,
+            ),
+            spec=IngressV1Spec(
+                default_backend=IngressV1SpecDefaultBackend(
+                    # resource=IngressV1SpecDefaultBackendResource(
+                    #     api_group=ingress_class.api_group,
+                    #     kind=ingress_class.kind,
+                    #     name=ingress_class.name,
+                    # ),
+                    service=IngressV1SpecDefaultBackendService(
+                        name=app_name,
+                        port=IngressV1SpecDefaultBackendServicePort(
+                            # name="http",
+                            number=443,
+                        ),
+                    )
+                ),
+                ingress_class_name="caddy",
+                rule=[
+                    IngressV1SpecRule(
+                        host=f"{config.variables.get('primary_domain_name')}",
+                        http=IngressV1SpecRuleHttp(
+                            path=[
+                                IngressV1SpecRuleHttpPath(
+                                    backend=IngressV1SpecRuleHttpPathBackend(
+                                        # resource=IngressV1SpecRuleHttpPathBackendResource(
+                                        #     api_group=docker_registry_helm_release_resource.api_group,
+                                        #     kind=docker_registry_helm_release_resource.kind,
+                                        #     name=docker_registry_helm_release_resource.name,
+                                        # ),
+                                        service=IngressV1SpecRuleHttpPathBackendService(
+                                            name=app_name,
+                                            port=IngressV1SpecRuleHttpPathBackendServicePort(
+                                                # name="http",
+                                                number=80,
+                                            ),
+                                        )
+                                    ),
+                                    path="/",
+                                    path_type="Prefix",
+                                )
+                            ]
+                        ),
+                    )
+                ],
+                # tls=[
+                #     IngressV1SpecTls(
+                #         hosts=[
+                #             "registry.timestep.local"
+                #         ],
+                #         secret_name="ssl-registry.timestep.local"
+                #     )
+                # ],
+            ),
+        )
 
         # platform_helm_release_resource = HelmReleaseTerraformResource(
         #     id_="platform_helm_release_resource",
