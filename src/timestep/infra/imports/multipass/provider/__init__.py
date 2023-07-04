@@ -1,8 +1,8 @@
-"""
+'''
 # `provider`
 
 Refer to the Terraform Registory for docs: [`multipass`](https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs).
-"""
+'''
 import abc
 import builtins
 import datetime
@@ -26,7 +26,7 @@ class MultipassProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="multipass.provider.MultipassProvider",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs multipass}."""
+    '''Represents a {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs multipass}.'''
 
     def __init__(
         self,
@@ -35,19 +35,15 @@ class MultipassProvider(
         *,
         alias: typing.Optional[builtins.str] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs multipass} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs multipass} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
         :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs#alias MultipassProvider#alias}
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__e1f94d75d367044a5687d31d87490ca6ef27d410e65a2b3c574ca66776de6d89
-            )
-            check_type(
-                argname="argument scope", value=scope, expected_type=type_hints["scope"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__e1f94d75d367044a5687d31d87490ca6ef27d410e65a2b3c574ca66776de6d89)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         config = MultipassProviderConfig(alias=alias)
 
@@ -59,10 +55,7 @@ class MultipassProvider(
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(
-            typing.Mapping[builtins.str, typing.Any],
-            jsii.invoke(self, "synthesizeAttributes", []),
-        )
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="tfResourceType")
@@ -82,12 +75,8 @@ class MultipassProvider(
     @alias.setter
     def alias(self, value: typing.Optional[builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__9348b67499328ff8d5bee728a38204dd08461142604142d7ff8ab4612955b8dd
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__9348b67499328ff8d5bee728a38204dd08461142604142d7ff8ab4612955b8dd)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "alias", value)
 
 
@@ -98,26 +87,22 @@ class MultipassProvider(
 )
 class MultipassProviderConfig:
     def __init__(self, *, alias: typing.Optional[builtins.str] = None) -> None:
-        """
+        '''
         :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs#alias MultipassProvider#alias}
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__b713be3a6889bc8e1233255dd9189fa318357c8ea2a6abd150b6bd3f65c93ccc
-            )
-            check_type(
-                argname="argument alias", value=alias, expected_type=type_hints["alias"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__b713be3a6889bc8e1233255dd9189fa318357c8ea2a6abd150b6bd3f65c93ccc)
+            check_type(argname="argument alias", value=alias, expected_type=type_hints["alias"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if alias is not None:
             self._values["alias"] = alias
 
     @builtins.property
     def alias(self) -> typing.Optional[builtins.str]:
-        """Alias name.
+        '''Alias name.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs#alias MultipassProvider#alias}
-        """
+        '''
         result = self._values.get("alias")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -140,7 +125,6 @@ __all__ = [
 
 publication.publish()
 
-
 def _typecheckingstub__e1f94d75d367044a5687d31d87490ca6ef27d410e65a2b3c574ca66776de6d89(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -150,13 +134,11 @@ def _typecheckingstub__e1f94d75d367044a5687d31d87490ca6ef27d410e65a2b3c574ca6677
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__9348b67499328ff8d5bee728a38204dd08461142604142d7ff8ab4612955b8dd(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__b713be3a6889bc8e1233255dd9189fa318357c8ea2a6abd150b6bd3f65c93ccc(
     *,
