@@ -107,7 +107,7 @@ def get_cloud_instance_resource(
             region=config.variables.get("do_droplet_region"),
             scope=scope,
             size=config.variables.get("do_droplet_size"),
-            ssh_keys=[cloud_instance_ssh_key_resource.default.fingerprint],
+            ssh_keys=[cloud_instance_ssh_key_resource.fingerprint],
             user_data=cloud_init_config_construct.outputs["user_data"].value,
         )
 
