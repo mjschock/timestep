@@ -53,21 +53,6 @@ def main(config: AppConfig) -> None:
         )
 
     else:
-        # workspaces: IRemoteWorkspace = NamedRemoteWorkspace(
-        #     # name=config.TERRAFORM_WORKSPACE,
-        #     name=config.variables.get("tf_workspace"),
-        # )
-        # backend: RemoteBackend = RemoteBackend(
-        #     scope=stack,
-        #     # hostname=config.TERRAFORM_HOSTNAME,
-        #     hostname=config.variables.get("tf_hostname"),
-        #     # organization=config.TERRAFORM_ORGANIZATION,
-        #     organization=config.variables.get("tf_organization"),
-        #     # token=config.TF_API_TOKEN,
-        #     token=config.secrets.get_secret_value().get("tf_api_token"),
-        #     workspaces=workspaces,
-        # )
-
         CloudBackend(
             scope=k3s_cluster_stack,
             hostname=config.variables.get("tf_hostname"),
