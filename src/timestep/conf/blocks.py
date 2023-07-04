@@ -13,6 +13,8 @@ from pydantic import SecretStr
 BASE_PATH = pathlib.Path.cwd()
 DIST_PATH: str = f"{BASE_PATH}/dist"
 
+use_tmpdirname = False
+
 
 class SecureShellCredentials(Block):
     _block_type_slug: str = "ssh-credentials"
@@ -25,7 +27,11 @@ class SecureShellCredentials(Block):
             with tempfile.TemporaryDirectory() as tmpdirname:
                 comment = f"{os.environ.get('USER')}@{socket.gethostname()}"
                 key_type = "ed25519"
-                output_keyfile = f"{tmpdirname}/.ssh/id_{key_type}"
+
+                if use_tmpdirname:
+                    output_keyfile = f"{tmpdirname}/.ssh/id_{key_type}"
+                else:
+                    output_keyfile = f"{BASE_PATH}/.ssh/id_{key_type}"
 
                 if not os.path.exists(output_keyfile):
                     os.makedirs(os.path.dirname(output_keyfile), exist_ok=True)
