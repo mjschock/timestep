@@ -34,6 +34,7 @@ class CloudInitConfigConstruct(Construct):
         ] = get_cloud_init_config_data_source.submit(
             scope=scope,
             config=config,
+            cloud_init_config_provider=self.cloud_init_config_provider_future,
             cloud_init_config_resource=self.cloud_init_config_resource_future,
         )
         # self.cloud_init_config_outputs_future: PrefectFuture[

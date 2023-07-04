@@ -243,7 +243,10 @@ def get_cloud_init_config_resource(
 
 @task
 def get_cloud_init_config_data_source(
-    scope: Construct, config: AppConfig, cloud_init_config_resource: TerraformResource
+    scope: Construct,
+    config: AppConfig,
+    cloud_init_config_provider: TerraformProvider,
+    cloud_init_config_resource: TerraformResource,
 ) -> TerraformDataSource:
     if (
         config.variables.get("cloud_instance_provider")
@@ -284,7 +287,7 @@ def get_cloud_init_config_data_source(
             depends_on=None,
             for_each=None,
             lifecycle=None,
-            # provider=cloud_init_config_resource.provider,
+            provider=cloud_init_config_provider,
             provisioners=None,
         )
 
