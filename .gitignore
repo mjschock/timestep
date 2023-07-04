@@ -1,5 +1,5 @@
 dist
-!dist/.gitkeep
+!dist/docs
 node_modules
 *.pyc
 __pycache__

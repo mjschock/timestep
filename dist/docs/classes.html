@@ -1,0 +1,158 @@
+<html>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      <div class="mermaid">
+    
+        classDiagram
+          class ABC {
+          }
+          class TerraformStack {
+            dependencies
+            synthesizer
+            add_dependency(dependency: 'TerraformStack') None
+            add_override(path: builtins.str, value: typing.Any) None
+            all_providers() typing.List[TerraformProvider]
+            depends_on(stack: 'TerraformStack') builtins.bool
+            ensure_backend_exists() 'TerraformBackend'
+            get_logical_id(tf_element: typing.Union[_constructs_77d1e7e8.Node, TerraformElement]) builtins.str
+            is_stack(x: typing.Any) builtins.bool
+            of(construct: _constructs_77d1e7e8.IConstruct) 'TerraformStack'
+            prepare_stack() None
+            register_incoming_cross_stack_reference(from_stack: 'TerraformStack') TerraformRemoteState
+            register_outgoing_cross_stack_reference(identifier: builtins.str) TerraformOutput
+            run_all_validations() None
+            to_terraform() typing.Any
+          }
+          class Construct {
+            node
+            is_construct(x: typing.Any) builtins.bool
+            to_string() builtins.str
+          }
+          class Enum {
+            name()
+            value()
+          }
+          class ReprEnum {
+          }
+          class StrEnum {
+          }
+          class Block {
+            block_initialization()* None
+            get_block_capabilities() FrozenSet[str]
+            get_block_class_from_key(key: str) Type[Self]
+            get_block_class_from_schema(schema: BlockSchema) Type[Self]
+            get_block_schema_version() str
+            get_block_type_name()
+            get_block_type_slug()
+            get_code_example() Optional[str]
+            get_description() Optional[str]
+            is_block_class(block) bool
+            load(name: str, validate: bool, client: 'PrefectClient')
+            register_type_and_schema(client: 'PrefectClient')
+            save(name: str, overwrite: bool, client: 'PrefectClient')
+          }
+          class SecretDict {
+            dict() Dict
+            get_secret_value() Dict[str, Any]
+            validate(value: Any) 'SecretDict'
+          }
+          class AppConfig {
+            secrets
+            variables
+          }
+          class CloudInstanceProvider {
+            name
+          }
+          class DomainNameRegistrarProvider {
+            name
+          }
+          class SecureShellCredentials {
+            private_key
+            private_key : Optional[SecretStr]
+            public_key
+            public_key : Optional[str]
+            block_initialization()
+          }
+          class CloudInitConfigConstruct {
+            cloud_init_config_data_source_future : PrefectFuture[TerraformDataSource]
+            cloud_init_config_outputs_future : PrefectFuture[Dict[str, TerraformOutput]]
+            cloud_init_config_provider_future : PrefectFuture[TerraformProvider]
+            cloud_init_config_resource_future : PrefectFuture[TerraformResource]
+            data_source
+            outputs
+            provider
+            resource
+          }
+          class CloudInstanceConstruct {
+            cloud_instance_data_source_future : PrefectFuture[TerraformDataSource]
+            cloud_instance_outputs_future : PrefectFuture[Dict[str, TerraformOutput]]
+            cloud_instance_provider_future : PrefectFuture[TerraformProvider]
+            cloud_instance_resource_future : PrefectFuture[TerraformResource]
+            data_source
+            outputs
+            provider
+            resource
+          }
+          class CloudInstanceDomainConstruct {
+            cloud_instance_domain_data_source_future : PrefectFuture[TerraformDataSource]
+            cloud_instance_domain_outputs_future : PrefectFuture[Dict[str, TerraformOutput]]
+            cloud_instance_domain_provider_future : PrefectFuture[TerraformProvider]
+            cloud_instance_domain_resource_future : PrefectFuture[TerraformResource]
+            data_source
+            outputs
+            provider
+            resource
+          }
+          class DomainNameRegistrarConstruct {
+            data_source
+            domain_name_registrar_data_source_future : PrefectFuture[TerraformDataSource]
+            domain_name_registrar_outputs_future : PrefectFuture[Dict[str, TerraformOutput]]
+            domain_name_registrar_provider_future : PrefectFuture[TerraformProvider]
+            domain_name_registrar_resource_future : PrefectFuture[TerraformResource]
+            outputs
+            provider
+            resource
+          }
+          class KubeConfigConstruct {
+            data_source
+            kube_config_data_source_future : PrefectFuture[TerraformDataSource]
+            kube_config_outputs_future : PrefectFuture[Dict[str, TerraformOutput]]
+            kube_config_provider_future : PrefectFuture[TerraformProvider]
+            kube_config_resource_future : PrefectFuture[TerraformResource]
+            outputs
+            provider
+            resource
+          }
+          class KubernetesClusterConstruct {
+          }
+          class BaseStack {
+            cloud_init_config_construct
+            cloud_instance_construct
+            cloud_instance_domain_construct
+            domain_name_registar_construct
+            kube_config_construct
+            kubernetes_cluster_construct
+          }
+          class Dict {
+          }
+          TerraformStack --|> Construct
+          ReprEnum --|> Enum
+          StrEnum --|> ReprEnum
+          Block --|> ABC
+          AppConfig --|> Block
+          CloudInstanceProvider --|> StrEnum
+          DomainNameRegistrarProvider --|> StrEnum
+          SecureShellCredentials --|> Block
+          CloudInitConfigConstruct --|> Construct
+          CloudInstanceConstruct --|> Construct
+          CloudInstanceDomainConstruct --|> Construct
+          DomainNameRegistrarConstruct --|> Construct
+          KubeConfigConstruct --|> Construct
+          KubernetesClusterConstruct --|> Construct
+          BaseStack --|> TerraformStack
+          SecretDict --* AppConfig : secrets
+          Dict --* AppConfig : variables
+  
+       </div>
+  </body>
+</html>
