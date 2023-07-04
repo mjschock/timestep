@@ -18,7 +18,7 @@ from timestep.infra.imports.namecheap.provider import (
 )
 from timestep.infra.imports.null.provider import NullProvider as NullTerraformProvider
 from timestep.infra.imports.null.resource import Resource as NullTerraformResource
-from timestep.infra.stacks.base.constructs.cloud_instance.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
     CloudInstanceConstruct,
 )
 

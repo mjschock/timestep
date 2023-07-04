@@ -5,25 +5,24 @@ from constructs import Construct
 from prefect import get_run_logger
 
 from timestep.conf.blocks import AppConfig
-from timestep.infra.stacks.base.constructs.cloud_init_config.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.blocks import (
     CloudInitConfigConstruct,
 )
-from timestep.infra.stacks.base.constructs.cloud_instance.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
     CloudInstanceConstruct,
 )
-from timestep.infra.stacks.base.constructs.cloud_instance_domain.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance_domain.blocks import (
     CloudInstanceDomainConstruct,
 )
-from timestep.infra.stacks.base.constructs.domain_name_registrar.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.blocks import (
     DomainNameRegistrarConstruct,
 )
-from timestep.infra.stacks.base.constructs.kube_config.blocks import KubeConfigConstruct
-from timestep.infra.stacks.base.constructs.kubernetes_cluster.blocks import (
-    KubernetesClusterConstruct,
+from timestep.infra.stacks.k3s_cluster.constructs.kube_config.blocks import (
+    KubeConfigConstruct,
 )
 
 
-class BaseStack(TerraformStack):
+class K3sClusterStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
         super().__init__(scope, id)
         get_run_logger()
@@ -59,11 +58,5 @@ class BaseStack(TerraformStack):
             cloud_instance_construct=self.cloud_instance_construct,
             config=config,
             id="kube_config_construct",
-            scope=self,
-        )
-
-        self.kubernetes_cluster_construct = KubernetesClusterConstruct(
-            config=config,
-            id="kubernetes_cluster_construct",
             scope=self,
         )

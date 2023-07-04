@@ -28,7 +28,7 @@ from timestep.infra.imports.multipass.instance import (
 from timestep.infra.imports.multipass.provider import (
     MultipassProvider as MultipassTerraformProvider,
 )
-from timestep.infra.stacks.base.constructs.cloud_init_config.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.blocks import (
     CloudInitConfigConstruct,
 )
 
