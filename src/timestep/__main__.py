@@ -1,11 +1,15 @@
 import os
 import pathlib
 
-from cdktf import App, LocalBackend, TerraformStack
+from cdktf import App, CloudBackend, LocalBackend, NamedCloudWorkspace, TerraformStack
 from dotenv import dotenv_values
 from prefect import flow, get_run_logger
 
-from timestep.conf.blocks import AppConfig, SecureShellCredentials
+from timestep.conf.blocks import (
+    AppConfig,
+    CloudInstanceProvider,
+    SecureShellCredentials,
+)
 from timestep.infra.stacks.k3s_cluster.stack import K3sClusterStack
 
 BASE_PATH = pathlib.Path.cwd()
@@ -37,34 +41,39 @@ def main(config: AppConfig) -> None:
     )
 
     stack_id: str = config.variables.get("primary_domain_name")
-    LocalBackend(
-        path=f"terraform.{stack_id}.tfstate",
-        scope=k3s_cluster_stack,
-        workspace_dir=None,
-    )
 
-    # pg_backend: PgBackend = PgBackend(
-    #     conn_str=config.secrets.get_secret_value().get("pg_conn_str"),
-    #     schema_name=config.variables.get("pg_schema_name"),
-    #     scope=base_stack,
-    #     skip_schema_creation=False,
-    # )
+    if (
+        config.variables.get("cloud_instance_provider")
+        == CloudInstanceProvider.MULTIPASS
+    ):
+        LocalBackend(
+            path=f"terraform.{stack_id}.tfstate",
+            scope=k3s_cluster_stack,
+            workspace_dir=None,
+        )
 
-    # else:
-    # workspaces: IRemoteWorkspace = NamedRemoteWorkspace(
-    #     # name=config.TERRAFORM_WORKSPACE,
-    #     name=config.variables.get("tf_workspace"),
-    # )
-    # backend: RemoteBackend = RemoteBackend(
-    #     scope=stack,
-    #     # hostname=config.TERRAFORM_HOSTNAME,
-    #     hostname=config.variables.get("tf_hostname"),
-    #     # organization=config.TERRAFORM_ORGANIZATION,
-    #     organization=config.variables.get("tf_organization"),
-    #     # token=config.TF_API_TOKEN,
-    #     token=config.secrets.get_secret_value().get("tf_api_token"),
-    #     workspaces=workspaces,
-    # )
+    else:
+        # workspaces: IRemoteWorkspace = NamedRemoteWorkspace(
+        #     # name=config.TERRAFORM_WORKSPACE,
+        #     name=config.variables.get("tf_workspace"),
+        # )
+        # backend: RemoteBackend = RemoteBackend(
+        #     scope=stack,
+        #     # hostname=config.TERRAFORM_HOSTNAME,
+        #     hostname=config.variables.get("tf_hostname"),
+        #     # organization=config.TERRAFORM_ORGANIZATION,
+        #     organization=config.variables.get("tf_organization"),
+        #     # token=config.TF_API_TOKEN,
+        #     token=config.secrets.get_secret_value().get("tf_api_token"),
+        #     workspaces=workspaces,
+        # )
+
+        CloudBackend(
+            scope=k3s_cluster_stack,
+            hostname=config.variables.get("tf_hostname"),
+            organization=config.variables.get("tf_organization"),
+            workspaces=NamedCloudWorkspace(config.variables.get("tf_workspace")),
+        )
 
     app.synth()
 
