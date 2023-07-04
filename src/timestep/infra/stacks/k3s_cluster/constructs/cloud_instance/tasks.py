@@ -19,6 +19,7 @@ from timestep.infra.imports.digitalocean.droplet import (
 from timestep.infra.imports.digitalocean.provider import (
     DigitaloceanProvider as DigitaloceanTerraformProvider,
 )
+from timestep.infra.imports.digitalocean.ssh_key import SshKey
 from timestep.infra.imports.multipass.data_multipass_instance import (
     DataMultipassInstance as MultipassInstanceTerraformDataSource,
 )
@@ -91,6 +92,11 @@ def get_cloud_instance_resource(
         config.variables.get("cloud_instance_provider")
         == CloudInstanceProvider.DIGITALOCEAN
     ):
+        cloud_instance_ssh_key_resource = SshKey(
+            id_="cloud_instance_ssh_key_resource",
+            name=f'{config.variables.get("cloud_instance_name")}_ssh_key',
+            public_key=config.variables.get("ssh_public_key"),
+        )
         cloud_instance_resource = DigitaloceanDropletTerraformResource(
             id_="cloud_instance_resource",
             image=config.variables.get("do_droplet_image"),
@@ -99,6 +105,7 @@ def get_cloud_instance_resource(
             region=config.variables.get("do_droplet_region"),
             scope=scope,
             size=config.variables.get("do_droplet_size"),
+            ssh_keys=[cloud_instance_ssh_key_resource.default.fingerprint],
             user_data=cloud_init_config_construct.outputs["user_data"].value,
         )
 
