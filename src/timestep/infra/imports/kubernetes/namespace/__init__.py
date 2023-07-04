@@ -1,7 +1,7 @@
 """
 # `kubernetes_namespace`
 
-Refer to the Terraform Registory for docs: [`kubernetes_namespace`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace).
+Refer to the Terraform Registory for docs: [`kubernetes_namespace`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class Namespace(
@@ -24,7 +26,7 @@ class Namespace(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.namespace.Namespace",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace kubernetes_namespace}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace kubernetes_namespace}."""
 
     def __init__(
         self,
@@ -83,13 +85,13 @@ class Namespace(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace kubernetes_namespace} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace kubernetes_namespace} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#metadata Namespace#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#id Namespace#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#timeouts Namespace#timeouts}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#metadata Namespace#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#id Namespace#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#timeouts Namespace#timeouts}
         :param connection:
         :param count:
         :param depends_on:
@@ -133,10 +135,10 @@ class Namespace(
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the namespace that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#annotations Namespace#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#generate_name Namespace#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the namespace. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#labels Namespace#labels}
-        :param name: Name of the namespace, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#name Namespace#name}
+        :param annotations: An unstructured key value map stored with the namespace that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#annotations Namespace#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#generate_name Namespace#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the namespace. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#labels Namespace#labels}
+        :param name: Name of the namespace, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#name Namespace#name}
         """
         value = NamespaceMetadata(
             annotations=annotations,
@@ -150,7 +152,7 @@ class Namespace(
     @jsii.member(jsii_name="putTimeouts")
     def put_timeouts(self, *, delete: typing.Optional[builtins.str] = None) -> None:
         """
-        :param delete: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#delete Namespace#delete}.
+        :param delete: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#delete Namespace#delete}.
         """
         value = NamespaceTimeouts(delete=delete)
 
@@ -313,9 +315,9 @@ class NamespaceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#metadata Namespace#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#id Namespace#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#timeouts Namespace#timeouts}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#metadata Namespace#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#id Namespace#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#timeouts Namespace#timeouts}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -500,7 +502,7 @@ class NamespaceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "NamespaceMetadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#metadata Namespace#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#metadata Namespace#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -508,7 +510,7 @@ class NamespaceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#id Namespace#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#id Namespace#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -520,7 +522,7 @@ class NamespaceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def timeouts(self) -> typing.Optional["NamespaceTimeouts"]:
         """timeouts block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#timeouts Namespace#timeouts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#timeouts Namespace#timeouts}
         """
         result = self._values.get("timeouts")
         return typing.cast(typing.Optional["NamespaceTimeouts"], result)
@@ -557,10 +559,10 @@ class NamespaceMetadata:
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the namespace that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#annotations Namespace#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#generate_name Namespace#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the namespace. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#labels Namespace#labels}
-        :param name: Name of the namespace, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#name Namespace#name}
+        :param annotations: An unstructured key value map stored with the namespace that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#annotations Namespace#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#generate_name Namespace#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the namespace. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#labels Namespace#labels}
+        :param name: Name of the namespace, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#name Namespace#name}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -602,7 +604,7 @@ class NamespaceMetadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#annotations Namespace#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#annotations Namespace#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -615,7 +617,7 @@ class NamespaceMetadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#generate_name Namespace#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#generate_name Namespace#generate_name}
         """
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -626,7 +628,7 @@ class NamespaceMetadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#labels Namespace#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#labels Namespace#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -637,7 +639,7 @@ class NamespaceMetadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the namespace, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#name Namespace#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#name Namespace#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -842,7 +844,7 @@ class NamespaceMetadataOutputReference(
 class NamespaceTimeouts:
     def __init__(self, *, delete: typing.Optional[builtins.str] = None) -> None:
         """
-        :param delete: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#delete Namespace#delete}.
+        :param delete: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#delete Namespace#delete}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -859,7 +861,7 @@ class NamespaceTimeouts:
 
     @builtins.property
     def delete(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/namespace#delete Namespace#delete}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/namespace#delete Namespace#delete}."""
         result = self._values.get("delete")
         return typing.cast(typing.Optional[builtins.str], result)
 

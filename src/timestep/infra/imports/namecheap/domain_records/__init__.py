@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class DomainRecords(
@@ -1132,11 +1134,11 @@ class DomainRecordsRecordOutputReference(
     def internal_value(
         self,
     ) -> typing.Optional[
-        typing.Union[DomainRecordsRecord, _cdktf_9a9027ec.IResolvable]
+        typing.Union[_cdktf_9a9027ec.IResolvable, DomainRecordsRecord]
     ]:
         return typing.cast(
             typing.Optional[
-                typing.Union[DomainRecordsRecord, _cdktf_9a9027ec.IResolvable]
+                typing.Union[_cdktf_9a9027ec.IResolvable, DomainRecordsRecord]
             ],
             jsii.get(self, "internalValue"),
         )
@@ -1145,7 +1147,7 @@ class DomainRecordsRecordOutputReference(
     def internal_value(
         self,
         value: typing.Optional[
-            typing.Union[DomainRecordsRecord, _cdktf_9a9027ec.IResolvable]
+            typing.Union[_cdktf_9a9027ec.IResolvable, DomainRecordsRecord]
         ],
     ) -> None:
         if __debug__:
@@ -1451,7 +1453,7 @@ def _typecheckingstub__8d04ca74190bfb976113df29b06ad404e6f5ef553a3d9272c13310f9c
 
 def _typecheckingstub__04e3014aa80e6a75a923d177e3d41c02ed15a43aacc8dba064b6f4387ec1fa52(
     value: typing.Optional[
-        typing.Union[DomainRecordsRecord, _cdktf_9a9027ec.IResolvable]
+        typing.Union[_cdktf_9a9027ec.IResolvable, DomainRecordsRecord]
     ],
 ) -> None:
     """Type checking stubs"""

@@ -1,7 +1,7 @@
 """
 # `data_kubernetes_secret_v1`
 
-Refer to the Terraform Registory for docs: [`data_kubernetes_secret_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1).
+Refer to the Terraform Registory for docs: [`data_kubernetes_secret_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class DataKubernetesSecretV1(
@@ -24,7 +26,7 @@ class DataKubernetesSecretV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.dataKubernetesSecretV1.DataKubernetesSecretV1",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1 kubernetes_secret_v1}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1 kubernetes_secret_v1}."""
 
     def __init__(
         self,
@@ -81,13 +83,13 @@ class DataKubernetesSecretV1(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1 kubernetes_secret_v1} Data Source.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1 kubernetes_secret_v1} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#metadata DataKubernetesSecretV1#metadata}
-        :param binary_data: A map of the secret data with values encoded in base64 format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#binary_data DataKubernetesSecretV1#binary_data}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#id DataKubernetesSecretV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#metadata DataKubernetesSecretV1#metadata}
+        :param binary_data: A map of the secret data with values encoded in base64 format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#binary_data DataKubernetesSecretV1#binary_data}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#id DataKubernetesSecretV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection:
         :param count:
         :param depends_on:
@@ -132,11 +134,11 @@ class DataKubernetesSecretV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the secret that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#annotations DataKubernetesSecretV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#generate_name DataKubernetesSecretV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the secret. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#labels DataKubernetesSecretV1#labels}
-        :param name: Name of the secret, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#name DataKubernetesSecretV1#name}
-        :param namespace: Namespace defines the space within which name of the secret must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#namespace DataKubernetesSecretV1#namespace}
+        :param annotations: An unstructured key value map stored with the secret that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#annotations DataKubernetesSecretV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#generate_name DataKubernetesSecretV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the secret. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#labels DataKubernetesSecretV1#labels}
+        :param name: Name of the secret, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#name DataKubernetesSecretV1#name}
+        :param namespace: Namespace defines the space within which name of the secret must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#namespace DataKubernetesSecretV1#namespace}
         """
         value = DataKubernetesSecretV1Metadata(
             annotations=annotations,
@@ -326,9 +328,9 @@ class DataKubernetesSecretV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#metadata DataKubernetesSecretV1#metadata}
-        :param binary_data: A map of the secret data with values encoded in base64 format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#binary_data DataKubernetesSecretV1#binary_data}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#id DataKubernetesSecretV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#metadata DataKubernetesSecretV1#metadata}
+        :param binary_data: A map of the secret data with values encoded in base64 format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#binary_data DataKubernetesSecretV1#binary_data}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#id DataKubernetesSecretV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -511,7 +513,7 @@ class DataKubernetesSecretV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "DataKubernetesSecretV1Metadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#metadata DataKubernetesSecretV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#metadata DataKubernetesSecretV1#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -523,7 +525,7 @@ class DataKubernetesSecretV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         """A map of the secret data with values encoded in base64 format.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#binary_data DataKubernetesSecretV1#binary_data}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#binary_data DataKubernetesSecretV1#binary_data}
         """
         result = self._values.get("binary_data")
         return typing.cast(
@@ -532,7 +534,7 @@ class DataKubernetesSecretV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#id DataKubernetesSecretV1#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#id DataKubernetesSecretV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -574,11 +576,11 @@ class DataKubernetesSecretV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the secret that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#annotations DataKubernetesSecretV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#generate_name DataKubernetesSecretV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the secret. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#labels DataKubernetesSecretV1#labels}
-        :param name: Name of the secret, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#name DataKubernetesSecretV1#name}
-        :param namespace: Namespace defines the space within which name of the secret must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#namespace DataKubernetesSecretV1#namespace}
+        :param annotations: An unstructured key value map stored with the secret that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#annotations DataKubernetesSecretV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#generate_name DataKubernetesSecretV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the secret. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#labels DataKubernetesSecretV1#labels}
+        :param name: Name of the secret, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#name DataKubernetesSecretV1#name}
+        :param namespace: Namespace defines the space within which name of the secret must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#namespace DataKubernetesSecretV1#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -627,7 +629,7 @@ class DataKubernetesSecretV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#annotations DataKubernetesSecretV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#annotations DataKubernetesSecretV1#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -640,7 +642,7 @@ class DataKubernetesSecretV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#generate_name DataKubernetesSecretV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#generate_name DataKubernetesSecretV1#generate_name}
         """
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -651,7 +653,7 @@ class DataKubernetesSecretV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#labels DataKubernetesSecretV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#labels DataKubernetesSecretV1#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -662,7 +664,7 @@ class DataKubernetesSecretV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the secret, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#name DataKubernetesSecretV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#name DataKubernetesSecretV1#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -671,7 +673,7 @@ class DataKubernetesSecretV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Namespace defines the space within which name of the secret must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/secret_v1#namespace DataKubernetesSecretV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#namespace DataKubernetesSecretV1#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)

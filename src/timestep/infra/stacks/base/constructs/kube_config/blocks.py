@@ -32,7 +32,7 @@ class KubeConfigConstruct(Construct):
         cloud_instance_construct: CloudInstanceConstruct,
     ) -> None:
         super().__init__(scope, id)
-        logger = get_run_logger()
+        get_run_logger()
 
         self.kube_config_provider_future: PrefectFuture[
             TerraformProvider
@@ -74,7 +74,7 @@ class KubeConfigConstruct(Construct):
         try:
             kube_config_block = KubernetesClusterConfig.load("kube-config")
 
-        except ValueError as e:
+        except ValueError:
             kube_config_block = KubernetesClusterConfig.from_file(
                 path=config.variables.get("kubeconfig"),
                 context_name=config.variables.get("kubecontext"),

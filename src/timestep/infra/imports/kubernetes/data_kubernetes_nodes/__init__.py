@@ -1,7 +1,7 @@
 """
 # `data_kubernetes_nodes`
 
-Refer to the Terraform Registory for docs: [`data_kubernetes_nodes`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes).
+Refer to the Terraform Registory for docs: [`data_kubernetes_nodes`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class DataKubernetesNodes(
@@ -24,7 +26,7 @@ class DataKubernetesNodes(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.dataKubernetesNodes.DataKubernetesNodes",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes kubernetes_nodes}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes kubernetes_nodes}."""
 
     def __init__(
         self,
@@ -82,12 +84,12 @@ class DataKubernetesNodes(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes kubernetes_nodes} Data Source.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes kubernetes_nodes} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes#id DataKubernetesNodes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#id DataKubernetesNodes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
         :param connection:
         :param count:
         :param depends_on:
@@ -127,7 +129,7 @@ class DataKubernetesNodes(
         labels: typing.Mapping[builtins.str, builtins.str],
     ) -> None:
         """
-        :param labels: Select nodes with these labels. More info: http://kubernetes.io/docs/user-guide/labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
+        :param labels: Select nodes with these labels. More info: http://kubernetes.io/docs/user-guide/labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
         """
         value = DataKubernetesNodesMetadata(labels=labels)
 
@@ -273,8 +275,8 @@ class DataKubernetesNodesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes#id DataKubernetesNodes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#id DataKubernetesNodes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -448,7 +450,7 @@ class DataKubernetesNodesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes#id DataKubernetesNodes#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#id DataKubernetesNodes#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -460,7 +462,7 @@ class DataKubernetesNodesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> typing.Optional["DataKubernetesNodesMetadata"]:
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
         """
         result = self._values.get("metadata")
         return typing.cast(typing.Optional["DataKubernetesNodesMetadata"], result)
@@ -485,7 +487,7 @@ class DataKubernetesNodesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 class DataKubernetesNodesMetadata:
     def __init__(self, *, labels: typing.Mapping[builtins.str, builtins.str]) -> None:
         """
-        :param labels: Select nodes with these labels. More info: http://kubernetes.io/docs/user-guide/labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
+        :param labels: Select nodes with these labels. More info: http://kubernetes.io/docs/user-guide/labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -504,7 +506,7 @@ class DataKubernetesNodesMetadata:
     def labels(self) -> typing.Mapping[builtins.str, builtins.str]:
         """Select nodes with these labels. More info: http://kubernetes.io/docs/user-guide/labels.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
         """
         result = self._values.get("labels")
         assert result is not None, "Required property 'labels' is missing"

@@ -1,7 +1,7 @@
 """
 # `kubernetes_persistent_volume_claim_v1`
 
-Refer to the Terraform Registory for docs: [`kubernetes_persistent_volume_claim_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1).
+Refer to the Terraform Registory for docs: [`kubernetes_persistent_volume_claim_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class PersistentVolumeClaimV1(
@@ -24,7 +26,7 @@ class PersistentVolumeClaimV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.persistentVolumeClaimV1.PersistentVolumeClaimV1",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1 kubernetes_persistent_volume_claim_v1}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1 kubernetes_persistent_volume_claim_v1}."""
 
     def __init__(
         self,
@@ -91,15 +93,15 @@ class PersistentVolumeClaimV1(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1 kubernetes_persistent_volume_claim_v1} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1 kubernetes_persistent_volume_claim_v1} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#metadata PersistentVolumeClaimV1#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#spec PersistentVolumeClaimV1#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#id PersistentVolumeClaimV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#timeouts PersistentVolumeClaimV1#timeouts}
-        :param wait_until_bound: Whether to wait for the claim to reach ``Bound`` state (to find volume in which to claim the space). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#wait_until_bound PersistentVolumeClaimV1#wait_until_bound}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#metadata PersistentVolumeClaimV1#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#spec PersistentVolumeClaimV1#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#id PersistentVolumeClaimV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#timeouts PersistentVolumeClaimV1#timeouts}
+        :param wait_until_bound: Whether to wait for the claim to reach ``Bound`` state (to find volume in which to claim the space). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#wait_until_bound PersistentVolumeClaimV1#wait_until_bound}
         :param connection:
         :param count:
         :param depends_on:
@@ -146,11 +148,11 @@ class PersistentVolumeClaimV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the persistent volume claim that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#annotations PersistentVolumeClaimV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#generate_name PersistentVolumeClaimV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the persistent volume claim. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#labels PersistentVolumeClaimV1#labels}
-        :param name: Name of the persistent volume claim, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#name PersistentVolumeClaimV1#name}
-        :param namespace: Namespace defines the space within which name of the persistent volume claim must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#namespace PersistentVolumeClaimV1#namespace}
+        :param annotations: An unstructured key value map stored with the persistent volume claim that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#annotations PersistentVolumeClaimV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#generate_name PersistentVolumeClaimV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the persistent volume claim. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#labels PersistentVolumeClaimV1#labels}
+        :param name: Name of the persistent volume claim, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#name PersistentVolumeClaimV1#name}
+        :param namespace: Namespace defines the space within which name of the persistent volume claim must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#namespace PersistentVolumeClaimV1#namespace}
         """
         value = PersistentVolumeClaimV1Metadata(
             annotations=annotations,
@@ -181,11 +183,11 @@ class PersistentVolumeClaimV1(
         volume_name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param access_modes: A set of the desired access modes the volume should have. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#access-modes-1. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#access_modes PersistentVolumeClaimV1#access_modes}
-        :param resources: resources block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#resources PersistentVolumeClaimV1#resources}
-        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#selector PersistentVolumeClaimV1#selector}
-        :param storage_class_name: Name of the storage class requested by the claim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#storage_class_name PersistentVolumeClaimV1#storage_class_name}
-        :param volume_name: The binding reference to the PersistentVolume backing this claim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#volume_name PersistentVolumeClaimV1#volume_name}
+        :param access_modes: A set of the desired access modes the volume should have. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#access-modes-1. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#access_modes PersistentVolumeClaimV1#access_modes}
+        :param resources: resources block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#resources PersistentVolumeClaimV1#resources}
+        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#selector PersistentVolumeClaimV1#selector}
+        :param storage_class_name: Name of the storage class requested by the claim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#storage_class_name PersistentVolumeClaimV1#storage_class_name}
+        :param volume_name: The binding reference to the PersistentVolume backing this claim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#volume_name PersistentVolumeClaimV1#volume_name}
         """
         value = PersistentVolumeClaimV1Spec(
             access_modes=access_modes,
@@ -200,7 +202,7 @@ class PersistentVolumeClaimV1(
     @jsii.member(jsii_name="putTimeouts")
     def put_timeouts(self, *, create: typing.Optional[builtins.str] = None) -> None:
         """
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#create PersistentVolumeClaimV1#create}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#create PersistentVolumeClaimV1#create}.
         """
         value = PersistentVolumeClaimV1Timeouts(create=create)
 
@@ -428,11 +430,11 @@ class PersistentVolumeClaimV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#metadata PersistentVolumeClaimV1#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#spec PersistentVolumeClaimV1#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#id PersistentVolumeClaimV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#timeouts PersistentVolumeClaimV1#timeouts}
-        :param wait_until_bound: Whether to wait for the claim to reach ``Bound`` state (to find volume in which to claim the space). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#wait_until_bound PersistentVolumeClaimV1#wait_until_bound}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#metadata PersistentVolumeClaimV1#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#spec PersistentVolumeClaimV1#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#id PersistentVolumeClaimV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#timeouts PersistentVolumeClaimV1#timeouts}
+        :param wait_until_bound: Whether to wait for the claim to reach ``Bound`` state (to find volume in which to claim the space). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#wait_until_bound PersistentVolumeClaimV1#wait_until_bound}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -630,7 +632,7 @@ class PersistentVolumeClaimV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "PersistentVolumeClaimV1Metadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#metadata PersistentVolumeClaimV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#metadata PersistentVolumeClaimV1#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -640,7 +642,7 @@ class PersistentVolumeClaimV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def spec(self) -> "PersistentVolumeClaimV1Spec":
         """spec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#spec PersistentVolumeClaimV1#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#spec PersistentVolumeClaimV1#spec}
         """
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
@@ -648,7 +650,7 @@ class PersistentVolumeClaimV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#id PersistentVolumeClaimV1#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#id PersistentVolumeClaimV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -660,7 +662,7 @@ class PersistentVolumeClaimV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def timeouts(self) -> typing.Optional["PersistentVolumeClaimV1Timeouts"]:
         """timeouts block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#timeouts PersistentVolumeClaimV1#timeouts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#timeouts PersistentVolumeClaimV1#timeouts}
         """
         result = self._values.get("timeouts")
         return typing.cast(typing.Optional["PersistentVolumeClaimV1Timeouts"], result)
@@ -671,7 +673,7 @@ class PersistentVolumeClaimV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to wait for the claim to reach ``Bound`` state (to find volume in which to claim the space).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#wait_until_bound PersistentVolumeClaimV1#wait_until_bound}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#wait_until_bound PersistentVolumeClaimV1#wait_until_bound}
         """
         result = self._values.get("wait_until_bound")
         return typing.cast(
@@ -713,11 +715,11 @@ class PersistentVolumeClaimV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the persistent volume claim that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#annotations PersistentVolumeClaimV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#generate_name PersistentVolumeClaimV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the persistent volume claim. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#labels PersistentVolumeClaimV1#labels}
-        :param name: Name of the persistent volume claim, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#name PersistentVolumeClaimV1#name}
-        :param namespace: Namespace defines the space within which name of the persistent volume claim must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#namespace PersistentVolumeClaimV1#namespace}
+        :param annotations: An unstructured key value map stored with the persistent volume claim that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#annotations PersistentVolumeClaimV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#generate_name PersistentVolumeClaimV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the persistent volume claim. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#labels PersistentVolumeClaimV1#labels}
+        :param name: Name of the persistent volume claim, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#name PersistentVolumeClaimV1#name}
+        :param namespace: Namespace defines the space within which name of the persistent volume claim must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#namespace PersistentVolumeClaimV1#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -766,7 +768,7 @@ class PersistentVolumeClaimV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#annotations PersistentVolumeClaimV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#annotations PersistentVolumeClaimV1#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -779,7 +781,7 @@ class PersistentVolumeClaimV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#generate_name PersistentVolumeClaimV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#generate_name PersistentVolumeClaimV1#generate_name}
         """
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -790,7 +792,7 @@ class PersistentVolumeClaimV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#labels PersistentVolumeClaimV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#labels PersistentVolumeClaimV1#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -801,7 +803,7 @@ class PersistentVolumeClaimV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the persistent volume claim, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#name PersistentVolumeClaimV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#name PersistentVolumeClaimV1#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -810,7 +812,7 @@ class PersistentVolumeClaimV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Namespace defines the space within which name of the persistent volume claim must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#namespace PersistentVolumeClaimV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#namespace PersistentVolumeClaimV1#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1068,11 +1070,11 @@ class PersistentVolumeClaimV1Spec:
         volume_name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param access_modes: A set of the desired access modes the volume should have. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#access-modes-1. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#access_modes PersistentVolumeClaimV1#access_modes}
-        :param resources: resources block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#resources PersistentVolumeClaimV1#resources}
-        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#selector PersistentVolumeClaimV1#selector}
-        :param storage_class_name: Name of the storage class requested by the claim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#storage_class_name PersistentVolumeClaimV1#storage_class_name}
-        :param volume_name: The binding reference to the PersistentVolume backing this claim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#volume_name PersistentVolumeClaimV1#volume_name}
+        :param access_modes: A set of the desired access modes the volume should have. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#access-modes-1. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#access_modes PersistentVolumeClaimV1#access_modes}
+        :param resources: resources block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#resources PersistentVolumeClaimV1#resources}
+        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#selector PersistentVolumeClaimV1#selector}
+        :param storage_class_name: Name of the storage class requested by the claim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#storage_class_name PersistentVolumeClaimV1#storage_class_name}
+        :param volume_name: The binding reference to the PersistentVolume backing this claim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#volume_name PersistentVolumeClaimV1#volume_name}
         """
         if isinstance(resources, dict):
             resources = PersistentVolumeClaimV1SpecResources(**resources)
@@ -1122,7 +1124,7 @@ class PersistentVolumeClaimV1Spec:
     def access_modes(self) -> typing.List[builtins.str]:
         """A set of the desired access modes the volume should have. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#access-modes-1.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#access_modes PersistentVolumeClaimV1#access_modes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#access_modes PersistentVolumeClaimV1#access_modes}
         """
         result = self._values.get("access_modes")
         assert result is not None, "Required property 'access_modes' is missing"
@@ -1132,7 +1134,7 @@ class PersistentVolumeClaimV1Spec:
     def resources(self) -> "PersistentVolumeClaimV1SpecResources":
         """resources block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#resources PersistentVolumeClaimV1#resources}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#resources PersistentVolumeClaimV1#resources}
         """
         result = self._values.get("resources")
         assert result is not None, "Required property 'resources' is missing"
@@ -1142,7 +1144,7 @@ class PersistentVolumeClaimV1Spec:
     def selector(self) -> typing.Optional["PersistentVolumeClaimV1SpecSelector"]:
         """selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#selector PersistentVolumeClaimV1#selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#selector PersistentVolumeClaimV1#selector}
         """
         result = self._values.get("selector")
         return typing.cast(
@@ -1153,7 +1155,7 @@ class PersistentVolumeClaimV1Spec:
     def storage_class_name(self) -> typing.Optional[builtins.str]:
         """Name of the storage class requested by the claim.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#storage_class_name PersistentVolumeClaimV1#storage_class_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#storage_class_name PersistentVolumeClaimV1#storage_class_name}
         """
         result = self._values.get("storage_class_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1162,7 +1164,7 @@ class PersistentVolumeClaimV1Spec:
     def volume_name(self) -> typing.Optional[builtins.str]:
         """The binding reference to the PersistentVolume backing this claim.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#volume_name PersistentVolumeClaimV1#volume_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#volume_name PersistentVolumeClaimV1#volume_name}
         """
         result = self._values.get("volume_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1217,8 +1219,8 @@ class PersistentVolumeClaimV1SpecOutputReference(
         requests: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         """
-        :param limits: Map describing the maximum amount of compute resources allowed. More info: http://kubernetes.io/docs/user-guide/compute-resources/. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#limits PersistentVolumeClaimV1#limits}
-        :param requests: Map describing the minimum amount of compute resources required. If this is omitted for a container, it defaults to ``limits`` if that is explicitly specified, otherwise to an implementation-defined value. More info: http://kubernetes.io/docs/user-guide/compute-resources/ Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#requests PersistentVolumeClaimV1#requests}
+        :param limits: Map describing the maximum amount of compute resources allowed. More info: http://kubernetes.io/docs/user-guide/compute-resources/. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#limits PersistentVolumeClaimV1#limits}
+        :param requests: Map describing the minimum amount of compute resources required. If this is omitted for a container, it defaults to ``limits`` if that is explicitly specified, otherwise to an implementation-defined value. More info: http://kubernetes.io/docs/user-guide/compute-resources/ Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#requests PersistentVolumeClaimV1#requests}
         """
         value = PersistentVolumeClaimV1SpecResources(limits=limits, requests=requests)
 
@@ -1244,8 +1246,8 @@ class PersistentVolumeClaimV1SpecOutputReference(
         ] = None,
     ) -> None:
         """
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#match_expressions PersistentVolumeClaimV1#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#match_labels PersistentVolumeClaimV1#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#match_expressions PersistentVolumeClaimV1#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#match_labels PersistentVolumeClaimV1#match_labels}
         """
         value = PersistentVolumeClaimV1SpecSelector(
             match_expressions=match_expressions, match_labels=match_labels
@@ -1405,8 +1407,8 @@ class PersistentVolumeClaimV1SpecResources:
         requests: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         """
-        :param limits: Map describing the maximum amount of compute resources allowed. More info: http://kubernetes.io/docs/user-guide/compute-resources/. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#limits PersistentVolumeClaimV1#limits}
-        :param requests: Map describing the minimum amount of compute resources required. If this is omitted for a container, it defaults to ``limits`` if that is explicitly specified, otherwise to an implementation-defined value. More info: http://kubernetes.io/docs/user-guide/compute-resources/ Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#requests PersistentVolumeClaimV1#requests}
+        :param limits: Map describing the maximum amount of compute resources allowed. More info: http://kubernetes.io/docs/user-guide/compute-resources/. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#limits PersistentVolumeClaimV1#limits}
+        :param requests: Map describing the minimum amount of compute resources required. If this is omitted for a container, it defaults to ``limits`` if that is explicitly specified, otherwise to an implementation-defined value. More info: http://kubernetes.io/docs/user-guide/compute-resources/ Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#requests PersistentVolumeClaimV1#requests}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1432,7 +1434,7 @@ class PersistentVolumeClaimV1SpecResources:
     def limits(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         """Map describing the maximum amount of compute resources allowed. More info: http://kubernetes.io/docs/user-guide/compute-resources/.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#limits PersistentVolumeClaimV1#limits}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#limits PersistentVolumeClaimV1#limits}
         """
         result = self._values.get("limits")
         return typing.cast(
@@ -1445,7 +1447,7 @@ class PersistentVolumeClaimV1SpecResources:
 
         If this is omitted for a container, it defaults to ``limits`` if that is explicitly specified, otherwise to an implementation-defined value. More info: http://kubernetes.io/docs/user-guide/compute-resources/
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#requests PersistentVolumeClaimV1#requests}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#requests PersistentVolumeClaimV1#requests}
         """
         result = self._values.get("requests")
         return typing.cast(
@@ -1609,8 +1611,8 @@ class PersistentVolumeClaimV1SpecSelector:
         ] = None,
     ) -> None:
         """
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#match_expressions PersistentVolumeClaimV1#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#match_labels PersistentVolumeClaimV1#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#match_expressions PersistentVolumeClaimV1#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#match_labels PersistentVolumeClaimV1#match_labels}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1643,7 +1645,7 @@ class PersistentVolumeClaimV1SpecSelector:
     ]:
         """match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#match_expressions PersistentVolumeClaimV1#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#match_expressions PersistentVolumeClaimV1#match_expressions}
         """
         result = self._values.get("match_expressions")
         return typing.cast(
@@ -1664,7 +1666,7 @@ class PersistentVolumeClaimV1SpecSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#match_labels PersistentVolumeClaimV1#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#match_labels PersistentVolumeClaimV1#match_labels}
         """
         result = self._values.get("match_labels")
         return typing.cast(
@@ -1697,9 +1699,9 @@ class PersistentVolumeClaimV1SpecSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         """
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#key PersistentVolumeClaimV1#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#operator PersistentVolumeClaimV1#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#values PersistentVolumeClaimV1#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#key PersistentVolumeClaimV1#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#operator PersistentVolumeClaimV1#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#values PersistentVolumeClaimV1#values}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1730,7 +1732,7 @@ class PersistentVolumeClaimV1SpecSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         """The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#key PersistentVolumeClaimV1#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#key PersistentVolumeClaimV1#key}
         """
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1739,7 +1741,7 @@ class PersistentVolumeClaimV1SpecSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         """A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#operator PersistentVolumeClaimV1#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#operator PersistentVolumeClaimV1#operator}
         """
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1750,7 +1752,7 @@ class PersistentVolumeClaimV1SpecSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#values PersistentVolumeClaimV1#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#values PersistentVolumeClaimV1#values}
         """
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2243,7 +2245,7 @@ class PersistentVolumeClaimV1SpecSelectorOutputReference(
 class PersistentVolumeClaimV1Timeouts:
     def __init__(self, *, create: typing.Optional[builtins.str] = None) -> None:
         """
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#create PersistentVolumeClaimV1#create}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#create PersistentVolumeClaimV1#create}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -2260,7 +2262,7 @@ class PersistentVolumeClaimV1Timeouts:
 
     @builtins.property
     def create(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume_claim_v1#create PersistentVolumeClaimV1#create}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume_claim_v1#create PersistentVolumeClaimV1#create}."""
         result = self._values.get("create")
         return typing.cast(typing.Optional[builtins.str], result)
 

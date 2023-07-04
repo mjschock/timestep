@@ -1,7 +1,7 @@
 """
 # `data_kubernetes_service_account_v1`
 
-Refer to the Terraform Registory for docs: [`data_kubernetes_service_account_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1).
+Refer to the Terraform Registory for docs: [`data_kubernetes_service_account_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class DataKubernetesServiceAccountV1(
@@ -24,7 +26,7 @@ class DataKubernetesServiceAccountV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.dataKubernetesServiceAccountV1.DataKubernetesServiceAccountV1",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1 kubernetes_service_account_v1}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1 kubernetes_service_account_v1}."""
 
     def __init__(
         self,
@@ -81,12 +83,12 @@ class DataKubernetesServiceAccountV1(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1 kubernetes_service_account_v1} Data Source.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1 kubernetes_service_account_v1} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#metadata DataKubernetesServiceAccountV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#id DataKubernetesServiceAccountV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#metadata DataKubernetesServiceAccountV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#id DataKubernetesServiceAccountV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection:
         :param count:
         :param depends_on:
@@ -129,10 +131,10 @@ class DataKubernetesServiceAccountV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the service account that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#annotations DataKubernetesServiceAccountV1#annotations}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the service account. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#labels DataKubernetesServiceAccountV1#labels}
-        :param name: Name of the service account, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#name DataKubernetesServiceAccountV1#name}
-        :param namespace: Namespace defines the space within which name of the service account must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#namespace DataKubernetesServiceAccountV1#namespace}
+        :param annotations: An unstructured key value map stored with the service account that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#annotations DataKubernetesServiceAccountV1#annotations}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the service account. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#labels DataKubernetesServiceAccountV1#labels}
+        :param name: Name of the service account, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#name DataKubernetesServiceAccountV1#name}
+        :param namespace: Namespace defines the space within which name of the service account must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#namespace DataKubernetesServiceAccountV1#namespace}
         """
         value = DataKubernetesServiceAccountV1Metadata(
             annotations=annotations, labels=labels, name=name, namespace=namespace
@@ -300,8 +302,8 @@ class DataKubernetesServiceAccountV1Config(_cdktf_9a9027ec.TerraformMetaArgument
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#metadata DataKubernetesServiceAccountV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#id DataKubernetesServiceAccountV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#metadata DataKubernetesServiceAccountV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#id DataKubernetesServiceAccountV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -477,7 +479,7 @@ class DataKubernetesServiceAccountV1Config(_cdktf_9a9027ec.TerraformMetaArgument
     def metadata(self) -> "DataKubernetesServiceAccountV1Metadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#metadata DataKubernetesServiceAccountV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#metadata DataKubernetesServiceAccountV1#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -485,7 +487,7 @@ class DataKubernetesServiceAccountV1Config(_cdktf_9a9027ec.TerraformMetaArgument
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#id DataKubernetesServiceAccountV1#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#id DataKubernetesServiceAccountV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -742,10 +744,10 @@ class DataKubernetesServiceAccountV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the service account that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#annotations DataKubernetesServiceAccountV1#annotations}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the service account. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#labels DataKubernetesServiceAccountV1#labels}
-        :param name: Name of the service account, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#name DataKubernetesServiceAccountV1#name}
-        :param namespace: Namespace defines the space within which name of the service account must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#namespace DataKubernetesServiceAccountV1#namespace}
+        :param annotations: An unstructured key value map stored with the service account that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#annotations DataKubernetesServiceAccountV1#annotations}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the service account. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#labels DataKubernetesServiceAccountV1#labels}
+        :param name: Name of the service account, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#name DataKubernetesServiceAccountV1#name}
+        :param namespace: Namespace defines the space within which name of the service account must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#namespace DataKubernetesServiceAccountV1#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -787,7 +789,7 @@ class DataKubernetesServiceAccountV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#annotations DataKubernetesServiceAccountV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#annotations DataKubernetesServiceAccountV1#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -800,7 +802,7 @@ class DataKubernetesServiceAccountV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#labels DataKubernetesServiceAccountV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#labels DataKubernetesServiceAccountV1#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -811,7 +813,7 @@ class DataKubernetesServiceAccountV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the service account, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#name DataKubernetesServiceAccountV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#name DataKubernetesServiceAccountV1#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -820,7 +822,7 @@ class DataKubernetesServiceAccountV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Namespace defines the space within which name of the service account must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/service_account_v1#namespace DataKubernetesServiceAccountV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/service_account_v1#namespace DataKubernetesServiceAccountV1#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)

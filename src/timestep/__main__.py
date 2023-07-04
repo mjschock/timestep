@@ -1,7 +1,7 @@
 import os
 import pathlib
 
-from cdktf import App, LocalBackend, PgBackend, TerraformStack
+from cdktf import App, LocalBackend, TerraformStack
 from dotenv import dotenv_values
 from prefect import flow, get_run_logger
 
@@ -17,22 +17,17 @@ def main(config: AppConfig) -> None:
     logger = get_run_logger()
     logger.debug(f"config: {config}")
 
-    # class BaseApp(App, BaseModel, Construct):
-    #     def __init__(self, *, context: typing.Mapping[str, typing.Any] | None = None, outdir: str | None = None, skip_validation: bool | None = None, stack_traces: bool | None = None) -> None:
-    #         super().__init__(context=context, outdir=outdir, skip_validation=skip_validation, stack_traces=stack_traces)
-
-    # app: App = BaseApp(
     app: App = App(
         context={
-            "excludeStackIdFromLogicalIds": "true",
             "allowSepCharsInLogicalIds": "true",
+            "excludeStackIdFromLogicalIds": "true",
         },
         outdir=DIST_PATH,
         skip_validation=False,
         stack_traces=True,
     )
 
-    # assert app.getContext("excludeStackIdFromLogicalIds") == "false"
+    assert app.node.get_context("allowSepCharsInLogicalIds") == "true"
     assert app.node.get_context("excludeStackIdFromLogicalIds") == "true"
 
     base_stack: TerraformStack = BaseStack(
@@ -41,14 +36,9 @@ def main(config: AppConfig) -> None:
         id=config.variables.get("primary_domain_name"),
     )
 
-    # if (
-    #     config.variables.get("cloud_instance_provider")
-    #     == CloudInstanceProvider.MULTIPASS
-    # ):
-
-    stackId: str = config.variables.get("primary_domain_name")
-    backend: LocalBackend = LocalBackend(
-        path=f"terraform.{stackId}.tfstate",  # default terraform.${stackId}.tfstate
+    stack_id: str = config.variables.get("primary_domain_name")
+    LocalBackend(
+        path=f"terraform.{stack_id}.tfstate",
         scope=base_stack,
         workspace_dir=None,
     )
@@ -88,7 +78,7 @@ if __name__ == "__main__":
     try:
         ssh_credentials_block = SecureShellCredentials.load("ssh-credentials")
 
-    except ValueError as e:
+    except ValueError:
         ssh_credentials_block = SecureShellCredentials(
             public_key=config.get("SSH_PUBLIC_KEY", None),
             private_key=config.get("SSH_PRIVATE_KEY", None),
@@ -108,6 +98,8 @@ if __name__ == "__main__":
     MULTIPASS_INSTANCE_DISK: str = f"{DISK_SIZE_GB}G"
     MULTIPASS_INSTANCE_IMAGE: str = "22.04"
 
+    primary_domain_name = config.get("PRIMARY_DOMAIN_NAME")
+    kubeconfig = f"{DIST_PATH}/stacks/{primary_domain_name}/kube-config.yaml"
     app_config_block = AppConfig(
         secrets={
             "do_token": config.get("DO_TOKEN", None),
@@ -134,7 +126,7 @@ if __name__ == "__main__":
                 "MULTIPASS_INSTANCE_IMAGE", MULTIPASS_INSTANCE_IMAGE
             ),
             # "kubeconfig": config.get("KUBECONFIG", None),
-            "kubeconfig": f"{DIST_PATH}/stacks/{config.get('PRIMARY_DOMAIN_NAME')}/kube-config.yaml",
+            "kubeconfig": kubeconfig,
             "kubecontext": config.get("KUBECONTEXT", None),
             "primary_domain_name": config.get("PRIMARY_DOMAIN_NAME", None),
             "ssh_public_key": ssh_credentials_block.public_key,

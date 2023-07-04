@@ -1,7 +1,7 @@
 """
 # `kubernetes_persistent_volume`
 
-Refer to the Terraform Registory for docs: [`kubernetes_persistent_volume`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume).
+Refer to the Terraform Registory for docs: [`kubernetes_persistent_volume`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class PersistentVolume(
@@ -24,7 +26,7 @@ class PersistentVolume(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.persistentVolume.PersistentVolume",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume kubernetes_persistent_volume}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume kubernetes_persistent_volume}."""
 
     def __init__(
         self,
@@ -93,14 +95,14 @@ class PersistentVolume(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume kubernetes_persistent_volume} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume kubernetes_persistent_volume} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#metadata PersistentVolume#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#spec PersistentVolume#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#id PersistentVolume#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#timeouts PersistentVolume#timeouts}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#metadata PersistentVolume#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#spec PersistentVolume#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#id PersistentVolume#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#timeouts PersistentVolume#timeouts}
         :param connection:
         :param count:
         :param depends_on:
@@ -144,9 +146,9 @@ class PersistentVolume(
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the persistent volume that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#annotations PersistentVolume#annotations}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the persistent volume. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#labels PersistentVolume#labels}
-        :param name: Name of the persistent volume, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param annotations: An unstructured key value map stored with the persistent volume that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#annotations PersistentVolume#annotations}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the persistent volume. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#labels PersistentVolume#labels}
+        :param name: Name of the persistent volume, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         value = PersistentVolumeMetadata(
             annotations=annotations, labels=labels, name=name
@@ -181,7 +183,7 @@ class PersistentVolume(
     @jsii.member(jsii_name="putTimeouts")
     def put_timeouts(self, *, create: typing.Optional[builtins.str] = None) -> None:
         """
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#create PersistentVolume#create}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#create PersistentVolume#create}.
         """
         value = PersistentVolumeTimeouts(create=create)
 
@@ -376,10 +378,10 @@ class PersistentVolumeConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#metadata PersistentVolume#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#spec PersistentVolume#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#id PersistentVolume#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#timeouts PersistentVolume#timeouts}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#metadata PersistentVolume#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#spec PersistentVolume#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#id PersistentVolume#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#timeouts PersistentVolume#timeouts}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -568,7 +570,7 @@ class PersistentVolumeConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "PersistentVolumeMetadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#metadata PersistentVolume#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#metadata PersistentVolume#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -580,7 +582,7 @@ class PersistentVolumeConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["PersistentVolumeSpec"]]:
         """spec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#spec PersistentVolume#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#spec PersistentVolume#spec}
         """
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
@@ -593,7 +595,7 @@ class PersistentVolumeConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#id PersistentVolume#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#id PersistentVolume#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -605,7 +607,7 @@ class PersistentVolumeConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def timeouts(self) -> typing.Optional["PersistentVolumeTimeouts"]:
         """timeouts block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#timeouts PersistentVolume#timeouts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#timeouts PersistentVolume#timeouts}
         """
         result = self._values.get("timeouts")
         return typing.cast(typing.Optional["PersistentVolumeTimeouts"], result)
@@ -636,9 +638,9 @@ class PersistentVolumeMetadata:
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the persistent volume that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#annotations PersistentVolume#annotations}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the persistent volume. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#labels PersistentVolume#labels}
-        :param name: Name of the persistent volume, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param annotations: An unstructured key value map stored with the persistent volume that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#annotations PersistentVolume#annotations}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the persistent volume. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#labels PersistentVolume#labels}
+        :param name: Name of the persistent volume, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -673,7 +675,7 @@ class PersistentVolumeMetadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#annotations PersistentVolume#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#annotations PersistentVolume#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -686,7 +688,7 @@ class PersistentVolumeMetadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#labels PersistentVolume#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#labels PersistentVolume#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -697,7 +699,7 @@ class PersistentVolumeMetadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the persistent volume, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -909,15 +911,15 @@ class PersistentVolumeSpec:
         volume_mode: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param access_modes: Contains all ways the volume can be mounted. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#access-modes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#access_modes PersistentVolume#access_modes}
-        :param capacity: A description of the persistent volume's resources and capacity. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#capacity. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#capacity PersistentVolume#capacity}
-        :param persistent_volume_source: persistent_volume_source block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#persistent_volume_source PersistentVolume#persistent_volume_source}
-        :param claim_ref: claim_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#claim_ref PersistentVolume#claim_ref}
-        :param mount_options: A list of mount options, e.g. ["ro", "soft"]. Not validated - mount will simply fail if one is invalid. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#mount_options PersistentVolume#mount_options}
-        :param node_affinity: node_affinity block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_affinity PersistentVolume#node_affinity}
-        :param persistent_volume_reclaim_policy: What happens to a persistent volume when released from its claim. Valid options are Retain (default) and Recycle. Recycling must be supported by the volume plugin underlying this persistent volume. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#recycling-policy Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#persistent_volume_reclaim_policy PersistentVolume#persistent_volume_reclaim_policy}
-        :param storage_class_name: A description of the persistent volume's class. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#storage_class_name PersistentVolume#storage_class_name}
-        :param volume_mode: Defines if a volume is intended to be used with a formatted filesystem. or to remain in raw block state. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_mode PersistentVolume#volume_mode}
+        :param access_modes: Contains all ways the volume can be mounted. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#access-modes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#access_modes PersistentVolume#access_modes}
+        :param capacity: A description of the persistent volume's resources and capacity. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#capacity. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#capacity PersistentVolume#capacity}
+        :param persistent_volume_source: persistent_volume_source block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#persistent_volume_source PersistentVolume#persistent_volume_source}
+        :param claim_ref: claim_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#claim_ref PersistentVolume#claim_ref}
+        :param mount_options: A list of mount options, e.g. ["ro", "soft"]. Not validated - mount will simply fail if one is invalid. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#mount_options PersistentVolume#mount_options}
+        :param node_affinity: node_affinity block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_affinity PersistentVolume#node_affinity}
+        :param persistent_volume_reclaim_policy: What happens to a persistent volume when released from its claim. Valid options are Retain (default) and Recycle. Recycling must be supported by the volume plugin underlying this persistent volume. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#recycling-policy Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#persistent_volume_reclaim_policy PersistentVolume#persistent_volume_reclaim_policy}
+        :param storage_class_name: A description of the persistent volume's class. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#storage_class_name PersistentVolume#storage_class_name}
+        :param volume_mode: Defines if a volume is intended to be used with a formatted filesystem. or to remain in raw block state. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_mode PersistentVolume#volume_mode}
         """
         if isinstance(persistent_volume_source, dict):
             persistent_volume_source = PersistentVolumeSpecPersistentVolumeSource(
@@ -1000,7 +1002,7 @@ class PersistentVolumeSpec:
     def access_modes(self) -> typing.List[builtins.str]:
         """Contains all ways the volume can be mounted. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#access-modes.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#access_modes PersistentVolume#access_modes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#access_modes PersistentVolume#access_modes}
         """
         result = self._values.get("access_modes")
         assert result is not None, "Required property 'access_modes' is missing"
@@ -1010,7 +1012,7 @@ class PersistentVolumeSpec:
     def capacity(self) -> typing.Mapping[builtins.str, builtins.str]:
         """A description of the persistent volume's resources and capacity. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#capacity.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#capacity PersistentVolume#capacity}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#capacity PersistentVolume#capacity}
         """
         result = self._values.get("capacity")
         assert result is not None, "Required property 'capacity' is missing"
@@ -1020,7 +1022,7 @@ class PersistentVolumeSpec:
     def persistent_volume_source(self) -> "PersistentVolumeSpecPersistentVolumeSource":
         """persistent_volume_source block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#persistent_volume_source PersistentVolume#persistent_volume_source}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#persistent_volume_source PersistentVolume#persistent_volume_source}
         """
         result = self._values.get("persistent_volume_source")
         assert (
@@ -1032,7 +1034,7 @@ class PersistentVolumeSpec:
     def claim_ref(self) -> typing.Optional["PersistentVolumeSpecClaimRef"]:
         """claim_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#claim_ref PersistentVolume#claim_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#claim_ref PersistentVolume#claim_ref}
         """
         result = self._values.get("claim_ref")
         return typing.cast(typing.Optional["PersistentVolumeSpecClaimRef"], result)
@@ -1041,7 +1043,7 @@ class PersistentVolumeSpec:
     def mount_options(self) -> typing.Optional[typing.List[builtins.str]]:
         """A list of mount options, e.g. ["ro", "soft"]. Not validated - mount will simply fail if one is invalid.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#mount_options PersistentVolume#mount_options}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#mount_options PersistentVolume#mount_options}
         """
         result = self._values.get("mount_options")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1050,7 +1052,7 @@ class PersistentVolumeSpec:
     def node_affinity(self) -> typing.Optional["PersistentVolumeSpecNodeAffinity"]:
         """node_affinity block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_affinity PersistentVolume#node_affinity}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_affinity PersistentVolume#node_affinity}
         """
         result = self._values.get("node_affinity")
         return typing.cast(typing.Optional["PersistentVolumeSpecNodeAffinity"], result)
@@ -1061,7 +1063,7 @@ class PersistentVolumeSpec:
 
         Valid options are Retain (default) and Recycle. Recycling must be supported by the volume plugin underlying this persistent volume. More info: http://kubernetes.io/docs/user-guide/persistent-volumes#recycling-policy
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#persistent_volume_reclaim_policy PersistentVolume#persistent_volume_reclaim_policy}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#persistent_volume_reclaim_policy PersistentVolume#persistent_volume_reclaim_policy}
         """
         result = self._values.get("persistent_volume_reclaim_policy")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1070,7 +1072,7 @@ class PersistentVolumeSpec:
     def storage_class_name(self) -> typing.Optional[builtins.str]:
         """A description of the persistent volume's class. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#storage_class_name PersistentVolume#storage_class_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#storage_class_name PersistentVolume#storage_class_name}
         """
         result = self._values.get("storage_class_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1081,7 +1083,7 @@ class PersistentVolumeSpec:
 
         or to remain in raw block state.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_mode PersistentVolume#volume_mode}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_mode PersistentVolume#volume_mode}
         """
         result = self._values.get("volume_mode")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1111,8 +1113,8 @@ class PersistentVolumeSpecClaimRef:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: The name of the PersistentVolumeClaim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: The namespace of the PersistentVolumeClaim. Uses 'default' namespace if none is specified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: The name of the PersistentVolumeClaim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: The namespace of the PersistentVolumeClaim. Uses 'default' namespace if none is specified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1136,7 +1138,7 @@ class PersistentVolumeSpecClaimRef:
     def name(self) -> builtins.str:
         """The name of the PersistentVolumeClaim.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1146,7 +1148,7 @@ class PersistentVolumeSpecClaimRef:
     def namespace(self) -> typing.Optional[builtins.str]:
         """The namespace of the PersistentVolumeClaim. Uses 'default' namespace if none is specified.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1422,7 +1424,7 @@ class PersistentVolumeSpecNodeAffinity:
         ] = None,
     ) -> None:
         """
-        :param required: required block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#required PersistentVolume#required}
+        :param required: required block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#required PersistentVolume#required}
         """
         if isinstance(required, dict):
             required = PersistentVolumeSpecNodeAffinityRequired(**required)
@@ -1443,7 +1445,7 @@ class PersistentVolumeSpecNodeAffinity:
     def required(self) -> typing.Optional["PersistentVolumeSpecNodeAffinityRequired"]:
         """required block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#required PersistentVolume#required}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#required PersistentVolume#required}
         """
         result = self._values.get("required")
         return typing.cast(
@@ -1507,7 +1509,7 @@ class PersistentVolumeSpecNodeAffinityOutputReference(
         ],
     ) -> None:
         """
-        :param node_selector_term: node_selector_term block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_selector_term PersistentVolume#node_selector_term}
+        :param node_selector_term: node_selector_term block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_selector_term PersistentVolume#node_selector_term}
         """
         value = PersistentVolumeSpecNodeAffinityRequired(
             node_selector_term=node_selector_term
@@ -1580,7 +1582,7 @@ class PersistentVolumeSpecNodeAffinityRequired:
         ],
     ) -> None:
         """
-        :param node_selector_term: node_selector_term block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_selector_term PersistentVolume#node_selector_term}
+        :param node_selector_term: node_selector_term block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_selector_term PersistentVolume#node_selector_term}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1604,7 +1606,7 @@ class PersistentVolumeSpecNodeAffinityRequired:
     ]:
         """node_selector_term block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_selector_term PersistentVolume#node_selector_term}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_selector_term PersistentVolume#node_selector_term}
         """
         result = self._values.get("node_selector_term")
         assert result is not None, "Required property 'node_selector_term' is missing"
@@ -1664,8 +1666,8 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTerm:
         ] = None,
     ) -> None:
         """
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#match_expressions PersistentVolume#match_expressions}
-        :param match_fields: match_fields block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#match_fields PersistentVolume#match_fields}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#match_expressions PersistentVolume#match_expressions}
+        :param match_fields: match_fields block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#match_fields PersistentVolume#match_fields}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1700,7 +1702,7 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTerm:
     ]:
         """match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#match_expressions PersistentVolume#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#match_expressions PersistentVolume#match_expressions}
         """
         result = self._values.get("match_expressions")
         return typing.cast(
@@ -1728,7 +1730,7 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTerm:
     ]:
         """match_fields block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#match_fields PersistentVolume#match_fields}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#match_fields PersistentVolume#match_fields}
         """
         result = self._values.get("match_fields")
         return typing.cast(
@@ -1924,9 +1926,9 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTermMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         """
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#key PersistentVolume#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists``, ``DoesNotExist``, ``Gt``, and ``Lt``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#operator PersistentVolume#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#values PersistentVolume#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#key PersistentVolume#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists``, ``DoesNotExist``, ``Gt``, and ``Lt``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#operator PersistentVolume#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#values PersistentVolume#values}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1956,7 +1958,7 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTermMatchExpressions:
     def key(self) -> builtins.str:
         """The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#key PersistentVolume#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#key PersistentVolume#key}
         """
         result = self._values.get("key")
         assert result is not None, "Required property 'key' is missing"
@@ -1966,7 +1968,7 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTermMatchExpressions:
     def operator(self) -> builtins.str:
         """A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists``, ``DoesNotExist``, ``Gt``, and ``Lt``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#operator PersistentVolume#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#operator PersistentVolume#operator}
         """
         result = self._values.get("operator")
         assert result is not None, "Required property 'operator' is missing"
@@ -1978,7 +1980,7 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTermMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#values PersistentVolume#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#values PersistentVolume#values}
         """
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2332,9 +2334,9 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTermMatchFields:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         """
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#key PersistentVolume#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists``, ``DoesNotExist``, ``Gt``, and ``Lt``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#operator PersistentVolume#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#values PersistentVolume#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#key PersistentVolume#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists``, ``DoesNotExist``, ``Gt``, and ``Lt``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#operator PersistentVolume#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#values PersistentVolume#values}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -2364,7 +2366,7 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTermMatchFields:
     def key(self) -> builtins.str:
         """The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#key PersistentVolume#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#key PersistentVolume#key}
         """
         result = self._values.get("key")
         assert result is not None, "Required property 'key' is missing"
@@ -2374,7 +2376,7 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTermMatchFields:
     def operator(self) -> builtins.str:
         """A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists``, ``DoesNotExist``, ``Gt``, and ``Lt``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#operator PersistentVolume#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#operator PersistentVolume#operator}
         """
         result = self._values.get("operator")
         assert result is not None, "Required property 'operator' is missing"
@@ -2386,7 +2388,7 @@ class PersistentVolumeSpecNodeAffinityRequiredNodeSelectorTermMatchFields:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#values PersistentVolume#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#values PersistentVolume#values}
         """
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -3118,8 +3120,8 @@ class PersistentVolumeSpecOutputReference(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: The name of the PersistentVolumeClaim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: The namespace of the PersistentVolumeClaim. Uses 'default' namespace if none is specified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: The name of the PersistentVolumeClaim. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: The namespace of the PersistentVolumeClaim. Uses 'default' namespace if none is specified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         value = PersistentVolumeSpecClaimRef(name=name, namespace=namespace)
 
@@ -3137,7 +3139,7 @@ class PersistentVolumeSpecOutputReference(
         ] = None,
     ) -> None:
         """
-        :param required: required block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#required PersistentVolume#required}
+        :param required: required block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#required PersistentVolume#required}
         """
         value = PersistentVolumeSpecNodeAffinity(required=required)
 
@@ -3263,25 +3265,25 @@ class PersistentVolumeSpecOutputReference(
         ] = None,
     ) -> None:
         """
-        :param aws_elastic_block_store: aws_elastic_block_store block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#aws_elastic_block_store PersistentVolume#aws_elastic_block_store}
-        :param azure_disk: azure_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#azure_disk PersistentVolume#azure_disk}
-        :param azure_file: azure_file block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#azure_file PersistentVolume#azure_file}
-        :param ceph_fs: ceph_fs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#ceph_fs PersistentVolume#ceph_fs}
-        :param cinder: cinder block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#cinder PersistentVolume#cinder}
-        :param csi: csi block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#csi PersistentVolume#csi}
-        :param fc: fc block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fc PersistentVolume#fc}
-        :param flex_volume: flex_volume block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#flex_volume PersistentVolume#flex_volume}
-        :param flocker: flocker block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#flocker PersistentVolume#flocker}
-        :param gce_persistent_disk: gce_persistent_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#gce_persistent_disk PersistentVolume#gce_persistent_disk}
-        :param glusterfs: glusterfs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#glusterfs PersistentVolume#glusterfs}
-        :param host_path: host_path block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#host_path PersistentVolume#host_path}
-        :param iscsi: iscsi block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#iscsi PersistentVolume#iscsi}
-        :param local: local block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#local PersistentVolume#local}
-        :param nfs: nfs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#nfs PersistentVolume#nfs}
-        :param photon_persistent_disk: photon_persistent_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#photon_persistent_disk PersistentVolume#photon_persistent_disk}
-        :param quobyte: quobyte block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#quobyte PersistentVolume#quobyte}
-        :param rbd: rbd block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rbd PersistentVolume#rbd}
-        :param vsphere_volume: vsphere_volume block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#vsphere_volume PersistentVolume#vsphere_volume}
+        :param aws_elastic_block_store: aws_elastic_block_store block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#aws_elastic_block_store PersistentVolume#aws_elastic_block_store}
+        :param azure_disk: azure_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#azure_disk PersistentVolume#azure_disk}
+        :param azure_file: azure_file block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#azure_file PersistentVolume#azure_file}
+        :param ceph_fs: ceph_fs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#ceph_fs PersistentVolume#ceph_fs}
+        :param cinder: cinder block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#cinder PersistentVolume#cinder}
+        :param csi: csi block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#csi PersistentVolume#csi}
+        :param fc: fc block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fc PersistentVolume#fc}
+        :param flex_volume: flex_volume block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#flex_volume PersistentVolume#flex_volume}
+        :param flocker: flocker block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#flocker PersistentVolume#flocker}
+        :param gce_persistent_disk: gce_persistent_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#gce_persistent_disk PersistentVolume#gce_persistent_disk}
+        :param glusterfs: glusterfs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#glusterfs PersistentVolume#glusterfs}
+        :param host_path: host_path block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#host_path PersistentVolume#host_path}
+        :param iscsi: iscsi block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#iscsi PersistentVolume#iscsi}
+        :param local: local block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#local PersistentVolume#local}
+        :param nfs: nfs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#nfs PersistentVolume#nfs}
+        :param photon_persistent_disk: photon_persistent_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#photon_persistent_disk PersistentVolume#photon_persistent_disk}
+        :param quobyte: quobyte block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#quobyte PersistentVolume#quobyte}
+        :param rbd: rbd block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rbd PersistentVolume#rbd}
+        :param vsphere_volume: vsphere_volume block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#vsphere_volume PersistentVolume#vsphere_volume}
         """
         value = PersistentVolumeSpecPersistentVolumeSource(
             aws_elastic_block_store=aws_elastic_block_store,
@@ -3710,25 +3712,25 @@ class PersistentVolumeSpecPersistentVolumeSource:
         ] = None,
     ) -> None:
         """
-        :param aws_elastic_block_store: aws_elastic_block_store block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#aws_elastic_block_store PersistentVolume#aws_elastic_block_store}
-        :param azure_disk: azure_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#azure_disk PersistentVolume#azure_disk}
-        :param azure_file: azure_file block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#azure_file PersistentVolume#azure_file}
-        :param ceph_fs: ceph_fs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#ceph_fs PersistentVolume#ceph_fs}
-        :param cinder: cinder block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#cinder PersistentVolume#cinder}
-        :param csi: csi block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#csi PersistentVolume#csi}
-        :param fc: fc block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fc PersistentVolume#fc}
-        :param flex_volume: flex_volume block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#flex_volume PersistentVolume#flex_volume}
-        :param flocker: flocker block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#flocker PersistentVolume#flocker}
-        :param gce_persistent_disk: gce_persistent_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#gce_persistent_disk PersistentVolume#gce_persistent_disk}
-        :param glusterfs: glusterfs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#glusterfs PersistentVolume#glusterfs}
-        :param host_path: host_path block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#host_path PersistentVolume#host_path}
-        :param iscsi: iscsi block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#iscsi PersistentVolume#iscsi}
-        :param local: local block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#local PersistentVolume#local}
-        :param nfs: nfs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#nfs PersistentVolume#nfs}
-        :param photon_persistent_disk: photon_persistent_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#photon_persistent_disk PersistentVolume#photon_persistent_disk}
-        :param quobyte: quobyte block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#quobyte PersistentVolume#quobyte}
-        :param rbd: rbd block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rbd PersistentVolume#rbd}
-        :param vsphere_volume: vsphere_volume block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#vsphere_volume PersistentVolume#vsphere_volume}
+        :param aws_elastic_block_store: aws_elastic_block_store block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#aws_elastic_block_store PersistentVolume#aws_elastic_block_store}
+        :param azure_disk: azure_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#azure_disk PersistentVolume#azure_disk}
+        :param azure_file: azure_file block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#azure_file PersistentVolume#azure_file}
+        :param ceph_fs: ceph_fs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#ceph_fs PersistentVolume#ceph_fs}
+        :param cinder: cinder block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#cinder PersistentVolume#cinder}
+        :param csi: csi block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#csi PersistentVolume#csi}
+        :param fc: fc block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fc PersistentVolume#fc}
+        :param flex_volume: flex_volume block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#flex_volume PersistentVolume#flex_volume}
+        :param flocker: flocker block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#flocker PersistentVolume#flocker}
+        :param gce_persistent_disk: gce_persistent_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#gce_persistent_disk PersistentVolume#gce_persistent_disk}
+        :param glusterfs: glusterfs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#glusterfs PersistentVolume#glusterfs}
+        :param host_path: host_path block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#host_path PersistentVolume#host_path}
+        :param iscsi: iscsi block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#iscsi PersistentVolume#iscsi}
+        :param local: local block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#local PersistentVolume#local}
+        :param nfs: nfs block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#nfs PersistentVolume#nfs}
+        :param photon_persistent_disk: photon_persistent_disk block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#photon_persistent_disk PersistentVolume#photon_persistent_disk}
+        :param quobyte: quobyte block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#quobyte PersistentVolume#quobyte}
+        :param rbd: rbd block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rbd PersistentVolume#rbd}
+        :param vsphere_volume: vsphere_volume block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#vsphere_volume PersistentVolume#vsphere_volume}
         """
         if isinstance(aws_elastic_block_store, dict):
             aws_elastic_block_store = (
@@ -3921,7 +3923,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ]:
         """aws_elastic_block_store block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#aws_elastic_block_store PersistentVolume#aws_elastic_block_store}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#aws_elastic_block_store PersistentVolume#aws_elastic_block_store}
         """
         result = self._values.get("aws_elastic_block_store")
         return typing.cast(
@@ -3937,7 +3939,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceAzureDisk"]:
         """azure_disk block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#azure_disk PersistentVolume#azure_disk}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#azure_disk PersistentVolume#azure_disk}
         """
         result = self._values.get("azure_disk")
         return typing.cast(
@@ -3951,7 +3953,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceAzureFile"]:
         """azure_file block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#azure_file PersistentVolume#azure_file}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#azure_file PersistentVolume#azure_file}
         """
         result = self._values.get("azure_file")
         return typing.cast(
@@ -3965,7 +3967,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceCephFs"]:
         """ceph_fs block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#ceph_fs PersistentVolume#ceph_fs}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#ceph_fs PersistentVolume#ceph_fs}
         """
         result = self._values.get("ceph_fs")
         return typing.cast(
@@ -3978,7 +3980,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceCinder"]:
         """cinder block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#cinder PersistentVolume#cinder}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#cinder PersistentVolume#cinder}
         """
         result = self._values.get("cinder")
         return typing.cast(
@@ -3989,7 +3991,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     def csi(self) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceCsi"]:
         """csi block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#csi PersistentVolume#csi}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#csi PersistentVolume#csi}
         """
         result = self._values.get("csi")
         return typing.cast(
@@ -4000,7 +4002,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     def fc(self) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceFc"]:
         """fc block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fc PersistentVolume#fc}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fc PersistentVolume#fc}
         """
         result = self._values.get("fc")
         return typing.cast(
@@ -4013,7 +4015,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceFlexVolume"]:
         """flex_volume block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#flex_volume PersistentVolume#flex_volume}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#flex_volume PersistentVolume#flex_volume}
         """
         result = self._values.get("flex_volume")
         return typing.cast(
@@ -4027,7 +4029,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceFlocker"]:
         """flocker block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#flocker PersistentVolume#flocker}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#flocker PersistentVolume#flocker}
         """
         result = self._values.get("flocker")
         return typing.cast(
@@ -4040,7 +4042,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceGcePersistentDisk"]:
         """gce_persistent_disk block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#gce_persistent_disk PersistentVolume#gce_persistent_disk}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#gce_persistent_disk PersistentVolume#gce_persistent_disk}
         """
         result = self._values.get("gce_persistent_disk")
         return typing.cast(
@@ -4056,7 +4058,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceGlusterfs"]:
         """glusterfs block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#glusterfs PersistentVolume#glusterfs}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#glusterfs PersistentVolume#glusterfs}
         """
         result = self._values.get("glusterfs")
         return typing.cast(
@@ -4070,7 +4072,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceHostPath"]:
         """host_path block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#host_path PersistentVolume#host_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#host_path PersistentVolume#host_path}
         """
         result = self._values.get("host_path")
         return typing.cast(
@@ -4084,7 +4086,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceIscsi"]:
         """iscsi block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#iscsi PersistentVolume#iscsi}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#iscsi PersistentVolume#iscsi}
         """
         result = self._values.get("iscsi")
         return typing.cast(
@@ -4097,7 +4099,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceLocal"]:
         """local block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#local PersistentVolume#local}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#local PersistentVolume#local}
         """
         result = self._values.get("local")
         return typing.cast(
@@ -4108,7 +4110,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     def nfs(self) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceNfs"]:
         """nfs block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#nfs PersistentVolume#nfs}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#nfs PersistentVolume#nfs}
         """
         result = self._values.get("nfs")
         return typing.cast(
@@ -4123,7 +4125,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ]:
         """photon_persistent_disk block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#photon_persistent_disk PersistentVolume#photon_persistent_disk}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#photon_persistent_disk PersistentVolume#photon_persistent_disk}
         """
         result = self._values.get("photon_persistent_disk")
         return typing.cast(
@@ -4139,7 +4141,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceQuobyte"]:
         """quobyte block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#quobyte PersistentVolume#quobyte}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#quobyte PersistentVolume#quobyte}
         """
         result = self._values.get("quobyte")
         return typing.cast(
@@ -4150,7 +4152,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     def rbd(self) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceRbd"]:
         """rbd block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rbd PersistentVolume#rbd}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rbd PersistentVolume#rbd}
         """
         result = self._values.get("rbd")
         return typing.cast(
@@ -4163,7 +4165,7 @@ class PersistentVolumeSpecPersistentVolumeSource:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceVsphereVolume"]:
         """vsphere_volume block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#vsphere_volume PersistentVolume#vsphere_volume}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#vsphere_volume PersistentVolume#vsphere_volume}
         """
         result = self._values.get("vsphere_volume")
         return typing.cast(
@@ -4205,10 +4207,10 @@ class PersistentVolumeSpecPersistentVolumeSourceAwsElasticBlockStore:
         ] = None,
     ) -> None:
         """
-        :param volume_id: Unique ID of the persistent disk resource in AWS (Amazon EBS volume). More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
-        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param partition: The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#partition PersistentVolume#partition}
-        :param read_only: Whether to set the read-only property in VolumeMounts to "true". If omitted, the default is "false". More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param volume_id: Unique ID of the persistent disk resource in AWS (Amazon EBS volume). More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
+        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param partition: The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#partition PersistentVolume#partition}
+        :param read_only: Whether to set the read-only property in VolumeMounts to "true". If omitted, the default is "false". More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -4248,7 +4250,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAwsElasticBlockStore:
     def volume_id(self) -> builtins.str:
         """Unique ID of the persistent disk resource in AWS (Amazon EBS volume). More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
         """
         result = self._values.get("volume_id")
         assert result is not None, "Required property 'volume_id' is missing"
@@ -4260,7 +4262,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAwsElasticBlockStore:
 
         Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4271,7 +4273,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAwsElasticBlockStore:
 
         If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#partition PersistentVolume#partition}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#partition PersistentVolume#partition}
         """
         result = self._values.get("partition")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -4282,7 +4284,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAwsElasticBlockStore:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to set the read-only property in VolumeMounts to "true". If omitted, the default is "false". More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -4501,12 +4503,12 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureDisk:
         ] = None,
     ) -> None:
         """
-        :param caching_mode: Host Caching mode: None, Read Only, Read Write. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#caching_mode PersistentVolume#caching_mode}
-        :param data_disk_uri: The URI the data disk in the blob storage. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#data_disk_uri PersistentVolume#data_disk_uri}
-        :param disk_name: The Name of the data disk in the blob storage. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#disk_name PersistentVolume#disk_name}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param kind: The type for the data disk. Expected values: Shared, Dedicated, Managed. Defaults to Shared. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#kind PersistentVolume#kind}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param caching_mode: Host Caching mode: None, Read Only, Read Write. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#caching_mode PersistentVolume#caching_mode}
+        :param data_disk_uri: The URI the data disk in the blob storage. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#data_disk_uri PersistentVolume#data_disk_uri}
+        :param disk_name: The Name of the data disk in the blob storage. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#disk_name PersistentVolume#disk_name}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param kind: The type for the data disk. Expected values: Shared, Dedicated, Managed. Defaults to Shared. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#kind PersistentVolume#kind}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -4556,7 +4558,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureDisk:
     def caching_mode(self) -> builtins.str:
         """Host Caching mode: None, Read Only, Read Write.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#caching_mode PersistentVolume#caching_mode}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#caching_mode PersistentVolume#caching_mode}
         """
         result = self._values.get("caching_mode")
         assert result is not None, "Required property 'caching_mode' is missing"
@@ -4566,7 +4568,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureDisk:
     def data_disk_uri(self) -> builtins.str:
         """The URI the data disk in the blob storage.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#data_disk_uri PersistentVolume#data_disk_uri}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#data_disk_uri PersistentVolume#data_disk_uri}
         """
         result = self._values.get("data_disk_uri")
         assert result is not None, "Required property 'data_disk_uri' is missing"
@@ -4576,7 +4578,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureDisk:
     def disk_name(self) -> builtins.str:
         """The Name of the data disk in the blob storage.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#disk_name PersistentVolume#disk_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#disk_name PersistentVolume#disk_name}
         """
         result = self._values.get("disk_name")
         assert result is not None, "Required property 'disk_name' is missing"
@@ -4588,7 +4590,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureDisk:
 
         Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4597,7 +4599,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureDisk:
     def kind(self) -> typing.Optional[builtins.str]:
         """The type for the data disk. Expected values: Shared, Dedicated, Managed. Defaults to Shared.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#kind PersistentVolume#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#kind PersistentVolume#kind}
         """
         result = self._values.get("kind")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4608,7 +4610,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureDisk:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -4860,10 +4862,10 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureFile:
         secret_namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param secret_name: The name of secret that contains Azure Storage Account Name and Key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_name PersistentVolume#secret_name}
-        :param share_name: Share Name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#share_name PersistentVolume#share_name}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param secret_namespace: The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is "default" namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_namespace PersistentVolume#secret_namespace}
+        :param secret_name: The name of secret that contains Azure Storage Account Name and Key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_name PersistentVolume#secret_name}
+        :param share_name: Share Name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#share_name PersistentVolume#share_name}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param secret_namespace: The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is "default" namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_namespace PersistentVolume#secret_namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -4902,7 +4904,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureFile:
     def secret_name(self) -> builtins.str:
         """The name of secret that contains Azure Storage Account Name and Key.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_name PersistentVolume#secret_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_name PersistentVolume#secret_name}
         """
         result = self._values.get("secret_name")
         assert result is not None, "Required property 'secret_name' is missing"
@@ -4912,7 +4914,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureFile:
     def share_name(self) -> builtins.str:
         """Share Name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#share_name PersistentVolume#share_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#share_name PersistentVolume#share_name}
         """
         result = self._values.get("share_name")
         assert result is not None, "Required property 'share_name' is missing"
@@ -4924,7 +4926,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureFile:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -4938,7 +4940,7 @@ class PersistentVolumeSpecPersistentVolumeSourceAzureFile:
 
         For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is "default" namespace.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_namespace PersistentVolume#secret_namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_namespace PersistentVolume#secret_namespace}
         """
         result = self._values.get("secret_namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5150,12 +5152,12 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFs:
         user: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param monitors: Monitors is a collection of Ceph monitors More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#monitors PersistentVolume#monitors}
-        :param path: Used as the mounted root, rather than the full Ceph tree, default is /. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to ``false`` (read/write). More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param secret_file: The path to key ring for User, default is /etc/ceph/user.secret More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_file PersistentVolume#secret_file}
-        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
-        :param user: User is the rados user name, default is admin. More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#user PersistentVolume#user}
+        :param monitors: Monitors is a collection of Ceph monitors More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#monitors PersistentVolume#monitors}
+        :param path: Used as the mounted root, rather than the full Ceph tree, default is /. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to ``false`` (read/write). More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param secret_file: The path to key ring for User, default is /etc/ceph/user.secret More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_file PersistentVolume#secret_file}
+        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
+        :param user: User is the rados user name, default is admin. More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#user PersistentVolume#user}
         """
         if isinstance(secret_ref, dict):
             secret_ref = PersistentVolumeSpecPersistentVolumeSourceCephFsSecretRef(
@@ -5209,7 +5211,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFs:
     def monitors(self) -> typing.List[builtins.str]:
         """Monitors is a collection of Ceph monitors More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#monitors PersistentVolume#monitors}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#monitors PersistentVolume#monitors}
         """
         result = self._values.get("monitors")
         assert result is not None, "Required property 'monitors' is missing"
@@ -5219,7 +5221,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFs:
     def path(self) -> typing.Optional[builtins.str]:
         """Used as the mounted root, rather than the full Ceph tree, default is /.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
         """
         result = self._values.get("path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5230,7 +5232,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFs:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the read-only setting in VolumeMounts. Defaults to ``false`` (read/write). More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -5242,7 +5244,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFs:
     def secret_file(self) -> typing.Optional[builtins.str]:
         """The path to key ring for User, default is /etc/ceph/user.secret More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_file PersistentVolume#secret_file}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_file PersistentVolume#secret_file}
         """
         result = self._values.get("secret_file")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5253,7 +5255,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFs:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceCephFsSecretRef"]:
         """secret_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
         """
         result = self._values.get("secret_ref")
         return typing.cast(
@@ -5267,7 +5269,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFs:
     def user(self) -> typing.Optional[builtins.str]:
         """User is the rados user name, default is admin. More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#user PersistentVolume#user}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#user PersistentVolume#user}
         """
         result = self._values.get("user")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5322,8 +5324,8 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFsOutputReference(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceCephFsSecretRef(
             name=name, namespace=namespace
@@ -5531,8 +5533,8 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFsSecretRef:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -5556,7 +5558,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFsSecretRef:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5565,7 +5567,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCephFsSecretRef:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5712,9 +5714,9 @@ class PersistentVolumeSpecPersistentVolumeSourceCinder:
         ] = None,
     ) -> None:
         """
-        :param volume_id: Volume ID used to identify the volume in Cinder. More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param volume_id: Volume ID used to identify the volume in Cinder. More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -5747,7 +5749,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCinder:
     def volume_id(self) -> builtins.str:
         """Volume ID used to identify the volume in Cinder. More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
         """
         result = self._values.get("volume_id")
         assert result is not None, "Required property 'volume_id' is missing"
@@ -5759,7 +5761,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCinder:
 
         Must be a filesystem type supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5770,7 +5772,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCinder:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -5983,15 +5985,15 @@ class PersistentVolumeSpecPersistentVolumeSourceCsi:
         ] = None,
     ) -> None:
         """
-        :param driver: the name of the volume driver to use. More info: https://kubernetes.io/docs/concepts/storage/volumes/#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#driver PersistentVolume#driver}
-        :param volume_handle: A string value that uniquely identifies the volume. More info: https://kubernetes.io/docs/concepts/storage/volumes/#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_handle PersistentVolume#volume_handle}
-        :param controller_expand_secret_ref: controller_expand_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#controller_expand_secret_ref PersistentVolume#controller_expand_secret_ref}
-        :param controller_publish_secret_ref: controller_publish_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#controller_publish_secret_ref PersistentVolume#controller_publish_secret_ref}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param node_publish_secret_ref: node_publish_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_publish_secret_ref PersistentVolume#node_publish_secret_ref}
-        :param node_stage_secret_ref: node_stage_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_stage_secret_ref PersistentVolume#node_stage_secret_ref}
-        :param read_only: Whether to set the read-only property in VolumeMounts to "true". If omitted, the default is "false". More info: http://kubernetes.io/docs/user-guide/volumes#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param volume_attributes: Attributes of the volume to publish. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_attributes PersistentVolume#volume_attributes}
+        :param driver: the name of the volume driver to use. More info: https://kubernetes.io/docs/concepts/storage/volumes/#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#driver PersistentVolume#driver}
+        :param volume_handle: A string value that uniquely identifies the volume. More info: https://kubernetes.io/docs/concepts/storage/volumes/#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_handle PersistentVolume#volume_handle}
+        :param controller_expand_secret_ref: controller_expand_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#controller_expand_secret_ref PersistentVolume#controller_expand_secret_ref}
+        :param controller_publish_secret_ref: controller_publish_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#controller_publish_secret_ref PersistentVolume#controller_publish_secret_ref}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param node_publish_secret_ref: node_publish_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_publish_secret_ref PersistentVolume#node_publish_secret_ref}
+        :param node_stage_secret_ref: node_stage_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_stage_secret_ref PersistentVolume#node_stage_secret_ref}
+        :param read_only: Whether to set the read-only property in VolumeMounts to "true". If omitted, the default is "false". More info: http://kubernetes.io/docs/user-guide/volumes#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param volume_attributes: Attributes of the volume to publish. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_attributes PersistentVolume#volume_attributes}
         """
         if isinstance(controller_expand_secret_ref, dict):
             controller_expand_secret_ref = (
@@ -6091,7 +6093,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsi:
     def driver(self) -> builtins.str:
         """the name of the volume driver to use. More info: https://kubernetes.io/docs/concepts/storage/volumes/#csi.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#driver PersistentVolume#driver}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#driver PersistentVolume#driver}
         """
         result = self._values.get("driver")
         assert result is not None, "Required property 'driver' is missing"
@@ -6101,7 +6103,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsi:
     def volume_handle(self) -> builtins.str:
         """A string value that uniquely identifies the volume. More info: https://kubernetes.io/docs/concepts/storage/volumes/#csi.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_handle PersistentVolume#volume_handle}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_handle PersistentVolume#volume_handle}
         """
         result = self._values.get("volume_handle")
         assert result is not None, "Required property 'volume_handle' is missing"
@@ -6115,7 +6117,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsi:
     ]:
         """controller_expand_secret_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#controller_expand_secret_ref PersistentVolume#controller_expand_secret_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#controller_expand_secret_ref PersistentVolume#controller_expand_secret_ref}
         """
         result = self._values.get("controller_expand_secret_ref")
         return typing.cast(
@@ -6133,7 +6135,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsi:
     ]:
         """controller_publish_secret_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#controller_publish_secret_ref PersistentVolume#controller_publish_secret_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#controller_publish_secret_ref PersistentVolume#controller_publish_secret_ref}
         """
         result = self._values.get("controller_publish_secret_ref")
         return typing.cast(
@@ -6149,7 +6151,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsi:
 
         Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6162,7 +6164,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsi:
     ]:
         """node_publish_secret_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_publish_secret_ref PersistentVolume#node_publish_secret_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_publish_secret_ref PersistentVolume#node_publish_secret_ref}
         """
         result = self._values.get("node_publish_secret_ref")
         return typing.cast(
@@ -6180,7 +6182,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsi:
     ]:
         """node_stage_secret_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_stage_secret_ref PersistentVolume#node_stage_secret_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_stage_secret_ref PersistentVolume#node_stage_secret_ref}
         """
         result = self._values.get("node_stage_secret_ref")
         return typing.cast(
@@ -6196,7 +6198,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsi:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to set the read-only property in VolumeMounts to "true". If omitted, the default is "false". More info: http://kubernetes.io/docs/user-guide/volumes#csi.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -6210,7 +6212,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsi:
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         """Attributes of the volume to publish.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_attributes PersistentVolume#volume_attributes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_attributes PersistentVolume#volume_attributes}
         """
         result = self._values.get("volume_attributes")
         return typing.cast(
@@ -6242,8 +6244,8 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiControllerExpandSecretRef:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -6267,7 +6269,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiControllerExpandSecretRef:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6276,7 +6278,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiControllerExpandSecretRef:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6420,8 +6422,8 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiControllerPublishSecretRef:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -6445,7 +6447,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiControllerPublishSecretRef:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6454,7 +6456,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiControllerPublishSecretRef:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6598,8 +6600,8 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiNodePublishSecretRef:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -6623,7 +6625,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiNodePublishSecretRef:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6632,7 +6634,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiNodePublishSecretRef:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6776,8 +6778,8 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiNodeStageSecretRef:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -6801,7 +6803,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiNodeStageSecretRef:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6810,7 +6812,7 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiNodeStageSecretRef:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6979,8 +6981,8 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiOutputReference(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceCsiControllerExpandSecretRef(
             name=name, namespace=namespace
@@ -6998,8 +7000,8 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiOutputReference(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceCsiControllerPublishSecretRef(
             name=name, namespace=namespace
@@ -7017,8 +7019,8 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiOutputReference(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceCsiNodePublishSecretRef(
             name=name, namespace=namespace
@@ -7034,8 +7036,8 @@ class PersistentVolumeSpecPersistentVolumeSourceCsiOutputReference(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceCsiNodeStageSecretRef(
             name=name, namespace=namespace
@@ -7349,10 +7351,10 @@ class PersistentVolumeSpecPersistentVolumeSourceFc:
         ] = None,
     ) -> None:
         """
-        :param lun: FC target lun number. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#lun PersistentVolume#lun}
-        :param target_ww_ns: FC target worldwide names (WWNs). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#target_ww_ns PersistentVolume#target_ww_ns}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param lun: FC target lun number. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#lun PersistentVolume#lun}
+        :param target_ww_ns: FC target worldwide names (WWNs). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#target_ww_ns PersistentVolume#target_ww_ns}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -7389,7 +7391,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFc:
     def lun(self) -> jsii.Number:
         """FC target lun number.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#lun PersistentVolume#lun}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#lun PersistentVolume#lun}
         """
         result = self._values.get("lun")
         assert result is not None, "Required property 'lun' is missing"
@@ -7399,7 +7401,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFc:
     def target_ww_ns(self) -> typing.List[builtins.str]:
         """FC target worldwide names (WWNs).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#target_ww_ns PersistentVolume#target_ww_ns}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#target_ww_ns PersistentVolume#target_ww_ns}
         """
         result = self._values.get("target_ww_ns")
         assert result is not None, "Required property 'target_ww_ns' is missing"
@@ -7411,7 +7413,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFc:
 
         Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -7422,7 +7424,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFc:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -7632,11 +7634,11 @@ class PersistentVolumeSpecPersistentVolumeSourceFlexVolume:
         ] = None,
     ) -> None:
         """
-        :param driver: Driver is the name of the driver to use for this volume. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#driver PersistentVolume#driver}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". The default filesystem depends on FlexVolume script. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param options: Extra command options if any. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#options PersistentVolume#options}
-        :param read_only: Whether to force the ReadOnly setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
+        :param driver: Driver is the name of the driver to use for this volume. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#driver PersistentVolume#driver}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". The default filesystem depends on FlexVolume script. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param options: Extra command options if any. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#options PersistentVolume#options}
+        :param read_only: Whether to force the ReadOnly setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
         """
         if isinstance(secret_ref, dict):
             secret_ref = PersistentVolumeSpecPersistentVolumeSourceFlexVolumeSecretRef(
@@ -7687,7 +7689,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFlexVolume:
     def driver(self) -> builtins.str:
         """Driver is the name of the driver to use for this volume.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#driver PersistentVolume#driver}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#driver PersistentVolume#driver}
         """
         result = self._values.get("driver")
         assert result is not None, "Required property 'driver' is missing"
@@ -7699,7 +7701,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFlexVolume:
 
         Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". The default filesystem depends on FlexVolume script.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -7708,7 +7710,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFlexVolume:
     def options(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         """Extra command options if any.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#options PersistentVolume#options}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#options PersistentVolume#options}
         """
         result = self._values.get("options")
         return typing.cast(
@@ -7721,7 +7723,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFlexVolume:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the ReadOnly setting in VolumeMounts. Defaults to false (read/write).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -7737,7 +7739,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFlexVolume:
     ]:
         """secret_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
         """
         result = self._values.get("secret_ref")
         return typing.cast(
@@ -7797,8 +7799,8 @@ class PersistentVolumeSpecPersistentVolumeSourceFlexVolumeOutputReference(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceFlexVolumeSecretRef(
             name=name, namespace=namespace
@@ -7986,8 +7988,8 @@ class PersistentVolumeSpecPersistentVolumeSourceFlexVolumeSecretRef:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -8011,7 +8013,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFlexVolumeSecretRef:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8020,7 +8022,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFlexVolumeSecretRef:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8162,8 +8164,8 @@ class PersistentVolumeSpecPersistentVolumeSourceFlocker:
         dataset_uuid: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param dataset_name: Name of the dataset stored as metadata -> name on the dataset for Flocker should be considered as deprecated. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#dataset_name PersistentVolume#dataset_name}
-        :param dataset_uuid: UUID of the dataset. This is unique identifier of a Flocker dataset. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#dataset_uuid PersistentVolume#dataset_uuid}
+        :param dataset_name: Name of the dataset stored as metadata -> name on the dataset for Flocker should be considered as deprecated. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#dataset_name PersistentVolume#dataset_name}
+        :param dataset_uuid: UUID of the dataset. This is unique identifier of a Flocker dataset. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#dataset_uuid PersistentVolume#dataset_uuid}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -8189,7 +8191,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFlocker:
     def dataset_name(self) -> typing.Optional[builtins.str]:
         """Name of the dataset stored as metadata -> name on the dataset for Flocker should be considered as deprecated.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#dataset_name PersistentVolume#dataset_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#dataset_name PersistentVolume#dataset_name}
         """
         result = self._values.get("dataset_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8198,7 +8200,7 @@ class PersistentVolumeSpecPersistentVolumeSourceFlocker:
     def dataset_uuid(self) -> typing.Optional[builtins.str]:
         """UUID of the dataset. This is unique identifier of a Flocker dataset.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#dataset_uuid PersistentVolume#dataset_uuid}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#dataset_uuid PersistentVolume#dataset_uuid}
         """
         result = self._values.get("dataset_uuid")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8346,10 +8348,10 @@ class PersistentVolumeSpecPersistentVolumeSourceGcePersistentDisk:
         ] = None,
     ) -> None:
         """
-        :param pd_name: Unique name of the PD resource in GCE. Used to identify the disk in GCE. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#pd_name PersistentVolume#pd_name}
-        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param partition: The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty). More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#partition PersistentVolume#partition}
-        :param read_only: Whether to force the ReadOnly setting in VolumeMounts. Defaults to false. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param pd_name: Unique name of the PD resource in GCE. Used to identify the disk in GCE. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#pd_name PersistentVolume#pd_name}
+        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param partition: The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty). More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#partition PersistentVolume#partition}
+        :param read_only: Whether to force the ReadOnly setting in VolumeMounts. Defaults to false. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -8389,7 +8391,7 @@ class PersistentVolumeSpecPersistentVolumeSourceGcePersistentDisk:
     def pd_name(self) -> builtins.str:
         """Unique name of the PD resource in GCE. Used to identify the disk in GCE. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#pd_name PersistentVolume#pd_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#pd_name PersistentVolume#pd_name}
         """
         result = self._values.get("pd_name")
         assert result is not None, "Required property 'pd_name' is missing"
@@ -8401,7 +8403,7 @@ class PersistentVolumeSpecPersistentVolumeSourceGcePersistentDisk:
 
         Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8412,7 +8414,7 @@ class PersistentVolumeSpecPersistentVolumeSourceGcePersistentDisk:
 
         If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty). More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#partition PersistentVolume#partition}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#partition PersistentVolume#partition}
         """
         result = self._values.get("partition")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -8423,7 +8425,7 @@ class PersistentVolumeSpecPersistentVolumeSourceGcePersistentDisk:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the ReadOnly setting in VolumeMounts. Defaults to false. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -8632,9 +8634,9 @@ class PersistentVolumeSpecPersistentVolumeSourceGlusterfs:
         ] = None,
     ) -> None:
         """
-        :param endpoints_name: The endpoint name that details Glusterfs topology. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#endpoints_name PersistentVolume#endpoints_name}
-        :param path: The Glusterfs volume path. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
-        :param read_only: Whether to force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param endpoints_name: The endpoint name that details Glusterfs topology. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#endpoints_name PersistentVolume#endpoints_name}
+        :param path: The Glusterfs volume path. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
+        :param read_only: Whether to force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -8664,7 +8666,7 @@ class PersistentVolumeSpecPersistentVolumeSourceGlusterfs:
     def endpoints_name(self) -> builtins.str:
         """The endpoint name that details Glusterfs topology. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#endpoints_name PersistentVolume#endpoints_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#endpoints_name PersistentVolume#endpoints_name}
         """
         result = self._values.get("endpoints_name")
         assert result is not None, "Required property 'endpoints_name' is missing"
@@ -8674,7 +8676,7 @@ class PersistentVolumeSpecPersistentVolumeSourceGlusterfs:
     def path(self) -> builtins.str:
         """The Glusterfs volume path. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
         """
         result = self._values.get("path")
         assert result is not None, "Required property 'path' is missing"
@@ -8686,7 +8688,7 @@ class PersistentVolumeSpecPersistentVolumeSourceGlusterfs:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -8854,8 +8856,8 @@ class PersistentVolumeSpecPersistentVolumeSourceHostPath:
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param path: Path of the directory on the host. More info: http://kubernetes.io/docs/user-guide/volumes#hostpath. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
-        :param type: Type for HostPath volume. Allowed values are "" (default), DirectoryOrCreate, Directory, FileOrCreate, File, Socket, CharDevice and BlockDevice. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#type PersistentVolume#type}
+        :param path: Path of the directory on the host. More info: http://kubernetes.io/docs/user-guide/volumes#hostpath. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
+        :param type: Type for HostPath volume. Allowed values are "" (default), DirectoryOrCreate, Directory, FileOrCreate, File, Socket, CharDevice and BlockDevice. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#type PersistentVolume#type}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -8877,7 +8879,7 @@ class PersistentVolumeSpecPersistentVolumeSourceHostPath:
     def path(self) -> typing.Optional[builtins.str]:
         """Path of the directory on the host. More info: http://kubernetes.io/docs/user-guide/volumes#hostpath.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
         """
         result = self._values.get("path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -8886,7 +8888,7 @@ class PersistentVolumeSpecPersistentVolumeSourceHostPath:
     def type(self) -> typing.Optional[builtins.str]:
         """Type for HostPath volume. Allowed values are "" (default), DirectoryOrCreate, Directory, FileOrCreate, File, Socket, CharDevice and BlockDevice.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#type PersistentVolume#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#type PersistentVolume#type}
         """
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9034,12 +9036,12 @@ class PersistentVolumeSpecPersistentVolumeSourceIscsi:
         ] = None,
     ) -> None:
         """
-        :param iqn: Target iSCSI Qualified Name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#iqn PersistentVolume#iqn}
-        :param target_portal: iSCSI target portal. The portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#target_portal PersistentVolume#target_portal}
-        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#iscsi Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param iscsi_interface: iSCSI interface name that uses an iSCSI transport. Defaults to 'default' (tcp). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#iscsi_interface PersistentVolume#iscsi_interface}
-        :param lun: iSCSI target lun number. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#lun PersistentVolume#lun}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param iqn: Target iSCSI Qualified Name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#iqn PersistentVolume#iqn}
+        :param target_portal: iSCSI target portal. The portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#target_portal PersistentVolume#target_portal}
+        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#iscsi Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param iscsi_interface: iSCSI interface name that uses an iSCSI transport. Defaults to 'default' (tcp). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#iscsi_interface PersistentVolume#iscsi_interface}
+        :param lun: iSCSI target lun number. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#lun PersistentVolume#lun}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -9088,7 +9090,7 @@ class PersistentVolumeSpecPersistentVolumeSourceIscsi:
     def iqn(self) -> builtins.str:
         """Target iSCSI Qualified Name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#iqn PersistentVolume#iqn}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#iqn PersistentVolume#iqn}
         """
         result = self._values.get("iqn")
         assert result is not None, "Required property 'iqn' is missing"
@@ -9100,7 +9102,7 @@ class PersistentVolumeSpecPersistentVolumeSourceIscsi:
 
         The portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#target_portal PersistentVolume#target_portal}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#target_portal PersistentVolume#target_portal}
         """
         result = self._values.get("target_portal")
         assert result is not None, "Required property 'target_portal' is missing"
@@ -9112,7 +9114,7 @@ class PersistentVolumeSpecPersistentVolumeSourceIscsi:
 
         Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#iscsi
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9121,7 +9123,7 @@ class PersistentVolumeSpecPersistentVolumeSourceIscsi:
     def iscsi_interface(self) -> typing.Optional[builtins.str]:
         """iSCSI interface name that uses an iSCSI transport. Defaults to 'default' (tcp).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#iscsi_interface PersistentVolume#iscsi_interface}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#iscsi_interface PersistentVolume#iscsi_interface}
         """
         result = self._values.get("iscsi_interface")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9130,7 +9132,7 @@ class PersistentVolumeSpecPersistentVolumeSourceIscsi:
     def lun(self) -> typing.Optional[jsii.Number]:
         """iSCSI target lun number.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#lun PersistentVolume#lun}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#lun PersistentVolume#lun}
         """
         result = self._values.get("lun")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -9141,7 +9143,7 @@ class PersistentVolumeSpecPersistentVolumeSourceIscsi:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the read-only setting in VolumeMounts. Defaults to false.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -9381,7 +9383,7 @@ class PersistentVolumeSpecPersistentVolumeSourceIscsiOutputReference(
 class PersistentVolumeSpecPersistentVolumeSourceLocal:
     def __init__(self, *, path: typing.Optional[builtins.str] = None) -> None:
         """
-        :param path: Path of the directory on the host. More info: http://kubernetes.io/docs/user-guide/volumes#local. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
+        :param path: Path of the directory on the host. More info: http://kubernetes.io/docs/user-guide/volumes#local. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -9398,7 +9400,7 @@ class PersistentVolumeSpecPersistentVolumeSourceLocal:
     def path(self) -> typing.Optional[builtins.str]:
         """Path of the directory on the host. More info: http://kubernetes.io/docs/user-guide/volumes#local.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
         """
         result = self._values.get("path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -9511,9 +9513,9 @@ class PersistentVolumeSpecPersistentVolumeSourceNfs:
         ] = None,
     ) -> None:
         """
-        :param path: Path that is exported by the NFS server. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
-        :param server: Server is the hostname or IP address of the NFS server. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#server PersistentVolume#server}
-        :param read_only: Whether to force the NFS export to be mounted with read-only permissions. Defaults to false. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param path: Path that is exported by the NFS server. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
+        :param server: Server is the hostname or IP address of the NFS server. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#server PersistentVolume#server}
+        :param read_only: Whether to force the NFS export to be mounted with read-only permissions. Defaults to false. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -9543,7 +9545,7 @@ class PersistentVolumeSpecPersistentVolumeSourceNfs:
     def path(self) -> builtins.str:
         """Path that is exported by the NFS server. More info: http://kubernetes.io/docs/user-guide/volumes#nfs.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
         """
         result = self._values.get("path")
         assert result is not None, "Required property 'path' is missing"
@@ -9553,7 +9555,7 @@ class PersistentVolumeSpecPersistentVolumeSourceNfs:
     def server(self) -> builtins.str:
         """Server is the hostname or IP address of the NFS server. More info: http://kubernetes.io/docs/user-guide/volumes#nfs.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#server PersistentVolume#server}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#server PersistentVolume#server}
         """
         result = self._values.get("server")
         assert result is not None, "Required property 'server' is missing"
@@ -9565,7 +9567,7 @@ class PersistentVolumeSpecPersistentVolumeSourceNfs:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the NFS export to be mounted with read-only permissions. Defaults to false. More info: http://kubernetes.io/docs/user-guide/volumes#nfs.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -9760,10 +9762,10 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param volume_id: Unique ID of the persistent disk resource in AWS (Amazon EBS volume). More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
-        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param partition: The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#partition PersistentVolume#partition}
-        :param read_only: Whether to set the read-only property in VolumeMounts to "true". If omitted, the default is "false". More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param volume_id: Unique ID of the persistent disk resource in AWS (Amazon EBS volume). More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
+        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param partition: The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#partition PersistentVolume#partition}
+        :param read_only: Whether to set the read-only property in VolumeMounts to "true". If omitted, the default is "false". More info: http://kubernetes.io/docs/user-guide/volumes#awselasticblockstore. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceAwsElasticBlockStore(
             volume_id=volume_id,
@@ -9788,12 +9790,12 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param caching_mode: Host Caching mode: None, Read Only, Read Write. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#caching_mode PersistentVolume#caching_mode}
-        :param data_disk_uri: The URI the data disk in the blob storage. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#data_disk_uri PersistentVolume#data_disk_uri}
-        :param disk_name: The Name of the data disk in the blob storage. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#disk_name PersistentVolume#disk_name}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param kind: The type for the data disk. Expected values: Shared, Dedicated, Managed. Defaults to Shared. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#kind PersistentVolume#kind}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param caching_mode: Host Caching mode: None, Read Only, Read Write. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#caching_mode PersistentVolume#caching_mode}
+        :param data_disk_uri: The URI the data disk in the blob storage. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#data_disk_uri PersistentVolume#data_disk_uri}
+        :param disk_name: The Name of the data disk in the blob storage. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#disk_name PersistentVolume#disk_name}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param kind: The type for the data disk. Expected values: Shared, Dedicated, Managed. Defaults to Shared. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#kind PersistentVolume#kind}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceAzureDisk(
             caching_mode=caching_mode,
@@ -9818,10 +9820,10 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         secret_namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param secret_name: The name of secret that contains Azure Storage Account Name and Key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_name PersistentVolume#secret_name}
-        :param share_name: Share Name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#share_name PersistentVolume#share_name}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param secret_namespace: The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is "default" namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_namespace PersistentVolume#secret_namespace}
+        :param secret_name: The name of secret that contains Azure Storage Account Name and Key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_name PersistentVolume#secret_name}
+        :param share_name: Share Name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#share_name PersistentVolume#share_name}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param secret_namespace: The namespace of the secret that contains Azure Storage Account Name and Key. For Kubernetes up to 1.18.x the default is the same as the Pod. For Kubernetes 1.19.x and later the default is "default" namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_namespace PersistentVolume#secret_namespace}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceAzureFile(
             secret_name=secret_name,
@@ -9851,12 +9853,12 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         user: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param monitors: Monitors is a collection of Ceph monitors More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#monitors PersistentVolume#monitors}
-        :param path: Used as the mounted root, rather than the full Ceph tree, default is /. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to ``false`` (read/write). More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param secret_file: The path to key ring for User, default is /etc/ceph/user.secret More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_file PersistentVolume#secret_file}
-        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
-        :param user: User is the rados user name, default is admin. More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#user PersistentVolume#user}
+        :param monitors: Monitors is a collection of Ceph monitors More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#monitors PersistentVolume#monitors}
+        :param path: Used as the mounted root, rather than the full Ceph tree, default is /. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to ``false`` (read/write). More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param secret_file: The path to key ring for User, default is /etc/ceph/user.secret More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_file PersistentVolume#secret_file}
+        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
+        :param user: User is the rados user name, default is admin. More info: http://releases.k8s.io/HEAD/examples/volumes/cephfs/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#user PersistentVolume#user}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceCephFs(
             monitors=monitors,
@@ -9880,9 +9882,9 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param volume_id: Volume ID used to identify the volume in Cinder. More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param volume_id: Volume ID used to identify the volume in Cinder. More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_id PersistentVolume#volume_id}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). More info: http://releases.k8s.io/HEAD/examples/mysql-cinder-pd/README.md. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceCinder(
             volume_id=volume_id, fs_type=fs_type, read_only=read_only
@@ -9929,15 +9931,15 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param driver: the name of the volume driver to use. More info: https://kubernetes.io/docs/concepts/storage/volumes/#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#driver PersistentVolume#driver}
-        :param volume_handle: A string value that uniquely identifies the volume. More info: https://kubernetes.io/docs/concepts/storage/volumes/#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_handle PersistentVolume#volume_handle}
-        :param controller_expand_secret_ref: controller_expand_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#controller_expand_secret_ref PersistentVolume#controller_expand_secret_ref}
-        :param controller_publish_secret_ref: controller_publish_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#controller_publish_secret_ref PersistentVolume#controller_publish_secret_ref}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param node_publish_secret_ref: node_publish_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_publish_secret_ref PersistentVolume#node_publish_secret_ref}
-        :param node_stage_secret_ref: node_stage_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#node_stage_secret_ref PersistentVolume#node_stage_secret_ref}
-        :param read_only: Whether to set the read-only property in VolumeMounts to "true". If omitted, the default is "false". More info: http://kubernetes.io/docs/user-guide/volumes#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param volume_attributes: Attributes of the volume to publish. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_attributes PersistentVolume#volume_attributes}
+        :param driver: the name of the volume driver to use. More info: https://kubernetes.io/docs/concepts/storage/volumes/#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#driver PersistentVolume#driver}
+        :param volume_handle: A string value that uniquely identifies the volume. More info: https://kubernetes.io/docs/concepts/storage/volumes/#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_handle PersistentVolume#volume_handle}
+        :param controller_expand_secret_ref: controller_expand_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#controller_expand_secret_ref PersistentVolume#controller_expand_secret_ref}
+        :param controller_publish_secret_ref: controller_publish_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#controller_publish_secret_ref PersistentVolume#controller_publish_secret_ref}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param node_publish_secret_ref: node_publish_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_publish_secret_ref PersistentVolume#node_publish_secret_ref}
+        :param node_stage_secret_ref: node_stage_secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#node_stage_secret_ref PersistentVolume#node_stage_secret_ref}
+        :param read_only: Whether to set the read-only property in VolumeMounts to "true". If omitted, the default is "false". More info: http://kubernetes.io/docs/user-guide/volumes#csi. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param volume_attributes: Attributes of the volume to publish. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_attributes PersistentVolume#volume_attributes}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceCsi(
             driver=driver,
@@ -9965,10 +9967,10 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param lun: FC target lun number. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#lun PersistentVolume#lun}
-        :param target_ww_ns: FC target worldwide names (WWNs). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#target_ww_ns PersistentVolume#target_ww_ns}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param lun: FC target lun number. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#lun PersistentVolume#lun}
+        :param target_ww_ns: FC target worldwide names (WWNs). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#target_ww_ns PersistentVolume#target_ww_ns}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceFc(
             lun=lun, target_ww_ns=target_ww_ns, fs_type=fs_type, read_only=read_only
@@ -9994,11 +9996,11 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param driver: Driver is the name of the driver to use for this volume. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#driver PersistentVolume#driver}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". The default filesystem depends on FlexVolume script. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param options: Extra command options if any. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#options PersistentVolume#options}
-        :param read_only: Whether to force the ReadOnly setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
+        :param driver: Driver is the name of the driver to use for this volume. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#driver PersistentVolume#driver}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". The default filesystem depends on FlexVolume script. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param options: Extra command options if any. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#options PersistentVolume#options}
+        :param read_only: Whether to force the ReadOnly setting in VolumeMounts. Defaults to false (read/write). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceFlexVolume(
             driver=driver,
@@ -10018,8 +10020,8 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         dataset_uuid: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param dataset_name: Name of the dataset stored as metadata -> name on the dataset for Flocker should be considered as deprecated. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#dataset_name PersistentVolume#dataset_name}
-        :param dataset_uuid: UUID of the dataset. This is unique identifier of a Flocker dataset. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#dataset_uuid PersistentVolume#dataset_uuid}
+        :param dataset_name: Name of the dataset stored as metadata -> name on the dataset for Flocker should be considered as deprecated. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#dataset_name PersistentVolume#dataset_name}
+        :param dataset_uuid: UUID of the dataset. This is unique identifier of a Flocker dataset. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#dataset_uuid PersistentVolume#dataset_uuid}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceFlocker(
             dataset_name=dataset_name, dataset_uuid=dataset_uuid
@@ -10039,10 +10041,10 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param pd_name: Unique name of the PD resource in GCE. Used to identify the disk in GCE. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#pd_name PersistentVolume#pd_name}
-        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param partition: The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty). More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#partition PersistentVolume#partition}
-        :param read_only: Whether to force the ReadOnly setting in VolumeMounts. Defaults to false. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param pd_name: Unique name of the PD resource in GCE. Used to identify the disk in GCE. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#pd_name PersistentVolume#pd_name}
+        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param partition: The partition in the volume that you want to mount. If omitted, the default is to mount by volume name. Examples: For volume /dev/sda1, you specify the partition as "1". Similarly, the volume partition for /dev/sda is "0" (or you can leave the property empty). More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#partition PersistentVolume#partition}
+        :param read_only: Whether to force the ReadOnly setting in VolumeMounts. Defaults to false. More info: http://kubernetes.io/docs/user-guide/volumes#gcepersistentdisk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceGcePersistentDisk(
             pd_name=pd_name, fs_type=fs_type, partition=partition, read_only=read_only
@@ -10061,9 +10063,9 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param endpoints_name: The endpoint name that details Glusterfs topology. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#endpoints_name PersistentVolume#endpoints_name}
-        :param path: The Glusterfs volume path. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
-        :param read_only: Whether to force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param endpoints_name: The endpoint name that details Glusterfs topology. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#endpoints_name PersistentVolume#endpoints_name}
+        :param path: The Glusterfs volume path. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
+        :param read_only: Whether to force the Glusterfs volume to be mounted with read-only permissions. Defaults to false. More info: http://releases.k8s.io/HEAD/examples/volumes/glusterfs/README.md#create-a-pod. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceGlusterfs(
             endpoints_name=endpoints_name, path=path, read_only=read_only
@@ -10079,8 +10081,8 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param path: Path of the directory on the host. More info: http://kubernetes.io/docs/user-guide/volumes#hostpath. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
-        :param type: Type for HostPath volume. Allowed values are "" (default), DirectoryOrCreate, Directory, FileOrCreate, File, Socket, CharDevice and BlockDevice. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#type PersistentVolume#type}
+        :param path: Path of the directory on the host. More info: http://kubernetes.io/docs/user-guide/volumes#hostpath. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
+        :param type: Type for HostPath volume. Allowed values are "" (default), DirectoryOrCreate, Directory, FileOrCreate, File, Socket, CharDevice and BlockDevice. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#type PersistentVolume#type}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceHostPath(path=path, type=type)
 
@@ -10100,12 +10102,12 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param iqn: Target iSCSI Qualified Name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#iqn PersistentVolume#iqn}
-        :param target_portal: iSCSI target portal. The portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#target_portal PersistentVolume#target_portal}
-        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#iscsi Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param iscsi_interface: iSCSI interface name that uses an iSCSI transport. Defaults to 'default' (tcp). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#iscsi_interface PersistentVolume#iscsi_interface}
-        :param lun: iSCSI target lun number. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#lun PersistentVolume#lun}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param iqn: Target iSCSI Qualified Name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#iqn PersistentVolume#iqn}
+        :param target_portal: iSCSI target portal. The portal is either an IP or ip_addr:port if the port is other than default (typically TCP ports 860 and 3260). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#target_portal PersistentVolume#target_portal}
+        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#iscsi Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param iscsi_interface: iSCSI interface name that uses an iSCSI transport. Defaults to 'default' (tcp). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#iscsi_interface PersistentVolume#iscsi_interface}
+        :param lun: iSCSI target lun number. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#lun PersistentVolume#lun}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceIscsi(
             iqn=iqn,
@@ -10121,7 +10123,7 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
     @jsii.member(jsii_name="putLocal")
     def put_local(self, *, path: typing.Optional[builtins.str] = None) -> None:
         """
-        :param path: Path of the directory on the host. More info: http://kubernetes.io/docs/user-guide/volumes#local. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
+        :param path: Path of the directory on the host. More info: http://kubernetes.io/docs/user-guide/volumes#local. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceLocal(path=path)
 
@@ -10138,9 +10140,9 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param path: Path that is exported by the NFS server. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#path PersistentVolume#path}
-        :param server: Server is the hostname or IP address of the NFS server. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#server PersistentVolume#server}
-        :param read_only: Whether to force the NFS export to be mounted with read-only permissions. Defaults to false. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param path: Path that is exported by the NFS server. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#path PersistentVolume#path}
+        :param server: Server is the hostname or IP address of the NFS server. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#server PersistentVolume#server}
+        :param read_only: Whether to force the NFS export to be mounted with read-only permissions. Defaults to false. More info: http://kubernetes.io/docs/user-guide/volumes#nfs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceNfs(
             path=path, server=server, read_only=read_only
@@ -10156,8 +10158,8 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         fs_type: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param pd_id: ID that identifies Photon Controller persistent disk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#pd_id PersistentVolume#pd_id}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param pd_id: ID that identifies Photon Controller persistent disk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#pd_id PersistentVolume#pd_id}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         value = PersistentVolumeSpecPersistentVolumeSourcePhotonPersistentDisk(
             pd_id=pd_id, fs_type=fs_type
@@ -10178,11 +10180,11 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         user: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param registry: Registry represents a single or multiple Quobyte Registry services specified as a string as host:port pair (multiple entries are separated with commas) which acts as the central registry for volumes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#registry PersistentVolume#registry}
-        :param volume: Volume is a string that references an already created Quobyte volume by name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume PersistentVolume#volume}
-        :param group: Group to map volume access to Default is no group. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#group PersistentVolume#group}
-        :param read_only: Whether to force the Quobyte volume to be mounted with read-only permissions. Defaults to false. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param user: User to map volume access to Defaults to serivceaccount user. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#user PersistentVolume#user}
+        :param registry: Registry represents a single or multiple Quobyte Registry services specified as a string as host:port pair (multiple entries are separated with commas) which acts as the central registry for volumes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#registry PersistentVolume#registry}
+        :param volume: Volume is a string that references an already created Quobyte volume by name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume PersistentVolume#volume}
+        :param group: Group to map volume access to Default is no group. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#group PersistentVolume#group}
+        :param read_only: Whether to force the Quobyte volume to be mounted with read-only permissions. Defaults to false. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param user: User to map volume access to Defaults to serivceaccount user. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#user PersistentVolume#user}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceQuobyte(
             registry=registry,
@@ -10215,14 +10217,14 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         ] = None,
     ) -> None:
         """
-        :param ceph_monitors: A collection of Ceph monitors. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#ceph_monitors PersistentVolume#ceph_monitors}
-        :param rbd_image: The rados image name. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rbd_image PersistentVolume#rbd_image}
-        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#rbd Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param keyring: Keyring is the path to key ring for RBDUser. Default is /etc/ceph/keyring. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#keyring PersistentVolume#keyring}
-        :param rados_user: The rados user name. Default is admin. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rados_user PersistentVolume#rados_user}
-        :param rbd_pool: The rados pool name. Default is rbd. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rbd_pool PersistentVolume#rbd_pool}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
+        :param ceph_monitors: A collection of Ceph monitors. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#ceph_monitors PersistentVolume#ceph_monitors}
+        :param rbd_image: The rados image name. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rbd_image PersistentVolume#rbd_image}
+        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#rbd Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param keyring: Keyring is the path to key ring for RBDUser. Default is /etc/ceph/keyring. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#keyring PersistentVolume#keyring}
+        :param rados_user: The rados user name. Default is admin. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rados_user PersistentVolume#rados_user}
+        :param rbd_pool: The rados pool name. Default is rbd. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rbd_pool PersistentVolume#rbd_pool}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceRbd(
             ceph_monitors=ceph_monitors,
@@ -10245,8 +10247,8 @@ class PersistentVolumeSpecPersistentVolumeSourceOutputReference(
         fs_type: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param volume_path: Path that identifies vSphere volume vmdk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_path PersistentVolume#volume_path}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param volume_path: Path that identifies vSphere volume vmdk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_path PersistentVolume#volume_path}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceVsphereVolume(
             volume_path=volume_path, fs_type=fs_type
@@ -10744,8 +10746,8 @@ class PersistentVolumeSpecPersistentVolumeSourcePhotonPersistentDisk:
         fs_type: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param pd_id: ID that identifies Photon Controller persistent disk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#pd_id PersistentVolume#pd_id}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param pd_id: ID that identifies Photon Controller persistent disk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#pd_id PersistentVolume#pd_id}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -10769,7 +10771,7 @@ class PersistentVolumeSpecPersistentVolumeSourcePhotonPersistentDisk:
     def pd_id(self) -> builtins.str:
         """ID that identifies Photon Controller persistent disk.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#pd_id PersistentVolume#pd_id}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#pd_id PersistentVolume#pd_id}
         """
         result = self._values.get("pd_id")
         assert result is not None, "Required property 'pd_id' is missing"
@@ -10781,7 +10783,7 @@ class PersistentVolumeSpecPersistentVolumeSourcePhotonPersistentDisk:
 
         Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -10930,11 +10932,11 @@ class PersistentVolumeSpecPersistentVolumeSourceQuobyte:
         user: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param registry: Registry represents a single or multiple Quobyte Registry services specified as a string as host:port pair (multiple entries are separated with commas) which acts as the central registry for volumes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#registry PersistentVolume#registry}
-        :param volume: Volume is a string that references an already created Quobyte volume by name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume PersistentVolume#volume}
-        :param group: Group to map volume access to Default is no group. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#group PersistentVolume#group}
-        :param read_only: Whether to force the Quobyte volume to be mounted with read-only permissions. Defaults to false. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param user: User to map volume access to Defaults to serivceaccount user. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#user PersistentVolume#user}
+        :param registry: Registry represents a single or multiple Quobyte Registry services specified as a string as host:port pair (multiple entries are separated with commas) which acts as the central registry for volumes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#registry PersistentVolume#registry}
+        :param volume: Volume is a string that references an already created Quobyte volume by name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume PersistentVolume#volume}
+        :param group: Group to map volume access to Default is no group. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#group PersistentVolume#group}
+        :param read_only: Whether to force the Quobyte volume to be mounted with read-only permissions. Defaults to false. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param user: User to map volume access to Defaults to serivceaccount user. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#user PersistentVolume#user}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -10976,7 +10978,7 @@ class PersistentVolumeSpecPersistentVolumeSourceQuobyte:
     def registry(self) -> builtins.str:
         """Registry represents a single or multiple Quobyte Registry services specified as a string as host:port pair (multiple entries are separated with commas) which acts as the central registry for volumes.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#registry PersistentVolume#registry}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#registry PersistentVolume#registry}
         """
         result = self._values.get("registry")
         assert result is not None, "Required property 'registry' is missing"
@@ -10986,7 +10988,7 @@ class PersistentVolumeSpecPersistentVolumeSourceQuobyte:
     def volume(self) -> builtins.str:
         """Volume is a string that references an already created Quobyte volume by name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume PersistentVolume#volume}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume PersistentVolume#volume}
         """
         result = self._values.get("volume")
         assert result is not None, "Required property 'volume' is missing"
@@ -10996,7 +10998,7 @@ class PersistentVolumeSpecPersistentVolumeSourceQuobyte:
     def group(self) -> typing.Optional[builtins.str]:
         """Group to map volume access to Default is no group.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#group PersistentVolume#group}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#group PersistentVolume#group}
         """
         result = self._values.get("group")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -11007,7 +11009,7 @@ class PersistentVolumeSpecPersistentVolumeSourceQuobyte:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the Quobyte volume to be mounted with read-only permissions. Defaults to false.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -11019,7 +11021,7 @@ class PersistentVolumeSpecPersistentVolumeSourceQuobyte:
     def user(self) -> typing.Optional[builtins.str]:
         """User to map volume access to Defaults to serivceaccount user.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#user PersistentVolume#user}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#user PersistentVolume#user}
         """
         result = self._values.get("user")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -11256,14 +11258,14 @@ class PersistentVolumeSpecPersistentVolumeSourceRbd:
         ] = None,
     ) -> None:
         """
-        :param ceph_monitors: A collection of Ceph monitors. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#ceph_monitors PersistentVolume#ceph_monitors}
-        :param rbd_image: The rados image name. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rbd_image PersistentVolume#rbd_image}
-        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#rbd Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
-        :param keyring: Keyring is the path to key ring for RBDUser. Default is /etc/ceph/keyring. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#keyring PersistentVolume#keyring}
-        :param rados_user: The rados user name. Default is admin. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rados_user PersistentVolume#rados_user}
-        :param rbd_pool: The rados pool name. Default is rbd. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rbd_pool PersistentVolume#rbd_pool}
-        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
-        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
+        :param ceph_monitors: A collection of Ceph monitors. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#ceph_monitors PersistentVolume#ceph_monitors}
+        :param rbd_image: The rados image name. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rbd_image PersistentVolume#rbd_image}
+        :param fs_type: Filesystem type of the volume that you want to mount. Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#rbd Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param keyring: Keyring is the path to key ring for RBDUser. Default is /etc/ceph/keyring. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#keyring PersistentVolume#keyring}
+        :param rados_user: The rados user name. Default is admin. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rados_user PersistentVolume#rados_user}
+        :param rbd_pool: The rados pool name. Default is rbd. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rbd_pool PersistentVolume#rbd_pool}
+        :param read_only: Whether to force the read-only setting in VolumeMounts. Defaults to false. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        :param secret_ref: secret_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
         """
         if isinstance(secret_ref, dict):
             secret_ref = PersistentVolumeSpecPersistentVolumeSourceRbdSecretRef(
@@ -11334,7 +11336,7 @@ class PersistentVolumeSpecPersistentVolumeSourceRbd:
     def ceph_monitors(self) -> typing.List[builtins.str]:
         """A collection of Ceph monitors. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#ceph_monitors PersistentVolume#ceph_monitors}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#ceph_monitors PersistentVolume#ceph_monitors}
         """
         result = self._values.get("ceph_monitors")
         assert result is not None, "Required property 'ceph_monitors' is missing"
@@ -11344,7 +11346,7 @@ class PersistentVolumeSpecPersistentVolumeSourceRbd:
     def rbd_image(self) -> builtins.str:
         """The rados image name. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rbd_image PersistentVolume#rbd_image}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rbd_image PersistentVolume#rbd_image}
         """
         result = self._values.get("rbd_image")
         assert result is not None, "Required property 'rbd_image' is missing"
@@ -11356,7 +11358,7 @@ class PersistentVolumeSpecPersistentVolumeSourceRbd:
 
         Tip: Ensure that the filesystem type is supported by the host operating system. Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. More info: http://kubernetes.io/docs/user-guide/volumes#rbd
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -11365,7 +11367,7 @@ class PersistentVolumeSpecPersistentVolumeSourceRbd:
     def keyring(self) -> typing.Optional[builtins.str]:
         """Keyring is the path to key ring for RBDUser. Default is /etc/ceph/keyring. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#keyring PersistentVolume#keyring}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#keyring PersistentVolume#keyring}
         """
         result = self._values.get("keyring")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -11374,7 +11376,7 @@ class PersistentVolumeSpecPersistentVolumeSourceRbd:
     def rados_user(self) -> typing.Optional[builtins.str]:
         """The rados user name. Default is admin. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rados_user PersistentVolume#rados_user}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rados_user PersistentVolume#rados_user}
         """
         result = self._values.get("rados_user")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -11383,7 +11385,7 @@ class PersistentVolumeSpecPersistentVolumeSourceRbd:
     def rbd_pool(self) -> typing.Optional[builtins.str]:
         """The rados pool name. Default is rbd. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#rbd_pool PersistentVolume#rbd_pool}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#rbd_pool PersistentVolume#rbd_pool}
         """
         result = self._values.get("rbd_pool")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -11394,7 +11396,7 @@ class PersistentVolumeSpecPersistentVolumeSourceRbd:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether to force the read-only setting in VolumeMounts. Defaults to false. More info: http://releases.k8s.io/HEAD/examples/volumes/rbd/README.md#how-to-use-it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#read_only PersistentVolume#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -11408,7 +11410,7 @@ class PersistentVolumeSpecPersistentVolumeSourceRbd:
     ) -> typing.Optional["PersistentVolumeSpecPersistentVolumeSourceRbdSecretRef"]:
         """secret_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#secret_ref PersistentVolume#secret_ref}
         """
         result = self._values.get("secret_ref")
         return typing.cast(
@@ -11466,8 +11468,8 @@ class PersistentVolumeSpecPersistentVolumeSourceRbdOutputReference(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         value = PersistentVolumeSpecPersistentVolumeSourceRbdSecretRef(
             name=name, namespace=namespace
@@ -11726,8 +11728,8 @@ class PersistentVolumeSpecPersistentVolumeSourceRbdSecretRef:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
-        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
+        :param namespace: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -11751,7 +11753,7 @@ class PersistentVolumeSpecPersistentVolumeSourceRbdSecretRef:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#name PersistentVolume#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#name PersistentVolume#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -11760,7 +11762,7 @@ class PersistentVolumeSpecPersistentVolumeSourceRbdSecretRef:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#namespace PersistentVolume#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -11897,8 +11899,8 @@ class PersistentVolumeSpecPersistentVolumeSourceVsphereVolume:
         fs_type: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param volume_path: Path that identifies vSphere volume vmdk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_path PersistentVolume#volume_path}
-        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        :param volume_path: Path that identifies vSphere volume vmdk. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_path PersistentVolume#volume_path}
+        :param fs_type: Filesystem type to mount. Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -11924,7 +11926,7 @@ class PersistentVolumeSpecPersistentVolumeSourceVsphereVolume:
     def volume_path(self) -> builtins.str:
         """Path that identifies vSphere volume vmdk.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#volume_path PersistentVolume#volume_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#volume_path PersistentVolume#volume_path}
         """
         result = self._values.get("volume_path")
         assert result is not None, "Required property 'volume_path' is missing"
@@ -11936,7 +11938,7 @@ class PersistentVolumeSpecPersistentVolumeSourceVsphereVolume:
 
         Must be a filesystem type supported by the host operating system. Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#fs_type PersistentVolume#fs_type}
         """
         result = self._values.get("fs_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -12065,7 +12067,7 @@ class PersistentVolumeSpecPersistentVolumeSourceVsphereVolumeOutputReference(
 class PersistentVolumeTimeouts:
     def __init__(self, *, create: typing.Optional[builtins.str] = None) -> None:
         """
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#create PersistentVolume#create}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#create PersistentVolume#create}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -12082,7 +12084,7 @@ class PersistentVolumeTimeouts:
 
     @builtins.property
     def create(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/persistent_volume#create PersistentVolume#create}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/persistent_volume#create PersistentVolume#create}."""
         result = self._values.get("create")
         return typing.cast(typing.Optional[builtins.str], result)
 

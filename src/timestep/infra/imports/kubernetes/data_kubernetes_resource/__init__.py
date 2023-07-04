@@ -1,7 +1,7 @@
 """
 # `data_kubernetes_resource`
 
-Refer to the Terraform Registory for docs: [`data_kubernetes_resource`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource).
+Refer to the Terraform Registory for docs: [`data_kubernetes_resource`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class DataKubernetesResource(
@@ -24,7 +26,7 @@ class DataKubernetesResource(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.dataKubernetesResource.DataKubernetesResource",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource kubernetes_resource}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource kubernetes_resource}."""
 
     def __init__(
         self,
@@ -82,14 +84,14 @@ class DataKubernetesResource(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource kubernetes_resource} Data Source.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource kubernetes_resource} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param api_version: The resource apiVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#api_version DataKubernetesResource#api_version}
-        :param kind: The resource kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#kind DataKubernetesResource#kind}
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#metadata DataKubernetesResource#metadata}
-        :param object: The response from the API server. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#object DataKubernetesResource#object}
+        :param api_version: The resource apiVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#api_version DataKubernetesResource#api_version}
+        :param kind: The resource kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#kind DataKubernetesResource#kind}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#metadata DataKubernetesResource#metadata}
+        :param object: The response from the API server. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#object DataKubernetesResource#object}
         :param connection:
         :param count:
         :param depends_on:
@@ -130,8 +132,8 @@ class DataKubernetesResource(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: The resource name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#name DataKubernetesResource#name}
-        :param namespace: The resource namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#namespace DataKubernetesResource#namespace}
+        :param name: The resource name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#name DataKubernetesResource#name}
+        :param namespace: The resource namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#namespace DataKubernetesResource#namespace}
         """
         value = DataKubernetesResourceMetadata(name=name, namespace=namespace)
 
@@ -319,10 +321,10 @@ class DataKubernetesResourceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param api_version: The resource apiVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#api_version DataKubernetesResource#api_version}
-        :param kind: The resource kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#kind DataKubernetesResource#kind}
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#metadata DataKubernetesResource#metadata}
-        :param object: The response from the API server. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#object DataKubernetesResource#object}
+        :param api_version: The resource apiVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#api_version DataKubernetesResource#api_version}
+        :param kind: The resource kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#kind DataKubernetesResource#kind}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#metadata DataKubernetesResource#metadata}
+        :param object: The response from the API server. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#object DataKubernetesResource#object}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -512,7 +514,7 @@ class DataKubernetesResourceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def api_version(self) -> builtins.str:
         """The resource apiVersion.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#api_version DataKubernetesResource#api_version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#api_version DataKubernetesResource#api_version}
         """
         result = self._values.get("api_version")
         assert result is not None, "Required property 'api_version' is missing"
@@ -522,7 +524,7 @@ class DataKubernetesResourceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def kind(self) -> builtins.str:
         """The resource kind.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#kind DataKubernetesResource#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#kind DataKubernetesResource#kind}
         """
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -532,7 +534,7 @@ class DataKubernetesResourceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "DataKubernetesResourceMetadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#metadata DataKubernetesResource#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#metadata DataKubernetesResource#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -542,7 +544,7 @@ class DataKubernetesResourceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def object(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
         """The response from the API server.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#object DataKubernetesResource#object}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#object DataKubernetesResource#object}
         """
         result = self._values.get("object")
         return typing.cast(
@@ -574,8 +576,8 @@ class DataKubernetesResourceMetadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: The resource name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#name DataKubernetesResource#name}
-        :param namespace: The resource namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#namespace DataKubernetesResource#namespace}
+        :param name: The resource name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#name DataKubernetesResource#name}
+        :param namespace: The resource namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#namespace DataKubernetesResource#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -599,7 +601,7 @@ class DataKubernetesResourceMetadata:
     def name(self) -> builtins.str:
         """The resource name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#name DataKubernetesResource#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#name DataKubernetesResource#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -609,7 +611,7 @@ class DataKubernetesResourceMetadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         """The resource namespace.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/data-sources/resource#namespace DataKubernetesResource#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resource#namespace DataKubernetesResource#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)

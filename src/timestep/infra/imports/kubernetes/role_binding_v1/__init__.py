@@ -1,7 +1,7 @@
 """
 # `kubernetes_role_binding_v1`
 
-Refer to the Terraform Registory for docs: [`kubernetes_role_binding_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1).
+Refer to the Terraform Registory for docs: [`kubernetes_role_binding_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class RoleBindingV1(
@@ -24,7 +26,7 @@ class RoleBindingV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.roleBindingV1.RoleBindingV1",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1 kubernetes_role_binding_v1}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1 kubernetes_role_binding_v1}."""
 
     def __init__(
         self,
@@ -91,14 +93,14 @@ class RoleBindingV1(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1 kubernetes_role_binding_v1} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1 kubernetes_role_binding_v1} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#metadata RoleBindingV1#metadata}
-        :param role_ref: role_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#role_ref RoleBindingV1#role_ref}
-        :param subject: subject block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#subject RoleBindingV1#subject}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#id RoleBindingV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#metadata RoleBindingV1#metadata}
+        :param role_ref: role_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#role_ref RoleBindingV1#role_ref}
+        :param subject: subject block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#subject RoleBindingV1#subject}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#id RoleBindingV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection:
         :param count:
         :param depends_on:
@@ -144,11 +146,11 @@ class RoleBindingV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the roleBinding that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#annotations RoleBindingV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#generate_name RoleBindingV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the roleBinding. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#labels RoleBindingV1#labels}
-        :param name: Name of the roleBinding, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#name RoleBindingV1#name}
-        :param namespace: Namespace defines the space within which name of the roleBinding must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#namespace RoleBindingV1#namespace}
+        :param annotations: An unstructured key value map stored with the roleBinding that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#annotations RoleBindingV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#generate_name RoleBindingV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the roleBinding. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#labels RoleBindingV1#labels}
+        :param name: Name of the roleBinding, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#name RoleBindingV1#name}
+        :param namespace: Namespace defines the space within which name of the roleBinding must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#namespace RoleBindingV1#namespace}
         """
         value = RoleBindingV1Metadata(
             annotations=annotations,
@@ -169,9 +171,9 @@ class RoleBindingV1(
         name: builtins.str,
     ) -> None:
         """
-        :param api_group: The API group of the user. The only value possible at the moment is ``rbac.authorization.k8s.io``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#api_group RoleBindingV1#api_group}
-        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#kind RoleBindingV1#kind}
-        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#name RoleBindingV1#name}
+        :param api_group: The API group of the user. The only value possible at the moment is ``rbac.authorization.k8s.io``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#api_group RoleBindingV1#api_group}
+        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#kind RoleBindingV1#kind}
+        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#name RoleBindingV1#name}
         """
         value = RoleBindingV1RoleRef(api_group=api_group, kind=kind, name=name)
 
@@ -377,10 +379,10 @@ class RoleBindingV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#metadata RoleBindingV1#metadata}
-        :param role_ref: role_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#role_ref RoleBindingV1#role_ref}
-        :param subject: subject block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#subject RoleBindingV1#subject}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#id RoleBindingV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#metadata RoleBindingV1#metadata}
+        :param role_ref: role_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#role_ref RoleBindingV1#role_ref}
+        :param subject: subject block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#subject RoleBindingV1#subject}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#id RoleBindingV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -570,7 +572,7 @@ class RoleBindingV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "RoleBindingV1Metadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#metadata RoleBindingV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#metadata RoleBindingV1#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -580,7 +582,7 @@ class RoleBindingV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def role_ref(self) -> "RoleBindingV1RoleRef":
         """role_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#role_ref RoleBindingV1#role_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#role_ref RoleBindingV1#role_ref}
         """
         result = self._values.get("role_ref")
         assert result is not None, "Required property 'role_ref' is missing"
@@ -592,7 +594,7 @@ class RoleBindingV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["RoleBindingV1Subject"]]:
         """subject block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#subject RoleBindingV1#subject}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#subject RoleBindingV1#subject}
         """
         result = self._values.get("subject")
         assert result is not None, "Required property 'subject' is missing"
@@ -605,7 +607,7 @@ class RoleBindingV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#id RoleBindingV1#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#id RoleBindingV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -647,11 +649,11 @@ class RoleBindingV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the roleBinding that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#annotations RoleBindingV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#generate_name RoleBindingV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the roleBinding. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#labels RoleBindingV1#labels}
-        :param name: Name of the roleBinding, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#name RoleBindingV1#name}
-        :param namespace: Namespace defines the space within which name of the roleBinding must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#namespace RoleBindingV1#namespace}
+        :param annotations: An unstructured key value map stored with the roleBinding that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#annotations RoleBindingV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#generate_name RoleBindingV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the roleBinding. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#labels RoleBindingV1#labels}
+        :param name: Name of the roleBinding, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#name RoleBindingV1#name}
+        :param namespace: Namespace defines the space within which name of the roleBinding must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#namespace RoleBindingV1#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -700,7 +702,7 @@ class RoleBindingV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#annotations RoleBindingV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#annotations RoleBindingV1#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -713,7 +715,7 @@ class RoleBindingV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#generate_name RoleBindingV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#generate_name RoleBindingV1#generate_name}
         """
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -724,7 +726,7 @@ class RoleBindingV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#labels RoleBindingV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#labels RoleBindingV1#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -735,7 +737,7 @@ class RoleBindingV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the roleBinding, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#name RoleBindingV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#name RoleBindingV1#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -744,7 +746,7 @@ class RoleBindingV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Namespace defines the space within which name of the roleBinding must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#namespace RoleBindingV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#namespace RoleBindingV1#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -982,9 +984,9 @@ class RoleBindingV1RoleRef:
         name: builtins.str,
     ) -> None:
         """
-        :param api_group: The API group of the user. The only value possible at the moment is ``rbac.authorization.k8s.io``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#api_group RoleBindingV1#api_group}
-        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#kind RoleBindingV1#kind}
-        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#name RoleBindingV1#name}
+        :param api_group: The API group of the user. The only value possible at the moment is ``rbac.authorization.k8s.io``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#api_group RoleBindingV1#api_group}
+        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#kind RoleBindingV1#kind}
+        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#name RoleBindingV1#name}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1011,7 +1013,7 @@ class RoleBindingV1RoleRef:
     def api_group(self) -> builtins.str:
         """The API group of the user. The only value possible at the moment is ``rbac.authorization.k8s.io``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#api_group RoleBindingV1#api_group}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#api_group RoleBindingV1#api_group}
         """
         result = self._values.get("api_group")
         assert result is not None, "Required property 'api_group' is missing"
@@ -1021,7 +1023,7 @@ class RoleBindingV1RoleRef:
     def kind(self) -> builtins.str:
         """The kind of resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#kind RoleBindingV1#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#kind RoleBindingV1#kind}
         """
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -1031,7 +1033,7 @@ class RoleBindingV1RoleRef:
     def name(self) -> builtins.str:
         """The name of the User to bind to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#name RoleBindingV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#name RoleBindingV1#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1183,10 +1185,10 @@ class RoleBindingV1Subject:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#kind RoleBindingV1#kind}
-        :param name: The name of the resource to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#name RoleBindingV1#name}
-        :param api_group: The API group of the subject resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#api_group RoleBindingV1#api_group}
-        :param namespace: The Namespace of the subject resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#namespace RoleBindingV1#namespace}
+        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#kind RoleBindingV1#kind}
+        :param name: The name of the resource to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#name RoleBindingV1#name}
+        :param api_group: The API group of the subject resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#api_group RoleBindingV1#api_group}
+        :param namespace: The Namespace of the subject resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#namespace RoleBindingV1#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1221,7 +1223,7 @@ class RoleBindingV1Subject:
     def kind(self) -> builtins.str:
         """The kind of resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#kind RoleBindingV1#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#kind RoleBindingV1#kind}
         """
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -1231,7 +1233,7 @@ class RoleBindingV1Subject:
     def name(self) -> builtins.str:
         """The name of the resource to bind to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#name RoleBindingV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#name RoleBindingV1#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1241,7 +1243,7 @@ class RoleBindingV1Subject:
     def api_group(self) -> typing.Optional[builtins.str]:
         """The API group of the subject resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#api_group RoleBindingV1#api_group}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#api_group RoleBindingV1#api_group}
         """
         result = self._values.get("api_group")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1250,7 +1252,7 @@ class RoleBindingV1Subject:
     def namespace(self) -> typing.Optional[builtins.str]:
         """The Namespace of the subject resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/role_binding_v1#namespace RoleBindingV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_binding_v1#namespace RoleBindingV1#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)

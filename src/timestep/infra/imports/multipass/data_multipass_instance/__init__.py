@@ -1,7 +1,7 @@
 """
 # `data_multipass_instance`
 
-Refer to the Terraform Registory for docs: [`data_multipass_instance`](https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance).
+Refer to the Terraform Registory for docs: [`data_multipass_instance`](https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/data-sources/instance).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class DataMultipassInstance(
@@ -24,7 +26,7 @@ class DataMultipassInstance(
     metaclass=jsii.JSIIMeta,
     jsii_type="multipass.dataMultipassInstance.DataMultipassInstance",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance multipass_instance}."""
+    """Represents a {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/data-sources/instance multipass_instance}."""
 
     def __init__(
         self,
@@ -77,11 +79,11 @@ class DataMultipassInstance(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance multipass_instance} Data Source.
+        """Create a new {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/data-sources/instance multipass_instance} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param name: Instance name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance#name DataMultipassInstance#name}
+        :param name: Instance name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/data-sources/instance#name DataMultipassInstance#name}
         :param connection:
         :param count:
         :param depends_on:
@@ -237,7 +239,7 @@ class DataMultipassInstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param name: Instance name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance#name DataMultipassInstance#name}
+        :param name: Instance name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/data-sources/instance#name DataMultipassInstance#name}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -406,7 +408,7 @@ class DataMultipassInstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def name(self) -> builtins.str:
         """Instance name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/data-sources/instance#name DataMultipassInstance#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/data-sources/instance#name DataMultipassInstance#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"

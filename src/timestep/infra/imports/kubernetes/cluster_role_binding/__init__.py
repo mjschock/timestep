@@ -1,7 +1,7 @@
 """
 # `kubernetes_cluster_role_binding`
 
-Refer to the Terraform Registory for docs: [`kubernetes_cluster_role_binding`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding).
+Refer to the Terraform Registory for docs: [`kubernetes_cluster_role_binding`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class ClusterRoleBinding(
@@ -24,7 +26,7 @@ class ClusterRoleBinding(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.clusterRoleBinding.ClusterRoleBinding",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding kubernetes_cluster_role_binding}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding kubernetes_cluster_role_binding}."""
 
     def __init__(
         self,
@@ -91,14 +93,14 @@ class ClusterRoleBinding(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding kubernetes_cluster_role_binding} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding kubernetes_cluster_role_binding} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#metadata ClusterRoleBinding#metadata}
-        :param role_ref: role_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#role_ref ClusterRoleBinding#role_ref}
-        :param subject: subject block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#subject ClusterRoleBinding#subject}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#id ClusterRoleBinding#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#metadata ClusterRoleBinding#metadata}
+        :param role_ref: role_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#role_ref ClusterRoleBinding#role_ref}
+        :param subject: subject block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#subject ClusterRoleBinding#subject}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#id ClusterRoleBinding#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection:
         :param count:
         :param depends_on:
@@ -143,10 +145,10 @@ class ClusterRoleBinding(
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the clusterRoleBinding that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#annotations ClusterRoleBinding#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#generate_name ClusterRoleBinding#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the clusterRoleBinding. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#labels ClusterRoleBinding#labels}
-        :param name: Name of the clusterRoleBinding, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
+        :param annotations: An unstructured key value map stored with the clusterRoleBinding that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#annotations ClusterRoleBinding#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#generate_name ClusterRoleBinding#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the clusterRoleBinding. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#labels ClusterRoleBinding#labels}
+        :param name: Name of the clusterRoleBinding, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
         """
         value = ClusterRoleBindingMetadata(
             annotations=annotations,
@@ -166,9 +168,9 @@ class ClusterRoleBinding(
         name: builtins.str,
     ) -> None:
         """
-        :param api_group: The API group of the user. The only value possible at the moment is ``rbac.authorization.k8s.io``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#api_group ClusterRoleBinding#api_group}
-        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#kind ClusterRoleBinding#kind}
-        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
+        :param api_group: The API group of the user. The only value possible at the moment is ``rbac.authorization.k8s.io``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#api_group ClusterRoleBinding#api_group}
+        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#kind ClusterRoleBinding#kind}
+        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
         """
         value = ClusterRoleBindingRoleRef(api_group=api_group, kind=kind, name=name)
 
@@ -378,10 +380,10 @@ class ClusterRoleBindingConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#metadata ClusterRoleBinding#metadata}
-        :param role_ref: role_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#role_ref ClusterRoleBinding#role_ref}
-        :param subject: subject block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#subject ClusterRoleBinding#subject}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#id ClusterRoleBinding#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#metadata ClusterRoleBinding#metadata}
+        :param role_ref: role_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#role_ref ClusterRoleBinding#role_ref}
+        :param subject: subject block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#subject ClusterRoleBinding#subject}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#id ClusterRoleBinding#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -571,7 +573,7 @@ class ClusterRoleBindingConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "ClusterRoleBindingMetadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#metadata ClusterRoleBinding#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#metadata ClusterRoleBinding#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -581,7 +583,7 @@ class ClusterRoleBindingConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def role_ref(self) -> "ClusterRoleBindingRoleRef":
         """role_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#role_ref ClusterRoleBinding#role_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#role_ref ClusterRoleBinding#role_ref}
         """
         result = self._values.get("role_ref")
         assert result is not None, "Required property 'role_ref' is missing"
@@ -595,7 +597,7 @@ class ClusterRoleBindingConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ]:
         """subject block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#subject ClusterRoleBinding#subject}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#subject ClusterRoleBinding#subject}
         """
         result = self._values.get("subject")
         assert result is not None, "Required property 'subject' is missing"
@@ -608,7 +610,7 @@ class ClusterRoleBindingConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#id ClusterRoleBinding#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#id ClusterRoleBinding#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -648,10 +650,10 @@ class ClusterRoleBindingMetadata:
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the clusterRoleBinding that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#annotations ClusterRoleBinding#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#generate_name ClusterRoleBinding#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the clusterRoleBinding. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#labels ClusterRoleBinding#labels}
-        :param name: Name of the clusterRoleBinding, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
+        :param annotations: An unstructured key value map stored with the clusterRoleBinding that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#annotations ClusterRoleBinding#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#generate_name ClusterRoleBinding#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the clusterRoleBinding. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#labels ClusterRoleBinding#labels}
+        :param name: Name of the clusterRoleBinding, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -693,7 +695,7 @@ class ClusterRoleBindingMetadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#annotations ClusterRoleBinding#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#annotations ClusterRoleBinding#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -706,7 +708,7 @@ class ClusterRoleBindingMetadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#generate_name ClusterRoleBinding#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#generate_name ClusterRoleBinding#generate_name}
         """
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -717,7 +719,7 @@ class ClusterRoleBindingMetadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#labels ClusterRoleBinding#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#labels ClusterRoleBinding#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -728,7 +730,7 @@ class ClusterRoleBindingMetadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the clusterRoleBinding, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -942,9 +944,9 @@ class ClusterRoleBindingRoleRef:
         name: builtins.str,
     ) -> None:
         """
-        :param api_group: The API group of the user. The only value possible at the moment is ``rbac.authorization.k8s.io``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#api_group ClusterRoleBinding#api_group}
-        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#kind ClusterRoleBinding#kind}
-        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
+        :param api_group: The API group of the user. The only value possible at the moment is ``rbac.authorization.k8s.io``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#api_group ClusterRoleBinding#api_group}
+        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#kind ClusterRoleBinding#kind}
+        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -971,7 +973,7 @@ class ClusterRoleBindingRoleRef:
     def api_group(self) -> builtins.str:
         """The API group of the user. The only value possible at the moment is ``rbac.authorization.k8s.io``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#api_group ClusterRoleBinding#api_group}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#api_group ClusterRoleBinding#api_group}
         """
         result = self._values.get("api_group")
         assert result is not None, "Required property 'api_group' is missing"
@@ -981,7 +983,7 @@ class ClusterRoleBindingRoleRef:
     def kind(self) -> builtins.str:
         """The kind of resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#kind ClusterRoleBinding#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#kind ClusterRoleBinding#kind}
         """
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -991,7 +993,7 @@ class ClusterRoleBindingRoleRef:
     def name(self) -> builtins.str:
         """The name of the User to bind to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1143,10 +1145,10 @@ class ClusterRoleBindingSubject:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#kind ClusterRoleBinding#kind}
-        :param name: The name of the resource to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
-        :param api_group: The API group of the subject resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#api_group ClusterRoleBinding#api_group}
-        :param namespace: The Namespace of the subject resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#namespace ClusterRoleBinding#namespace}
+        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#kind ClusterRoleBinding#kind}
+        :param name: The name of the resource to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
+        :param api_group: The API group of the subject resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#api_group ClusterRoleBinding#api_group}
+        :param namespace: The Namespace of the subject resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#namespace ClusterRoleBinding#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1181,7 +1183,7 @@ class ClusterRoleBindingSubject:
     def kind(self) -> builtins.str:
         """The kind of resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#kind ClusterRoleBinding#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#kind ClusterRoleBinding#kind}
         """
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -1191,7 +1193,7 @@ class ClusterRoleBindingSubject:
     def name(self) -> builtins.str:
         """The name of the resource to bind to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#name ClusterRoleBinding#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1201,7 +1203,7 @@ class ClusterRoleBindingSubject:
     def api_group(self) -> typing.Optional[builtins.str]:
         """The API group of the subject resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#api_group ClusterRoleBinding#api_group}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#api_group ClusterRoleBinding#api_group}
         """
         result = self._values.get("api_group")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1210,7 +1212,7 @@ class ClusterRoleBindingSubject:
     def namespace(self) -> typing.Optional[builtins.str]:
         """The Namespace of the subject resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/cluster_role_binding#namespace ClusterRoleBinding#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role_binding#namespace ClusterRoleBinding#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)

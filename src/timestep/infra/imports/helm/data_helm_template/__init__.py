@@ -1,7 +1,7 @@
 """
 # `data_helm_template`
 
-Refer to the Terraform Registory for docs: [`data_helm_template`](https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template).
+Refer to the Terraform Registory for docs: [`data_helm_template`](https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class DataHelmTemplate(
@@ -24,7 +26,7 @@ class DataHelmTemplate(
     metaclass=jsii.JSIIMeta,
     jsii_type="helm.dataHelmTemplate.DataHelmTemplate",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template helm_template}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template helm_template}."""
 
     def __init__(
         self,
@@ -200,55 +202,55 @@ class DataHelmTemplate(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template helm_template} Data Source.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template helm_template} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param chart: Chart name to be installed. A path may be used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#chart DataHelmTemplate#chart}
-        :param name: Release name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}
-        :param api_versions: Kubernetes api versions used for Capabilities.APIVersions. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#api_versions DataHelmTemplate#api_versions}
-        :param atomic: If set, installation process purges chart on fail. The wait flag will be set automatically if atomic is used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#atomic DataHelmTemplate#atomic}
-        :param crds: List of rendered CRDs from the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#crds DataHelmTemplate#crds}
-        :param create_namespace: Create the namespace if it does not exist. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#create_namespace DataHelmTemplate#create_namespace}
-        :param dependency_update: Run helm dependency update before installing the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#dependency_update DataHelmTemplate#dependency_update}
-        :param description: Add a custom description. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#description DataHelmTemplate#description}
-        :param devel: Use chart development versions, too. Equivalent to version '>0.0.0-0'. If ``version`` is set, this is ignored. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#devel DataHelmTemplate#devel}
-        :param disable_openapi_validation: If set, the installation process will not validate rendered templates against the Kubernetes OpenAPI Schema. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#disable_openapi_validation DataHelmTemplate#disable_openapi_validation}
-        :param disable_webhooks: Prevent hooks from running. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#disable_webhooks DataHelmTemplate#disable_webhooks}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#id DataHelmTemplate#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param include_crds: Include CRDs in the templated output. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#include_crds DataHelmTemplate#include_crds}
-        :param is_upgrade: Set .Release.IsUpgrade instead of .Release.IsInstall. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#is_upgrade DataHelmTemplate#is_upgrade}
-        :param keyring: Location of public keys used for verification. Used only if ``verify`` is true. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#keyring DataHelmTemplate#keyring}
-        :param kube_version: Kubernetes version used for Capabilities.KubeVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#kube_version DataHelmTemplate#kube_version}
-        :param manifest: Concatenated rendered chart templates. This corresponds to the output of the ``helm template`` command. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#manifest DataHelmTemplate#manifest}
-        :param manifests: Map of rendered chart templates indexed by the template name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#manifests DataHelmTemplate#manifests}
-        :param namespace: Namespace to install the release into. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#namespace DataHelmTemplate#namespace}
-        :param notes: Rendered notes if the chart contains a ``NOTES.txt``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#notes DataHelmTemplate#notes}
-        :param pass_credentials: Pass credentials to all domains. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#pass_credentials DataHelmTemplate#pass_credentials}
-        :param postrender: postrender block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#postrender DataHelmTemplate#postrender}
-        :param render_subchart_notes: If set, render subchart notes along with the parent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#render_subchart_notes DataHelmTemplate#render_subchart_notes}
-        :param replace: Re-use the given name, even if that name is already used. This is unsafe in production. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#replace DataHelmTemplate#replace}
-        :param repository: Repository where to locate the requested chart. If is a URL the chart is installed without installing the repository. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository DataHelmTemplate#repository}
-        :param repository_ca_file: The Repositories CA File. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_ca_file DataHelmTemplate#repository_ca_file}
-        :param repository_cert_file: The repositories cert file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_cert_file DataHelmTemplate#repository_cert_file}
-        :param repository_key_file: The repositories cert key file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_key_file DataHelmTemplate#repository_key_file}
-        :param repository_password: Password for HTTP basic authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_password DataHelmTemplate#repository_password}
-        :param repository_username: Username for HTTP basic authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_username DataHelmTemplate#repository_username}
-        :param reset_values: When upgrading, reset the values to the ones built into the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#reset_values DataHelmTemplate#reset_values}
-        :param reuse_values: When upgrading, reuse the last release's values and merge in any overrides. If 'reset_values' is specified, this is ignored. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#reuse_values DataHelmTemplate#reuse_values}
-        :param set: set block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set DataHelmTemplate#set}
-        :param set_list: set_list block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set_list DataHelmTemplate#set_list}
-        :param set_sensitive: set_sensitive block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set_sensitive DataHelmTemplate#set_sensitive}
-        :param set_string: set_string block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set_string DataHelmTemplate#set_string}
-        :param show_only: Only show manifests rendered from the given templates. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#show_only DataHelmTemplate#show_only}
-        :param skip_crds: If set, no CRDs will be installed. By default, CRDs are installed if not already present. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#skip_crds DataHelmTemplate#skip_crds}
-        :param skip_tests: If set, tests will not be rendered. By default, tests are rendered. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#skip_tests DataHelmTemplate#skip_tests}
-        :param timeout: Time in seconds to wait for any individual kubernetes operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#timeout DataHelmTemplate#timeout}
-        :param validate: Validate your manifests against the Kubernetes cluster you are currently pointing at. This is the same validation performed on an install Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#validate DataHelmTemplate#validate}
-        :param values: List of values in raw yaml format to pass to helm. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#values DataHelmTemplate#values}
-        :param verify: Verify the package before installing it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#verify DataHelmTemplate#verify}
-        :param version: Specify the exact chart version to install. If this is not specified, the latest version is installed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#version DataHelmTemplate#version}
-        :param wait: Will wait until all resources are in a ready state before marking the release as successful. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#wait DataHelmTemplate#wait}
+        :param chart: Chart name to be installed. A path may be used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#chart DataHelmTemplate#chart}
+        :param name: Release name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}
+        :param api_versions: Kubernetes api versions used for Capabilities.APIVersions. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#api_versions DataHelmTemplate#api_versions}
+        :param atomic: If set, installation process purges chart on fail. The wait flag will be set automatically if atomic is used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#atomic DataHelmTemplate#atomic}
+        :param crds: List of rendered CRDs from the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#crds DataHelmTemplate#crds}
+        :param create_namespace: Create the namespace if it does not exist. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#create_namespace DataHelmTemplate#create_namespace}
+        :param dependency_update: Run helm dependency update before installing the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#dependency_update DataHelmTemplate#dependency_update}
+        :param description: Add a custom description. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#description DataHelmTemplate#description}
+        :param devel: Use chart development versions, too. Equivalent to version '>0.0.0-0'. If ``version`` is set, this is ignored. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#devel DataHelmTemplate#devel}
+        :param disable_openapi_validation: If set, the installation process will not validate rendered templates against the Kubernetes OpenAPI Schema. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#disable_openapi_validation DataHelmTemplate#disable_openapi_validation}
+        :param disable_webhooks: Prevent hooks from running. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#disable_webhooks DataHelmTemplate#disable_webhooks}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#id DataHelmTemplate#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param include_crds: Include CRDs in the templated output. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#include_crds DataHelmTemplate#include_crds}
+        :param is_upgrade: Set .Release.IsUpgrade instead of .Release.IsInstall. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#is_upgrade DataHelmTemplate#is_upgrade}
+        :param keyring: Location of public keys used for verification. Used only if ``verify`` is true. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#keyring DataHelmTemplate#keyring}
+        :param kube_version: Kubernetes version used for Capabilities.KubeVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#kube_version DataHelmTemplate#kube_version}
+        :param manifest: Concatenated rendered chart templates. This corresponds to the output of the ``helm template`` command. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#manifest DataHelmTemplate#manifest}
+        :param manifests: Map of rendered chart templates indexed by the template name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#manifests DataHelmTemplate#manifests}
+        :param namespace: Namespace to install the release into. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#namespace DataHelmTemplate#namespace}
+        :param notes: Rendered notes if the chart contains a ``NOTES.txt``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#notes DataHelmTemplate#notes}
+        :param pass_credentials: Pass credentials to all domains. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#pass_credentials DataHelmTemplate#pass_credentials}
+        :param postrender: postrender block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#postrender DataHelmTemplate#postrender}
+        :param render_subchart_notes: If set, render subchart notes along with the parent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#render_subchart_notes DataHelmTemplate#render_subchart_notes}
+        :param replace: Re-use the given name, even if that name is already used. This is unsafe in production. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#replace DataHelmTemplate#replace}
+        :param repository: Repository where to locate the requested chart. If is a URL the chart is installed without installing the repository. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository DataHelmTemplate#repository}
+        :param repository_ca_file: The Repositories CA File. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_ca_file DataHelmTemplate#repository_ca_file}
+        :param repository_cert_file: The repositories cert file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_cert_file DataHelmTemplate#repository_cert_file}
+        :param repository_key_file: The repositories cert key file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_key_file DataHelmTemplate#repository_key_file}
+        :param repository_password: Password for HTTP basic authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_password DataHelmTemplate#repository_password}
+        :param repository_username: Username for HTTP basic authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_username DataHelmTemplate#repository_username}
+        :param reset_values: When upgrading, reset the values to the ones built into the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#reset_values DataHelmTemplate#reset_values}
+        :param reuse_values: When upgrading, reuse the last release's values and merge in any overrides. If 'reset_values' is specified, this is ignored. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#reuse_values DataHelmTemplate#reuse_values}
+        :param set: set block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set DataHelmTemplate#set}
+        :param set_list: set_list block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set_list DataHelmTemplate#set_list}
+        :param set_sensitive: set_sensitive block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set_sensitive DataHelmTemplate#set_sensitive}
+        :param set_string: set_string block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set_string DataHelmTemplate#set_string}
+        :param show_only: Only show manifests rendered from the given templates. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#show_only DataHelmTemplate#show_only}
+        :param skip_crds: If set, no CRDs will be installed. By default, CRDs are installed if not already present. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#skip_crds DataHelmTemplate#skip_crds}
+        :param skip_tests: If set, tests will not be rendered. By default, tests are rendered. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#skip_tests DataHelmTemplate#skip_tests}
+        :param timeout: Time in seconds to wait for any individual kubernetes operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#timeout DataHelmTemplate#timeout}
+        :param validate: Validate your manifests against the Kubernetes cluster you are currently pointing at. This is the same validation performed on an install Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#validate DataHelmTemplate#validate}
+        :param values: List of values in raw yaml format to pass to helm. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#values DataHelmTemplate#values}
+        :param verify: Verify the package before installing it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#verify DataHelmTemplate#verify}
+        :param version: Specify the exact chart version to install. If this is not specified, the latest version is installed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#version DataHelmTemplate#version}
+        :param wait: Will wait until all resources are in a ready state before marking the release as successful. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#wait DataHelmTemplate#wait}
         :param connection:
         :param count:
         :param depends_on:
@@ -327,7 +329,7 @@ class DataHelmTemplate(
     @jsii.member(jsii_name="putPostrender")
     def put_postrender(self, *, binary_path: builtins.str) -> None:
         """
-        :param binary_path: The command binary path. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#binary_path DataHelmTemplate#binary_path}
+        :param binary_path: The command binary path. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#binary_path DataHelmTemplate#binary_path}
         """
         value = DataHelmTemplatePostrender(binary_path=binary_path)
 
@@ -2057,51 +2059,51 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param chart: Chart name to be installed. A path may be used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#chart DataHelmTemplate#chart}
-        :param name: Release name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}
-        :param api_versions: Kubernetes api versions used for Capabilities.APIVersions. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#api_versions DataHelmTemplate#api_versions}
-        :param atomic: If set, installation process purges chart on fail. The wait flag will be set automatically if atomic is used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#atomic DataHelmTemplate#atomic}
-        :param crds: List of rendered CRDs from the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#crds DataHelmTemplate#crds}
-        :param create_namespace: Create the namespace if it does not exist. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#create_namespace DataHelmTemplate#create_namespace}
-        :param dependency_update: Run helm dependency update before installing the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#dependency_update DataHelmTemplate#dependency_update}
-        :param description: Add a custom description. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#description DataHelmTemplate#description}
-        :param devel: Use chart development versions, too. Equivalent to version '>0.0.0-0'. If ``version`` is set, this is ignored. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#devel DataHelmTemplate#devel}
-        :param disable_openapi_validation: If set, the installation process will not validate rendered templates against the Kubernetes OpenAPI Schema. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#disable_openapi_validation DataHelmTemplate#disable_openapi_validation}
-        :param disable_webhooks: Prevent hooks from running. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#disable_webhooks DataHelmTemplate#disable_webhooks}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#id DataHelmTemplate#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param include_crds: Include CRDs in the templated output. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#include_crds DataHelmTemplate#include_crds}
-        :param is_upgrade: Set .Release.IsUpgrade instead of .Release.IsInstall. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#is_upgrade DataHelmTemplate#is_upgrade}
-        :param keyring: Location of public keys used for verification. Used only if ``verify`` is true. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#keyring DataHelmTemplate#keyring}
-        :param kube_version: Kubernetes version used for Capabilities.KubeVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#kube_version DataHelmTemplate#kube_version}
-        :param manifest: Concatenated rendered chart templates. This corresponds to the output of the ``helm template`` command. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#manifest DataHelmTemplate#manifest}
-        :param manifests: Map of rendered chart templates indexed by the template name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#manifests DataHelmTemplate#manifests}
-        :param namespace: Namespace to install the release into. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#namespace DataHelmTemplate#namespace}
-        :param notes: Rendered notes if the chart contains a ``NOTES.txt``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#notes DataHelmTemplate#notes}
-        :param pass_credentials: Pass credentials to all domains. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#pass_credentials DataHelmTemplate#pass_credentials}
-        :param postrender: postrender block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#postrender DataHelmTemplate#postrender}
-        :param render_subchart_notes: If set, render subchart notes along with the parent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#render_subchart_notes DataHelmTemplate#render_subchart_notes}
-        :param replace: Re-use the given name, even if that name is already used. This is unsafe in production. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#replace DataHelmTemplate#replace}
-        :param repository: Repository where to locate the requested chart. If is a URL the chart is installed without installing the repository. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository DataHelmTemplate#repository}
-        :param repository_ca_file: The Repositories CA File. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_ca_file DataHelmTemplate#repository_ca_file}
-        :param repository_cert_file: The repositories cert file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_cert_file DataHelmTemplate#repository_cert_file}
-        :param repository_key_file: The repositories cert key file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_key_file DataHelmTemplate#repository_key_file}
-        :param repository_password: Password for HTTP basic authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_password DataHelmTemplate#repository_password}
-        :param repository_username: Username for HTTP basic authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_username DataHelmTemplate#repository_username}
-        :param reset_values: When upgrading, reset the values to the ones built into the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#reset_values DataHelmTemplate#reset_values}
-        :param reuse_values: When upgrading, reuse the last release's values and merge in any overrides. If 'reset_values' is specified, this is ignored. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#reuse_values DataHelmTemplate#reuse_values}
-        :param set: set block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set DataHelmTemplate#set}
-        :param set_list: set_list block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set_list DataHelmTemplate#set_list}
-        :param set_sensitive: set_sensitive block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set_sensitive DataHelmTemplate#set_sensitive}
-        :param set_string: set_string block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set_string DataHelmTemplate#set_string}
-        :param show_only: Only show manifests rendered from the given templates. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#show_only DataHelmTemplate#show_only}
-        :param skip_crds: If set, no CRDs will be installed. By default, CRDs are installed if not already present. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#skip_crds DataHelmTemplate#skip_crds}
-        :param skip_tests: If set, tests will not be rendered. By default, tests are rendered. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#skip_tests DataHelmTemplate#skip_tests}
-        :param timeout: Time in seconds to wait for any individual kubernetes operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#timeout DataHelmTemplate#timeout}
-        :param validate: Validate your manifests against the Kubernetes cluster you are currently pointing at. This is the same validation performed on an install Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#validate DataHelmTemplate#validate}
-        :param values: List of values in raw yaml format to pass to helm. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#values DataHelmTemplate#values}
-        :param verify: Verify the package before installing it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#verify DataHelmTemplate#verify}
-        :param version: Specify the exact chart version to install. If this is not specified, the latest version is installed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#version DataHelmTemplate#version}
-        :param wait: Will wait until all resources are in a ready state before marking the release as successful. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#wait DataHelmTemplate#wait}
+        :param chart: Chart name to be installed. A path may be used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#chart DataHelmTemplate#chart}
+        :param name: Release name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}
+        :param api_versions: Kubernetes api versions used for Capabilities.APIVersions. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#api_versions DataHelmTemplate#api_versions}
+        :param atomic: If set, installation process purges chart on fail. The wait flag will be set automatically if atomic is used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#atomic DataHelmTemplate#atomic}
+        :param crds: List of rendered CRDs from the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#crds DataHelmTemplate#crds}
+        :param create_namespace: Create the namespace if it does not exist. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#create_namespace DataHelmTemplate#create_namespace}
+        :param dependency_update: Run helm dependency update before installing the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#dependency_update DataHelmTemplate#dependency_update}
+        :param description: Add a custom description. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#description DataHelmTemplate#description}
+        :param devel: Use chart development versions, too. Equivalent to version '>0.0.0-0'. If ``version`` is set, this is ignored. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#devel DataHelmTemplate#devel}
+        :param disable_openapi_validation: If set, the installation process will not validate rendered templates against the Kubernetes OpenAPI Schema. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#disable_openapi_validation DataHelmTemplate#disable_openapi_validation}
+        :param disable_webhooks: Prevent hooks from running. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#disable_webhooks DataHelmTemplate#disable_webhooks}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#id DataHelmTemplate#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param include_crds: Include CRDs in the templated output. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#include_crds DataHelmTemplate#include_crds}
+        :param is_upgrade: Set .Release.IsUpgrade instead of .Release.IsInstall. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#is_upgrade DataHelmTemplate#is_upgrade}
+        :param keyring: Location of public keys used for verification. Used only if ``verify`` is true. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#keyring DataHelmTemplate#keyring}
+        :param kube_version: Kubernetes version used for Capabilities.KubeVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#kube_version DataHelmTemplate#kube_version}
+        :param manifest: Concatenated rendered chart templates. This corresponds to the output of the ``helm template`` command. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#manifest DataHelmTemplate#manifest}
+        :param manifests: Map of rendered chart templates indexed by the template name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#manifests DataHelmTemplate#manifests}
+        :param namespace: Namespace to install the release into. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#namespace DataHelmTemplate#namespace}
+        :param notes: Rendered notes if the chart contains a ``NOTES.txt``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#notes DataHelmTemplate#notes}
+        :param pass_credentials: Pass credentials to all domains. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#pass_credentials DataHelmTemplate#pass_credentials}
+        :param postrender: postrender block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#postrender DataHelmTemplate#postrender}
+        :param render_subchart_notes: If set, render subchart notes along with the parent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#render_subchart_notes DataHelmTemplate#render_subchart_notes}
+        :param replace: Re-use the given name, even if that name is already used. This is unsafe in production. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#replace DataHelmTemplate#replace}
+        :param repository: Repository where to locate the requested chart. If is a URL the chart is installed without installing the repository. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository DataHelmTemplate#repository}
+        :param repository_ca_file: The Repositories CA File. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_ca_file DataHelmTemplate#repository_ca_file}
+        :param repository_cert_file: The repositories cert file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_cert_file DataHelmTemplate#repository_cert_file}
+        :param repository_key_file: The repositories cert key file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_key_file DataHelmTemplate#repository_key_file}
+        :param repository_password: Password for HTTP basic authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_password DataHelmTemplate#repository_password}
+        :param repository_username: Username for HTTP basic authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_username DataHelmTemplate#repository_username}
+        :param reset_values: When upgrading, reset the values to the ones built into the chart. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#reset_values DataHelmTemplate#reset_values}
+        :param reuse_values: When upgrading, reuse the last release's values and merge in any overrides. If 'reset_values' is specified, this is ignored. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#reuse_values DataHelmTemplate#reuse_values}
+        :param set: set block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set DataHelmTemplate#set}
+        :param set_list: set_list block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set_list DataHelmTemplate#set_list}
+        :param set_sensitive: set_sensitive block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set_sensitive DataHelmTemplate#set_sensitive}
+        :param set_string: set_string block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set_string DataHelmTemplate#set_string}
+        :param show_only: Only show manifests rendered from the given templates. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#show_only DataHelmTemplate#show_only}
+        :param skip_crds: If set, no CRDs will be installed. By default, CRDs are installed if not already present. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#skip_crds DataHelmTemplate#skip_crds}
+        :param skip_tests: If set, tests will not be rendered. By default, tests are rendered. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#skip_tests DataHelmTemplate#skip_tests}
+        :param timeout: Time in seconds to wait for any individual kubernetes operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#timeout DataHelmTemplate#timeout}
+        :param validate: Validate your manifests against the Kubernetes cluster you are currently pointing at. This is the same validation performed on an install Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#validate DataHelmTemplate#validate}
+        :param values: List of values in raw yaml format to pass to helm. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#values DataHelmTemplate#values}
+        :param verify: Verify the package before installing it. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#verify DataHelmTemplate#verify}
+        :param version: Specify the exact chart version to install. If this is not specified, the latest version is installed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#version DataHelmTemplate#version}
+        :param wait: Will wait until all resources are in a ready state before marking the release as successful. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#wait DataHelmTemplate#wait}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -2563,7 +2565,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def chart(self) -> builtins.str:
         """Chart name to be installed. A path may be used.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#chart DataHelmTemplate#chart}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#chart DataHelmTemplate#chart}
         """
         result = self._values.get("chart")
         assert result is not None, "Required property 'chart' is missing"
@@ -2573,7 +2575,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def name(self) -> builtins.str:
         """Release name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -2583,7 +2585,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def api_versions(self) -> typing.Optional[typing.List[builtins.str]]:
         """Kubernetes api versions used for Capabilities.APIVersions.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#api_versions DataHelmTemplate#api_versions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#api_versions DataHelmTemplate#api_versions}
         """
         result = self._values.get("api_versions")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2594,7 +2596,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """If set, installation process purges chart on fail. The wait flag will be set automatically if atomic is used.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#atomic DataHelmTemplate#atomic}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#atomic DataHelmTemplate#atomic}
         """
         result = self._values.get("atomic")
         return typing.cast(
@@ -2606,7 +2608,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def crds(self) -> typing.Optional[typing.List[builtins.str]]:
         """List of rendered CRDs from the chart.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#crds DataHelmTemplate#crds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#crds DataHelmTemplate#crds}
         """
         result = self._values.get("crds")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2617,7 +2619,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Create the namespace if it does not exist.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#create_namespace DataHelmTemplate#create_namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#create_namespace DataHelmTemplate#create_namespace}
         """
         result = self._values.get("create_namespace")
         return typing.cast(
@@ -2631,7 +2633,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Run helm dependency update before installing the chart.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#dependency_update DataHelmTemplate#dependency_update}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#dependency_update DataHelmTemplate#dependency_update}
         """
         result = self._values.get("dependency_update")
         return typing.cast(
@@ -2643,7 +2645,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def description(self) -> typing.Optional[builtins.str]:
         """Add a custom description.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#description DataHelmTemplate#description}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#description DataHelmTemplate#description}
         """
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2654,7 +2656,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Use chart development versions, too. Equivalent to version '>0.0.0-0'. If ``version`` is set, this is ignored.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#devel DataHelmTemplate#devel}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#devel DataHelmTemplate#devel}
         """
         result = self._values.get("devel")
         return typing.cast(
@@ -2668,7 +2670,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """If set, the installation process will not validate rendered templates against the Kubernetes OpenAPI Schema.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#disable_openapi_validation DataHelmTemplate#disable_openapi_validation}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#disable_openapi_validation DataHelmTemplate#disable_openapi_validation}
         """
         result = self._values.get("disable_openapi_validation")
         return typing.cast(
@@ -2682,7 +2684,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Prevent hooks from running.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#disable_webhooks DataHelmTemplate#disable_webhooks}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#disable_webhooks DataHelmTemplate#disable_webhooks}
         """
         result = self._values.get("disable_webhooks")
         return typing.cast(
@@ -2692,7 +2694,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#id DataHelmTemplate#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#id DataHelmTemplate#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -2706,7 +2708,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Include CRDs in the templated output.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#include_crds DataHelmTemplate#include_crds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#include_crds DataHelmTemplate#include_crds}
         """
         result = self._values.get("include_crds")
         return typing.cast(
@@ -2720,7 +2722,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Set .Release.IsUpgrade instead of .Release.IsInstall.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#is_upgrade DataHelmTemplate#is_upgrade}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#is_upgrade DataHelmTemplate#is_upgrade}
         """
         result = self._values.get("is_upgrade")
         return typing.cast(
@@ -2732,7 +2734,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def keyring(self) -> typing.Optional[builtins.str]:
         """Location of public keys used for verification. Used only if ``verify`` is true.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#keyring DataHelmTemplate#keyring}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#keyring DataHelmTemplate#keyring}
         """
         result = self._values.get("keyring")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2741,7 +2743,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def kube_version(self) -> typing.Optional[builtins.str]:
         """Kubernetes version used for Capabilities.KubeVersion.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#kube_version DataHelmTemplate#kube_version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#kube_version DataHelmTemplate#kube_version}
         """
         result = self._values.get("kube_version")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2750,7 +2752,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def manifest(self) -> typing.Optional[builtins.str]:
         """Concatenated rendered chart templates. This corresponds to the output of the ``helm template`` command.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#manifest DataHelmTemplate#manifest}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#manifest DataHelmTemplate#manifest}
         """
         result = self._values.get("manifest")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2759,7 +2761,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def manifests(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         """Map of rendered chart templates indexed by the template name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#manifests DataHelmTemplate#manifests}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#manifests DataHelmTemplate#manifests}
         """
         result = self._values.get("manifests")
         return typing.cast(
@@ -2770,7 +2772,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def namespace(self) -> typing.Optional[builtins.str]:
         """Namespace to install the release into.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#namespace DataHelmTemplate#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#namespace DataHelmTemplate#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2779,7 +2781,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def notes(self) -> typing.Optional[builtins.str]:
         """Rendered notes if the chart contains a ``NOTES.txt``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#notes DataHelmTemplate#notes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#notes DataHelmTemplate#notes}
         """
         result = self._values.get("notes")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2790,7 +2792,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Pass credentials to all domains.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#pass_credentials DataHelmTemplate#pass_credentials}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#pass_credentials DataHelmTemplate#pass_credentials}
         """
         result = self._values.get("pass_credentials")
         return typing.cast(
@@ -2802,7 +2804,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def postrender(self) -> typing.Optional["DataHelmTemplatePostrender"]:
         """postrender block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#postrender DataHelmTemplate#postrender}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#postrender DataHelmTemplate#postrender}
         """
         result = self._values.get("postrender")
         return typing.cast(typing.Optional["DataHelmTemplatePostrender"], result)
@@ -2813,7 +2815,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """If set, render subchart notes along with the parent.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#render_subchart_notes DataHelmTemplate#render_subchart_notes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#render_subchart_notes DataHelmTemplate#render_subchart_notes}
         """
         result = self._values.get("render_subchart_notes")
         return typing.cast(
@@ -2827,7 +2829,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Re-use the given name, even if that name is already used. This is unsafe in production.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#replace DataHelmTemplate#replace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#replace DataHelmTemplate#replace}
         """
         result = self._values.get("replace")
         return typing.cast(
@@ -2839,7 +2841,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def repository(self) -> typing.Optional[builtins.str]:
         """Repository where to locate the requested chart. If is a URL the chart is installed without installing the repository.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository DataHelmTemplate#repository}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository DataHelmTemplate#repository}
         """
         result = self._values.get("repository")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2848,7 +2850,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def repository_ca_file(self) -> typing.Optional[builtins.str]:
         """The Repositories CA File.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_ca_file DataHelmTemplate#repository_ca_file}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_ca_file DataHelmTemplate#repository_ca_file}
         """
         result = self._values.get("repository_ca_file")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2857,7 +2859,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def repository_cert_file(self) -> typing.Optional[builtins.str]:
         """The repositories cert file.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_cert_file DataHelmTemplate#repository_cert_file}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_cert_file DataHelmTemplate#repository_cert_file}
         """
         result = self._values.get("repository_cert_file")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2866,7 +2868,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def repository_key_file(self) -> typing.Optional[builtins.str]:
         """The repositories cert key file.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_key_file DataHelmTemplate#repository_key_file}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_key_file DataHelmTemplate#repository_key_file}
         """
         result = self._values.get("repository_key_file")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2875,7 +2877,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def repository_password(self) -> typing.Optional[builtins.str]:
         """Password for HTTP basic authentication.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_password DataHelmTemplate#repository_password}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_password DataHelmTemplate#repository_password}
         """
         result = self._values.get("repository_password")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2884,7 +2886,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def repository_username(self) -> typing.Optional[builtins.str]:
         """Username for HTTP basic authentication.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#repository_username DataHelmTemplate#repository_username}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#repository_username DataHelmTemplate#repository_username}
         """
         result = self._values.get("repository_username")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2895,7 +2897,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """When upgrading, reset the values to the ones built into the chart.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#reset_values DataHelmTemplate#reset_values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#reset_values DataHelmTemplate#reset_values}
         """
         result = self._values.get("reset_values")
         return typing.cast(
@@ -2909,7 +2911,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """When upgrading, reuse the last release's values and merge in any overrides. If 'reset_values' is specified, this is ignored.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#reuse_values DataHelmTemplate#reuse_values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#reuse_values DataHelmTemplate#reuse_values}
         """
         result = self._values.get("reuse_values")
         return typing.cast(
@@ -2925,7 +2927,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ]:
         """set block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set DataHelmTemplate#set}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set DataHelmTemplate#set}
         """
         result = self._values.get("set")
         return typing.cast(
@@ -2947,7 +2949,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ]:
         """set_list block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set_list DataHelmTemplate#set_list}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set_list DataHelmTemplate#set_list}
         """
         result = self._values.get("set_list")
         return typing.cast(
@@ -2970,7 +2972,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ]:
         """set_sensitive block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set_sensitive DataHelmTemplate#set_sensitive}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set_sensitive DataHelmTemplate#set_sensitive}
         """
         result = self._values.get("set_sensitive")
         return typing.cast(
@@ -2993,7 +2995,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ]:
         """set_string block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#set_string DataHelmTemplate#set_string}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#set_string DataHelmTemplate#set_string}
         """
         result = self._values.get("set_string")
         return typing.cast(
@@ -3010,7 +3012,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def show_only(self) -> typing.Optional[typing.List[builtins.str]]:
         """Only show manifests rendered from the given templates.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#show_only DataHelmTemplate#show_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#show_only DataHelmTemplate#show_only}
         """
         result = self._values.get("show_only")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -3021,7 +3023,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """If set, no CRDs will be installed. By default, CRDs are installed if not already present.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#skip_crds DataHelmTemplate#skip_crds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#skip_crds DataHelmTemplate#skip_crds}
         """
         result = self._values.get("skip_crds")
         return typing.cast(
@@ -3035,7 +3037,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """If set, tests will not be rendered. By default, tests are rendered.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#skip_tests DataHelmTemplate#skip_tests}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#skip_tests DataHelmTemplate#skip_tests}
         """
         result = self._values.get("skip_tests")
         return typing.cast(
@@ -3047,7 +3049,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def timeout(self) -> typing.Optional[jsii.Number]:
         """Time in seconds to wait for any individual kubernetes operation.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#timeout DataHelmTemplate#timeout}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#timeout DataHelmTemplate#timeout}
         """
         result = self._values.get("timeout")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -3060,7 +3062,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
         This is the same validation performed on an install
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#validate DataHelmTemplate#validate}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#validate DataHelmTemplate#validate}
         """
         result = self._values.get("validate")
         return typing.cast(
@@ -3072,7 +3074,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def values(self) -> typing.Optional[typing.List[builtins.str]]:
         """List of values in raw yaml format to pass to helm.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#values DataHelmTemplate#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#values DataHelmTemplate#values}
         """
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -3083,7 +3085,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Verify the package before installing it.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#verify DataHelmTemplate#verify}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#verify DataHelmTemplate#verify}
         """
         result = self._values.get("verify")
         return typing.cast(
@@ -3095,7 +3097,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def version(self) -> typing.Optional[builtins.str]:
         """Specify the exact chart version to install. If this is not specified, the latest version is installed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#version DataHelmTemplate#version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#version DataHelmTemplate#version}
         """
         result = self._values.get("version")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3106,7 +3108,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Will wait until all resources are in a ready state before marking the release as successful.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#wait DataHelmTemplate#wait}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#wait DataHelmTemplate#wait}
         """
         result = self._values.get("wait")
         return typing.cast(
@@ -3134,7 +3136,7 @@ class DataHelmTemplateConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 class DataHelmTemplatePostrender:
     def __init__(self, *, binary_path: builtins.str) -> None:
         """
-        :param binary_path: The command binary path. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#binary_path DataHelmTemplate#binary_path}
+        :param binary_path: The command binary path. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#binary_path DataHelmTemplate#binary_path}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -3153,7 +3155,7 @@ class DataHelmTemplatePostrender:
     def binary_path(self) -> builtins.str:
         """The command binary path.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#binary_path DataHelmTemplate#binary_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#binary_path DataHelmTemplate#binary_path}
         """
         result = self._values.get("binary_path")
         assert result is not None, "Required property 'binary_path' is missing"
@@ -3260,9 +3262,9 @@ class DataHelmTemplateSet:
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}.
-        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#value DataHelmTemplate#value}.
-        :param type: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#type DataHelmTemplate#type}.
+        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}.
+        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#value DataHelmTemplate#value}.
+        :param type: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#type DataHelmTemplate#type}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -3286,21 +3288,21 @@ class DataHelmTemplateSet:
 
     @builtins.property
     def name(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}."""
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def value(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#value DataHelmTemplate#value}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#value DataHelmTemplate#value}."""
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def type(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#type DataHelmTemplate#type}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#type DataHelmTemplate#type}."""
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -3470,8 +3472,8 @@ class DataHelmTemplateSetListStruct:
         value: typing.Sequence[builtins.str],
     ) -> None:
         """
-        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}.
-        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#value DataHelmTemplate#value}.
+        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}.
+        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#value DataHelmTemplate#value}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -3490,14 +3492,14 @@ class DataHelmTemplateSetListStruct:
 
     @builtins.property
     def name(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}."""
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def value(self) -> typing.List[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#value DataHelmTemplate#value}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#value DataHelmTemplate#value}."""
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
         return typing.cast(typing.List[builtins.str], result)
@@ -3954,9 +3956,9 @@ class DataHelmTemplateSetSensitive:
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}.
-        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#value DataHelmTemplate#value}.
-        :param type: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#type DataHelmTemplate#type}.
+        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}.
+        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#value DataHelmTemplate#value}.
+        :param type: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#type DataHelmTemplate#type}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -3980,21 +3982,21 @@ class DataHelmTemplateSetSensitive:
 
     @builtins.property
     def name(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}."""
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def value(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#value DataHelmTemplate#value}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#value DataHelmTemplate#value}."""
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def type(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#type DataHelmTemplate#type}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#type DataHelmTemplate#type}."""
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -4316,8 +4318,8 @@ class DataHelmTemplateSetSensitiveOutputReference(
 class DataHelmTemplateSetString:
     def __init__(self, *, name: builtins.str, value: builtins.str) -> None:
         """
-        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}.
-        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#value DataHelmTemplate#value}.
+        :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}.
+        :param value: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#value DataHelmTemplate#value}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -4336,14 +4338,14 @@ class DataHelmTemplateSetString:
 
     @builtins.property
     def name(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#name DataHelmTemplate#name}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#name DataHelmTemplate#name}."""
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def value(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs/data-sources/template#value DataHelmTemplate#value}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs/data-sources/template#value DataHelmTemplate#value}."""
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
         return typing.cast(builtins.str, result)
