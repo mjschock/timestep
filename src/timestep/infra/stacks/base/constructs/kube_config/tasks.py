@@ -154,10 +154,22 @@ def get_kube_config_outputs(
         )
 
     else:
-        kube_config_outputs["kubeconfig"] = TerraformOutput(
+        # kube_config_outputs["kubeconfig"] = TerraformOutput(
+        #     scope=scope,
+        #     id="kube_config_outputs_kubeconfig",
+        #     value=kube_config_data_source.inputs_input["kubeconfig"],
+        # )
+
+        kube_config_outputs["config_path"] = TerraformOutput(
             scope=scope,
-            id="kube_config_outputs_kubeconfig",
-            value=kube_config_data_source.inputs_input["kubeconfig"],
+            id="kube_config_outputs_config_path",
+            value=kube_config_data_source.filename,
+        )
+
+        kube_config_outputs["config_context"] = TerraformOutput(
+            scope=scope,
+            id="kube_config_outputs_config_context",
+            value=config.variables.get("kubecontext"),
         )
 
     return kube_config_outputs
