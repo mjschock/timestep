@@ -95,7 +95,9 @@ def get_cloud_instance_resource(
         cloud_instance_ssh_key_resource = SshKey(
             id_="cloud_instance_ssh_key_resource",
             name=f'{config.variables.get("cloud_instance_name")}_ssh_key',
+            provider=cloud_instance_provider,
             public_key=config.variables.get("ssh_public_key"),
+            scope=scope,
         )
         cloud_instance_resource = DigitaloceanDropletTerraformResource(
             id_="cloud_instance_resource",
