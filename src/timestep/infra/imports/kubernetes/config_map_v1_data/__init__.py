@@ -1,7 +1,7 @@
 """
 # `kubernetes_config_map_v1_data`
 
-Refer to the Terraform Registory for docs: [`kubernetes_config_map_v1_data`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data).
+Refer to the Terraform Registory for docs: [`kubernetes_config_map_v1_data`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class ConfigMapV1Data(
@@ -24,7 +26,7 @@ class ConfigMapV1Data(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.configMapV1Data.ConfigMapV1Data",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data kubernetes_config_map_v1_data}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data kubernetes_config_map_v1_data}."""
 
     def __init__(
         self,
@@ -85,15 +87,15 @@ class ConfigMapV1Data(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data kubernetes_config_map_v1_data} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data kubernetes_config_map_v1_data} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param data: The data we want to add to the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#data ConfigMapV1Data#data}
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#metadata ConfigMapV1Data#metadata}
-        :param field_manager: Set the name of the field manager for the specified labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#field_manager ConfigMapV1Data#field_manager}
-        :param force: Force overwriting data that is managed outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#force ConfigMapV1Data#force}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#id ConfigMapV1Data#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param data: The data we want to add to the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#data ConfigMapV1Data#data}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#metadata ConfigMapV1Data#metadata}
+        :param field_manager: Set the name of the field manager for the specified labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#field_manager ConfigMapV1Data#field_manager}
+        :param force: Force overwriting data that is managed outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#force ConfigMapV1Data#force}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#id ConfigMapV1Data#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection:
         :param count:
         :param depends_on:
@@ -137,8 +139,8 @@ class ConfigMapV1Data(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: The name of the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#name ConfigMapV1Data#name}
-        :param namespace: The namespace of the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#namespace ConfigMapV1Data#namespace}
+        :param name: The name of the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#name ConfigMapV1Data#name}
+        :param namespace: The namespace of the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#namespace ConfigMapV1Data#namespace}
         """
         value = ConfigMapV1DataMetadata(name=name, namespace=namespace)
 
@@ -369,11 +371,11 @@ class ConfigMapV1DataConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param data: The data we want to add to the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#data ConfigMapV1Data#data}
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#metadata ConfigMapV1Data#metadata}
-        :param field_manager: Set the name of the field manager for the specified labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#field_manager ConfigMapV1Data#field_manager}
-        :param force: Force overwriting data that is managed outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#force ConfigMapV1Data#force}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#id ConfigMapV1Data#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param data: The data we want to add to the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#data ConfigMapV1Data#data}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#metadata ConfigMapV1Data#metadata}
+        :param field_manager: Set the name of the field manager for the specified labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#field_manager ConfigMapV1Data#field_manager}
+        :param force: Force overwriting data that is managed outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#force ConfigMapV1Data#force}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#id ConfigMapV1Data#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -565,7 +567,7 @@ class ConfigMapV1DataConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def data(self) -> typing.Mapping[builtins.str, builtins.str]:
         """The data we want to add to the ConfigMap.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#data ConfigMapV1Data#data}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#data ConfigMapV1Data#data}
         """
         result = self._values.get("data")
         assert result is not None, "Required property 'data' is missing"
@@ -575,7 +577,7 @@ class ConfigMapV1DataConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "ConfigMapV1DataMetadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#metadata ConfigMapV1Data#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#metadata ConfigMapV1Data#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -585,7 +587,7 @@ class ConfigMapV1DataConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def field_manager(self) -> typing.Optional[builtins.str]:
         """Set the name of the field manager for the specified labels.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#field_manager ConfigMapV1Data#field_manager}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#field_manager ConfigMapV1Data#field_manager}
         """
         result = self._values.get("field_manager")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -596,7 +598,7 @@ class ConfigMapV1DataConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Force overwriting data that is managed outside of Terraform.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#force ConfigMapV1Data#force}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#force ConfigMapV1Data#force}
         """
         result = self._values.get("force")
         return typing.cast(
@@ -606,7 +608,7 @@ class ConfigMapV1DataConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#id ConfigMapV1Data#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#id ConfigMapV1Data#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -639,8 +641,8 @@ class ConfigMapV1DataMetadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param name: The name of the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#name ConfigMapV1Data#name}
-        :param namespace: The namespace of the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#namespace ConfigMapV1Data#namespace}
+        :param name: The name of the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#name ConfigMapV1Data#name}
+        :param namespace: The namespace of the ConfigMap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#namespace ConfigMapV1Data#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -664,7 +666,7 @@ class ConfigMapV1DataMetadata:
     def name(self) -> builtins.str:
         """The name of the ConfigMap.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#name ConfigMapV1Data#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#name ConfigMapV1Data#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -674,7 +676,7 @@ class ConfigMapV1DataMetadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         """The namespace of the ConfigMap.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/config_map_v1_data#namespace ConfigMapV1Data#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/config_map_v1_data#namespace ConfigMapV1Data#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)

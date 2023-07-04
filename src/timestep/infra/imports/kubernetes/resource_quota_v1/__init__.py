@@ -1,7 +1,7 @@
 """
 # `kubernetes_resource_quota_v1`
 
-Refer to the Terraform Registory for docs: [`kubernetes_resource_quota_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1).
+Refer to the Terraform Registory for docs: [`kubernetes_resource_quota_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class ResourceQuotaV1(
@@ -24,7 +26,7 @@ class ResourceQuotaV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.resourceQuotaV1.ResourceQuotaV1",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1 kubernetes_resource_quota_v1}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1 kubernetes_resource_quota_v1}."""
 
     def __init__(
         self,
@@ -88,14 +90,14 @@ class ResourceQuotaV1(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1 kubernetes_resource_quota_v1} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1 kubernetes_resource_quota_v1} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#metadata ResourceQuotaV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#id ResourceQuotaV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#spec ResourceQuotaV1#spec}
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#timeouts ResourceQuotaV1#timeouts}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#metadata ResourceQuotaV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#id ResourceQuotaV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#spec ResourceQuotaV1#spec}
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#timeouts ResourceQuotaV1#timeouts}
         :param connection:
         :param count:
         :param depends_on:
@@ -141,11 +143,11 @@ class ResourceQuotaV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the resource quota that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#annotations ResourceQuotaV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#generate_name ResourceQuotaV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the resource quota. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#labels ResourceQuotaV1#labels}
-        :param name: Name of the resource quota, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#name ResourceQuotaV1#name}
-        :param namespace: Namespace defines the space within which name of the resource quota must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#namespace ResourceQuotaV1#namespace}
+        :param annotations: An unstructured key value map stored with the resource quota that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#annotations ResourceQuotaV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#generate_name ResourceQuotaV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the resource quota. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#labels ResourceQuotaV1#labels}
+        :param name: Name of the resource quota, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#name ResourceQuotaV1#name}
+        :param namespace: Namespace defines the space within which name of the resource quota must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#namespace ResourceQuotaV1#namespace}
         """
         value = ResourceQuotaV1Metadata(
             annotations=annotations,
@@ -171,9 +173,9 @@ class ResourceQuotaV1(
         ] = None,
     ) -> None:
         """
-        :param hard: The set of desired hard limits for each named resource. More info: http://releases.k8s.io/HEAD/docs/design/admission_control_resource_quota.md#admissioncontrol-plugin-resourcequota. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#hard ResourceQuotaV1#hard}
-        :param scopes: A collection of filters that must match each object tracked by a quota. If not specified, the quota matches all objects. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#scopes ResourceQuotaV1#scopes}
-        :param scope_selector: scope_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#scope_selector ResourceQuotaV1#scope_selector}
+        :param hard: The set of desired hard limits for each named resource. More info: http://releases.k8s.io/HEAD/docs/design/admission_control_resource_quota.md#admissioncontrol-plugin-resourcequota. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#hard ResourceQuotaV1#hard}
+        :param scopes: A collection of filters that must match each object tracked by a quota. If not specified, the quota matches all objects. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#scopes ResourceQuotaV1#scopes}
+        :param scope_selector: scope_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#scope_selector ResourceQuotaV1#scope_selector}
         """
         value = ResourceQuotaV1Spec(
             hard=hard, scopes=scopes, scope_selector=scope_selector
@@ -189,8 +191,8 @@ class ResourceQuotaV1(
         update: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#create ResourceQuotaV1#create}.
-        :param update: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#update ResourceQuotaV1#update}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#create ResourceQuotaV1#create}.
+        :param update: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#update ResourceQuotaV1#update}.
         """
         value = ResourceQuotaV1Timeouts(create=create, update=update)
 
@@ -375,10 +377,10 @@ class ResourceQuotaV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#metadata ResourceQuotaV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#id ResourceQuotaV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#spec ResourceQuotaV1#spec}
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#timeouts ResourceQuotaV1#timeouts}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#metadata ResourceQuotaV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#id ResourceQuotaV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#spec ResourceQuotaV1#spec}
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#timeouts ResourceQuotaV1#timeouts}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -570,7 +572,7 @@ class ResourceQuotaV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "ResourceQuotaV1Metadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#metadata ResourceQuotaV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#metadata ResourceQuotaV1#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -578,7 +580,7 @@ class ResourceQuotaV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#id ResourceQuotaV1#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#id ResourceQuotaV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -590,7 +592,7 @@ class ResourceQuotaV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def spec(self) -> typing.Optional["ResourceQuotaV1Spec"]:
         """spec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#spec ResourceQuotaV1#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#spec ResourceQuotaV1#spec}
         """
         result = self._values.get("spec")
         return typing.cast(typing.Optional["ResourceQuotaV1Spec"], result)
@@ -599,7 +601,7 @@ class ResourceQuotaV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def timeouts(self) -> typing.Optional["ResourceQuotaV1Timeouts"]:
         """timeouts block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#timeouts ResourceQuotaV1#timeouts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#timeouts ResourceQuotaV1#timeouts}
         """
         result = self._values.get("timeouts")
         return typing.cast(typing.Optional["ResourceQuotaV1Timeouts"], result)
@@ -638,11 +640,11 @@ class ResourceQuotaV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the resource quota that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#annotations ResourceQuotaV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#generate_name ResourceQuotaV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the resource quota. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#labels ResourceQuotaV1#labels}
-        :param name: Name of the resource quota, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#name ResourceQuotaV1#name}
-        :param namespace: Namespace defines the space within which name of the resource quota must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#namespace ResourceQuotaV1#namespace}
+        :param annotations: An unstructured key value map stored with the resource quota that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#annotations ResourceQuotaV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#generate_name ResourceQuotaV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the resource quota. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#labels ResourceQuotaV1#labels}
+        :param name: Name of the resource quota, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#name ResourceQuotaV1#name}
+        :param namespace: Namespace defines the space within which name of the resource quota must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#namespace ResourceQuotaV1#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -691,7 +693,7 @@ class ResourceQuotaV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#annotations ResourceQuotaV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#annotations ResourceQuotaV1#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -704,7 +706,7 @@ class ResourceQuotaV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#generate_name ResourceQuotaV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#generate_name ResourceQuotaV1#generate_name}
         """
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -715,7 +717,7 @@ class ResourceQuotaV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#labels ResourceQuotaV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#labels ResourceQuotaV1#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -726,7 +728,7 @@ class ResourceQuotaV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the resource quota, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#name ResourceQuotaV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#name ResourceQuotaV1#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -735,7 +737,7 @@ class ResourceQuotaV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Namespace defines the space within which name of the resource quota must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#namespace ResourceQuotaV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#namespace ResourceQuotaV1#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -982,9 +984,9 @@ class ResourceQuotaV1Spec:
         ] = None,
     ) -> None:
         """
-        :param hard: The set of desired hard limits for each named resource. More info: http://releases.k8s.io/HEAD/docs/design/admission_control_resource_quota.md#admissioncontrol-plugin-resourcequota. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#hard ResourceQuotaV1#hard}
-        :param scopes: A collection of filters that must match each object tracked by a quota. If not specified, the quota matches all objects. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#scopes ResourceQuotaV1#scopes}
-        :param scope_selector: scope_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#scope_selector ResourceQuotaV1#scope_selector}
+        :param hard: The set of desired hard limits for each named resource. More info: http://releases.k8s.io/HEAD/docs/design/admission_control_resource_quota.md#admissioncontrol-plugin-resourcequota. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#hard ResourceQuotaV1#hard}
+        :param scopes: A collection of filters that must match each object tracked by a quota. If not specified, the quota matches all objects. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#scopes ResourceQuotaV1#scopes}
+        :param scope_selector: scope_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#scope_selector ResourceQuotaV1#scope_selector}
         """
         if isinstance(scope_selector, dict):
             scope_selector = ResourceQuotaV1SpecScopeSelector(**scope_selector)
@@ -1017,7 +1019,7 @@ class ResourceQuotaV1Spec:
     def hard(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         """The set of desired hard limits for each named resource. More info: http://releases.k8s.io/HEAD/docs/design/admission_control_resource_quota.md#admissioncontrol-plugin-resourcequota.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#hard ResourceQuotaV1#hard}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#hard ResourceQuotaV1#hard}
         """
         result = self._values.get("hard")
         return typing.cast(
@@ -1030,7 +1032,7 @@ class ResourceQuotaV1Spec:
 
         If not specified, the quota matches all objects.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#scopes ResourceQuotaV1#scopes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#scopes ResourceQuotaV1#scopes}
         """
         result = self._values.get("scopes")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1039,7 +1041,7 @@ class ResourceQuotaV1Spec:
     def scope_selector(self) -> typing.Optional["ResourceQuotaV1SpecScopeSelector"]:
         """scope_selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#scope_selector ResourceQuotaV1#scope_selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#scope_selector ResourceQuotaV1#scope_selector}
         """
         result = self._values.get("scope_selector")
         return typing.cast(typing.Optional["ResourceQuotaV1SpecScopeSelector"], result)
@@ -1103,7 +1105,7 @@ class ResourceQuotaV1SpecOutputReference(
         ] = None,
     ) -> None:
         """
-        :param match_expression: match_expression block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#match_expression ResourceQuotaV1#match_expression}
+        :param match_expression: match_expression block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#match_expression ResourceQuotaV1#match_expression}
         """
         value = ResourceQuotaV1SpecScopeSelector(match_expression=match_expression)
 
@@ -1229,7 +1231,7 @@ class ResourceQuotaV1SpecScopeSelector:
         ] = None,
     ) -> None:
         """
-        :param match_expression: match_expression block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#match_expression ResourceQuotaV1#match_expression}
+        :param match_expression: match_expression block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#match_expression ResourceQuotaV1#match_expression}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1255,7 +1257,7 @@ class ResourceQuotaV1SpecScopeSelector:
     ]:
         """match_expression block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#match_expression ResourceQuotaV1#match_expression}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#match_expression ResourceQuotaV1#match_expression}
         """
         result = self._values.get("match_expression")
         return typing.cast(
@@ -1298,9 +1300,9 @@ class ResourceQuotaV1SpecScopeSelectorMatchExpression:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         """
-        :param operator: Represents a scope's relationship to a set of values. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#operator ResourceQuotaV1#operator}
-        :param scope_name: The name of the scope that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#scope_name ResourceQuotaV1#scope_name}
-        :param values: A list of scope selector requirements by scope of the resources. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#values ResourceQuotaV1#values}
+        :param operator: Represents a scope's relationship to a set of values. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#operator ResourceQuotaV1#operator}
+        :param scope_name: The name of the scope that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#scope_name ResourceQuotaV1#scope_name}
+        :param values: A list of scope selector requirements by scope of the resources. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#values ResourceQuotaV1#values}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1332,7 +1334,7 @@ class ResourceQuotaV1SpecScopeSelectorMatchExpression:
     def operator(self) -> builtins.str:
         """Represents a scope's relationship to a set of values.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#operator ResourceQuotaV1#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#operator ResourceQuotaV1#operator}
         """
         result = self._values.get("operator")
         assert result is not None, "Required property 'operator' is missing"
@@ -1342,7 +1344,7 @@ class ResourceQuotaV1SpecScopeSelectorMatchExpression:
     def scope_name(self) -> builtins.str:
         """The name of the scope that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#scope_name ResourceQuotaV1#scope_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#scope_name ResourceQuotaV1#scope_name}
         """
         result = self._values.get("scope_name")
         assert result is not None, "Required property 'scope_name' is missing"
@@ -1352,7 +1354,7 @@ class ResourceQuotaV1SpecScopeSelectorMatchExpression:
     def values(self) -> typing.Optional[typing.List[builtins.str]]:
         """A list of scope selector requirements by scope of the resources.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#values ResourceQuotaV1#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#values ResourceQuotaV1#values}
         """
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1809,8 +1811,8 @@ class ResourceQuotaV1Timeouts:
         update: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#create ResourceQuotaV1#create}.
-        :param update: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#update ResourceQuotaV1#update}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#create ResourceQuotaV1#create}.
+        :param update: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#update ResourceQuotaV1#update}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1834,13 +1836,13 @@ class ResourceQuotaV1Timeouts:
 
     @builtins.property
     def create(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#create ResourceQuotaV1#create}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#create ResourceQuotaV1#create}."""
         result = self._values.get("create")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def update(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/resource_quota_v1#update ResourceQuotaV1#update}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/resource_quota_v1#update ResourceQuotaV1#update}."""
         result = self._values.get("update")
         return typing.cast(typing.Optional[builtins.str], result)
 

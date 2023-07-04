@@ -1,12 +1,14 @@
+default_language_version:
+    python: python3.11
+exclude: ^$|src/timestep/infra/imports
+fail_fast: true
 repos:
   - hooks:
+      - args: [ --fix, --exit-non-zero-on-fix ]
+        id: ruff
+    repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.275
+  - hooks:
       - id: black
-        language_version: python3.11
     repo: https://github.com/psf/black
     rev: 23.3.0
-  - hooks:
-      - args: ["--profile", "black", "--filter-files"]
-        id: isort
-        name: isort (python)
-    repo: https://github.com/pycqa/isort
-    rev: 5.12.0

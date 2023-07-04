@@ -1,7 +1,7 @@
 """
 # `multipass_instance`
 
-Refer to the Terraform Registory for docs: [`multipass_instance`](https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance).
+Refer to the Terraform Registory for docs: [`multipass_instance`](https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class Instance(
@@ -24,7 +26,7 @@ class Instance(
     metaclass=jsii.JSIIMeta,
     jsii_type="multipass.instance.Instance",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance multipass_instance}."""
+    """Represents a {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance multipass_instance}."""
 
     def __init__(
         self,
@@ -82,16 +84,16 @@ class Instance(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance multipass_instance} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance multipass_instance} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param name: Name for the instance. If it is 'primary' (the configured primary instance name), the user's home directory is mounted inside the newly launched instance, in 'Home'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#name Instance#name}
-        :param cloudinit_file: Path to a user-data cloud-init configuration. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#cloudinit_file Instance#cloudinit_file}
-        :param cpus: Number of CPUs to allocate. Minimum: 1, default: 1. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#cpus Instance#cpus}
-        :param disk: Disk space to allocate. Positive integers, in KiB, MiB, GiB or TiB suffix. Minimum: 512MiB, default: 5GiB. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#disk Instance#disk}
-        :param image: Optional image to launch. If omitted, then the default Ubuntu LTS will be used. can be either ‘release’ or ‘daily‘. If is omitted, ‘release’ will be used. can be a partial image hash or an Ubuntu release version, codename or alias. is a custom image URL that is in http://, https://, or file:// format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#image Instance#image}
-        :param memory: Amount of memory to allocate. Positive integers, in KiB, MiB, GiB or TiB suffix. Minimum: 128MiB, default: 1GiB. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#memory Instance#memory}
+        :param name: Name for the instance. If it is 'primary' (the configured primary instance name), the user's home directory is mounted inside the newly launched instance, in 'Home'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#name Instance#name}
+        :param cloudinit_file: Path to a user-data cloud-init configuration. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#cloudinit_file Instance#cloudinit_file}
+        :param cpus: Number of CPUs to allocate. Minimum: 1, default: 1. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#cpus Instance#cpus}
+        :param disk: Disk space to allocate. Positive integers, in KiB, MiB, GiB or TiB suffix. Minimum: 512MiB, default: 5GiB. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#disk Instance#disk}
+        :param image: Optional image to launch. If omitted, then the default Ubuntu LTS will be used. can be either ‘release’ or ‘daily‘. If is omitted, ‘release’ will be used. can be a partial image hash or an Ubuntu release version, codename or alias. is a custom image URL that is in http://, https://, or file:// format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#image Instance#image}
+        :param memory: Amount of memory to allocate. Positive integers, in KiB, MiB, GiB or TiB suffix. Minimum: 128MiB, default: 1GiB. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#memory Instance#memory}
         :param connection:
         :param count:
         :param depends_on:
@@ -369,12 +371,12 @@ class InstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param name: Name for the instance. If it is 'primary' (the configured primary instance name), the user's home directory is mounted inside the newly launched instance, in 'Home'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#name Instance#name}
-        :param cloudinit_file: Path to a user-data cloud-init configuration. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#cloudinit_file Instance#cloudinit_file}
-        :param cpus: Number of CPUs to allocate. Minimum: 1, default: 1. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#cpus Instance#cpus}
-        :param disk: Disk space to allocate. Positive integers, in KiB, MiB, GiB or TiB suffix. Minimum: 512MiB, default: 5GiB. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#disk Instance#disk}
-        :param image: Optional image to launch. If omitted, then the default Ubuntu LTS will be used. can be either ‘release’ or ‘daily‘. If is omitted, ‘release’ will be used. can be a partial image hash or an Ubuntu release version, codename or alias. is a custom image URL that is in http://, https://, or file:// format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#image Instance#image}
-        :param memory: Amount of memory to allocate. Positive integers, in KiB, MiB, GiB or TiB suffix. Minimum: 128MiB, default: 1GiB. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#memory Instance#memory}
+        :param name: Name for the instance. If it is 'primary' (the configured primary instance name), the user's home directory is mounted inside the newly launched instance, in 'Home'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#name Instance#name}
+        :param cloudinit_file: Path to a user-data cloud-init configuration. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#cloudinit_file Instance#cloudinit_file}
+        :param cpus: Number of CPUs to allocate. Minimum: 1, default: 1. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#cpus Instance#cpus}
+        :param disk: Disk space to allocate. Positive integers, in KiB, MiB, GiB or TiB suffix. Minimum: 512MiB, default: 5GiB. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#disk Instance#disk}
+        :param image: Optional image to launch. If omitted, then the default Ubuntu LTS will be used. can be either ‘release’ or ‘daily‘. If is omitted, ‘release’ will be used. can be a partial image hash or an Ubuntu release version, codename or alias. is a custom image URL that is in http://, https://, or file:// format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#image Instance#image}
+        :param memory: Amount of memory to allocate. Positive integers, in KiB, MiB, GiB or TiB suffix. Minimum: 128MiB, default: 1GiB. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#memory Instance#memory}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -574,7 +576,7 @@ class InstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
         If it is 'primary' (the configured primary instance name), the user's home directory is mounted inside the newly launched instance, in 'Home'.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#name Instance#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#name Instance#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -584,7 +586,7 @@ class InstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def cloudinit_file(self) -> typing.Optional[builtins.str]:
         """Path to a user-data cloud-init configuration.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#cloudinit_file Instance#cloudinit_file}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#cloudinit_file Instance#cloudinit_file}
         """
         result = self._values.get("cloudinit_file")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -593,7 +595,7 @@ class InstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def cpus(self) -> typing.Optional[jsii.Number]:
         """Number of CPUs to allocate. Minimum: 1, default: 1.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#cpus Instance#cpus}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#cpus Instance#cpus}
         """
         result = self._values.get("cpus")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -602,7 +604,7 @@ class InstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def disk(self) -> typing.Optional[builtins.str]:
         """Disk space to allocate. Positive integers, in KiB, MiB, GiB or TiB suffix. Minimum: 512MiB, default: 5GiB.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#disk Instance#disk}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#disk Instance#disk}
         """
         result = self._values.get("disk")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -613,7 +615,7 @@ class InstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
         If omitted, then the default Ubuntu LTS will be used.  can be either ‘release’ or ‘daily‘. If  is omitted, ‘release’ will be used.  can be a partial image hash or an Ubuntu release version, codename or alias.  is a custom image URL that is in http://, https://, or file:// format.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#image Instance#image}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#image Instance#image}
         """
         result = self._values.get("image")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -622,7 +624,7 @@ class InstanceConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def memory(self) -> typing.Optional[builtins.str]:
         """Amount of memory to allocate. Positive integers, in KiB, MiB, GiB or TiB suffix. Minimum: 128MiB, default: 1GiB.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.1/docs/resources/instance#memory Instance#memory}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/larstobi/multipass/1.4.2/docs/resources/instance#memory Instance#memory}
         """
         result = self._values.get("memory")
         return typing.cast(typing.Optional[builtins.str], result)

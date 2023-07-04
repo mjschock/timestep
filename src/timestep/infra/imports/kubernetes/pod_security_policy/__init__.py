@@ -1,7 +1,7 @@
 """
 # `kubernetes_pod_security_policy`
 
-Refer to the Terraform Registory for docs: [`kubernetes_pod_security_policy`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy).
+Refer to the Terraform Registory for docs: [`kubernetes_pod_security_policy`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class PodSecurityPolicy(
@@ -24,7 +26,7 @@ class PodSecurityPolicy(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.podSecurityPolicy.PodSecurityPolicy",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy kubernetes_pod_security_policy}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy kubernetes_pod_security_policy}."""
 
     def __init__(
         self,
@@ -83,13 +85,13 @@ class PodSecurityPolicy(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy kubernetes_pod_security_policy} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy kubernetes_pod_security_policy} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#metadata PodSecurityPolicy#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#spec PodSecurityPolicy#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#id PodSecurityPolicy#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#metadata PodSecurityPolicy#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#spec PodSecurityPolicy#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#id PodSecurityPolicy#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection:
         :param count:
         :param depends_on:
@@ -132,9 +134,9 @@ class PodSecurityPolicy(
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the podsecuritypolicy that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#annotations PodSecurityPolicy#annotations}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the podsecuritypolicy. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#labels PodSecurityPolicy#labels}
-        :param name: Name of the podsecuritypolicy, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#name PodSecurityPolicy#name}
+        :param annotations: An unstructured key value map stored with the podsecuritypolicy that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#annotations PodSecurityPolicy#annotations}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the podsecuritypolicy. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#labels PodSecurityPolicy#labels}
+        :param name: Name of the podsecuritypolicy, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#name PodSecurityPolicy#name}
         """
         value = PodSecurityPolicyMetadata(
             annotations=annotations, labels=labels, name=name
@@ -231,28 +233,28 @@ class PodSecurityPolicy(
         volumes: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         """
-        :param fs_group: fs_group block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#fs_group PodSecurityPolicy#fs_group}
-        :param run_as_user: run_as_user block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#run_as_user PodSecurityPolicy#run_as_user}
-        :param supplemental_groups: supplemental_groups block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#supplemental_groups PodSecurityPolicy#supplemental_groups}
-        :param allowed_capabilities: allowedCapabilities is a list of capabilities that can be requested to add to the container. Capabilities in this field may be added at the pod author's discretion. You must not list a capability in both allowedCapabilities and requiredDropCapabilities. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_capabilities PodSecurityPolicy#allowed_capabilities}
-        :param allowed_flex_volumes: allowed_flex_volumes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_flex_volumes PodSecurityPolicy#allowed_flex_volumes}
-        :param allowed_host_paths: allowed_host_paths block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_host_paths PodSecurityPolicy#allowed_host_paths}
-        :param allowed_proc_mount_types: AllowedProcMountTypes is an allowlist of allowed ProcMountTypes. Empty or nil indicates that only the DefaultProcMountType may be used. This requires the ProcMountType feature flag to be enabled. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_proc_mount_types PodSecurityPolicy#allowed_proc_mount_types}
-        :param allowed_unsafe_sysctls: allowedUnsafeSysctls is a list of explicitly allowed unsafe sysctls, defaults to none. Each entry is either a plain sysctl name or ends in "*" in which case it is considered as a prefix of allowed sysctls. Single * means all unsafe sysctls are allowed. Kubelet has to allowlist all allowed unsafe sysctls explicitly to avoid rejection. Examples: e.g. "foo/*" allows "foo/bar", "foo/baz", etc. e.g. "foo.*" allows "foo.bar", "foo.baz", etc. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_unsafe_sysctls PodSecurityPolicy#allowed_unsafe_sysctls}
-        :param allow_privilege_escalation: allowPrivilegeEscalation determines if a pod can request to allow privilege escalation. If unspecified, defaults to true. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allow_privilege_escalation PodSecurityPolicy#allow_privilege_escalation}
-        :param default_add_capabilities: defaultAddCapabilities is the default set of capabilities that will be added to the container unless the pod spec specifically drops the capability. You may not list a capability in both defaultAddCapabilities and requiredDropCapabilities. Capabilities added here are implicitly allowed, and need not be included in the allowedCapabilities list. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#default_add_capabilities PodSecurityPolicy#default_add_capabilities}
-        :param default_allow_privilege_escalation: defaultAllowPrivilegeEscalation controls the default setting for whether a process can gain more privileges than its parent process. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#default_allow_privilege_escalation PodSecurityPolicy#default_allow_privilege_escalation}
-        :param forbidden_sysctls: forbiddenSysctls is a list of explicitly forbidden sysctls, defaults to none. Each entry is either a plain sysctl name or ends in "*" in which case it is considered as a prefix of forbidden sysctls. Single * means all sysctls are forbidden. Examples: e.g. "foo/*" forbids "foo/bar", "foo/baz", etc. e.g. "foo.*" forbids "foo.bar", "foo.baz", etc. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#forbidden_sysctls PodSecurityPolicy#forbidden_sysctls}
-        :param host_ipc: hostIPC determines if the policy allows the use of HostIPC in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_ipc PodSecurityPolicy#host_ipc}
-        :param host_network: hostNetwork determines if the policy allows the use of HostNetwork in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_network PodSecurityPolicy#host_network}
-        :param host_pid: hostPID determines if the policy allows the use of HostPID in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_pid PodSecurityPolicy#host_pid}
-        :param host_ports: host_ports block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_ports PodSecurityPolicy#host_ports}
-        :param privileged: privileged determines if a pod can request to be run as privileged. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#privileged PodSecurityPolicy#privileged}
-        :param read_only_root_filesystem: readOnlyRootFilesystem when set to true will force containers to run with a read only root file system. If the container specifically requests to run with a non-read only root file system the PSP should deny the pod. If set to false the container may run with a read only root file system if it wishes but it will not be forced to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#read_only_root_filesystem PodSecurityPolicy#read_only_root_filesystem}
-        :param required_drop_capabilities: requiredDropCapabilities are the capabilities that will be dropped from the container. These are required to be dropped and cannot be added. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#required_drop_capabilities PodSecurityPolicy#required_drop_capabilities}
-        :param run_as_group: run_as_group block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#run_as_group PodSecurityPolicy#run_as_group}
-        :param se_linux: se_linux block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#se_linux PodSecurityPolicy#se_linux}
-        :param volumes: volumes is an allowlist of volume plugins. Empty indicates that no volumes may be used. To allow all volumes you may use '*'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#volumes PodSecurityPolicy#volumes}
+        :param fs_group: fs_group block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#fs_group PodSecurityPolicy#fs_group}
+        :param run_as_user: run_as_user block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#run_as_user PodSecurityPolicy#run_as_user}
+        :param supplemental_groups: supplemental_groups block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#supplemental_groups PodSecurityPolicy#supplemental_groups}
+        :param allowed_capabilities: allowedCapabilities is a list of capabilities that can be requested to add to the container. Capabilities in this field may be added at the pod author's discretion. You must not list a capability in both allowedCapabilities and requiredDropCapabilities. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_capabilities PodSecurityPolicy#allowed_capabilities}
+        :param allowed_flex_volumes: allowed_flex_volumes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_flex_volumes PodSecurityPolicy#allowed_flex_volumes}
+        :param allowed_host_paths: allowed_host_paths block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_host_paths PodSecurityPolicy#allowed_host_paths}
+        :param allowed_proc_mount_types: AllowedProcMountTypes is an allowlist of allowed ProcMountTypes. Empty or nil indicates that only the DefaultProcMountType may be used. This requires the ProcMountType feature flag to be enabled. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_proc_mount_types PodSecurityPolicy#allowed_proc_mount_types}
+        :param allowed_unsafe_sysctls: allowedUnsafeSysctls is a list of explicitly allowed unsafe sysctls, defaults to none. Each entry is either a plain sysctl name or ends in "*" in which case it is considered as a prefix of allowed sysctls. Single * means all unsafe sysctls are allowed. Kubelet has to allowlist all allowed unsafe sysctls explicitly to avoid rejection. Examples: e.g. "foo/*" allows "foo/bar", "foo/baz", etc. e.g. "foo.*" allows "foo.bar", "foo.baz", etc. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_unsafe_sysctls PodSecurityPolicy#allowed_unsafe_sysctls}
+        :param allow_privilege_escalation: allowPrivilegeEscalation determines if a pod can request to allow privilege escalation. If unspecified, defaults to true. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allow_privilege_escalation PodSecurityPolicy#allow_privilege_escalation}
+        :param default_add_capabilities: defaultAddCapabilities is the default set of capabilities that will be added to the container unless the pod spec specifically drops the capability. You may not list a capability in both defaultAddCapabilities and requiredDropCapabilities. Capabilities added here are implicitly allowed, and need not be included in the allowedCapabilities list. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#default_add_capabilities PodSecurityPolicy#default_add_capabilities}
+        :param default_allow_privilege_escalation: defaultAllowPrivilegeEscalation controls the default setting for whether a process can gain more privileges than its parent process. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#default_allow_privilege_escalation PodSecurityPolicy#default_allow_privilege_escalation}
+        :param forbidden_sysctls: forbiddenSysctls is a list of explicitly forbidden sysctls, defaults to none. Each entry is either a plain sysctl name or ends in "*" in which case it is considered as a prefix of forbidden sysctls. Single * means all sysctls are forbidden. Examples: e.g. "foo/*" forbids "foo/bar", "foo/baz", etc. e.g. "foo.*" forbids "foo.bar", "foo.baz", etc. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#forbidden_sysctls PodSecurityPolicy#forbidden_sysctls}
+        :param host_ipc: hostIPC determines if the policy allows the use of HostIPC in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_ipc PodSecurityPolicy#host_ipc}
+        :param host_network: hostNetwork determines if the policy allows the use of HostNetwork in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_network PodSecurityPolicy#host_network}
+        :param host_pid: hostPID determines if the policy allows the use of HostPID in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_pid PodSecurityPolicy#host_pid}
+        :param host_ports: host_ports block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_ports PodSecurityPolicy#host_ports}
+        :param privileged: privileged determines if a pod can request to be run as privileged. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#privileged PodSecurityPolicy#privileged}
+        :param read_only_root_filesystem: readOnlyRootFilesystem when set to true will force containers to run with a read only root file system. If the container specifically requests to run with a non-read only root file system the PSP should deny the pod. If set to false the container may run with a read only root file system if it wishes but it will not be forced to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#read_only_root_filesystem PodSecurityPolicy#read_only_root_filesystem}
+        :param required_drop_capabilities: requiredDropCapabilities are the capabilities that will be dropped from the container. These are required to be dropped and cannot be added. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#required_drop_capabilities PodSecurityPolicy#required_drop_capabilities}
+        :param run_as_group: run_as_group block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#run_as_group PodSecurityPolicy#run_as_group}
+        :param se_linux: se_linux block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#se_linux PodSecurityPolicy#se_linux}
+        :param volumes: volumes is an allowlist of volume plugins. Empty indicates that no volumes may be used. To allow all volumes you may use '*'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#volumes PodSecurityPolicy#volumes}
         """
         value = PodSecurityPolicySpec(
             fs_group=fs_group,
@@ -428,9 +430,9 @@ class PodSecurityPolicyConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#metadata PodSecurityPolicy#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#spec PodSecurityPolicy#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#id PodSecurityPolicy#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#metadata PodSecurityPolicy#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#spec PodSecurityPolicy#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#id PodSecurityPolicy#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -612,7 +614,7 @@ class PodSecurityPolicyConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "PodSecurityPolicyMetadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#metadata PodSecurityPolicy#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#metadata PodSecurityPolicy#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -622,7 +624,7 @@ class PodSecurityPolicyConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def spec(self) -> "PodSecurityPolicySpec":
         """spec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#spec PodSecurityPolicy#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#spec PodSecurityPolicy#spec}
         """
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
@@ -630,7 +632,7 @@ class PodSecurityPolicyConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#id PodSecurityPolicy#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#id PodSecurityPolicy#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -664,9 +666,9 @@ class PodSecurityPolicyMetadata:
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the podsecuritypolicy that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#annotations PodSecurityPolicy#annotations}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the podsecuritypolicy. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#labels PodSecurityPolicy#labels}
-        :param name: Name of the podsecuritypolicy, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#name PodSecurityPolicy#name}
+        :param annotations: An unstructured key value map stored with the podsecuritypolicy that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#annotations PodSecurityPolicy#annotations}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the podsecuritypolicy. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#labels PodSecurityPolicy#labels}
+        :param name: Name of the podsecuritypolicy, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#name PodSecurityPolicy#name}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -701,7 +703,7 @@ class PodSecurityPolicyMetadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#annotations PodSecurityPolicy#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#annotations PodSecurityPolicy#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -714,7 +716,7 @@ class PodSecurityPolicyMetadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#labels PodSecurityPolicy#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#labels PodSecurityPolicy#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -725,7 +727,7 @@ class PodSecurityPolicyMetadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the podsecuritypolicy, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#name PodSecurityPolicy#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#name PodSecurityPolicy#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1012,28 +1014,28 @@ class PodSecurityPolicySpec:
         volumes: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         """
-        :param fs_group: fs_group block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#fs_group PodSecurityPolicy#fs_group}
-        :param run_as_user: run_as_user block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#run_as_user PodSecurityPolicy#run_as_user}
-        :param supplemental_groups: supplemental_groups block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#supplemental_groups PodSecurityPolicy#supplemental_groups}
-        :param allowed_capabilities: allowedCapabilities is a list of capabilities that can be requested to add to the container. Capabilities in this field may be added at the pod author's discretion. You must not list a capability in both allowedCapabilities and requiredDropCapabilities. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_capabilities PodSecurityPolicy#allowed_capabilities}
-        :param allowed_flex_volumes: allowed_flex_volumes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_flex_volumes PodSecurityPolicy#allowed_flex_volumes}
-        :param allowed_host_paths: allowed_host_paths block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_host_paths PodSecurityPolicy#allowed_host_paths}
-        :param allowed_proc_mount_types: AllowedProcMountTypes is an allowlist of allowed ProcMountTypes. Empty or nil indicates that only the DefaultProcMountType may be used. This requires the ProcMountType feature flag to be enabled. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_proc_mount_types PodSecurityPolicy#allowed_proc_mount_types}
-        :param allowed_unsafe_sysctls: allowedUnsafeSysctls is a list of explicitly allowed unsafe sysctls, defaults to none. Each entry is either a plain sysctl name or ends in "*" in which case it is considered as a prefix of allowed sysctls. Single * means all unsafe sysctls are allowed. Kubelet has to allowlist all allowed unsafe sysctls explicitly to avoid rejection. Examples: e.g. "foo/*" allows "foo/bar", "foo/baz", etc. e.g. "foo.*" allows "foo.bar", "foo.baz", etc. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_unsafe_sysctls PodSecurityPolicy#allowed_unsafe_sysctls}
-        :param allow_privilege_escalation: allowPrivilegeEscalation determines if a pod can request to allow privilege escalation. If unspecified, defaults to true. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allow_privilege_escalation PodSecurityPolicy#allow_privilege_escalation}
-        :param default_add_capabilities: defaultAddCapabilities is the default set of capabilities that will be added to the container unless the pod spec specifically drops the capability. You may not list a capability in both defaultAddCapabilities and requiredDropCapabilities. Capabilities added here are implicitly allowed, and need not be included in the allowedCapabilities list. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#default_add_capabilities PodSecurityPolicy#default_add_capabilities}
-        :param default_allow_privilege_escalation: defaultAllowPrivilegeEscalation controls the default setting for whether a process can gain more privileges than its parent process. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#default_allow_privilege_escalation PodSecurityPolicy#default_allow_privilege_escalation}
-        :param forbidden_sysctls: forbiddenSysctls is a list of explicitly forbidden sysctls, defaults to none. Each entry is either a plain sysctl name or ends in "*" in which case it is considered as a prefix of forbidden sysctls. Single * means all sysctls are forbidden. Examples: e.g. "foo/*" forbids "foo/bar", "foo/baz", etc. e.g. "foo.*" forbids "foo.bar", "foo.baz", etc. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#forbidden_sysctls PodSecurityPolicy#forbidden_sysctls}
-        :param host_ipc: hostIPC determines if the policy allows the use of HostIPC in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_ipc PodSecurityPolicy#host_ipc}
-        :param host_network: hostNetwork determines if the policy allows the use of HostNetwork in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_network PodSecurityPolicy#host_network}
-        :param host_pid: hostPID determines if the policy allows the use of HostPID in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_pid PodSecurityPolicy#host_pid}
-        :param host_ports: host_ports block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_ports PodSecurityPolicy#host_ports}
-        :param privileged: privileged determines if a pod can request to be run as privileged. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#privileged PodSecurityPolicy#privileged}
-        :param read_only_root_filesystem: readOnlyRootFilesystem when set to true will force containers to run with a read only root file system. If the container specifically requests to run with a non-read only root file system the PSP should deny the pod. If set to false the container may run with a read only root file system if it wishes but it will not be forced to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#read_only_root_filesystem PodSecurityPolicy#read_only_root_filesystem}
-        :param required_drop_capabilities: requiredDropCapabilities are the capabilities that will be dropped from the container. These are required to be dropped and cannot be added. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#required_drop_capabilities PodSecurityPolicy#required_drop_capabilities}
-        :param run_as_group: run_as_group block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#run_as_group PodSecurityPolicy#run_as_group}
-        :param se_linux: se_linux block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#se_linux PodSecurityPolicy#se_linux}
-        :param volumes: volumes is an allowlist of volume plugins. Empty indicates that no volumes may be used. To allow all volumes you may use '*'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#volumes PodSecurityPolicy#volumes}
+        :param fs_group: fs_group block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#fs_group PodSecurityPolicy#fs_group}
+        :param run_as_user: run_as_user block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#run_as_user PodSecurityPolicy#run_as_user}
+        :param supplemental_groups: supplemental_groups block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#supplemental_groups PodSecurityPolicy#supplemental_groups}
+        :param allowed_capabilities: allowedCapabilities is a list of capabilities that can be requested to add to the container. Capabilities in this field may be added at the pod author's discretion. You must not list a capability in both allowedCapabilities and requiredDropCapabilities. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_capabilities PodSecurityPolicy#allowed_capabilities}
+        :param allowed_flex_volumes: allowed_flex_volumes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_flex_volumes PodSecurityPolicy#allowed_flex_volumes}
+        :param allowed_host_paths: allowed_host_paths block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_host_paths PodSecurityPolicy#allowed_host_paths}
+        :param allowed_proc_mount_types: AllowedProcMountTypes is an allowlist of allowed ProcMountTypes. Empty or nil indicates that only the DefaultProcMountType may be used. This requires the ProcMountType feature flag to be enabled. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_proc_mount_types PodSecurityPolicy#allowed_proc_mount_types}
+        :param allowed_unsafe_sysctls: allowedUnsafeSysctls is a list of explicitly allowed unsafe sysctls, defaults to none. Each entry is either a plain sysctl name or ends in "*" in which case it is considered as a prefix of allowed sysctls. Single * means all unsafe sysctls are allowed. Kubelet has to allowlist all allowed unsafe sysctls explicitly to avoid rejection. Examples: e.g. "foo/*" allows "foo/bar", "foo/baz", etc. e.g. "foo.*" allows "foo.bar", "foo.baz", etc. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_unsafe_sysctls PodSecurityPolicy#allowed_unsafe_sysctls}
+        :param allow_privilege_escalation: allowPrivilegeEscalation determines if a pod can request to allow privilege escalation. If unspecified, defaults to true. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allow_privilege_escalation PodSecurityPolicy#allow_privilege_escalation}
+        :param default_add_capabilities: defaultAddCapabilities is the default set of capabilities that will be added to the container unless the pod spec specifically drops the capability. You may not list a capability in both defaultAddCapabilities and requiredDropCapabilities. Capabilities added here are implicitly allowed, and need not be included in the allowedCapabilities list. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#default_add_capabilities PodSecurityPolicy#default_add_capabilities}
+        :param default_allow_privilege_escalation: defaultAllowPrivilegeEscalation controls the default setting for whether a process can gain more privileges than its parent process. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#default_allow_privilege_escalation PodSecurityPolicy#default_allow_privilege_escalation}
+        :param forbidden_sysctls: forbiddenSysctls is a list of explicitly forbidden sysctls, defaults to none. Each entry is either a plain sysctl name or ends in "*" in which case it is considered as a prefix of forbidden sysctls. Single * means all sysctls are forbidden. Examples: e.g. "foo/*" forbids "foo/bar", "foo/baz", etc. e.g. "foo.*" forbids "foo.bar", "foo.baz", etc. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#forbidden_sysctls PodSecurityPolicy#forbidden_sysctls}
+        :param host_ipc: hostIPC determines if the policy allows the use of HostIPC in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_ipc PodSecurityPolicy#host_ipc}
+        :param host_network: hostNetwork determines if the policy allows the use of HostNetwork in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_network PodSecurityPolicy#host_network}
+        :param host_pid: hostPID determines if the policy allows the use of HostPID in the pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_pid PodSecurityPolicy#host_pid}
+        :param host_ports: host_ports block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_ports PodSecurityPolicy#host_ports}
+        :param privileged: privileged determines if a pod can request to be run as privileged. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#privileged PodSecurityPolicy#privileged}
+        :param read_only_root_filesystem: readOnlyRootFilesystem when set to true will force containers to run with a read only root file system. If the container specifically requests to run with a non-read only root file system the PSP should deny the pod. If set to false the container may run with a read only root file system if it wishes but it will not be forced to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#read_only_root_filesystem PodSecurityPolicy#read_only_root_filesystem}
+        :param required_drop_capabilities: requiredDropCapabilities are the capabilities that will be dropped from the container. These are required to be dropped and cannot be added. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#required_drop_capabilities PodSecurityPolicy#required_drop_capabilities}
+        :param run_as_group: run_as_group block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#run_as_group PodSecurityPolicy#run_as_group}
+        :param se_linux: se_linux block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#se_linux PodSecurityPolicy#se_linux}
+        :param volumes: volumes is an allowlist of volume plugins. Empty indicates that no volumes may be used. To allow all volumes you may use '*'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#volumes PodSecurityPolicy#volumes}
         """
         if isinstance(fs_group, dict):
             fs_group = PodSecurityPolicySpecFsGroup(**fs_group)
@@ -1211,7 +1213,7 @@ class PodSecurityPolicySpec:
     def fs_group(self) -> "PodSecurityPolicySpecFsGroup":
         """fs_group block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#fs_group PodSecurityPolicy#fs_group}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#fs_group PodSecurityPolicy#fs_group}
         """
         result = self._values.get("fs_group")
         assert result is not None, "Required property 'fs_group' is missing"
@@ -1221,7 +1223,7 @@ class PodSecurityPolicySpec:
     def run_as_user(self) -> "PodSecurityPolicySpecRunAsUser":
         """run_as_user block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#run_as_user PodSecurityPolicy#run_as_user}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#run_as_user PodSecurityPolicy#run_as_user}
         """
         result = self._values.get("run_as_user")
         assert result is not None, "Required property 'run_as_user' is missing"
@@ -1231,7 +1233,7 @@ class PodSecurityPolicySpec:
     def supplemental_groups(self) -> "PodSecurityPolicySpecSupplementalGroups":
         """supplemental_groups block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#supplemental_groups PodSecurityPolicy#supplemental_groups}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#supplemental_groups PodSecurityPolicy#supplemental_groups}
         """
         result = self._values.get("supplemental_groups")
         assert result is not None, "Required property 'supplemental_groups' is missing"
@@ -1243,7 +1245,7 @@ class PodSecurityPolicySpec:
 
         Capabilities in this field may be added at the pod author's discretion. You must not list a capability in both allowedCapabilities and requiredDropCapabilities.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_capabilities PodSecurityPolicy#allowed_capabilities}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_capabilities PodSecurityPolicy#allowed_capabilities}
         """
         result = self._values.get("allowed_capabilities")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1259,7 +1261,7 @@ class PodSecurityPolicySpec:
     ]:
         """allowed_flex_volumes block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_flex_volumes PodSecurityPolicy#allowed_flex_volumes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_flex_volumes PodSecurityPolicy#allowed_flex_volumes}
         """
         result = self._values.get("allowed_flex_volumes")
         return typing.cast(
@@ -1283,7 +1285,7 @@ class PodSecurityPolicySpec:
     ]:
         """allowed_host_paths block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_host_paths PodSecurityPolicy#allowed_host_paths}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_host_paths PodSecurityPolicy#allowed_host_paths}
         """
         result = self._values.get("allowed_host_paths")
         return typing.cast(
@@ -1302,7 +1304,7 @@ class PodSecurityPolicySpec:
 
         Empty or nil indicates that only the DefaultProcMountType may be used. This requires the ProcMountType feature flag to be enabled.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_proc_mount_types PodSecurityPolicy#allowed_proc_mount_types}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_proc_mount_types PodSecurityPolicy#allowed_proc_mount_types}
         """
         result = self._values.get("allowed_proc_mount_types")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1315,7 +1317,7 @@ class PodSecurityPolicySpec:
 
         Examples: e.g. "foo/*" allows "foo/bar", "foo/baz", etc. e.g. "foo.*" allows "foo.bar", "foo.baz", etc.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allowed_unsafe_sysctls PodSecurityPolicy#allowed_unsafe_sysctls}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allowed_unsafe_sysctls PodSecurityPolicy#allowed_unsafe_sysctls}
         """
         result = self._values.get("allowed_unsafe_sysctls")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1326,7 +1328,7 @@ class PodSecurityPolicySpec:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """allowPrivilegeEscalation determines if a pod can request to allow privilege escalation. If unspecified, defaults to true.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#allow_privilege_escalation PodSecurityPolicy#allow_privilege_escalation}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#allow_privilege_escalation PodSecurityPolicy#allow_privilege_escalation}
         """
         result = self._values.get("allow_privilege_escalation")
         return typing.cast(
@@ -1340,7 +1342,7 @@ class PodSecurityPolicySpec:
 
         You may not list a capability in both defaultAddCapabilities and requiredDropCapabilities. Capabilities added here are implicitly allowed, and need not be included in the allowedCapabilities list.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#default_add_capabilities PodSecurityPolicy#default_add_capabilities}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#default_add_capabilities PodSecurityPolicy#default_add_capabilities}
         """
         result = self._values.get("default_add_capabilities")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1351,7 +1353,7 @@ class PodSecurityPolicySpec:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """defaultAllowPrivilegeEscalation controls the default setting for whether a process can gain more privileges than its parent process.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#default_allow_privilege_escalation PodSecurityPolicy#default_allow_privilege_escalation}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#default_allow_privilege_escalation PodSecurityPolicy#default_allow_privilege_escalation}
         """
         result = self._values.get("default_allow_privilege_escalation")
         return typing.cast(
@@ -1367,7 +1369,7 @@ class PodSecurityPolicySpec:
 
         Examples: e.g. "foo/*" forbids "foo/bar", "foo/baz", etc. e.g. "foo.*" forbids "foo.bar", "foo.baz", etc.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#forbidden_sysctls PodSecurityPolicy#forbidden_sysctls}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#forbidden_sysctls PodSecurityPolicy#forbidden_sysctls}
         """
         result = self._values.get("forbidden_sysctls")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1378,7 +1380,7 @@ class PodSecurityPolicySpec:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """hostIPC determines if the policy allows the use of HostIPC in the pod spec.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_ipc PodSecurityPolicy#host_ipc}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_ipc PodSecurityPolicy#host_ipc}
         """
         result = self._values.get("host_ipc")
         return typing.cast(
@@ -1392,7 +1394,7 @@ class PodSecurityPolicySpec:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """hostNetwork determines if the policy allows the use of HostNetwork in the pod spec.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_network PodSecurityPolicy#host_network}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_network PodSecurityPolicy#host_network}
         """
         result = self._values.get("host_network")
         return typing.cast(
@@ -1406,7 +1408,7 @@ class PodSecurityPolicySpec:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """hostPID determines if the policy allows the use of HostPID in the pod spec.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_pid PodSecurityPolicy#host_pid}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_pid PodSecurityPolicy#host_pid}
         """
         result = self._values.get("host_pid")
         return typing.cast(
@@ -1424,7 +1426,7 @@ class PodSecurityPolicySpec:
     ]:
         """host_ports block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#host_ports PodSecurityPolicy#host_ports}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#host_ports PodSecurityPolicy#host_ports}
         """
         result = self._values.get("host_ports")
         return typing.cast(
@@ -1443,7 +1445,7 @@ class PodSecurityPolicySpec:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """privileged determines if a pod can request to be run as privileged.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#privileged PodSecurityPolicy#privileged}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#privileged PodSecurityPolicy#privileged}
         """
         result = self._values.get("privileged")
         return typing.cast(
@@ -1459,7 +1461,7 @@ class PodSecurityPolicySpec:
 
         If the container specifically requests to run with a non-read only root file system the PSP should deny the pod. If set to false the container may run with a read only root file system if it wishes but it will not be forced to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#read_only_root_filesystem PodSecurityPolicy#read_only_root_filesystem}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#read_only_root_filesystem PodSecurityPolicy#read_only_root_filesystem}
         """
         result = self._values.get("read_only_root_filesystem")
         return typing.cast(
@@ -1473,7 +1475,7 @@ class PodSecurityPolicySpec:
 
         These are required to be dropped and cannot be added.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#required_drop_capabilities PodSecurityPolicy#required_drop_capabilities}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#required_drop_capabilities PodSecurityPolicy#required_drop_capabilities}
         """
         result = self._values.get("required_drop_capabilities")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1482,7 +1484,7 @@ class PodSecurityPolicySpec:
     def run_as_group(self) -> typing.Optional["PodSecurityPolicySpecRunAsGroup"]:
         """run_as_group block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#run_as_group PodSecurityPolicy#run_as_group}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#run_as_group PodSecurityPolicy#run_as_group}
         """
         result = self._values.get("run_as_group")
         return typing.cast(typing.Optional["PodSecurityPolicySpecRunAsGroup"], result)
@@ -1491,7 +1493,7 @@ class PodSecurityPolicySpec:
     def se_linux(self) -> typing.Optional["PodSecurityPolicySpecSeLinux"]:
         """se_linux block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#se_linux PodSecurityPolicy#se_linux}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#se_linux PodSecurityPolicy#se_linux}
         """
         result = self._values.get("se_linux")
         return typing.cast(typing.Optional["PodSecurityPolicySpecSeLinux"], result)
@@ -1502,7 +1504,7 @@ class PodSecurityPolicySpec:
 
         Empty indicates that no volumes may be used. To allow all volumes you may use '*'.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#volumes PodSecurityPolicy#volumes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#volumes PodSecurityPolicy#volumes}
         """
         result = self._values.get("volumes")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1527,7 +1529,7 @@ class PodSecurityPolicySpec:
 class PodSecurityPolicySpecAllowedFlexVolumes:
     def __init__(self, *, driver: builtins.str) -> None:
         """
-        :param driver: driver is the name of the Flexvolume driver. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#driver PodSecurityPolicy#driver}
+        :param driver: driver is the name of the Flexvolume driver. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#driver PodSecurityPolicy#driver}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1546,7 +1548,7 @@ class PodSecurityPolicySpecAllowedFlexVolumes:
     def driver(self) -> builtins.str:
         """driver is the name of the Flexvolume driver.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#driver PodSecurityPolicy#driver}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#driver PodSecurityPolicy#driver}
         """
         result = self._values.get("driver")
         assert result is not None, "Required property 'driver' is missing"
@@ -1842,8 +1844,8 @@ class PodSecurityPolicySpecAllowedHostPaths:
         ] = None,
     ) -> None:
         """
-        :param path_prefix: pathPrefix is the path prefix that the host volume must match. It does not support ``*``. Trailing slashes are trimmed when validating the path prefix with a host path. Examples: ``/foo`` would allow ``/foo``, ``/foo/`` and ``/foo/bar`` ``/foo`` would not allow ``/food`` or ``/etc/foo`` Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#path_prefix PodSecurityPolicy#path_prefix}
-        :param read_only: when set to true, will allow host volumes matching the pathPrefix only if all volume mounts are readOnly. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#read_only PodSecurityPolicy#read_only}
+        :param path_prefix: pathPrefix is the path prefix that the host volume must match. It does not support ``*``. Trailing slashes are trimmed when validating the path prefix with a host path. Examples: ``/foo`` would allow ``/foo``, ``/foo/`` and ``/foo/bar`` ``/foo`` would not allow ``/food`` or ``/etc/foo`` Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#path_prefix PodSecurityPolicy#path_prefix}
+        :param read_only: when set to true, will allow host volumes matching the pathPrefix only if all volume mounts are readOnly. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#read_only PodSecurityPolicy#read_only}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1873,7 +1875,7 @@ class PodSecurityPolicySpecAllowedHostPaths:
 
         Examples: ``/foo`` would allow ``/foo``, ``/foo/`` and ``/foo/bar`` ``/foo`` would not allow ``/food`` or ``/etc/foo``
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#path_prefix PodSecurityPolicy#path_prefix}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#path_prefix PodSecurityPolicy#path_prefix}
         """
         result = self._values.get("path_prefix")
         assert result is not None, "Required property 'path_prefix' is missing"
@@ -1885,7 +1887,7 @@ class PodSecurityPolicySpecAllowedHostPaths:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """when set to true, will allow host volumes matching the pathPrefix only if all volume mounts are readOnly.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#read_only PodSecurityPolicy#read_only}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#read_only PodSecurityPolicy#read_only}
         """
         result = self._values.get("read_only")
         return typing.cast(
@@ -2227,8 +2229,8 @@ class PodSecurityPolicySpecFsGroup:
         ] = None,
     ) -> None:
         """
-        :param rule: rule is the strategy that will dictate what FSGroup is used in the SecurityContext. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
-        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        :param rule: rule is the strategy that will dictate what FSGroup is used in the SecurityContext. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -2250,7 +2252,7 @@ class PodSecurityPolicySpecFsGroup:
     def rule(self) -> builtins.str:
         """rule is the strategy that will dictate what FSGroup is used in the SecurityContext.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
         """
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
@@ -2267,7 +2269,7 @@ class PodSecurityPolicySpecFsGroup:
     ]:
         """range block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         result = self._values.get("range")
         return typing.cast(
@@ -2430,8 +2432,8 @@ class PodSecurityPolicySpecFsGroupOutputReference(
 class PodSecurityPolicySpecFsGroupRange:
     def __init__(self, *, max: jsii.Number, min: jsii.Number) -> None:
         """
-        :param max: max is the end of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
-        :param min: min is the start of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
+        :param max: max is the end of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
+        :param min: min is the start of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -2452,7 +2454,7 @@ class PodSecurityPolicySpecFsGroupRange:
     def max(self) -> jsii.Number:
         """max is the end of the range, inclusive.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
         """
         result = self._values.get("max")
         assert result is not None, "Required property 'max' is missing"
@@ -2462,7 +2464,7 @@ class PodSecurityPolicySpecFsGroupRange:
     def min(self) -> jsii.Number:
         """min is the start of the range, inclusive.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
         """
         result = self._values.get("min")
         assert result is not None, "Required property 'min' is missing"
@@ -2767,8 +2769,8 @@ class PodSecurityPolicySpecFsGroupRangeOutputReference(
 class PodSecurityPolicySpecHostPorts:
     def __init__(self, *, max: jsii.Number, min: jsii.Number) -> None:
         """
-        :param max: max is the end of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
-        :param min: min is the start of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
+        :param max: max is the end of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
+        :param min: min is the start of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -2789,7 +2791,7 @@ class PodSecurityPolicySpecHostPorts:
     def max(self) -> jsii.Number:
         """max is the end of the range, inclusive.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
         """
         result = self._values.get("max")
         assert result is not None, "Required property 'max' is missing"
@@ -2799,7 +2801,7 @@ class PodSecurityPolicySpecHostPorts:
     def min(self) -> jsii.Number:
         """min is the start of the range, inclusive.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
         """
         result = self._values.get("min")
         assert result is not None, "Required property 'min' is missing"
@@ -3193,8 +3195,8 @@ class PodSecurityPolicySpecOutputReference(
         ] = None,
     ) -> None:
         """
-        :param rule: rule is the strategy that will dictate what FSGroup is used in the SecurityContext. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
-        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        :param rule: rule is the strategy that will dictate what FSGroup is used in the SecurityContext. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         value = PodSecurityPolicySpecFsGroup(rule=rule, range=range)
 
@@ -3243,8 +3245,8 @@ class PodSecurityPolicySpecOutputReference(
         ] = None,
     ) -> None:
         """
-        :param rule: rule is the strategy that will dictate the allowable RunAsGroup values that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
-        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        :param rule: rule is the strategy that will dictate the allowable RunAsGroup values that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         value = PodSecurityPolicySpecRunAsGroup(rule=rule, range=range)
 
@@ -3268,8 +3270,8 @@ class PodSecurityPolicySpecOutputReference(
         ] = None,
     ) -> None:
         """
-        :param rule: rule is the strategy that will dictate the allowable RunAsUser values that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
-        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        :param rule: rule is the strategy that will dictate the allowable RunAsUser values that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         value = PodSecurityPolicySpecRunAsUser(rule=rule, range=range)
 
@@ -3293,8 +3295,8 @@ class PodSecurityPolicySpecOutputReference(
         ] = None,
     ) -> None:
         """
-        :param rule: rule is the strategy that will dictate the allowable labels that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
-        :param se_linux_options: se_linux_options block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#se_linux_options PodSecurityPolicy#se_linux_options}
+        :param rule: rule is the strategy that will dictate the allowable labels that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        :param se_linux_options: se_linux_options block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#se_linux_options PodSecurityPolicy#se_linux_options}
         """
         value = PodSecurityPolicySpecSeLinux(
             rule=rule, se_linux_options=se_linux_options
@@ -3320,8 +3322,8 @@ class PodSecurityPolicySpecOutputReference(
         ] = None,
     ) -> None:
         """
-        :param rule: rule is the strategy that will dictate what supplemental groups is used in the SecurityContext. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
-        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        :param rule: rule is the strategy that will dictate what supplemental groups is used in the SecurityContext. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         value = PodSecurityPolicySpecSupplementalGroups(rule=rule, range=range)
 
@@ -4027,8 +4029,8 @@ class PodSecurityPolicySpecRunAsGroup:
         ] = None,
     ) -> None:
         """
-        :param rule: rule is the strategy that will dictate the allowable RunAsGroup values that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
-        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        :param rule: rule is the strategy that will dictate the allowable RunAsGroup values that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -4050,7 +4052,7 @@ class PodSecurityPolicySpecRunAsGroup:
     def rule(self) -> builtins.str:
         """rule is the strategy that will dictate the allowable RunAsGroup values that may be set.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
         """
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
@@ -4067,7 +4069,7 @@ class PodSecurityPolicySpecRunAsGroup:
     ]:
         """range block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         result = self._values.get("range")
         return typing.cast(
@@ -4230,8 +4232,8 @@ class PodSecurityPolicySpecRunAsGroupOutputReference(
 class PodSecurityPolicySpecRunAsGroupRange:
     def __init__(self, *, max: jsii.Number, min: jsii.Number) -> None:
         """
-        :param max: max is the end of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
-        :param min: min is the start of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
+        :param max: max is the end of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
+        :param min: min is the start of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -4252,7 +4254,7 @@ class PodSecurityPolicySpecRunAsGroupRange:
     def max(self) -> jsii.Number:
         """max is the end of the range, inclusive.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
         """
         result = self._values.get("max")
         assert result is not None, "Required property 'max' is missing"
@@ -4262,7 +4264,7 @@ class PodSecurityPolicySpecRunAsGroupRange:
     def min(self) -> jsii.Number:
         """min is the start of the range, inclusive.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
         """
         result = self._values.get("min")
         assert result is not None, "Required property 'min' is missing"
@@ -4585,8 +4587,8 @@ class PodSecurityPolicySpecRunAsUser:
         ] = None,
     ) -> None:
         """
-        :param rule: rule is the strategy that will dictate the allowable RunAsUser values that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
-        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        :param rule: rule is the strategy that will dictate the allowable RunAsUser values that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -4608,7 +4610,7 @@ class PodSecurityPolicySpecRunAsUser:
     def rule(self) -> builtins.str:
         """rule is the strategy that will dictate the allowable RunAsUser values that may be set.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
         """
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
@@ -4625,7 +4627,7 @@ class PodSecurityPolicySpecRunAsUser:
     ]:
         """range block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         result = self._values.get("range")
         return typing.cast(
@@ -4788,8 +4790,8 @@ class PodSecurityPolicySpecRunAsUserOutputReference(
 class PodSecurityPolicySpecRunAsUserRange:
     def __init__(self, *, max: jsii.Number, min: jsii.Number) -> None:
         """
-        :param max: max is the end of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
-        :param min: min is the start of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
+        :param max: max is the end of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
+        :param min: min is the start of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -4810,7 +4812,7 @@ class PodSecurityPolicySpecRunAsUserRange:
     def max(self) -> jsii.Number:
         """max is the end of the range, inclusive.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
         """
         result = self._values.get("max")
         assert result is not None, "Required property 'max' is missing"
@@ -4820,7 +4822,7 @@ class PodSecurityPolicySpecRunAsUserRange:
     def min(self) -> jsii.Number:
         """min is the start of the range, inclusive.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
         """
         result = self._values.get("min")
         assert result is not None, "Required property 'min' is missing"
@@ -5143,8 +5145,8 @@ class PodSecurityPolicySpecSeLinux:
         ] = None,
     ) -> None:
         """
-        :param rule: rule is the strategy that will dictate the allowable labels that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
-        :param se_linux_options: se_linux_options block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#se_linux_options PodSecurityPolicy#se_linux_options}
+        :param rule: rule is the strategy that will dictate the allowable labels that may be set. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        :param se_linux_options: se_linux_options block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#se_linux_options PodSecurityPolicy#se_linux_options}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -5168,7 +5170,7 @@ class PodSecurityPolicySpecSeLinux:
     def rule(self) -> builtins.str:
         """rule is the strategy that will dictate the allowable labels that may be set.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
         """
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
@@ -5185,7 +5187,7 @@ class PodSecurityPolicySpecSeLinux:
     ]:
         """se_linux_options block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#se_linux_options PodSecurityPolicy#se_linux_options}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#se_linux_options PodSecurityPolicy#se_linux_options}
         """
         result = self._values.get("se_linux_options")
         return typing.cast(
@@ -5356,10 +5358,10 @@ class PodSecurityPolicySpecSeLinuxSeLinuxOptions:
         user: builtins.str,
     ) -> None:
         """
-        :param level: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#level PodSecurityPolicy#level}.
-        :param role: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#role PodSecurityPolicy#role}.
-        :param type: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#type PodSecurityPolicy#type}.
-        :param user: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#user PodSecurityPolicy#user}.
+        :param level: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#level PodSecurityPolicy#level}.
+        :param role: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#role PodSecurityPolicy#role}.
+        :param type: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#type PodSecurityPolicy#type}.
+        :param user: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#user PodSecurityPolicy#user}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -5386,28 +5388,28 @@ class PodSecurityPolicySpecSeLinuxSeLinuxOptions:
 
     @builtins.property
     def level(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#level PodSecurityPolicy#level}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#level PodSecurityPolicy#level}."""
         result = self._values.get("level")
         assert result is not None, "Required property 'level' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def role(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#role PodSecurityPolicy#role}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#role PodSecurityPolicy#role}."""
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def type(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#type PodSecurityPolicy#type}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#type PodSecurityPolicy#type}."""
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def user(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#user PodSecurityPolicy#user}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#user PodSecurityPolicy#user}."""
         result = self._values.get("user")
         assert result is not None, "Required property 'user' is missing"
         return typing.cast(builtins.str, result)
@@ -5774,8 +5776,8 @@ class PodSecurityPolicySpecSupplementalGroups:
         ] = None,
     ) -> None:
         """
-        :param rule: rule is the strategy that will dictate what supplemental groups is used in the SecurityContext. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
-        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        :param rule: rule is the strategy that will dictate what supplemental groups is used in the SecurityContext. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        :param range: range block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -5797,7 +5799,7 @@ class PodSecurityPolicySpecSupplementalGroups:
     def rule(self) -> builtins.str:
         """rule is the strategy that will dictate what supplemental groups is used in the SecurityContext.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#rule PodSecurityPolicy#rule}
         """
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
@@ -5814,7 +5816,7 @@ class PodSecurityPolicySpecSupplementalGroups:
     ]:
         """range block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#range PodSecurityPolicy#range}
         """
         result = self._values.get("range")
         return typing.cast(
@@ -5979,8 +5981,8 @@ class PodSecurityPolicySpecSupplementalGroupsOutputReference(
 class PodSecurityPolicySpecSupplementalGroupsRange:
     def __init__(self, *, max: jsii.Number, min: jsii.Number) -> None:
         """
-        :param max: max is the end of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
-        :param min: min is the start of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
+        :param max: max is the end of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
+        :param min: min is the start of the range, inclusive. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -6001,7 +6003,7 @@ class PodSecurityPolicySpecSupplementalGroupsRange:
     def max(self) -> jsii.Number:
         """max is the end of the range, inclusive.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#max PodSecurityPolicy#max}
         """
         result = self._values.get("max")
         assert result is not None, "Required property 'max' is missing"
@@ -6011,7 +6013,7 @@ class PodSecurityPolicySpecSupplementalGroupsRange:
     def min(self) -> jsii.Number:
         """min is the start of the range, inclusive.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/pod_security_policy#min PodSecurityPolicy#min}
         """
         result = self._values.get("min")
         assert result is not None, "Required property 'min' is missing"

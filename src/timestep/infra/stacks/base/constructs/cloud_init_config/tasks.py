@@ -1,4 +1,3 @@
-import os
 from typing import Dict
 
 from cdktf import (
@@ -9,9 +8,7 @@ from cdktf import (
 )
 from cloud_init_gen import CloudInitDoc
 from constructs import Construct
-from prefect import get_run_logger, task
-from prefect.futures import PrefectFuture
-from prefect_shell import ShellOperation
+from prefect import task
 
 from timestep.conf.blocks import AppConfig, CloudInstanceProvider
 from timestep.infra.imports.cloudinit.data_cloudinit_config import (
@@ -22,8 +19,6 @@ from timestep.infra.imports.cloudinit.provider import CloudinitProvider
 from timestep.infra.imports.local.data_local_file import DataLocalFile
 from timestep.infra.imports.local.file import File
 from timestep.infra.imports.local.provider import LocalProvider
-from timestep.infra.imports.null.data_null_data_source import DataNullDataSource
-from timestep.infra.imports.null.provider import NullProvider
 from timestep.infra.imports.null.resource import Resource
 
 
@@ -115,7 +110,7 @@ def get_cloud_init_config_resource(
                 "-l",
                 "ubuntu",
                 "-c",
-                'echo "eval \\"\$(direnv hook bash)\\"" >> $HOME/.bashrc',
+                'echo "eval \\"\\$(direnv hook bash)\\"" >> $HOME/.bashrc',
             ],
             [
                 "runuser",
@@ -130,14 +125,14 @@ def get_cloud_init_config_resource(
                 "-l",
                 "ubuntu",
                 "-c",
-                "echo export PATH=\$HOME/.anyenv/bin:\$PATH >> $HOME/.bashrc",
+                "echo export PATH=\\$HOME/.anyenv/bin:\\$PATH >> $HOME/.bashrc",
             ],
             [
                 "runuser",
                 "-l",
                 "ubuntu",
                 "-c",
-                'echo "eval \\"\$(anyenv init -)\\"" >> $HOME/.bashrc',
+                'echo "eval \\"\\$(anyenv init -)\\"" >> $HOME/.bashrc',
             ],
             [
                 "runuser",
@@ -187,7 +182,7 @@ def get_cloud_init_config_resource(
                 "-l",
                 "ubuntu",
                 "-c",
-                "echo export PATH=\$HOME/.arkade/bin:\$PATH >> $HOME/.bashrc",
+                "echo export PATH=\\$HOME/.arkade/bin:\\$PATH >> $HOME/.bashrc",
             ],
             ["runuser", "-l", "ubuntu", "-c", "arkade get k3sup"],
             ["runuser", "-l", "ubuntu", "-c", "mkdir $HOME/.kube"],
@@ -196,7 +191,12 @@ def get_cloud_init_config_resource(
                 "-l",
                 "ubuntu",
                 "-c",
-                f'$HOME/.arkade/bin/k3sup install --context {config.variables.get("kubecontext")} --k3s-extra-args "--disable traefik" --local --local-path $HOME/.kube/config --user ubuntu',
+                f"""$HOME/.arkade/bin/k3sup install \
+--context {config.variables.get("kubecontext")} \
+--k3s-extra-args '--disable traefik' \
+--local \
+--local-path $HOME/.kube/config \
+--user ubuntu""",
             ],
         ],
         users=[

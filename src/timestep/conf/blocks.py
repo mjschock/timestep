@@ -5,14 +5,10 @@ import tempfile
 from enum import StrEnum, auto
 from typing import Dict, Optional
 
-from prefect import flow
 from prefect.blocks.core import Block
 from prefect.blocks.fields import SecretDict
-from prefect.blocks.kubernetes import KubernetesClusterConfig
-from prefect.blocks.system import Secret
-from prefect.exceptions import ObjectNotFound
 from prefect_shell import ShellOperation
-from pydantic import BaseModel, SecretStr, validator
+from pydantic import SecretStr
 
 BASE_PATH = pathlib.Path.cwd()
 DIST_PATH: str = f"{BASE_PATH}/dist"
@@ -36,7 +32,11 @@ class SecureShellCredentials(Block):
 
                     with ShellOperation(
                         commands=[
-                            f"ssh-keygen -t {key_type} -C {comment} -f {output_keyfile} -N ''",
+                            f"""ssh-keygen \
+-t {key_type} \
+-C {comment} \
+-f {output_keyfile} \
+-N ''""",
                         ],
                     ) as shell_operation:
                         shell_process = shell_operation.trigger()

@@ -1,4 +1,3 @@
-import pytest
 from cdktf import TerraformStack, Testing
 
 # The tests below are example tests, you can find more information at
@@ -14,7 +13,8 @@ class TestMain:
     #    assert Testing.to_have_resource(self.synthesized, Container.TF_RESOURCE_TYPE)
 
     # def test_should_use_an_ubuntu_image(self):
-    #    assert Testing.to_have_resource_with_properties(self.synthesized, Image.TF_RESOURCE_TYPE, {
+    #    assert Testing.to_have_resource_with_properties(
+    #       self.synthesized, Image.TF_RESOURCE_TYPE, {
     #        "name": "ubuntu:latest",
     #    })
 

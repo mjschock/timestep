@@ -1,7 +1,7 @@
 """
 # `kubernetes_manifest`
 
-Refer to the Terraform Registory for docs: [`kubernetes_manifest`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest).
+Refer to the Terraform Registory for docs: [`kubernetes_manifest`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class Manifest(
@@ -24,7 +26,7 @@ class Manifest(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.manifest.Manifest",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest kubernetes_manifest}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest kubernetes_manifest}."""
 
     def __init__(
         self,
@@ -91,17 +93,17 @@ class Manifest(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest kubernetes_manifest} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest kubernetes_manifest} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param manifest: A Kubernetes manifest describing the desired state of the resource in HCL format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#manifest Manifest#manifest}
-        :param computed_fields: List of manifest fields whose values can be altered by the API server during 'apply'. Defaults to: ["metadata.annotations", "metadata.labels"]. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#computed_fields Manifest#computed_fields}
-        :param field_manager: field_manager block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#field_manager Manifest#field_manager}
-        :param object: The resulting resource state, as returned by the API server after applying the desired state from ``manifest``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#object Manifest#object}
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#timeouts Manifest#timeouts}
-        :param wait: wait block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#wait Manifest#wait}
-        :param wait_for: A map of attribute paths and desired patterns to be matched. After each apply the provider will wait for all attributes listed here to reach a value that matches the desired pattern. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#wait_for Manifest#wait_for}
+        :param manifest: A Kubernetes manifest describing the desired state of the resource in HCL format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#manifest Manifest#manifest}
+        :param computed_fields: List of manifest fields whose values can be altered by the API server during 'apply'. Defaults to: ["metadata.annotations", "metadata.labels"]. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#computed_fields Manifest#computed_fields}
+        :param field_manager: field_manager block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#field_manager Manifest#field_manager}
+        :param object: The resulting resource state, as returned by the API server after applying the desired state from ``manifest``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#object Manifest#object}
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#timeouts Manifest#timeouts}
+        :param wait: wait block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#wait Manifest#wait}
+        :param wait_for: A map of attribute paths and desired patterns to be matched. After each apply the provider will wait for all attributes listed here to reach a value that matches the desired pattern. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#wait_for Manifest#wait_for}
         :param connection:
         :param count:
         :param depends_on:
@@ -147,8 +149,8 @@ class Manifest(
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param force_conflicts: Force changes against conflicts. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#force_conflicts Manifest#force_conflicts}
-        :param name: The name to use for the field manager when creating and updating the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#name Manifest#name}
+        :param force_conflicts: Force changes against conflicts. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#force_conflicts Manifest#force_conflicts}
+        :param name: The name to use for the field manager when creating and updating the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#name Manifest#name}
         """
         value = ManifestFieldManager(force_conflicts=force_conflicts, name=name)
 
@@ -163,9 +165,9 @@ class Manifest(
         update: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param create: Timeout for the create operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#create Manifest#create}
-        :param delete: Timeout for the delete operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#delete Manifest#delete}
-        :param update: Timeout for the update operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#update Manifest#update}
+        :param create: Timeout for the create operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#create Manifest#create}
+        :param delete: Timeout for the delete operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#delete Manifest#delete}
+        :param update: Timeout for the update operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#update Manifest#update}
         """
         value = ManifestTimeouts(create=create, delete=delete, update=update)
 
@@ -191,9 +193,9 @@ class Manifest(
         ] = None,
     ) -> None:
         """
-        :param condition: condition block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#condition Manifest#condition}
-        :param fields: A map of paths to fields to wait for a specific field value. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#fields Manifest#fields}
-        :param rollout: Wait for rollout to complete on resources that support ``kubectl rollout status``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#rollout Manifest#rollout}
+        :param condition: condition block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#condition Manifest#condition}
+        :param fields: A map of paths to fields to wait for a specific field value. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#fields Manifest#fields}
+        :param rollout: Wait for rollout to complete on resources that support ``kubectl rollout status``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#rollout Manifest#rollout}
         """
         value = ManifestWait(condition=condition, fields=fields, rollout=rollout)
 
@@ -206,7 +208,7 @@ class Manifest(
         fields: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         """
-        :param fields: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#fields Manifest#fields}.
+        :param fields: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#fields Manifest#fields}.
         """
         value = ManifestWaitFor(fields=fields)
 
@@ -474,13 +476,13 @@ class ManifestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param manifest: A Kubernetes manifest describing the desired state of the resource in HCL format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#manifest Manifest#manifest}
-        :param computed_fields: List of manifest fields whose values can be altered by the API server during 'apply'. Defaults to: ["metadata.annotations", "metadata.labels"]. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#computed_fields Manifest#computed_fields}
-        :param field_manager: field_manager block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#field_manager Manifest#field_manager}
-        :param object: The resulting resource state, as returned by the API server after applying the desired state from ``manifest``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#object Manifest#object}
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#timeouts Manifest#timeouts}
-        :param wait: wait block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#wait Manifest#wait}
-        :param wait_for: A map of attribute paths and desired patterns to be matched. After each apply the provider will wait for all attributes listed here to reach a value that matches the desired pattern. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#wait_for Manifest#wait_for}
+        :param manifest: A Kubernetes manifest describing the desired state of the resource in HCL format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#manifest Manifest#manifest}
+        :param computed_fields: List of manifest fields whose values can be altered by the API server during 'apply'. Defaults to: ["metadata.annotations", "metadata.labels"]. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#computed_fields Manifest#computed_fields}
+        :param field_manager: field_manager block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#field_manager Manifest#field_manager}
+        :param object: The resulting resource state, as returned by the API server after applying the desired state from ``manifest``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#object Manifest#object}
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#timeouts Manifest#timeouts}
+        :param wait: wait block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#wait Manifest#wait}
+        :param wait_for: A map of attribute paths and desired patterns to be matched. After each apply the provider will wait for all attributes listed here to reach a value that matches the desired pattern. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#wait_for Manifest#wait_for}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -699,7 +701,7 @@ class ManifestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def manifest(self) -> typing.Mapping[builtins.str, typing.Any]:
         """A Kubernetes manifest describing the desired state of the resource in HCL format.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#manifest Manifest#manifest}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#manifest Manifest#manifest}
         """
         result = self._values.get("manifest")
         assert result is not None, "Required property 'manifest' is missing"
@@ -709,7 +711,7 @@ class ManifestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def computed_fields(self) -> typing.Optional[typing.List[builtins.str]]:
         """List of manifest fields whose values can be altered by the API server during 'apply'. Defaults to: ["metadata.annotations", "metadata.labels"].
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#computed_fields Manifest#computed_fields}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#computed_fields Manifest#computed_fields}
         """
         result = self._values.get("computed_fields")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -718,7 +720,7 @@ class ManifestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def field_manager(self) -> typing.Optional["ManifestFieldManager"]:
         """field_manager block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#field_manager Manifest#field_manager}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#field_manager Manifest#field_manager}
         """
         result = self._values.get("field_manager")
         return typing.cast(typing.Optional["ManifestFieldManager"], result)
@@ -727,7 +729,7 @@ class ManifestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def object(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
         """The resulting resource state, as returned by the API server after applying the desired state from ``manifest``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#object Manifest#object}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#object Manifest#object}
         """
         result = self._values.get("object")
         return typing.cast(
@@ -738,7 +740,7 @@ class ManifestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def timeouts(self) -> typing.Optional["ManifestTimeouts"]:
         """timeouts block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#timeouts Manifest#timeouts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#timeouts Manifest#timeouts}
         """
         result = self._values.get("timeouts")
         return typing.cast(typing.Optional["ManifestTimeouts"], result)
@@ -747,7 +749,7 @@ class ManifestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def wait(self) -> typing.Optional["ManifestWait"]:
         """wait block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#wait Manifest#wait}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#wait Manifest#wait}
         """
         result = self._values.get("wait")
         return typing.cast(typing.Optional["ManifestWait"], result)
@@ -758,7 +760,7 @@ class ManifestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
         After each apply the provider will wait for all attributes listed here to reach a value that matches the desired pattern.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#wait_for Manifest#wait_for}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#wait_for Manifest#wait_for}
         """
         result = self._values.get("wait_for")
         return typing.cast(typing.Optional["ManifestWaitFor"], result)
@@ -790,8 +792,8 @@ class ManifestFieldManager:
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param force_conflicts: Force changes against conflicts. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#force_conflicts Manifest#force_conflicts}
-        :param name: The name to use for the field manager when creating and updating the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#name Manifest#name}
+        :param force_conflicts: Force changes against conflicts. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#force_conflicts Manifest#force_conflicts}
+        :param name: The name to use for the field manager when creating and updating the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#name Manifest#name}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -817,7 +819,7 @@ class ManifestFieldManager:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Force changes against conflicts.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#force_conflicts Manifest#force_conflicts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#force_conflicts Manifest#force_conflicts}
         """
         result = self._values.get("force_conflicts")
         return typing.cast(
@@ -829,7 +831,7 @@ class ManifestFieldManager:
     def name(self) -> typing.Optional[builtins.str]:
         """The name to use for the field manager when creating and updating the resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#name Manifest#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#name Manifest#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -972,9 +974,9 @@ class ManifestTimeouts:
         update: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param create: Timeout for the create operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#create Manifest#create}
-        :param delete: Timeout for the delete operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#delete Manifest#delete}
-        :param update: Timeout for the update operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#update Manifest#update}
+        :param create: Timeout for the create operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#create Manifest#create}
+        :param delete: Timeout for the delete operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#delete Manifest#delete}
+        :param update: Timeout for the update operation. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#update Manifest#update}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1007,7 +1009,7 @@ class ManifestTimeouts:
     def create(self) -> typing.Optional[builtins.str]:
         """Timeout for the create operation.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#create Manifest#create}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#create Manifest#create}
         """
         result = self._values.get("create")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1016,7 +1018,7 @@ class ManifestTimeouts:
     def delete(self) -> typing.Optional[builtins.str]:
         """Timeout for the delete operation.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#delete Manifest#delete}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#delete Manifest#delete}
         """
         result = self._values.get("delete")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1025,7 +1027,7 @@ class ManifestTimeouts:
     def update(self) -> typing.Optional[builtins.str]:
         """Timeout for the update operation.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#update Manifest#update}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#update Manifest#update}
         """
         result = self._values.get("update")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1191,9 +1193,9 @@ class ManifestWait:
         ] = None,
     ) -> None:
         """
-        :param condition: condition block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#condition Manifest#condition}
-        :param fields: A map of paths to fields to wait for a specific field value. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#fields Manifest#fields}
-        :param rollout: Wait for rollout to complete on resources that support ``kubectl rollout status``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#rollout Manifest#rollout}
+        :param condition: condition block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#condition Manifest#condition}
+        :param fields: A map of paths to fields to wait for a specific field value. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#fields Manifest#fields}
+        :param rollout: Wait for rollout to complete on resources that support ``kubectl rollout status``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#rollout Manifest#rollout}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1230,7 +1232,7 @@ class ManifestWait:
     ]:
         """condition block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#condition Manifest#condition}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#condition Manifest#condition}
         """
         result = self._values.get("condition")
         return typing.cast(
@@ -1246,7 +1248,7 @@ class ManifestWait:
     def fields(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         """A map of paths to fields to wait for a specific field value.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#fields Manifest#fields}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#fields Manifest#fields}
         """
         result = self._values.get("fields")
         return typing.cast(
@@ -1259,7 +1261,7 @@ class ManifestWait:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Wait for rollout to complete on resources that support ``kubectl rollout status``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#rollout Manifest#rollout}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#rollout Manifest#rollout}
         """
         result = self._values.get("rollout")
         return typing.cast(
@@ -1292,8 +1294,8 @@ class ManifestWaitCondition:
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param status: The condition status. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#status Manifest#status}
-        :param type: The type of condition. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#type Manifest#type}
+        :param status: The condition status. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#status Manifest#status}
+        :param type: The type of condition. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#type Manifest#type}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1317,7 +1319,7 @@ class ManifestWaitCondition:
     def status(self) -> typing.Optional[builtins.str]:
         """The condition status.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#status Manifest#status}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#status Manifest#status}
         """
         result = self._values.get("status")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1326,7 +1328,7 @@ class ManifestWaitCondition:
     def type(self) -> typing.Optional[builtins.str]:
         """The type of condition.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#type Manifest#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#type Manifest#type}
         """
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1632,7 +1634,7 @@ class ManifestWaitFor:
         fields: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         """
-        :param fields: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#fields Manifest#fields}.
+        :param fields: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#fields Manifest#fields}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1649,7 +1651,7 @@ class ManifestWaitFor:
 
     @builtins.property
     def fields(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/manifest#fields Manifest#fields}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/manifest#fields Manifest#fields}."""
         result = self._values.get("fields")
         return typing.cast(
             typing.Optional[typing.Mapping[builtins.str, builtins.str]], result

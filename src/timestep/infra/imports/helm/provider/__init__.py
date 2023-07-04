@@ -1,7 +1,7 @@
 """
 # `provider`
 
-Refer to the Terraform Registory for docs: [`helm`](https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs).
+Refer to the Terraform Registory for docs: [`helm`](https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class HelmProvider(
@@ -24,7 +26,7 @@ class HelmProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="helm.provider.HelmProvider",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs helm}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs helm}."""
 
     def __init__(
         self,
@@ -62,21 +64,21 @@ class HelmProvider(
         repository_cache: typing.Optional[builtins.str] = None,
         repository_config_path: typing.Optional[builtins.str] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs helm} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs helm} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#alias HelmProvider#alias}
-        :param burst_limit: Helm burst limit. Increase this if you have a cluster with many CRDs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#burst_limit HelmProvider#burst_limit}
-        :param debug: Debug indicates whether or not Helm is running in Debug mode. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#debug HelmProvider#debug}
-        :param experiments: experiments block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#experiments HelmProvider#experiments}
-        :param helm_driver: The backend storage driver. Values are: configmap, secret, memory, sql. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#helm_driver HelmProvider#helm_driver}
-        :param kubernetes: kubernetes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#kubernetes HelmProvider#kubernetes}
-        :param plugins_path: The path to the helm plugins directory. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#plugins_path HelmProvider#plugins_path}
-        :param registry: registry block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#registry HelmProvider#registry}
-        :param registry_config_path: The path to the registry config file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#registry_config_path HelmProvider#registry_config_path}
-        :param repository_cache: The path to the file containing cached repository indexes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#repository_cache HelmProvider#repository_cache}
-        :param repository_config_path: The path to the file containing repository names and URLs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#repository_config_path HelmProvider#repository_config_path}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#alias HelmProvider#alias}
+        :param burst_limit: Helm burst limit. Increase this if you have a cluster with many CRDs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#burst_limit HelmProvider#burst_limit}
+        :param debug: Debug indicates whether or not Helm is running in Debug mode. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#debug HelmProvider#debug}
+        :param experiments: experiments block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#experiments HelmProvider#experiments}
+        :param helm_driver: The backend storage driver. Values are: configmap, secret, memory, sql. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#helm_driver HelmProvider#helm_driver}
+        :param kubernetes: kubernetes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#kubernetes HelmProvider#kubernetes}
+        :param plugins_path: The path to the helm plugins directory. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#plugins_path HelmProvider#plugins_path}
+        :param registry: registry block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#registry HelmProvider#registry}
+        :param registry_config_path: The path to the registry config file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#registry_config_path HelmProvider#registry_config_path}
+        :param repository_cache: The path to the file containing cached repository indexes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#repository_cache HelmProvider#repository_cache}
+        :param repository_config_path: The path to the file containing repository names and URLs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#repository_config_path HelmProvider#repository_config_path}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -514,17 +516,17 @@ class HelmProviderConfig:
         repository_config_path: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#alias HelmProvider#alias}
-        :param burst_limit: Helm burst limit. Increase this if you have a cluster with many CRDs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#burst_limit HelmProvider#burst_limit}
-        :param debug: Debug indicates whether or not Helm is running in Debug mode. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#debug HelmProvider#debug}
-        :param experiments: experiments block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#experiments HelmProvider#experiments}
-        :param helm_driver: The backend storage driver. Values are: configmap, secret, memory, sql. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#helm_driver HelmProvider#helm_driver}
-        :param kubernetes: kubernetes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#kubernetes HelmProvider#kubernetes}
-        :param plugins_path: The path to the helm plugins directory. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#plugins_path HelmProvider#plugins_path}
-        :param registry: registry block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#registry HelmProvider#registry}
-        :param registry_config_path: The path to the registry config file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#registry_config_path HelmProvider#registry_config_path}
-        :param repository_cache: The path to the file containing cached repository indexes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#repository_cache HelmProvider#repository_cache}
-        :param repository_config_path: The path to the file containing repository names and URLs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#repository_config_path HelmProvider#repository_config_path}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#alias HelmProvider#alias}
+        :param burst_limit: Helm burst limit. Increase this if you have a cluster with many CRDs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#burst_limit HelmProvider#burst_limit}
+        :param debug: Debug indicates whether or not Helm is running in Debug mode. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#debug HelmProvider#debug}
+        :param experiments: experiments block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#experiments HelmProvider#experiments}
+        :param helm_driver: The backend storage driver. Values are: configmap, secret, memory, sql. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#helm_driver HelmProvider#helm_driver}
+        :param kubernetes: kubernetes block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#kubernetes HelmProvider#kubernetes}
+        :param plugins_path: The path to the helm plugins directory. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#plugins_path HelmProvider#plugins_path}
+        :param registry: registry block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#registry HelmProvider#registry}
+        :param registry_config_path: The path to the registry config file. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#registry_config_path HelmProvider#registry_config_path}
+        :param repository_cache: The path to the file containing cached repository indexes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#repository_cache HelmProvider#repository_cache}
+        :param repository_config_path: The path to the file containing repository names and URLs. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#repository_config_path HelmProvider#repository_config_path}
         """
         if isinstance(experiments, dict):
             experiments = HelmProviderExperiments(**experiments)
@@ -613,7 +615,7 @@ class HelmProviderConfig:
     def alias(self) -> typing.Optional[builtins.str]:
         """Alias name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#alias HelmProvider#alias}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#alias HelmProvider#alias}
         """
         result = self._values.get("alias")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -622,7 +624,7 @@ class HelmProviderConfig:
     def burst_limit(self) -> typing.Optional[jsii.Number]:
         """Helm burst limit. Increase this if you have a cluster with many CRDs.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#burst_limit HelmProvider#burst_limit}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#burst_limit HelmProvider#burst_limit}
         """
         result = self._values.get("burst_limit")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -633,7 +635,7 @@ class HelmProviderConfig:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Debug indicates whether or not Helm is running in Debug mode.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#debug HelmProvider#debug}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#debug HelmProvider#debug}
         """
         result = self._values.get("debug")
         return typing.cast(
@@ -645,7 +647,7 @@ class HelmProviderConfig:
     def experiments(self) -> typing.Optional["HelmProviderExperiments"]:
         """experiments block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#experiments HelmProvider#experiments}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#experiments HelmProvider#experiments}
         """
         result = self._values.get("experiments")
         return typing.cast(typing.Optional["HelmProviderExperiments"], result)
@@ -654,7 +656,7 @@ class HelmProviderConfig:
     def helm_driver(self) -> typing.Optional[builtins.str]:
         """The backend storage driver. Values are: configmap, secret, memory, sql.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#helm_driver HelmProvider#helm_driver}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#helm_driver HelmProvider#helm_driver}
         """
         result = self._values.get("helm_driver")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -663,7 +665,7 @@ class HelmProviderConfig:
     def kubernetes(self) -> typing.Optional["HelmProviderKubernetes"]:
         """kubernetes block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#kubernetes HelmProvider#kubernetes}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#kubernetes HelmProvider#kubernetes}
         """
         result = self._values.get("kubernetes")
         return typing.cast(typing.Optional["HelmProviderKubernetes"], result)
@@ -672,7 +674,7 @@ class HelmProviderConfig:
     def plugins_path(self) -> typing.Optional[builtins.str]:
         """The path to the helm plugins directory.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#plugins_path HelmProvider#plugins_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#plugins_path HelmProvider#plugins_path}
         """
         result = self._values.get("plugins_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -685,7 +687,7 @@ class HelmProviderConfig:
     ]:
         """registry block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#registry HelmProvider#registry}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#registry HelmProvider#registry}
         """
         result = self._values.get("registry")
         return typing.cast(
@@ -701,7 +703,7 @@ class HelmProviderConfig:
     def registry_config_path(self) -> typing.Optional[builtins.str]:
         """The path to the registry config file.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#registry_config_path HelmProvider#registry_config_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#registry_config_path HelmProvider#registry_config_path}
         """
         result = self._values.get("registry_config_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -710,7 +712,7 @@ class HelmProviderConfig:
     def repository_cache(self) -> typing.Optional[builtins.str]:
         """The path to the file containing cached repository indexes.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#repository_cache HelmProvider#repository_cache}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#repository_cache HelmProvider#repository_cache}
         """
         result = self._values.get("repository_cache")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -719,7 +721,7 @@ class HelmProviderConfig:
     def repository_config_path(self) -> typing.Optional[builtins.str]:
         """The path to the file containing repository names and URLs.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#repository_config_path HelmProvider#repository_config_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#repository_config_path HelmProvider#repository_config_path}
         """
         result = self._values.get("repository_config_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -750,7 +752,7 @@ class HelmProviderExperiments:
         ] = None,
     ) -> None:
         """
-        :param manifest: Enable full diff by storing the rendered manifest in the state. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#manifest HelmProvider#manifest}
+        :param manifest: Enable full diff by storing the rendered manifest in the state. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#manifest HelmProvider#manifest}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -771,7 +773,7 @@ class HelmProviderExperiments:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Enable full diff by storing the rendered manifest in the state.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#manifest HelmProvider#manifest}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#manifest HelmProvider#manifest}
         """
         result = self._values.get("manifest")
         return typing.cast(
@@ -839,21 +841,21 @@ class HelmProviderKubernetes:
         username: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param client_certificate: PEM-encoded client certificate for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#client_certificate HelmProvider#client_certificate}
-        :param client_key: PEM-encoded client certificate key for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#client_key HelmProvider#client_key}
-        :param cluster_ca_certificate: PEM-encoded root certificates bundle for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#cluster_ca_certificate HelmProvider#cluster_ca_certificate}
-        :param config_context: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#config_context HelmProvider#config_context}.
-        :param config_context_auth_info: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#config_context_auth_info HelmProvider#config_context_auth_info}.
-        :param config_context_cluster: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#config_context_cluster HelmProvider#config_context_cluster}.
-        :param config_path: Path to the kube config file. Can be set with KUBE_CONFIG_PATH. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#config_path HelmProvider#config_path}
-        :param config_paths: A list of paths to kube config files. Can be set with KUBE_CONFIG_PATHS environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#config_paths HelmProvider#config_paths}
-        :param exec: exec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#exec HelmProvider#exec}
-        :param host: The hostname (in form of URI) of Kubernetes master. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#host HelmProvider#host}
-        :param insecure: Whether server should be accessed without verifying the TLS certificate. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#insecure HelmProvider#insecure}
-        :param password: The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#password HelmProvider#password}
-        :param proxy_url: URL to the proxy to be used for all API requests. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#proxy_url HelmProvider#proxy_url}
-        :param token: Token to authenticate an service account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#token HelmProvider#token}
-        :param username: The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#username HelmProvider#username}
+        :param client_certificate: PEM-encoded client certificate for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#client_certificate HelmProvider#client_certificate}
+        :param client_key: PEM-encoded client certificate key for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#client_key HelmProvider#client_key}
+        :param cluster_ca_certificate: PEM-encoded root certificates bundle for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#cluster_ca_certificate HelmProvider#cluster_ca_certificate}
+        :param config_context: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#config_context HelmProvider#config_context}.
+        :param config_context_auth_info: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#config_context_auth_info HelmProvider#config_context_auth_info}.
+        :param config_context_cluster: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#config_context_cluster HelmProvider#config_context_cluster}.
+        :param config_path: Path to the kube config file. Can be set with KUBE_CONFIG_PATH. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#config_path HelmProvider#config_path}
+        :param config_paths: A list of paths to kube config files. Can be set with KUBE_CONFIG_PATHS environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#config_paths HelmProvider#config_paths}
+        :param exec: exec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#exec HelmProvider#exec}
+        :param host: The hostname (in form of URI) of Kubernetes master. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#host HelmProvider#host}
+        :param insecure: Whether server should be accessed without verifying the TLS certificate. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#insecure HelmProvider#insecure}
+        :param password: The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#password HelmProvider#password}
+        :param proxy_url: URL to the proxy to be used for all API requests. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#proxy_url HelmProvider#proxy_url}
+        :param token: Token to authenticate an service account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#token HelmProvider#token}
+        :param username: The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#username HelmProvider#username}
         """
         if isinstance(exec, dict):
             exec = HelmProviderKubernetesExec(**exec)
@@ -966,7 +968,7 @@ class HelmProviderKubernetes:
     def client_certificate(self) -> typing.Optional[builtins.str]:
         """PEM-encoded client certificate for TLS authentication.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#client_certificate HelmProvider#client_certificate}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#client_certificate HelmProvider#client_certificate}
         """
         result = self._values.get("client_certificate")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -975,7 +977,7 @@ class HelmProviderKubernetes:
     def client_key(self) -> typing.Optional[builtins.str]:
         """PEM-encoded client certificate key for TLS authentication.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#client_key HelmProvider#client_key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#client_key HelmProvider#client_key}
         """
         result = self._values.get("client_key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -984,26 +986,26 @@ class HelmProviderKubernetes:
     def cluster_ca_certificate(self) -> typing.Optional[builtins.str]:
         """PEM-encoded root certificates bundle for TLS authentication.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#cluster_ca_certificate HelmProvider#cluster_ca_certificate}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#cluster_ca_certificate HelmProvider#cluster_ca_certificate}
         """
         result = self._values.get("cluster_ca_certificate")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def config_context(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#config_context HelmProvider#config_context}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#config_context HelmProvider#config_context}."""
         result = self._values.get("config_context")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def config_context_auth_info(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#config_context_auth_info HelmProvider#config_context_auth_info}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#config_context_auth_info HelmProvider#config_context_auth_info}."""
         result = self._values.get("config_context_auth_info")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def config_context_cluster(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#config_context_cluster HelmProvider#config_context_cluster}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#config_context_cluster HelmProvider#config_context_cluster}."""
         result = self._values.get("config_context_cluster")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -1011,7 +1013,7 @@ class HelmProviderKubernetes:
     def config_path(self) -> typing.Optional[builtins.str]:
         """Path to the kube config file. Can be set with KUBE_CONFIG_PATH.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#config_path HelmProvider#config_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#config_path HelmProvider#config_path}
         """
         result = self._values.get("config_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1020,7 +1022,7 @@ class HelmProviderKubernetes:
     def config_paths(self) -> typing.Optional[typing.List[builtins.str]]:
         """A list of paths to kube config files. Can be set with KUBE_CONFIG_PATHS environment variable.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#config_paths HelmProvider#config_paths}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#config_paths HelmProvider#config_paths}
         """
         result = self._values.get("config_paths")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1029,7 +1031,7 @@ class HelmProviderKubernetes:
     def exec(self) -> typing.Optional["HelmProviderKubernetesExec"]:
         """exec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#exec HelmProvider#exec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#exec HelmProvider#exec}
         """
         result = self._values.get("exec")
         return typing.cast(typing.Optional["HelmProviderKubernetesExec"], result)
@@ -1038,7 +1040,7 @@ class HelmProviderKubernetes:
     def host(self) -> typing.Optional[builtins.str]:
         """The hostname (in form of URI) of Kubernetes master.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#host HelmProvider#host}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#host HelmProvider#host}
         """
         result = self._values.get("host")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1049,7 +1051,7 @@ class HelmProviderKubernetes:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         """Whether server should be accessed without verifying the TLS certificate.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#insecure HelmProvider#insecure}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#insecure HelmProvider#insecure}
         """
         result = self._values.get("insecure")
         return typing.cast(
@@ -1061,7 +1063,7 @@ class HelmProviderKubernetes:
     def password(self) -> typing.Optional[builtins.str]:
         """The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#password HelmProvider#password}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#password HelmProvider#password}
         """
         result = self._values.get("password")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1070,7 +1072,7 @@ class HelmProviderKubernetes:
     def proxy_url(self) -> typing.Optional[builtins.str]:
         """URL to the proxy to be used for all API requests.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#proxy_url HelmProvider#proxy_url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#proxy_url HelmProvider#proxy_url}
         """
         result = self._values.get("proxy_url")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1079,7 +1081,7 @@ class HelmProviderKubernetes:
     def token(self) -> typing.Optional[builtins.str]:
         """Token to authenticate an service account.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#token HelmProvider#token}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#token HelmProvider#token}
         """
         result = self._values.get("token")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1088,7 +1090,7 @@ class HelmProviderKubernetes:
     def username(self) -> typing.Optional[builtins.str]:
         """The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#username HelmProvider#username}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#username HelmProvider#username}
         """
         result = self._values.get("username")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1125,10 +1127,10 @@ class HelmProviderKubernetesExec:
         env: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         """
-        :param api_version: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#api_version HelmProvider#api_version}.
-        :param command: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#command HelmProvider#command}.
-        :param args: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#args HelmProvider#args}.
-        :param env: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#env HelmProvider#env}.
+        :param api_version: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#api_version HelmProvider#api_version}.
+        :param command: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#command HelmProvider#command}.
+        :param args: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#args HelmProvider#args}.
+        :param env: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#env HelmProvider#env}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1161,27 +1163,27 @@ class HelmProviderKubernetesExec:
 
     @builtins.property
     def api_version(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#api_version HelmProvider#api_version}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#api_version HelmProvider#api_version}."""
         result = self._values.get("api_version")
         assert result is not None, "Required property 'api_version' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def command(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#command HelmProvider#command}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#command HelmProvider#command}."""
         result = self._values.get("command")
         assert result is not None, "Required property 'command' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def args(self) -> typing.Optional[typing.List[builtins.str]]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#args HelmProvider#args}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#args HelmProvider#args}."""
         result = self._values.get("args")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def env(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#env HelmProvider#env}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#env HelmProvider#env}."""
         result = self._values.get("env")
         return typing.cast(
             typing.Optional[typing.Mapping[builtins.str, builtins.str]], result
@@ -1213,9 +1215,9 @@ class HelmProviderRegistry:
         username: builtins.str,
     ) -> None:
         """
-        :param password: The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#password HelmProvider#password}
-        :param url: OCI URL in form of oci://host:port or oci://host. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#url HelmProvider#url}
-        :param username: The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#username HelmProvider#username}
+        :param password: The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#password HelmProvider#password}
+        :param url: OCI URL in form of oci://host:port or oci://host. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#url HelmProvider#url}
+        :param username: The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#username HelmProvider#username}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1244,7 +1246,7 @@ class HelmProviderRegistry:
     def password(self) -> builtins.str:
         """The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#password HelmProvider#password}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#password HelmProvider#password}
         """
         result = self._values.get("password")
         assert result is not None, "Required property 'password' is missing"
@@ -1254,7 +1256,7 @@ class HelmProviderRegistry:
     def url(self) -> builtins.str:
         """OCI URL in form of oci://host:port or oci://host.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#url HelmProvider#url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#url HelmProvider#url}
         """
         result = self._values.get("url")
         assert result is not None, "Required property 'url' is missing"
@@ -1264,7 +1266,7 @@ class HelmProviderRegistry:
     def username(self) -> builtins.str:
         """The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.0/docs#username HelmProvider#username}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/helm/2.10.1/docs#username HelmProvider#username}
         """
         result = self._values.get("username")
         assert result is not None, "Required property 'username' is missing"

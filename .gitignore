@@ -5,8 +5,8 @@ node_modules
 __pycache__
 .obsidian
 .pytest_cache
+.ruff_cache
 .ssh
 .venv
 
-src/timestep/infra/stacks/base/constructs/kubernetes_cluster_ingress/ingress/
 src/timestep/projects

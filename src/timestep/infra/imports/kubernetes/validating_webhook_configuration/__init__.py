@@ -1,7 +1,7 @@
 """
 # `kubernetes_validating_webhook_configuration`
 
-Refer to the Terraform Registory for docs: [`kubernetes_validating_webhook_configuration`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration).
+Refer to the Terraform Registory for docs: [`kubernetes_validating_webhook_configuration`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class ValidatingWebhookConfiguration(
@@ -24,7 +26,7 @@ class ValidatingWebhookConfiguration(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.validatingWebhookConfiguration.ValidatingWebhookConfiguration",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration kubernetes_validating_webhook_configuration}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration kubernetes_validating_webhook_configuration}."""
 
     def __init__(
         self,
@@ -90,13 +92,13 @@ class ValidatingWebhookConfiguration(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration kubernetes_validating_webhook_configuration} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration kubernetes_validating_webhook_configuration} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#metadata ValidatingWebhookConfiguration#metadata}
-        :param webhook: webhook block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#webhook ValidatingWebhookConfiguration#webhook}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#id ValidatingWebhookConfiguration#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#metadata ValidatingWebhookConfiguration#metadata}
+        :param webhook: webhook block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#webhook ValidatingWebhookConfiguration#webhook}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#id ValidatingWebhookConfiguration#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection:
         :param count:
         :param depends_on:
@@ -140,10 +142,10 @@ class ValidatingWebhookConfiguration(
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the validating webhook configuration that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#annotations ValidatingWebhookConfiguration#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#generate_name ValidatingWebhookConfiguration#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the validating webhook configuration. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#labels ValidatingWebhookConfiguration#labels}
-        :param name: Name of the validating webhook configuration, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
+        :param annotations: An unstructured key value map stored with the validating webhook configuration that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#annotations ValidatingWebhookConfiguration#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#generate_name ValidatingWebhookConfiguration#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the validating webhook configuration. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#labels ValidatingWebhookConfiguration#labels}
+        :param name: Name of the validating webhook configuration, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
         """
         value = ValidatingWebhookConfigurationMetadata(
             annotations=annotations,
@@ -349,9 +351,9 @@ class ValidatingWebhookConfigurationConfig(_cdktf_9a9027ec.TerraformMetaArgument
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#metadata ValidatingWebhookConfiguration#metadata}
-        :param webhook: webhook block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#webhook ValidatingWebhookConfiguration#webhook}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#id ValidatingWebhookConfiguration#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#metadata ValidatingWebhookConfiguration#metadata}
+        :param webhook: webhook block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#webhook ValidatingWebhookConfiguration#webhook}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#id ValidatingWebhookConfiguration#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -533,7 +535,7 @@ class ValidatingWebhookConfigurationConfig(_cdktf_9a9027ec.TerraformMetaArgument
     def metadata(self) -> "ValidatingWebhookConfigurationMetadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#metadata ValidatingWebhookConfiguration#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#metadata ValidatingWebhookConfiguration#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -548,7 +550,7 @@ class ValidatingWebhookConfigurationConfig(_cdktf_9a9027ec.TerraformMetaArgument
     ]:
         """webhook block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#webhook ValidatingWebhookConfiguration#webhook}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#webhook ValidatingWebhookConfiguration#webhook}
         """
         result = self._values.get("webhook")
         assert result is not None, "Required property 'webhook' is missing"
@@ -562,7 +564,7 @@ class ValidatingWebhookConfigurationConfig(_cdktf_9a9027ec.TerraformMetaArgument
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#id ValidatingWebhookConfiguration#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#id ValidatingWebhookConfiguration#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -602,10 +604,10 @@ class ValidatingWebhookConfigurationMetadata:
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the validating webhook configuration that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#annotations ValidatingWebhookConfiguration#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#generate_name ValidatingWebhookConfiguration#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the validating webhook configuration. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#labels ValidatingWebhookConfiguration#labels}
-        :param name: Name of the validating webhook configuration, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
+        :param annotations: An unstructured key value map stored with the validating webhook configuration that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#annotations ValidatingWebhookConfiguration#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#generate_name ValidatingWebhookConfiguration#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the validating webhook configuration. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#labels ValidatingWebhookConfiguration#labels}
+        :param name: Name of the validating webhook configuration, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -647,7 +649,7 @@ class ValidatingWebhookConfigurationMetadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#annotations ValidatingWebhookConfiguration#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#annotations ValidatingWebhookConfiguration#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -660,7 +662,7 @@ class ValidatingWebhookConfigurationMetadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#generate_name ValidatingWebhookConfiguration#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#generate_name ValidatingWebhookConfiguration#generate_name}
         """
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -671,7 +673,7 @@ class ValidatingWebhookConfigurationMetadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#labels ValidatingWebhookConfiguration#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#labels ValidatingWebhookConfiguration#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -682,7 +684,7 @@ class ValidatingWebhookConfigurationMetadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the validating webhook configuration, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -940,16 +942,16 @@ class ValidatingWebhookConfigurationWebhook:
         timeout_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
         """
-        :param client_config: client_config block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#client_config ValidatingWebhookConfiguration#client_config}
-        :param name: The name of the admission webhook. Name should be fully qualified, e.g., imagepolicy.kubernetes.io, where "imagepolicy" is the name of the webhook, and kubernetes.io is the name of the organization. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
-        :param admission_review_versions: AdmissionReviewVersions is an ordered list of preferred ``AdmissionReview`` versions the Webhook expects. API server will try to use first version in the list which it supports. If none of the versions specified in this list supported by API server, validation will fail for this object. If a persisted webhook configuration specifies allowed versions and does not include any versions known to the API Server, calls to the webhook will fail and be subject to the failure policy. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#admission_review_versions ValidatingWebhookConfiguration#admission_review_versions}
-        :param failure_policy: FailurePolicy defines how unrecognized errors from the admission endpoint are handled - allowed values are Ignore or Fail. Defaults to Fail. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#failure_policy ValidatingWebhookConfiguration#failure_policy}
-        :param match_policy: matchPolicy defines how the "rules" list is used to match incoming requests. Allowed values are "Exact" or "Equivalent". - Exact: match a request only if it exactly matches a specified rule. For example, if deployments can be modified via apps/v1, apps/v1beta1, and extensions/v1beta1, but "rules" only included ``apiGroups:["apps"], apiVersions:["v1"], resources: ["deployments"]``, a request to apps/v1beta1 or extensions/v1beta1 would not be sent to the webhook. - Equivalent: match a request if modifies a resource listed in rules, even via another API group or version. For example, if deployments can be modified via apps/v1, apps/v1beta1, and extensions/v1beta1, and "rules" only included ``apiGroups:["apps"], apiVersions:["v1"], resources: ["deployments"]``, a request to apps/v1beta1 or extensions/v1beta1 would be converted to apps/v1 and sent to the webhook. Defaults to "Equivalent" Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_policy ValidatingWebhookConfiguration#match_policy}
-        :param namespace_selector: namespace_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#namespace_selector ValidatingWebhookConfiguration#namespace_selector}
-        :param object_selector: object_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#object_selector ValidatingWebhookConfiguration#object_selector}
-        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#rule ValidatingWebhookConfiguration#rule}
-        :param side_effects: SideEffects states whether this webhook has side effects. Acceptable values are: None, NoneOnDryRun (webhooks created via v1beta1 may also specify Some or Unknown). Webhooks with side effects MUST implement a reconciliation system, since a request may be rejected by a future step in the admission chain and the side effects therefore need to be undone. Requests with the dryRun attribute will be auto-rejected if they match a webhook with sideEffects == Unknown or Some. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#side_effects ValidatingWebhookConfiguration#side_effects}
-        :param timeout_seconds: TimeoutSeconds specifies the timeout for this webhook. After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 10 seconds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#timeout_seconds ValidatingWebhookConfiguration#timeout_seconds}
+        :param client_config: client_config block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#client_config ValidatingWebhookConfiguration#client_config}
+        :param name: The name of the admission webhook. Name should be fully qualified, e.g., imagepolicy.kubernetes.io, where "imagepolicy" is the name of the webhook, and kubernetes.io is the name of the organization. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
+        :param admission_review_versions: AdmissionReviewVersions is an ordered list of preferred ``AdmissionReview`` versions the Webhook expects. API server will try to use first version in the list which it supports. If none of the versions specified in this list supported by API server, validation will fail for this object. If a persisted webhook configuration specifies allowed versions and does not include any versions known to the API Server, calls to the webhook will fail and be subject to the failure policy. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#admission_review_versions ValidatingWebhookConfiguration#admission_review_versions}
+        :param failure_policy: FailurePolicy defines how unrecognized errors from the admission endpoint are handled - allowed values are Ignore or Fail. Defaults to Fail. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#failure_policy ValidatingWebhookConfiguration#failure_policy}
+        :param match_policy: matchPolicy defines how the "rules" list is used to match incoming requests. Allowed values are "Exact" or "Equivalent". - Exact: match a request only if it exactly matches a specified rule. For example, if deployments can be modified via apps/v1, apps/v1beta1, and extensions/v1beta1, but "rules" only included ``apiGroups:["apps"], apiVersions:["v1"], resources: ["deployments"]``, a request to apps/v1beta1 or extensions/v1beta1 would not be sent to the webhook. - Equivalent: match a request if modifies a resource listed in rules, even via another API group or version. For example, if deployments can be modified via apps/v1, apps/v1beta1, and extensions/v1beta1, and "rules" only included ``apiGroups:["apps"], apiVersions:["v1"], resources: ["deployments"]``, a request to apps/v1beta1 or extensions/v1beta1 would be converted to apps/v1 and sent to the webhook. Defaults to "Equivalent" Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_policy ValidatingWebhookConfiguration#match_policy}
+        :param namespace_selector: namespace_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#namespace_selector ValidatingWebhookConfiguration#namespace_selector}
+        :param object_selector: object_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#object_selector ValidatingWebhookConfiguration#object_selector}
+        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#rule ValidatingWebhookConfiguration#rule}
+        :param side_effects: SideEffects states whether this webhook has side effects. Acceptable values are: None, NoneOnDryRun (webhooks created via v1beta1 may also specify Some or Unknown). Webhooks with side effects MUST implement a reconciliation system, since a request may be rejected by a future step in the admission chain and the side effects therefore need to be undone. Requests with the dryRun attribute will be auto-rejected if they match a webhook with sideEffects == Unknown or Some. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#side_effects ValidatingWebhookConfiguration#side_effects}
+        :param timeout_seconds: TimeoutSeconds specifies the timeout for this webhook. After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 10 seconds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#timeout_seconds ValidatingWebhookConfiguration#timeout_seconds}
         """
         if isinstance(client_config, dict):
             client_config = ValidatingWebhookConfigurationWebhookClientConfig(
@@ -1038,7 +1040,7 @@ class ValidatingWebhookConfigurationWebhook:
     def client_config(self) -> "ValidatingWebhookConfigurationWebhookClientConfig":
         """client_config block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#client_config ValidatingWebhookConfiguration#client_config}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#client_config ValidatingWebhookConfiguration#client_config}
         """
         result = self._values.get("client_config")
         assert result is not None, "Required property 'client_config' is missing"
@@ -1050,7 +1052,7 @@ class ValidatingWebhookConfigurationWebhook:
 
         Name should be fully qualified, e.g., imagepolicy.kubernetes.io, where "imagepolicy" is the name of the webhook, and kubernetes.io is the name of the organization. Required.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1062,7 +1064,7 @@ class ValidatingWebhookConfigurationWebhook:
 
         API server will try to use first version in the list which it supports. If none of the versions specified in this list supported by API server, validation will fail for this object. If a persisted webhook configuration specifies allowed versions and does not include any versions known to the API Server, calls to the webhook will fail and be subject to the failure policy.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#admission_review_versions ValidatingWebhookConfiguration#admission_review_versions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#admission_review_versions ValidatingWebhookConfiguration#admission_review_versions}
         """
         result = self._values.get("admission_review_versions")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1073,7 +1075,7 @@ class ValidatingWebhookConfigurationWebhook:
 
         Defaults to Fail.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#failure_policy ValidatingWebhookConfiguration#failure_policy}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#failure_policy ValidatingWebhookConfiguration#failure_policy}
         """
         result = self._values.get("failure_policy")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1087,7 +1089,7 @@ class ValidatingWebhookConfigurationWebhook:
 
         Defaults to "Equivalent"
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_policy ValidatingWebhookConfiguration#match_policy}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_policy ValidatingWebhookConfiguration#match_policy}
         """
         result = self._values.get("match_policy")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1098,7 +1100,7 @@ class ValidatingWebhookConfigurationWebhook:
     ) -> typing.Optional["ValidatingWebhookConfigurationWebhookNamespaceSelector"]:
         """namespace_selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#namespace_selector ValidatingWebhookConfiguration#namespace_selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#namespace_selector ValidatingWebhookConfiguration#namespace_selector}
         """
         result = self._values.get("namespace_selector")
         return typing.cast(
@@ -1112,7 +1114,7 @@ class ValidatingWebhookConfigurationWebhook:
     ) -> typing.Optional["ValidatingWebhookConfigurationWebhookObjectSelector"]:
         """object_selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#object_selector ValidatingWebhookConfiguration#object_selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#object_selector ValidatingWebhookConfiguration#object_selector}
         """
         result = self._values.get("object_selector")
         return typing.cast(
@@ -1131,7 +1133,7 @@ class ValidatingWebhookConfigurationWebhook:
     ]:
         """rule block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#rule ValidatingWebhookConfiguration#rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#rule ValidatingWebhookConfiguration#rule}
         """
         result = self._values.get("rule")
         return typing.cast(
@@ -1150,7 +1152,7 @@ class ValidatingWebhookConfigurationWebhook:
 
         Acceptable values are: None, NoneOnDryRun (webhooks created via v1beta1 may also specify Some or Unknown). Webhooks with side effects MUST implement a reconciliation system, since a request may be rejected by a future step in the admission chain and the side effects therefore need to be undone. Requests with the dryRun attribute will be auto-rejected if they match a webhook with sideEffects == Unknown or Some.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#side_effects ValidatingWebhookConfiguration#side_effects}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#side_effects ValidatingWebhookConfiguration#side_effects}
         """
         result = self._values.get("side_effects")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1161,7 +1163,7 @@ class ValidatingWebhookConfigurationWebhook:
 
         After the timeout passes, the webhook call will be ignored or the API call will fail based on the failure policy. The timeout value must be between 1 and 30 seconds. Default to 10 seconds.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#timeout_seconds ValidatingWebhookConfiguration#timeout_seconds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#timeout_seconds ValidatingWebhookConfiguration#timeout_seconds}
         """
         result = self._values.get("timeout_seconds")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -1197,9 +1199,9 @@ class ValidatingWebhookConfigurationWebhookClientConfig:
         url: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param ca_bundle: ``caBundle`` is a PEM encoded CA bundle which will be used to validate the webhook's server certificate. If unspecified, system trust roots on the apiserver are used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#ca_bundle ValidatingWebhookConfiguration#ca_bundle}
-        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#service ValidatingWebhookConfiguration#service}
-        :param url: ``url`` gives the location of the webhook, in standard URL form (``scheme://host:port/path``). Exactly one of ``url`` or ``service`` must be specified. The ``host`` should not refer to a service running in the cluster; use the ``service`` field instead. The host might be resolved via external DNS in some apiservers (e.g., ``kube-apiserver`` cannot resolve in-cluster DNS as that would be a layering violation). ``host`` may also be an IP address. Please note that using ``localhost`` or ``127.0.0.1`` as a ``host`` is risky unless you take great care to run this webhook on all hosts which run an apiserver which might need to make calls to this webhook. Such installs are likely to be non-portable, i.e., not easy to turn up in a new cluster. The scheme must be "https"; the URL must begin with "https://". A path is optional, and if present may be any string permissible in a URL. You may use the path to pass an arbitrary string to the webhook, for example, a cluster identifier. Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fragments ("#...") and query parameters ("?...") are not allowed, either. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#url ValidatingWebhookConfiguration#url}
+        :param ca_bundle: ``caBundle`` is a PEM encoded CA bundle which will be used to validate the webhook's server certificate. If unspecified, system trust roots on the apiserver are used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#ca_bundle ValidatingWebhookConfiguration#ca_bundle}
+        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#service ValidatingWebhookConfiguration#service}
+        :param url: ``url`` gives the location of the webhook, in standard URL form (``scheme://host:port/path``). Exactly one of ``url`` or ``service`` must be specified. The ``host`` should not refer to a service running in the cluster; use the ``service`` field instead. The host might be resolved via external DNS in some apiservers (e.g., ``kube-apiserver`` cannot resolve in-cluster DNS as that would be a layering violation). ``host`` may also be an IP address. Please note that using ``localhost`` or ``127.0.0.1`` as a ``host`` is risky unless you take great care to run this webhook on all hosts which run an apiserver which might need to make calls to this webhook. Such installs are likely to be non-portable, i.e., not easy to turn up in a new cluster. The scheme must be "https"; the URL must begin with "https://". A path is optional, and if present may be any string permissible in a URL. You may use the path to pass an arbitrary string to the webhook, for example, a cluster identifier. Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fragments ("#...") and query parameters ("?...") are not allowed, either. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#url ValidatingWebhookConfiguration#url}
         """
         if isinstance(service, dict):
             service = ValidatingWebhookConfigurationWebhookClientConfigService(
@@ -1236,7 +1238,7 @@ class ValidatingWebhookConfigurationWebhookClientConfig:
 
         If unspecified, system trust roots on the apiserver are used.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#ca_bundle ValidatingWebhookConfiguration#ca_bundle}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#ca_bundle ValidatingWebhookConfiguration#ca_bundle}
         """
         result = self._values.get("ca_bundle")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1247,7 +1249,7 @@ class ValidatingWebhookConfigurationWebhookClientConfig:
     ) -> typing.Optional["ValidatingWebhookConfigurationWebhookClientConfigService"]:
         """service block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#service ValidatingWebhookConfiguration#service}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#service ValidatingWebhookConfiguration#service}
         """
         result = self._values.get("service")
         return typing.cast(
@@ -1271,7 +1273,7 @@ class ValidatingWebhookConfigurationWebhookClientConfig:
 
         Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fragments ("#...") and query parameters ("?...") are not allowed, either.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#url ValidatingWebhookConfiguration#url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#url ValidatingWebhookConfiguration#url}
         """
         result = self._values.get("url")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1328,10 +1330,10 @@ class ValidatingWebhookConfigurationWebhookClientConfigOutputReference(
         port: typing.Optional[jsii.Number] = None,
     ) -> None:
         """
-        :param name: ``name`` is the name of the service. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
-        :param namespace: ``namespace`` is the namespace of the service. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#namespace ValidatingWebhookConfiguration#namespace}
-        :param path: ``path`` is an optional URL path which will be sent in any request to this service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#path ValidatingWebhookConfiguration#path}
-        :param port: If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. ``port`` should be a valid port number (1-65535, inclusive). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#port ValidatingWebhookConfiguration#port}
+        :param name: ``name`` is the name of the service. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
+        :param namespace: ``namespace`` is the namespace of the service. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#namespace ValidatingWebhookConfiguration#namespace}
+        :param path: ``path`` is an optional URL path which will be sent in any request to this service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#path ValidatingWebhookConfiguration#path}
+        :param port: If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. ``port`` should be a valid port number (1-65535, inclusive). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#port ValidatingWebhookConfiguration#port}
         """
         value = ValidatingWebhookConfigurationWebhookClientConfigService(
             name=name, namespace=namespace, path=path, port=port
@@ -1460,10 +1462,10 @@ class ValidatingWebhookConfigurationWebhookClientConfigService:
         port: typing.Optional[jsii.Number] = None,
     ) -> None:
         """
-        :param name: ``name`` is the name of the service. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
-        :param namespace: ``namespace`` is the namespace of the service. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#namespace ValidatingWebhookConfiguration#namespace}
-        :param path: ``path`` is an optional URL path which will be sent in any request to this service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#path ValidatingWebhookConfiguration#path}
-        :param port: If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. ``port`` should be a valid port number (1-65535, inclusive). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#port ValidatingWebhookConfiguration#port}
+        :param name: ``name`` is the name of the service. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
+        :param namespace: ``namespace`` is the namespace of the service. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#namespace ValidatingWebhookConfiguration#namespace}
+        :param path: ``path`` is an optional URL path which will be sent in any request to this service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#path ValidatingWebhookConfiguration#path}
+        :param port: If specified, the port on the service that hosting webhook. Default to 443 for backward compatibility. ``port`` should be a valid port number (1-65535, inclusive). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#port ValidatingWebhookConfiguration#port}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1496,7 +1498,7 @@ class ValidatingWebhookConfigurationWebhookClientConfigService:
     def name(self) -> builtins.str:
         """``name`` is the name of the service. Required.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#name ValidatingWebhookConfiguration#name}
         """
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1506,7 +1508,7 @@ class ValidatingWebhookConfigurationWebhookClientConfigService:
     def namespace(self) -> builtins.str:
         """``namespace`` is the namespace of the service. Required.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#namespace ValidatingWebhookConfiguration#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#namespace ValidatingWebhookConfiguration#namespace}
         """
         result = self._values.get("namespace")
         assert result is not None, "Required property 'namespace' is missing"
@@ -1516,7 +1518,7 @@ class ValidatingWebhookConfigurationWebhookClientConfigService:
     def path(self) -> typing.Optional[builtins.str]:
         """``path`` is an optional URL path which will be sent in any request to this service.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#path ValidatingWebhookConfiguration#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#path ValidatingWebhookConfiguration#path}
         """
         result = self._values.get("path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1527,7 +1529,7 @@ class ValidatingWebhookConfigurationWebhookClientConfigService:
 
         Default to 443 for backward compatibility. ``port`` should be a valid port number (1-65535, inclusive).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#port ValidatingWebhookConfiguration#port}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#port ValidatingWebhookConfiguration#port}
         """
         result = self._values.get("port")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -1876,8 +1878,8 @@ class ValidatingWebhookConfigurationWebhookNamespaceSelector:
         ] = None,
     ) -> None:
         """
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1912,7 +1914,7 @@ class ValidatingWebhookConfigurationWebhookNamespaceSelector:
     ]:
         """match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
         """
         result = self._values.get("match_expressions")
         return typing.cast(
@@ -1935,7 +1937,7 @@ class ValidatingWebhookConfigurationWebhookNamespaceSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
         """
         result = self._values.get("match_labels")
         return typing.cast(
@@ -1968,9 +1970,9 @@ class ValidatingWebhookConfigurationWebhookNamespaceSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         """
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#key ValidatingWebhookConfiguration#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#operator ValidatingWebhookConfiguration#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#values ValidatingWebhookConfiguration#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#key ValidatingWebhookConfiguration#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#operator ValidatingWebhookConfiguration#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#values ValidatingWebhookConfiguration#values}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -2001,7 +2003,7 @@ class ValidatingWebhookConfigurationWebhookNamespaceSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         """The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#key ValidatingWebhookConfiguration#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#key ValidatingWebhookConfiguration#key}
         """
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2010,7 +2012,7 @@ class ValidatingWebhookConfigurationWebhookNamespaceSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         """A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#operator ValidatingWebhookConfiguration#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#operator ValidatingWebhookConfiguration#operator}
         """
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2021,7 +2023,7 @@ class ValidatingWebhookConfigurationWebhookNamespaceSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#values ValidatingWebhookConfiguration#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#values ValidatingWebhookConfiguration#values}
         """
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2547,8 +2549,8 @@ class ValidatingWebhookConfigurationWebhookObjectSelector:
         ] = None,
     ) -> None:
         """
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -2583,7 +2585,7 @@ class ValidatingWebhookConfigurationWebhookObjectSelector:
     ]:
         """match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
         """
         result = self._values.get("match_expressions")
         return typing.cast(
@@ -2606,7 +2608,7 @@ class ValidatingWebhookConfigurationWebhookObjectSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
         """
         result = self._values.get("match_labels")
         return typing.cast(
@@ -2639,9 +2641,9 @@ class ValidatingWebhookConfigurationWebhookObjectSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         """
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#key ValidatingWebhookConfiguration#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#operator ValidatingWebhookConfiguration#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#values ValidatingWebhookConfiguration#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#key ValidatingWebhookConfiguration#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#operator ValidatingWebhookConfiguration#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#values ValidatingWebhookConfiguration#values}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -2672,7 +2674,7 @@ class ValidatingWebhookConfigurationWebhookObjectSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         """The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#key ValidatingWebhookConfiguration#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#key ValidatingWebhookConfiguration#key}
         """
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2681,7 +2683,7 @@ class ValidatingWebhookConfigurationWebhookObjectSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         """A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#operator ValidatingWebhookConfiguration#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#operator ValidatingWebhookConfiguration#operator}
         """
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2692,7 +2694,7 @@ class ValidatingWebhookConfigurationWebhookObjectSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#values ValidatingWebhookConfiguration#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#values ValidatingWebhookConfiguration#values}
         """
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -3257,9 +3259,9 @@ class ValidatingWebhookConfigurationWebhookOutputReference(
         url: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param ca_bundle: ``caBundle`` is a PEM encoded CA bundle which will be used to validate the webhook's server certificate. If unspecified, system trust roots on the apiserver are used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#ca_bundle ValidatingWebhookConfiguration#ca_bundle}
-        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#service ValidatingWebhookConfiguration#service}
-        :param url: ``url`` gives the location of the webhook, in standard URL form (``scheme://host:port/path``). Exactly one of ``url`` or ``service`` must be specified. The ``host`` should not refer to a service running in the cluster; use the ``service`` field instead. The host might be resolved via external DNS in some apiservers (e.g., ``kube-apiserver`` cannot resolve in-cluster DNS as that would be a layering violation). ``host`` may also be an IP address. Please note that using ``localhost`` or ``127.0.0.1`` as a ``host`` is risky unless you take great care to run this webhook on all hosts which run an apiserver which might need to make calls to this webhook. Such installs are likely to be non-portable, i.e., not easy to turn up in a new cluster. The scheme must be "https"; the URL must begin with "https://". A path is optional, and if present may be any string permissible in a URL. You may use the path to pass an arbitrary string to the webhook, for example, a cluster identifier. Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fragments ("#...") and query parameters ("?...") are not allowed, either. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#url ValidatingWebhookConfiguration#url}
+        :param ca_bundle: ``caBundle`` is a PEM encoded CA bundle which will be used to validate the webhook's server certificate. If unspecified, system trust roots on the apiserver are used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#ca_bundle ValidatingWebhookConfiguration#ca_bundle}
+        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#service ValidatingWebhookConfiguration#service}
+        :param url: ``url`` gives the location of the webhook, in standard URL form (``scheme://host:port/path``). Exactly one of ``url`` or ``service`` must be specified. The ``host`` should not refer to a service running in the cluster; use the ``service`` field instead. The host might be resolved via external DNS in some apiservers (e.g., ``kube-apiserver`` cannot resolve in-cluster DNS as that would be a layering violation). ``host`` may also be an IP address. Please note that using ``localhost`` or ``127.0.0.1`` as a ``host`` is risky unless you take great care to run this webhook on all hosts which run an apiserver which might need to make calls to this webhook. Such installs are likely to be non-portable, i.e., not easy to turn up in a new cluster. The scheme must be "https"; the URL must begin with "https://". A path is optional, and if present may be any string permissible in a URL. You may use the path to pass an arbitrary string to the webhook, for example, a cluster identifier. Attempting to use a user or basic auth e.g. "user:password@" is not allowed. Fragments ("#...") and query parameters ("?...") are not allowed, either. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#url ValidatingWebhookConfiguration#url}
         """
         value = ValidatingWebhookConfigurationWebhookClientConfig(
             ca_bundle=ca_bundle, service=service, url=url
@@ -3287,8 +3289,8 @@ class ValidatingWebhookConfigurationWebhookOutputReference(
         ] = None,
     ) -> None:
         """
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
         """
         value = ValidatingWebhookConfigurationWebhookNamespaceSelector(
             match_expressions=match_expressions, match_labels=match_labels
@@ -3316,8 +3318,8 @@ class ValidatingWebhookConfigurationWebhookOutputReference(
         ] = None,
     ) -> None:
         """
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_expressions ValidatingWebhookConfiguration#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#match_labels ValidatingWebhookConfiguration#match_labels}
         """
         value = ValidatingWebhookConfigurationWebhookObjectSelector(
             match_expressions=match_expressions, match_labels=match_labels
@@ -3667,11 +3669,11 @@ class ValidatingWebhookConfigurationWebhookRule:
         scope: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param api_groups: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#api_groups ValidatingWebhookConfiguration#api_groups}.
-        :param api_versions: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#api_versions ValidatingWebhookConfiguration#api_versions}.
-        :param operations: Operations is the operations the admission hook cares about - CREATE, UPDATE, DELETE, CONNECT or * for all of those operations and any future admission operations that are added. If '*' is present, the length of the slice must be one. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#operations ValidatingWebhookConfiguration#operations}
-        :param resources: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#resources ValidatingWebhookConfiguration#resources}.
-        :param scope: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#scope ValidatingWebhookConfiguration#scope}.
+        :param api_groups: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#api_groups ValidatingWebhookConfiguration#api_groups}.
+        :param api_versions: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#api_versions ValidatingWebhookConfiguration#api_versions}.
+        :param operations: Operations is the operations the admission hook cares about - CREATE, UPDATE, DELETE, CONNECT or * for all of those operations and any future admission operations that are added. If '*' is present, the length of the slice must be one. Required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#operations ValidatingWebhookConfiguration#operations}
+        :param resources: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#resources ValidatingWebhookConfiguration#resources}.
+        :param scope: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#scope ValidatingWebhookConfiguration#scope}.
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -3711,14 +3713,14 @@ class ValidatingWebhookConfigurationWebhookRule:
 
     @builtins.property
     def api_groups(self) -> typing.List[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#api_groups ValidatingWebhookConfiguration#api_groups}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#api_groups ValidatingWebhookConfiguration#api_groups}."""
         result = self._values.get("api_groups")
         assert result is not None, "Required property 'api_groups' is missing"
         return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
     def api_versions(self) -> typing.List[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#api_versions ValidatingWebhookConfiguration#api_versions}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#api_versions ValidatingWebhookConfiguration#api_versions}."""
         result = self._values.get("api_versions")
         assert result is not None, "Required property 'api_versions' is missing"
         return typing.cast(typing.List[builtins.str], result)
@@ -3729,7 +3731,7 @@ class ValidatingWebhookConfigurationWebhookRule:
 
         If '*' is present, the length of the slice must be one. Required.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#operations ValidatingWebhookConfiguration#operations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#operations ValidatingWebhookConfiguration#operations}
         """
         result = self._values.get("operations")
         assert result is not None, "Required property 'operations' is missing"
@@ -3737,14 +3739,14 @@ class ValidatingWebhookConfigurationWebhookRule:
 
     @builtins.property
     def resources(self) -> typing.List[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#resources ValidatingWebhookConfiguration#resources}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#resources ValidatingWebhookConfiguration#resources}."""
         result = self._values.get("resources")
         assert result is not None, "Required property 'resources' is missing"
         return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
     def scope(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/validating_webhook_configuration#scope ValidatingWebhookConfiguration#scope}."""
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/validating_webhook_configuration#scope ValidatingWebhookConfiguration#scope}."""
         result = self._values.get("scope")
         return typing.cast(typing.Optional[builtins.str], result)
 

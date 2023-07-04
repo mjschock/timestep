@@ -1,7 +1,7 @@
 """
 # `kubernetes_endpoints_v1`
 
-Refer to the Terraform Registory for docs: [`kubernetes_endpoints_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1).
+Refer to the Terraform Registory for docs: [`kubernetes_endpoints_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1).
 """
 import abc
 import builtins
@@ -9,14 +9,16 @@ import datetime
 import enum
 import typing
 
-import cdktf as _cdktf_9a9027ec
-import constructs as _constructs_77d1e7e8
 import jsii
 import publication
 import typing_extensions
+
 from typeguard import check_type
 
 from .._jsii import *
+
+import cdktf as _cdktf_9a9027ec
+import constructs as _constructs_77d1e7e8
 
 
 class EndpointsV1(
@@ -24,7 +26,7 @@ class EndpointsV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.endpointsV1.EndpointsV1",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1 kubernetes_endpoints_v1}."""
+    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1 kubernetes_endpoints_v1}."""
 
     def __init__(
         self,
@@ -90,13 +92,13 @@ class EndpointsV1(
             ]
         ] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1 kubernetes_endpoints_v1} Resource.
+        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1 kubernetes_endpoints_v1} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#metadata EndpointsV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#id EndpointsV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param subset: subset block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#subset EndpointsV1#subset}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#metadata EndpointsV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#id EndpointsV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param subset: subset block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#subset EndpointsV1#subset}
         :param connection:
         :param count:
         :param depends_on:
@@ -141,11 +143,11 @@ class EndpointsV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the endpoints that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#annotations EndpointsV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#generate_name EndpointsV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the endpoints. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#labels EndpointsV1#labels}
-        :param name: Name of the endpoints, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#name EndpointsV1#name}
-        :param namespace: Namespace defines the space within which name of the endpoints must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#namespace EndpointsV1#namespace}
+        :param annotations: An unstructured key value map stored with the endpoints that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#annotations EndpointsV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#generate_name EndpointsV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the endpoints. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#labels EndpointsV1#labels}
+        :param name: Name of the endpoints, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#name EndpointsV1#name}
+        :param namespace: Namespace defines the space within which name of the endpoints must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#namespace EndpointsV1#namespace}
         """
         value = EndpointsV1Metadata(
             annotations=annotations,
@@ -343,9 +345,9 @@ class EndpointsV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle:
         :param provider:
         :param provisioners:
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#metadata EndpointsV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#id EndpointsV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param subset: subset block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#subset EndpointsV1#subset}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#metadata EndpointsV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#id EndpointsV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param subset: subset block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#subset EndpointsV1#subset}
         """
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -528,7 +530,7 @@ class EndpointsV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "EndpointsV1Metadata":
         """metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#metadata EndpointsV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#metadata EndpointsV1#metadata}
         """
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -536,7 +538,7 @@ class EndpointsV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#id EndpointsV1#id}.
+        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#id EndpointsV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -552,7 +554,7 @@ class EndpointsV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     ]:
         """subset block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#subset EndpointsV1#subset}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#subset EndpointsV1#subset}
         """
         result = self._values.get("subset")
         return typing.cast(
@@ -598,11 +600,11 @@ class EndpointsV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param annotations: An unstructured key value map stored with the endpoints that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#annotations EndpointsV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#generate_name EndpointsV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the endpoints. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#labels EndpointsV1#labels}
-        :param name: Name of the endpoints, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#name EndpointsV1#name}
-        :param namespace: Namespace defines the space within which name of the endpoints must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#namespace EndpointsV1#namespace}
+        :param annotations: An unstructured key value map stored with the endpoints that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#annotations EndpointsV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#generate_name EndpointsV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the endpoints. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#labels EndpointsV1#labels}
+        :param name: Name of the endpoints, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#name EndpointsV1#name}
+        :param namespace: Namespace defines the space within which name of the endpoints must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#namespace EndpointsV1#namespace}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -651,7 +653,7 @@ class EndpointsV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#annotations EndpointsV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#annotations EndpointsV1#annotations}
         """
         result = self._values.get("annotations")
         return typing.cast(
@@ -664,7 +666,7 @@ class EndpointsV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#generate_name EndpointsV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#generate_name EndpointsV1#generate_name}
         """
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -675,7 +677,7 @@ class EndpointsV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#labels EndpointsV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#labels EndpointsV1#labels}
         """
         result = self._values.get("labels")
         return typing.cast(
@@ -686,7 +688,7 @@ class EndpointsV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         """Name of the endpoints, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#name EndpointsV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#name EndpointsV1#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -695,7 +697,7 @@ class EndpointsV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         """Namespace defines the space within which name of the endpoints must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#namespace EndpointsV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#namespace EndpointsV1#namespace}
         """
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -966,9 +968,9 @@ class EndpointsV1Subset:
         ] = None,
     ) -> None:
         """
-        :param address: address block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#address EndpointsV1#address}
-        :param not_ready_address: not_ready_address block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#not_ready_address EndpointsV1#not_ready_address}
-        :param port: port block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#port EndpointsV1#port}
+        :param address: address block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#address EndpointsV1#address}
+        :param not_ready_address: not_ready_address block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#not_ready_address EndpointsV1#not_ready_address}
+        :param port: port block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#port EndpointsV1#port}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1005,7 +1007,7 @@ class EndpointsV1Subset:
     ]:
         """address block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#address EndpointsV1#address}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#address EndpointsV1#address}
         """
         result = self._values.get("address")
         return typing.cast(
@@ -1027,7 +1029,7 @@ class EndpointsV1Subset:
     ]:
         """not_ready_address block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#not_ready_address EndpointsV1#not_ready_address}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#not_ready_address EndpointsV1#not_ready_address}
         """
         result = self._values.get("not_ready_address")
         return typing.cast(
@@ -1048,7 +1050,7 @@ class EndpointsV1Subset:
     ]:
         """port block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#port EndpointsV1#port}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#port EndpointsV1#port}
         """
         result = self._values.get("port")
         return typing.cast(
@@ -1086,9 +1088,9 @@ class EndpointsV1SubsetAddress:
         node_name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param ip: The IP of this endpoint. May not be loopback (127.0.0.0/8), link-local (169.254.0.0/16), or link-local multicast ((224.0.0.0/24). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#ip EndpointsV1#ip}
-        :param hostname: The Hostname of this endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#hostname EndpointsV1#hostname}
-        :param node_name: Node hosting this endpoint. This can be used to determine endpoints local to a node. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#node_name EndpointsV1#node_name}
+        :param ip: The IP of this endpoint. May not be loopback (127.0.0.0/8), link-local (169.254.0.0/16), or link-local multicast ((224.0.0.0/24). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#ip EndpointsV1#ip}
+        :param hostname: The Hostname of this endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#hostname EndpointsV1#hostname}
+        :param node_name: Node hosting this endpoint. This can be used to determine endpoints local to a node. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#node_name EndpointsV1#node_name}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1117,7 +1119,7 @@ class EndpointsV1SubsetAddress:
     def ip(self) -> builtins.str:
         """The IP of this endpoint. May not be loopback (127.0.0.0/8), link-local (169.254.0.0/16), or link-local multicast ((224.0.0.0/24).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#ip EndpointsV1#ip}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#ip EndpointsV1#ip}
         """
         result = self._values.get("ip")
         assert result is not None, "Required property 'ip' is missing"
@@ -1127,7 +1129,7 @@ class EndpointsV1SubsetAddress:
     def hostname(self) -> typing.Optional[builtins.str]:
         """The Hostname of this endpoint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#hostname EndpointsV1#hostname}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#hostname EndpointsV1#hostname}
         """
         result = self._values.get("hostname")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1136,7 +1138,7 @@ class EndpointsV1SubsetAddress:
     def node_name(self) -> typing.Optional[builtins.str]:
         """Node hosting this endpoint. This can be used to determine endpoints local to a node.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#node_name EndpointsV1#node_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#node_name EndpointsV1#node_name}
         """
         result = self._values.get("node_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1610,9 +1612,9 @@ class EndpointsV1SubsetNotReadyAddress:
         node_name: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param ip: The IP of this endpoint. May not be loopback (127.0.0.0/8), link-local (169.254.0.0/16), or link-local multicast ((224.0.0.0/24). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#ip EndpointsV1#ip}
-        :param hostname: The Hostname of this endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#hostname EndpointsV1#hostname}
-        :param node_name: Node hosting this endpoint. This can be used to determine endpoints local to a node. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#node_name EndpointsV1#node_name}
+        :param ip: The IP of this endpoint. May not be loopback (127.0.0.0/8), link-local (169.254.0.0/16), or link-local multicast ((224.0.0.0/24). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#ip EndpointsV1#ip}
+        :param hostname: The Hostname of this endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#hostname EndpointsV1#hostname}
+        :param node_name: Node hosting this endpoint. This can be used to determine endpoints local to a node. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#node_name EndpointsV1#node_name}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -1641,7 +1643,7 @@ class EndpointsV1SubsetNotReadyAddress:
     def ip(self) -> builtins.str:
         """The IP of this endpoint. May not be loopback (127.0.0.0/8), link-local (169.254.0.0/16), or link-local multicast ((224.0.0.0/24).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#ip EndpointsV1#ip}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#ip EndpointsV1#ip}
         """
         result = self._values.get("ip")
         assert result is not None, "Required property 'ip' is missing"
@@ -1651,7 +1653,7 @@ class EndpointsV1SubsetNotReadyAddress:
     def hostname(self) -> typing.Optional[builtins.str]:
         """The Hostname of this endpoint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#hostname EndpointsV1#hostname}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#hostname EndpointsV1#hostname}
         """
         result = self._values.get("hostname")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1660,7 +1662,7 @@ class EndpointsV1SubsetNotReadyAddress:
     def node_name(self) -> typing.Optional[builtins.str]:
         """Node hosting this endpoint. This can be used to determine endpoints local to a node.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#node_name EndpointsV1#node_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#node_name EndpointsV1#node_name}
         """
         result = self._values.get("node_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2238,9 +2240,9 @@ class EndpointsV1SubsetPort:
         protocol: typing.Optional[builtins.str] = None,
     ) -> None:
         """
-        :param port: The port that will be exposed by this endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#port EndpointsV1#port}
-        :param name: The name of this port within the endpoint. Must be a DNS_LABEL. Optional if only one Port is defined on this endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#name EndpointsV1#name}
-        :param protocol: The IP protocol for this port. Supports ``TCP`` and ``UDP``. Default is ``TCP``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#protocol EndpointsV1#protocol}
+        :param port: The port that will be exposed by this endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#port EndpointsV1#port}
+        :param name: The name of this port within the endpoint. Must be a DNS_LABEL. Optional if only one Port is defined on this endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#name EndpointsV1#name}
+        :param protocol: The IP protocol for this port. Supports ``TCP`` and ``UDP``. Default is ``TCP``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#protocol EndpointsV1#protocol}
         """
         if __debug__:
             type_hints = typing.get_type_hints(
@@ -2269,7 +2271,7 @@ class EndpointsV1SubsetPort:
     def port(self) -> jsii.Number:
         """The port that will be exposed by this endpoint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#port EndpointsV1#port}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#port EndpointsV1#port}
         """
         result = self._values.get("port")
         assert result is not None, "Required property 'port' is missing"
@@ -2281,7 +2283,7 @@ class EndpointsV1SubsetPort:
 
         Must be a DNS_LABEL. Optional if only one Port is defined on this endpoint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#name EndpointsV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#name EndpointsV1#name}
         """
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2290,7 +2292,7 @@ class EndpointsV1SubsetPort:
     def protocol(self) -> typing.Optional[builtins.str]:
         """The IP protocol for this port. Supports ``TCP`` and ``UDP``. Default is ``TCP``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.0/docs/resources/endpoints_v1#protocol EndpointsV1#protocol}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/endpoints_v1#protocol EndpointsV1#protocol}
         """
         result = self._values.get("protocol")
         return typing.cast(typing.Optional[builtins.str], result)
