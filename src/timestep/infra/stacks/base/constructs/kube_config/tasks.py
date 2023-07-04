@@ -85,7 +85,7 @@ def get_kube_config_resource(
             "ipv4": ipv4,
             "kubecontext": kubecontext,
             "local_path": local_path,
-            "ssh_private_key": ssh_private_key_path,
+            "ssh_private_key": str(ssh_private_key),  # TODO: Make sure this is hidden
         },
     )
 
