@@ -72,6 +72,7 @@ def main(config: AppConfig) -> None:
             scope=k3s_cluster_stack,
             hostname=config.variables.get("tf_hostname"),
             organization=config.variables.get("tf_organization"),
+            token=config.secrets.get_secret_value().get("tf_api_token"),
             workspaces=NamedCloudWorkspace(config.variables.get("tf_workspace")),
         )
 
