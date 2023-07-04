@@ -8,7 +8,6 @@ from cdktf import (
 )
 from constructs import Construct
 from prefect import get_run_logger
-from prefect.blocks.kubernetes import KubernetesClusterConfig
 from prefect.futures import PrefectFuture
 
 from timestep.conf.blocks import AppConfig
@@ -71,16 +70,20 @@ class KubeConfigConstruct(Construct):
         self.data_source = self.kube_config_data_source_future.result()
         self.outputs = self.kube_config_outputs_future.result()
 
-        try:
-            kube_config_block = KubernetesClusterConfig.load("kube-config")
+        # tf_locals = TerraformLocal(
+        #     scope=scope,
+        # )
 
-        except ValueError:
-            kube_config_block = KubernetesClusterConfig.from_file(
-                path=config.variables.get("kubeconfig"),
-                context_name=config.variables.get("kubecontext"),
-            )
+        # try:
+        #     kube_config_block = KubernetesClusterConfig.load("kube-config")
 
-            kube_config_block.save(
-                name="kube-config",
-                overwrite=False,
-            )
+        # except ValueError:
+        #     kube_config_block = KubernetesClusterConfig.from_file(
+        #         path=config.variables.get("kubeconfig"),
+        #         context_name=config.variables.get("kubecontext"),
+        #     )
+
+        #     kube_config_block.save(
+        #         name="kube-config",
+        #         overwrite=False,
+        #     )

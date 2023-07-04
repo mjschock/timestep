@@ -30,14 +30,13 @@ class SecureShellCredentials(Block):
                 if not os.path.exists(output_keyfile):
                     os.makedirs(os.path.dirname(output_keyfile), exist_ok=True)
 
-                    with ShellOperation(
-                        commands=[
-                            f"""ssh-keygen \
+                    command = f"""ssh-keygen \
 -t {key_type} \
 -C {comment} \
 -f {output_keyfile} \
--N ''""",
-                        ],
+-N ''"""
+                    with ShellOperation(
+                        commands=[command],
                     ) as shell_operation:
                         shell_process = shell_operation.trigger()
                         shell_process.wait_for_completion()
