@@ -41,19 +41,19 @@ local_resource(
         'poetry.lock',
         'src/timestep/__main__.py',
         'src/timestep/conf/blocks.py',
-        'src/timestep/infra/stacks/base/stack.py',
-        'src/timestep/infra/stacks/base/constructs/cloud_init_config/blocks.py',
-        'src/timestep/infra/stacks/base/constructs/cloud_init_config/tasks.py',
-        'src/timestep/infra/stacks/base/constructs/cloud_instance/blocks.py',
-        'src/timestep/infra/stacks/base/constructs/cloud_instance/tasks.py',
-        'src/timestep/infra/stacks/base/constructs/cloud_instance_domain/blocks.py',
-        'src/timestep/infra/stacks/base/constructs/cloud_instance_domain/tasks.py',
-        'src/timestep/infra/stacks/base/constructs/domain_name_registrar/blocks.py',
-        'src/timestep/infra/stacks/base/constructs/domain_name_registrar/tasks.py',
-        'src/timestep/infra/stacks/base/constructs/kube_config/blocks.py',
-        'src/timestep/infra/stacks/base/constructs/kube_config/tasks.py',
-        'src/timestep/infra/stacks/base/constructs/kubernetes_cluster/blocks.py',
-        'src/timestep/infra/stacks/base/constructs/kubernetes_cluster/tasks.py',
+        'src/timestep/infra/stacks/k3s_cluster/stack.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_init_config/blocks.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_init_config/tasks.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance/blocks.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance/tasks.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance_domain/blocks.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance_domain/tasks.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/domain_name_registrar/blocks.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/domain_name_registrar/tasks.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/kube_config/blocks.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/kube_config/tasks.py',
+        'src/timestep/infra/stacks/kubernetes_cluster/constructs/kubernetes_cluster/blocks.py',
+        'src/timestep/infra/stacks/kubernetes_cluster/constructs/kubernetes_cluster/tasks.py',
     ],
     env={
     },
@@ -92,4 +92,4 @@ local_resource(
     },
 )
 
-# k8s_yaml(listdir('src/timestep/infra/stacks/base/constructs/kubernetes_cluster/sample'))
+# k8s_yaml(listdir('src/timestep/infra/stacks/k3s_cluster/constructs/kubernetes_cluster/sample'))

@@ -12,7 +12,7 @@ from prefect import get_run_logger
 from prefect.futures import PrefectFuture
 
 from timestep.conf.blocks import AppConfig
-from timestep.infra.stacks.base.constructs.cloud_init_config.tasks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.tasks import (
     get_cloud_init_config_data_source,
     get_cloud_init_config_outputs,
     get_cloud_init_config_provider,

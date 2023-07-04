@@ -6,7 +6,7 @@ from dotenv import dotenv_values
 from prefect import flow, get_run_logger
 
 from timestep.conf.blocks import AppConfig, SecureShellCredentials
-from timestep.infra.stacks.base.stack import BaseStack
+from timestep.infra.stacks.k3s_cluster.stack import K3sClusterStack
 
 BASE_PATH = pathlib.Path.cwd()
 DIST_PATH: str = f"{BASE_PATH}/dist"
@@ -30,7 +30,7 @@ def main(config: AppConfig) -> None:
     assert app.node.get_context("allowSepCharsInLogicalIds") == "true"
     assert app.node.get_context("excludeStackIdFromLogicalIds") == "true"
 
-    base_stack: TerraformStack = BaseStack(
+    k3s_cluster_stack: TerraformStack = K3sClusterStack(
         config=config,
         scope=app,
         id=config.variables.get("primary_domain_name"),
@@ -39,7 +39,7 @@ def main(config: AppConfig) -> None:
     stack_id: str = config.variables.get("primary_domain_name")
     LocalBackend(
         path=f"terraform.{stack_id}.tfstate",
-        scope=base_stack,
+        scope=k3s_cluster_stack,
         workspace_dir=None,
     )
 

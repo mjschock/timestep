@@ -11,10 +11,10 @@ from prefect import get_run_logger
 from prefect.futures import PrefectFuture
 
 from timestep.conf.blocks import AppConfig
-from timestep.infra.stacks.base.constructs.cloud_instance.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
     CloudInstanceConstruct,
 )
-from timestep.infra.stacks.base.constructs.domain_name_registrar.tasks import (
+from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.tasks import (
     get_domain_name_registrar_data_source,
     get_domain_name_registrar_outputs,
     get_domain_name_registrar_provider,

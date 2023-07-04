@@ -9,4 +9,5 @@ __pycache__
 .ssh
 .venv
 
+projen
 src/timestep/projects

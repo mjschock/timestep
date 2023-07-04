@@ -1646,18 +1646,18 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "jsii"
-version = "1.83.0"
+version = "1.84.0"
 description = "Python client for jsii runtime"
 optional = false
 python-versions = "~=3.7"
 files = [
-    {file = "jsii-1.83.0-py3-none-any.whl", hash = "sha256:7c9790843d09ef92d8fec7955ff37419435127bc42a72cd83745ebaab8545f03"},
-    {file = "jsii-1.83.0.tar.gz", hash = "sha256:ed5af7f656bfe652543668e2fb8667c527391b09d02a0fec1deca1e1aa0118ad"},
+    {file = "jsii-1.84.0-py3-none-any.whl", hash = "sha256:7748205665d079112721d6eb23a37fa084722ab675f65e8a6514ec908660bd57"},
+    {file = "jsii-1.84.0.tar.gz", hash = "sha256:29f8352525e980e126d5d0fd3510fff9a81a8dbc36249f99d922907f2e6bf4c3"},
 ]
 
 [package.dependencies]
 attrs = ">=21.2,<24.0"
-cattrs = ">=1.8,<22.3"
+cattrs = ">=1.8,<23.2"
 importlib-resources = ">=5.2.0"
 publication = ">=0.0.3"
 python-dateutil = "*"
