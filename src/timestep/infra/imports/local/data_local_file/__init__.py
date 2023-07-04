@@ -1,8 +1,8 @@
-"""
+'''
 # `data_local_file`
 
 Refer to the Terraform Registory for docs: [`data_local_file`](https://registry.terraform.io/providers/hashicorp/local/2.4.0/docs/data-sources/file).
-"""
+'''
 import abc
 import builtins
 import datetime
@@ -26,7 +26,7 @@ class DataLocalFile(
     metaclass=jsii.JSIIMeta,
     jsii_type="local.dataLocalFile.DataLocalFile",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/local/2.4.0/docs/data-sources/file local_file}."""
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/local/2.4.0/docs/data-sources/file local_file}.'''
 
     def __init__(
         self,
@@ -34,71 +34,30 @@ class DataLocalFile(
         id: builtins.str,
         *,
         filename: builtins.str,
-        connection: typing.Optional[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ] = None,
-        count: typing.Optional[
-            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-        ] = None,
-        depends_on: typing.Optional[
-            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-        ] = None,
+        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[
-            typing.Union[
-                _cdktf_9a9027ec.TerraformResourceLifecycle,
-                typing.Dict[builtins.str, typing.Any],
-            ]
-        ] = None,
+        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[
-            typing.Sequence[
-                typing.Union[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                ]
-            ]
-        ] = None,
+        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/local/2.4.0/docs/data-sources/file local_file} Data Source.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/local/2.4.0/docs/data-sources/file local_file} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
         :param filename: Path to the file that will be read. The data source will return an error if the file does not exist. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/local/2.4.0/docs/data-sources/file#filename DataLocalFile#filename}
-        :param connection:
-        :param count:
-        :param depends_on:
-        :param for_each:
-        :param lifecycle:
-        :param provider:
-        :param provisioners:
-        """
+        :param connection: 
+        :param count: 
+        :param depends_on: 
+        :param for_each: 
+        :param lifecycle: 
+        :param provider: 
+        :param provisioners: 
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__687a723fc3a980cd3b66a9e073b3e8bf657445526c4e6440aac1dd378a2bb6dc
-            )
-            check_type(
-                argname="argument scope", value=scope, expected_type=type_hints["scope"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__687a723fc3a980cd3b66a9e073b3e8bf657445526c4e6440aac1dd378a2bb6dc)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         config = DataLocalFileConfig(
             filename=filename,
@@ -115,10 +74,7 @@ class DataLocalFile(
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(
-            typing.Mapping[builtins.str, typing.Any],
-            jsii.invoke(self, "synthesizeAttributes", []),
-        )
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="tfResourceType")
@@ -173,9 +129,7 @@ class DataLocalFile(
     @builtins.property
     @jsii.member(jsii_name="filenameInput")
     def filename_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(
-            typing.Optional[builtins.str], jsii.get(self, "filenameInput")
-        )
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "filenameInput"))
 
     @builtins.property
     @jsii.member(jsii_name="filename")
@@ -185,12 +139,8 @@ class DataLocalFile(
     @filename.setter
     def filename(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__de412e9398830e8c6aac82bd2c898c3654fc54764630ea86323bc2407190cefa
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__de412e9398830e8c6aac82bd2c898c3654fc54764630ea86323bc2407190cefa)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "filename", value)
 
 
@@ -212,106 +162,37 @@ class DataLocalFileConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def __init__(
         self,
         *,
-        connection: typing.Optional[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ] = None,
-        count: typing.Optional[
-            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-        ] = None,
-        depends_on: typing.Optional[
-            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-        ] = None,
+        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[
-            typing.Union[
-                _cdktf_9a9027ec.TerraformResourceLifecycle,
-                typing.Dict[builtins.str, typing.Any],
-            ]
-        ] = None,
+        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[
-            typing.Sequence[
-                typing.Union[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                ]
-            ]
-        ] = None,
+        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
         filename: builtins.str,
     ) -> None:
-        """
-        :param connection:
-        :param count:
-        :param depends_on:
-        :param for_each:
-        :param lifecycle:
-        :param provider:
-        :param provisioners:
+        '''
+        :param connection: 
+        :param count: 
+        :param depends_on: 
+        :param for_each: 
+        :param lifecycle: 
+        :param provider: 
+        :param provisioners: 
         :param filename: Path to the file that will be read. The data source will return an error if the file does not exist. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/local/2.4.0/docs/data-sources/file#filename DataLocalFile#filename}
-        """
+        '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__533b322ad7c1b6b009eeec1a0e15c481523a2ca3505c59df2493edea0b75ac5f
-            )
-            check_type(
-                argname="argument connection",
-                value=connection,
-                expected_type=type_hints["connection"],
-            )
-            check_type(
-                argname="argument count", value=count, expected_type=type_hints["count"]
-            )
-            check_type(
-                argname="argument depends_on",
-                value=depends_on,
-                expected_type=type_hints["depends_on"],
-            )
-            check_type(
-                argname="argument for_each",
-                value=for_each,
-                expected_type=type_hints["for_each"],
-            )
-            check_type(
-                argname="argument lifecycle",
-                value=lifecycle,
-                expected_type=type_hints["lifecycle"],
-            )
-            check_type(
-                argname="argument provider",
-                value=provider,
-                expected_type=type_hints["provider"],
-            )
-            check_type(
-                argname="argument provisioners",
-                value=provisioners,
-                expected_type=type_hints["provisioners"],
-            )
-            check_type(
-                argname="argument filename",
-                value=filename,
-                expected_type=type_hints["filename"],
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__533b322ad7c1b6b009eeec1a0e15c481523a2ca3505c59df2493edea0b75ac5f)
+            check_type(argname="argument connection", value=connection, expected_type=type_hints["connection"])
+            check_type(argname="argument count", value=count, expected_type=type_hints["count"])
+            check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
+            check_type(argname="argument for_each", value=for_each, expected_type=type_hints["for_each"])
+            check_type(argname="argument lifecycle", value=lifecycle, expected_type=type_hints["lifecycle"])
+            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
+            check_type(argname="argument provisioners", value=provisioners, expected_type=type_hints["provisioners"])
+            check_type(argname="argument filename", value=filename, expected_type=type_hints["filename"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "filename": filename,
         }
@@ -333,114 +214,75 @@ class DataLocalFileConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     @builtins.property
     def connection(
         self,
-    ) -> typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.SSHProvisionerConnection,
-            _cdktf_9a9027ec.WinrmProvisionerConnection,
-        ]
-    ]:
-        """
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]]:
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("connection")
-        return typing.cast(
-            typing.Optional[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                ]
-            ],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
     def count(
         self,
     ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("count")
-        return typing.cast(
-            typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
         self,
     ) -> typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("depends_on")
-        return typing.cast(
-            typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result
-        )
+        return typing.cast(typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result)
 
     @builtins.property
     def for_each(self) -> typing.Optional[_cdktf_9a9027ec.ITerraformIterator]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("for_each")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.ITerraformIterator], result)
 
     @builtins.property
     def lifecycle(self) -> typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("lifecycle")
-        return typing.cast(
-            typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result
-        )
+        return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result)
 
     @builtins.property
     def provider(self) -> typing.Optional[_cdktf_9a9027ec.TerraformProvider]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("provider")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformProvider], result)
 
     @builtins.property
     def provisioners(
         self,
-    ) -> typing.Optional[
-        typing.List[
-            typing.Union[
-                _cdktf_9a9027ec.FileProvisioner,
-                _cdktf_9a9027ec.LocalExecProvisioner,
-                _cdktf_9a9027ec.RemoteExecProvisioner,
-            ]
-        ]
-    ]:
-        """
+    ) -> typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]]:
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("provisioners")
-        return typing.cast(
-            typing.Optional[
-                typing.List[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                    ]
-                ]
-            ],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]], result)
 
     @builtins.property
     def filename(self) -> builtins.str:
-        """Path to the file that will be read.
+        '''Path to the file that will be read.
 
         The data source will return an error if the file does not exist.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/local/2.4.0/docs/data-sources/file#filename DataLocalFile#filename}
-        """
+        '''
         result = self._values.get("filename")
         assert result is not None, "Required property 'filename' is missing"
         return typing.cast(builtins.str, result)
@@ -464,60 +306,21 @@ __all__ = [
 
 publication.publish()
 
-
 def _typecheckingstub__687a723fc3a980cd3b66a9e073b3e8bf657445526c4e6440aac1dd378a2bb6dc(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
     filename: builtins.str,
-    connection: typing.Optional[
-        typing.Union[
-            typing.Union[
-                _cdktf_9a9027ec.SSHProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-            typing.Union[
-                _cdktf_9a9027ec.WinrmProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-        ]
-    ] = None,
-    count: typing.Optional[
-        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-    ] = None,
-    depends_on: typing.Optional[
-        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-    ] = None,
+    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.TerraformResourceLifecycle,
-            typing.Dict[builtins.str, typing.Any],
-        ]
-    ] = None,
+    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[
-        typing.Sequence[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.FileProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.LocalExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.RemoteExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ]
-    ] = None,
+    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__de412e9398830e8c6aac82bd2c898c3654fc54764630ea86323bc2407190cefa(
     value: builtins.str,
@@ -525,53 +328,15 @@ def _typecheckingstub__de412e9398830e8c6aac82bd2c898c3654fc54764630ea86323bc2407
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__533b322ad7c1b6b009eeec1a0e15c481523a2ca3505c59df2493edea0b75ac5f(
     *,
-    connection: typing.Optional[
-        typing.Union[
-            typing.Union[
-                _cdktf_9a9027ec.SSHProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-            typing.Union[
-                _cdktf_9a9027ec.WinrmProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-        ]
-    ] = None,
-    count: typing.Optional[
-        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-    ] = None,
-    depends_on: typing.Optional[
-        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-    ] = None,
+    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.TerraformResourceLifecycle,
-            typing.Dict[builtins.str, typing.Any],
-        ]
-    ] = None,
+    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[
-        typing.Sequence[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.FileProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.LocalExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.RemoteExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ]
-    ] = None,
+    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     filename: builtins.str,
 ) -> None:
     """Type checking stubs"""

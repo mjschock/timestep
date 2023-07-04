@@ -1,8 +1,8 @@
-"""
+'''
 # `kubernetes_priority_class`
 
 Refer to the Terraform Registory for docs: [`kubernetes_priority_class`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class).
-"""
+'''
 import abc
 import builtins
 import datetime
@@ -26,69 +26,28 @@ class PriorityClass(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.priorityClass.PriorityClass",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class kubernetes_priority_class}."""
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class kubernetes_priority_class}.'''
 
     def __init__(
         self,
         scope: _constructs_77d1e7e8.Construct,
         id_: builtins.str,
         *,
-        metadata: typing.Union[
-            "PriorityClassMetadata", typing.Dict[builtins.str, typing.Any]
-        ],
+        metadata: typing.Union["PriorityClassMetadata", typing.Dict[builtins.str, typing.Any]],
         value: jsii.Number,
         description: typing.Optional[builtins.str] = None,
-        global_default: typing.Optional[
-            typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]
-        ] = None,
+        global_default: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
         id: typing.Optional[builtins.str] = None,
         preemption_policy: typing.Optional[builtins.str] = None,
-        connection: typing.Optional[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ] = None,
-        count: typing.Optional[
-            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-        ] = None,
-        depends_on: typing.Optional[
-            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-        ] = None,
+        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[
-            typing.Union[
-                _cdktf_9a9027ec.TerraformResourceLifecycle,
-                typing.Dict[builtins.str, typing.Any],
-            ]
-        ] = None,
+        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[
-            typing.Sequence[
-                typing.Union[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                ]
-            ]
-        ] = None,
+        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class kubernetes_priority_class} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class kubernetes_priority_class} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -98,24 +57,18 @@ class PriorityClass(
         :param global_default: Specifies whether this PriorityClass should be considered as the default priority for pods that do not have any priority class. Only one PriorityClass can be marked as ``globalDefault``. However, if more than one PriorityClasses exists with their ``globalDefault`` field set to true, the smallest value of such global default PriorityClasses will be used as the default priority. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#global_default PriorityClass#global_default}
         :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#id PriorityClass#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param preemption_policy: PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#preemption_policy PriorityClass#preemption_policy}
-        :param connection:
-        :param count:
-        :param depends_on:
-        :param for_each:
-        :param lifecycle:
-        :param provider:
-        :param provisioners:
-        """
+        :param connection: 
+        :param count: 
+        :param depends_on: 
+        :param for_each: 
+        :param lifecycle: 
+        :param provider: 
+        :param provisioners: 
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__2f73eb862103560e5bfc0dab7aebcae51d5302082ce37e09441b6143d9e46a1f
-            )
-            check_type(
-                argname="argument scope", value=scope, expected_type=type_hints["scope"]
-            )
-            check_type(
-                argname="argument id_", value=id_, expected_type=type_hints["id_"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__2f73eb862103560e5bfc0dab7aebcae51d5302082ce37e09441b6143d9e46a1f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id_", value=id_, expected_type=type_hints["id_"])
         config = PriorityClassConfig(
             metadata=metadata,
             value=value,
@@ -143,12 +96,12 @@ class PriorityClass(
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
-        """
+        '''
         :param annotations: An unstructured key value map stored with the priority class that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#annotations PriorityClass#annotations}
         :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#generate_name PriorityClass#generate_name}
         :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the priority class. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#labels PriorityClass#labels}
         :param name: Name of the priority class, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#name PriorityClass#name}
-        """
+        '''
         value = PriorityClassMetadata(
             annotations=annotations,
             generate_name=generate_name,
@@ -176,10 +129,7 @@ class PriorityClass(
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(
-            typing.Mapping[builtins.str, typing.Any],
-            jsii.invoke(self, "synthesizeAttributes", []),
-        )
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="tfResourceType")
@@ -189,26 +139,19 @@ class PriorityClass(
     @builtins.property
     @jsii.member(jsii_name="metadata")
     def metadata(self) -> "PriorityClassMetadataOutputReference":
-        return typing.cast(
-            "PriorityClassMetadataOutputReference", jsii.get(self, "metadata")
-        )
+        return typing.cast("PriorityClassMetadataOutputReference", jsii.get(self, "metadata"))
 
     @builtins.property
     @jsii.member(jsii_name="descriptionInput")
     def description_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(
-            typing.Optional[builtins.str], jsii.get(self, "descriptionInput")
-        )
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "descriptionInput"))
 
     @builtins.property
     @jsii.member(jsii_name="globalDefaultInput")
     def global_default_input(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(
-            typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]],
-            jsii.get(self, "globalDefaultInput"),
-        )
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "globalDefaultInput"))
 
     @builtins.property
     @jsii.member(jsii_name="idInput")
@@ -218,16 +161,12 @@ class PriorityClass(
     @builtins.property
     @jsii.member(jsii_name="metadataInput")
     def metadata_input(self) -> typing.Optional["PriorityClassMetadata"]:
-        return typing.cast(
-            typing.Optional["PriorityClassMetadata"], jsii.get(self, "metadataInput")
-        )
+        return typing.cast(typing.Optional["PriorityClassMetadata"], jsii.get(self, "metadataInput"))
 
     @builtins.property
     @jsii.member(jsii_name="preemptionPolicyInput")
     def preemption_policy_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(
-            typing.Optional[builtins.str], jsii.get(self, "preemptionPolicyInput")
-        )
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "preemptionPolicyInput"))
 
     @builtins.property
     @jsii.member(jsii_name="valueInput")
@@ -242,12 +181,8 @@ class PriorityClass(
     @description.setter
     def description(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__e3b553c733fffb19c214cb3833e9bdc8b6e79396845b5c9b5e763f539b9e62f1
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__e3b553c733fffb19c214cb3833e9bdc8b6e79396845b5c9b5e763f539b9e62f1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value)
 
     @builtins.property
@@ -255,10 +190,7 @@ class PriorityClass(
     def global_default(
         self,
     ) -> typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]:
-        return typing.cast(
-            typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
-            jsii.get(self, "globalDefault"),
-        )
+        return typing.cast(typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable], jsii.get(self, "globalDefault"))
 
     @global_default.setter
     def global_default(
@@ -266,12 +198,8 @@ class PriorityClass(
         value: typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__77f43cc99926282e7f869f2838af2eba6ef37e60d260407ac75fd7ba8a6891a7
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__77f43cc99926282e7f869f2838af2eba6ef37e60d260407ac75fd7ba8a6891a7)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "globalDefault", value)
 
     @builtins.property
@@ -282,12 +210,8 @@ class PriorityClass(
     @id.setter
     def id(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__2f25e7ee55b8f4debd3803403caca57bceaff03ede0b8c04ce9cd6bb95bef5fa
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__2f25e7ee55b8f4debd3803403caca57bceaff03ede0b8c04ce9cd6bb95bef5fa)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "id", value)
 
     @builtins.property
@@ -298,12 +222,8 @@ class PriorityClass(
     @preemption_policy.setter
     def preemption_policy(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__bd1434cf62776534dee3ba95c12e8f29f0166d05337536d4630b415c63b2af2b
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__bd1434cf62776534dee3ba95c12e8f29f0166d05337536d4630b415c63b2af2b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "preemptionPolicy", value)
 
     @builtins.property
@@ -314,12 +234,8 @@ class PriorityClass(
     @value.setter
     def value(self, value: jsii.Number) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__e05074a0062e5fd4e1d2480b4d2b46654477237d021c122d90c9dc0d68afa99f
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__e05074a0062e5fd4e1d2480b4d2b46654477237d021c122d90c9dc0d68afa99f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "value", value)
 
 
@@ -346,141 +262,54 @@ class PriorityClassConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def __init__(
         self,
         *,
-        connection: typing.Optional[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ] = None,
-        count: typing.Optional[
-            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-        ] = None,
-        depends_on: typing.Optional[
-            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-        ] = None,
+        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[
-            typing.Union[
-                _cdktf_9a9027ec.TerraformResourceLifecycle,
-                typing.Dict[builtins.str, typing.Any],
-            ]
-        ] = None,
+        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[
-            typing.Sequence[
-                typing.Union[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                ]
-            ]
-        ] = None,
-        metadata: typing.Union[
-            "PriorityClassMetadata", typing.Dict[builtins.str, typing.Any]
-        ],
+        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+        metadata: typing.Union["PriorityClassMetadata", typing.Dict[builtins.str, typing.Any]],
         value: jsii.Number,
         description: typing.Optional[builtins.str] = None,
-        global_default: typing.Optional[
-            typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]
-        ] = None,
+        global_default: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
         id: typing.Optional[builtins.str] = None,
         preemption_policy: typing.Optional[builtins.str] = None,
     ) -> None:
-        """
-        :param connection:
-        :param count:
-        :param depends_on:
-        :param for_each:
-        :param lifecycle:
-        :param provider:
-        :param provisioners:
+        '''
+        :param connection: 
+        :param count: 
+        :param depends_on: 
+        :param for_each: 
+        :param lifecycle: 
+        :param provider: 
+        :param provisioners: 
         :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#metadata PriorityClass#metadata}
         :param value: The value of this priority class. This is the actual priority that pods receive when they have the name of this class in their pod spec. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#value PriorityClass#value}
         :param description: An arbitrary string that usually provides guidelines on when this priority class should be used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#description PriorityClass#description}
         :param global_default: Specifies whether this PriorityClass should be considered as the default priority for pods that do not have any priority class. Only one PriorityClass can be marked as ``globalDefault``. However, if more than one PriorityClasses exists with their ``globalDefault`` field set to true, the smallest value of such global default PriorityClasses will be used as the default priority. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#global_default PriorityClass#global_default}
         :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#id PriorityClass#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param preemption_policy: PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#preemption_policy PriorityClass#preemption_policy}
-        """
+        '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
         if isinstance(metadata, dict):
             metadata = PriorityClassMetadata(**metadata)
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__fd4d3a5b9ba678508f0f6e2c2080e5ed0997ecf152bbd24347ab20ed67a527ab
-            )
-            check_type(
-                argname="argument connection",
-                value=connection,
-                expected_type=type_hints["connection"],
-            )
-            check_type(
-                argname="argument count", value=count, expected_type=type_hints["count"]
-            )
-            check_type(
-                argname="argument depends_on",
-                value=depends_on,
-                expected_type=type_hints["depends_on"],
-            )
-            check_type(
-                argname="argument for_each",
-                value=for_each,
-                expected_type=type_hints["for_each"],
-            )
-            check_type(
-                argname="argument lifecycle",
-                value=lifecycle,
-                expected_type=type_hints["lifecycle"],
-            )
-            check_type(
-                argname="argument provider",
-                value=provider,
-                expected_type=type_hints["provider"],
-            )
-            check_type(
-                argname="argument provisioners",
-                value=provisioners,
-                expected_type=type_hints["provisioners"],
-            )
-            check_type(
-                argname="argument metadata",
-                value=metadata,
-                expected_type=type_hints["metadata"],
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
-            check_type(
-                argname="argument description",
-                value=description,
-                expected_type=type_hints["description"],
-            )
-            check_type(
-                argname="argument global_default",
-                value=global_default,
-                expected_type=type_hints["global_default"],
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__fd4d3a5b9ba678508f0f6e2c2080e5ed0997ecf152bbd24347ab20ed67a527ab)
+            check_type(argname="argument connection", value=connection, expected_type=type_hints["connection"])
+            check_type(argname="argument count", value=count, expected_type=type_hints["count"])
+            check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
+            check_type(argname="argument for_each", value=for_each, expected_type=type_hints["for_each"])
+            check_type(argname="argument lifecycle", value=lifecycle, expected_type=type_hints["lifecycle"])
+            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
+            check_type(argname="argument provisioners", value=provisioners, expected_type=type_hints["provisioners"])
+            check_type(argname="argument metadata", value=metadata, expected_type=type_hints["metadata"])
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument global_default", value=global_default, expected_type=type_hints["global_default"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(
-                argname="argument preemption_policy",
-                value=preemption_policy,
-                expected_type=type_hints["preemption_policy"],
-            )
+            check_type(argname="argument preemption_policy", value=preemption_policy, expected_type=type_hints["preemption_policy"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "metadata": metadata,
             "value": value,
@@ -511,134 +340,95 @@ class PriorityClassConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     @builtins.property
     def connection(
         self,
-    ) -> typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.SSHProvisionerConnection,
-            _cdktf_9a9027ec.WinrmProvisionerConnection,
-        ]
-    ]:
-        """
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]]:
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("connection")
-        return typing.cast(
-            typing.Optional[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                ]
-            ],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
     def count(
         self,
     ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("count")
-        return typing.cast(
-            typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
         self,
     ) -> typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("depends_on")
-        return typing.cast(
-            typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result
-        )
+        return typing.cast(typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result)
 
     @builtins.property
     def for_each(self) -> typing.Optional[_cdktf_9a9027ec.ITerraformIterator]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("for_each")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.ITerraformIterator], result)
 
     @builtins.property
     def lifecycle(self) -> typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("lifecycle")
-        return typing.cast(
-            typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result
-        )
+        return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result)
 
     @builtins.property
     def provider(self) -> typing.Optional[_cdktf_9a9027ec.TerraformProvider]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("provider")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformProvider], result)
 
     @builtins.property
     def provisioners(
         self,
-    ) -> typing.Optional[
-        typing.List[
-            typing.Union[
-                _cdktf_9a9027ec.FileProvisioner,
-                _cdktf_9a9027ec.LocalExecProvisioner,
-                _cdktf_9a9027ec.RemoteExecProvisioner,
-            ]
-        ]
-    ]:
-        """
+    ) -> typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]]:
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("provisioners")
-        return typing.cast(
-            typing.Optional[
-                typing.List[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                    ]
-                ]
-            ],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]], result)
 
     @builtins.property
     def metadata(self) -> "PriorityClassMetadata":
-        """metadata block.
+        '''metadata block.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#metadata PriorityClass#metadata}
-        """
+        '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
         return typing.cast("PriorityClassMetadata", result)
 
     @builtins.property
     def value(self) -> jsii.Number:
-        """The value of this priority class.
+        '''The value of this priority class.
 
         This is the actual priority that pods receive when they have the name of this class in their pod spec.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#value PriorityClass#value}
-        """
+        '''
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
         return typing.cast(jsii.Number, result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        """An arbitrary string that usually provides guidelines on when this priority class should be used.
+        '''An arbitrary string that usually provides guidelines on when this priority class should be used.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#description PriorityClass#description}
-        """
+        '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -646,34 +436,31 @@ class PriorityClassConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def global_default(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
-        """Specifies whether this PriorityClass should be considered as the default priority for pods that do not have any priority class.
+        '''Specifies whether this PriorityClass should be considered as the default priority for pods that do not have any priority class.
 
         Only one PriorityClass can be marked as ``globalDefault``. However, if more than one PriorityClasses exists with their ``globalDefault`` field set to true, the smallest value of such global default PriorityClasses will be used as the default priority.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#global_default PriorityClass#global_default}
-        """
+        '''
         result = self._values.get("global_default")
-        return typing.cast(
-            typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#id PriorityClass#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#id PriorityClass#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        """
+        '''
         result = self._values.get("id")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def preemption_policy(self) -> typing.Optional[builtins.str]:
-        """PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset.
+        '''PreemptionPolicy is the Policy for preempting pods with lower priority. One of Never, PreemptLowerPriority. Defaults to PreemptLowerPriority if unset.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#preemption_policy PriorityClass#preemption_policy}
-        """
+        '''
         result = self._values.get("preemption_policy")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -708,34 +495,18 @@ class PriorityClassMetadata:
         labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
-        """
+        '''
         :param annotations: An unstructured key value map stored with the priority class that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#annotations PriorityClass#annotations}
         :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#generate_name PriorityClass#generate_name}
         :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the priority class. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#labels PriorityClass#labels}
         :param name: Name of the priority class, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#name PriorityClass#name}
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__1769df8fa99394a0274c881604a4b7e2ddbf395ee78e216506cb3b06b7496ef9
-            )
-            check_type(
-                argname="argument annotations",
-                value=annotations,
-                expected_type=type_hints["annotations"],
-            )
-            check_type(
-                argname="argument generate_name",
-                value=generate_name,
-                expected_type=type_hints["generate_name"],
-            )
-            check_type(
-                argname="argument labels",
-                value=labels,
-                expected_type=type_hints["labels"],
-            )
-            check_type(
-                argname="argument name", value=name, expected_type=type_hints["name"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__1769df8fa99394a0274c881604a4b7e2ddbf395ee78e216506cb3b06b7496ef9)
+            check_type(argname="argument annotations", value=annotations, expected_type=type_hints["annotations"])
+            check_type(argname="argument generate_name", value=generate_name, expected_type=type_hints["generate_name"])
+            check_type(argname="argument labels", value=labels, expected_type=type_hints["labels"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if annotations is not None:
             self._values["annotations"] = annotations
@@ -750,47 +521,43 @@ class PriorityClassMetadata:
     def annotations(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        """An unstructured key value map stored with the priority class that may be used to store arbitrary metadata.
+        '''An unstructured key value map stored with the priority class that may be used to store arbitrary metadata.
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#annotations PriorityClass#annotations}
-        """
+        '''
         result = self._values.get("annotations")
-        return typing.cast(
-            typing.Optional[typing.Mapping[builtins.str, builtins.str]], result
-        )
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
     def generate_name(self) -> typing.Optional[builtins.str]:
-        """Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided.
+        '''Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided.
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#generate_name PriorityClass#generate_name}
-        """
+        '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def labels(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        """Map of string keys and values that can be used to organize and categorize (scope and select) the priority class.
+        '''Map of string keys and values that can be used to organize and categorize (scope and select) the priority class.
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#labels PriorityClass#labels}
-        """
+        '''
         result = self._values.get("labels")
-        return typing.cast(
-            typing.Optional[typing.Mapping[builtins.str, builtins.str]], result
-        )
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
-        """Name of the priority class, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
+        '''Name of the priority class, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/priority_class#name PriorityClass#name}
-        """
+        '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -816,24 +583,14 @@ class PriorityClassMetadataOutputReference(
         terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
         terraform_attribute: builtins.str,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__d15afcda136fdbfd17cfeb46a445fba8c4ca4274eb718019e94e6f267847ea17
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__d15afcda136fdbfd17cfeb46a445fba8c4ca4274eb718019e94e6f267847ea17)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
         jsii.create(self.__class__, self, [terraform_resource, terraform_attribute])
 
     @jsii.member(jsii_name="resetAnnotations")
@@ -872,27 +629,19 @@ class PriorityClassMetadataOutputReference(
     def annotations_input(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        return typing.cast(
-            typing.Optional[typing.Mapping[builtins.str, builtins.str]],
-            jsii.get(self, "annotationsInput"),
-        )
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "annotationsInput"))
 
     @builtins.property
     @jsii.member(jsii_name="generateNameInput")
     def generate_name_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(
-            typing.Optional[builtins.str], jsii.get(self, "generateNameInput")
-        )
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "generateNameInput"))
 
     @builtins.property
     @jsii.member(jsii_name="labelsInput")
     def labels_input(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        return typing.cast(
-            typing.Optional[typing.Mapping[builtins.str, builtins.str]],
-            jsii.get(self, "labelsInput"),
-        )
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "labelsInput"))
 
     @builtins.property
     @jsii.member(jsii_name="nameInput")
@@ -902,19 +651,13 @@ class PriorityClassMetadataOutputReference(
     @builtins.property
     @jsii.member(jsii_name="annotations")
     def annotations(self) -> typing.Mapping[builtins.str, builtins.str]:
-        return typing.cast(
-            typing.Mapping[builtins.str, builtins.str], jsii.get(self, "annotations")
-        )
+        return typing.cast(typing.Mapping[builtins.str, builtins.str], jsii.get(self, "annotations"))
 
     @annotations.setter
     def annotations(self, value: typing.Mapping[builtins.str, builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__314ce4da4f98fb3827212f423dff961719246c9326cb1025fb7e62e545150fe4
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__314ce4da4f98fb3827212f423dff961719246c9326cb1025fb7e62e545150fe4)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "annotations", value)
 
     @builtins.property
@@ -925,30 +668,20 @@ class PriorityClassMetadataOutputReference(
     @generate_name.setter
     def generate_name(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__d0380976ade148a7606a6ca9eb477d31242ef5b9918148a9479d8e246889de72
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__d0380976ade148a7606a6ca9eb477d31242ef5b9918148a9479d8e246889de72)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "generateName", value)
 
     @builtins.property
     @jsii.member(jsii_name="labels")
     def labels(self) -> typing.Mapping[builtins.str, builtins.str]:
-        return typing.cast(
-            typing.Mapping[builtins.str, builtins.str], jsii.get(self, "labels")
-        )
+        return typing.cast(typing.Mapping[builtins.str, builtins.str], jsii.get(self, "labels"))
 
     @labels.setter
     def labels(self, value: typing.Mapping[builtins.str, builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__58049475890771e734c6f7a84f60fcabf4bf986f43b944436eb878ec4039f00e
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__58049475890771e734c6f7a84f60fcabf4bf986f43b944436eb878ec4039f00e)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "labels", value)
 
     @builtins.property
@@ -959,30 +692,20 @@ class PriorityClassMetadataOutputReference(
     @name.setter
     def name(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__70f7793f4921ad05029a57956232af5912428a49f1bfc4460404dc97ed47c850
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__70f7793f4921ad05029a57956232af5912428a49f1bfc4460404dc97ed47c850)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "name", value)
 
     @builtins.property
     @jsii.member(jsii_name="internalValue")
     def internal_value(self) -> typing.Optional[PriorityClassMetadata]:
-        return typing.cast(
-            typing.Optional[PriorityClassMetadata], jsii.get(self, "internalValue")
-        )
+        return typing.cast(typing.Optional[PriorityClassMetadata], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(self, value: typing.Optional[PriorityClassMetadata]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__7ffb7305bf2167f76a625b7ed9d85c97bfd7718ecb095bd4e8bd8b552a7e5ff7
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__7ffb7305bf2167f76a625b7ed9d85c97bfd7718ecb095bd4e8bd8b552a7e5ff7)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "internalValue", value)
 
 
@@ -995,69 +718,26 @@ __all__ = [
 
 publication.publish()
 
-
 def _typecheckingstub__2f73eb862103560e5bfc0dab7aebcae51d5302082ce37e09441b6143d9e46a1f(
     scope: _constructs_77d1e7e8.Construct,
     id_: builtins.str,
     *,
-    metadata: typing.Union[
-        PriorityClassMetadata, typing.Dict[builtins.str, typing.Any]
-    ],
+    metadata: typing.Union[PriorityClassMetadata, typing.Dict[builtins.str, typing.Any]],
     value: jsii.Number,
     description: typing.Optional[builtins.str] = None,
-    global_default: typing.Optional[
-        typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]
-    ] = None,
+    global_default: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     id: typing.Optional[builtins.str] = None,
     preemption_policy: typing.Optional[builtins.str] = None,
-    connection: typing.Optional[
-        typing.Union[
-            typing.Union[
-                _cdktf_9a9027ec.SSHProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-            typing.Union[
-                _cdktf_9a9027ec.WinrmProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-        ]
-    ] = None,
-    count: typing.Optional[
-        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-    ] = None,
-    depends_on: typing.Optional[
-        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-    ] = None,
+    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.TerraformResourceLifecycle,
-            typing.Dict[builtins.str, typing.Any],
-        ]
-    ] = None,
+    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[
-        typing.Sequence[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.FileProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.LocalExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.RemoteExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ]
-    ] = None,
+    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__e3b553c733fffb19c214cb3833e9bdc8b6e79396845b5c9b5e763f539b9e62f1(
     value: builtins.str,
@@ -1065,13 +745,11 @@ def _typecheckingstub__e3b553c733fffb19c214cb3833e9bdc8b6e79396845b5c9b5e763f539
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__77f43cc99926282e7f869f2838af2eba6ef37e60d260407ac75fd7ba8a6891a7(
     value: typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable],
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__2f25e7ee55b8f4debd3803403caca57bceaff03ede0b8c04ce9cd6bb95bef5fa(
     value: builtins.str,
@@ -1079,13 +757,11 @@ def _typecheckingstub__2f25e7ee55b8f4debd3803403caca57bceaff03ede0b8c04ce9cd6bb9
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__bd1434cf62776534dee3ba95c12e8f29f0166d05337536d4630b415c63b2af2b(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__e05074a0062e5fd4e1d2480b4d2b46654477237d021c122d90c9dc0d68afa99f(
     value: jsii.Number,
@@ -1093,67 +769,24 @@ def _typecheckingstub__e05074a0062e5fd4e1d2480b4d2b46654477237d021c122d90c9dc0d6
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__fd4d3a5b9ba678508f0f6e2c2080e5ed0997ecf152bbd24347ab20ed67a527ab(
     *,
-    connection: typing.Optional[
-        typing.Union[
-            typing.Union[
-                _cdktf_9a9027ec.SSHProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-            typing.Union[
-                _cdktf_9a9027ec.WinrmProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-        ]
-    ] = None,
-    count: typing.Optional[
-        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-    ] = None,
-    depends_on: typing.Optional[
-        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-    ] = None,
+    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.TerraformResourceLifecycle,
-            typing.Dict[builtins.str, typing.Any],
-        ]
-    ] = None,
+    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[
-        typing.Sequence[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.FileProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.LocalExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.RemoteExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ]
-    ] = None,
-    metadata: typing.Union[
-        PriorityClassMetadata, typing.Dict[builtins.str, typing.Any]
-    ],
+    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+    metadata: typing.Union[PriorityClassMetadata, typing.Dict[builtins.str, typing.Any]],
     value: jsii.Number,
     description: typing.Optional[builtins.str] = None,
-    global_default: typing.Optional[
-        typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]
-    ] = None,
+    global_default: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     id: typing.Optional[builtins.str] = None,
     preemption_policy: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__1769df8fa99394a0274c881604a4b7e2ddbf395ee78e216506cb3b06b7496ef9(
     *,
@@ -1165,7 +798,6 @@ def _typecheckingstub__1769df8fa99394a0274c881604a4b7e2ddbf395ee78e216506cb3b06b
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__d15afcda136fdbfd17cfeb46a445fba8c4ca4274eb718019e94e6f267847ea17(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
     terraform_attribute: builtins.str,
@@ -1173,13 +805,11 @@ def _typecheckingstub__d15afcda136fdbfd17cfeb46a445fba8c4ca4274eb718019e94e6f267
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__314ce4da4f98fb3827212f423dff961719246c9326cb1025fb7e62e545150fe4(
     value: typing.Mapping[builtins.str, builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__d0380976ade148a7606a6ca9eb477d31242ef5b9918148a9479d8e246889de72(
     value: builtins.str,
@@ -1187,20 +817,17 @@ def _typecheckingstub__d0380976ade148a7606a6ca9eb477d31242ef5b9918148a9479d8e246
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__58049475890771e734c6f7a84f60fcabf4bf986f43b944436eb878ec4039f00e(
     value: typing.Mapping[builtins.str, builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__70f7793f4921ad05029a57956232af5912428a49f1bfc4460404dc97ed47c850(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__7ffb7305bf2167f76a625b7ed9d85c97bfd7718ecb095bd4e8bd8b552a7e5ff7(
     value: typing.Optional[PriorityClassMetadata],

@@ -1,8 +1,8 @@
-"""
+'''
 # `data_digitalocean_kubernetes_cluster`
 
 Refer to the Terraform Registory for docs: [`data_digitalocean_kubernetes_cluster`](https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster).
-"""
+'''
 import abc
 import builtins
 import datetime
@@ -26,7 +26,7 @@ class DataDigitaloceanKubernetesCluster(
     metaclass=jsii.JSIIMeta,
     jsii_type="digitalocean.dataDigitaloceanKubernetesCluster.DataDigitaloceanKubernetesCluster",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster digitalocean_kubernetes_cluster}."""
+    '''Represents a {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster digitalocean_kubernetes_cluster}.'''
 
     def __init__(
         self,
@@ -36,76 +36,33 @@ class DataDigitaloceanKubernetesCluster(
         name: builtins.str,
         id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-        connection: typing.Optional[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ] = None,
-        count: typing.Optional[
-            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-        ] = None,
-        depends_on: typing.Optional[
-            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-        ] = None,
+        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[
-            typing.Union[
-                _cdktf_9a9027ec.TerraformResourceLifecycle,
-                typing.Dict[builtins.str, typing.Any],
-            ]
-        ] = None,
+        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[
-            typing.Sequence[
-                typing.Union[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                ]
-            ]
-        ] = None,
+        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster digitalocean_kubernetes_cluster} Data Source.
+        '''Create a new {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster digitalocean_kubernetes_cluster} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
         :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#name DataDigitaloceanKubernetesCluster#name}.
         :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#id DataDigitaloceanKubernetesCluster#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param tags: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#tags DataDigitaloceanKubernetesCluster#tags}.
-        :param connection:
-        :param count:
-        :param depends_on:
-        :param for_each:
-        :param lifecycle:
-        :param provider:
-        :param provisioners:
-        """
+        :param connection: 
+        :param count: 
+        :param depends_on: 
+        :param for_each: 
+        :param lifecycle: 
+        :param provider: 
+        :param provisioners: 
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__358cb1bbbe8631e79099580643fb3eee6eb904096d09dc34ecab6cc743f3543b
-            )
-            check_type(
-                argname="argument scope", value=scope, expected_type=type_hints["scope"]
-            )
-            check_type(
-                argname="argument id_", value=id_, expected_type=type_hints["id_"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__358cb1bbbe8631e79099580643fb3eee6eb904096d09dc34ecab6cc743f3543b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id_", value=id_, expected_type=type_hints["id_"])
         config = DataDigitaloceanKubernetesClusterConfig(
             name=name,
             id=id,
@@ -131,10 +88,7 @@ class DataDigitaloceanKubernetesCluster(
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(
-            typing.Mapping[builtins.str, typing.Any],
-            jsii.invoke(self, "synthesizeAttributes", []),
-        )
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="tfResourceType")
@@ -174,27 +128,19 @@ class DataDigitaloceanKubernetesCluster(
     @builtins.property
     @jsii.member(jsii_name="kubeConfig")
     def kube_config(self) -> "DataDigitaloceanKubernetesClusterKubeConfigList":
-        return typing.cast(
-            "DataDigitaloceanKubernetesClusterKubeConfigList",
-            jsii.get(self, "kubeConfig"),
-        )
+        return typing.cast("DataDigitaloceanKubernetesClusterKubeConfigList", jsii.get(self, "kubeConfig"))
 
     @builtins.property
     @jsii.member(jsii_name="maintenancePolicy")
     def maintenance_policy(
         self,
     ) -> "DataDigitaloceanKubernetesClusterMaintenancePolicyList":
-        return typing.cast(
-            "DataDigitaloceanKubernetesClusterMaintenancePolicyList",
-            jsii.get(self, "maintenancePolicy"),
-        )
+        return typing.cast("DataDigitaloceanKubernetesClusterMaintenancePolicyList", jsii.get(self, "maintenancePolicy"))
 
     @builtins.property
     @jsii.member(jsii_name="nodePool")
     def node_pool(self) -> "DataDigitaloceanKubernetesClusterNodePoolList":
-        return typing.cast(
-            "DataDigitaloceanKubernetesClusterNodePoolList", jsii.get(self, "nodePool")
-        )
+        return typing.cast("DataDigitaloceanKubernetesClusterNodePoolList", jsii.get(self, "nodePool"))
 
     @builtins.property
     @jsii.member(jsii_name="region")
@@ -249,9 +195,7 @@ class DataDigitaloceanKubernetesCluster(
     @builtins.property
     @jsii.member(jsii_name="tagsInput")
     def tags_input(self) -> typing.Optional[typing.List[builtins.str]]:
-        return typing.cast(
-            typing.Optional[typing.List[builtins.str]], jsii.get(self, "tagsInput")
-        )
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "tagsInput"))
 
     @builtins.property
     @jsii.member(jsii_name="id")
@@ -261,12 +205,8 @@ class DataDigitaloceanKubernetesCluster(
     @id.setter
     def id(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__744a505fd1ca62a263976d6d18ca78912db6bb50aa76cb01cb39fe40a8b32b7f
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__744a505fd1ca62a263976d6d18ca78912db6bb50aa76cb01cb39fe40a8b32b7f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "id", value)
 
     @builtins.property
@@ -277,12 +217,8 @@ class DataDigitaloceanKubernetesCluster(
     @name.setter
     def name(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__710d81f583b3b4fdcdd894752ea38f225f9a4bb5ed32b88e6ac509e95d1cc558
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__710d81f583b3b4fdcdd894752ea38f225f9a4bb5ed32b88e6ac509e95d1cc558)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "name", value)
 
     @builtins.property
@@ -293,12 +229,8 @@ class DataDigitaloceanKubernetesCluster(
     @tags.setter
     def tags(self, value: typing.List[builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__6416dbeaddd5563541e2e591e0c49a9106fb2121a7ce5252847230b0f49b65f2
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__6416dbeaddd5563541e2e591e0c49a9106fb2121a7ce5252847230b0f49b65f2)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tags", value)
 
 
@@ -322,112 +254,43 @@ class DataDigitaloceanKubernetesClusterConfig(_cdktf_9a9027ec.TerraformMetaArgum
     def __init__(
         self,
         *,
-        connection: typing.Optional[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ] = None,
-        count: typing.Optional[
-            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-        ] = None,
-        depends_on: typing.Optional[
-            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-        ] = None,
+        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[
-            typing.Union[
-                _cdktf_9a9027ec.TerraformResourceLifecycle,
-                typing.Dict[builtins.str, typing.Any],
-            ]
-        ] = None,
+        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[
-            typing.Sequence[
-                typing.Union[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                ]
-            ]
-        ] = None,
+        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
         name: builtins.str,
         id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
-        """
-        :param connection:
-        :param count:
-        :param depends_on:
-        :param for_each:
-        :param lifecycle:
-        :param provider:
-        :param provisioners:
+        '''
+        :param connection: 
+        :param count: 
+        :param depends_on: 
+        :param for_each: 
+        :param lifecycle: 
+        :param provider: 
+        :param provisioners: 
         :param name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#name DataDigitaloceanKubernetesCluster#name}.
         :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#id DataDigitaloceanKubernetesCluster#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param tags: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#tags DataDigitaloceanKubernetesCluster#tags}.
-        """
+        '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__b5f6e5059e4e1ffe057be439dc0ef4788901886f63cc26a6afbbe8506067f3bb
-            )
-            check_type(
-                argname="argument connection",
-                value=connection,
-                expected_type=type_hints["connection"],
-            )
-            check_type(
-                argname="argument count", value=count, expected_type=type_hints["count"]
-            )
-            check_type(
-                argname="argument depends_on",
-                value=depends_on,
-                expected_type=type_hints["depends_on"],
-            )
-            check_type(
-                argname="argument for_each",
-                value=for_each,
-                expected_type=type_hints["for_each"],
-            )
-            check_type(
-                argname="argument lifecycle",
-                value=lifecycle,
-                expected_type=type_hints["lifecycle"],
-            )
-            check_type(
-                argname="argument provider",
-                value=provider,
-                expected_type=type_hints["provider"],
-            )
-            check_type(
-                argname="argument provisioners",
-                value=provisioners,
-                expected_type=type_hints["provisioners"],
-            )
-            check_type(
-                argname="argument name", value=name, expected_type=type_hints["name"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__b5f6e5059e4e1ffe057be439dc0ef4788901886f63cc26a6afbbe8506067f3bb)
+            check_type(argname="argument connection", value=connection, expected_type=type_hints["connection"])
+            check_type(argname="argument count", value=count, expected_type=type_hints["count"])
+            check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
+            check_type(argname="argument for_each", value=for_each, expected_type=type_hints["for_each"])
+            check_type(argname="argument lifecycle", value=lifecycle, expected_type=type_hints["lifecycle"])
+            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
+            check_type(argname="argument provisioners", value=provisioners, expected_type=type_hints["provisioners"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(
-                argname="argument tags", value=tags, expected_type=type_hints["tags"]
-            )
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "name": name,
         }
@@ -453,126 +316,87 @@ class DataDigitaloceanKubernetesClusterConfig(_cdktf_9a9027ec.TerraformMetaArgum
     @builtins.property
     def connection(
         self,
-    ) -> typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.SSHProvisionerConnection,
-            _cdktf_9a9027ec.WinrmProvisionerConnection,
-        ]
-    ]:
-        """
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]]:
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("connection")
-        return typing.cast(
-            typing.Optional[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                ]
-            ],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
     def count(
         self,
     ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("count")
-        return typing.cast(
-            typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
         self,
     ) -> typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("depends_on")
-        return typing.cast(
-            typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result
-        )
+        return typing.cast(typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result)
 
     @builtins.property
     def for_each(self) -> typing.Optional[_cdktf_9a9027ec.ITerraformIterator]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("for_each")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.ITerraformIterator], result)
 
     @builtins.property
     def lifecycle(self) -> typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("lifecycle")
-        return typing.cast(
-            typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result
-        )
+        return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result)
 
     @builtins.property
     def provider(self) -> typing.Optional[_cdktf_9a9027ec.TerraformProvider]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("provider")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformProvider], result)
 
     @builtins.property
     def provisioners(
         self,
-    ) -> typing.Optional[
-        typing.List[
-            typing.Union[
-                _cdktf_9a9027ec.FileProvisioner,
-                _cdktf_9a9027ec.LocalExecProvisioner,
-                _cdktf_9a9027ec.RemoteExecProvisioner,
-            ]
-        ]
-    ]:
-        """
+    ) -> typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]]:
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("provisioners")
-        return typing.cast(
-            typing.Optional[
-                typing.List[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                    ]
-                ]
-            ],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]], result)
 
     @builtins.property
     def name(self) -> builtins.str:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#name DataDigitaloceanKubernetesCluster#name}."""
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#name DataDigitaloceanKubernetesCluster#name}.'''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#id DataDigitaloceanKubernetesCluster#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#id DataDigitaloceanKubernetesCluster#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        """
+        '''
         result = self._values.get("id")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[builtins.str]]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#tags DataDigitaloceanKubernetesCluster#tags}."""
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/digitalocean/digitalocean/2.28.1/docs/data-sources/kubernetes_cluster#tags DataDigitaloceanKubernetesCluster#tags}.'''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
@@ -620,105 +444,68 @@ class DataDigitaloceanKubernetesClusterKubeConfigList(
         terraform_attribute: builtins.str,
         wraps_set: builtins.bool,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param wraps_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__432b496671f1a869d2f887e2a30b052f2a4ad9a4652ebf6d588bd43ffabf3328
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
-            check_type(
-                argname="argument wraps_set",
-                value=wraps_set,
-                expected_type=type_hints["wraps_set"],
-            )
-        jsii.create(
-            self.__class__, self, [terraform_resource, terraform_attribute, wraps_set]
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__432b496671f1a869d2f887e2a30b052f2a4ad9a4652ebf6d588bd43ffabf3328)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument wraps_set", value=wraps_set, expected_type=type_hints["wraps_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, wraps_set])
 
     @jsii.member(jsii_name="get")
     def get(
         self,
         index: jsii.Number,
     ) -> "DataDigitaloceanKubernetesClusterKubeConfigOutputReference":
-        """
+        '''
         :param index: the index of the item to return.
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__498b3050a1a39d5f5be1647f9d67506ba6e9f6287305169b65b12dd4741a2397
-            )
-            check_type(
-                argname="argument index", value=index, expected_type=type_hints["index"]
-            )
-        return typing.cast(
-            "DataDigitaloceanKubernetesClusterKubeConfigOutputReference",
-            jsii.invoke(self, "get", [index]),
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__498b3050a1a39d5f5be1647f9d67506ba6e9f6287305169b65b12dd4741a2397)
+            check_type(argname="argument index", value=index, expected_type=type_hints["index"])
+        return typing.cast("DataDigitaloceanKubernetesClusterKubeConfigOutputReference", jsii.invoke(self, "get", [index]))
 
     @builtins.property
     @jsii.member(jsii_name="terraformAttribute")
     def _terraform_attribute(self) -> builtins.str:
-        """The attribute on the parent resource this class is referencing."""
+        '''The attribute on the parent resource this class is referencing.'''
         return typing.cast(builtins.str, jsii.get(self, "terraformAttribute"))
 
     @_terraform_attribute.setter
     def _terraform_attribute(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__d2a21bea33185376c77c5f37399e619a2e199e881a8ca61a29af81342255480c
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__d2a21bea33185376c77c5f37399e619a2e199e881a8ca61a29af81342255480c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "terraformAttribute", value)
 
     @builtins.property
     @jsii.member(jsii_name="terraformResource")
     def _terraform_resource(self) -> _cdktf_9a9027ec.IInterpolatingParent:
-        """The parent resource."""
-        return typing.cast(
-            _cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource")
-        )
+        '''The parent resource.'''
+        return typing.cast(_cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource"))
 
     @_terraform_resource.setter
     def _terraform_resource(self, value: _cdktf_9a9027ec.IInterpolatingParent) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__6087f6c8f9e7fce740e982dae844ea4b2f98386bd12722e66304b0df4288e887
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__6087f6c8f9e7fce740e982dae844ea4b2f98386bd12722e66304b0df4288e887)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "terraformResource", value)
 
     @builtins.property
     @jsii.member(jsii_name="wrapsSet")
     def _wraps_set(self) -> builtins.bool:
-        """whether the list is wrapping a set (will add tolist() to be able to access an item via an index)."""
+        '''whether the list is wrapping a set (will add tolist() to be able to access an item via an index).'''
         return typing.cast(builtins.bool, jsii.get(self, "wrapsSet"))
 
     @_wraps_set.setter
     def _wraps_set(self, value: builtins.bool) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__c2a19486752223eac0212b1ed1c5fbeb8d9679e0adecd5b3cc925f69a4f6a7f5
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__c2a19486752223eac0212b1ed1c5fbeb8d9679e0adecd5b3cc925f69a4f6a7f5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "wrapsSet", value)
 
 
@@ -734,46 +521,19 @@ class DataDigitaloceanKubernetesClusterKubeConfigOutputReference(
         complex_object_index: jsii.Number,
         complex_object_is_from_set: builtins.bool,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param complex_object_index: the index of this item in the list.
         :param complex_object_is_from_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__552a3f1b0b3cd3513c5387faf28acdca5ac43e3c97726f367b8b5752af90e3d4
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
-            check_type(
-                argname="argument complex_object_index",
-                value=complex_object_index,
-                expected_type=type_hints["complex_object_index"],
-            )
-            check_type(
-                argname="argument complex_object_is_from_set",
-                value=complex_object_is_from_set,
-                expected_type=type_hints["complex_object_is_from_set"],
-            )
-        jsii.create(
-            self.__class__,
-            self,
-            [
-                terraform_resource,
-                terraform_attribute,
-                complex_object_index,
-                complex_object_is_from_set,
-            ],
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__552a3f1b0b3cd3513c5387faf28acdca5ac43e3c97726f367b8b5752af90e3d4)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument complex_object_index", value=complex_object_index, expected_type=type_hints["complex_object_index"])
+            check_type(argname="argument complex_object_is_from_set", value=complex_object_is_from_set, expected_type=type_hints["complex_object_is_from_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, complex_object_index, complex_object_is_from_set])
 
     @builtins.property
     @jsii.member(jsii_name="clientCertificate")
@@ -815,10 +575,7 @@ class DataDigitaloceanKubernetesClusterKubeConfigOutputReference(
     def internal_value(
         self,
     ) -> typing.Optional[DataDigitaloceanKubernetesClusterKubeConfig]:
-        return typing.cast(
-            typing.Optional[DataDigitaloceanKubernetesClusterKubeConfig],
-            jsii.get(self, "internalValue"),
-        )
+        return typing.cast(typing.Optional[DataDigitaloceanKubernetesClusterKubeConfig], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
@@ -826,12 +583,8 @@ class DataDigitaloceanKubernetesClusterKubeConfigOutputReference(
         value: typing.Optional[DataDigitaloceanKubernetesClusterKubeConfig],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__a52cde72b3d4a7922514e65adc580def2d72be8dd9181259199914708ad6b5c8
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__a52cde72b3d4a7922514e65adc580def2d72be8dd9181259199914708ad6b5c8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "internalValue", value)
 
 
@@ -867,105 +620,68 @@ class DataDigitaloceanKubernetesClusterMaintenancePolicyList(
         terraform_attribute: builtins.str,
         wraps_set: builtins.bool,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param wraps_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__16fba8885f16378e5d52bfa489f03ccfd50861655eea8316e9c3c28342fd55a6
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
-            check_type(
-                argname="argument wraps_set",
-                value=wraps_set,
-                expected_type=type_hints["wraps_set"],
-            )
-        jsii.create(
-            self.__class__, self, [terraform_resource, terraform_attribute, wraps_set]
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__16fba8885f16378e5d52bfa489f03ccfd50861655eea8316e9c3c28342fd55a6)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument wraps_set", value=wraps_set, expected_type=type_hints["wraps_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, wraps_set])
 
     @jsii.member(jsii_name="get")
     def get(
         self,
         index: jsii.Number,
     ) -> "DataDigitaloceanKubernetesClusterMaintenancePolicyOutputReference":
-        """
+        '''
         :param index: the index of the item to return.
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__adefb07721c42855b7c2ce4f45aafd01e5e0e782b188f7569060357ca9b2decd
-            )
-            check_type(
-                argname="argument index", value=index, expected_type=type_hints["index"]
-            )
-        return typing.cast(
-            "DataDigitaloceanKubernetesClusterMaintenancePolicyOutputReference",
-            jsii.invoke(self, "get", [index]),
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__adefb07721c42855b7c2ce4f45aafd01e5e0e782b188f7569060357ca9b2decd)
+            check_type(argname="argument index", value=index, expected_type=type_hints["index"])
+        return typing.cast("DataDigitaloceanKubernetesClusterMaintenancePolicyOutputReference", jsii.invoke(self, "get", [index]))
 
     @builtins.property
     @jsii.member(jsii_name="terraformAttribute")
     def _terraform_attribute(self) -> builtins.str:
-        """The attribute on the parent resource this class is referencing."""
+        '''The attribute on the parent resource this class is referencing.'''
         return typing.cast(builtins.str, jsii.get(self, "terraformAttribute"))
 
     @_terraform_attribute.setter
     def _terraform_attribute(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__c401ea61298b7efddc5af5b698cbf4114330c6f538834f5d2d044b16c37d2bb5
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__c401ea61298b7efddc5af5b698cbf4114330c6f538834f5d2d044b16c37d2bb5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "terraformAttribute", value)
 
     @builtins.property
     @jsii.member(jsii_name="terraformResource")
     def _terraform_resource(self) -> _cdktf_9a9027ec.IInterpolatingParent:
-        """The parent resource."""
-        return typing.cast(
-            _cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource")
-        )
+        '''The parent resource.'''
+        return typing.cast(_cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource"))
 
     @_terraform_resource.setter
     def _terraform_resource(self, value: _cdktf_9a9027ec.IInterpolatingParent) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__bfdecdd98a2cac7d5126a1497eca183036c73e95e9e688291591f399256fd188
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__bfdecdd98a2cac7d5126a1497eca183036c73e95e9e688291591f399256fd188)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "terraformResource", value)
 
     @builtins.property
     @jsii.member(jsii_name="wrapsSet")
     def _wraps_set(self) -> builtins.bool:
-        """whether the list is wrapping a set (will add tolist() to be able to access an item via an index)."""
+        '''whether the list is wrapping a set (will add tolist() to be able to access an item via an index).'''
         return typing.cast(builtins.bool, jsii.get(self, "wrapsSet"))
 
     @_wraps_set.setter
     def _wraps_set(self, value: builtins.bool) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__3920e120533f424c5b75d86af5687765c0417c1c274bfda7ee0a493e02be0b2e
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__3920e120533f424c5b75d86af5687765c0417c1c274bfda7ee0a493e02be0b2e)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "wrapsSet", value)
 
 
@@ -981,46 +697,19 @@ class DataDigitaloceanKubernetesClusterMaintenancePolicyOutputReference(
         complex_object_index: jsii.Number,
         complex_object_is_from_set: builtins.bool,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param complex_object_index: the index of this item in the list.
         :param complex_object_is_from_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__440cfd46aa8a04815d46a78329887cb3f691c1c150f0f43a989e71fa61c6afaf
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
-            check_type(
-                argname="argument complex_object_index",
-                value=complex_object_index,
-                expected_type=type_hints["complex_object_index"],
-            )
-            check_type(
-                argname="argument complex_object_is_from_set",
-                value=complex_object_is_from_set,
-                expected_type=type_hints["complex_object_is_from_set"],
-            )
-        jsii.create(
-            self.__class__,
-            self,
-            [
-                terraform_resource,
-                terraform_attribute,
-                complex_object_index,
-                complex_object_is_from_set,
-            ],
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__440cfd46aa8a04815d46a78329887cb3f691c1c150f0f43a989e71fa61c6afaf)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument complex_object_index", value=complex_object_index, expected_type=type_hints["complex_object_index"])
+            check_type(argname="argument complex_object_is_from_set", value=complex_object_is_from_set, expected_type=type_hints["complex_object_is_from_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, complex_object_index, complex_object_is_from_set])
 
     @builtins.property
     @jsii.member(jsii_name="day")
@@ -1042,10 +731,7 @@ class DataDigitaloceanKubernetesClusterMaintenancePolicyOutputReference(
     def internal_value(
         self,
     ) -> typing.Optional[DataDigitaloceanKubernetesClusterMaintenancePolicy]:
-        return typing.cast(
-            typing.Optional[DataDigitaloceanKubernetesClusterMaintenancePolicy],
-            jsii.get(self, "internalValue"),
-        )
+        return typing.cast(typing.Optional[DataDigitaloceanKubernetesClusterMaintenancePolicy], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
@@ -1053,12 +739,8 @@ class DataDigitaloceanKubernetesClusterMaintenancePolicyOutputReference(
         value: typing.Optional[DataDigitaloceanKubernetesClusterMaintenancePolicy],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__dbf76cd55b748fa4bb34b409f2bc7d93619ceb5f2982c79c8dda52506fc39143
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__dbf76cd55b748fa4bb34b409f2bc7d93619ceb5f2982c79c8dda52506fc39143)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "internalValue", value)
 
 
@@ -1094,105 +776,68 @@ class DataDigitaloceanKubernetesClusterNodePoolList(
         terraform_attribute: builtins.str,
         wraps_set: builtins.bool,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param wraps_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__c74c300b3773b20bd81531363735f2daef3d090df34221f2b904d4861d49aea9
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
-            check_type(
-                argname="argument wraps_set",
-                value=wraps_set,
-                expected_type=type_hints["wraps_set"],
-            )
-        jsii.create(
-            self.__class__, self, [terraform_resource, terraform_attribute, wraps_set]
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__c74c300b3773b20bd81531363735f2daef3d090df34221f2b904d4861d49aea9)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument wraps_set", value=wraps_set, expected_type=type_hints["wraps_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, wraps_set])
 
     @jsii.member(jsii_name="get")
     def get(
         self,
         index: jsii.Number,
     ) -> "DataDigitaloceanKubernetesClusterNodePoolOutputReference":
-        """
+        '''
         :param index: the index of the item to return.
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__4dec71bbae593b635fd1288b9a64889deb4fd2b52319d373fbe01cf0184b746d
-            )
-            check_type(
-                argname="argument index", value=index, expected_type=type_hints["index"]
-            )
-        return typing.cast(
-            "DataDigitaloceanKubernetesClusterNodePoolOutputReference",
-            jsii.invoke(self, "get", [index]),
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__4dec71bbae593b635fd1288b9a64889deb4fd2b52319d373fbe01cf0184b746d)
+            check_type(argname="argument index", value=index, expected_type=type_hints["index"])
+        return typing.cast("DataDigitaloceanKubernetesClusterNodePoolOutputReference", jsii.invoke(self, "get", [index]))
 
     @builtins.property
     @jsii.member(jsii_name="terraformAttribute")
     def _terraform_attribute(self) -> builtins.str:
-        """The attribute on the parent resource this class is referencing."""
+        '''The attribute on the parent resource this class is referencing.'''
         return typing.cast(builtins.str, jsii.get(self, "terraformAttribute"))
 
     @_terraform_attribute.setter
     def _terraform_attribute(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__accc9cf299d7ec48a8bd35b7cb19c0ff15954534d3f059fba70a816ac9d68c80
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__accc9cf299d7ec48a8bd35b7cb19c0ff15954534d3f059fba70a816ac9d68c80)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "terraformAttribute", value)
 
     @builtins.property
     @jsii.member(jsii_name="terraformResource")
     def _terraform_resource(self) -> _cdktf_9a9027ec.IInterpolatingParent:
-        """The parent resource."""
-        return typing.cast(
-            _cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource")
-        )
+        '''The parent resource.'''
+        return typing.cast(_cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource"))
 
     @_terraform_resource.setter
     def _terraform_resource(self, value: _cdktf_9a9027ec.IInterpolatingParent) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__9f5d7f187dec1017c7a9a50446d12e683a2794b6e6d2d272b83fe0010b5eb551
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__9f5d7f187dec1017c7a9a50446d12e683a2794b6e6d2d272b83fe0010b5eb551)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "terraformResource", value)
 
     @builtins.property
     @jsii.member(jsii_name="wrapsSet")
     def _wraps_set(self) -> builtins.bool:
-        """whether the list is wrapping a set (will add tolist() to be able to access an item via an index)."""
+        '''whether the list is wrapping a set (will add tolist() to be able to access an item via an index).'''
         return typing.cast(builtins.bool, jsii.get(self, "wrapsSet"))
 
     @_wraps_set.setter
     def _wraps_set(self, value: builtins.bool) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__9d49f01a220e8b71339626ab77e424460f5b327abbb81d1e770c5c3ee5a9feb7
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__9d49f01a220e8b71339626ab77e424460f5b327abbb81d1e770c5c3ee5a9feb7)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "wrapsSet", value)
 
 
@@ -1228,105 +873,68 @@ class DataDigitaloceanKubernetesClusterNodePoolNodesList(
         terraform_attribute: builtins.str,
         wraps_set: builtins.bool,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param wraps_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__5e5a83085b3d2f98bc4f408bc567bd6e3e26271d432372051621700a241c5397
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
-            check_type(
-                argname="argument wraps_set",
-                value=wraps_set,
-                expected_type=type_hints["wraps_set"],
-            )
-        jsii.create(
-            self.__class__, self, [terraform_resource, terraform_attribute, wraps_set]
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__5e5a83085b3d2f98bc4f408bc567bd6e3e26271d432372051621700a241c5397)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument wraps_set", value=wraps_set, expected_type=type_hints["wraps_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, wraps_set])
 
     @jsii.member(jsii_name="get")
     def get(
         self,
         index: jsii.Number,
     ) -> "DataDigitaloceanKubernetesClusterNodePoolNodesOutputReference":
-        """
+        '''
         :param index: the index of the item to return.
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__eff35207dfd85af22a28561aadc75d3bfc00131d0b27c5b3f268011ff966a628
-            )
-            check_type(
-                argname="argument index", value=index, expected_type=type_hints["index"]
-            )
-        return typing.cast(
-            "DataDigitaloceanKubernetesClusterNodePoolNodesOutputReference",
-            jsii.invoke(self, "get", [index]),
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__eff35207dfd85af22a28561aadc75d3bfc00131d0b27c5b3f268011ff966a628)
+            check_type(argname="argument index", value=index, expected_type=type_hints["index"])
+        return typing.cast("DataDigitaloceanKubernetesClusterNodePoolNodesOutputReference", jsii.invoke(self, "get", [index]))
 
     @builtins.property
     @jsii.member(jsii_name="terraformAttribute")
     def _terraform_attribute(self) -> builtins.str:
-        """The attribute on the parent resource this class is referencing."""
+        '''The attribute on the parent resource this class is referencing.'''
         return typing.cast(builtins.str, jsii.get(self, "terraformAttribute"))
 
     @_terraform_attribute.setter
     def _terraform_attribute(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__c3c357be10e23ba51a7969803a7762ac421acd6e4e0cc8d6cd9ad535f109d2e0
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__c3c357be10e23ba51a7969803a7762ac421acd6e4e0cc8d6cd9ad535f109d2e0)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "terraformAttribute", value)
 
     @builtins.property
     @jsii.member(jsii_name="terraformResource")
     def _terraform_resource(self) -> _cdktf_9a9027ec.IInterpolatingParent:
-        """The parent resource."""
-        return typing.cast(
-            _cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource")
-        )
+        '''The parent resource.'''
+        return typing.cast(_cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource"))
 
     @_terraform_resource.setter
     def _terraform_resource(self, value: _cdktf_9a9027ec.IInterpolatingParent) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__cb66e3416f384399ab37bcbb4a280728cb69df3cc924395cb2a4ea0781df1004
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__cb66e3416f384399ab37bcbb4a280728cb69df3cc924395cb2a4ea0781df1004)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "terraformResource", value)
 
     @builtins.property
     @jsii.member(jsii_name="wrapsSet")
     def _wraps_set(self) -> builtins.bool:
-        """whether the list is wrapping a set (will add tolist() to be able to access an item via an index)."""
+        '''whether the list is wrapping a set (will add tolist() to be able to access an item via an index).'''
         return typing.cast(builtins.bool, jsii.get(self, "wrapsSet"))
 
     @_wraps_set.setter
     def _wraps_set(self, value: builtins.bool) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__6595b6b070dda44e89f2c3cfab17d201a3174232b4d5b4168de57df1ea011d6c
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__6595b6b070dda44e89f2c3cfab17d201a3174232b4d5b4168de57df1ea011d6c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "wrapsSet", value)
 
 
@@ -1342,46 +950,19 @@ class DataDigitaloceanKubernetesClusterNodePoolNodesOutputReference(
         complex_object_index: jsii.Number,
         complex_object_is_from_set: builtins.bool,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param complex_object_index: the index of this item in the list.
         :param complex_object_is_from_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__3b03893d07b25a539a66c097f0cbfb7008af0efcee2ea99c5c9cfc6c3548814d
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
-            check_type(
-                argname="argument complex_object_index",
-                value=complex_object_index,
-                expected_type=type_hints["complex_object_index"],
-            )
-            check_type(
-                argname="argument complex_object_is_from_set",
-                value=complex_object_is_from_set,
-                expected_type=type_hints["complex_object_is_from_set"],
-            )
-        jsii.create(
-            self.__class__,
-            self,
-            [
-                terraform_resource,
-                terraform_attribute,
-                complex_object_index,
-                complex_object_is_from_set,
-            ],
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__3b03893d07b25a539a66c097f0cbfb7008af0efcee2ea99c5c9cfc6c3548814d)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument complex_object_index", value=complex_object_index, expected_type=type_hints["complex_object_index"])
+            check_type(argname="argument complex_object_is_from_set", value=complex_object_is_from_set, expected_type=type_hints["complex_object_is_from_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, complex_object_index, complex_object_is_from_set])
 
     @builtins.property
     @jsii.member(jsii_name="createdAt")
@@ -1418,10 +999,7 @@ class DataDigitaloceanKubernetesClusterNodePoolNodesOutputReference(
     def internal_value(
         self,
     ) -> typing.Optional[DataDigitaloceanKubernetesClusterNodePoolNodes]:
-        return typing.cast(
-            typing.Optional[DataDigitaloceanKubernetesClusterNodePoolNodes],
-            jsii.get(self, "internalValue"),
-        )
+        return typing.cast(typing.Optional[DataDigitaloceanKubernetesClusterNodePoolNodes], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
@@ -1429,12 +1007,8 @@ class DataDigitaloceanKubernetesClusterNodePoolNodesOutputReference(
         value: typing.Optional[DataDigitaloceanKubernetesClusterNodePoolNodes],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__9eb622e870cbb1a78e79d328a7f7f0061626c7867c7b115a3ff8ab7453737e49
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__9eb622e870cbb1a78e79d328a7f7f0061626c7867c7b115a3ff8ab7453737e49)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "internalValue", value)
 
 
@@ -1450,46 +1024,19 @@ class DataDigitaloceanKubernetesClusterNodePoolOutputReference(
         complex_object_index: jsii.Number,
         complex_object_is_from_set: builtins.bool,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param complex_object_index: the index of this item in the list.
         :param complex_object_is_from_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__7a372808503acfed07e3ba0c39fede245a0eed9e6d86eb61cb1f550ecc82a3cb
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
-            check_type(
-                argname="argument complex_object_index",
-                value=complex_object_index,
-                expected_type=type_hints["complex_object_index"],
-            )
-            check_type(
-                argname="argument complex_object_is_from_set",
-                value=complex_object_is_from_set,
-                expected_type=type_hints["complex_object_is_from_set"],
-            )
-        jsii.create(
-            self.__class__,
-            self,
-            [
-                terraform_resource,
-                terraform_attribute,
-                complex_object_index,
-                complex_object_is_from_set,
-            ],
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__7a372808503acfed07e3ba0c39fede245a0eed9e6d86eb61cb1f550ecc82a3cb)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument complex_object_index", value=complex_object_index, expected_type=type_hints["complex_object_index"])
+            check_type(argname="argument complex_object_is_from_set", value=complex_object_is_from_set, expected_type=type_hints["complex_object_is_from_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, complex_object_index, complex_object_is_from_set])
 
     @builtins.property
     @jsii.member(jsii_name="actualNodeCount")
@@ -1534,9 +1081,7 @@ class DataDigitaloceanKubernetesClusterNodePoolOutputReference(
     @builtins.property
     @jsii.member(jsii_name="nodes")
     def nodes(self) -> DataDigitaloceanKubernetesClusterNodePoolNodesList:
-        return typing.cast(
-            DataDigitaloceanKubernetesClusterNodePoolNodesList, jsii.get(self, "nodes")
-        )
+        return typing.cast(DataDigitaloceanKubernetesClusterNodePoolNodesList, jsii.get(self, "nodes"))
 
     @builtins.property
     @jsii.member(jsii_name="size")
@@ -1551,20 +1096,14 @@ class DataDigitaloceanKubernetesClusterNodePoolOutputReference(
     @builtins.property
     @jsii.member(jsii_name="taint")
     def taint(self) -> "DataDigitaloceanKubernetesClusterNodePoolTaintList":
-        return typing.cast(
-            "DataDigitaloceanKubernetesClusterNodePoolTaintList",
-            jsii.get(self, "taint"),
-        )
+        return typing.cast("DataDigitaloceanKubernetesClusterNodePoolTaintList", jsii.get(self, "taint"))
 
     @builtins.property
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
     ) -> typing.Optional[DataDigitaloceanKubernetesClusterNodePool]:
-        return typing.cast(
-            typing.Optional[DataDigitaloceanKubernetesClusterNodePool],
-            jsii.get(self, "internalValue"),
-        )
+        return typing.cast(typing.Optional[DataDigitaloceanKubernetesClusterNodePool], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
@@ -1572,12 +1111,8 @@ class DataDigitaloceanKubernetesClusterNodePoolOutputReference(
         value: typing.Optional[DataDigitaloceanKubernetesClusterNodePool],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__15ca8ecf0cf982414c066551cd3ab5a78caea626e1b1477cdcadb49d9eeb7026
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__15ca8ecf0cf982414c066551cd3ab5a78caea626e1b1477cdcadb49d9eeb7026)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "internalValue", value)
 
 
@@ -1613,105 +1148,68 @@ class DataDigitaloceanKubernetesClusterNodePoolTaintList(
         terraform_attribute: builtins.str,
         wraps_set: builtins.bool,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param wraps_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__3ba57064690c282cb8183038e1263eb4ac9f5f9c316fe9c100b4028b0004548a
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
-            check_type(
-                argname="argument wraps_set",
-                value=wraps_set,
-                expected_type=type_hints["wraps_set"],
-            )
-        jsii.create(
-            self.__class__, self, [terraform_resource, terraform_attribute, wraps_set]
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__3ba57064690c282cb8183038e1263eb4ac9f5f9c316fe9c100b4028b0004548a)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument wraps_set", value=wraps_set, expected_type=type_hints["wraps_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, wraps_set])
 
     @jsii.member(jsii_name="get")
     def get(
         self,
         index: jsii.Number,
     ) -> "DataDigitaloceanKubernetesClusterNodePoolTaintOutputReference":
-        """
+        '''
         :param index: the index of the item to return.
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__d666ebfadd55a49d5f7c6f351ff8b52b95498d9b516eefe532249e1ed4ad9402
-            )
-            check_type(
-                argname="argument index", value=index, expected_type=type_hints["index"]
-            )
-        return typing.cast(
-            "DataDigitaloceanKubernetesClusterNodePoolTaintOutputReference",
-            jsii.invoke(self, "get", [index]),
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__d666ebfadd55a49d5f7c6f351ff8b52b95498d9b516eefe532249e1ed4ad9402)
+            check_type(argname="argument index", value=index, expected_type=type_hints["index"])
+        return typing.cast("DataDigitaloceanKubernetesClusterNodePoolTaintOutputReference", jsii.invoke(self, "get", [index]))
 
     @builtins.property
     @jsii.member(jsii_name="terraformAttribute")
     def _terraform_attribute(self) -> builtins.str:
-        """The attribute on the parent resource this class is referencing."""
+        '''The attribute on the parent resource this class is referencing.'''
         return typing.cast(builtins.str, jsii.get(self, "terraformAttribute"))
 
     @_terraform_attribute.setter
     def _terraform_attribute(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__e5e10b137430293f251077e9266a68299e88e71ac924d3d35223c64322a82aef
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__e5e10b137430293f251077e9266a68299e88e71ac924d3d35223c64322a82aef)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "terraformAttribute", value)
 
     @builtins.property
     @jsii.member(jsii_name="terraformResource")
     def _terraform_resource(self) -> _cdktf_9a9027ec.IInterpolatingParent:
-        """The parent resource."""
-        return typing.cast(
-            _cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource")
-        )
+        '''The parent resource.'''
+        return typing.cast(_cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource"))
 
     @_terraform_resource.setter
     def _terraform_resource(self, value: _cdktf_9a9027ec.IInterpolatingParent) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__790041436a702942a011fd46a40b0eb468daad789d0785dbf72c5fef1c9d1bad
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__790041436a702942a011fd46a40b0eb468daad789d0785dbf72c5fef1c9d1bad)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "terraformResource", value)
 
     @builtins.property
     @jsii.member(jsii_name="wrapsSet")
     def _wraps_set(self) -> builtins.bool:
-        """whether the list is wrapping a set (will add tolist() to be able to access an item via an index)."""
+        '''whether the list is wrapping a set (will add tolist() to be able to access an item via an index).'''
         return typing.cast(builtins.bool, jsii.get(self, "wrapsSet"))
 
     @_wraps_set.setter
     def _wraps_set(self, value: builtins.bool) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__0be1dd13d95d1011e7267afe0016cdf911020894803af74d4011c3660bc4775a
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__0be1dd13d95d1011e7267afe0016cdf911020894803af74d4011c3660bc4775a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "wrapsSet", value)
 
 
@@ -1727,46 +1225,19 @@ class DataDigitaloceanKubernetesClusterNodePoolTaintOutputReference(
         complex_object_index: jsii.Number,
         complex_object_is_from_set: builtins.bool,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
         :param complex_object_index: the index of this item in the list.
         :param complex_object_is_from_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__d2b4082bd9827924af5d665fd415059a0c84f792d6162647588f3fe10c2793cd
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
-            check_type(
-                argname="argument complex_object_index",
-                value=complex_object_index,
-                expected_type=type_hints["complex_object_index"],
-            )
-            check_type(
-                argname="argument complex_object_is_from_set",
-                value=complex_object_is_from_set,
-                expected_type=type_hints["complex_object_is_from_set"],
-            )
-        jsii.create(
-            self.__class__,
-            self,
-            [
-                terraform_resource,
-                terraform_attribute,
-                complex_object_index,
-                complex_object_is_from_set,
-            ],
-        )
+            type_hints = typing.get_type_hints(_typecheckingstub__d2b4082bd9827924af5d665fd415059a0c84f792d6162647588f3fe10c2793cd)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument complex_object_index", value=complex_object_index, expected_type=type_hints["complex_object_index"])
+            check_type(argname="argument complex_object_is_from_set", value=complex_object_is_from_set, expected_type=type_hints["complex_object_is_from_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, complex_object_index, complex_object_is_from_set])
 
     @builtins.property
     @jsii.member(jsii_name="effect")
@@ -1788,10 +1259,7 @@ class DataDigitaloceanKubernetesClusterNodePoolTaintOutputReference(
     def internal_value(
         self,
     ) -> typing.Optional[DataDigitaloceanKubernetesClusterNodePoolTaint]:
-        return typing.cast(
-            typing.Optional[DataDigitaloceanKubernetesClusterNodePoolTaint],
-            jsii.get(self, "internalValue"),
-        )
+        return typing.cast(typing.Optional[DataDigitaloceanKubernetesClusterNodePoolTaint], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
@@ -1799,12 +1267,8 @@ class DataDigitaloceanKubernetesClusterNodePoolTaintOutputReference(
         value: typing.Optional[DataDigitaloceanKubernetesClusterNodePoolTaint],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__30e9654f5bc2a2ed652eb7ec76ba42ad0270b59493758126096ee9c457e2c372
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__30e9654f5bc2a2ed652eb7ec76ba42ad0270b59493758126096ee9c457e2c372)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "internalValue", value)
 
 
@@ -1830,7 +1294,6 @@ __all__ = [
 
 publication.publish()
 
-
 def _typecheckingstub__358cb1bbbe8631e79099580643fb3eee6eb904096d09dc34ecab6cc743f3543b(
     scope: _constructs_77d1e7e8.Construct,
     id_: builtins.str,
@@ -1838,54 +1301,16 @@ def _typecheckingstub__358cb1bbbe8631e79099580643fb3eee6eb904096d09dc34ecab6cc74
     name: builtins.str,
     id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[builtins.str]] = None,
-    connection: typing.Optional[
-        typing.Union[
-            typing.Union[
-                _cdktf_9a9027ec.SSHProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-            typing.Union[
-                _cdktf_9a9027ec.WinrmProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-        ]
-    ] = None,
-    count: typing.Optional[
-        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-    ] = None,
-    depends_on: typing.Optional[
-        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-    ] = None,
+    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.TerraformResourceLifecycle,
-            typing.Dict[builtins.str, typing.Any],
-        ]
-    ] = None,
+    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[
-        typing.Sequence[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.FileProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.LocalExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.RemoteExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ]
-    ] = None,
+    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__744a505fd1ca62a263976d6d18ca78912db6bb50aa76cb01cb39fe40a8b32b7f(
     value: builtins.str,
@@ -1893,13 +1318,11 @@ def _typecheckingstub__744a505fd1ca62a263976d6d18ca78912db6bb50aa76cb01cb39fe40a
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__710d81f583b3b4fdcdd894752ea38f225f9a4bb5ed32b88e6ac509e95d1cc558(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__6416dbeaddd5563541e2e591e0c49a9106fb2121a7ce5252847230b0f49b65f2(
     value: typing.List[builtins.str],
@@ -1907,60 +1330,21 @@ def _typecheckingstub__6416dbeaddd5563541e2e591e0c49a9106fb2121a7ce5252847230b0f
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__b5f6e5059e4e1ffe057be439dc0ef4788901886f63cc26a6afbbe8506067f3bb(
     *,
-    connection: typing.Optional[
-        typing.Union[
-            typing.Union[
-                _cdktf_9a9027ec.SSHProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-            typing.Union[
-                _cdktf_9a9027ec.WinrmProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-        ]
-    ] = None,
-    count: typing.Optional[
-        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-    ] = None,
-    depends_on: typing.Optional[
-        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-    ] = None,
+    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.TerraformResourceLifecycle,
-            typing.Dict[builtins.str, typing.Any],
-        ]
-    ] = None,
+    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[
-        typing.Sequence[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.FileProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.LocalExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.RemoteExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ]
-    ] = None,
+    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     name: builtins.str,
     id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__432b496671f1a869d2f887e2a30b052f2a4ad9a4652ebf6d588bd43ffabf3328(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -1970,13 +1354,11 @@ def _typecheckingstub__432b496671f1a869d2f887e2a30b052f2a4ad9a4652ebf6d588bd43ff
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__498b3050a1a39d5f5be1647f9d67506ba6e9f6287305169b65b12dd4741a2397(
     index: jsii.Number,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__d2a21bea33185376c77c5f37399e619a2e199e881a8ca61a29af81342255480c(
     value: builtins.str,
@@ -1984,20 +1366,17 @@ def _typecheckingstub__d2a21bea33185376c77c5f37399e619a2e199e881a8ca61a29af81342
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__6087f6c8f9e7fce740e982dae844ea4b2f98386bd12722e66304b0df4288e887(
     value: _cdktf_9a9027ec.IInterpolatingParent,
 ) -> None:
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__c2a19486752223eac0212b1ed1c5fbeb8d9679e0adecd5b3cc925f69a4f6a7f5(
     value: builtins.bool,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__552a3f1b0b3cd3513c5387faf28acdca5ac43e3c97726f367b8b5752af90e3d4(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -2008,13 +1387,11 @@ def _typecheckingstub__552a3f1b0b3cd3513c5387faf28acdca5ac43e3c97726f367b8b5752a
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__a52cde72b3d4a7922514e65adc580def2d72be8dd9181259199914708ad6b5c8(
     value: typing.Optional[DataDigitaloceanKubernetesClusterKubeConfig],
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__16fba8885f16378e5d52bfa489f03ccfd50861655eea8316e9c3c28342fd55a6(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -2024,13 +1401,11 @@ def _typecheckingstub__16fba8885f16378e5d52bfa489f03ccfd50861655eea8316e9c3c2834
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__adefb07721c42855b7c2ce4f45aafd01e5e0e782b188f7569060357ca9b2decd(
     index: jsii.Number,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__c401ea61298b7efddc5af5b698cbf4114330c6f538834f5d2d044b16c37d2bb5(
     value: builtins.str,
@@ -2038,20 +1413,17 @@ def _typecheckingstub__c401ea61298b7efddc5af5b698cbf4114330c6f538834f5d2d044b16c
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__bfdecdd98a2cac7d5126a1497eca183036c73e95e9e688291591f399256fd188(
     value: _cdktf_9a9027ec.IInterpolatingParent,
 ) -> None:
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__3920e120533f424c5b75d86af5687765c0417c1c274bfda7ee0a493e02be0b2e(
     value: builtins.bool,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__440cfd46aa8a04815d46a78329887cb3f691c1c150f0f43a989e71fa61c6afaf(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -2062,13 +1434,11 @@ def _typecheckingstub__440cfd46aa8a04815d46a78329887cb3f691c1c150f0f43a989e71fa6
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__dbf76cd55b748fa4bb34b409f2bc7d93619ceb5f2982c79c8dda52506fc39143(
     value: typing.Optional[DataDigitaloceanKubernetesClusterMaintenancePolicy],
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__c74c300b3773b20bd81531363735f2daef3d090df34221f2b904d4861d49aea9(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -2078,13 +1448,11 @@ def _typecheckingstub__c74c300b3773b20bd81531363735f2daef3d090df34221f2b904d4861
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__4dec71bbae593b635fd1288b9a64889deb4fd2b52319d373fbe01cf0184b746d(
     index: jsii.Number,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__accc9cf299d7ec48a8bd35b7cb19c0ff15954534d3f059fba70a816ac9d68c80(
     value: builtins.str,
@@ -2092,20 +1460,17 @@ def _typecheckingstub__accc9cf299d7ec48a8bd35b7cb19c0ff15954534d3f059fba70a816ac
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__9f5d7f187dec1017c7a9a50446d12e683a2794b6e6d2d272b83fe0010b5eb551(
     value: _cdktf_9a9027ec.IInterpolatingParent,
 ) -> None:
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__9d49f01a220e8b71339626ab77e424460f5b327abbb81d1e770c5c3ee5a9feb7(
     value: builtins.bool,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__5e5a83085b3d2f98bc4f408bc567bd6e3e26271d432372051621700a241c5397(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -2115,13 +1480,11 @@ def _typecheckingstub__5e5a83085b3d2f98bc4f408bc567bd6e3e26271d432372051621700a2
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__eff35207dfd85af22a28561aadc75d3bfc00131d0b27c5b3f268011ff966a628(
     index: jsii.Number,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__c3c357be10e23ba51a7969803a7762ac421acd6e4e0cc8d6cd9ad535f109d2e0(
     value: builtins.str,
@@ -2129,20 +1492,17 @@ def _typecheckingstub__c3c357be10e23ba51a7969803a7762ac421acd6e4e0cc8d6cd9ad535f
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__cb66e3416f384399ab37bcbb4a280728cb69df3cc924395cb2a4ea0781df1004(
     value: _cdktf_9a9027ec.IInterpolatingParent,
 ) -> None:
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__6595b6b070dda44e89f2c3cfab17d201a3174232b4d5b4168de57df1ea011d6c(
     value: builtins.bool,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__3b03893d07b25a539a66c097f0cbfb7008af0efcee2ea99c5c9cfc6c3548814d(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -2153,13 +1513,11 @@ def _typecheckingstub__3b03893d07b25a539a66c097f0cbfb7008af0efcee2ea99c5c9cfc6c3
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__9eb622e870cbb1a78e79d328a7f7f0061626c7867c7b115a3ff8ab7453737e49(
     value: typing.Optional[DataDigitaloceanKubernetesClusterNodePoolNodes],
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__7a372808503acfed07e3ba0c39fede245a0eed9e6d86eb61cb1f550ecc82a3cb(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -2170,13 +1528,11 @@ def _typecheckingstub__7a372808503acfed07e3ba0c39fede245a0eed9e6d86eb61cb1f550ec
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__15ca8ecf0cf982414c066551cd3ab5a78caea626e1b1477cdcadb49d9eeb7026(
     value: typing.Optional[DataDigitaloceanKubernetesClusterNodePool],
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__3ba57064690c282cb8183038e1263eb4ac9f5f9c316fe9c100b4028b0004548a(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -2186,13 +1542,11 @@ def _typecheckingstub__3ba57064690c282cb8183038e1263eb4ac9f5f9c316fe9c100b4028b0
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__d666ebfadd55a49d5f7c6f351ff8b52b95498d9b516eefe532249e1ed4ad9402(
     index: jsii.Number,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__e5e10b137430293f251077e9266a68299e88e71ac924d3d35223c64322a82aef(
     value: builtins.str,
@@ -2200,20 +1554,17 @@ def _typecheckingstub__e5e10b137430293f251077e9266a68299e88e71ac924d3d35223c6432
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__790041436a702942a011fd46a40b0eb468daad789d0785dbf72c5fef1c9d1bad(
     value: _cdktf_9a9027ec.IInterpolatingParent,
 ) -> None:
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__0be1dd13d95d1011e7267afe0016cdf911020894803af74d4011c3660bc4775a(
     value: builtins.bool,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__d2b4082bd9827924af5d665fd415059a0c84f792d6162647588f3fe10c2793cd(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
@@ -2223,7 +1574,6 @@ def _typecheckingstub__d2b4082bd9827924af5d665fd415059a0c84f792d6162647588f3fe10
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__30e9654f5bc2a2ed652eb7ec76ba42ad0270b59493758126096ee9c457e2c372(
     value: typing.Optional[DataDigitaloceanKubernetesClusterNodePoolTaint],

@@ -1,8 +1,8 @@
-"""
+'''
 # `data_kubernetes_secret_v1`
 
 Refer to the Terraform Registory for docs: [`data_kubernetes_secret_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1).
-"""
+'''
 import abc
 import builtins
 import datetime
@@ -26,88 +26,43 @@ class DataKubernetesSecretV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.dataKubernetesSecretV1.DataKubernetesSecretV1",
 ):
-    """Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1 kubernetes_secret_v1}."""
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1 kubernetes_secret_v1}.'''
 
     def __init__(
         self,
         scope: _constructs_77d1e7e8.Construct,
         id_: builtins.str,
         *,
-        metadata: typing.Union[
-            "DataKubernetesSecretV1Metadata", typing.Dict[builtins.str, typing.Any]
-        ],
+        metadata: typing.Union["DataKubernetesSecretV1Metadata", typing.Dict[builtins.str, typing.Any]],
         binary_data: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
-        connection: typing.Optional[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ] = None,
-        count: typing.Optional[
-            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-        ] = None,
-        depends_on: typing.Optional[
-            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-        ] = None,
+        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[
-            typing.Union[
-                _cdktf_9a9027ec.TerraformResourceLifecycle,
-                typing.Dict[builtins.str, typing.Any],
-            ]
-        ] = None,
+        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[
-            typing.Sequence[
-                typing.Union[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                ]
-            ]
-        ] = None,
+        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        """Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1 kubernetes_secret_v1} Data Source.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1 kubernetes_secret_v1} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
         :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#metadata DataKubernetesSecretV1#metadata}
         :param binary_data: A map of the secret data with values encoded in base64 format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#binary_data DataKubernetesSecretV1#binary_data}
         :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#id DataKubernetesSecretV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param connection:
-        :param count:
-        :param depends_on:
-        :param for_each:
-        :param lifecycle:
-        :param provider:
-        :param provisioners:
-        """
+        :param connection: 
+        :param count: 
+        :param depends_on: 
+        :param for_each: 
+        :param lifecycle: 
+        :param provider: 
+        :param provisioners: 
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__07b366133a885a325d588b250695873142a1a6750a249b50272a35800c505ecc
-            )
-            check_type(
-                argname="argument scope", value=scope, expected_type=type_hints["scope"]
-            )
-            check_type(
-                argname="argument id_", value=id_, expected_type=type_hints["id_"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__07b366133a885a325d588b250695873142a1a6750a249b50272a35800c505ecc)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id_", value=id_, expected_type=type_hints["id_"])
         config = DataKubernetesSecretV1Config(
             metadata=metadata,
             binary_data=binary_data,
@@ -133,13 +88,13 @@ class DataKubernetesSecretV1(
         name: typing.Optional[builtins.str] = None,
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
-        """
+        '''
         :param annotations: An unstructured key value map stored with the secret that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#annotations DataKubernetesSecretV1#annotations}
         :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#generate_name DataKubernetesSecretV1#generate_name}
         :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the secret. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#labels DataKubernetesSecretV1#labels}
         :param name: Name of the secret, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#name DataKubernetesSecretV1#name}
         :param namespace: Namespace defines the space within which name of the secret must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#namespace DataKubernetesSecretV1#namespace}
-        """
+        '''
         value = DataKubernetesSecretV1Metadata(
             annotations=annotations,
             generate_name=generate_name,
@@ -160,10 +115,7 @@ class DataKubernetesSecretV1(
 
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
-        return typing.cast(
-            typing.Mapping[builtins.str, typing.Any],
-            jsii.invoke(self, "synthesizeAttributes", []),
-        )
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="tfResourceType")
@@ -183,9 +135,7 @@ class DataKubernetesSecretV1(
     @builtins.property
     @jsii.member(jsii_name="metadata")
     def metadata(self) -> "DataKubernetesSecretV1MetadataOutputReference":
-        return typing.cast(
-            "DataKubernetesSecretV1MetadataOutputReference", jsii.get(self, "metadata")
-        )
+        return typing.cast("DataKubernetesSecretV1MetadataOutputReference", jsii.get(self, "metadata"))
 
     @builtins.property
     @jsii.member(jsii_name="type")
@@ -197,10 +147,7 @@ class DataKubernetesSecretV1(
     def binary_data_input(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        return typing.cast(
-            typing.Optional[typing.Mapping[builtins.str, builtins.str]],
-            jsii.get(self, "binaryDataInput"),
-        )
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "binaryDataInput"))
 
     @builtins.property
     @jsii.member(jsii_name="idInput")
@@ -210,27 +157,18 @@ class DataKubernetesSecretV1(
     @builtins.property
     @jsii.member(jsii_name="metadataInput")
     def metadata_input(self) -> typing.Optional["DataKubernetesSecretV1Metadata"]:
-        return typing.cast(
-            typing.Optional["DataKubernetesSecretV1Metadata"],
-            jsii.get(self, "metadataInput"),
-        )
+        return typing.cast(typing.Optional["DataKubernetesSecretV1Metadata"], jsii.get(self, "metadataInput"))
 
     @builtins.property
     @jsii.member(jsii_name="binaryData")
     def binary_data(self) -> typing.Mapping[builtins.str, builtins.str]:
-        return typing.cast(
-            typing.Mapping[builtins.str, builtins.str], jsii.get(self, "binaryData")
-        )
+        return typing.cast(typing.Mapping[builtins.str, builtins.str], jsii.get(self, "binaryData"))
 
     @binary_data.setter
     def binary_data(self, value: typing.Mapping[builtins.str, builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__470e62685b21d8fe70ffcd52a7c8796e2099f99093f14c3ba20e91986853040b
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__470e62685b21d8fe70ffcd52a7c8796e2099f99093f14c3ba20e91986853040b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "binaryData", value)
 
     @builtins.property
@@ -241,12 +179,8 @@ class DataKubernetesSecretV1(
     @id.setter
     def id(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__14cdcf875e36f87243d4157cb77bb778238d6c7ce95e3f202fc02ce7a0d74a6c
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__14cdcf875e36f87243d4157cb77bb778238d6c7ce95e3f202fc02ce7a0d74a6c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "id", value)
 
 
@@ -270,119 +204,44 @@ class DataKubernetesSecretV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def __init__(
         self,
         *,
-        connection: typing.Optional[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ] = None,
-        count: typing.Optional[
-            typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-        ] = None,
-        depends_on: typing.Optional[
-            typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-        ] = None,
+        connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+        count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+        depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
         for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-        lifecycle: typing.Optional[
-            typing.Union[
-                _cdktf_9a9027ec.TerraformResourceLifecycle,
-                typing.Dict[builtins.str, typing.Any],
-            ]
-        ] = None,
+        lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-        provisioners: typing.Optional[
-            typing.Sequence[
-                typing.Union[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                    typing.Union[
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                        typing.Dict[builtins.str, typing.Any],
-                    ],
-                ]
-            ]
-        ] = None,
-        metadata: typing.Union[
-            "DataKubernetesSecretV1Metadata", typing.Dict[builtins.str, typing.Any]
-        ],
+        provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+        metadata: typing.Union["DataKubernetesSecretV1Metadata", typing.Dict[builtins.str, typing.Any]],
         binary_data: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         id: typing.Optional[builtins.str] = None,
     ) -> None:
-        """
-        :param connection:
-        :param count:
-        :param depends_on:
-        :param for_each:
-        :param lifecycle:
-        :param provider:
-        :param provisioners:
+        '''
+        :param connection: 
+        :param count: 
+        :param depends_on: 
+        :param for_each: 
+        :param lifecycle: 
+        :param provider: 
+        :param provisioners: 
         :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#metadata DataKubernetesSecretV1#metadata}
         :param binary_data: A map of the secret data with values encoded in base64 format. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#binary_data DataKubernetesSecretV1#binary_data}
         :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#id DataKubernetesSecretV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        """
+        '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
         if isinstance(metadata, dict):
             metadata = DataKubernetesSecretV1Metadata(**metadata)
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__aba5f7d5b626fef111e4c7f59a591f2b20ba41b32dabfd1d93fe12fa83836e2e
-            )
-            check_type(
-                argname="argument connection",
-                value=connection,
-                expected_type=type_hints["connection"],
-            )
-            check_type(
-                argname="argument count", value=count, expected_type=type_hints["count"]
-            )
-            check_type(
-                argname="argument depends_on",
-                value=depends_on,
-                expected_type=type_hints["depends_on"],
-            )
-            check_type(
-                argname="argument for_each",
-                value=for_each,
-                expected_type=type_hints["for_each"],
-            )
-            check_type(
-                argname="argument lifecycle",
-                value=lifecycle,
-                expected_type=type_hints["lifecycle"],
-            )
-            check_type(
-                argname="argument provider",
-                value=provider,
-                expected_type=type_hints["provider"],
-            )
-            check_type(
-                argname="argument provisioners",
-                value=provisioners,
-                expected_type=type_hints["provisioners"],
-            )
-            check_type(
-                argname="argument metadata",
-                value=metadata,
-                expected_type=type_hints["metadata"],
-            )
-            check_type(
-                argname="argument binary_data",
-                value=binary_data,
-                expected_type=type_hints["binary_data"],
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__aba5f7d5b626fef111e4c7f59a591f2b20ba41b32dabfd1d93fe12fa83836e2e)
+            check_type(argname="argument connection", value=connection, expected_type=type_hints["connection"])
+            check_type(argname="argument count", value=count, expected_type=type_hints["count"])
+            check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
+            check_type(argname="argument for_each", value=for_each, expected_type=type_hints["for_each"])
+            check_type(argname="argument lifecycle", value=lifecycle, expected_type=type_hints["lifecycle"])
+            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
+            check_type(argname="argument provisioners", value=provisioners, expected_type=type_hints["provisioners"])
+            check_type(argname="argument metadata", value=metadata, expected_type=type_hints["metadata"])
+            check_type(argname="argument binary_data", value=binary_data, expected_type=type_hints["binary_data"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "metadata": metadata,
@@ -409,112 +268,73 @@ class DataKubernetesSecretV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     @builtins.property
     def connection(
         self,
-    ) -> typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.SSHProvisionerConnection,
-            _cdktf_9a9027ec.WinrmProvisionerConnection,
-        ]
-    ]:
-        """
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]]:
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("connection")
-        return typing.cast(
-            typing.Optional[
-                typing.Union[
-                    _cdktf_9a9027ec.SSHProvisionerConnection,
-                    _cdktf_9a9027ec.WinrmProvisionerConnection,
-                ]
-            ],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, _cdktf_9a9027ec.WinrmProvisionerConnection]], result)
 
     @builtins.property
     def count(
         self,
     ) -> typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("count")
-        return typing.cast(
-            typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]], result)
 
     @builtins.property
     def depends_on(
         self,
     ) -> typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("depends_on")
-        return typing.cast(
-            typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result
-        )
+        return typing.cast(typing.Optional[typing.List[_cdktf_9a9027ec.ITerraformDependable]], result)
 
     @builtins.property
     def for_each(self) -> typing.Optional[_cdktf_9a9027ec.ITerraformIterator]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("for_each")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.ITerraformIterator], result)
 
     @builtins.property
     def lifecycle(self) -> typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("lifecycle")
-        return typing.cast(
-            typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result
-        )
+        return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformResourceLifecycle], result)
 
     @builtins.property
     def provider(self) -> typing.Optional[_cdktf_9a9027ec.TerraformProvider]:
-        """
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("provider")
         return typing.cast(typing.Optional[_cdktf_9a9027ec.TerraformProvider], result)
 
     @builtins.property
     def provisioners(
         self,
-    ) -> typing.Optional[
-        typing.List[
-            typing.Union[
-                _cdktf_9a9027ec.FileProvisioner,
-                _cdktf_9a9027ec.LocalExecProvisioner,
-                _cdktf_9a9027ec.RemoteExecProvisioner,
-            ]
-        ]
-    ]:
-        """
+    ) -> typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]]:
+        '''
         :stability: experimental
-        """
+        '''
         result = self._values.get("provisioners")
-        return typing.cast(
-            typing.Optional[
-                typing.List[
-                    typing.Union[
-                        _cdktf_9a9027ec.FileProvisioner,
-                        _cdktf_9a9027ec.LocalExecProvisioner,
-                        _cdktf_9a9027ec.RemoteExecProvisioner,
-                    ]
-                ]
-            ],
-            result,
-        )
+        return typing.cast(typing.Optional[typing.List[typing.Union[_cdktf_9a9027ec.FileProvisioner, _cdktf_9a9027ec.LocalExecProvisioner, _cdktf_9a9027ec.RemoteExecProvisioner]]], result)
 
     @builtins.property
     def metadata(self) -> "DataKubernetesSecretV1Metadata":
-        """metadata block.
+        '''metadata block.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#metadata DataKubernetesSecretV1#metadata}
-        """
+        '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
         return typing.cast("DataKubernetesSecretV1Metadata", result)
@@ -523,22 +343,20 @@ class DataKubernetesSecretV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def binary_data(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        """A map of the secret data with values encoded in base64 format.
+        '''A map of the secret data with values encoded in base64 format.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#binary_data DataKubernetesSecretV1#binary_data}
-        """
+        '''
         result = self._values.get("binary_data")
-        return typing.cast(
-            typing.Optional[typing.Mapping[builtins.str, builtins.str]], result
-        )
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        """Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#id DataKubernetesSecretV1#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#id DataKubernetesSecretV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        """
+        '''
         result = self._values.get("id")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -575,40 +393,20 @@ class DataKubernetesSecretV1Metadata:
         name: typing.Optional[builtins.str] = None,
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
-        """
+        '''
         :param annotations: An unstructured key value map stored with the secret that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#annotations DataKubernetesSecretV1#annotations}
         :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#generate_name DataKubernetesSecretV1#generate_name}
         :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the secret. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#labels DataKubernetesSecretV1#labels}
         :param name: Name of the secret, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#name DataKubernetesSecretV1#name}
         :param namespace: Namespace defines the space within which name of the secret must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#namespace DataKubernetesSecretV1#namespace}
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__0cc63b48435818439437b7ab83991b0febbb260a50b10407dbceef8ca1bd0561
-            )
-            check_type(
-                argname="argument annotations",
-                value=annotations,
-                expected_type=type_hints["annotations"],
-            )
-            check_type(
-                argname="argument generate_name",
-                value=generate_name,
-                expected_type=type_hints["generate_name"],
-            )
-            check_type(
-                argname="argument labels",
-                value=labels,
-                expected_type=type_hints["labels"],
-            )
-            check_type(
-                argname="argument name", value=name, expected_type=type_hints["name"]
-            )
-            check_type(
-                argname="argument namespace",
-                value=namespace,
-                expected_type=type_hints["namespace"],
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__0cc63b48435818439437b7ab83991b0febbb260a50b10407dbceef8ca1bd0561)
+            check_type(argname="argument annotations", value=annotations, expected_type=type_hints["annotations"])
+            check_type(argname="argument generate_name", value=generate_name, expected_type=type_hints["generate_name"])
+            check_type(argname="argument labels", value=labels, expected_type=type_hints["labels"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument namespace", value=namespace, expected_type=type_hints["namespace"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if annotations is not None:
             self._values["annotations"] = annotations
@@ -625,56 +423,52 @@ class DataKubernetesSecretV1Metadata:
     def annotations(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        """An unstructured key value map stored with the secret that may be used to store arbitrary metadata.
+        '''An unstructured key value map stored with the secret that may be used to store arbitrary metadata.
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#annotations DataKubernetesSecretV1#annotations}
-        """
+        '''
         result = self._values.get("annotations")
-        return typing.cast(
-            typing.Optional[typing.Mapping[builtins.str, builtins.str]], result
-        )
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
     def generate_name(self) -> typing.Optional[builtins.str]:
-        """Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided.
+        '''Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided.
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#generate_name DataKubernetesSecretV1#generate_name}
-        """
+        '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def labels(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        """Map of string keys and values that can be used to organize and categorize (scope and select) the secret.
+        '''Map of string keys and values that can be used to organize and categorize (scope and select) the secret.
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#labels DataKubernetesSecretV1#labels}
-        """
+        '''
         result = self._values.get("labels")
-        return typing.cast(
-            typing.Optional[typing.Mapping[builtins.str, builtins.str]], result
-        )
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
-        """Name of the secret, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
+        '''Name of the secret, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#name DataKubernetesSecretV1#name}
-        """
+        '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def namespace(self) -> typing.Optional[builtins.str]:
-        """Namespace defines the space within which name of the secret must be unique.
+        '''Namespace defines the space within which name of the secret must be unique.
 
         Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/secret_v1#namespace DataKubernetesSecretV1#namespace}
-        """
+        '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -700,24 +494,14 @@ class DataKubernetesSecretV1MetadataOutputReference(
         terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
         terraform_attribute: builtins.str,
     ) -> None:
-        """
+        '''
         :param terraform_resource: The parent resource.
         :param terraform_attribute: The attribute on the parent resource this class is referencing.
-        """
+        '''
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__965ef9b9d4c67c2f85147273e1d73964a8caca03a692b34d1439ec91575d6d24
-            )
-            check_type(
-                argname="argument terraform_resource",
-                value=terraform_resource,
-                expected_type=type_hints["terraform_resource"],
-            )
-            check_type(
-                argname="argument terraform_attribute",
-                value=terraform_attribute,
-                expected_type=type_hints["terraform_attribute"],
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__965ef9b9d4c67c2f85147273e1d73964a8caca03a692b34d1439ec91575d6d24)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
         jsii.create(self.__class__, self, [terraform_resource, terraform_attribute])
 
     @jsii.member(jsii_name="resetAnnotations")
@@ -760,27 +544,19 @@ class DataKubernetesSecretV1MetadataOutputReference(
     def annotations_input(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        return typing.cast(
-            typing.Optional[typing.Mapping[builtins.str, builtins.str]],
-            jsii.get(self, "annotationsInput"),
-        )
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "annotationsInput"))
 
     @builtins.property
     @jsii.member(jsii_name="generateNameInput")
     def generate_name_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(
-            typing.Optional[builtins.str], jsii.get(self, "generateNameInput")
-        )
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "generateNameInput"))
 
     @builtins.property
     @jsii.member(jsii_name="labelsInput")
     def labels_input(
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        return typing.cast(
-            typing.Optional[typing.Mapping[builtins.str, builtins.str]],
-            jsii.get(self, "labelsInput"),
-        )
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "labelsInput"))
 
     @builtins.property
     @jsii.member(jsii_name="nameInput")
@@ -790,26 +566,18 @@ class DataKubernetesSecretV1MetadataOutputReference(
     @builtins.property
     @jsii.member(jsii_name="namespaceInput")
     def namespace_input(self) -> typing.Optional[builtins.str]:
-        return typing.cast(
-            typing.Optional[builtins.str], jsii.get(self, "namespaceInput")
-        )
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "namespaceInput"))
 
     @builtins.property
     @jsii.member(jsii_name="annotations")
     def annotations(self) -> typing.Mapping[builtins.str, builtins.str]:
-        return typing.cast(
-            typing.Mapping[builtins.str, builtins.str], jsii.get(self, "annotations")
-        )
+        return typing.cast(typing.Mapping[builtins.str, builtins.str], jsii.get(self, "annotations"))
 
     @annotations.setter
     def annotations(self, value: typing.Mapping[builtins.str, builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__085267eaf787f0d2eb00a8285595ee35cfbf4a132ad651c37b5d66a54eeb8d01
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__085267eaf787f0d2eb00a8285595ee35cfbf4a132ad651c37b5d66a54eeb8d01)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "annotations", value)
 
     @builtins.property
@@ -820,30 +588,20 @@ class DataKubernetesSecretV1MetadataOutputReference(
     @generate_name.setter
     def generate_name(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__c3e70077b868a5d9ba27092adc382e0ec42b01c73b185f33850ace5caf38aca7
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__c3e70077b868a5d9ba27092adc382e0ec42b01c73b185f33850ace5caf38aca7)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "generateName", value)
 
     @builtins.property
     @jsii.member(jsii_name="labels")
     def labels(self) -> typing.Mapping[builtins.str, builtins.str]:
-        return typing.cast(
-            typing.Mapping[builtins.str, builtins.str], jsii.get(self, "labels")
-        )
+        return typing.cast(typing.Mapping[builtins.str, builtins.str], jsii.get(self, "labels"))
 
     @labels.setter
     def labels(self, value: typing.Mapping[builtins.str, builtins.str]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__a655c05fe702395c13883741eda5191e533946c50645b80ddfffdf1b099390b8
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__a655c05fe702395c13883741eda5191e533946c50645b80ddfffdf1b099390b8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "labels", value)
 
     @builtins.property
@@ -854,12 +612,8 @@ class DataKubernetesSecretV1MetadataOutputReference(
     @name.setter
     def name(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__9818afc877c86fd31615058a03b62ab86c0d9f0016ba53780d8c5d0c16252c51
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__9818afc877c86fd31615058a03b62ab86c0d9f0016ba53780d8c5d0c16252c51)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "name", value)
 
     @builtins.property
@@ -870,21 +624,14 @@ class DataKubernetesSecretV1MetadataOutputReference(
     @namespace.setter
     def namespace(self, value: builtins.str) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__ca1f3008110de6bea526945136a94d0b4fce631153856b22eb08764c4e46f226
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__ca1f3008110de6bea526945136a94d0b4fce631153856b22eb08764c4e46f226)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "namespace", value)
 
     @builtins.property
     @jsii.member(jsii_name="internalValue")
     def internal_value(self) -> typing.Optional[DataKubernetesSecretV1Metadata]:
-        return typing.cast(
-            typing.Optional[DataKubernetesSecretV1Metadata],
-            jsii.get(self, "internalValue"),
-        )
+        return typing.cast(typing.Optional[DataKubernetesSecretV1Metadata], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
@@ -892,12 +639,8 @@ class DataKubernetesSecretV1MetadataOutputReference(
         value: typing.Optional[DataKubernetesSecretV1Metadata],
     ) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(
-                _typecheckingstub__0a559f60d5c5972fee011cea0cc774aa1b6a670d4acb9dbc3e2a341eb235843d
-            )
-            check_type(
-                argname="argument value", value=value, expected_type=type_hints["value"]
-            )
+            type_hints = typing.get_type_hints(_typecheckingstub__0a559f60d5c5972fee011cea0cc774aa1b6a670d4acb9dbc3e2a341eb235843d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "internalValue", value)
 
 
@@ -910,64 +653,23 @@ __all__ = [
 
 publication.publish()
 
-
 def _typecheckingstub__07b366133a885a325d588b250695873142a1a6750a249b50272a35800c505ecc(
     scope: _constructs_77d1e7e8.Construct,
     id_: builtins.str,
     *,
-    metadata: typing.Union[
-        DataKubernetesSecretV1Metadata, typing.Dict[builtins.str, typing.Any]
-    ],
+    metadata: typing.Union[DataKubernetesSecretV1Metadata, typing.Dict[builtins.str, typing.Any]],
     binary_data: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     id: typing.Optional[builtins.str] = None,
-    connection: typing.Optional[
-        typing.Union[
-            typing.Union[
-                _cdktf_9a9027ec.SSHProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-            typing.Union[
-                _cdktf_9a9027ec.WinrmProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-        ]
-    ] = None,
-    count: typing.Optional[
-        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-    ] = None,
-    depends_on: typing.Optional[
-        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-    ] = None,
+    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.TerraformResourceLifecycle,
-            typing.Dict[builtins.str, typing.Any],
-        ]
-    ] = None,
+    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[
-        typing.Sequence[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.FileProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.LocalExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.RemoteExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ]
-    ] = None,
+    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__470e62685b21d8fe70ffcd52a7c8796e2099f99093f14c3ba20e91986853040b(
     value: typing.Mapping[builtins.str, builtins.str],
@@ -975,69 +677,27 @@ def _typecheckingstub__470e62685b21d8fe70ffcd52a7c8796e2099f99093f14c3ba20e91986
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__14cdcf875e36f87243d4157cb77bb778238d6c7ce95e3f202fc02ce7a0d74a6c(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__aba5f7d5b626fef111e4c7f59a591f2b20ba41b32dabfd1d93fe12fa83836e2e(
     *,
-    connection: typing.Optional[
-        typing.Union[
-            typing.Union[
-                _cdktf_9a9027ec.SSHProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-            typing.Union[
-                _cdktf_9a9027ec.WinrmProvisionerConnection,
-                typing.Dict[builtins.str, typing.Any],
-            ],
-        ]
-    ] = None,
-    count: typing.Optional[
-        typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]
-    ] = None,
-    depends_on: typing.Optional[
-        typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]
-    ] = None,
+    connection: typing.Optional[typing.Union[typing.Union[_cdktf_9a9027ec.SSHProvisionerConnection, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.WinrmProvisionerConnection, typing.Dict[builtins.str, typing.Any]]]] = None,
+    count: typing.Optional[typing.Union[jsii.Number, _cdktf_9a9027ec.TerraformCount]] = None,
+    depends_on: typing.Optional[typing.Sequence[_cdktf_9a9027ec.ITerraformDependable]] = None,
     for_each: typing.Optional[_cdktf_9a9027ec.ITerraformIterator] = None,
-    lifecycle: typing.Optional[
-        typing.Union[
-            _cdktf_9a9027ec.TerraformResourceLifecycle,
-            typing.Dict[builtins.str, typing.Any],
-        ]
-    ] = None,
+    lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
-    provisioners: typing.Optional[
-        typing.Sequence[
-            typing.Union[
-                typing.Union[
-                    _cdktf_9a9027ec.FileProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.LocalExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-                typing.Union[
-                    _cdktf_9a9027ec.RemoteExecProvisioner,
-                    typing.Dict[builtins.str, typing.Any],
-                ],
-            ]
-        ]
-    ] = None,
-    metadata: typing.Union[
-        DataKubernetesSecretV1Metadata, typing.Dict[builtins.str, typing.Any]
-    ],
+    provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+    metadata: typing.Union[DataKubernetesSecretV1Metadata, typing.Dict[builtins.str, typing.Any]],
     binary_data: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__0cc63b48435818439437b7ab83991b0febbb260a50b10407dbceef8ca1bd0561(
     *,
@@ -1050,7 +710,6 @@ def _typecheckingstub__0cc63b48435818439437b7ab83991b0febbb260a50b10407dbceef8ca
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__965ef9b9d4c67c2f85147273e1d73964a8caca03a692b34d1439ec91575d6d24(
     terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
     terraform_attribute: builtins.str,
@@ -1058,13 +717,11 @@ def _typecheckingstub__965ef9b9d4c67c2f85147273e1d73964a8caca03a692b34d1439ec915
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__085267eaf787f0d2eb00a8285595ee35cfbf4a132ad651c37b5d66a54eeb8d01(
     value: typing.Mapping[builtins.str, builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__c3e70077b868a5d9ba27092adc382e0ec42b01c73b185f33850ace5caf38aca7(
     value: builtins.str,
@@ -1072,13 +729,11 @@ def _typecheckingstub__c3e70077b868a5d9ba27092adc382e0ec42b01c73b185f33850ace5ca
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__a655c05fe702395c13883741eda5191e533946c50645b80ddfffdf1b099390b8(
     value: typing.Mapping[builtins.str, builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__9818afc877c86fd31615058a03b62ab86c0d9f0016ba53780d8c5d0c16252c51(
     value: builtins.str,
@@ -1086,13 +741,11 @@ def _typecheckingstub__9818afc877c86fd31615058a03b62ab86c0d9f0016ba53780d8c5d0c1
     """Type checking stubs"""
     pass
 
-
 def _typecheckingstub__ca1f3008110de6bea526945136a94d0b4fce631153856b22eb08764c4e46f226(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
-
 
 def _typecheckingstub__0a559f60d5c5972fee011cea0cc774aa1b6a670d4acb9dbc3e2a341eb235843d(
     value: typing.Optional[DataKubernetesSecretV1Metadata],
