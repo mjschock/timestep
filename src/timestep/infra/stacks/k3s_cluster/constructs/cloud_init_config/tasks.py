@@ -19,6 +19,7 @@ from timestep.infra.imports.cloudinit.provider import CloudinitProvider
 from timestep.infra.imports.local.data_local_file import DataLocalFile
 from timestep.infra.imports.local.file import File
 from timestep.infra.imports.local.provider import LocalProvider
+from timestep.infra.imports.null.provider import NullProvider as NullTerraformProvider
 from timestep.infra.imports.null.resource import Resource
 
 
@@ -229,9 +230,13 @@ def get_cloud_init_config_resource(
         )
 
     else:
+        null_provider = NullTerraformProvider(
+            id="null_provider",
+            scope=scope,
+        )
         cloud_init_config_resource = Resource(
             id="cloud_init_config_resource",
-            # provider=cloud_init_config_provider,
+            provider=null_provider,
             scope=scope,
             triggers={
                 "content": user_data.render(),
