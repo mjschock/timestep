@@ -275,15 +275,9 @@ def get_cloud_init_config_data_source(
         cloud_init_config_data_source = DataCloudinitConfig(
             scope=scope,
             id="cloud_init_config_data_source",
-            base64_encode=False
-            if config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
-            else True,
+            base64_encode=False,
             boundary=None,
-            gzip=False
-            if config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
-            else True,
+            gzip=False,
             part=[
                 data_cloud_init_config_part,
             ],
