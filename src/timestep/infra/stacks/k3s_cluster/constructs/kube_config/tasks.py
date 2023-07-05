@@ -60,12 +60,12 @@ def get_kube_config_resource(
         ssh_private_key_path = fp.name
 
         command = f"""k3sup install \
-            --context {kubecontext} \
-            --ip {ipv4} \
-            --local-path {local_path} \
-            --skip-install \
-            --ssh-key {ssh_private_key_path} \
-            --user ubuntu && rm {ssh_private_key_path}"""
+--context {kubecontext} \
+--ip {ipv4} \
+--local-path {local_path} \
+--skip-install \
+--ssh-key {ssh_private_key_path} \
+--user ubuntu && rm {ssh_private_key_path}"""
 
         local_exec_provisioner = LocalExecProvisioner(
             command=command,
