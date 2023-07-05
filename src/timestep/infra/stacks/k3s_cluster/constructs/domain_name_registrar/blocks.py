@@ -1,8 +1,4 @@
-from typing import Dict
-
 from cdktf import (
-    TerraformDataSource,
-    TerraformOutput,
     TerraformProvider,
     TerraformResource,
 )
@@ -15,8 +11,6 @@ from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
     CloudInstanceConstruct,
 )
 from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.tasks import (
-    get_domain_name_registrar_data_source,
-    get_domain_name_registrar_outputs,
     get_domain_name_registrar_provider,
     get_domain_name_registrar_resource,
 )
@@ -48,24 +42,6 @@ class DomainNameRegistrarConstruct(Construct):
             cloud_instance_construct=cloud_instance_construct,
             domain_name_registrar_provider=self.domain_name_registrar_provider_future,
         )
-        self.domain_name_registrar_data_source_future: PrefectFuture[
-            TerraformDataSource
-        ] = get_domain_name_registrar_data_source.submit(
-            scope=scope,
-            config=config,
-            cloud_instance_construct=cloud_instance_construct,
-            domain_name_registrar_resource=self.domain_name_registrar_resource_future,
-        )
-        self.domain_name_registrar_outputs_future: PrefectFuture[
-            Dict[str, TerraformOutput]
-        ] = get_domain_name_registrar_outputs.submit(
-            scope=scope,
-            config=config,
-            cloud_instance_construct=cloud_instance_construct,
-            domain_name_registrar_data_source=self.domain_name_registrar_data_source_future,
-        )
 
         self.provider = self.domain_name_registrar_provider_future.result()
         self.resource = self.domain_name_registrar_resource_future.result()
-        self.data_source = self.domain_name_registrar_data_source_future.result()
-        self.outputs = self.domain_name_registrar_outputs_future.result()
