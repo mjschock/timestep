@@ -17,6 +17,9 @@ from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance_domain.blocks i
 from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.blocks import (
     DomainNameRegistrarConstruct,
 )
+from timestep.infra.stacks.k3s_cluster.constructs.kube_config.blocks import (
+    KubeConfigConstruct,
+)
 
 
 class K3sClusterStack(TerraformStack):
@@ -51,9 +54,9 @@ class K3sClusterStack(TerraformStack):
             scope=self,
         )
 
-        # self.kube_config_construct = KubeConfigConstruct(
-        #     cloud_instance_construct=self.cloud_instance_construct,
-        #     config=config,
-        #     id="kube_config_construct",
-        #     scope=self,
-        # )
+        self.kube_config_construct = KubeConfigConstruct(
+            cloud_instance_construct=self.cloud_instance_construct,
+            config=config,
+            id="kube_config_construct",
+            scope=self,
+        )
