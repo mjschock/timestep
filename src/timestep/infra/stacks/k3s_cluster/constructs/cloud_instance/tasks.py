@@ -78,7 +78,8 @@ def get_cloud_instance_resource(
         == CloudInstanceProvider.MULTIPASS
     ):
         cloud_instance_resource = MultipassInstanceTerraformResource(
-            cloudinit_file=cloud_init_config_construct.outputs["cloudinit_file"].value,
+            # cloudinit_file=cloud_init_config_construct.outputs["cloudinit_file"].value,  # noqa: E501
+            cloudinit_file=cloud_init_config_construct.data_source.filename,
             cpus=config.variables.get("multipass_instance_cpus"),
             disk=config.variables.get("multipass_instance_disk"),
             id="cloud_instance_resource",
@@ -108,7 +109,8 @@ def get_cloud_instance_resource(
             scope=scope,
             size=config.variables.get("do_droplet_size"),
             ssh_keys=[cloud_instance_ssh_key_resource.fingerprint],
-            user_data=cloud_init_config_construct.outputs["user_data"].value,
+            # user_data=cloud_init_config_construct.outputs["user_data"].value,
+            user_data=cloud_init_config_construct.data_source.rendered,
         )
 
     else:
