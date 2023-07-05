@@ -8,6 +8,9 @@ from timestep.conf.blocks import AppConfig
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.blocks import (
     CloudInitConfigConstruct,
 )
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
+    CloudInstanceConstruct,
+)
 
 
 class K3sClusterStack(TerraformStack):
@@ -21,12 +24,12 @@ class K3sClusterStack(TerraformStack):
             scope=self,
         )
 
-        # self.cloud_instance_construct = CloudInstanceConstruct(
-        #     cloud_init_config_construct=self.cloud_init_config_construct,
-        #     config=config,
-        #     id="cloud_instance_construct",
-        #     scope=self,
-        # )
+        self.cloud_instance_construct = CloudInstanceConstruct(
+            cloud_init_config_construct=self.cloud_init_config_construct,
+            config=config,
+            id="cloud_instance_construct",
+            scope=self,
+        )
 
         # self.cloud_instance_domain_construct = CloudInstanceDomainConstruct(
         #     cloud_instance_construct=self.cloud_instance_construct,
