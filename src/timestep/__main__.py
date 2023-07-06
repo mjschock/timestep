@@ -1,13 +1,12 @@
 import os
 import pathlib
 
-from cdktf import App, CloudBackend, LocalBackend, NamedCloudWorkspace, TerraformStack
+from cdktf import App
 from dotenv import dotenv_values
 from prefect import flow, get_run_logger
 
 from timestep.conf.blocks import (
     AppConfig,
-    CloudInstanceProvider,
     SecureShellCredentials,
 )
 from timestep.infra.stacks.k3s_cluster.stack import K3sClusterStack
@@ -34,32 +33,11 @@ def main(config: AppConfig) -> None:
     assert app.node.get_context("allowSepCharsInLogicalIds") == "true"
     assert app.node.get_context("excludeStackIdFromLogicalIds") == "true"
 
-    k3s_cluster_stack: TerraformStack = K3sClusterStack(
+    K3sClusterStack(
         config=config,
         scope=app,
         id=config.variables.get("primary_domain_name"),
     )
-
-    stack_id: str = config.variables.get("primary_domain_name")
-
-    if (
-        config.variables.get("cloud_instance_provider")
-        == CloudInstanceProvider.MULTIPASS
-    ):
-        LocalBackend(
-            path=f"terraform.{stack_id}.tfstate",
-            scope=k3s_cluster_stack,
-            workspace_dir=None,
-        )
-
-    else:
-        CloudBackend(
-            scope=k3s_cluster_stack,
-            hostname=config.variables.get("tf_hostname"),
-            organization=config.variables.get("tf_organization"),
-            token=config.secrets.get_secret_value().get("tf_api_token"),
-            workspaces=NamedCloudWorkspace(config.variables.get("tf_workspace")),
-        )
 
     app.synth()
 
