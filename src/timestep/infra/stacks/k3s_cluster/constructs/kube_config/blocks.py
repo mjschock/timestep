@@ -1,5 +1,6 @@
 from cdktf import (
     TerraformProvider,
+    TerraformResource,
 )
 from constructs import Construct
 from prefect import get_run_logger
@@ -11,6 +12,7 @@ from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
 )
 from timestep.infra.stacks.k3s_cluster.constructs.kube_config.tasks import (
     get_kube_config_provider,
+    get_kube_config_resource,
 )
 
 
@@ -32,14 +34,14 @@ class KubeConfigConstruct(Construct):
             config=config,
             cloud_instance_construct=cloud_instance_construct,
         )
-        # self.kube_config_resource_future: PrefectFuture[
-        #     TerraformResource
-        # ] = get_kube_config_resource.submit(
-        #     scope=scope,
-        #     config=config,
-        #     cloud_instance_construct=cloud_instance_construct,
-        #     kube_config_provider=self.kube_config_provider_future,
-        # )
+        self.kube_config_resource_future: PrefectFuture[
+            TerraformResource
+        ] = get_kube_config_resource.submit(
+            scope=scope,
+            config=config,
+            cloud_instance_construct=cloud_instance_construct,
+            kube_config_provider=self.kube_config_provider_future,
+        )
         # self.kube_config_data_source_future: PrefectFuture[
         #     TerraformDataSource
         # ] = get_kube_config_data_source.submit(
@@ -58,7 +60,7 @@ class KubeConfigConstruct(Construct):
         # )
 
         self.provider = self.kube_config_provider_future.result()
-        # self.resource = self.kube_config_resource_future.result()
+        self.resource = self.kube_config_resource_future.result()
         # self.data_source = self.kube_config_data_source_future.result()
         # self.outputs = self.kube_config_outputs_future.result()
 
