@@ -16,6 +16,7 @@ from timestep.conf.blocks import AppConfig, CloudInstanceProvider
 from timestep.infra.imports.local.data_local_file import (
     DataLocalFile as LocalFileTerraformDataSource,
 )
+from timestep.infra.imports.local.provider import LocalProvider
 from timestep.infra.imports.null.provider import NullProvider as NullTerraformProvider
 from timestep.infra.imports.null.resource import Resource as NullTerraformResource
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
@@ -100,6 +101,12 @@ def get_kube_config_data_source(
     cloud_instance_construct: CloudInstanceConstruct,
     kube_config_resource: TerraformResource,
 ) -> TerraformDataSource:
+    local_provider = LocalProvider(
+        alias="local_provider",
+        id="local_provider",
+        scope=scope,
+    )
+
     if (
         config.variables.get("cloud_instance_provider")
         == CloudInstanceProvider.MULTIPASS
@@ -108,6 +115,7 @@ def get_kube_config_data_source(
             depends_on=[kube_config_resource],
             filename=config.variables.get("kubeconfig"),
             id="kube_config_data_source",
+            provider=local_provider,
             scope=scope,
         )
 
@@ -119,6 +127,7 @@ def get_kube_config_data_source(
             depends_on=[kube_config_resource],
             filename=config.variables.get("kubeconfig"),
             id="kube_config_data_source",
+            provider=local_provider,
             scope=scope,
         )
 
