@@ -23,6 +23,9 @@ from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.blocks i
 from timestep.infra.stacks.k3s_cluster.constructs.kube_config.blocks import (
     KubeConfigConstruct,
 )
+from timestep.infra.stacks.kubernetes_config.constructs.ingress_controller.construct import (  # noqa: E501
+    IngressControllerConstruct,
+)
 
 
 class K3sClusterStack(TerraformStack):
@@ -108,12 +111,12 @@ class K3sClusterStack(TerraformStack):
         #     scope=self,
         # )
 
-        # self.ingress_controller_construct = IngressControllerConstruct(
-        #     # container_registry_construct=self.container_registry_construct,
-        #     config=config,
-        #     id="ingress_controller_construct",
-        #     scope=self,
-        # )
+        self.ingress_controller_construct = IngressControllerConstruct(
+            # container_registry_construct=self.container_registry_construct,
+            config=config,
+            id="ingress_controller_construct",
+            scope=self,
+        )
 
         # self.minio_construct = MinioConstruct(
         #     ingress_controller_construct=self.ingress_controller_construct,
