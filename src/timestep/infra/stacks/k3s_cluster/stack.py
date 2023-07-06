@@ -23,6 +23,9 @@ from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.blocks i
 from timestep.infra.stacks.k3s_cluster.constructs.kube_config.blocks import (
     KubeConfigConstruct,
 )
+from timestep.infra.stacks.kubernetes_config.constructs.ingress_controller.construct import (  # noqa: E501
+    IngressControllerConstruct,
+)
 
 
 class K3sClusterStack(TerraformStack):
@@ -63,6 +66,40 @@ class K3sClusterStack(TerraformStack):
             id="kube_config_construct",
             scope=self,
         )
+
+        # self.container_registry_construct = ContainerRegistryConstruct(
+        #     config=config,
+        #     id="container_registry_construct",
+        #     scope=self,
+        # )
+
+        self.ingress_controller_construct = IngressControllerConstruct(
+            # container_registry_construct=self.container_registry_construct,
+            config=config,
+            id="ingress_controller_construct",
+            scope=self,
+        )
+
+        # self.minio_construct = MinioConstruct(
+        #     ingress_controller_construct=self.ingress_controller_construct,
+        #     config=config,
+        #     id="minio_construct",
+        #     scope=self,
+        # )
+
+        # self.postgres_construct = PostgresConstruct(
+        #     ingress_controller_construct=self.ingress_controller_construct,
+        #     config=config,
+        #     id="postgres_construct",
+        #     scope=self,
+        # )
+
+        # self.telemetry_construct = TelemetryConstruct(
+        #     ingress_controller_construct=self.ingress_controller_construct,
+        #     config=config,
+        #     id="telemetry_construct",
+        #     scope=self,
+        # )
 
         stack_id: str = config.variables.get("primary_domain_name")
 
