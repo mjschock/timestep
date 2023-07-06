@@ -105,6 +105,7 @@ def get_kube_config_resource(
             # filename=f"{config.BASE_PATH}/{config.HOSTS_FILE_PATH}",
             # filename="hosts",
             filename=local_path,
+            source=local_path,
             provider=kube_config_provider,
             provisioners=[
                 local_exec_provisioner,
