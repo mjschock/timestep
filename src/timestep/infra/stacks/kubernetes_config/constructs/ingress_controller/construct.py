@@ -2,8 +2,6 @@ from constructs import Construct
 from prefect import get_run_logger
 
 from timestep.conf.blocks import AppConfig
-from timestep.infra.imports.helm.provider import HelmProvider as HelmTerraformProvider
-from timestep.infra.imports.helm.provider import HelmProviderKubernetes
 from timestep.infra.imports.kubernetes.provider import (
     KubernetesProvider as KubernetesTerraformProvider,
 )
@@ -15,7 +13,7 @@ class IngressControllerConstruct(Construct):
         super().__init__(id=id, scope=scope)
         get_run_logger()
 
-        kubernetes_provider = KubernetesTerraformProvider(
+        KubernetesTerraformProvider(
             config_context=scope.kube_config_construct.outputs.get(
                 "config_context"
             ).value,
@@ -24,16 +22,16 @@ class IngressControllerConstruct(Construct):
             scope=scope,
         )
 
-        HelmTerraformProvider(
-            id="helm_provider",
-            kubernetes=HelmProviderKubernetes(
-                # config_context=config.KUBE_CONTEXT,
-                # config_path=config.KUBE_CONFIG_PATH,
-                config_context=kubernetes_provider.config_context,
-                config_path=kubernetes_provider.config_path,
-            ),
-            scope=scope,
-        )
+        # HelmTerraformProvider(
+        #     id="helm_provider",
+        #     kubernetes=HelmProviderKubernetes(
+        #         # config_context=config.KUBE_CONTEXT,
+        #         # config_path=config.KUBE_CONFIG_PATH,
+        #         config_context=kubernetes_provider.config_context,
+        #         config_path=kubernetes_provider.config_path,
+        #     ),
+        #     scope=scope,
+        # )
 
         # HelmReleaseTerraformResource(
         #     id_="caddy_ingress_controller_helm_release_resource",
