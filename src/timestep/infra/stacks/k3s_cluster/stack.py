@@ -64,6 +64,44 @@ class K3sClusterStack(TerraformStack):
             scope=self,
         )
 
+        # tf_locals = TerraformLocal(
+        #     expression=f"locals {{ ipv4 = {self.cloud_instance_construct.outputs['ipv4'].value} }}",  # noqa: E501
+        #     id="tf_locals",
+        #     scope=self,
+        # )
+
+        # ipv4 = self.cloud_instance_construct.outputs["ipv4"].value
+        # ipv4 = tf_locals.to_string()
+        # assert ipv4 == "127.0.0.1", f"{ipv4} != 127.0.0.1"
+        #     kubecontext = config.variables.get("kubecontext")
+        #     # local_path = config.variables.get("kubeconfig")
+        #     local_path = "kube-config.yaml"
+        #     ssh_private_key: SecretStr = config.secrets.get_secret_value().get(
+        #         "ssh_private_key"
+        #     )
+        #     ssh_private_key_path: str
+
+        #     with tempfile.NamedTemporaryFile(
+        #         delete=False,
+        #     ) as fp:
+        #         ssh_private_key_path = fp.name
+
+        #         command = f"""k3sup install \
+        # --context {kubecontext} \
+        # --ip {ipv4} \
+        # --local-path {local_path} \
+        # --skip-install \
+        # --ssh-key {ssh_private_key_path} \
+        # --user ubuntu && rm {ssh_private_key_path}"""
+
+        #         local_exec_provisioner = LocalExecProvisioner(
+        #             command=command,
+        #             type="local-exec",
+        #         )
+
+        #         fp.write(ssh_private_key.get_secret_value().encode())
+        #         fp.flush()
+
         # self.container_registry_construct = ContainerRegistryConstruct(
         #     config=config,
         #     id="container_registry_construct",
