@@ -55,8 +55,8 @@ def get_kube_config_resource(
 ) -> TerraformResource:
     ipv4 = cloud_instance_construct.outputs["ipv4"].value
     kubecontext = config.variables.get("kubecontext")
-    local_path = config.variables.get("kubeconfig")
-    # local_path = "kube-config.yaml"
+    # local_path = config.variables.get("kubeconfig")
+    local_path = "kube-config.yaml"
 
     ssh_private_key: SecretStr = config.secrets.get_secret_value().get(
         "ssh_private_key"
