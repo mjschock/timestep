@@ -1,4 +1,8 @@
+from typing import Dict
+
 from cdktf import (
+    TerraformDataSource,
+    TerraformOutput,
     TerraformProvider,
     TerraformResource,
 )
@@ -11,6 +15,8 @@ from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
     CloudInstanceConstruct,
 )
 from timestep.infra.stacks.k3s_cluster.constructs.kube_config.tasks import (
+    get_kube_config_data_source,
+    get_kube_config_outputs,
     get_kube_config_provider,
     get_kube_config_resource,
 )
@@ -42,27 +48,27 @@ class KubeConfigConstruct(Construct):
             cloud_instance_construct=cloud_instance_construct,
             kube_config_provider=self.kube_config_provider_future,
         )
-        # self.kube_config_data_source_future: PrefectFuture[
-        #     TerraformDataSource
-        # ] = get_kube_config_data_source.submit(
-        #     scope=scope,
-        #     config=config,
-        #     cloud_instance_construct=cloud_instance_construct,
-        #     kube_config_resource=self.kube_config_resource_future,
-        # )
-        # self.kube_config_outputs_future: PrefectFuture[
-        #     Dict[str, TerraformOutput]
-        # ] = get_kube_config_outputs.submit(
-        #     scope=scope,
-        #     config=config,
-        #     cloud_instance_construct=cloud_instance_construct,
-        #     kube_config_data_source=self.kube_config_data_source_future,
-        # )
+        self.kube_config_data_source_future: PrefectFuture[
+            TerraformDataSource
+        ] = get_kube_config_data_source.submit(
+            scope=scope,
+            config=config,
+            cloud_instance_construct=cloud_instance_construct,
+            kube_config_resource=self.kube_config_resource_future,
+        )
+        self.kube_config_outputs_future: PrefectFuture[
+            Dict[str, TerraformOutput]
+        ] = get_kube_config_outputs.submit(
+            scope=scope,
+            config=config,
+            cloud_instance_construct=cloud_instance_construct,
+            kube_config_data_source=self.kube_config_data_source_future,
+        )
 
         self.provider = self.kube_config_provider_future.result()
         self.resource = self.kube_config_resource_future.result()
-        # self.data_source = self.kube_config_data_source_future.result()
-        # self.outputs = self.kube_config_outputs_future.result()
+        self.data_source = self.kube_config_data_source_future.result()
+        self.outputs = self.kube_config_outputs_future.result()
 
         # tf_locals = TerraformLocal(
         #     scope=scope,
