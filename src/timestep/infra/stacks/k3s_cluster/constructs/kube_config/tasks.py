@@ -1,3 +1,4 @@
+import datetime
 import tempfile
 from typing import Dict
 
@@ -16,8 +17,9 @@ from timestep.conf.blocks import AppConfig, CloudInstanceProvider
 from timestep.infra.imports.local.data_local_file import (
     DataLocalFile as LocalFileTerraformDataSource,
 )
-from timestep.infra.imports.local.file import File as LocalFileTerraformResource
 from timestep.infra.imports.local.provider import LocalProvider
+from timestep.infra.imports.null.provider import NullProvider as NullTerraformProvider
+from timestep.infra.imports.null.resource import Resource
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
     CloudInstanceConstruct,
 )
@@ -29,17 +31,17 @@ def get_kube_config_provider(
     config: AppConfig,
     cloud_instance_construct: CloudInstanceConstruct,
 ) -> TerraformProvider:
-    # kube_config_provider = NullTerraformProvider(
-    #     alias="kube_config_provider",
-    #     id="kube_config_provider",
-    #     scope=scope,
-    # )
-
-    kube_config_provider = LocalProvider(
+    kube_config_provider = NullTerraformProvider(
         alias="kube_config_provider",
         id="kube_config_provider",
         scope=scope,
     )
+
+    # kube_config_provider = LocalProvider(
+    #     alias="kube_config_provider",
+    #     id="kube_config_provider",
+    #     scope=scope,
+    # )
 
     return kube_config_provider
 
@@ -53,8 +55,9 @@ def get_kube_config_resource(
 ) -> TerraformResource:
     ipv4 = cloud_instance_construct.outputs["ipv4"].value
     kubecontext = config.variables.get("kubecontext")
-    # local_path = config.variables.get("kubeconfig")
-    local_path = "kube-config.yaml"
+    local_path = config.variables.get("kubeconfig")
+    # local_path = "kube-config.yaml"
+
     ssh_private_key: SecretStr = config.secrets.get_secret_value().get(
         "ssh_private_key"
     )
@@ -81,37 +84,40 @@ def get_kube_config_resource(
         fp.write(ssh_private_key.get_secret_value().encode())
         fp.flush()
 
-        # kube_config_resource = NullTerraformResource(
-        #     id="kube_config_resource",
-        #     provider=kube_config_provider,
-        #     provisioners=[
-        #         local_exec_provisioner,
-        #     ],
-        #     scope=scope,
-        #     triggers={
-        #         "ipv4": ipv4,
-        #         "kubecontext": kubecontext,
-        #         "local_path": local_path,
-        #         "ssh_private_key": str(ssh_private_key),  # TODO: Make sure this is hidden  # noqa: E501
-        #     },
-        # )
-
-        kube_config_resource = LocalFileTerraformResource(
+        kube_config_resource = Resource(
             id="kube_config_resource",
-            #             content=f"""{ipv4} {subdomains[0]}.{primary_domain_name}
-            # {ipv4} {subdomains[1]}.{primary_domain_name}
-            # {ipv4} {primary_domain_name}
-            # """,
-            # filename=f"{config.BASE_PATH}/{config.HOSTS_FILE_PATH}",
-            # filename="hosts",
-            filename=local_path,
-            source=local_path,
             provider=kube_config_provider,
             provisioners=[
                 local_exec_provisioner,
             ],
             scope=scope,
+            triggers={
+                "ipv4": ipv4,
+                "kubecontext": kubecontext,
+                "local_path": local_path,
+                "now": datetime.datetime.now().isoformat(),
+                "ssh_private_key": str(
+                    ssh_private_key
+                ),  # TODO: Make sure this is hidden  # noqa: E501
+            },
         )
+
+        # kube_config_resource = LocalFileTerraformResource(
+        #     id="kube_config_resource",
+        #     #             content=f"""{ipv4} {subdomains[0]}.{primary_domain_name}
+        #     # {ipv4} {subdomains[1]}.{primary_domain_name}
+        #     # {ipv4} {primary_domain_name}
+        #     # """,
+        #     # filename=f"{config.BASE_PATH}/{config.HOSTS_FILE_PATH}",
+        #     # filename="hosts",
+        #     filename=local_path,
+        #     source=local_path,
+        #     provider=kube_config_provider,
+        #     # provisioners=[
+        #     #     local_exec_provisioner,
+        #     # ],
+        #     scope=scope,
+        # )
 
     return kube_config_resource
 
@@ -136,7 +142,8 @@ def get_kube_config_data_source(
         kube_config_data_source = LocalFileTerraformDataSource(
             depends_on=[kube_config_resource],
             # filename=config.variables.get("kubeconfig"),
-            filename=kube_config_resource.filename,
+            # filename=kube_config_resource.filename,
+            filename=kube_config_resource.inputs_input["local_path"],
             id="kube_config_data_source",
             provider=local_provider,
             scope=scope,
@@ -149,7 +156,8 @@ def get_kube_config_data_source(
         kube_config_data_source = LocalFileTerraformDataSource(
             depends_on=[kube_config_resource],
             # filename=config.variables.get("kubeconfig"),
-            filename=kube_config_resource.filename,
+            # filename=kube_config_resource.filename,
+            filename=kube_config_resource.inputs_input["local_path"],
             id="kube_config_data_source",
             provider=local_provider,
             scope=scope,
