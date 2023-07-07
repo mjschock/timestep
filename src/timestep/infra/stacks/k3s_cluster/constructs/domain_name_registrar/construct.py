@@ -25,16 +25,17 @@ class DomainNameRegistrarConstruct(Construct):
             == DomainNameRegistrarProvider.NAMECHEAP
         ):  # noqa: E501
             domain_name_registrar_provider = NamecheapProvider(
-                id="domain_name_registrar_provider",
                 api_key=config.secrets.get_secret_value().get("namecheap_api_key"),
                 api_user=config.secrets.get_secret_value().get("namecheap_api_user"),
-                user_name=config.secrets.get_secret_value().get("namecheap_user_name"),
+                client_ip=config.variables.get("client_ip"),
+                id="domain_name_registrar_provider",
                 scope=scope,
+                user_name=config.secrets.get_secret_value().get("namecheap_user_name"),
             )
 
             DomainRecords(
-                id_="domain_name_registrar_resource",
                 domain=config.variables.get("primary_domain_name"),
+                id_="domain_name_registrar_resource",
                 mode="OVERWRITE",
                 nameservers=[  # TODO: Get these dynamically
                     "ns1.digitalocean.com",
