@@ -104,7 +104,7 @@ if __name__ == "__main__":
             "multipass_instance_image": config.get(
                 "MULTIPASS_INSTANCE_IMAGE", MULTIPASS_INSTANCE_IMAGE
             ),
-            "namecheap_client_ip": config.get("NAMECHEAP_CLIENT_IP", "40.84.170.16"),
+            # "namecheap_client_ip": config.get("NAMECHEAP_CLIENT_IP", None),
             "primary_domain_name": config.get("PRIMARY_DOMAIN_NAME", None),
             "ssh_public_key": ssh_credentials_block.public_key,
             "tf_hostname": config.get("TF_HOSTNAME", None),
