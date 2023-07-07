@@ -2741,13 +2741,13 @@ virtualenv = ">=20.10.0"
 
 [[package]]
 name = "prefect"
-version = "2.10.13"
+version = "2.10.19"
 description = "Workflow orchestration and management."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "prefect-2.10.13-py3-none-any.whl", hash = "sha256:6e497c5549b7c4238ddf736f7c38fcbe0cac1a3fc822aa0f481cf76485d2677d"},
-    {file = "prefect-2.10.13.tar.gz", hash = "sha256:a9294aea081c7f416cef41e99fe584f656d6d9a6dafc37633343e25ee69f9136"},
+    {file = "prefect-2.10.19-py3-none-any.whl", hash = "sha256:854fdb71c61f505195c08aad0ff9081a2f2c764d6dd0727bc8142b8fff07a4f1"},
+    {file = "prefect-2.10.19.tar.gz", hash = "sha256:cc8920f1f77151e617ac2dae3aa57cbbb6984a443eb84c6b6ff1ad672c74ea0a"},
 ]
 
 [package.dependencies]
@@ -2776,12 +2776,13 @@ orjson = ">=3.7"
 packaging = ">=21.3"
 pathspec = ">=0.8.0"
 pendulum = ">=2.1.2"
-pydantic = ">=1.10.0"
+pydantic = ">=1.10.0,<2.0.0"
 python-slugify = ">=5.0"
 pytz = ">=2021.1"
 pyyaml = ">=5.4.1"
 readchar = ">=4.0.0"
 rich = ">=11.0"
+ruamel-yaml = ">=0.17.0"
 sqlalchemy = {version = ">=1.4.22,<1.4.33 || >1.4.33", extras = ["asyncio"]}
 toml = ">=0.10.0"
 typer = ">=0.4.2"
@@ -2794,13 +2795,13 @@ dev = ["cairosvg", "flaky", "ipython", "ipython (==8.12.*)", "jinja2", "mike", "
 
 [[package]]
 name = "prefect-kubernetes"
-version = "0.2.8"
+version = "0.2.10"
 description = "Prefect integrations for interacting with Kubernetes."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "prefect-kubernetes-0.2.8.tar.gz", hash = "sha256:f3db74aa620f76ec726da1b0b2fbbfbe66ebac3015757d689878e3b3d4ddcdc5"},
-    {file = "prefect_kubernetes-0.2.8-py3-none-any.whl", hash = "sha256:37eee3165a76809e8504297d501cae8350d1c2614ee7eada06ca9ec848b5da45"},
+    {file = "prefect-kubernetes-0.2.10.tar.gz", hash = "sha256:c55b5f955057eb9291cf78943b55bd7d6f83ae262b9bc50207dd9b602b789cad"},
+    {file = "prefect_kubernetes-0.2.10-py3-none-any.whl", hash = "sha256:c4141796eee7bd8e8ec1cd682bf62dcf1d72ae0b0bed10875e5d6552bab6f306"},
 ]
 
 [package.dependencies]
@@ -4537,4 +4538,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "2fd7b17c4a97a42516922262993705124fdef081e7518f3b47c6aeed7528f59a"
+content-hash = "7cc4d2f8024c5f40af9cca4b6bc9c988840933838bb505a0265759190bd9e8e0"
