@@ -42,9 +42,9 @@ def get_domain_name_registrar_provider(
     ):
         domain_name_registrar_provider = NamecheapTerraformProvider(
             id="domain_name_registrar_provider",
-            api_key=config.NAMECHEAP_API_KEY,
-            api_user=config.NAMECHEAP_API_USER,
-            user_name=config.NAMECHEAP_USER_NAME,
+            api_key=config.secrets.get_secret_value().get("namecheap_api_key"),
+            api_user=config.secrets.get_secret_value().get("namecheap_api_user"),
+            user_name=config.secrets.get_secret_value().get("namecheap_user_name"),
             scope=scope,
         )
 
@@ -79,7 +79,7 @@ def get_domain_name_registrar_resource(
     ):
         domain_name_registrar_resource = NamecheapDomainRecordsTerraformResource(
             id_="domain_name_registrar_resource",
-            domain=config.DOMAIN,
+            domain=config.variables.get("primary_domain_name"),
             mode="OVERWRITE",
             nameservers=[  # TODO: Get these dynamically
                 "ns1.digitalocean.com",
