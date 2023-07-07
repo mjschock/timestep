@@ -76,6 +76,9 @@ if __name__ == "__main__":
     app_config_block = AppConfig(
         secrets={
             "do_token": config.get("DO_TOKEN", None),
+            "namecheap_api_key": config.get("NAMECHEAP_API_KEY", None),
+            "namecheap_api_user": config.get("NAMECHEAP_API_USER", None),
+            "namecheap_user_name": config.get("NAMECHEAP_USER_NAME", None),
             "ssh_private_key": ssh_credentials_block.private_key,
             "tf_api_token": config.get("TF_API_TOKEN", None),
         },
@@ -101,9 +104,6 @@ if __name__ == "__main__":
             "multipass_instance_image": config.get(
                 "MULTIPASS_INSTANCE_IMAGE", MULTIPASS_INSTANCE_IMAGE
             ),
-            "namecheap_api_key": config.get("NAMECHEAP_API_KEY", None),
-            "namecheap_api_user": config.get("NAMECHEAP_API_USER", None),
-            "namecheap_user_name": config.get("NAMECHEAP_USER_NAME", None),
             "primary_domain_name": config.get("PRIMARY_DOMAIN_NAME", None),
             "ssh_public_key": ssh_credentials_block.public_key,
             "tf_hostname": config.get("TF_HOSTNAME", None),
