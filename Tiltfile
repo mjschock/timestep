@@ -14,6 +14,26 @@ local_resource(
 )
 
 local_resource(
+    'poetry run cdktf get',
+    cmd='poetry run cdktf get --force --language python --log-level $CDKTF_LOG_LEVEL --output src/timestep/infra/imports',
+    deps=[
+        'cdktf.json',
+    ],
+    labels=['build'],
+    resource_deps=['poetry install'],
+)
+
+# local_resource(
+#     'poetry run toml-sort',
+#     cmd='poetry run toml-sort -ai pyproject.toml',
+#     deps=[
+#         'pyproject.toml',
+#     ],
+#     labels=['build'],
+#     resource_deps=['poetry install'],
+# )
+
+local_resource(
     'prefect server',
     links=[
         'http://127.0.0.1:4200',
@@ -51,12 +71,15 @@ local_resource(
         'src/timestep/infra/stacks/k3s_cluster/constructs/domain_name_registrar/construct.py',
         'src/timestep/infra/stacks/k3s_cluster/constructs/kube_config/blocks.py',
         'src/timestep/infra/stacks/k3s_cluster/constructs/kube_config/tasks.py',
-        'src/timestep/infra/stacks/kubernetes_config/constructs/ingress_controller/construct.py',
+        # 'src/timestep/infra/stacks/kubernetes_config/constructs/ingress_controller/construct.py',
     ],
     env={
     },
     labels=['deploy'],
-    resource_deps=['poetry install']
+    resource_deps=[
+        # 'poetry install',
+        'poetry run cdktf get',
+    ]
 )
 
 cmd_button('poetry run cdktf destroy',
