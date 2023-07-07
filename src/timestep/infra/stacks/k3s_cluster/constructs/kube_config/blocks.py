@@ -69,21 +69,3 @@ class KubeConfigConstruct(Construct):
         self.resource = self.kube_config_resource_future.result()
         self.data_source = self.kube_config_data_source_future.result()
         self.outputs = self.kube_config_outputs_future.result()
-
-        # tf_locals = TerraformLocal(
-        #     scope=scope,
-        # )
-
-        # try:
-        #     kube_config_block = KubernetesClusterConfig.load("kube-config")
-
-        # except ValueError:
-        #     kube_config_block = KubernetesClusterConfig.from_file(
-        #         path=config.variables.get("kubeconfig"),
-        #         context_name=config.variables.get("kubecontext"),
-        #     )
-
-        #     kube_config_block.save(
-        #         name="kube-config",
-        #         overwrite=False,
-        #     )
