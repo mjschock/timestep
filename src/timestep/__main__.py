@@ -92,7 +92,6 @@ if __name__ == "__main__":
             "domain_name_registrar_provider": config.get(
                 "DOMAIN_NAME_REGISTRAR_PROVIDER", None
             ),
-            # "kubeconfig": config.get("KUBECONFIG", None),
             "kubeconfig": kubeconfig,
             "kubecontext": config.get("KUBECONTEXT", None),
             "multipass_instance_cpus": config.get(

@@ -1,14 +1,12 @@
-default:
+default: clean
 	./tilt-up.sh
 
 clean:
 	rm -rf dist
 	rm -rf src/timestep/infra/imports
 
-imports:
-	poetry run cdktf get --force --language python --log-level $CDKTF_LOG_LEVEL --output src/timestep/infra/imports
-
-pretty:
-	poetry run toml-sort -ai pyproject.toml
+pre-commit:
 	poetry run pre-commit run --all-files
-	poetry run pyreverse --all-ancestors --all-associated --module-names y --colorized --output html --output-directory dist/docs src.timestep
+
+pyreverse:
+	poetry run pyreverse --all-ancestors --all-associated --module-names y --colorized --output html --output-directory dist src.timestep
