@@ -17,7 +17,7 @@ from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance_domain.blocks import (
     CloudInstanceDomainConstruct,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.construct import (  # noqa: E501
     DomainNameRegistrarConstruct,
 )
 from timestep.infra.stacks.k3s_cluster.constructs.kube_config.blocks import (

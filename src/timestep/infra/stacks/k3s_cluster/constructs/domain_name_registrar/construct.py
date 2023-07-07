@@ -3,7 +3,6 @@ from prefect import get_run_logger
 
 from timestep.conf.blocks import AppConfig
 from timestep.infra.imports.null.provider import NullProvider as NullTerraformProvider
-from timestep.infra.imports.null.resource import Resource as NullTerraformResource
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
     CloudInstanceConstruct,
 )
@@ -39,14 +38,8 @@ class DomainNameRegistrarConstruct(Construct):
         # self.provider = self.domain_name_registrar_provider_future.result()
         # self.resource = self.domain_name_registrar_resource_future.result()
 
-        domain_name_registrar_provider = NullTerraformProvider(
+        NullTerraformProvider(
             alias="domain_name_registrar_provider",
             id="domain_name_registrar_provider",
-            scope=scope,
-        )
-
-        NullTerraformResource(
-            id="domain_name_registrar_resource",
-            provider=domain_name_registrar_provider,
             scope=scope,
         )
