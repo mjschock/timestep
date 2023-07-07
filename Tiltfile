@@ -71,7 +71,7 @@ local_resource(
         'src/timestep/infra/stacks/k3s_cluster/constructs/domain_name_registrar/construct.py',
         'src/timestep/infra/stacks/k3s_cluster/constructs/kube_config/blocks.py',
         'src/timestep/infra/stacks/k3s_cluster/constructs/kube_config/tasks.py',
-        # 'src/timestep/infra/stacks/kubernetes_config/constructs/ingress_controller/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/ingress_controller/construct.py',
     ],
     env={
     },

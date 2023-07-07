@@ -6,7 +6,7 @@
 		"allowSepCharsInLogicalIds": "true"
 	},
 	"language": "python",
-	"output": "dist",
+	"output": "cdktf.out",
 	"projectId": "68b963d4-6feb-4c02-8c49-c6d4eddc23a3",
 	"sendCrashReports": "false",
 	"terraformModules": [],

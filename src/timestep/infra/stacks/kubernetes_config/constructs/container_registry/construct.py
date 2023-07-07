@@ -28,8 +28,6 @@ class ContainerRegistryConstruct(Construct):
         helm_provider = HelmTerraformProvider(
             id="helm_provider",
             kubernetes=HelmProviderKubernetes(
-                # config_context=config.KUBE_CONTEXT,
-                # config_path=config.KUBE_CONFIG_PATH,
                 config_context=kubernetes_provider.config_context,
                 config_path=kubernetes_provider.config_path,
             ),
