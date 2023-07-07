@@ -12,7 +12,8 @@
     "hashicorp/external@~> 2.3",
     "namecheap/namecheap@~> 2.1",
     "hashicorp/local@~> 2.4",
-    "hashicorp/null@~> 3.2"
+    "hashicorp/null@~> 3.2",
+    "hashicorp/http@~> 3.4"
   ],
   "terraformModules": [],
   "codeMakerOutput": "src/timestep/infra/imports",
