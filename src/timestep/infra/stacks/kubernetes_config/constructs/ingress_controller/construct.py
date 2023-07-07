@@ -7,19 +7,26 @@ from timestep.infra.imports.helm.release import Release, ReleaseSet
 from timestep.infra.imports.kubernetes.provider import (
     KubernetesProvider as KubernetesTerraformProvider,
 )
+from timestep.infra.stacks.k3s_cluster.constructs.kube_config.blocks import (
+    KubeConfigConstruct,
+)
 
 
 class IngressControllerConstruct(Construct):
-    def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
+    def __init__(
+        self,
+        scope: Construct,
+        id: str,
+        config: AppConfig,
+        kube_config_construct: KubeConfigConstruct,
+    ) -> None:  # noqa: E501
         # def __init__(self, id: str, scope: Construct) -> None:
         super().__init__(id=id, scope=scope)
         get_run_logger()
 
         kubernetes_provider = KubernetesTerraformProvider(
-            config_context=scope.kube_config_construct.outputs.get(
-                "config_context"
-            ).value,
-            config_path=scope.kube_config_construct.outputs.get("config_path").value,
+            config_context=kube_config_construct.outputs.get("config_context").value,
+            config_path=kube_config_construct.outputs.get("config_path").value,
             id="kubernetes_provider",
             scope=scope,
         )

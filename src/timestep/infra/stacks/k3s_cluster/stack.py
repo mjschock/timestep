@@ -76,6 +76,7 @@ class K3sClusterStack(TerraformStack):
         self.ingress_controller_construct = IngressControllerConstruct(
             # container_registry_construct=self.container_registry_construct,
             config=config,
+            kube_config_construct=self.kube_config_construct,
             id="ingress_controller_construct",
             scope=self,
         )
