@@ -4,25 +4,9 @@ from prefect import get_run_logger
 from timestep.conf.blocks import AppConfig
 from timestep.infra.imports.helm.provider import HelmProvider, HelmProviderKubernetes
 from timestep.infra.imports.helm.release import Release, ReleaseSet
-from timestep.infra.imports.kubernetes.deployment import Deployment
-from timestep.infra.imports.kubernetes.ingress_v1 import (
-    IngressV1,
-    IngressV1Metadata,
-    IngressV1Spec,
-    IngressV1SpecDefaultBackend,
-    IngressV1SpecDefaultBackendService,
-    IngressV1SpecDefaultBackendServicePort,
-    IngressV1SpecRule,
-    IngressV1SpecRuleHttp,
-    IngressV1SpecRuleHttpPath,
-    IngressV1SpecRuleHttpPathBackend,
-    IngressV1SpecRuleHttpPathBackendService,
-    IngressV1SpecRuleHttpPathBackendServicePort,
-)
 from timestep.infra.imports.kubernetes.provider import (
     KubernetesProvider as KubernetesTerraformProvider,
 )
-from timestep.infra.imports.kubernetes.service import Service
 
 
 class IngressControllerConstruct(Construct):
@@ -44,8 +28,6 @@ class IngressControllerConstruct(Construct):
             id="helm_provider",
             # helm_driver postgres?
             kubernetes=HelmProviderKubernetes(
-                # config_context=config.KUBE_CONTEXT,
-                # config_path=config.KUBE_CONFIG_PATH,
                 config_context=kubernetes_provider.config_context,
                 config_path=kubernetes_provider.config_path,
             ),
@@ -87,66 +69,66 @@ class IngressControllerConstruct(Construct):
         )
 
         # app_name = "caddy-server"
-        app_name = "prefect-server"
+        # app_name = "prefect-server"
 
-        Deployment(
-            scope=self,
-            id_=f"{app_name}_deployment_resource",
-            metadata={
-                "name": app_name,
-                "namespace": "default",
-                "labels": {"app": app_name},
-            },
-            spec={
-                "replicas": "1",  # We're using SQLite, so we should only run 1 pod
-                "selector": {"match_labels": {"app": app_name}},
-                "template": {
-                    "metadata": {"labels": {"app": app_name}},
-                    "spec": {
-                        "container": [
-                            {
-                                "command": [
-                                    "prefect",
-                                    "server",
-                                    "start",
-                                    "--host",
-                                    "0.0.0.0",
-                                    "--log-level",
-                                    "WARNING",
-                                ],  # noqa: E501
-                                "image": "prefecthq/prefect:2.10.19-python3.11",
-                                "imagePullPolicy": "IfNotPresent",
-                                "name": "api",
-                                "ports": [
-                                    # {"containerPort": 80},
-                                    # {"containerPort": 443},
-                                    {"containerPort": 4200},
-                                ],
-                            }
-                        ]
-                    },
-                },
-            },
-        )
+        # Deployment(
+        #     scope=self,
+        #     id_=f"{app_name}_deployment_resource",
+        #     metadata={
+        #         "name": app_name,
+        #         "namespace": "default",
+        #         "labels": {"app": app_name},
+        #     },
+        #     spec={
+        #         "replicas": "1",  # We're using SQLite, so we should only run 1 pod
+        #         "selector": {"match_labels": {"app": app_name}},
+        #         "template": {
+        #             "metadata": {"labels": {"app": app_name}},
+        #             "spec": {
+        #                 "container": [
+        #                     {
+        #                         "command": [
+        #                             "prefect",
+        #                             "server",
+        #                             "start",
+        #                             "--host",
+        #                             "0.0.0.0",
+        #                             "--log-level",
+        #                             "WARNING",
+        #                         ],  # noqa: E501
+        #                         "image": "prefecthq/prefect:2.10.19-python3.11",
+        #                         "imagePullPolicy": "IfNotPresent",
+        #                         "name": "api",
+        #                         "ports": [
+        #                             # {"containerPort": 80},
+        #                             # {"containerPort": 443},
+        #                             {"containerPort": 4200},
+        #                         ],
+        #                     }
+        #                 ]
+        #             },
+        #         },
+        #     },
+        # )
 
-        Service(
-            scope=self,
-            id_=f"{app_name}_service_resource",
-            metadata={
-                "name": app_name,
-                "namespace": "default",
-                "labels": {"app": app_name},
-            },
-            spec={
-                "selector": {"app": app_name},
-                "port": [
-                    # {"name": "http", "port": 80, "target_port": 80},
-                    # {"name": "https", "port": 443, "target_port": 443},
-                    # {"name": "http", "port": 4200, "target_port": 4200},
-                    {"protocol": "TCP", "port": 4200, "target_port": 4200},
-                ],
-            },
-        )
+        # Service(
+        #     scope=self,
+        #     id_=f"{app_name}_service_resource",
+        #     metadata={
+        #         "name": app_name,
+        #         "namespace": "default",
+        #         "labels": {"app": app_name},
+        #     },
+        #     spec={
+        #         "selector": {"app": app_name},
+        #         "port": [
+        #             # {"name": "http", "port": 80, "target_port": 80},
+        #             # {"name": "https", "port": 443, "target_port": 443},
+        #             # {"name": "http", "port": 4200, "target_port": 4200},
+        #             {"protocol": "TCP", "port": 4200, "target_port": 4200},
+        #         ],
+        #     },
+        # )
 
         # caddy_server_ingress_resource = Ingress(
         #     scope=self,
@@ -174,68 +156,68 @@ class IngressControllerConstruct(Construct):
         #     }
         # )
 
-        IngressV1(
-            scope=scope,
-            id_=f"{app_name}_ingress_resource",
-            metadata=IngressV1Metadata(
-                annotations={
-                    "kubernetes.io/ingress.class": "caddy",
-                    # "cert-manager.io/cluster-issuer": "letsencrypt-staging",
-                },
-                # name=docker_registry_helm_release_resource.name,
-                # namespace=docker_registry_helm_release_resource.namespace,
-                name=app_name,
-                # namespace=caddy_ingress_controller_helm_release_resource.namespace,
-            ),
-            spec=IngressV1Spec(
-                default_backend=IngressV1SpecDefaultBackend(
-                    # resource=IngressV1SpecDefaultBackendResource(
-                    #     api_group=ingress_class.api_group,
-                    #     kind=ingress_class.kind,
-                    #     name=ingress_class.name,
-                    # ),
-                    service=IngressV1SpecDefaultBackendService(
-                        name=app_name,
-                        port=IngressV1SpecDefaultBackendServicePort(
-                            # name="http",
-                            # number=443,
-                            # number=2019,
-                            number=4200,
-                        ),
-                    )
-                ),
-                ingress_class_name="caddy",
-                rule=[
-                    IngressV1SpecRule(
-                        host=f"{config.variables.get('primary_domain_name')}",
-                        http=IngressV1SpecRuleHttp(
-                            path=[
-                                IngressV1SpecRuleHttpPath(
-                                    backend=IngressV1SpecRuleHttpPathBackend(
-                                        service=IngressV1SpecRuleHttpPathBackendService(  # noqa: E501
-                                            name=app_name,
-                                            port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
-                                                # number=80,
-                                                # number=443,
-                                                # number=2019,
-                                                number=4200,
-                                            ),
-                                        )
-                                    ),
-                                    path="/",
-                                    path_type="Prefix",
-                                )
-                            ]
-                        ),
-                    )
-                ],
-                # tls=[
-                #     IngressV1SpecTls(
-                #         hosts=[
-                #             "registry.timestep.local"
-                #         ],
-                #         secret_name="ssl-registry.timestep.local"
-                #     )
-                # ],
-            ),
-        )
+        # IngressV1(
+        #     scope=scope,
+        #     id_=f"{app_name}_ingress_resource",
+        #     metadata=IngressV1Metadata(
+        #         annotations={
+        #             "kubernetes.io/ingress.class": "caddy",
+        #             # "cert-manager.io/cluster-issuer": "letsencrypt-staging",
+        #         },
+        #         # name=docker_registry_helm_release_resource.name,
+        #         # namespace=docker_registry_helm_release_resource.namespace,
+        #         name=app_name,
+        #         # namespace=caddy_ingress_controller_helm_release_resource.namespace,
+        #     ),
+        #     spec=IngressV1Spec(
+        #         default_backend=IngressV1SpecDefaultBackend(
+        #             # resource=IngressV1SpecDefaultBackendResource(
+        #             #     api_group=ingress_class.api_group,
+        #             #     kind=ingress_class.kind,
+        #             #     name=ingress_class.name,
+        #             # ),
+        #             service=IngressV1SpecDefaultBackendService(
+        #                 name=app_name,
+        #                 port=IngressV1SpecDefaultBackendServicePort(
+        #                     # name="http",
+        #                     # number=443,
+        #                     # number=2019,
+        #                     number=4200,
+        #                 ),
+        #             )
+        #         ),
+        #         ingress_class_name="caddy",
+        #         rule=[
+        #             IngressV1SpecRule(
+        #                 host=f"{config.variables.get('primary_domain_name')}",
+        #                 http=IngressV1SpecRuleHttp(
+        #                     path=[
+        #                         IngressV1SpecRuleHttpPath(
+        #                             backend=IngressV1SpecRuleHttpPathBackend(
+        #                                 service=IngressV1SpecRuleHttpPathBackendService(  # noqa: E501
+        #                                     name=app_name,
+        #                                     port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
+        #                                         # number=80,
+        #                                         # number=443,
+        #                                         # number=2019,
+        #                                         number=4200,
+        #                                     ),
+        #                                 )
+        #                             ),
+        #                             path="/",
+        #                             path_type="Prefix",
+        #                         )
+        #                     ]
+        #                 ),
+        #             )
+        #         ],
+        #         # tls=[
+        #         #     IngressV1SpecTls(
+        #         #         hosts=[
+        #         #             "registry.timestep.local"
+        #         #         ],
+        #         #         secret_name="ssl-registry.timestep.local"
+        #         #     )
+        #         # ],
+        #     ),
+        # )

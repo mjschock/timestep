@@ -12,7 +12,7 @@ from timestep.conf.blocks import (
 from timestep.infra.stacks.k3s_cluster.stack import K3sClusterStack
 
 BASE_PATH = pathlib.Path.cwd()
-DIST_PATH: str = f"{BASE_PATH}/dist"
+DIST_PATH: str = f"{BASE_PATH}/cdktf.out"
 
 
 @flow()
