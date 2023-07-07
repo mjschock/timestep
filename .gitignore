@@ -1,5 +1,4 @@
 dist
-!dist/docs
 node_modules
 *.pyc
 __pycache__
@@ -8,6 +7,3 @@ __pycache__
 .ruff_cache
 .ssh
 .venv
-
-projen
-src/timestep/projects
