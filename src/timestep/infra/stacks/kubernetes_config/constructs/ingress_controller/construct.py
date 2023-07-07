@@ -4,9 +4,11 @@ from prefect import get_run_logger
 from timestep.conf.blocks import AppConfig
 from timestep.infra.imports.helm.provider import HelmProvider, HelmProviderKubernetes
 from timestep.infra.imports.helm.release import Release, ReleaseSet
+from timestep.infra.imports.kubernetes.deployment_v1 import DeploymentV1
 from timestep.infra.imports.kubernetes.provider import (
     KubernetesProvider as KubernetesTerraformProvider,
 )
+from timestep.infra.imports.kubernetes.service_v1 import ServiceV1
 from timestep.infra.stacks.k3s_cluster.constructs.kube_config.blocks import (
     KubeConfigConstruct,
 )
@@ -75,67 +77,68 @@ class IngressControllerConstruct(Construct):
             scope=scope,
         )
 
-        # app_name = "caddy-server"
+        app_name = "caddy-server"
         # app_name = "prefect-server"
 
-        # Deployment(
-        #     scope=self,
-        #     id_=f"{app_name}_deployment_resource",
-        #     metadata={
-        #         "name": app_name,
-        #         "namespace": "default",
-        #         "labels": {"app": app_name},
-        #     },
-        #     spec={
-        #         "replicas": "1",  # We're using SQLite, so we should only run 1 pod
-        #         "selector": {"match_labels": {"app": app_name}},
-        #         "template": {
-        #             "metadata": {"labels": {"app": app_name}},
-        #             "spec": {
-        #                 "container": [
-        #                     {
-        #                         "command": [
-        #                             "prefect",
-        #                             "server",
-        #                             "start",
-        #                             "--host",
-        #                             "0.0.0.0",
-        #                             "--log-level",
-        #                             "WARNING",
-        #                         ],  # noqa: E501
-        #                         "image": "prefecthq/prefect:2.10.19-python3.11",
-        #                         "imagePullPolicy": "IfNotPresent",
-        #                         "name": "api",
-        #                         "ports": [
-        #                             # {"containerPort": 80},
-        #                             # {"containerPort": 443},
-        #                             {"containerPort": 4200},
-        #                         ],
-        #                     }
-        #                 ]
-        #             },
-        #         },
-        #     },
-        # )
+        DeploymentV1(
+            scope=self,
+            id_=f"{app_name}_deployment_resource",
+            metadata={
+                "name": app_name,
+                "namespace": "default",
+                "labels": {"app": app_name},
+            },
+            spec={
+                # "replicas": "1",  # We're using SQLite, so we should only run 1 pod
+                "selector": {"match_labels": {"app": app_name}},
+                "template": {
+                    "metadata": {"labels": {"app": app_name}},
+                    "spec": {
+                        "container": [
+                            {
+                                # "command": [
+                                #     "prefect",
+                                #     "server",
+                                #     "start",
+                                #     "--host",
+                                #     "0.0.0.0",
+                                #     "--log-level",
+                                #     "WARNING",
+                                # ],  # noqa: E501
+                                # "image": "prefecthq/prefect:2.10.19-python3.11",
+                                "image": "caddy",
+                                "imagePullPolicy": "IfNotPresent",
+                                # "name": "api",
+                                "name": app_name,
+                                "ports": [
+                                    {"containerPort": 80},
+                                    {"containerPort": 443},
+                                    # {"containerPort": 4200},
+                                ],
+                            }
+                        ]
+                    },
+                },
+            },
+        )
 
-        # Service(
-        #     scope=self,
-        #     id_=f"{app_name}_service_resource",
-        #     metadata={
-        #         "name": app_name,
-        #         "namespace": "default",
-        #         "labels": {"app": app_name},
-        #     },
-        #     spec={
-        #         "selector": {"app": app_name},
-        #         "port": [
-        #             # {"name": "http", "port": 80, "target_port": 80},
-        #             # {"name": "https", "port": 443, "target_port": 443},
-        #             # {"name": "http", "port": 4200, "target_port": 4200},
-        #             {"protocol": "TCP", "port": 4200, "target_port": 4200},
-        #         ],
-        #     },
-        # )
+        ServiceV1(
+            scope=self,
+            id_=f"{app_name}_service_resource",
+            metadata={
+                "name": app_name,
+                "namespace": "default",
+                "labels": {"app": app_name},
+            },
+            spec={
+                "selector": {"app": app_name},
+                "port": [
+                    {"name": "http", "port": 80, "target_port": 80},
+                    {"name": "https", "port": 443, "target_port": 443},
+                    # {"protocol": "TCP", "port": 4200, "target_port": 4200},
+                ],
+            },
+        )
 
         # caddy_server_ingress_resource = Ingress(
         #     scope=self,
