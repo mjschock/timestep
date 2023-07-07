@@ -16,7 +16,6 @@
     "hashicorp/http@~> 3.4"
   ],
   "terraformModules": [],
-  "codeMakerOutput": "src/timestep/infra/imports",
   "context": {
     "excludeStackIdFromLogicalIds": "true",
     "allowSepCharsInLogicalIds": "true"
