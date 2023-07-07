@@ -43,6 +43,7 @@ class IngressControllerConstruct(Construct):
             atomic=True,
             chart="caddy-ingress-controller",
             create_namespace=True,
+            depends_on=[scope.kube_config_construct],
             name="caddy-ingress-controller",
             namespace="caddy-system",
             repository="https://caddyserver.github.io/ingress",
