@@ -89,6 +89,9 @@ if __name__ == "__main__":
             "domain_name_registrar_provider": config.get(
                 "DOMAIN_NAME_REGISTRAR_PROVIDER", None
             ),
+            # "kubeconfig": config.get("KUBECONFIG", None),
+            "kubeconfig": kubeconfig,
+            "kubecontext": config.get("KUBECONTEXT", None),
             "multipass_instance_cpus": config.get(
                 "MULTIPASS_INSTANCE_CPUS", MULTIPASS_INSTANCE_CPUS
             ),
@@ -98,9 +101,9 @@ if __name__ == "__main__":
             "multipass_instance_image": config.get(
                 "MULTIPASS_INSTANCE_IMAGE", MULTIPASS_INSTANCE_IMAGE
             ),
-            # "kubeconfig": config.get("KUBECONFIG", None),
-            "kubeconfig": kubeconfig,
-            "kubecontext": config.get("KUBECONTEXT", None),
+            "namecheap_api_key": config.get("NAMECHEAP_API_KEY", None),
+            "namecheap_api_user": config.get("NAMECHEAP_API_USER", None),
+            "namecheap_user_name": config.get("NAMECHEAP_USER_NAME", None),
             "primary_domain_name": config.get("PRIMARY_DOMAIN_NAME", None),
             "ssh_public_key": ssh_credentials_block.public_key,
             "tf_hostname": config.get("TF_HOSTNAME", None),
