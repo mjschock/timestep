@@ -86,30 +86,41 @@ class IngressControllerConstruct(Construct):
             scope=scope,
         )
 
-        app_name = "caddy-server"
+        # app_name = "caddy-server"
+        app_name = "prefect-server"
 
         Deployment(
             scope=self,
-            id_="caddy_server_deployment_resource",
+            id_=f"{app_name}_deployment_resource",
             metadata={
                 "name": app_name,
-                # "namespace": caddy_ingress_controller_helm_release_resource.namespace,  # noqa: E501
+                "namespace": "default",
                 "labels": {"app": app_name},
             },
             spec={
-                #    'replicas': 2,
+                "replicas": "1",  # We're using SQLite, so we should only run 1 pod
                 "selector": {"match_labels": {"app": app_name}},
                 "template": {
                     "metadata": {"labels": {"app": app_name}},
                     "spec": {
                         "container": [
                             {
-                                "image": "caddy",
-                                "name": app_name,
+                                "command": [
+                                    "prefect",
+                                    "server",
+                                    "start",
+                                    "--host",
+                                    "0.0.0.0",
+                                    "--log-level",
+                                    "WARNING",
+                                ],  # noqa: E501
+                                "image": "prefecthq/prefect:2.10.19-python3.11",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "api",
                                 "ports": [
                                     # {"containerPort": 80},
                                     # {"containerPort": 443},
-                                    {"containerPort": 2019},
+                                    {"containerPort": 4200},
                                 ],
                             }
                         ]
@@ -120,17 +131,19 @@ class IngressControllerConstruct(Construct):
 
         Service(
             scope=self,
-            id_="caddy_server_service_resource",
+            id_=f"{app_name}_service_resource",
             metadata={
                 "name": app_name,
-                # "namespace": caddy_ingress_controller_helm_release_resource.namespace,  # noqa: E501
+                "namespace": "default",
+                "labels": {"app": app_name},
             },
             spec={
                 "selector": {"app": app_name},
                 "port": [
                     # {"name": "http", "port": 80, "target_port": 80},
                     # {"name": "https", "port": 443, "target_port": 443},
-                    {"name": "metrics", "port": 2019, "target_port": 2019},
+                    # {"name": "http", "port": 4200, "target_port": 4200},
+                    {"protocol": "TCP", "port": 4200}
                 ],
             },
         )
@@ -163,7 +176,7 @@ class IngressControllerConstruct(Construct):
 
         IngressV1(
             scope=scope,
-            id_="docker_registry_ingcaddy_server_ingress_resourceress_resource",
+            id_=f"{app_name}_ingress_resource",
             metadata=IngressV1Metadata(
                 annotations={
                     "kubernetes.io/ingress.class": "caddy",
@@ -186,7 +199,8 @@ class IngressControllerConstruct(Construct):
                         port=IngressV1SpecDefaultBackendServicePort(
                             # name="http",
                             # number=443,
-                            number=2019,
+                            # number=2019,
+                            number=4200,
                         ),
                     )
                 ),
@@ -203,7 +217,8 @@ class IngressControllerConstruct(Construct):
                                             port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
                                                 # number=80,
                                                 # number=443,
-                                                number=2019,
+                                                # number=2019,
+                                                number=4200,
                                             ),
                                         )
                                     ),
