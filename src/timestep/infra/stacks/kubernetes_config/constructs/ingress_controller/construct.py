@@ -143,7 +143,7 @@ class IngressControllerConstruct(Construct):
                     # {"name": "http", "port": 80, "target_port": 80},
                     # {"name": "https", "port": 443, "target_port": 443},
                     # {"name": "http", "port": 4200, "target_port": 4200},
-                    {"protocol": "TCP", "port": 4200}
+                    {"protocol": "TCP", "port": 4200, "target_port": 4200},
                 ],
             },
         )
