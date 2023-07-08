@@ -26,7 +26,8 @@ permissions:
 jobs:
   terraform:
     name: "Terraform CDK Diff"
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
