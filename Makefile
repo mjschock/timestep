@@ -2,8 +2,8 @@ default: clean
 	./tilt-up.sh
 
 clean:
+	rm -rf cdktf.out
 	rm -rf docs
-	rm -rf dist
 	rm -rf src/timestep/infra/imports
 
 pre-commit:
