@@ -30,7 +30,8 @@ permissions:
 jobs:
   terraform:
     name: "Terraform CDK Deploy"
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
