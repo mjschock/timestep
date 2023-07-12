@@ -224,9 +224,7 @@ def get_cloud_init_config_resource(
                 "ssh_authorized_keys": [
                     config.variables.get("ssh_public_key").strip(),
                 ],
-                "sudo": [
-                    "ALL=(ALL) NOPASSWD:ALL",
-                ],
+                "sudo": "ALL=(ALL) NOPASSWD:ALL",
             },
         ],
     )
