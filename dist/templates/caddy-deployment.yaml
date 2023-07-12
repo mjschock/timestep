@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --build none --chart --out dist --secrets-as-files
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: caddy
+  name: caddy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: caddy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --build none --chart --out dist --secrets-as-files
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/timestep-default: "true"
+        io.kompose.service: caddy
+    spec:
+      containers:
+        - image: caddy/caddy
+          name: caddy
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/caddy/Caddyfile
+              name: caddy-claim0
+            - mountPath: /root/.caddy
+              name: caddy-certs
+      restartPolicy: Always
+      volumes:
+        - name: caddy-claim0
+          persistentVolumeClaim:
+            claimName: caddy-claim0
+        - name: caddy-certs
+          persistentVolumeClaim:
+            claimName: caddy-certs
+status: {}

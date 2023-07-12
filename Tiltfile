@@ -23,15 +23,15 @@ local_resource(
     resource_deps=['poetry install'],
 )
 
-# local_resource(
-#     'poetry run toml-sort',
-#     cmd='poetry run toml-sort -ai pyproject.toml',
-#     deps=[
-#         'pyproject.toml',
-#     ],
-#     labels=['build'],
-#     resource_deps=['poetry install'],
-# )
+local_resource(
+    'kompose convert',
+    cmd='kompose convert --build none --chart --out dist --secrets-as-files',
+    deps=[
+        'Caddyfile',
+        'docker-compose.yml',
+    ],
+    labels=['build'],
+)
 
 local_resource(
     'prefect server',

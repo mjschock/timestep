@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --build none --chart --out dist --secrets-as-files
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: caddy
+  name: caddy
+spec:
+  ports:
+    - name: "80"
+      port: 80
+      targetPort: 80
+    - name: "443"
+      port: 443
+      targetPort: 443
+  selector:
+    io.kompose.service: caddy
+status:
+  loadBalancer: {}
