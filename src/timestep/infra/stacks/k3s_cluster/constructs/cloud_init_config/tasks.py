@@ -56,6 +56,8 @@ def get_cloud_init_config_resource(
     ) or not config.secrets.get_secret_value().get("ssh_private_key", None):
         raise Exception("SSH credentials not found")
 
+    username = "ubuntu"
+
     cloud_cfg = dict(
         disable_root=True,
         package_reboot_if_required=True,
@@ -84,132 +86,147 @@ def get_cloud_init_config_resource(
             "zlib1g-dev",
         ],
         runcmd=[
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                'bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"',
-            ],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                'echo "" >> $HOME/.oh-my-bash/custom/example.sh',
-            ],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                'echo OSH_THEME="zork" >> $HOME/.oh-my-bash/custom/example.sh',
-            ],
-            ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.bashrc'],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                'echo "eval \\"\\$(direnv hook bash)\\"" >> $HOME/.bashrc',
-            ],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                "git clone https://github.com/anyenv/anyenv ~/.anyenv",
-            ],
-            ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.bashrc'],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                "echo export PATH=\\$HOME/.anyenv/bin:\\$PATH >> $HOME/.bashrc",
-            ],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                'echo "eval \\"\\$(anyenv init -)\\"" >> $HOME/.bashrc',
-            ],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                "$HOME/.anyenv/bin/anyenv install --force-init",
-            ],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                "$HOME/.anyenv/bin/anyenv install jenv",
-            ],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                "$HOME/.anyenv/bin/anyenv install nodenv",
-            ],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                "$HOME/.anyenv/bin/anyenv install goenv",
-            ],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                "$HOME/.anyenv/bin/anyenv install pyenv",
-            ],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                "curl -sLS https://get.arkade.dev | sudo sh",
-            ],
-            ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.bashrc'],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                "echo export PATH=\\$HOME/.arkade/bin:\\$PATH >> $HOME/.bashrc",
-            ],
-            ["runuser", "-l", "ubuntu", "-c", "arkade get k3sup"],
-            ["runuser", "-l", "ubuntu", "-c", "mkdir $HOME/.kube"],
-            [
-                "runuser",
-                "-l",
-                "ubuntu",
-                "-c",
-                f"""$HOME/.arkade/bin/k3sup install \
---context {config.variables.get("kubecontext")} \
---k3s-extra-args '--disable traefik' \
---local \
---local-path $HOME/.kube/config \
---user ubuntu""",
-            ],
+            "sed -i -E 's|^#?Port .*|Port 4444|' /etc/ssh/sshd_config",
+            "sed -i -E '/^#?PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config",  # noqa: E501
+            f"sed -i -e '$aAllowUsers {username}' /etc/ssh/sshd_config",
+            "restart ssh",
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     'bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"',
+            # ],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     'echo "" >> $HOME/.oh-my-bash/custom/example.sh',
+            # ],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     'echo OSH_THEME="zork" >> $HOME/.oh-my-bash/custom/example.sh',
+            # ],
+            # ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.bashrc'],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     'echo "eval \\"\\$(direnv hook bash)\\"" >> $HOME/.bashrc',
+            # ],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     "git clone https://github.com/anyenv/anyenv ~/.anyenv",
+            # ],
+            # ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.bashrc'],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     "echo export PATH=\\$HOME/.anyenv/bin:\\$PATH >> $HOME/.bashrc",
+            # ],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     'echo "eval \\"\\$(anyenv init -)\\"" >> $HOME/.bashrc',
+            # ],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     "$HOME/.anyenv/bin/anyenv install --force-init",
+            # ],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     "$HOME/.anyenv/bin/anyenv install jenv",
+            # ],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     "$HOME/.anyenv/bin/anyenv install nodenv",
+            # ],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     "$HOME/.anyenv/bin/anyenv install goenv",
+            # ],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     "$HOME/.anyenv/bin/anyenv install pyenv",
+            # ],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     "curl -sLS https://get.arkade.dev | sudo sh",
+            # ],
+            # ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.bashrc'],
+            # [
+            #     "runuser",
+            #     "-l",
+            #     "ubuntu",
+            #     "-c",
+            #     "echo export PATH=\\$HOME/.arkade/bin:\\$PATH >> $HOME/.bashrc",
+            # ],
+            #             ["runuser", "-l", "ubuntu", "-c", "arkade get k3sup"],
+            #             ["runuser", "-l", "ubuntu", "-c", "mkdir $HOME/.kube"],
+            #             [
+            #                 "runuser",
+            #                 "-l",
+            #                 "ubuntu",
+            #                 "-c",
+            #                 f"""$HOME/.arkade/bin/k3sup install \
+            # --context {config.variables.get("kubecontext")} \
+            # --k3s-extra-args '--disable traefik' \
+            # --local \
+            # --local-path $HOME/.kube/config \
+            # --user ubuntu""",
+            #             ],
+            # [
+            #     "runuser", "-l", "ubuntu", "-c", "wget https://raw.githubusercontent.com/hasura/graphql-engine/stable/install-manifests/docker-compose-https/docker-compose.yaml",
+            # ],
+            # [
+            #     "runuser", "-l", "ubuntu", "-c", "wget https://raw.githubusercontent.com/hasura/graphql-engine/stable/install-manifests/docker-compose-https/Caddyfile",
+            # ],
+            # [
+            #     "runuser", "-l", "ubuntu", "-c", "docker-compose up -d",
+            # ]
         ],
         users=[
             "default",
             {
                 "groups": "sudo",
-                "name": "ubuntu",
+                "name": username,
                 "shell": "/bin/bash",
                 "ssh_authorized_keys": [
                     config.variables.get("ssh_public_key").strip(),
                 ],
-                "sudo": "ALL=(ALL) NOPASSWD:ALL",
+                "sudo": [
+                    "ALL=(ALL) NOPASSWD:ALL",
+                ],
             },
         ],
     )
