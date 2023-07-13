@@ -204,7 +204,6 @@ def get_cloud_init_config_resource(
                 username,
                 "-c",
                 f"""$HOME/.arkade/bin/k3sup install \
-            --cluster \
             --context {config.variables.get("kubecontext")} \
             --k3s-extra-args '--disable traefik' \
             --local \
