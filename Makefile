@@ -8,7 +8,7 @@ clean:
 
 k3s-cluster:
 	k3sup install --context timestep.local --ip 10.159.189.82 --k3s-extra-args '--disable traefik' --local-path kubeconfig --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
-	k3sup install --context timestep.ai --ip 159.223.199.136 --k3s-extra-args '--disable traefik' --local-path kubeconfig --merge --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
+	k3sup install --context timestep.ai --ip 146.190.144.240 --k3s-extra-args '--disable traefik' --local-path kubeconfig --merge --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
 
 pre-commit:
 	poetry run pre-commit run --all-files
@@ -18,4 +18,4 @@ pyreverse:
 
 ssh:
 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.159.189.82
-	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@159.223.199.136
+	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@146.190.144.240
