@@ -63,10 +63,10 @@ if __name__ == "__main__":
         )
 
     CPUS: int = 1
-    DISK_SIZE_GB: int = 10
+    DISK_SIZE_GB: int = 25
     DO_DROPLET_IMAGE: str = "ubuntu-22-04-x64"
     DO_DROPLET_REGION: str = "sfo3"
-    DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-512mb-{DISK_SIZE_GB}gb"
+    DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-1gb"
     MULTIPASS_INSTANCE_CPUS: int = CPUS
     MULTIPASS_INSTANCE_DISK: str = f"{DISK_SIZE_GB}G"
     MULTIPASS_INSTANCE_IMAGE: str = "22.04"
