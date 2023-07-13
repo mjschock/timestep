@@ -1,7 +1,7 @@
 '''
 # `kubernetes_ingress_v1`
 
-Refer to the Terraform Registory for docs: [`kubernetes_ingress_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1).
+Refer to the Terraform Registory for docs: [`kubernetes_ingress_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class IngressV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.ingressV1.IngressV1",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1 kubernetes_ingress_v1}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1 kubernetes_ingress_v1}.'''
 
     def __init__(
         self,
@@ -46,15 +46,15 @@ class IngressV1(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1 kubernetes_ingress_v1} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1 kubernetes_ingress_v1} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#metadata IngressV1#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#spec IngressV1#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#id IngressV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#timeouts IngressV1#timeouts}
-        :param wait_for_load_balancer: Terraform will wait for the load balancer to have at least 1 endpoint before considering the resource created. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#wait_for_load_balancer IngressV1#wait_for_load_balancer}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#metadata IngressV1#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#spec IngressV1#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#id IngressV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#timeouts IngressV1#timeouts}
+        :param wait_for_load_balancer: Terraform will wait for the load balancer to have at least 1 endpoint before considering the resource created. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#wait_for_load_balancer IngressV1#wait_for_load_balancer}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -95,11 +95,11 @@ class IngressV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the ingress that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#annotations IngressV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#generate_name IngressV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the ingress. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#labels IngressV1#labels}
-        :param name: Name of the ingress, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
-        :param namespace: Namespace defines the space within which name of the ingress must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#namespace IngressV1#namespace}
+        :param annotations: An unstructured key value map stored with the ingress that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#annotations IngressV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#generate_name IngressV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the ingress. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#labels IngressV1#labels}
+        :param name: Name of the ingress, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
+        :param namespace: Namespace defines the space within which name of the ingress must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#namespace IngressV1#namespace}
         '''
         value = IngressV1Metadata(
             annotations=annotations,
@@ -121,10 +121,10 @@ class IngressV1(
         tls: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["IngressV1SpecTls", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param default_backend: default_backend block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#default_backend IngressV1#default_backend}
-        :param ingress_class_name: IngressClassName is the name of an IngressClass cluster resource. Ingress controller implementations use this field to know whether they should be serving this Ingress resource, by a transitive connection (controller -> IngressClass -> Ingress resource). Although the ``kubernetes.io/ingress.class`` annotation (simple constant name) was never formally defined, it was widely supported by Ingress controllers to create a direct binding between Ingress controller and Ingress resources. Newly created Ingress resources should prefer using the field. However, even though the annotation is officially deprecated, for backwards compatibility reasons, ingress controllers should still honor that annotation if present. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#ingress_class_name IngressV1#ingress_class_name}
-        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#rule IngressV1#rule}
-        :param tls: tls block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#tls IngressV1#tls}
+        :param default_backend: default_backend block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#default_backend IngressV1#default_backend}
+        :param ingress_class_name: IngressClassName is the name of an IngressClass cluster resource. Ingress controller implementations use this field to know whether they should be serving this Ingress resource, by a transitive connection (controller -> IngressClass -> Ingress resource). Although the ``kubernetes.io/ingress.class`` annotation (simple constant name) was never formally defined, it was widely supported by Ingress controllers to create a direct binding between Ingress controller and Ingress resources. Newly created Ingress resources should prefer using the field. However, even though the annotation is officially deprecated, for backwards compatibility reasons, ingress controllers should still honor that annotation if present. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#ingress_class_name IngressV1#ingress_class_name}
+        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#rule IngressV1#rule}
+        :param tls: tls block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#tls IngressV1#tls}
         '''
         value = IngressV1Spec(
             default_backend=default_backend,
@@ -143,8 +143,8 @@ class IngressV1(
         delete: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#create IngressV1#create}.
-        :param delete: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#delete IngressV1#delete}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#create IngressV1#create}.
+        :param delete: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#delete IngressV1#delete}.
         '''
         value = IngressV1Timeouts(create=create, delete=delete)
 
@@ -293,11 +293,11 @@ class IngressV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#metadata IngressV1#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#spec IngressV1#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#id IngressV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#timeouts IngressV1#timeouts}
-        :param wait_for_load_balancer: Terraform will wait for the load balancer to have at least 1 endpoint before considering the resource created. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#wait_for_load_balancer IngressV1#wait_for_load_balancer}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#metadata IngressV1#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#spec IngressV1#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#id IngressV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#timeouts IngressV1#timeouts}
+        :param wait_for_load_balancer: Terraform will wait for the load balancer to have at least 1 endpoint before considering the resource created. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#wait_for_load_balancer IngressV1#wait_for_load_balancer}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -414,7 +414,7 @@ class IngressV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "IngressV1Metadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#metadata IngressV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#metadata IngressV1#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -424,7 +424,7 @@ class IngressV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def spec(self) -> "IngressV1Spec":
         '''spec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#spec IngressV1#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#spec IngressV1#spec}
         '''
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
@@ -432,7 +432,7 @@ class IngressV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#id IngressV1#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#id IngressV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -444,7 +444,7 @@ class IngressV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def timeouts(self) -> typing.Optional["IngressV1Timeouts"]:
         '''timeouts block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#timeouts IngressV1#timeouts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#timeouts IngressV1#timeouts}
         '''
         result = self._values.get("timeouts")
         return typing.cast(typing.Optional["IngressV1Timeouts"], result)
@@ -455,7 +455,7 @@ class IngressV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Terraform will wait for the load balancer to have at least 1 endpoint before considering the resource created.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#wait_for_load_balancer IngressV1#wait_for_load_balancer}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#wait_for_load_balancer IngressV1#wait_for_load_balancer}
         '''
         result = self._values.get("wait_for_load_balancer")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -494,11 +494,11 @@ class IngressV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the ingress that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#annotations IngressV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#generate_name IngressV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the ingress. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#labels IngressV1#labels}
-        :param name: Name of the ingress, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
-        :param namespace: Namespace defines the space within which name of the ingress must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#namespace IngressV1#namespace}
+        :param annotations: An unstructured key value map stored with the ingress that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#annotations IngressV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#generate_name IngressV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the ingress. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#labels IngressV1#labels}
+        :param name: Name of the ingress, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
+        :param namespace: Namespace defines the space within which name of the ingress must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#namespace IngressV1#namespace}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5a2184811dc6f73ff3c7fc1e56e184f800fb084f4e6c5166328ca31c0822850d)
@@ -527,7 +527,7 @@ class IngressV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#annotations IngressV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#annotations IngressV1#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -538,7 +538,7 @@ class IngressV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#generate_name IngressV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#generate_name IngressV1#generate_name}
         '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -549,7 +549,7 @@ class IngressV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#labels IngressV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#labels IngressV1#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -558,7 +558,7 @@ class IngressV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the ingress, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -567,7 +567,7 @@ class IngressV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         '''Namespace defines the space within which name of the ingress must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#namespace IngressV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#namespace IngressV1#namespace}
         '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -761,10 +761,10 @@ class IngressV1Spec:
         tls: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["IngressV1SpecTls", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param default_backend: default_backend block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#default_backend IngressV1#default_backend}
-        :param ingress_class_name: IngressClassName is the name of an IngressClass cluster resource. Ingress controller implementations use this field to know whether they should be serving this Ingress resource, by a transitive connection (controller -> IngressClass -> Ingress resource). Although the ``kubernetes.io/ingress.class`` annotation (simple constant name) was never formally defined, it was widely supported by Ingress controllers to create a direct binding between Ingress controller and Ingress resources. Newly created Ingress resources should prefer using the field. However, even though the annotation is officially deprecated, for backwards compatibility reasons, ingress controllers should still honor that annotation if present. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#ingress_class_name IngressV1#ingress_class_name}
-        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#rule IngressV1#rule}
-        :param tls: tls block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#tls IngressV1#tls}
+        :param default_backend: default_backend block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#default_backend IngressV1#default_backend}
+        :param ingress_class_name: IngressClassName is the name of an IngressClass cluster resource. Ingress controller implementations use this field to know whether they should be serving this Ingress resource, by a transitive connection (controller -> IngressClass -> Ingress resource). Although the ``kubernetes.io/ingress.class`` annotation (simple constant name) was never formally defined, it was widely supported by Ingress controllers to create a direct binding between Ingress controller and Ingress resources. Newly created Ingress resources should prefer using the field. However, even though the annotation is officially deprecated, for backwards compatibility reasons, ingress controllers should still honor that annotation if present. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#ingress_class_name IngressV1#ingress_class_name}
+        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#rule IngressV1#rule}
+        :param tls: tls block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#tls IngressV1#tls}
         '''
         if isinstance(default_backend, dict):
             default_backend = IngressV1SpecDefaultBackend(**default_backend)
@@ -788,7 +788,7 @@ class IngressV1Spec:
     def default_backend(self) -> typing.Optional["IngressV1SpecDefaultBackend"]:
         '''default_backend block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#default_backend IngressV1#default_backend}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#default_backend IngressV1#default_backend}
         '''
         result = self._values.get("default_backend")
         return typing.cast(typing.Optional["IngressV1SpecDefaultBackend"], result)
@@ -799,7 +799,7 @@ class IngressV1Spec:
 
         Ingress controller implementations use this field to know whether they should be serving this Ingress resource, by a transitive connection (controller -> IngressClass -> Ingress resource). Although the ``kubernetes.io/ingress.class`` annotation (simple constant name) was never formally defined, it was widely supported by Ingress controllers to create a direct binding between Ingress controller and Ingress resources. Newly created Ingress resources should prefer using the field. However, even though the annotation is officially deprecated, for backwards compatibility reasons, ingress controllers should still honor that annotation if present.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#ingress_class_name IngressV1#ingress_class_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#ingress_class_name IngressV1#ingress_class_name}
         '''
         result = self._values.get("ingress_class_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -810,7 +810,7 @@ class IngressV1Spec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["IngressV1SpecRule"]]]:
         '''rule block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#rule IngressV1#rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#rule IngressV1#rule}
         '''
         result = self._values.get("rule")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["IngressV1SpecRule"]]], result)
@@ -821,7 +821,7 @@ class IngressV1Spec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["IngressV1SpecTls"]]]:
         '''tls block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#tls IngressV1#tls}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#tls IngressV1#tls}
         '''
         result = self._values.get("tls")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["IngressV1SpecTls"]]], result)
@@ -851,8 +851,8 @@ class IngressV1SpecDefaultBackend:
         service: typing.Optional[typing.Union["IngressV1SpecDefaultBackendService", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param resource: resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#resource IngressV1#resource}
-        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#service IngressV1#service}
+        :param resource: resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#resource IngressV1#resource}
+        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#service IngressV1#service}
         '''
         if isinstance(resource, dict):
             resource = IngressV1SpecDefaultBackendResource(**resource)
@@ -872,7 +872,7 @@ class IngressV1SpecDefaultBackend:
     def resource(self) -> typing.Optional["IngressV1SpecDefaultBackendResource"]:
         '''resource block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#resource IngressV1#resource}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#resource IngressV1#resource}
         '''
         result = self._values.get("resource")
         return typing.cast(typing.Optional["IngressV1SpecDefaultBackendResource"], result)
@@ -881,7 +881,7 @@ class IngressV1SpecDefaultBackend:
     def service(self) -> typing.Optional["IngressV1SpecDefaultBackendService"]:
         '''service block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#service IngressV1#service}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#service IngressV1#service}
         '''
         result = self._values.get("service")
         return typing.cast(typing.Optional["IngressV1SpecDefaultBackendService"], result)
@@ -927,9 +927,9 @@ class IngressV1SpecDefaultBackendOutputReference(
         name: builtins.str,
     ) -> None:
         '''
-        :param api_group: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#api_group IngressV1#api_group}
-        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#kind IngressV1#kind}
-        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        :param api_group: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#api_group IngressV1#api_group}
+        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#kind IngressV1#kind}
+        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         value = IngressV1SpecDefaultBackendResource(
             api_group=api_group, kind=kind, name=name
@@ -945,8 +945,8 @@ class IngressV1SpecDefaultBackendOutputReference(
         port: typing.Union["IngressV1SpecDefaultBackendServicePort", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''
-        :param name: Specifies the name of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
-        :param port: port block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#port IngressV1#port}
+        :param name: Specifies the name of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
+        :param port: port block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#port IngressV1#port}
         '''
         value = IngressV1SpecDefaultBackendService(name=name, port=port)
 
@@ -1010,9 +1010,9 @@ class IngressV1SpecDefaultBackendResource:
         name: builtins.str,
     ) -> None:
         '''
-        :param api_group: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#api_group IngressV1#api_group}
-        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#kind IngressV1#kind}
-        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        :param api_group: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#api_group IngressV1#api_group}
+        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#kind IngressV1#kind}
+        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d32c29e43a10a3bb07e63f042854aeca592615bd1aff315a545b8e11b497985d)
@@ -1031,7 +1031,7 @@ class IngressV1SpecDefaultBackendResource:
 
         If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#api_group IngressV1#api_group}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#api_group IngressV1#api_group}
         '''
         result = self._values.get("api_group")
         assert result is not None, "Required property 'api_group' is missing"
@@ -1041,7 +1041,7 @@ class IngressV1SpecDefaultBackendResource:
     def kind(self) -> builtins.str:
         '''The kind of resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#kind IngressV1#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#kind IngressV1#kind}
         '''
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -1051,7 +1051,7 @@ class IngressV1SpecDefaultBackendResource:
     def name(self) -> builtins.str:
         '''The name of the User to bind to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1169,8 +1169,8 @@ class IngressV1SpecDefaultBackendService:
         port: typing.Union["IngressV1SpecDefaultBackendServicePort", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''
-        :param name: Specifies the name of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
-        :param port: port block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#port IngressV1#port}
+        :param name: Specifies the name of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
+        :param port: port block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#port IngressV1#port}
         '''
         if isinstance(port, dict):
             port = IngressV1SpecDefaultBackendServicePort(**port)
@@ -1187,7 +1187,7 @@ class IngressV1SpecDefaultBackendService:
     def name(self) -> builtins.str:
         '''Specifies the name of the referenced service.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1197,7 +1197,7 @@ class IngressV1SpecDefaultBackendService:
     def port(self) -> "IngressV1SpecDefaultBackendServicePort":
         '''port block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#port IngressV1#port}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#port IngressV1#port}
         '''
         result = self._values.get("port")
         assert result is not None, "Required property 'port' is missing"
@@ -1243,8 +1243,8 @@ class IngressV1SpecDefaultBackendServiceOutputReference(
         number: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param name: Specifies the name of the port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
-        :param number: Specifies the numerical port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#number IngressV1#number}
+        :param name: Specifies the name of the port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
+        :param number: Specifies the numerical port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#number IngressV1#number}
         '''
         value = IngressV1SpecDefaultBackendServicePort(name=name, number=number)
 
@@ -1306,8 +1306,8 @@ class IngressV1SpecDefaultBackendServicePort:
         number: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param name: Specifies the name of the port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
-        :param number: Specifies the numerical port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#number IngressV1#number}
+        :param name: Specifies the name of the port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
+        :param number: Specifies the numerical port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#number IngressV1#number}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a4865143546e4283e869a52ffcd1441cfaae7d3c866e482e0215b8a84986b346)
@@ -1323,7 +1323,7 @@ class IngressV1SpecDefaultBackendServicePort:
     def name(self) -> typing.Optional[builtins.str]:
         '''Specifies the name of the port of the referenced service.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1332,7 +1332,7 @@ class IngressV1SpecDefaultBackendServicePort:
     def number(self) -> typing.Optional[jsii.Number]:
         '''Specifies the numerical port of the referenced service.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#number IngressV1#number}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#number IngressV1#number}
         '''
         result = self._values.get("number")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -1455,8 +1455,8 @@ class IngressV1SpecOutputReference(
         service: typing.Optional[typing.Union[IngressV1SpecDefaultBackendService, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param resource: resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#resource IngressV1#resource}
-        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#service IngressV1#service}
+        :param resource: resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#resource IngressV1#resource}
+        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#service IngressV1#service}
         '''
         value = IngressV1SpecDefaultBackend(resource=resource, service=service)
 
@@ -1581,8 +1581,8 @@ class IngressV1SpecRule:
         http: typing.Optional[typing.Union["IngressV1SpecRuleHttp", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param host: Host is the fully qualified domain name of a network host, as defined by RFC 3986. Note the following deviations from the "host" part of the URI as defined in RFC 3986: 1. IPs are not allowed. Currently an IngressRuleValue can only apply to the IP in the Spec of the parent Ingress. 2. The ``:`` delimiter is not respected because ports are not allowed. Currently the port of an Ingress is implicitly :80 for http and :443 for https. Both these may change in the future. Incoming requests are matched against the host before the IngressRuleValue. If the host is unspecified, the Ingress routes all traffic based on the specified IngressRuleValue. Host can be "precise" which is a domain name without the terminating dot of a network host (e.g. "foo.bar.com") or "wildcard", which is a domain name prefixed with a single wildcard label (e.g. "*.foo.com"). The wildcard character '*' must appear by itself as the first DNS label and matches only a single label. You cannot have a wildcard label by itself (e.g. Host == "*"). Requests will be matched against the Host field in the following way: 1. If Host is precise, the request matches this rule if the http host header is equal to Host. 2. If Host is a wildcard, then the request matches this rule if the http host header is to equal to the suffix (removing the first label) of the wildcard rule. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#host IngressV1#host}
-        :param http: http block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#http IngressV1#http}
+        :param host: Host is the fully qualified domain name of a network host, as defined by RFC 3986. Note the following deviations from the "host" part of the URI as defined in RFC 3986: 1. IPs are not allowed. Currently an IngressRuleValue can only apply to the IP in the Spec of the parent Ingress. 2. The ``:`` delimiter is not respected because ports are not allowed. Currently the port of an Ingress is implicitly :80 for http and :443 for https. Both these may change in the future. Incoming requests are matched against the host before the IngressRuleValue. If the host is unspecified, the Ingress routes all traffic based on the specified IngressRuleValue. Host can be "precise" which is a domain name without the terminating dot of a network host (e.g. "foo.bar.com") or "wildcard", which is a domain name prefixed with a single wildcard label (e.g. "*.foo.com"). The wildcard character '*' must appear by itself as the first DNS label and matches only a single label. You cannot have a wildcard label by itself (e.g. Host == "*"). Requests will be matched against the Host field in the following way: 1. If Host is precise, the request matches this rule if the http host header is equal to Host. 2. If Host is a wildcard, then the request matches this rule if the http host header is to equal to the suffix (removing the first label) of the wildcard rule. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#host IngressV1#host}
+        :param http: http block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#http IngressV1#http}
         '''
         if isinstance(http, dict):
             http = IngressV1SpecRuleHttp(**http)
@@ -1609,7 +1609,7 @@ class IngressV1SpecRule:
 
         Host can be "precise" which is a domain name without the terminating dot of a network host (e.g. "foo.bar.com") or "wildcard", which is a domain name prefixed with a single wildcard label (e.g. "*.foo.com"). The wildcard character '*' must appear by itself as the first DNS label and matches only a single label. You cannot have a wildcard label by itself (e.g. Host == "*"). Requests will be matched against the Host field in the following way: 1. If Host is precise, the request matches this rule if the http host header is equal to Host. 2. If Host is a wildcard, then the request matches this rule if the http host header is to equal to the suffix (removing the first label) of the wildcard rule.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#host IngressV1#host}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#host IngressV1#host}
         '''
         result = self._values.get("host")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1618,7 +1618,7 @@ class IngressV1SpecRule:
     def http(self) -> typing.Optional["IngressV1SpecRuleHttp"]:
         '''http block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#http IngressV1#http}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#http IngressV1#http}
         '''
         result = self._values.get("http")
         return typing.cast(typing.Optional["IngressV1SpecRuleHttp"], result)
@@ -1647,7 +1647,7 @@ class IngressV1SpecRuleHttp:
         path: typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["IngressV1SpecRuleHttpPath", typing.Dict[builtins.str, typing.Any]]]],
     ) -> None:
         '''
-        :param path: path block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#path IngressV1#path}
+        :param path: path block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#path IngressV1#path}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__78b19742b9021a645e80c69f360722388ef5ec00c50b300ac2eefb62df0946af)
@@ -1662,7 +1662,7 @@ class IngressV1SpecRuleHttp:
     ) -> typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["IngressV1SpecRuleHttpPath"]]:
         '''path block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#path IngressV1#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#path IngressV1#path}
         '''
         result = self._values.get("path")
         assert result is not None, "Required property 'path' is missing"
@@ -1752,9 +1752,9 @@ class IngressV1SpecRuleHttpPath:
         path_type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param backend: backend block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#backend IngressV1#backend}
-        :param path: Path is matched against the path of an incoming request. Currently it can contain characters disallowed from the conventional "path" part of a URL as defined by RFC 3986. Paths must begin with a '/' and must be present when using PathType with value "Exact" or "Prefix". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#path IngressV1#path}
-        :param path_type: PathType determines the interpretation of the Path matching. PathType can be one of the following values: * Exact: Matches the URL path exactly. * Prefix: Matches based on a URL path prefix split by '/'. Matching is done on a path element by element basis. A path element refers is the list of labels in the path split by the '/' separator. A request is a match for path p if every p is an element-wise prefix of p of the request path. Note that if the last element of the path is a substring of the last element in request path, it is not a match (e.g. /foo/bar matches /foo/bar/baz, but does not match /foo/barbaz). ImplementationSpecific: Interpretation of the Path matching is up to the IngressClass. Implementations can treat this as a separate PathType or treat it identically to Prefix or Exact path types. Implementations are required to support all path types. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#path_type IngressV1#path_type}
+        :param backend: backend block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#backend IngressV1#backend}
+        :param path: Path is matched against the path of an incoming request. Currently it can contain characters disallowed from the conventional "path" part of a URL as defined by RFC 3986. Paths must begin with a '/' and must be present when using PathType with value "Exact" or "Prefix". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#path IngressV1#path}
+        :param path_type: PathType determines the interpretation of the Path matching. PathType can be one of the following values: * Exact: Matches the URL path exactly. * Prefix: Matches based on a URL path prefix split by '/'. Matching is done on a path element by element basis. A path element refers is the list of labels in the path split by the '/' separator. A request is a match for path p if every p is an element-wise prefix of p of the request path. Note that if the last element of the path is a substring of the last element in request path, it is not a match (e.g. /foo/bar matches /foo/bar/baz, but does not match /foo/barbaz). ImplementationSpecific: Interpretation of the Path matching is up to the IngressClass. Implementations can treat this as a separate PathType or treat it identically to Prefix or Exact path types. Implementations are required to support all path types. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#path_type IngressV1#path_type}
         '''
         if isinstance(backend, dict):
             backend = IngressV1SpecRuleHttpPathBackend(**backend)
@@ -1775,7 +1775,7 @@ class IngressV1SpecRuleHttpPath:
     def backend(self) -> typing.Optional["IngressV1SpecRuleHttpPathBackend"]:
         '''backend block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#backend IngressV1#backend}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#backend IngressV1#backend}
         '''
         result = self._values.get("backend")
         return typing.cast(typing.Optional["IngressV1SpecRuleHttpPathBackend"], result)
@@ -1786,7 +1786,7 @@ class IngressV1SpecRuleHttpPath:
 
         Currently it can contain characters disallowed from the conventional "path" part of a URL as defined by RFC 3986. Paths must begin with a '/' and must be present when using PathType with value "Exact" or "Prefix".
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#path IngressV1#path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#path IngressV1#path}
         '''
         result = self._values.get("path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1807,7 +1807,7 @@ class IngressV1SpecRuleHttpPath:
         or treat it identically to Prefix or Exact path types.
         Implementations are required to support all path types.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#path_type IngressV1#path_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#path_type IngressV1#path_type}
         '''
         result = self._values.get("path_type")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1837,8 +1837,8 @@ class IngressV1SpecRuleHttpPathBackend:
         service: typing.Optional[typing.Union["IngressV1SpecRuleHttpPathBackendService", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param resource: resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#resource IngressV1#resource}
-        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#service IngressV1#service}
+        :param resource: resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#resource IngressV1#resource}
+        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#service IngressV1#service}
         '''
         if isinstance(resource, dict):
             resource = IngressV1SpecRuleHttpPathBackendResource(**resource)
@@ -1858,7 +1858,7 @@ class IngressV1SpecRuleHttpPathBackend:
     def resource(self) -> typing.Optional["IngressV1SpecRuleHttpPathBackendResource"]:
         '''resource block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#resource IngressV1#resource}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#resource IngressV1#resource}
         '''
         result = self._values.get("resource")
         return typing.cast(typing.Optional["IngressV1SpecRuleHttpPathBackendResource"], result)
@@ -1867,7 +1867,7 @@ class IngressV1SpecRuleHttpPathBackend:
     def service(self) -> typing.Optional["IngressV1SpecRuleHttpPathBackendService"]:
         '''service block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#service IngressV1#service}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#service IngressV1#service}
         '''
         result = self._values.get("service")
         return typing.cast(typing.Optional["IngressV1SpecRuleHttpPathBackendService"], result)
@@ -1913,9 +1913,9 @@ class IngressV1SpecRuleHttpPathBackendOutputReference(
         name: builtins.str,
     ) -> None:
         '''
-        :param api_group: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#api_group IngressV1#api_group}
-        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#kind IngressV1#kind}
-        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        :param api_group: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#api_group IngressV1#api_group}
+        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#kind IngressV1#kind}
+        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         value = IngressV1SpecRuleHttpPathBackendResource(
             api_group=api_group, kind=kind, name=name
@@ -1931,8 +1931,8 @@ class IngressV1SpecRuleHttpPathBackendOutputReference(
         port: typing.Union["IngressV1SpecRuleHttpPathBackendServicePort", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''
-        :param name: Specifies the name of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
-        :param port: port block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#port IngressV1#port}
+        :param name: Specifies the name of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
+        :param port: port block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#port IngressV1#port}
         '''
         value = IngressV1SpecRuleHttpPathBackendService(name=name, port=port)
 
@@ -2000,9 +2000,9 @@ class IngressV1SpecRuleHttpPathBackendResource:
         name: builtins.str,
     ) -> None:
         '''
-        :param api_group: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#api_group IngressV1#api_group}
-        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#kind IngressV1#kind}
-        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        :param api_group: APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#api_group IngressV1#api_group}
+        :param kind: The kind of resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#kind IngressV1#kind}
+        :param name: The name of the User to bind to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__97a6ed77e094f187f4107986d60be51b99f3062ebfe321fd2bc96c3f72a8fb60)
@@ -2021,7 +2021,7 @@ class IngressV1SpecRuleHttpPathBackendResource:
 
         If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#api_group IngressV1#api_group}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#api_group IngressV1#api_group}
         '''
         result = self._values.get("api_group")
         assert result is not None, "Required property 'api_group' is missing"
@@ -2031,7 +2031,7 @@ class IngressV1SpecRuleHttpPathBackendResource:
     def kind(self) -> builtins.str:
         '''The kind of resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#kind IngressV1#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#kind IngressV1#kind}
         '''
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -2041,7 +2041,7 @@ class IngressV1SpecRuleHttpPathBackendResource:
     def name(self) -> builtins.str:
         '''The name of the User to bind to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -2161,8 +2161,8 @@ class IngressV1SpecRuleHttpPathBackendService:
         port: typing.Union["IngressV1SpecRuleHttpPathBackendServicePort", typing.Dict[builtins.str, typing.Any]],
     ) -> None:
         '''
-        :param name: Specifies the name of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
-        :param port: port block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#port IngressV1#port}
+        :param name: Specifies the name of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
+        :param port: port block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#port IngressV1#port}
         '''
         if isinstance(port, dict):
             port = IngressV1SpecRuleHttpPathBackendServicePort(**port)
@@ -2179,7 +2179,7 @@ class IngressV1SpecRuleHttpPathBackendService:
     def name(self) -> builtins.str:
         '''Specifies the name of the referenced service.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -2189,7 +2189,7 @@ class IngressV1SpecRuleHttpPathBackendService:
     def port(self) -> "IngressV1SpecRuleHttpPathBackendServicePort":
         '''port block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#port IngressV1#port}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#port IngressV1#port}
         '''
         result = self._values.get("port")
         assert result is not None, "Required property 'port' is missing"
@@ -2235,8 +2235,8 @@ class IngressV1SpecRuleHttpPathBackendServiceOutputReference(
         number: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param name: Specifies the name of the port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
-        :param number: Specifies the numerical port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#number IngressV1#number}
+        :param name: Specifies the name of the port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
+        :param number: Specifies the numerical port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#number IngressV1#number}
         '''
         value = IngressV1SpecRuleHttpPathBackendServicePort(name=name, number=number)
 
@@ -2302,8 +2302,8 @@ class IngressV1SpecRuleHttpPathBackendServicePort:
         number: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param name: Specifies the name of the port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
-        :param number: Specifies the numerical port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#number IngressV1#number}
+        :param name: Specifies the name of the port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
+        :param number: Specifies the numerical port of the referenced service. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#number IngressV1#number}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__93cac2f6a57e74851f1e0a0311b216032e63d0f55016f1a56ca690c0b2844427)
@@ -2319,7 +2319,7 @@ class IngressV1SpecRuleHttpPathBackendServicePort:
     def name(self) -> typing.Optional[builtins.str]:
         '''Specifies the name of the port of the referenced service.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#name IngressV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#name IngressV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2328,7 +2328,7 @@ class IngressV1SpecRuleHttpPathBackendServicePort:
     def number(self) -> typing.Optional[jsii.Number]:
         '''Specifies the numerical port of the referenced service.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#number IngressV1#number}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#number IngressV1#number}
         '''
         result = self._values.get("number")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -2549,8 +2549,8 @@ class IngressV1SpecRuleHttpPathOutputReference(
         service: typing.Optional[typing.Union[IngressV1SpecRuleHttpPathBackendService, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param resource: resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#resource IngressV1#resource}
-        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#service IngressV1#service}
+        :param resource: resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#resource IngressV1#resource}
+        :param service: service block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#service IngressV1#service}
         '''
         value = IngressV1SpecRuleHttpPathBackend(resource=resource, service=service)
 
@@ -2753,7 +2753,7 @@ class IngressV1SpecRuleOutputReference(
         path: typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[IngressV1SpecRuleHttpPath, typing.Dict[builtins.str, typing.Any]]]],
     ) -> None:
         '''
-        :param path: path block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#path IngressV1#path}
+        :param path: path block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#path IngressV1#path}
         '''
         value = IngressV1SpecRuleHttp(path=path)
 
@@ -2825,8 +2825,8 @@ class IngressV1SpecTls:
         secret_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param hosts: Hosts are a list of hosts included in the TLS certificate. The values in this list must match the name/s used in the tlsSecret. Defaults to the wildcard host setting for the loadbalancer controller fulfilling this Ingress, if left unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#hosts IngressV1#hosts}
-        :param secret_name: SecretName is the name of the secret used to terminate TLS traffic on port 443. Field is left optional to allow TLS routing based on SNI hostname alone. If the SNI host in a listener conflicts with the "Host" header field used by an IngressRule, the SNI host is used for termination and value of the Host header is used for routing. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#secret_name IngressV1#secret_name}
+        :param hosts: Hosts are a list of hosts included in the TLS certificate. The values in this list must match the name/s used in the tlsSecret. Defaults to the wildcard host setting for the loadbalancer controller fulfilling this Ingress, if left unspecified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#hosts IngressV1#hosts}
+        :param secret_name: SecretName is the name of the secret used to terminate TLS traffic on port 443. Field is left optional to allow TLS routing based on SNI hostname alone. If the SNI host in a listener conflicts with the "Host" header field used by an IngressRule, the SNI host is used for termination and value of the Host header is used for routing. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#secret_name IngressV1#secret_name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__10710e25eb63bb1b2ab1848a899aa29ad680db20fee3657979b66206022ebc89)
@@ -2844,7 +2844,7 @@ class IngressV1SpecTls:
 
         The values in this list must match the name/s used in the tlsSecret. Defaults to the wildcard host setting for the loadbalancer controller fulfilling this Ingress, if left unspecified.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#hosts IngressV1#hosts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#hosts IngressV1#hosts}
         '''
         result = self._values.get("hosts")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2855,7 +2855,7 @@ class IngressV1SpecTls:
 
         Field is left optional to allow TLS routing based on SNI hostname alone. If the SNI host in a listener conflicts with the "Host" header field used by an IngressRule, the SNI host is used for termination and value of the Host header is used for routing.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#secret_name IngressV1#secret_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#secret_name IngressV1#secret_name}
         '''
         result = self._values.get("secret_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3489,8 +3489,8 @@ class IngressV1Timeouts:
         delete: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#create IngressV1#create}.
-        :param delete: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#delete IngressV1#delete}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#create IngressV1#create}.
+        :param delete: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#delete IngressV1#delete}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__73be57f295ede3ac6a97c07df02735dba0b18e722a3d69be6fbcf00fdbec8750)
@@ -3504,13 +3504,13 @@ class IngressV1Timeouts:
 
     @builtins.property
     def create(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#create IngressV1#create}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#create IngressV1#create}.'''
         result = self._values.get("create")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def delete(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/ingress_v1#delete IngressV1#delete}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/ingress_v1#delete IngressV1#delete}.'''
         result = self._values.get("delete")
         return typing.cast(typing.Optional[builtins.str], result)
 

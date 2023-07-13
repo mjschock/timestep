@@ -1,7 +1,7 @@
 '''
 # `kubernetes_limit_range_v1`
 
-Refer to the Terraform Registory for docs: [`kubernetes_limit_range_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1).
+Refer to the Terraform Registory for docs: [`kubernetes_limit_range_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class LimitRangeV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.limitRangeV1.LimitRangeV1",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1 kubernetes_limit_range_v1}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1 kubernetes_limit_range_v1}.'''
 
     def __init__(
         self,
@@ -44,13 +44,13 @@ class LimitRangeV1(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1 kubernetes_limit_range_v1} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1 kubernetes_limit_range_v1} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#metadata LimitRangeV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#id LimitRangeV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#spec LimitRangeV1#spec}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#metadata LimitRangeV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#id LimitRangeV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#spec LimitRangeV1#spec}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -89,11 +89,11 @@ class LimitRangeV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the limit range that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#annotations LimitRangeV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#generate_name LimitRangeV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the limit range. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#labels LimitRangeV1#labels}
-        :param name: Name of the limit range, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#name LimitRangeV1#name}
-        :param namespace: Namespace defines the space within which name of the limit range must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#namespace LimitRangeV1#namespace}
+        :param annotations: An unstructured key value map stored with the limit range that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#annotations LimitRangeV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#generate_name LimitRangeV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the limit range. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#labels LimitRangeV1#labels}
+        :param name: Name of the limit range, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#name LimitRangeV1#name}
+        :param namespace: Namespace defines the space within which name of the limit range must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#namespace LimitRangeV1#namespace}
         '''
         value = LimitRangeV1Metadata(
             annotations=annotations,
@@ -112,7 +112,7 @@ class LimitRangeV1(
         limit: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["LimitRangeV1SpecLimit", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param limit: limit block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#limit LimitRangeV1#limit}
+        :param limit: limit block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#limit LimitRangeV1#limit}
         '''
         value = LimitRangeV1Spec(limit=limit)
 
@@ -212,9 +212,9 @@ class LimitRangeV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#metadata LimitRangeV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#id LimitRangeV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#spec LimitRangeV1#spec}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#metadata LimitRangeV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#id LimitRangeV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#spec LimitRangeV1#spec}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -324,7 +324,7 @@ class LimitRangeV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "LimitRangeV1Metadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#metadata LimitRangeV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#metadata LimitRangeV1#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -332,7 +332,7 @@ class LimitRangeV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#id LimitRangeV1#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#id LimitRangeV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -344,7 +344,7 @@ class LimitRangeV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def spec(self) -> typing.Optional["LimitRangeV1Spec"]:
         '''spec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#spec LimitRangeV1#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#spec LimitRangeV1#spec}
         '''
         result = self._values.get("spec")
         return typing.cast(typing.Optional["LimitRangeV1Spec"], result)
@@ -383,11 +383,11 @@ class LimitRangeV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the limit range that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#annotations LimitRangeV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#generate_name LimitRangeV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the limit range. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#labels LimitRangeV1#labels}
-        :param name: Name of the limit range, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#name LimitRangeV1#name}
-        :param namespace: Namespace defines the space within which name of the limit range must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#namespace LimitRangeV1#namespace}
+        :param annotations: An unstructured key value map stored with the limit range that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#annotations LimitRangeV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#generate_name LimitRangeV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the limit range. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#labels LimitRangeV1#labels}
+        :param name: Name of the limit range, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#name LimitRangeV1#name}
+        :param namespace: Namespace defines the space within which name of the limit range must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#namespace LimitRangeV1#namespace}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__86dcf40f60a86a54cd69a20c5e530a7ffbac751eac67d358000f008ccfb1e439)
@@ -416,7 +416,7 @@ class LimitRangeV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#annotations LimitRangeV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#annotations LimitRangeV1#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -427,7 +427,7 @@ class LimitRangeV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#generate_name LimitRangeV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#generate_name LimitRangeV1#generate_name}
         '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -438,7 +438,7 @@ class LimitRangeV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#labels LimitRangeV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#labels LimitRangeV1#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -447,7 +447,7 @@ class LimitRangeV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the limit range, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#name LimitRangeV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#name LimitRangeV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -456,7 +456,7 @@ class LimitRangeV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         '''Namespace defines the space within which name of the limit range must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#namespace LimitRangeV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#namespace LimitRangeV1#namespace}
         '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -642,7 +642,7 @@ class LimitRangeV1Spec:
         limit: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["LimitRangeV1SpecLimit", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param limit: limit block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#limit LimitRangeV1#limit}
+        :param limit: limit block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#limit LimitRangeV1#limit}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__39a6db406bc9c17849d384c221c43f5df666fcffb545a2971e7bd65f07b58c37)
@@ -657,7 +657,7 @@ class LimitRangeV1Spec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["LimitRangeV1SpecLimit"]]]:
         '''limit block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#limit LimitRangeV1#limit}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#limit LimitRangeV1#limit}
         '''
         result = self._values.get("limit")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["LimitRangeV1SpecLimit"]]], result)
@@ -698,12 +698,12 @@ class LimitRangeV1SpecLimit:
         type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param default: Default resource requirement limit value by resource name if resource limit is omitted. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#default LimitRangeV1#default}
-        :param default_request: The default resource requirement request value by resource name if resource request is omitted. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#default_request LimitRangeV1#default_request}
-        :param max: Max usage constraints on this kind by resource name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#max LimitRangeV1#max}
-        :param max_limit_request_ratio: The named resource must have a request and limit that are both non-zero where limit divided by request is less than or equal to the enumerated value; this represents the max burst for the named resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#max_limit_request_ratio LimitRangeV1#max_limit_request_ratio}
-        :param min: Min usage constraints on this kind by resource name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#min LimitRangeV1#min}
-        :param type: Type of resource that this limit applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#type LimitRangeV1#type}
+        :param default: Default resource requirement limit value by resource name if resource limit is omitted. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#default LimitRangeV1#default}
+        :param default_request: The default resource requirement request value by resource name if resource request is omitted. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#default_request LimitRangeV1#default_request}
+        :param max: Max usage constraints on this kind by resource name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#max LimitRangeV1#max}
+        :param max_limit_request_ratio: The named resource must have a request and limit that are both non-zero where limit divided by request is less than or equal to the enumerated value; this represents the max burst for the named resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#max_limit_request_ratio LimitRangeV1#max_limit_request_ratio}
+        :param min: Min usage constraints on this kind by resource name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#min LimitRangeV1#min}
+        :param type: Type of resource that this limit applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#type LimitRangeV1#type}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5aca5baeff7211ae142976a06a5f7b418be6404862e5b9882067ebc2c2c1e7bf)
@@ -731,7 +731,7 @@ class LimitRangeV1SpecLimit:
     def default(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         '''Default resource requirement limit value by resource name if resource limit is omitted.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#default LimitRangeV1#default}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#default LimitRangeV1#default}
         '''
         result = self._values.get("default")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -742,7 +742,7 @@ class LimitRangeV1SpecLimit:
     ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         '''The default resource requirement request value by resource name if resource request is omitted.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#default_request LimitRangeV1#default_request}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#default_request LimitRangeV1#default_request}
         '''
         result = self._values.get("default_request")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -751,7 +751,7 @@ class LimitRangeV1SpecLimit:
     def max(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         '''Max usage constraints on this kind by resource name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#max LimitRangeV1#max}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#max LimitRangeV1#max}
         '''
         result = self._values.get("max")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -764,7 +764,7 @@ class LimitRangeV1SpecLimit:
 
         this represents the max burst for the named resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#max_limit_request_ratio LimitRangeV1#max_limit_request_ratio}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#max_limit_request_ratio LimitRangeV1#max_limit_request_ratio}
         '''
         result = self._values.get("max_limit_request_ratio")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -773,7 +773,7 @@ class LimitRangeV1SpecLimit:
     def min(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         '''Min usage constraints on this kind by resource name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#min LimitRangeV1#min}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#min LimitRangeV1#min}
         '''
         result = self._values.get("min")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -782,7 +782,7 @@ class LimitRangeV1SpecLimit:
     def type(self) -> typing.Optional[builtins.str]:
         '''Type of resource that this limit applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/limit_range_v1#type LimitRangeV1#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/limit_range_v1#type LimitRangeV1#type}
         '''
         result = self._values.get("type")
         return typing.cast(typing.Optional[builtins.str], result)

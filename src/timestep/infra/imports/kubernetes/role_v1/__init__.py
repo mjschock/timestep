@@ -1,7 +1,7 @@
 '''
 # `kubernetes_role_v1`
 
-Refer to the Terraform Registory for docs: [`kubernetes_role_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1).
+Refer to the Terraform Registory for docs: [`kubernetes_role_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class RoleV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.roleV1.RoleV1",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1 kubernetes_role_v1}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1 kubernetes_role_v1}.'''
 
     def __init__(
         self,
@@ -44,13 +44,13 @@ class RoleV1(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1 kubernetes_role_v1} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1 kubernetes_role_v1} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#metadata RoleV1#metadata}
-        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#rule RoleV1#rule}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#id RoleV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#metadata RoleV1#metadata}
+        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#rule RoleV1#rule}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#id RoleV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -89,11 +89,11 @@ class RoleV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the role that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#annotations RoleV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#generate_name RoleV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the role. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#labels RoleV1#labels}
-        :param name: Name of the role, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#name RoleV1#name}
-        :param namespace: Namespace defines the space within which name of the role must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#namespace RoleV1#namespace}
+        :param annotations: An unstructured key value map stored with the role that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#annotations RoleV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#generate_name RoleV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the role. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#labels RoleV1#labels}
+        :param name: Name of the role, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#name RoleV1#name}
+        :param namespace: Namespace defines the space within which name of the role must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#namespace RoleV1#namespace}
         '''
         value = RoleV1Metadata(
             annotations=annotations,
@@ -210,9 +210,9 @@ class RoleV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#metadata RoleV1#metadata}
-        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#rule RoleV1#rule}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#id RoleV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#metadata RoleV1#metadata}
+        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#rule RoleV1#rule}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#id RoleV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -319,7 +319,7 @@ class RoleV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "RoleV1Metadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#metadata RoleV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#metadata RoleV1#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -331,7 +331,7 @@ class RoleV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["RoleV1Rule"]]:
         '''rule block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#rule RoleV1#rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#rule RoleV1#rule}
         '''
         result = self._values.get("rule")
         assert result is not None, "Required property 'rule' is missing"
@@ -339,7 +339,7 @@ class RoleV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#id RoleV1#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#id RoleV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -381,11 +381,11 @@ class RoleV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the role that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#annotations RoleV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#generate_name RoleV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the role. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#labels RoleV1#labels}
-        :param name: Name of the role, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#name RoleV1#name}
-        :param namespace: Namespace defines the space within which name of the role must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#namespace RoleV1#namespace}
+        :param annotations: An unstructured key value map stored with the role that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#annotations RoleV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#generate_name RoleV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the role. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#labels RoleV1#labels}
+        :param name: Name of the role, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#name RoleV1#name}
+        :param namespace: Namespace defines the space within which name of the role must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#namespace RoleV1#namespace}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b236ade5ebc4865ee8a0bd3e4e3d217d31111e25ea3d8b0255969b80a42fb386)
@@ -414,7 +414,7 @@ class RoleV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#annotations RoleV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#annotations RoleV1#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -425,7 +425,7 @@ class RoleV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#generate_name RoleV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#generate_name RoleV1#generate_name}
         '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -436,7 +436,7 @@ class RoleV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#labels RoleV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#labels RoleV1#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -445,7 +445,7 @@ class RoleV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the role, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#name RoleV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#name RoleV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -454,7 +454,7 @@ class RoleV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         '''Namespace defines the space within which name of the role must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#namespace RoleV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#namespace RoleV1#namespace}
         '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -648,10 +648,10 @@ class RoleV1Rule:
         resource_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param api_groups: Name of the APIGroup that contains the resources. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#api_groups RoleV1#api_groups}
-        :param resources: List of resources that the rule applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#resources RoleV1#resources}
-        :param verbs: List of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#verbs RoleV1#verbs}
-        :param resource_names: White list of names that the rule applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#resource_names RoleV1#resource_names}
+        :param api_groups: Name of the APIGroup that contains the resources. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#api_groups RoleV1#api_groups}
+        :param resources: List of resources that the rule applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#resources RoleV1#resources}
+        :param verbs: List of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#verbs RoleV1#verbs}
+        :param resource_names: White list of names that the rule applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#resource_names RoleV1#resource_names}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__180f4ca8093f29a8367900578477fcabe779077ccc209ae2c2bfebc4abf9c89a)
@@ -671,7 +671,7 @@ class RoleV1Rule:
     def api_groups(self) -> typing.List[builtins.str]:
         '''Name of the APIGroup that contains the resources.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#api_groups RoleV1#api_groups}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#api_groups RoleV1#api_groups}
         '''
         result = self._values.get("api_groups")
         assert result is not None, "Required property 'api_groups' is missing"
@@ -681,7 +681,7 @@ class RoleV1Rule:
     def resources(self) -> typing.List[builtins.str]:
         '''List of resources that the rule applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#resources RoleV1#resources}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#resources RoleV1#resources}
         '''
         result = self._values.get("resources")
         assert result is not None, "Required property 'resources' is missing"
@@ -691,7 +691,7 @@ class RoleV1Rule:
     def verbs(self) -> typing.List[builtins.str]:
         '''List of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#verbs RoleV1#verbs}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#verbs RoleV1#verbs}
         '''
         result = self._values.get("verbs")
         assert result is not None, "Required property 'verbs' is missing"
@@ -701,7 +701,7 @@ class RoleV1Rule:
     def resource_names(self) -> typing.Optional[typing.List[builtins.str]]:
         '''White list of names that the rule applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/role_v1#resource_names RoleV1#resource_names}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/role_v1#resource_names RoleV1#resource_names}
         '''
         result = self._values.get("resource_names")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)

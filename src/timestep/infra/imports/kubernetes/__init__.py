@@ -43,6 +43,7 @@ __all__ = [
     "data_kubernetes_nodes",
     "data_kubernetes_persistent_volume_claim",
     "data_kubernetes_persistent_volume_claim_v1",
+    "data_kubernetes_persistent_volume_v1",
     "data_kubernetes_pod",
     "data_kubernetes_pod_v1",
     "data_kubernetes_resource",
@@ -59,6 +60,7 @@ __all__ = [
     "default_service_account_v1",
     "deployment",
     "deployment_v1",
+    "endpoint_slice_v1",
     "endpoints",
     "endpoints_v1",
     "env",
@@ -153,6 +155,7 @@ from . import data_kubernetes_namespace_v1
 from . import data_kubernetes_nodes
 from . import data_kubernetes_persistent_volume_claim
 from . import data_kubernetes_persistent_volume_claim_v1
+from . import data_kubernetes_persistent_volume_v1
 from . import data_kubernetes_pod
 from . import data_kubernetes_pod_v1
 from . import data_kubernetes_resource
@@ -169,6 +172,7 @@ from . import default_service_account
 from . import default_service_account_v1
 from . import deployment
 from . import deployment_v1
+from . import endpoint_slice_v1
 from . import endpoints
 from . import endpoints_v1
 from . import env

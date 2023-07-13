@@ -1,7 +1,7 @@
 '''
 # `data_kubernetes_resources`
 
-Refer to the Terraform Registory for docs: [`data_kubernetes_resources`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources).
+Refer to the Terraform Registory for docs: [`data_kubernetes_resources`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class DataKubernetesResources(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.dataKubernetesResources.DataKubernetesResources",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources kubernetes_resources}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources kubernetes_resources}.'''
 
     def __init__(
         self,
@@ -48,17 +48,17 @@ class DataKubernetesResources(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources kubernetes_resources} Data Source.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources kubernetes_resources} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param api_version: The resource apiVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#api_version DataKubernetesResources#api_version}
-        :param kind: The resource kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#kind DataKubernetesResources#kind}
-        :param field_selector: A selector to restrict the list of returned objects by their fields. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#field_selector DataKubernetesResources#field_selector}
-        :param label_selector: A selector to restrict the list of returned objects by their labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#label_selector DataKubernetesResources#label_selector}
-        :param limit: Limit is a maximum number of responses to return for a list call. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#limit DataKubernetesResources#limit}
-        :param namespace: The resource namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#namespace DataKubernetesResources#namespace}
-        :param objects: The response from the API server. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#objects DataKubernetesResources#objects}
+        :param api_version: The resource apiVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#api_version DataKubernetesResources#api_version}
+        :param kind: The resource kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#kind DataKubernetesResources#kind}
+        :param field_selector: A selector to restrict the list of returned objects by their fields. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#field_selector DataKubernetesResources#field_selector}
+        :param label_selector: A selector to restrict the list of returned objects by their labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#label_selector DataKubernetesResources#label_selector}
+        :param limit: Limit is a maximum number of responses to return for a list call. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#limit DataKubernetesResources#limit}
+        :param namespace: The resource namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#namespace DataKubernetesResources#namespace}
+        :param objects: The response from the API server. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#objects DataKubernetesResources#objects}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -288,13 +288,13 @@ class DataKubernetesResourcesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param api_version: The resource apiVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#api_version DataKubernetesResources#api_version}
-        :param kind: The resource kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#kind DataKubernetesResources#kind}
-        :param field_selector: A selector to restrict the list of returned objects by their fields. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#field_selector DataKubernetesResources#field_selector}
-        :param label_selector: A selector to restrict the list of returned objects by their labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#label_selector DataKubernetesResources#label_selector}
-        :param limit: Limit is a maximum number of responses to return for a list call. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#limit DataKubernetesResources#limit}
-        :param namespace: The resource namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#namespace DataKubernetesResources#namespace}
-        :param objects: The response from the API server. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#objects DataKubernetesResources#objects}
+        :param api_version: The resource apiVersion. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#api_version DataKubernetesResources#api_version}
+        :param kind: The resource kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#kind DataKubernetesResources#kind}
+        :param field_selector: A selector to restrict the list of returned objects by their fields. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#field_selector DataKubernetesResources#field_selector}
+        :param label_selector: A selector to restrict the list of returned objects by their labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#label_selector DataKubernetesResources#label_selector}
+        :param limit: Limit is a maximum number of responses to return for a list call. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#limit DataKubernetesResources#limit}
+        :param namespace: The resource namespace. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#namespace DataKubernetesResources#namespace}
+        :param objects: The response from the API server. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#objects DataKubernetesResources#objects}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -411,7 +411,7 @@ class DataKubernetesResourcesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def api_version(self) -> builtins.str:
         '''The resource apiVersion.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#api_version DataKubernetesResources#api_version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#api_version DataKubernetesResources#api_version}
         '''
         result = self._values.get("api_version")
         assert result is not None, "Required property 'api_version' is missing"
@@ -421,7 +421,7 @@ class DataKubernetesResourcesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def kind(self) -> builtins.str:
         '''The resource kind.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#kind DataKubernetesResources#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#kind DataKubernetesResources#kind}
         '''
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -431,7 +431,7 @@ class DataKubernetesResourcesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def field_selector(self) -> typing.Optional[builtins.str]:
         '''A selector to restrict the list of returned objects by their fields.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#field_selector DataKubernetesResources#field_selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#field_selector DataKubernetesResources#field_selector}
         '''
         result = self._values.get("field_selector")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -440,7 +440,7 @@ class DataKubernetesResourcesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def label_selector(self) -> typing.Optional[builtins.str]:
         '''A selector to restrict the list of returned objects by their labels.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#label_selector DataKubernetesResources#label_selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#label_selector DataKubernetesResources#label_selector}
         '''
         result = self._values.get("label_selector")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -449,7 +449,7 @@ class DataKubernetesResourcesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def limit(self) -> typing.Optional[jsii.Number]:
         '''Limit is a maximum number of responses to return for a list call.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#limit DataKubernetesResources#limit}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#limit DataKubernetesResources#limit}
         '''
         result = self._values.get("limit")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -458,7 +458,7 @@ class DataKubernetesResourcesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def namespace(self) -> typing.Optional[builtins.str]:
         '''The resource namespace.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#namespace DataKubernetesResources#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#namespace DataKubernetesResources#namespace}
         '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -467,7 +467,7 @@ class DataKubernetesResourcesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def objects(self) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
         '''The response from the API server.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/resources#objects DataKubernetesResources#objects}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/resources#objects DataKubernetesResources#objects}
         '''
         result = self._values.get("objects")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)

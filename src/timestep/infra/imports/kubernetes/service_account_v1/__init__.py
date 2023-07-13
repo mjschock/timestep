@@ -1,7 +1,7 @@
 '''
 # `kubernetes_service_account_v1`
 
-Refer to the Terraform Registory for docs: [`kubernetes_service_account_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1).
+Refer to the Terraform Registory for docs: [`kubernetes_service_account_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class ServiceAccountV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.serviceAccountV1.ServiceAccountV1",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1 kubernetes_service_account_v1}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1 kubernetes_service_account_v1}.'''
 
     def __init__(
         self,
@@ -47,16 +47,16 @@ class ServiceAccountV1(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1 kubernetes_service_account_v1} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1 kubernetes_service_account_v1} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#metadata ServiceAccountV1#metadata}
-        :param automount_service_account_token: Enable automatic mounting of the service account token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#automount_service_account_token ServiceAccountV1#automount_service_account_token}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#id ServiceAccountV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param image_pull_secret: image_pull_secret block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#image_pull_secret ServiceAccountV1#image_pull_secret}
-        :param secret: secret block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#secret ServiceAccountV1#secret}
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#timeouts ServiceAccountV1#timeouts}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#metadata ServiceAccountV1#metadata}
+        :param automount_service_account_token: Enable automatic mounting of the service account token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#automount_service_account_token ServiceAccountV1#automount_service_account_token}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#id ServiceAccountV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param image_pull_secret: image_pull_secret block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#image_pull_secret ServiceAccountV1#image_pull_secret}
+        :param secret: secret block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#secret ServiceAccountV1#secret}
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#timeouts ServiceAccountV1#timeouts}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -111,11 +111,11 @@ class ServiceAccountV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the service account that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#annotations ServiceAccountV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#generate_name ServiceAccountV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the service account. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#labels ServiceAccountV1#labels}
-        :param name: Name of the service account, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#name ServiceAccountV1#name}
-        :param namespace: Namespace defines the space within which name of the service account must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#namespace ServiceAccountV1#namespace}
+        :param annotations: An unstructured key value map stored with the service account that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#annotations ServiceAccountV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#generate_name ServiceAccountV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the service account. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#labels ServiceAccountV1#labels}
+        :param name: Name of the service account, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#name ServiceAccountV1#name}
+        :param namespace: Namespace defines the space within which name of the service account must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#namespace ServiceAccountV1#namespace}
         '''
         value = ServiceAccountV1Metadata(
             annotations=annotations,
@@ -143,7 +143,7 @@ class ServiceAccountV1(
     @jsii.member(jsii_name="putTimeouts")
     def put_timeouts(self, *, create: typing.Optional[builtins.str] = None) -> None:
         '''
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#create ServiceAccountV1#create}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#create ServiceAccountV1#create}.
         '''
         value = ServiceAccountV1Timeouts(create=create)
 
@@ -316,12 +316,12 @@ class ServiceAccountV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#metadata ServiceAccountV1#metadata}
-        :param automount_service_account_token: Enable automatic mounting of the service account token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#automount_service_account_token ServiceAccountV1#automount_service_account_token}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#id ServiceAccountV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param image_pull_secret: image_pull_secret block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#image_pull_secret ServiceAccountV1#image_pull_secret}
-        :param secret: secret block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#secret ServiceAccountV1#secret}
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#timeouts ServiceAccountV1#timeouts}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#metadata ServiceAccountV1#metadata}
+        :param automount_service_account_token: Enable automatic mounting of the service account token. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#automount_service_account_token ServiceAccountV1#automount_service_account_token}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#id ServiceAccountV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param image_pull_secret: image_pull_secret block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#image_pull_secret ServiceAccountV1#image_pull_secret}
+        :param secret: secret block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#secret ServiceAccountV1#secret}
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#timeouts ServiceAccountV1#timeouts}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -440,7 +440,7 @@ class ServiceAccountV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "ServiceAccountV1Metadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#metadata ServiceAccountV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#metadata ServiceAccountV1#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -452,14 +452,14 @@ class ServiceAccountV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Enable automatic mounting of the service account token.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#automount_service_account_token ServiceAccountV1#automount_service_account_token}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#automount_service_account_token ServiceAccountV1#automount_service_account_token}
         '''
         result = self._values.get("automount_service_account_token")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#id ServiceAccountV1#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#id ServiceAccountV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -473,7 +473,7 @@ class ServiceAccountV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["ServiceAccountV1ImagePullSecret"]]]:
         '''image_pull_secret block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#image_pull_secret ServiceAccountV1#image_pull_secret}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#image_pull_secret ServiceAccountV1#image_pull_secret}
         '''
         result = self._values.get("image_pull_secret")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["ServiceAccountV1ImagePullSecret"]]], result)
@@ -484,7 +484,7 @@ class ServiceAccountV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["ServiceAccountV1Secret"]]]:
         '''secret block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#secret ServiceAccountV1#secret}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#secret ServiceAccountV1#secret}
         '''
         result = self._values.get("secret")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["ServiceAccountV1Secret"]]], result)
@@ -493,7 +493,7 @@ class ServiceAccountV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def timeouts(self) -> typing.Optional["ServiceAccountV1Timeouts"]:
         '''timeouts block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#timeouts ServiceAccountV1#timeouts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#timeouts ServiceAccountV1#timeouts}
         '''
         result = self._values.get("timeouts")
         return typing.cast(typing.Optional["ServiceAccountV1Timeouts"], result)
@@ -518,7 +518,7 @@ class ServiceAccountV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 class ServiceAccountV1ImagePullSecret:
     def __init__(self, *, name: typing.Optional[builtins.str] = None) -> None:
         '''
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#name ServiceAccountV1#name}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#name ServiceAccountV1#name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1a5a432aa1b7580f222cf4f83461d3ec6d02a7148190d7bbd06b124000ca938a)
@@ -531,7 +531,7 @@ class ServiceAccountV1ImagePullSecret:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#name ServiceAccountV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#name ServiceAccountV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -728,11 +728,11 @@ class ServiceAccountV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the service account that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#annotations ServiceAccountV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#generate_name ServiceAccountV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the service account. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#labels ServiceAccountV1#labels}
-        :param name: Name of the service account, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#name ServiceAccountV1#name}
-        :param namespace: Namespace defines the space within which name of the service account must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#namespace ServiceAccountV1#namespace}
+        :param annotations: An unstructured key value map stored with the service account that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#annotations ServiceAccountV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#generate_name ServiceAccountV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the service account. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#labels ServiceAccountV1#labels}
+        :param name: Name of the service account, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#name ServiceAccountV1#name}
+        :param namespace: Namespace defines the space within which name of the service account must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#namespace ServiceAccountV1#namespace}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fe97a0c72691da6da957011316b89a47c437ea82837a8963a78dab92b281d618)
@@ -761,7 +761,7 @@ class ServiceAccountV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#annotations ServiceAccountV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#annotations ServiceAccountV1#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -772,7 +772,7 @@ class ServiceAccountV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#generate_name ServiceAccountV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#generate_name ServiceAccountV1#generate_name}
         '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -783,7 +783,7 @@ class ServiceAccountV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#labels ServiceAccountV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#labels ServiceAccountV1#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -792,7 +792,7 @@ class ServiceAccountV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the service account, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#name ServiceAccountV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#name ServiceAccountV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -801,7 +801,7 @@ class ServiceAccountV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         '''Namespace defines the space within which name of the service account must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#namespace ServiceAccountV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#namespace ServiceAccountV1#namespace}
         '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -983,7 +983,7 @@ class ServiceAccountV1MetadataOutputReference(
 class ServiceAccountV1Secret:
     def __init__(self, *, name: typing.Optional[builtins.str] = None) -> None:
         '''
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#name ServiceAccountV1#name}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#name ServiceAccountV1#name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__382b10bb07662428a547c72881a026723eea897a21ab5f916ab558fe11cd942a)
@@ -996,7 +996,7 @@ class ServiceAccountV1Secret:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#name ServiceAccountV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#name ServiceAccountV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1176,7 +1176,7 @@ class ServiceAccountV1SecretOutputReference(
 class ServiceAccountV1Timeouts:
     def __init__(self, *, create: typing.Optional[builtins.str] = None) -> None:
         '''
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#create ServiceAccountV1#create}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#create ServiceAccountV1#create}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5505164f3d4c708823e24edf548a860ee7d319a213972cfea297d8b786c989ab)
@@ -1187,7 +1187,7 @@ class ServiceAccountV1Timeouts:
 
     @builtins.property
     def create(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/service_account_v1#create ServiceAccountV1#create}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/service_account_v1#create ServiceAccountV1#create}.'''
         result = self._values.get("create")
         return typing.cast(typing.Optional[builtins.str], result)
 

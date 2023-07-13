@@ -1,7 +1,7 @@
 '''
 # `kubernetes_network_policy`
 
-Refer to the Terraform Registory for docs: [`kubernetes_network_policy`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy).
+Refer to the Terraform Registory for docs: [`kubernetes_network_policy`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class NetworkPolicy(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.networkPolicy.NetworkPolicy",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy kubernetes_network_policy}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy kubernetes_network_policy}.'''
 
     def __init__(
         self,
@@ -44,13 +44,13 @@ class NetworkPolicy(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy kubernetes_network_policy} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy kubernetes_network_policy} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#metadata NetworkPolicy#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#spec NetworkPolicy#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#id NetworkPolicy#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#metadata NetworkPolicy#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#spec NetworkPolicy#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#id NetworkPolicy#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -89,11 +89,11 @@ class NetworkPolicy(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the network policy that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#annotations NetworkPolicy#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#generate_name NetworkPolicy#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the network policy. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#labels NetworkPolicy#labels}
-        :param name: Name of the network policy, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#name NetworkPolicy#name}
-        :param namespace: Namespace defines the space within which name of the network policy must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#namespace NetworkPolicy#namespace}
+        :param annotations: An unstructured key value map stored with the network policy that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#annotations NetworkPolicy#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#generate_name NetworkPolicy#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the network policy. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#labels NetworkPolicy#labels}
+        :param name: Name of the network policy, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#name NetworkPolicy#name}
+        :param namespace: Namespace defines the space within which name of the network policy must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#namespace NetworkPolicy#namespace}
         '''
         value = NetworkPolicyMetadata(
             annotations=annotations,
@@ -115,10 +115,10 @@ class NetworkPolicy(
         ingress: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["NetworkPolicySpecIngress", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param pod_selector: pod_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
-        :param policy_types: List of rule types that the NetworkPolicy relates to. Valid options are ["Ingress"], ["Egress"], or ["Ingress", "Egress"]. If this field is not specified, it will default based on the existence of Ingress or Egress rules; policies that contain an Egress section are assumed to affect Egress, and all policies (whether or not they contain an Ingress section) are assumed to affect Ingress. If you want to write an egress-only policy, you must explicitly specify policyTypes [ "Egress" ]. Likewise, if you want to write a policy that specifies that no egress is allowed, you must specify a policyTypes value that include "Egress" (since such a policy would not include an Egress section and would otherwise default to just [ "Ingress" ]). This field is beta-level in 1.8 Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#policy_types NetworkPolicy#policy_types}
-        :param egress: egress block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#egress NetworkPolicy#egress}
-        :param ingress: ingress block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ingress NetworkPolicy#ingress}
+        :param pod_selector: pod_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
+        :param policy_types: List of rule types that the NetworkPolicy relates to. Valid options are ["Ingress"], ["Egress"], or ["Ingress", "Egress"]. If this field is not specified, it will default based on the existence of Ingress or Egress rules; policies that contain an Egress section are assumed to affect Egress, and all policies (whether or not they contain an Ingress section) are assumed to affect Ingress. If you want to write an egress-only policy, you must explicitly specify policyTypes [ "Egress" ]. Likewise, if you want to write a policy that specifies that no egress is allowed, you must specify a policyTypes value that include "Egress" (since such a policy would not include an Egress section and would otherwise default to just [ "Ingress" ]). This field is beta-level in 1.8 Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#policy_types NetworkPolicy#policy_types}
+        :param egress: egress block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#egress NetworkPolicy#egress}
+        :param ingress: ingress block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ingress NetworkPolicy#ingress}
         '''
         value = NetworkPolicySpec(
             pod_selector=pod_selector,
@@ -219,9 +219,9 @@ class NetworkPolicyConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#metadata NetworkPolicy#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#spec NetworkPolicy#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#id NetworkPolicy#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#metadata NetworkPolicy#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#spec NetworkPolicy#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#id NetworkPolicy#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -330,7 +330,7 @@ class NetworkPolicyConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "NetworkPolicyMetadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#metadata NetworkPolicy#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#metadata NetworkPolicy#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -340,7 +340,7 @@ class NetworkPolicyConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def spec(self) -> "NetworkPolicySpec":
         '''spec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#spec NetworkPolicy#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#spec NetworkPolicy#spec}
         '''
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
@@ -348,7 +348,7 @@ class NetworkPolicyConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#id NetworkPolicy#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#id NetworkPolicy#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -390,11 +390,11 @@ class NetworkPolicyMetadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the network policy that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#annotations NetworkPolicy#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#generate_name NetworkPolicy#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the network policy. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#labels NetworkPolicy#labels}
-        :param name: Name of the network policy, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#name NetworkPolicy#name}
-        :param namespace: Namespace defines the space within which name of the network policy must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#namespace NetworkPolicy#namespace}
+        :param annotations: An unstructured key value map stored with the network policy that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#annotations NetworkPolicy#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#generate_name NetworkPolicy#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the network policy. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#labels NetworkPolicy#labels}
+        :param name: Name of the network policy, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#name NetworkPolicy#name}
+        :param namespace: Namespace defines the space within which name of the network policy must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#namespace NetworkPolicy#namespace}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__62e08969e357dac750417410309f456ebedd0b54300731729870f6d1db3f9eed)
@@ -423,7 +423,7 @@ class NetworkPolicyMetadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#annotations NetworkPolicy#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#annotations NetworkPolicy#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -434,7 +434,7 @@ class NetworkPolicyMetadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#generate_name NetworkPolicy#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#generate_name NetworkPolicy#generate_name}
         '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -445,7 +445,7 @@ class NetworkPolicyMetadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#labels NetworkPolicy#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#labels NetworkPolicy#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -454,7 +454,7 @@ class NetworkPolicyMetadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the network policy, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#name NetworkPolicy#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#name NetworkPolicy#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -463,7 +463,7 @@ class NetworkPolicyMetadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         '''Namespace defines the space within which name of the network policy must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#namespace NetworkPolicy#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#namespace NetworkPolicy#namespace}
         '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -657,10 +657,10 @@ class NetworkPolicySpec:
         ingress: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["NetworkPolicySpecIngress", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param pod_selector: pod_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
-        :param policy_types: List of rule types that the NetworkPolicy relates to. Valid options are ["Ingress"], ["Egress"], or ["Ingress", "Egress"]. If this field is not specified, it will default based on the existence of Ingress or Egress rules; policies that contain an Egress section are assumed to affect Egress, and all policies (whether or not they contain an Ingress section) are assumed to affect Ingress. If you want to write an egress-only policy, you must explicitly specify policyTypes [ "Egress" ]. Likewise, if you want to write a policy that specifies that no egress is allowed, you must specify a policyTypes value that include "Egress" (since such a policy would not include an Egress section and would otherwise default to just [ "Ingress" ]). This field is beta-level in 1.8 Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#policy_types NetworkPolicy#policy_types}
-        :param egress: egress block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#egress NetworkPolicy#egress}
-        :param ingress: ingress block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ingress NetworkPolicy#ingress}
+        :param pod_selector: pod_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
+        :param policy_types: List of rule types that the NetworkPolicy relates to. Valid options are ["Ingress"], ["Egress"], or ["Ingress", "Egress"]. If this field is not specified, it will default based on the existence of Ingress or Egress rules; policies that contain an Egress section are assumed to affect Egress, and all policies (whether or not they contain an Ingress section) are assumed to affect Ingress. If you want to write an egress-only policy, you must explicitly specify policyTypes [ "Egress" ]. Likewise, if you want to write a policy that specifies that no egress is allowed, you must specify a policyTypes value that include "Egress" (since such a policy would not include an Egress section and would otherwise default to just [ "Ingress" ]). This field is beta-level in 1.8 Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#policy_types NetworkPolicy#policy_types}
+        :param egress: egress block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#egress NetworkPolicy#egress}
+        :param ingress: ingress block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ingress NetworkPolicy#ingress}
         '''
         if isinstance(pod_selector, dict):
             pod_selector = NetworkPolicySpecPodSelector(**pod_selector)
@@ -683,7 +683,7 @@ class NetworkPolicySpec:
     def pod_selector(self) -> "NetworkPolicySpecPodSelector":
         '''pod_selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
         '''
         result = self._values.get("pod_selector")
         assert result is not None, "Required property 'pod_selector' is missing"
@@ -695,7 +695,7 @@ class NetworkPolicySpec:
 
         Valid options are ["Ingress"], ["Egress"], or ["Ingress", "Egress"]. If this field is not specified, it will default based on the existence of Ingress or Egress rules; policies that contain an Egress section are assumed to affect Egress, and all policies (whether or not they contain an Ingress section) are assumed to affect Ingress. If you want to write an egress-only policy, you must explicitly specify policyTypes [ "Egress" ]. Likewise, if you want to write a policy that specifies that no egress is allowed, you must specify a policyTypes value that include "Egress" (since such a policy would not include an Egress section and would otherwise default to just [ "Ingress" ]). This field is beta-level in 1.8
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#policy_types NetworkPolicy#policy_types}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#policy_types NetworkPolicy#policy_types}
         '''
         result = self._values.get("policy_types")
         assert result is not None, "Required property 'policy_types' is missing"
@@ -707,7 +707,7 @@ class NetworkPolicySpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecEgress"]]]:
         '''egress block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#egress NetworkPolicy#egress}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#egress NetworkPolicy#egress}
         '''
         result = self._values.get("egress")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecEgress"]]], result)
@@ -718,7 +718,7 @@ class NetworkPolicySpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecIngress"]]]:
         '''ingress block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ingress NetworkPolicy#ingress}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ingress NetworkPolicy#ingress}
         '''
         result = self._values.get("ingress")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecIngress"]]], result)
@@ -748,8 +748,8 @@ class NetworkPolicySpecEgress:
         to: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["NetworkPolicySpecEgressTo", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param ports: ports block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ports NetworkPolicy#ports}
-        :param to: to block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#to NetworkPolicy#to}
+        :param ports: ports block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ports NetworkPolicy#ports}
+        :param to: to block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#to NetworkPolicy#to}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__57766175b750e65b6a5b8bf1ad682472cd502608c90c7d39f7a7e2efad15def8)
@@ -767,7 +767,7 @@ class NetworkPolicySpecEgress:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecEgressPorts"]]]:
         '''ports block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ports NetworkPolicy#ports}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ports NetworkPolicy#ports}
         '''
         result = self._values.get("ports")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecEgressPorts"]]], result)
@@ -778,7 +778,7 @@ class NetworkPolicySpecEgress:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecEgressTo"]]]:
         '''to block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#to NetworkPolicy#to}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#to NetworkPolicy#to}
         '''
         result = self._values.get("to")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecEgressTo"]]], result)
@@ -1000,8 +1000,8 @@ class NetworkPolicySpecEgressPorts:
         protocol: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param port: The port on the given protocol. This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers. If present, only traffic on the specified protocol AND port will be matched. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#port NetworkPolicy#port}
-        :param protocol: The protocol (TCP, UDP, or SCTP) which traffic must match. If not specified, this field defaults to TCP. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#protocol NetworkPolicy#protocol}
+        :param port: The port on the given protocol. This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers. If present, only traffic on the specified protocol AND port will be matched. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#port NetworkPolicy#port}
+        :param protocol: The protocol (TCP, UDP, or SCTP) which traffic must match. If not specified, this field defaults to TCP. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#protocol NetworkPolicy#protocol}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__04fa0685b502202eb0d4ed5ac9c65009e1cefbf2daca9287b39f8fd22d42b17e)
@@ -1019,7 +1019,7 @@ class NetworkPolicySpecEgressPorts:
 
         This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers. If present, only traffic on the specified protocol AND port will be matched.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#port NetworkPolicy#port}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#port NetworkPolicy#port}
         '''
         result = self._values.get("port")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1028,7 +1028,7 @@ class NetworkPolicySpecEgressPorts:
     def protocol(self) -> typing.Optional[builtins.str]:
         '''The protocol (TCP, UDP, or SCTP) which traffic must match. If not specified, this field defaults to TCP.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#protocol NetworkPolicy#protocol}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#protocol NetworkPolicy#protocol}
         '''
         result = self._values.get("protocol")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1239,9 +1239,9 @@ class NetworkPolicySpecEgressTo:
         pod_selector: typing.Optional[typing.Union["NetworkPolicySpecEgressToPodSelector", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param ip_block: ip_block block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ip_block NetworkPolicy#ip_block}
-        :param namespace_selector: namespace_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#namespace_selector NetworkPolicy#namespace_selector}
-        :param pod_selector: pod_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
+        :param ip_block: ip_block block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ip_block NetworkPolicy#ip_block}
+        :param namespace_selector: namespace_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#namespace_selector NetworkPolicy#namespace_selector}
+        :param pod_selector: pod_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
         '''
         if isinstance(ip_block, dict):
             ip_block = NetworkPolicySpecEgressToIpBlock(**ip_block)
@@ -1266,7 +1266,7 @@ class NetworkPolicySpecEgressTo:
     def ip_block(self) -> typing.Optional["NetworkPolicySpecEgressToIpBlock"]:
         '''ip_block block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ip_block NetworkPolicy#ip_block}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ip_block NetworkPolicy#ip_block}
         '''
         result = self._values.get("ip_block")
         return typing.cast(typing.Optional["NetworkPolicySpecEgressToIpBlock"], result)
@@ -1277,7 +1277,7 @@ class NetworkPolicySpecEgressTo:
     ) -> typing.Optional["NetworkPolicySpecEgressToNamespaceSelector"]:
         '''namespace_selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#namespace_selector NetworkPolicy#namespace_selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#namespace_selector NetworkPolicy#namespace_selector}
         '''
         result = self._values.get("namespace_selector")
         return typing.cast(typing.Optional["NetworkPolicySpecEgressToNamespaceSelector"], result)
@@ -1286,7 +1286,7 @@ class NetworkPolicySpecEgressTo:
     def pod_selector(self) -> typing.Optional["NetworkPolicySpecEgressToPodSelector"]:
         '''pod_selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
         '''
         result = self._values.get("pod_selector")
         return typing.cast(typing.Optional["NetworkPolicySpecEgressToPodSelector"], result)
@@ -1316,8 +1316,8 @@ class NetworkPolicySpecEgressToIpBlock:
         except_: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param cidr: CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#cidr NetworkPolicy#cidr}
-        :param except_: Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#except NetworkPolicy#except}
+        :param cidr: CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#cidr NetworkPolicy#cidr}
+        :param except_: Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#except NetworkPolicy#except}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1596af371c690fc761b66393eff6c2163fc589ae446be6f93fe52c93e633769f)
@@ -1333,7 +1333,7 @@ class NetworkPolicySpecEgressToIpBlock:
     def cidr(self) -> typing.Optional[builtins.str]:
         '''CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64".
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#cidr NetworkPolicy#cidr}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#cidr NetworkPolicy#cidr}
         '''
         result = self._values.get("cidr")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1342,7 +1342,7 @@ class NetworkPolicySpecEgressToIpBlock:
     def except_(self) -> typing.Optional[typing.List[builtins.str]]:
         '''Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#except NetworkPolicy#except}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#except NetworkPolicy#except}
         '''
         result = self._values.get("except_")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1543,8 +1543,8 @@ class NetworkPolicySpecEgressToNamespaceSelector:
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5aa5962224ccf05d3454919b7050fe1aa212339d0bd88309797b0fb4ef90ae2b)
@@ -1562,7 +1562,7 @@ class NetworkPolicySpecEgressToNamespaceSelector:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecEgressToNamespaceSelectorMatchExpressions"]]]:
         '''match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
         '''
         result = self._values.get("match_expressions")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecEgressToNamespaceSelectorMatchExpressions"]]], result)
@@ -1575,7 +1575,7 @@ class NetworkPolicySpecEgressToNamespaceSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         result = self._values.get("match_labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -1606,9 +1606,9 @@ class NetworkPolicySpecEgressToNamespaceSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#key NetworkPolicy#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#operator NetworkPolicy#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#values NetworkPolicy#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#key NetworkPolicy#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#operator NetworkPolicy#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#values NetworkPolicy#values}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7a9829bec74c3ac154b9453b2618a6d48920121f6b1f58ad0a6c85624d3aebe8)
@@ -1627,7 +1627,7 @@ class NetworkPolicySpecEgressToNamespaceSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         '''The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#key NetworkPolicy#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#key NetworkPolicy#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1636,7 +1636,7 @@ class NetworkPolicySpecEgressToNamespaceSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         '''A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#operator NetworkPolicy#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#operator NetworkPolicy#operator}
         '''
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1647,7 +1647,7 @@ class NetworkPolicySpecEgressToNamespaceSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#values NetworkPolicy#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#values NetworkPolicy#values}
         '''
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1990,8 +1990,8 @@ class NetworkPolicySpecEgressToOutputReference(
         except_: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param cidr: CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#cidr NetworkPolicy#cidr}
-        :param except_: Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#except NetworkPolicy#except}
+        :param cidr: CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#cidr NetworkPolicy#cidr}
+        :param except_: Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#except NetworkPolicy#except}
         '''
         value = NetworkPolicySpecEgressToIpBlock(cidr=cidr, except_=except_)
 
@@ -2005,8 +2005,8 @@ class NetworkPolicySpecEgressToOutputReference(
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         value = NetworkPolicySpecEgressToNamespaceSelector(
             match_expressions=match_expressions, match_labels=match_labels
@@ -2022,8 +2022,8 @@ class NetworkPolicySpecEgressToOutputReference(
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         value = NetworkPolicySpecEgressToPodSelector(
             match_expressions=match_expressions, match_labels=match_labels
@@ -2113,8 +2113,8 @@ class NetworkPolicySpecEgressToPodSelector:
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fdbd1adbf28a982c9eb2bad0d0361468a435b7f22415576dc99483256e8a7a40)
@@ -2132,7 +2132,7 @@ class NetworkPolicySpecEgressToPodSelector:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecEgressToPodSelectorMatchExpressions"]]]:
         '''match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
         '''
         result = self._values.get("match_expressions")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecEgressToPodSelectorMatchExpressions"]]], result)
@@ -2145,7 +2145,7 @@ class NetworkPolicySpecEgressToPodSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         result = self._values.get("match_labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -2176,9 +2176,9 @@ class NetworkPolicySpecEgressToPodSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#key NetworkPolicy#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#operator NetworkPolicy#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#values NetworkPolicy#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#key NetworkPolicy#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#operator NetworkPolicy#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#values NetworkPolicy#values}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__29bfdbde4feaad04ff43a9a496ca05d5df28e69d84f8f446533dc8d14da14b88)
@@ -2197,7 +2197,7 @@ class NetworkPolicySpecEgressToPodSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         '''The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#key NetworkPolicy#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#key NetworkPolicy#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2206,7 +2206,7 @@ class NetworkPolicySpecEgressToPodSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         '''A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#operator NetworkPolicy#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#operator NetworkPolicy#operator}
         '''
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2217,7 +2217,7 @@ class NetworkPolicySpecEgressToPodSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#values NetworkPolicy#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#values NetworkPolicy#values}
         '''
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2537,8 +2537,8 @@ class NetworkPolicySpecIngress:
         ports: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["NetworkPolicySpecIngressPorts", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param from_: from block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#from NetworkPolicy#from}
-        :param ports: ports block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ports NetworkPolicy#ports}
+        :param from_: from block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#from NetworkPolicy#from}
+        :param ports: ports block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ports NetworkPolicy#ports}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7fa4c17708101b33f3182795bbc7139752c2ca536122d021df4d0412fec5795d)
@@ -2556,7 +2556,7 @@ class NetworkPolicySpecIngress:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecIngressFrom"]]]:
         '''from block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#from NetworkPolicy#from}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#from NetworkPolicy#from}
         '''
         result = self._values.get("from_")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecIngressFrom"]]], result)
@@ -2567,7 +2567,7 @@ class NetworkPolicySpecIngress:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecIngressPorts"]]]:
         '''ports block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ports NetworkPolicy#ports}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ports NetworkPolicy#ports}
         '''
         result = self._values.get("ports")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecIngressPorts"]]], result)
@@ -2602,9 +2602,9 @@ class NetworkPolicySpecIngressFrom:
         pod_selector: typing.Optional[typing.Union["NetworkPolicySpecIngressFromPodSelector", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param ip_block: ip_block block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ip_block NetworkPolicy#ip_block}
-        :param namespace_selector: namespace_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#namespace_selector NetworkPolicy#namespace_selector}
-        :param pod_selector: pod_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
+        :param ip_block: ip_block block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ip_block NetworkPolicy#ip_block}
+        :param namespace_selector: namespace_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#namespace_selector NetworkPolicy#namespace_selector}
+        :param pod_selector: pod_selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
         '''
         if isinstance(ip_block, dict):
             ip_block = NetworkPolicySpecIngressFromIpBlock(**ip_block)
@@ -2629,7 +2629,7 @@ class NetworkPolicySpecIngressFrom:
     def ip_block(self) -> typing.Optional["NetworkPolicySpecIngressFromIpBlock"]:
         '''ip_block block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#ip_block NetworkPolicy#ip_block}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#ip_block NetworkPolicy#ip_block}
         '''
         result = self._values.get("ip_block")
         return typing.cast(typing.Optional["NetworkPolicySpecIngressFromIpBlock"], result)
@@ -2640,7 +2640,7 @@ class NetworkPolicySpecIngressFrom:
     ) -> typing.Optional["NetworkPolicySpecIngressFromNamespaceSelector"]:
         '''namespace_selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#namespace_selector NetworkPolicy#namespace_selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#namespace_selector NetworkPolicy#namespace_selector}
         '''
         result = self._values.get("namespace_selector")
         return typing.cast(typing.Optional["NetworkPolicySpecIngressFromNamespaceSelector"], result)
@@ -2651,7 +2651,7 @@ class NetworkPolicySpecIngressFrom:
     ) -> typing.Optional["NetworkPolicySpecIngressFromPodSelector"]:
         '''pod_selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#pod_selector NetworkPolicy#pod_selector}
         '''
         result = self._values.get("pod_selector")
         return typing.cast(typing.Optional["NetworkPolicySpecIngressFromPodSelector"], result)
@@ -2681,8 +2681,8 @@ class NetworkPolicySpecIngressFromIpBlock:
         except_: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param cidr: CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#cidr NetworkPolicy#cidr}
-        :param except_: Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#except NetworkPolicy#except}
+        :param cidr: CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#cidr NetworkPolicy#cidr}
+        :param except_: Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#except NetworkPolicy#except}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1a5b01c1aca24cc2d893f8844d21ae7e5ed891dbabb8324efd22e5d6a19906b0)
@@ -2698,7 +2698,7 @@ class NetworkPolicySpecIngressFromIpBlock:
     def cidr(self) -> typing.Optional[builtins.str]:
         '''CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64".
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#cidr NetworkPolicy#cidr}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#cidr NetworkPolicy#cidr}
         '''
         result = self._values.get("cidr")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2707,7 +2707,7 @@ class NetworkPolicySpecIngressFromIpBlock:
     def except_(self) -> typing.Optional[typing.List[builtins.str]]:
         '''Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#except NetworkPolicy#except}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#except NetworkPolicy#except}
         '''
         result = self._values.get("except_")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -2908,8 +2908,8 @@ class NetworkPolicySpecIngressFromNamespaceSelector:
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__84b9ad6cf4a1753572a9d239661b3fb0101c3fede069551b7a081a2182f4325a)
@@ -2927,7 +2927,7 @@ class NetworkPolicySpecIngressFromNamespaceSelector:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecIngressFromNamespaceSelectorMatchExpressions"]]]:
         '''match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
         '''
         result = self._values.get("match_expressions")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecIngressFromNamespaceSelectorMatchExpressions"]]], result)
@@ -2940,7 +2940,7 @@ class NetworkPolicySpecIngressFromNamespaceSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         result = self._values.get("match_labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -2971,9 +2971,9 @@ class NetworkPolicySpecIngressFromNamespaceSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#key NetworkPolicy#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#operator NetworkPolicy#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#values NetworkPolicy#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#key NetworkPolicy#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#operator NetworkPolicy#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#values NetworkPolicy#values}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7ecf25a680423466fabdadfc289633f64dc391ffefd4f2ac473a57ffa86f7040)
@@ -2992,7 +2992,7 @@ class NetworkPolicySpecIngressFromNamespaceSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         '''The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#key NetworkPolicy#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#key NetworkPolicy#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3001,7 +3001,7 @@ class NetworkPolicySpecIngressFromNamespaceSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         '''A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#operator NetworkPolicy#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#operator NetworkPolicy#operator}
         '''
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3012,7 +3012,7 @@ class NetworkPolicySpecIngressFromNamespaceSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#values NetworkPolicy#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#values NetworkPolicy#values}
         '''
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -3355,8 +3355,8 @@ class NetworkPolicySpecIngressFromOutputReference(
         except_: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param cidr: CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#cidr NetworkPolicy#cidr}
-        :param except_: Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#except NetworkPolicy#except}
+        :param cidr: CIDR is a string representing the IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#cidr NetworkPolicy#cidr}
+        :param except_: Except is a slice of CIDRs that should not be included within an IP Block Valid examples are "192.168.1.1/24" or "2001:db9::/64" Except values will be rejected if they are outside the CIDR range. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#except NetworkPolicy#except}
         '''
         value = NetworkPolicySpecIngressFromIpBlock(cidr=cidr, except_=except_)
 
@@ -3370,8 +3370,8 @@ class NetworkPolicySpecIngressFromOutputReference(
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         value = NetworkPolicySpecIngressFromNamespaceSelector(
             match_expressions=match_expressions, match_labels=match_labels
@@ -3387,8 +3387,8 @@ class NetworkPolicySpecIngressFromOutputReference(
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         value = NetworkPolicySpecIngressFromPodSelector(
             match_expressions=match_expressions, match_labels=match_labels
@@ -3478,8 +3478,8 @@ class NetworkPolicySpecIngressFromPodSelector:
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b469114970af7e26a917568bc61441292b1743c160324d8fd83bf3e9c76e3e60)
@@ -3497,7 +3497,7 @@ class NetworkPolicySpecIngressFromPodSelector:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecIngressFromPodSelectorMatchExpressions"]]]:
         '''match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
         '''
         result = self._values.get("match_expressions")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecIngressFromPodSelectorMatchExpressions"]]], result)
@@ -3510,7 +3510,7 @@ class NetworkPolicySpecIngressFromPodSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         result = self._values.get("match_labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -3541,9 +3541,9 @@ class NetworkPolicySpecIngressFromPodSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#key NetworkPolicy#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#operator NetworkPolicy#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#values NetworkPolicy#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#key NetworkPolicy#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#operator NetworkPolicy#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#values NetworkPolicy#values}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3ee6f4a0fb2a337b57fe3399f7448b7aa7c8d72fc4fb84c8061ba61e95408ece)
@@ -3562,7 +3562,7 @@ class NetworkPolicySpecIngressFromPodSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         '''The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#key NetworkPolicy#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#key NetworkPolicy#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3571,7 +3571,7 @@ class NetworkPolicySpecIngressFromPodSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         '''A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#operator NetworkPolicy#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#operator NetworkPolicy#operator}
         '''
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3582,7 +3582,7 @@ class NetworkPolicySpecIngressFromPodSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#values NetworkPolicy#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#values NetworkPolicy#values}
         '''
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -4096,8 +4096,8 @@ class NetworkPolicySpecIngressPorts:
         protocol: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param port: The port on the given protocol. This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers. If present, only traffic on the specified protocol AND port will be matched. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#port NetworkPolicy#port}
-        :param protocol: The protocol (TCP, UDP, or SCTP) which traffic must match. If not specified, this field defaults to TCP. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#protocol NetworkPolicy#protocol}
+        :param port: The port on the given protocol. This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers. If present, only traffic on the specified protocol AND port will be matched. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#port NetworkPolicy#port}
+        :param protocol: The protocol (TCP, UDP, or SCTP) which traffic must match. If not specified, this field defaults to TCP. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#protocol NetworkPolicy#protocol}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1b5d3c987689ca370fcae19b62907c3d9e0344bbc0292d09954a65b3bf2790a3)
@@ -4115,7 +4115,7 @@ class NetworkPolicySpecIngressPorts:
 
         This can either be a numerical or named port on a pod. If this field is not provided, this matches all port names and numbers. If present, only traffic on the specified protocol AND port will be matched.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#port NetworkPolicy#port}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#port NetworkPolicy#port}
         '''
         result = self._values.get("port")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4124,7 +4124,7 @@ class NetworkPolicySpecIngressPorts:
     def protocol(self) -> typing.Optional[builtins.str]:
         '''The protocol (TCP, UDP, or SCTP) which traffic must match. If not specified, this field defaults to TCP.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#protocol NetworkPolicy#protocol}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#protocol NetworkPolicy#protocol}
         '''
         result = self._values.get("protocol")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4371,8 +4371,8 @@ class NetworkPolicySpecOutputReference(
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         value = NetworkPolicySpecPodSelector(
             match_expressions=match_expressions, match_labels=match_labels
@@ -4468,8 +4468,8 @@ class NetworkPolicySpecPodSelector:
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__88a54dba4e6198bc530307eec6123437cb9706d11a93d32d0bbd65a94869ec95)
@@ -4487,7 +4487,7 @@ class NetworkPolicySpecPodSelector:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecPodSelectorMatchExpressions"]]]:
         '''match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_expressions NetworkPolicy#match_expressions}
         '''
         result = self._values.get("match_expressions")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NetworkPolicySpecPodSelectorMatchExpressions"]]], result)
@@ -4500,7 +4500,7 @@ class NetworkPolicySpecPodSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#match_labels NetworkPolicy#match_labels}
         '''
         result = self._values.get("match_labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -4531,9 +4531,9 @@ class NetworkPolicySpecPodSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#key NetworkPolicy#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#operator NetworkPolicy#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#values NetworkPolicy#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#key NetworkPolicy#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#operator NetworkPolicy#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#values NetworkPolicy#values}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__08b3180ff78daf3a2b25e3d21f79766dd037088148362d5f0af5ba403dbc9df3)
@@ -4552,7 +4552,7 @@ class NetworkPolicySpecPodSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         '''The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#key NetworkPolicy#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#key NetworkPolicy#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4561,7 +4561,7 @@ class NetworkPolicySpecPodSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         '''A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#operator NetworkPolicy#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#operator NetworkPolicy#operator}
         '''
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4572,7 +4572,7 @@ class NetworkPolicySpecPodSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/network_policy#values NetworkPolicy#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/network_policy#values NetworkPolicy#values}
         '''
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)

@@ -1,7 +1,7 @@
 '''
 # `data_kubernetes_storage_class_v1`
 
-Refer to the Terraform Registory for docs: [`data_kubernetes_storage_class_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1).
+Refer to the Terraform Registory for docs: [`data_kubernetes_storage_class_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class DataKubernetesStorageClassV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.dataKubernetesStorageClassV1.DataKubernetesStorageClassV1",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1 kubernetes_storage_class_v1}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1 kubernetes_storage_class_v1}.'''
 
     def __init__(
         self,
@@ -49,18 +49,18 @@ class DataKubernetesStorageClassV1(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1 kubernetes_storage_class_v1} Data Source.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1 kubernetes_storage_class_v1} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#metadata DataKubernetesStorageClassV1#metadata}
-        :param allowed_topologies: allowed_topologies block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#allowed_topologies DataKubernetesStorageClassV1#allowed_topologies}
-        :param allow_volume_expansion: Indicates whether the storage class allow volume expand. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#allow_volume_expansion DataKubernetesStorageClassV1#allow_volume_expansion}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#id DataKubernetesStorageClassV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param mount_options: Persistent Volumes that are dynamically created by a storage class will have the mount options specified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#mount_options DataKubernetesStorageClassV1#mount_options}
-        :param parameters: The parameters for the provisioner that should create volumes of this storage class. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#parameters DataKubernetesStorageClassV1#parameters}
-        :param reclaim_policy: Indicates the type of the reclaim policy. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#reclaim_policy DataKubernetesStorageClassV1#reclaim_policy}
-        :param volume_binding_mode: Indicates when volume binding and dynamic provisioning should occur. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#volume_binding_mode DataKubernetesStorageClassV1#volume_binding_mode}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#metadata DataKubernetesStorageClassV1#metadata}
+        :param allowed_topologies: allowed_topologies block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#allowed_topologies DataKubernetesStorageClassV1#allowed_topologies}
+        :param allow_volume_expansion: Indicates whether the storage class allow volume expand. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#allow_volume_expansion DataKubernetesStorageClassV1#allow_volume_expansion}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#id DataKubernetesStorageClassV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param mount_options: Persistent Volumes that are dynamically created by a storage class will have the mount options specified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#mount_options DataKubernetesStorageClassV1#mount_options}
+        :param parameters: The parameters for the provisioner that should create volumes of this storage class. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#parameters DataKubernetesStorageClassV1#parameters}
+        :param reclaim_policy: Indicates the type of the reclaim policy. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#reclaim_policy DataKubernetesStorageClassV1#reclaim_policy}
+        :param volume_binding_mode: Indicates when volume binding and dynamic provisioning should occur. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#volume_binding_mode DataKubernetesStorageClassV1#volume_binding_mode}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -100,7 +100,7 @@ class DataKubernetesStorageClassV1(
         match_label_expressions: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["DataKubernetesStorageClassV1AllowedTopologiesMatchLabelExpressions", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param match_label_expressions: match_label_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#match_label_expressions DataKubernetesStorageClassV1#match_label_expressions}
+        :param match_label_expressions: match_label_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#match_label_expressions DataKubernetesStorageClassV1#match_label_expressions}
         '''
         value = DataKubernetesStorageClassV1AllowedTopologies(
             match_label_expressions=match_label_expressions
@@ -117,9 +117,9 @@ class DataKubernetesStorageClassV1(
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the storage class that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#annotations DataKubernetesStorageClassV1#annotations}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the storage class. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#labels DataKubernetesStorageClassV1#labels}
-        :param name: Name of the storage class, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#name DataKubernetesStorageClassV1#name}
+        :param annotations: An unstructured key value map stored with the storage class that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#annotations DataKubernetesStorageClassV1#annotations}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the storage class. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#labels DataKubernetesStorageClassV1#labels}
+        :param name: Name of the storage class, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#name DataKubernetesStorageClassV1#name}
         '''
         value = DataKubernetesStorageClassV1Metadata(
             annotations=annotations, labels=labels, name=name
@@ -317,7 +317,7 @@ class DataKubernetesStorageClassV1AllowedTopologies:
         match_label_expressions: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["DataKubernetesStorageClassV1AllowedTopologiesMatchLabelExpressions", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param match_label_expressions: match_label_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#match_label_expressions DataKubernetesStorageClassV1#match_label_expressions}
+        :param match_label_expressions: match_label_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#match_label_expressions DataKubernetesStorageClassV1#match_label_expressions}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e2e6bef322aa87e05dfe6654c6b4035ef8ab2a85253b5f97545b980adf19f915)
@@ -332,7 +332,7 @@ class DataKubernetesStorageClassV1AllowedTopologies:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DataKubernetesStorageClassV1AllowedTopologiesMatchLabelExpressions"]]]:
         '''match_label_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#match_label_expressions DataKubernetesStorageClassV1#match_label_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#match_label_expressions DataKubernetesStorageClassV1#match_label_expressions}
         '''
         result = self._values.get("match_label_expressions")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DataKubernetesStorageClassV1AllowedTopologiesMatchLabelExpressions"]]], result)
@@ -362,8 +362,8 @@ class DataKubernetesStorageClassV1AllowedTopologiesMatchLabelExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#key DataKubernetesStorageClassV1#key}
-        :param values: An array of string values. One value must match the label to be selected. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#values DataKubernetesStorageClassV1#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#key DataKubernetesStorageClassV1#key}
+        :param values: An array of string values. One value must match the label to be selected. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#values DataKubernetesStorageClassV1#values}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f0a9050a0545e63847610a12ea91a06835ef7202df92860c9ad925950e7dc9e1)
@@ -379,7 +379,7 @@ class DataKubernetesStorageClassV1AllowedTopologiesMatchLabelExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         '''The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#key DataKubernetesStorageClassV1#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#key DataKubernetesStorageClassV1#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -388,7 +388,7 @@ class DataKubernetesStorageClassV1AllowedTopologiesMatchLabelExpressions:
     def values(self) -> typing.Optional[typing.List[builtins.str]]:
         '''An array of string values. One value must match the label to be selected.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#values DataKubernetesStorageClassV1#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#values DataKubernetesStorageClassV1#values}
         '''
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -702,14 +702,14 @@ class DataKubernetesStorageClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments)
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#metadata DataKubernetesStorageClassV1#metadata}
-        :param allowed_topologies: allowed_topologies block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#allowed_topologies DataKubernetesStorageClassV1#allowed_topologies}
-        :param allow_volume_expansion: Indicates whether the storage class allow volume expand. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#allow_volume_expansion DataKubernetesStorageClassV1#allow_volume_expansion}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#id DataKubernetesStorageClassV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param mount_options: Persistent Volumes that are dynamically created by a storage class will have the mount options specified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#mount_options DataKubernetesStorageClassV1#mount_options}
-        :param parameters: The parameters for the provisioner that should create volumes of this storage class. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#parameters DataKubernetesStorageClassV1#parameters}
-        :param reclaim_policy: Indicates the type of the reclaim policy. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#reclaim_policy DataKubernetesStorageClassV1#reclaim_policy}
-        :param volume_binding_mode: Indicates when volume binding and dynamic provisioning should occur. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#volume_binding_mode DataKubernetesStorageClassV1#volume_binding_mode}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#metadata DataKubernetesStorageClassV1#metadata}
+        :param allowed_topologies: allowed_topologies block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#allowed_topologies DataKubernetesStorageClassV1#allowed_topologies}
+        :param allow_volume_expansion: Indicates whether the storage class allow volume expand. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#allow_volume_expansion DataKubernetesStorageClassV1#allow_volume_expansion}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#id DataKubernetesStorageClassV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param mount_options: Persistent Volumes that are dynamically created by a storage class will have the mount options specified. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#mount_options DataKubernetesStorageClassV1#mount_options}
+        :param parameters: The parameters for the provisioner that should create volumes of this storage class. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#parameters DataKubernetesStorageClassV1#parameters}
+        :param reclaim_policy: Indicates the type of the reclaim policy. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#reclaim_policy DataKubernetesStorageClassV1#reclaim_policy}
+        :param volume_binding_mode: Indicates when volume binding and dynamic provisioning should occur. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#volume_binding_mode DataKubernetesStorageClassV1#volume_binding_mode}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -834,7 +834,7 @@ class DataKubernetesStorageClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments)
     def metadata(self) -> "DataKubernetesStorageClassV1Metadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#metadata DataKubernetesStorageClassV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#metadata DataKubernetesStorageClassV1#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -846,7 +846,7 @@ class DataKubernetesStorageClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments)
     ) -> typing.Optional[DataKubernetesStorageClassV1AllowedTopologies]:
         '''allowed_topologies block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#allowed_topologies DataKubernetesStorageClassV1#allowed_topologies}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#allowed_topologies DataKubernetesStorageClassV1#allowed_topologies}
         '''
         result = self._values.get("allowed_topologies")
         return typing.cast(typing.Optional[DataKubernetesStorageClassV1AllowedTopologies], result)
@@ -857,14 +857,14 @@ class DataKubernetesStorageClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments)
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Indicates whether the storage class allow volume expand.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#allow_volume_expansion DataKubernetesStorageClassV1#allow_volume_expansion}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#allow_volume_expansion DataKubernetesStorageClassV1#allow_volume_expansion}
         '''
         result = self._values.get("allow_volume_expansion")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#id DataKubernetesStorageClassV1#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#id DataKubernetesStorageClassV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -876,7 +876,7 @@ class DataKubernetesStorageClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments)
     def mount_options(self) -> typing.Optional[typing.List[builtins.str]]:
         '''Persistent Volumes that are dynamically created by a storage class will have the mount options specified.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#mount_options DataKubernetesStorageClassV1#mount_options}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#mount_options DataKubernetesStorageClassV1#mount_options}
         '''
         result = self._values.get("mount_options")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -885,7 +885,7 @@ class DataKubernetesStorageClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments)
     def parameters(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         '''The parameters for the provisioner that should create volumes of this storage class.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#parameters DataKubernetesStorageClassV1#parameters}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#parameters DataKubernetesStorageClassV1#parameters}
         '''
         result = self._values.get("parameters")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -894,7 +894,7 @@ class DataKubernetesStorageClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments)
     def reclaim_policy(self) -> typing.Optional[builtins.str]:
         '''Indicates the type of the reclaim policy.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#reclaim_policy DataKubernetesStorageClassV1#reclaim_policy}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#reclaim_policy DataKubernetesStorageClassV1#reclaim_policy}
         '''
         result = self._values.get("reclaim_policy")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -903,7 +903,7 @@ class DataKubernetesStorageClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments)
     def volume_binding_mode(self) -> typing.Optional[builtins.str]:
         '''Indicates when volume binding and dynamic provisioning should occur.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#volume_binding_mode DataKubernetesStorageClassV1#volume_binding_mode}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#volume_binding_mode DataKubernetesStorageClassV1#volume_binding_mode}
         '''
         result = self._values.get("volume_binding_mode")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -934,9 +934,9 @@ class DataKubernetesStorageClassV1Metadata:
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the storage class that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#annotations DataKubernetesStorageClassV1#annotations}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the storage class. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#labels DataKubernetesStorageClassV1#labels}
-        :param name: Name of the storage class, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#name DataKubernetesStorageClassV1#name}
+        :param annotations: An unstructured key value map stored with the storage class that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#annotations DataKubernetesStorageClassV1#annotations}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the storage class. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#labels DataKubernetesStorageClassV1#labels}
+        :param name: Name of the storage class, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#name DataKubernetesStorageClassV1#name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__84604e53b327fc1f82e92acd6212ff4811d782c6cbf4b8348d57f97f2c3c90d6)
@@ -959,7 +959,7 @@ class DataKubernetesStorageClassV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#annotations DataKubernetesStorageClassV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#annotations DataKubernetesStorageClassV1#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -970,7 +970,7 @@ class DataKubernetesStorageClassV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#labels DataKubernetesStorageClassV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#labels DataKubernetesStorageClassV1#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -979,7 +979,7 @@ class DataKubernetesStorageClassV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the storage class, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/storage_class_v1#name DataKubernetesStorageClassV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/storage_class_v1#name DataKubernetesStorageClassV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)

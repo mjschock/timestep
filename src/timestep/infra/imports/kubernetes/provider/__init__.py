@@ -1,7 +1,7 @@
 '''
 # `provider`
 
-Refer to the Terraform Registory for docs: [`kubernetes`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs).
+Refer to the Terraform Registory for docs: [`kubernetes`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class KubernetesProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.provider.KubernetesProvider",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs kubernetes}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs kubernetes}.'''
 
     def __init__(
         self,
@@ -50,32 +50,34 @@ class KubernetesProvider(
         insecure: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
         password: typing.Optional[builtins.str] = None,
         proxy_url: typing.Optional[builtins.str] = None,
+        tls_server_name: typing.Optional[builtins.str] = None,
         token: typing.Optional[builtins.str] = None,
         username: typing.Optional[builtins.str] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs kubernetes} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs kubernetes} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#alias KubernetesProvider#alias}
-        :param client_certificate: PEM-encoded client certificate for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#client_certificate KubernetesProvider#client_certificate}
-        :param client_key: PEM-encoded client certificate key for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#client_key KubernetesProvider#client_key}
-        :param cluster_ca_certificate: PEM-encoded root certificates bundle for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#cluster_ca_certificate KubernetesProvider#cluster_ca_certificate}
-        :param config_context: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_context KubernetesProvider#config_context}.
-        :param config_context_auth_info: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_context_auth_info KubernetesProvider#config_context_auth_info}.
-        :param config_context_cluster: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_context_cluster KubernetesProvider#config_context_cluster}.
-        :param config_path: Path to the kube config file. Can be set with KUBE_CONFIG_PATH. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_path KubernetesProvider#config_path}
-        :param config_paths: A list of paths to kube config files. Can be set with KUBE_CONFIG_PATHS environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_paths KubernetesProvider#config_paths}
-        :param exec: exec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#exec KubernetesProvider#exec}
-        :param experiments: experiments block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#experiments KubernetesProvider#experiments}
-        :param host: The hostname (in form of URI) of Kubernetes master. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#host KubernetesProvider#host}
-        :param ignore_annotations: List of Kubernetes metadata annotations to ignore across all resources handled by this provider for situations where external systems are managing certain resource annotations. Each item is a regular expression. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#ignore_annotations KubernetesProvider#ignore_annotations}
-        :param ignore_labels: List of Kubernetes metadata labels to ignore across all resources handled by this provider for situations where external systems are managing certain resource labels. Each item is a regular expression. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#ignore_labels KubernetesProvider#ignore_labels}
-        :param insecure: Whether server should be accessed without verifying the TLS certificate. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#insecure KubernetesProvider#insecure}
-        :param password: The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#password KubernetesProvider#password}
-        :param proxy_url: URL to the proxy to be used for all API requests. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#proxy_url KubernetesProvider#proxy_url}
-        :param token: Token to authenticate an service account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#token KubernetesProvider#token}
-        :param username: The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#username KubernetesProvider#username}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#alias KubernetesProvider#alias}
+        :param client_certificate: PEM-encoded client certificate for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#client_certificate KubernetesProvider#client_certificate}
+        :param client_key: PEM-encoded client certificate key for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#client_key KubernetesProvider#client_key}
+        :param cluster_ca_certificate: PEM-encoded root certificates bundle for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#cluster_ca_certificate KubernetesProvider#cluster_ca_certificate}
+        :param config_context: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_context KubernetesProvider#config_context}.
+        :param config_context_auth_info: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_context_auth_info KubernetesProvider#config_context_auth_info}.
+        :param config_context_cluster: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_context_cluster KubernetesProvider#config_context_cluster}.
+        :param config_path: Path to the kube config file. Can be set with KUBE_CONFIG_PATH. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_path KubernetesProvider#config_path}
+        :param config_paths: A list of paths to kube config files. Can be set with KUBE_CONFIG_PATHS environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_paths KubernetesProvider#config_paths}
+        :param exec: exec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#exec KubernetesProvider#exec}
+        :param experiments: experiments block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#experiments KubernetesProvider#experiments}
+        :param host: The hostname (in form of URI) of Kubernetes master. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#host KubernetesProvider#host}
+        :param ignore_annotations: List of Kubernetes metadata annotations to ignore across all resources handled by this provider for situations where external systems are managing certain resource annotations. Each item is a regular expression. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#ignore_annotations KubernetesProvider#ignore_annotations}
+        :param ignore_labels: List of Kubernetes metadata labels to ignore across all resources handled by this provider for situations where external systems are managing certain resource labels. Each item is a regular expression. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#ignore_labels KubernetesProvider#ignore_labels}
+        :param insecure: Whether server should be accessed without verifying the TLS certificate. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#insecure KubernetesProvider#insecure}
+        :param password: The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#password KubernetesProvider#password}
+        :param proxy_url: URL to the proxy to be used for all API requests. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#proxy_url KubernetesProvider#proxy_url}
+        :param tls_server_name: Server name passed to the server for SNI and is used in the client to check server certificates against. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#tls_server_name KubernetesProvider#tls_server_name}
+        :param token: Token to authenticate an service account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#token KubernetesProvider#token}
+        :param username: The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#username KubernetesProvider#username}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4295596c0ba0e9def41a82553dd7d1904ba7303f56d65faa88effdb142bcabb4)
@@ -99,6 +101,7 @@ class KubernetesProvider(
             insecure=insecure,
             password=password,
             proxy_url=proxy_url,
+            tls_server_name=tls_server_name,
             token=token,
             username=username,
         )
@@ -172,6 +175,10 @@ class KubernetesProvider(
     @jsii.member(jsii_name="resetProxyUrl")
     def reset_proxy_url(self) -> None:
         return typing.cast(None, jsii.invoke(self, "resetProxyUrl", []))
+
+    @jsii.member(jsii_name="resetTlsServerName")
+    def reset_tls_server_name(self) -> None:
+        return typing.cast(None, jsii.invoke(self, "resetTlsServerName", []))
 
     @jsii.member(jsii_name="resetToken")
     def reset_token(self) -> None:
@@ -276,6 +283,11 @@ class KubernetesProvider(
     @jsii.member(jsii_name="proxyUrlInput")
     def proxy_url_input(self) -> typing.Optional[builtins.str]:
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "proxyUrlInput"))
+
+    @builtins.property
+    @jsii.member(jsii_name="tlsServerNameInput")
+    def tls_server_name_input(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "tlsServerNameInput"))
 
     @builtins.property
     @jsii.member(jsii_name="tokenInput")
@@ -503,6 +515,18 @@ class KubernetesProvider(
         jsii.set(self, "proxyUrl", value)
 
     @builtins.property
+    @jsii.member(jsii_name="tlsServerName")
+    def tls_server_name(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "tlsServerName"))
+
+    @tls_server_name.setter
+    def tls_server_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__247818868453d6b3c93004faf48c133627e7d0c26f4fcc8ab81dcd5ac7bd23cc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tlsServerName", value)
+
+    @builtins.property
     @jsii.member(jsii_name="token")
     def token(self) -> typing.Optional[builtins.str]:
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "token"))
@@ -548,6 +572,7 @@ class KubernetesProvider(
         "insecure": "insecure",
         "password": "password",
         "proxy_url": "proxyUrl",
+        "tls_server_name": "tlsServerName",
         "token": "token",
         "username": "username",
     },
@@ -573,29 +598,31 @@ class KubernetesProviderConfig:
         insecure: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
         password: typing.Optional[builtins.str] = None,
         proxy_url: typing.Optional[builtins.str] = None,
+        tls_server_name: typing.Optional[builtins.str] = None,
         token: typing.Optional[builtins.str] = None,
         username: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#alias KubernetesProvider#alias}
-        :param client_certificate: PEM-encoded client certificate for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#client_certificate KubernetesProvider#client_certificate}
-        :param client_key: PEM-encoded client certificate key for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#client_key KubernetesProvider#client_key}
-        :param cluster_ca_certificate: PEM-encoded root certificates bundle for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#cluster_ca_certificate KubernetesProvider#cluster_ca_certificate}
-        :param config_context: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_context KubernetesProvider#config_context}.
-        :param config_context_auth_info: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_context_auth_info KubernetesProvider#config_context_auth_info}.
-        :param config_context_cluster: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_context_cluster KubernetesProvider#config_context_cluster}.
-        :param config_path: Path to the kube config file. Can be set with KUBE_CONFIG_PATH. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_path KubernetesProvider#config_path}
-        :param config_paths: A list of paths to kube config files. Can be set with KUBE_CONFIG_PATHS environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_paths KubernetesProvider#config_paths}
-        :param exec: exec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#exec KubernetesProvider#exec}
-        :param experiments: experiments block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#experiments KubernetesProvider#experiments}
-        :param host: The hostname (in form of URI) of Kubernetes master. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#host KubernetesProvider#host}
-        :param ignore_annotations: List of Kubernetes metadata annotations to ignore across all resources handled by this provider for situations where external systems are managing certain resource annotations. Each item is a regular expression. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#ignore_annotations KubernetesProvider#ignore_annotations}
-        :param ignore_labels: List of Kubernetes metadata labels to ignore across all resources handled by this provider for situations where external systems are managing certain resource labels. Each item is a regular expression. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#ignore_labels KubernetesProvider#ignore_labels}
-        :param insecure: Whether server should be accessed without verifying the TLS certificate. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#insecure KubernetesProvider#insecure}
-        :param password: The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#password KubernetesProvider#password}
-        :param proxy_url: URL to the proxy to be used for all API requests. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#proxy_url KubernetesProvider#proxy_url}
-        :param token: Token to authenticate an service account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#token KubernetesProvider#token}
-        :param username: The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#username KubernetesProvider#username}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#alias KubernetesProvider#alias}
+        :param client_certificate: PEM-encoded client certificate for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#client_certificate KubernetesProvider#client_certificate}
+        :param client_key: PEM-encoded client certificate key for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#client_key KubernetesProvider#client_key}
+        :param cluster_ca_certificate: PEM-encoded root certificates bundle for TLS authentication. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#cluster_ca_certificate KubernetesProvider#cluster_ca_certificate}
+        :param config_context: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_context KubernetesProvider#config_context}.
+        :param config_context_auth_info: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_context_auth_info KubernetesProvider#config_context_auth_info}.
+        :param config_context_cluster: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_context_cluster KubernetesProvider#config_context_cluster}.
+        :param config_path: Path to the kube config file. Can be set with KUBE_CONFIG_PATH. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_path KubernetesProvider#config_path}
+        :param config_paths: A list of paths to kube config files. Can be set with KUBE_CONFIG_PATHS environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_paths KubernetesProvider#config_paths}
+        :param exec: exec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#exec KubernetesProvider#exec}
+        :param experiments: experiments block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#experiments KubernetesProvider#experiments}
+        :param host: The hostname (in form of URI) of Kubernetes master. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#host KubernetesProvider#host}
+        :param ignore_annotations: List of Kubernetes metadata annotations to ignore across all resources handled by this provider for situations where external systems are managing certain resource annotations. Each item is a regular expression. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#ignore_annotations KubernetesProvider#ignore_annotations}
+        :param ignore_labels: List of Kubernetes metadata labels to ignore across all resources handled by this provider for situations where external systems are managing certain resource labels. Each item is a regular expression. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#ignore_labels KubernetesProvider#ignore_labels}
+        :param insecure: Whether server should be accessed without verifying the TLS certificate. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#insecure KubernetesProvider#insecure}
+        :param password: The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#password KubernetesProvider#password}
+        :param proxy_url: URL to the proxy to be used for all API requests. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#proxy_url KubernetesProvider#proxy_url}
+        :param tls_server_name: Server name passed to the server for SNI and is used in the client to check server certificates against. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#tls_server_name KubernetesProvider#tls_server_name}
+        :param token: Token to authenticate an service account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#token KubernetesProvider#token}
+        :param username: The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#username KubernetesProvider#username}
         '''
         if isinstance(exec, dict):
             exec = KubernetesProviderExec(**exec)
@@ -620,6 +647,7 @@ class KubernetesProviderConfig:
             check_type(argname="argument insecure", value=insecure, expected_type=type_hints["insecure"])
             check_type(argname="argument password", value=password, expected_type=type_hints["password"])
             check_type(argname="argument proxy_url", value=proxy_url, expected_type=type_hints["proxy_url"])
+            check_type(argname="argument tls_server_name", value=tls_server_name, expected_type=type_hints["tls_server_name"])
             check_type(argname="argument token", value=token, expected_type=type_hints["token"])
             check_type(argname="argument username", value=username, expected_type=type_hints["username"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -657,6 +685,8 @@ class KubernetesProviderConfig:
             self._values["password"] = password
         if proxy_url is not None:
             self._values["proxy_url"] = proxy_url
+        if tls_server_name is not None:
+            self._values["tls_server_name"] = tls_server_name
         if token is not None:
             self._values["token"] = token
         if username is not None:
@@ -666,7 +696,7 @@ class KubernetesProviderConfig:
     def alias(self) -> typing.Optional[builtins.str]:
         '''Alias name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#alias KubernetesProvider#alias}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#alias KubernetesProvider#alias}
         '''
         result = self._values.get("alias")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -675,7 +705,7 @@ class KubernetesProviderConfig:
     def client_certificate(self) -> typing.Optional[builtins.str]:
         '''PEM-encoded client certificate for TLS authentication.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#client_certificate KubernetesProvider#client_certificate}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#client_certificate KubernetesProvider#client_certificate}
         '''
         result = self._values.get("client_certificate")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -684,7 +714,7 @@ class KubernetesProviderConfig:
     def client_key(self) -> typing.Optional[builtins.str]:
         '''PEM-encoded client certificate key for TLS authentication.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#client_key KubernetesProvider#client_key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#client_key KubernetesProvider#client_key}
         '''
         result = self._values.get("client_key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -693,26 +723,26 @@ class KubernetesProviderConfig:
     def cluster_ca_certificate(self) -> typing.Optional[builtins.str]:
         '''PEM-encoded root certificates bundle for TLS authentication.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#cluster_ca_certificate KubernetesProvider#cluster_ca_certificate}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#cluster_ca_certificate KubernetesProvider#cluster_ca_certificate}
         '''
         result = self._values.get("cluster_ca_certificate")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def config_context(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_context KubernetesProvider#config_context}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_context KubernetesProvider#config_context}.'''
         result = self._values.get("config_context")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def config_context_auth_info(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_context_auth_info KubernetesProvider#config_context_auth_info}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_context_auth_info KubernetesProvider#config_context_auth_info}.'''
         result = self._values.get("config_context_auth_info")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def config_context_cluster(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_context_cluster KubernetesProvider#config_context_cluster}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_context_cluster KubernetesProvider#config_context_cluster}.'''
         result = self._values.get("config_context_cluster")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -720,7 +750,7 @@ class KubernetesProviderConfig:
     def config_path(self) -> typing.Optional[builtins.str]:
         '''Path to the kube config file. Can be set with KUBE_CONFIG_PATH.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_path KubernetesProvider#config_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_path KubernetesProvider#config_path}
         '''
         result = self._values.get("config_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -729,7 +759,7 @@ class KubernetesProviderConfig:
     def config_paths(self) -> typing.Optional[typing.List[builtins.str]]:
         '''A list of paths to kube config files. Can be set with KUBE_CONFIG_PATHS environment variable.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#config_paths KubernetesProvider#config_paths}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#config_paths KubernetesProvider#config_paths}
         '''
         result = self._values.get("config_paths")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -738,7 +768,7 @@ class KubernetesProviderConfig:
     def exec(self) -> typing.Optional["KubernetesProviderExec"]:
         '''exec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#exec KubernetesProvider#exec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#exec KubernetesProvider#exec}
         '''
         result = self._values.get("exec")
         return typing.cast(typing.Optional["KubernetesProviderExec"], result)
@@ -747,7 +777,7 @@ class KubernetesProviderConfig:
     def experiments(self) -> typing.Optional["KubernetesProviderExperiments"]:
         '''experiments block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#experiments KubernetesProvider#experiments}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#experiments KubernetesProvider#experiments}
         '''
         result = self._values.get("experiments")
         return typing.cast(typing.Optional["KubernetesProviderExperiments"], result)
@@ -756,7 +786,7 @@ class KubernetesProviderConfig:
     def host(self) -> typing.Optional[builtins.str]:
         '''The hostname (in form of URI) of Kubernetes master.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#host KubernetesProvider#host}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#host KubernetesProvider#host}
         '''
         result = self._values.get("host")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -767,7 +797,7 @@ class KubernetesProviderConfig:
 
         Each item is a regular expression.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#ignore_annotations KubernetesProvider#ignore_annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#ignore_annotations KubernetesProvider#ignore_annotations}
         '''
         result = self._values.get("ignore_annotations")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -778,7 +808,7 @@ class KubernetesProviderConfig:
 
         Each item is a regular expression.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#ignore_labels KubernetesProvider#ignore_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#ignore_labels KubernetesProvider#ignore_labels}
         '''
         result = self._values.get("ignore_labels")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -789,7 +819,7 @@ class KubernetesProviderConfig:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Whether server should be accessed without verifying the TLS certificate.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#insecure KubernetesProvider#insecure}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#insecure KubernetesProvider#insecure}
         '''
         result = self._values.get("insecure")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -798,7 +828,7 @@ class KubernetesProviderConfig:
     def password(self) -> typing.Optional[builtins.str]:
         '''The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#password KubernetesProvider#password}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#password KubernetesProvider#password}
         '''
         result = self._values.get("password")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -807,16 +837,25 @@ class KubernetesProviderConfig:
     def proxy_url(self) -> typing.Optional[builtins.str]:
         '''URL to the proxy to be used for all API requests.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#proxy_url KubernetesProvider#proxy_url}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#proxy_url KubernetesProvider#proxy_url}
         '''
         result = self._values.get("proxy_url")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tls_server_name(self) -> typing.Optional[builtins.str]:
+        '''Server name passed to the server for SNI and is used in the client to check server certificates against.
+
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#tls_server_name KubernetesProvider#tls_server_name}
+        '''
+        result = self._values.get("tls_server_name")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def token(self) -> typing.Optional[builtins.str]:
         '''Token to authenticate an service account.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#token KubernetesProvider#token}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#token KubernetesProvider#token}
         '''
         result = self._values.get("token")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -825,7 +864,7 @@ class KubernetesProviderConfig:
     def username(self) -> typing.Optional[builtins.str]:
         '''The username to use for HTTP basic authentication when accessing the Kubernetes master endpoint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#username KubernetesProvider#username}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#username KubernetesProvider#username}
         '''
         result = self._values.get("username")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -862,10 +901,10 @@ class KubernetesProviderExec:
         env: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param api_version: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#api_version KubernetesProvider#api_version}.
-        :param command: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#command KubernetesProvider#command}.
-        :param args: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#args KubernetesProvider#args}.
-        :param env: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#env KubernetesProvider#env}.
+        :param api_version: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#api_version KubernetesProvider#api_version}.
+        :param command: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#command KubernetesProvider#command}.
+        :param args: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#args KubernetesProvider#args}.
+        :param env: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#env KubernetesProvider#env}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f996b06f16db06fa73c395cf8387f02102133787799238c438379388d3b58e61)
@@ -884,27 +923,27 @@ class KubernetesProviderExec:
 
     @builtins.property
     def api_version(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#api_version KubernetesProvider#api_version}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#api_version KubernetesProvider#api_version}.'''
         result = self._values.get("api_version")
         assert result is not None, "Required property 'api_version' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def command(self) -> builtins.str:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#command KubernetesProvider#command}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#command KubernetesProvider#command}.'''
         result = self._values.get("command")
         assert result is not None, "Required property 'command' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
     def args(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#args KubernetesProvider#args}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#args KubernetesProvider#args}.'''
         result = self._values.get("args")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def env(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#env KubernetesProvider#env}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#env KubernetesProvider#env}.'''
         result = self._values.get("env")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
@@ -932,7 +971,7 @@ class KubernetesProviderExperiments:
         manifest_resource: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param manifest_resource: Enable the ``kubernetes_manifest`` resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#manifest_resource KubernetesProvider#manifest_resource}
+        :param manifest_resource: Enable the ``kubernetes_manifest`` resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#manifest_resource KubernetesProvider#manifest_resource}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__71b0d5062b581fafd9bbe1d2f2ec55fdde646d35bdb13af6640869bf0508d756)
@@ -947,7 +986,7 @@ class KubernetesProviderExperiments:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Enable the ``kubernetes_manifest`` resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs#manifest_resource KubernetesProvider#manifest_resource}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs#manifest_resource KubernetesProvider#manifest_resource}
         '''
         result = self._values.get("manifest_resource")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -994,6 +1033,7 @@ def _typecheckingstub__4295596c0ba0e9def41a82553dd7d1904ba7303f56d65faa88effdb14
     insecure: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     password: typing.Optional[builtins.str] = None,
     proxy_url: typing.Optional[builtins.str] = None,
+    tls_server_name: typing.Optional[builtins.str] = None,
     token: typing.Optional[builtins.str] = None,
     username: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -1102,6 +1142,12 @@ def _typecheckingstub__390026d5f05624451ab72a3b4026db587ca44ef5e01d54ea197a20b30
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__247818868453d6b3c93004faf48c133627e7d0c26f4fcc8ab81dcd5ac7bd23cc(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6d09e014f06c6110a609bb067fcf75e2de7e1de371bb2c8a9b93bad30b45276d(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -1133,6 +1179,7 @@ def _typecheckingstub__dafa5f247742dbe21f39f8fc1d0973df6b7d5bb3ec7723cb5fb32787f
     insecure: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     password: typing.Optional[builtins.str] = None,
     proxy_url: typing.Optional[builtins.str] = None,
+    tls_server_name: typing.Optional[builtins.str] = None,
     token: typing.Optional[builtins.str] = None,
     username: typing.Optional[builtins.str] = None,
 ) -> None:

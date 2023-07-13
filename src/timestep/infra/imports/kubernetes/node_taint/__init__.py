@@ -1,7 +1,7 @@
 '''
 # `kubernetes_node_taint`
 
-Refer to the Terraform Registory for docs: [`kubernetes_node_taint`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint).
+Refer to the Terraform Registory for docs: [`kubernetes_node_taint`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class NodeTaint(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.nodeTaint.NodeTaint",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint kubernetes_node_taint}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint kubernetes_node_taint}.'''
 
     def __init__(
         self,
@@ -46,15 +46,15 @@ class NodeTaint(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint kubernetes_node_taint} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint kubernetes_node_taint} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#metadata NodeTaint#metadata}
-        :param taint: taint block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#taint NodeTaint#taint}
-        :param field_manager: Set the name of the field manager for the node taint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#field_manager NodeTaint#field_manager}
-        :param force: Force overwriting annotations that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#force NodeTaint#force}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#id NodeTaint#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#metadata NodeTaint#metadata}
+        :param taint: taint block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#taint NodeTaint#taint}
+        :param field_manager: Set the name of the field manager for the node taint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#field_manager NodeTaint#field_manager}
+        :param force: Force overwriting annotations that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#force NodeTaint#force}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#id NodeTaint#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -87,7 +87,7 @@ class NodeTaint(
     @jsii.member(jsii_name="putMetadata")
     def put_metadata(self, *, name: builtins.str) -> None:
         '''
-        :param name: The name of the node. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#name NodeTaint#name}
+        :param name: The name of the node. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#name NodeTaint#name}
         '''
         value = NodeTaintMetadata(name=name)
 
@@ -249,11 +249,11 @@ class NodeTaintConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#metadata NodeTaint#metadata}
-        :param taint: taint block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#taint NodeTaint#taint}
-        :param field_manager: Set the name of the field manager for the node taint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#field_manager NodeTaint#field_manager}
-        :param force: Force overwriting annotations that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#force NodeTaint#force}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#id NodeTaint#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#metadata NodeTaint#metadata}
+        :param taint: taint block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#taint NodeTaint#taint}
+        :param field_manager: Set the name of the field manager for the node taint. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#field_manager NodeTaint#field_manager}
+        :param force: Force overwriting annotations that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#force NodeTaint#force}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#id NodeTaint#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -366,7 +366,7 @@ class NodeTaintConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "NodeTaintMetadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#metadata NodeTaint#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#metadata NodeTaint#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -378,7 +378,7 @@ class NodeTaintConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["NodeTaintTaint"]]:
         '''taint block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#taint NodeTaint#taint}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#taint NodeTaint#taint}
         '''
         result = self._values.get("taint")
         assert result is not None, "Required property 'taint' is missing"
@@ -388,7 +388,7 @@ class NodeTaintConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def field_manager(self) -> typing.Optional[builtins.str]:
         '''Set the name of the field manager for the node taint.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#field_manager NodeTaint#field_manager}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#field_manager NodeTaint#field_manager}
         '''
         result = self._values.get("field_manager")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -399,14 +399,14 @@ class NodeTaintConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Force overwriting annotations that were created or edited outside of Terraform.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#force NodeTaint#force}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#force NodeTaint#force}
         '''
         result = self._values.get("force")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#id NodeTaint#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#id NodeTaint#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -434,7 +434,7 @@ class NodeTaintConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 class NodeTaintMetadata:
     def __init__(self, *, name: builtins.str) -> None:
         '''
-        :param name: The name of the node. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#name NodeTaint#name}
+        :param name: The name of the node. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#name NodeTaint#name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7e5140b616db2be054a60506189e7ff09d1610e4b7ec09d5e6559f95eb840278)
@@ -447,7 +447,7 @@ class NodeTaintMetadata:
     def name(self) -> builtins.str:
         '''The name of the node.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#name NodeTaint#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#name NodeTaint#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -529,9 +529,9 @@ class NodeTaintTaint:
         value: builtins.str,
     ) -> None:
         '''
-        :param effect: The taint effect. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#effect NodeTaint#effect}
-        :param key: The taint key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#key NodeTaint#key}
-        :param value: The taint value. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#value NodeTaint#value}
+        :param effect: The taint effect. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#effect NodeTaint#effect}
+        :param key: The taint key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#key NodeTaint#key}
+        :param value: The taint value. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#value NodeTaint#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9e5b3ecc41440562a0f56b80ba17a8963dfd40ec6afe2af76b30d6fb07c783c5)
@@ -548,7 +548,7 @@ class NodeTaintTaint:
     def effect(self) -> builtins.str:
         '''The taint effect.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#effect NodeTaint#effect}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#effect NodeTaint#effect}
         '''
         result = self._values.get("effect")
         assert result is not None, "Required property 'effect' is missing"
@@ -558,7 +558,7 @@ class NodeTaintTaint:
     def key(self) -> builtins.str:
         '''The taint key.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#key NodeTaint#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#key NodeTaint#key}
         '''
         result = self._values.get("key")
         assert result is not None, "Required property 'key' is missing"
@@ -568,7 +568,7 @@ class NodeTaintTaint:
     def value(self) -> builtins.str:
         '''The taint value.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/node_taint#value NodeTaint#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/node_taint#value NodeTaint#value}
         '''
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"

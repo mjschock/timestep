@@ -1,7 +1,7 @@
 '''
 # `kubernetes_cluster_role`
 
-Refer to the Terraform Registory for docs: [`kubernetes_cluster_role`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role).
+Refer to the Terraform Registory for docs: [`kubernetes_cluster_role`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class ClusterRole(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.clusterRole.ClusterRole",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role kubernetes_cluster_role}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role kubernetes_cluster_role}.'''
 
     def __init__(
         self,
@@ -45,14 +45,14 @@ class ClusterRole(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role kubernetes_cluster_role} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role kubernetes_cluster_role} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#metadata ClusterRole#metadata}
-        :param aggregation_rule: aggregation_rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#aggregation_rule ClusterRole#aggregation_rule}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#id ClusterRole#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#rule ClusterRole#rule}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#metadata ClusterRole#metadata}
+        :param aggregation_rule: aggregation_rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#aggregation_rule ClusterRole#aggregation_rule}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#id ClusterRole#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#rule ClusterRole#rule}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -88,7 +88,7 @@ class ClusterRole(
         cluster_role_selectors: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["ClusterRoleAggregationRuleClusterRoleSelectors", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param cluster_role_selectors: cluster_role_selectors block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#cluster_role_selectors ClusterRole#cluster_role_selectors}
+        :param cluster_role_selectors: cluster_role_selectors block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#cluster_role_selectors ClusterRole#cluster_role_selectors}
         '''
         value = ClusterRoleAggregationRule(
             cluster_role_selectors=cluster_role_selectors
@@ -106,10 +106,10 @@ class ClusterRole(
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the clusterRole that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#annotations ClusterRole#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#generate_name ClusterRole#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the clusterRole. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#labels ClusterRole#labels}
-        :param name: Name of the clusterRole, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#name ClusterRole#name}
+        :param annotations: An unstructured key value map stored with the clusterRole that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#annotations ClusterRole#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#generate_name ClusterRole#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the clusterRole. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#labels ClusterRole#labels}
+        :param name: Name of the clusterRole, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#name ClusterRole#name}
         '''
         value = ClusterRoleMetadata(
             annotations=annotations,
@@ -216,7 +216,7 @@ class ClusterRoleAggregationRule:
         cluster_role_selectors: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["ClusterRoleAggregationRuleClusterRoleSelectors", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param cluster_role_selectors: cluster_role_selectors block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#cluster_role_selectors ClusterRole#cluster_role_selectors}
+        :param cluster_role_selectors: cluster_role_selectors block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#cluster_role_selectors ClusterRole#cluster_role_selectors}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e8b1871a0dc25b5862a98cade4d3bc68c7155e77175fe48f7edfa15982bca2fc)
@@ -231,7 +231,7 @@ class ClusterRoleAggregationRule:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["ClusterRoleAggregationRuleClusterRoleSelectors"]]]:
         '''cluster_role_selectors block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#cluster_role_selectors ClusterRole#cluster_role_selectors}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#cluster_role_selectors ClusterRole#cluster_role_selectors}
         '''
         result = self._values.get("cluster_role_selectors")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["ClusterRoleAggregationRuleClusterRoleSelectors"]]], result)
@@ -264,8 +264,8 @@ class ClusterRoleAggregationRuleClusterRoleSelectors:
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#match_expressions ClusterRole#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#match_labels ClusterRole#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#match_expressions ClusterRole#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#match_labels ClusterRole#match_labels}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4ec728a0f2ec896f34c48ab4309a6c0f182a6d89092742ce52247114293ac93e)
@@ -283,7 +283,7 @@ class ClusterRoleAggregationRuleClusterRoleSelectors:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["ClusterRoleAggregationRuleClusterRoleSelectorsMatchExpressions"]]]:
         '''match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#match_expressions ClusterRole#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#match_expressions ClusterRole#match_expressions}
         '''
         result = self._values.get("match_expressions")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["ClusterRoleAggregationRuleClusterRoleSelectorsMatchExpressions"]]], result)
@@ -296,7 +296,7 @@ class ClusterRoleAggregationRuleClusterRoleSelectors:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#match_labels ClusterRole#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#match_labels ClusterRole#match_labels}
         '''
         result = self._values.get("match_labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -420,9 +420,9 @@ class ClusterRoleAggregationRuleClusterRoleSelectorsMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#key ClusterRole#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#operator ClusterRole#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#values ClusterRole#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#key ClusterRole#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#operator ClusterRole#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#values ClusterRole#values}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__015e41a7fc6828f029a2546b028fceaede35cceaa45b7739cd73cac36c6fbd4b)
@@ -441,7 +441,7 @@ class ClusterRoleAggregationRuleClusterRoleSelectorsMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         '''The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#key ClusterRole#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#key ClusterRole#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -450,7 +450,7 @@ class ClusterRoleAggregationRuleClusterRoleSelectorsMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         '''A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#operator ClusterRole#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#operator ClusterRole#operator}
         '''
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -461,7 +461,7 @@ class ClusterRoleAggregationRuleClusterRoleSelectorsMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#values ClusterRole#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#values ClusterRole#values}
         '''
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -884,10 +884,10 @@ class ClusterRoleConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#metadata ClusterRole#metadata}
-        :param aggregation_rule: aggregation_rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#aggregation_rule ClusterRole#aggregation_rule}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#id ClusterRole#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#rule ClusterRole#rule}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#metadata ClusterRole#metadata}
+        :param aggregation_rule: aggregation_rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#aggregation_rule ClusterRole#aggregation_rule}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#id ClusterRole#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param rule: rule block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#rule ClusterRole#rule}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -1000,7 +1000,7 @@ class ClusterRoleConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "ClusterRoleMetadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#metadata ClusterRole#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#metadata ClusterRole#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -1010,14 +1010,14 @@ class ClusterRoleConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def aggregation_rule(self) -> typing.Optional[ClusterRoleAggregationRule]:
         '''aggregation_rule block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#aggregation_rule ClusterRole#aggregation_rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#aggregation_rule ClusterRole#aggregation_rule}
         '''
         result = self._values.get("aggregation_rule")
         return typing.cast(typing.Optional[ClusterRoleAggregationRule], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#id ClusterRole#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#id ClusterRole#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -1031,7 +1031,7 @@ class ClusterRoleConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["ClusterRoleRule"]]]:
         '''rule block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#rule ClusterRole#rule}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#rule ClusterRole#rule}
         '''
         result = self._values.get("rule")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["ClusterRoleRule"]]], result)
@@ -1068,10 +1068,10 @@ class ClusterRoleMetadata:
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the clusterRole that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#annotations ClusterRole#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#generate_name ClusterRole#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the clusterRole. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#labels ClusterRole#labels}
-        :param name: Name of the clusterRole, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#name ClusterRole#name}
+        :param annotations: An unstructured key value map stored with the clusterRole that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#annotations ClusterRole#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#generate_name ClusterRole#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the clusterRole. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#labels ClusterRole#labels}
+        :param name: Name of the clusterRole, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#name ClusterRole#name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__617926c7523aeaaee7481242a853aa5590ed706df61da71051161eeb07b653b0)
@@ -1097,7 +1097,7 @@ class ClusterRoleMetadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#annotations ClusterRole#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#annotations ClusterRole#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -1108,7 +1108,7 @@ class ClusterRoleMetadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#generate_name ClusterRole#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#generate_name ClusterRole#generate_name}
         '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1119,7 +1119,7 @@ class ClusterRoleMetadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#labels ClusterRole#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#labels ClusterRole#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -1128,7 +1128,7 @@ class ClusterRoleMetadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the clusterRole, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#name ClusterRole#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#name ClusterRole#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1303,11 +1303,11 @@ class ClusterRoleRule:
         resources: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param verbs: Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule. VerbAll represents all kinds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#verbs ClusterRole#verbs}
-        :param api_groups: APIGroups is the name of the APIGroup that contains the resources. If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#api_groups ClusterRole#api_groups}
-        :param non_resource_urls: NonResourceURLs is a set of partial urls that a user should have access to. *s are allowed, but only as the full, final step in the path Since non-resource URLs are not namespaced, this field is only applicable for ClusterRoles referenced from a ClusterRoleBinding. Rules can either apply to API resources (such as "pods" or "secrets") or non-resource URL paths (such as "/api"), but not both. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#non_resource_urls ClusterRole#non_resource_urls}
-        :param resource_names: ResourceNames is an optional white list of names that the rule applies to. An empty set means that everything is allowed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#resource_names ClusterRole#resource_names}
-        :param resources: Resources is a list of resources this rule applies to. ResourceAll represents all resources. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#resources ClusterRole#resources}
+        :param verbs: Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule. VerbAll represents all kinds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#verbs ClusterRole#verbs}
+        :param api_groups: APIGroups is the name of the APIGroup that contains the resources. If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#api_groups ClusterRole#api_groups}
+        :param non_resource_urls: NonResourceURLs is a set of partial urls that a user should have access to. *s are allowed, but only as the full, final step in the path Since non-resource URLs are not namespaced, this field is only applicable for ClusterRoles referenced from a ClusterRoleBinding. Rules can either apply to API resources (such as "pods" or "secrets") or non-resource URL paths (such as "/api"), but not both. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#non_resource_urls ClusterRole#non_resource_urls}
+        :param resource_names: ResourceNames is an optional white list of names that the rule applies to. An empty set means that everything is allowed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#resource_names ClusterRole#resource_names}
+        :param resources: Resources is a list of resources this rule applies to. ResourceAll represents all resources. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#resources ClusterRole#resources}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f3e0a7269ce963183d44138dda4dccecf5007b17661b53d52a6ec370c9b7e6c1)
@@ -1334,7 +1334,7 @@ class ClusterRoleRule:
 
         VerbAll represents all kinds.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#verbs ClusterRole#verbs}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#verbs ClusterRole#verbs}
         '''
         result = self._values.get("verbs")
         assert result is not None, "Required property 'verbs' is missing"
@@ -1346,7 +1346,7 @@ class ClusterRoleRule:
 
         If multiple API groups are specified, any action requested against one of the enumerated resources in any API group will be allowed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#api_groups ClusterRole#api_groups}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#api_groups ClusterRole#api_groups}
         '''
         result = self._values.get("api_groups")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1357,7 +1357,7 @@ class ClusterRoleRule:
 
         *s are allowed, but only as the full, final step in the path Since non-resource URLs are not namespaced, this field is only applicable for ClusterRoles referenced from a ClusterRoleBinding. Rules can either apply to API resources (such as "pods" or "secrets") or non-resource URL paths (such as "/api"), but not both.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#non_resource_urls ClusterRole#non_resource_urls}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#non_resource_urls ClusterRole#non_resource_urls}
         '''
         result = self._values.get("non_resource_urls")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1368,7 +1368,7 @@ class ClusterRoleRule:
 
         An empty set means that everything is allowed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#resource_names ClusterRole#resource_names}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#resource_names ClusterRole#resource_names}
         '''
         result = self._values.get("resource_names")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -1377,7 +1377,7 @@ class ClusterRoleRule:
     def resources(self) -> typing.Optional[typing.List[builtins.str]]:
         '''Resources is a list of resources this rule applies to. ResourceAll represents all resources.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/cluster_role#resources ClusterRole#resources}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/cluster_role#resources ClusterRole#resources}
         '''
         result = self._values.get("resources")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)

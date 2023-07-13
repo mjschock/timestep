@@ -1,7 +1,7 @@
 '''
 # `kubernetes_token_request_v1`
 
-Refer to the Terraform Registory for docs: [`kubernetes_token_request_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1).
+Refer to the Terraform Registory for docs: [`kubernetes_token_request_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class TokenRequestV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.tokenRequestV1.TokenRequestV1",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1 kubernetes_token_request_v1}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1 kubernetes_token_request_v1}.'''
 
     def __init__(
         self,
@@ -44,13 +44,13 @@ class TokenRequestV1(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1 kubernetes_token_request_v1} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1 kubernetes_token_request_v1} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#metadata TokenRequestV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#id TokenRequestV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#spec TokenRequestV1#spec}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#metadata TokenRequestV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#id TokenRequestV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#spec TokenRequestV1#spec}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -89,11 +89,11 @@ class TokenRequestV1(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the token request that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#annotations TokenRequestV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#generate_name TokenRequestV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the token request. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#labels TokenRequestV1#labels}
-        :param name: Name of the token request, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#name TokenRequestV1#name}
-        :param namespace: Namespace defines the space within which name of the token request must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#namespace TokenRequestV1#namespace}
+        :param annotations: An unstructured key value map stored with the token request that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#annotations TokenRequestV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#generate_name TokenRequestV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the token request. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#labels TokenRequestV1#labels}
+        :param name: Name of the token request, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#name TokenRequestV1#name}
+        :param namespace: Namespace defines the space within which name of the token request must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#namespace TokenRequestV1#namespace}
         '''
         value = TokenRequestV1Metadata(
             annotations=annotations,
@@ -114,9 +114,9 @@ class TokenRequestV1(
         expiration_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param audiences: Audiences are the intendend audiences of the token. A recipient of a token must identify themself with an identifier in the list of audiences of the token, and otherwise should reject the token. A token issued for multiple audiences may be used to authenticate against any of the audiences listed but implies a high degree of trust between the target audiences. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#audiences TokenRequestV1#audiences}
-        :param bound_object_ref: bound_object_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#bound_object_ref TokenRequestV1#bound_object_ref}
-        :param expiration_seconds: expiration_seconds is the requested duration of validity of the request. The token issuer may return a token with a different validity duration so a client needs to check the 'expiration' field in a response. The expiration can't be less than 10 minutes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#expiration_seconds TokenRequestV1#expiration_seconds}
+        :param audiences: Audiences are the intendend audiences of the token. A recipient of a token must identify themself with an identifier in the list of audiences of the token, and otherwise should reject the token. A token issued for multiple audiences may be used to authenticate against any of the audiences listed but implies a high degree of trust between the target audiences. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#audiences TokenRequestV1#audiences}
+        :param bound_object_ref: bound_object_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#bound_object_ref TokenRequestV1#bound_object_ref}
+        :param expiration_seconds: expiration_seconds is the requested duration of validity of the request. The token issuer may return a token with a different validity duration so a client needs to check the 'expiration' field in a response. The expiration can't be less than 10 minutes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#expiration_seconds TokenRequestV1#expiration_seconds}
         '''
         value = TokenRequestV1Spec(
             audiences=audiences,
@@ -225,9 +225,9 @@ class TokenRequestV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#metadata TokenRequestV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#id TokenRequestV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#spec TokenRequestV1#spec}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#metadata TokenRequestV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#id TokenRequestV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#spec TokenRequestV1#spec}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -337,7 +337,7 @@ class TokenRequestV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "TokenRequestV1Metadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#metadata TokenRequestV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#metadata TokenRequestV1#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -345,7 +345,7 @@ class TokenRequestV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#id TokenRequestV1#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#id TokenRequestV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -357,7 +357,7 @@ class TokenRequestV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def spec(self) -> typing.Optional["TokenRequestV1Spec"]:
         '''spec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#spec TokenRequestV1#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#spec TokenRequestV1#spec}
         '''
         result = self._values.get("spec")
         return typing.cast(typing.Optional["TokenRequestV1Spec"], result)
@@ -396,11 +396,11 @@ class TokenRequestV1Metadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the token request that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#annotations TokenRequestV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#generate_name TokenRequestV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the token request. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#labels TokenRequestV1#labels}
-        :param name: Name of the token request, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#name TokenRequestV1#name}
-        :param namespace: Namespace defines the space within which name of the token request must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#namespace TokenRequestV1#namespace}
+        :param annotations: An unstructured key value map stored with the token request that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#annotations TokenRequestV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#generate_name TokenRequestV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the token request. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#labels TokenRequestV1#labels}
+        :param name: Name of the token request, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#name TokenRequestV1#name}
+        :param namespace: Namespace defines the space within which name of the token request must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#namespace TokenRequestV1#namespace}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2a3cd8b19a13a4d7396f73dcd174300e63f4e97236617b8822ddb00237b33d57)
@@ -429,7 +429,7 @@ class TokenRequestV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#annotations TokenRequestV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#annotations TokenRequestV1#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -440,7 +440,7 @@ class TokenRequestV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#generate_name TokenRequestV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#generate_name TokenRequestV1#generate_name}
         '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -451,7 +451,7 @@ class TokenRequestV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#labels TokenRequestV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#labels TokenRequestV1#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -460,7 +460,7 @@ class TokenRequestV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the token request, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#name TokenRequestV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#name TokenRequestV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -469,7 +469,7 @@ class TokenRequestV1Metadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         '''Namespace defines the space within which name of the token request must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#namespace TokenRequestV1#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#namespace TokenRequestV1#namespace}
         '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -661,9 +661,9 @@ class TokenRequestV1Spec:
         expiration_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param audiences: Audiences are the intendend audiences of the token. A recipient of a token must identify themself with an identifier in the list of audiences of the token, and otherwise should reject the token. A token issued for multiple audiences may be used to authenticate against any of the audiences listed but implies a high degree of trust between the target audiences. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#audiences TokenRequestV1#audiences}
-        :param bound_object_ref: bound_object_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#bound_object_ref TokenRequestV1#bound_object_ref}
-        :param expiration_seconds: expiration_seconds is the requested duration of validity of the request. The token issuer may return a token with a different validity duration so a client needs to check the 'expiration' field in a response. The expiration can't be less than 10 minutes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#expiration_seconds TokenRequestV1#expiration_seconds}
+        :param audiences: Audiences are the intendend audiences of the token. A recipient of a token must identify themself with an identifier in the list of audiences of the token, and otherwise should reject the token. A token issued for multiple audiences may be used to authenticate against any of the audiences listed but implies a high degree of trust between the target audiences. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#audiences TokenRequestV1#audiences}
+        :param bound_object_ref: bound_object_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#bound_object_ref TokenRequestV1#bound_object_ref}
+        :param expiration_seconds: expiration_seconds is the requested duration of validity of the request. The token issuer may return a token with a different validity duration so a client needs to check the 'expiration' field in a response. The expiration can't be less than 10 minutes. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#expiration_seconds TokenRequestV1#expiration_seconds}
         '''
         if isinstance(bound_object_ref, dict):
             bound_object_ref = TokenRequestV1SpecBoundObjectRef(**bound_object_ref)
@@ -686,7 +686,7 @@ class TokenRequestV1Spec:
 
         A recipient of a token must identify themself with an identifier in the list of audiences of the token, and otherwise should reject the token. A token issued for multiple audiences may be used to authenticate against any of the audiences listed but implies a high degree of trust between the target audiences.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#audiences TokenRequestV1#audiences}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#audiences TokenRequestV1#audiences}
         '''
         result = self._values.get("audiences")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -695,7 +695,7 @@ class TokenRequestV1Spec:
     def bound_object_ref(self) -> typing.Optional["TokenRequestV1SpecBoundObjectRef"]:
         '''bound_object_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#bound_object_ref TokenRequestV1#bound_object_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#bound_object_ref TokenRequestV1#bound_object_ref}
         '''
         result = self._values.get("bound_object_ref")
         return typing.cast(typing.Optional["TokenRequestV1SpecBoundObjectRef"], result)
@@ -706,7 +706,7 @@ class TokenRequestV1Spec:
 
         The token issuer may return a token with a different validity duration so a client needs to check the 'expiration' field in a response. The expiration can't be less than 10 minutes.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#expiration_seconds TokenRequestV1#expiration_seconds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#expiration_seconds TokenRequestV1#expiration_seconds}
         '''
         result = self._values.get("expiration_seconds")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -743,10 +743,10 @@ class TokenRequestV1SpecBoundObjectRef:
         uid: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#api_version TokenRequestV1#api_version}
-        :param kind: Kind of the referent. Valid kinds are 'Pod' and 'Secret'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#kind TokenRequestV1#kind}
-        :param name: Name of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#name TokenRequestV1#name}
-        :param uid: UID of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#uid TokenRequestV1#uid}
+        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#api_version TokenRequestV1#api_version}
+        :param kind: Kind of the referent. Valid kinds are 'Pod' and 'Secret'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#kind TokenRequestV1#kind}
+        :param name: Name of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#name TokenRequestV1#name}
+        :param uid: UID of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#uid TokenRequestV1#uid}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__02229e1724d1732dde7cc31554f9247427d1764ecea3a2b14dd6a813c6fe45b7)
@@ -768,7 +768,7 @@ class TokenRequestV1SpecBoundObjectRef:
     def api_version(self) -> typing.Optional[builtins.str]:
         '''API version of the referent.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#api_version TokenRequestV1#api_version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#api_version TokenRequestV1#api_version}
         '''
         result = self._values.get("api_version")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -777,7 +777,7 @@ class TokenRequestV1SpecBoundObjectRef:
     def kind(self) -> typing.Optional[builtins.str]:
         '''Kind of the referent. Valid kinds are 'Pod' and 'Secret'.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#kind TokenRequestV1#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#kind TokenRequestV1#kind}
         '''
         result = self._values.get("kind")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -786,7 +786,7 @@ class TokenRequestV1SpecBoundObjectRef:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the referent.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#name TokenRequestV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#name TokenRequestV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -795,7 +795,7 @@ class TokenRequestV1SpecBoundObjectRef:
     def uid(self) -> typing.Optional[builtins.str]:
         '''UID of the referent.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#uid TokenRequestV1#uid}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#uid TokenRequestV1#uid}
         '''
         result = self._values.get("uid")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -962,10 +962,10 @@ class TokenRequestV1SpecOutputReference(
         uid: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#api_version TokenRequestV1#api_version}
-        :param kind: Kind of the referent. Valid kinds are 'Pod' and 'Secret'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#kind TokenRequestV1#kind}
-        :param name: Name of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#name TokenRequestV1#name}
-        :param uid: UID of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/token_request_v1#uid TokenRequestV1#uid}
+        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#api_version TokenRequestV1#api_version}
+        :param kind: Kind of the referent. Valid kinds are 'Pod' and 'Secret'. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#kind TokenRequestV1#kind}
+        :param name: Name of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#name TokenRequestV1#name}
+        :param uid: UID of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/token_request_v1#uid TokenRequestV1#uid}
         '''
         value = TokenRequestV1SpecBoundObjectRef(
             api_version=api_version, kind=kind, name=name, uid=uid

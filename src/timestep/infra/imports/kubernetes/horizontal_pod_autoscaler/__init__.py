@@ -1,7 +1,7 @@
 '''
 # `kubernetes_horizontal_pod_autoscaler`
 
-Refer to the Terraform Registory for docs: [`kubernetes_horizontal_pod_autoscaler`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler).
+Refer to the Terraform Registory for docs: [`kubernetes_horizontal_pod_autoscaler`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class HorizontalPodAutoscaler(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.horizontalPodAutoscaler.HorizontalPodAutoscaler",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler kubernetes_horizontal_pod_autoscaler}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler kubernetes_horizontal_pod_autoscaler}.'''
 
     def __init__(
         self,
@@ -44,13 +44,13 @@ class HorizontalPodAutoscaler(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler kubernetes_horizontal_pod_autoscaler} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler kubernetes_horizontal_pod_autoscaler} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metadata HorizontalPodAutoscaler#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#spec HorizontalPodAutoscaler#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#id HorizontalPodAutoscaler#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metadata HorizontalPodAutoscaler#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#spec HorizontalPodAutoscaler#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#id HorizontalPodAutoscaler#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -89,11 +89,11 @@ class HorizontalPodAutoscaler(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the horizontal pod autoscaler that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#annotations HorizontalPodAutoscaler#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#generate_name HorizontalPodAutoscaler#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the horizontal pod autoscaler. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#labels HorizontalPodAutoscaler#labels}
-        :param name: Name of the horizontal pod autoscaler, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param namespace: Namespace defines the space within which name of the horizontal pod autoscaler must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#namespace HorizontalPodAutoscaler#namespace}
+        :param annotations: An unstructured key value map stored with the horizontal pod autoscaler that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#annotations HorizontalPodAutoscaler#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#generate_name HorizontalPodAutoscaler#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the horizontal pod autoscaler. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#labels HorizontalPodAutoscaler#labels}
+        :param name: Name of the horizontal pod autoscaler, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param namespace: Namespace defines the space within which name of the horizontal pod autoscaler must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#namespace HorizontalPodAutoscaler#namespace}
         '''
         value = HorizontalPodAutoscalerMetadata(
             annotations=annotations,
@@ -117,12 +117,12 @@ class HorizontalPodAutoscaler(
         target_cpu_utilization_percentage: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param max_replicas: Upper limit for the number of pods that can be set by the autoscaler. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#max_replicas HorizontalPodAutoscaler#max_replicas}
-        :param scale_target_ref: scale_target_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#scale_target_ref HorizontalPodAutoscaler#scale_target_ref}
-        :param behavior: behavior block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#behavior HorizontalPodAutoscaler#behavior}
-        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
-        :param min_replicas: Lower limit for the number of pods that can be set by the autoscaler, defaults to ``1``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#min_replicas HorizontalPodAutoscaler#min_replicas}
-        :param target_cpu_utilization_percentage: Target average CPU utilization (represented as a percentage of requested CPU) over all the pods. If not specified the default autoscaling policy will be used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target_cpu_utilization_percentage HorizontalPodAutoscaler#target_cpu_utilization_percentage}
+        :param max_replicas: Upper limit for the number of pods that can be set by the autoscaler. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#max_replicas HorizontalPodAutoscaler#max_replicas}
+        :param scale_target_ref: scale_target_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#scale_target_ref HorizontalPodAutoscaler#scale_target_ref}
+        :param behavior: behavior block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#behavior HorizontalPodAutoscaler#behavior}
+        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        :param min_replicas: Lower limit for the number of pods that can be set by the autoscaler, defaults to ``1``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#min_replicas HorizontalPodAutoscaler#min_replicas}
+        :param target_cpu_utilization_percentage: Target average CPU utilization (represented as a percentage of requested CPU) over all the pods. If not specified the default autoscaling policy will be used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target_cpu_utilization_percentage HorizontalPodAutoscaler#target_cpu_utilization_percentage}
         '''
         value = HorizontalPodAutoscalerSpec(
             max_replicas=max_replicas,
@@ -225,9 +225,9 @@ class HorizontalPodAutoscalerConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metadata HorizontalPodAutoscaler#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#spec HorizontalPodAutoscaler#spec}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#id HorizontalPodAutoscaler#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metadata HorizontalPodAutoscaler#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#spec HorizontalPodAutoscaler#spec}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#id HorizontalPodAutoscaler#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -336,7 +336,7 @@ class HorizontalPodAutoscalerConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "HorizontalPodAutoscalerMetadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metadata HorizontalPodAutoscaler#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metadata HorizontalPodAutoscaler#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -346,7 +346,7 @@ class HorizontalPodAutoscalerConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def spec(self) -> "HorizontalPodAutoscalerSpec":
         '''spec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#spec HorizontalPodAutoscaler#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#spec HorizontalPodAutoscaler#spec}
         '''
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
@@ -354,7 +354,7 @@ class HorizontalPodAutoscalerConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#id HorizontalPodAutoscaler#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#id HorizontalPodAutoscaler#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -396,11 +396,11 @@ class HorizontalPodAutoscalerMetadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the horizontal pod autoscaler that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#annotations HorizontalPodAutoscaler#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#generate_name HorizontalPodAutoscaler#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the horizontal pod autoscaler. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#labels HorizontalPodAutoscaler#labels}
-        :param name: Name of the horizontal pod autoscaler, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param namespace: Namespace defines the space within which name of the horizontal pod autoscaler must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#namespace HorizontalPodAutoscaler#namespace}
+        :param annotations: An unstructured key value map stored with the horizontal pod autoscaler that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#annotations HorizontalPodAutoscaler#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#generate_name HorizontalPodAutoscaler#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the horizontal pod autoscaler. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#labels HorizontalPodAutoscaler#labels}
+        :param name: Name of the horizontal pod autoscaler, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param namespace: Namespace defines the space within which name of the horizontal pod autoscaler must be unique. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#namespace HorizontalPodAutoscaler#namespace}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f4c4317e07c23a5cdcb50e9970ad9317031bc8254a1e560245747c0799d9588b)
@@ -429,7 +429,7 @@ class HorizontalPodAutoscalerMetadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#annotations HorizontalPodAutoscaler#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#annotations HorizontalPodAutoscaler#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -440,7 +440,7 @@ class HorizontalPodAutoscalerMetadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#generate_name HorizontalPodAutoscaler#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#generate_name HorizontalPodAutoscaler#generate_name}
         '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -451,7 +451,7 @@ class HorizontalPodAutoscalerMetadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#labels HorizontalPodAutoscaler#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#labels HorizontalPodAutoscaler#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -460,7 +460,7 @@ class HorizontalPodAutoscalerMetadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the horizontal pod autoscaler, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -469,7 +469,7 @@ class HorizontalPodAutoscalerMetadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         '''Namespace defines the space within which name of the horizontal pod autoscaler must be unique.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#namespace HorizontalPodAutoscaler#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#namespace HorizontalPodAutoscaler#namespace}
         '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -670,12 +670,12 @@ class HorizontalPodAutoscalerSpec:
         target_cpu_utilization_percentage: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param max_replicas: Upper limit for the number of pods that can be set by the autoscaler. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#max_replicas HorizontalPodAutoscaler#max_replicas}
-        :param scale_target_ref: scale_target_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#scale_target_ref HorizontalPodAutoscaler#scale_target_ref}
-        :param behavior: behavior block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#behavior HorizontalPodAutoscaler#behavior}
-        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
-        :param min_replicas: Lower limit for the number of pods that can be set by the autoscaler, defaults to ``1``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#min_replicas HorizontalPodAutoscaler#min_replicas}
-        :param target_cpu_utilization_percentage: Target average CPU utilization (represented as a percentage of requested CPU) over all the pods. If not specified the default autoscaling policy will be used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target_cpu_utilization_percentage HorizontalPodAutoscaler#target_cpu_utilization_percentage}
+        :param max_replicas: Upper limit for the number of pods that can be set by the autoscaler. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#max_replicas HorizontalPodAutoscaler#max_replicas}
+        :param scale_target_ref: scale_target_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#scale_target_ref HorizontalPodAutoscaler#scale_target_ref}
+        :param behavior: behavior block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#behavior HorizontalPodAutoscaler#behavior}
+        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        :param min_replicas: Lower limit for the number of pods that can be set by the autoscaler, defaults to ``1``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#min_replicas HorizontalPodAutoscaler#min_replicas}
+        :param target_cpu_utilization_percentage: Target average CPU utilization (represented as a percentage of requested CPU) over all the pods. If not specified the default autoscaling policy will be used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target_cpu_utilization_percentage HorizontalPodAutoscaler#target_cpu_utilization_percentage}
         '''
         if isinstance(scale_target_ref, dict):
             scale_target_ref = HorizontalPodAutoscalerSpecScaleTargetRef(**scale_target_ref)
@@ -706,7 +706,7 @@ class HorizontalPodAutoscalerSpec:
     def max_replicas(self) -> jsii.Number:
         '''Upper limit for the number of pods that can be set by the autoscaler.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#max_replicas HorizontalPodAutoscaler#max_replicas}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#max_replicas HorizontalPodAutoscaler#max_replicas}
         '''
         result = self._values.get("max_replicas")
         assert result is not None, "Required property 'max_replicas' is missing"
@@ -716,7 +716,7 @@ class HorizontalPodAutoscalerSpec:
     def scale_target_ref(self) -> "HorizontalPodAutoscalerSpecScaleTargetRef":
         '''scale_target_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#scale_target_ref HorizontalPodAutoscaler#scale_target_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#scale_target_ref HorizontalPodAutoscaler#scale_target_ref}
         '''
         result = self._values.get("scale_target_ref")
         assert result is not None, "Required property 'scale_target_ref' is missing"
@@ -726,7 +726,7 @@ class HorizontalPodAutoscalerSpec:
     def behavior(self) -> typing.Optional["HorizontalPodAutoscalerSpecBehavior"]:
         '''behavior block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#behavior HorizontalPodAutoscaler#behavior}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#behavior HorizontalPodAutoscaler#behavior}
         '''
         result = self._values.get("behavior")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecBehavior"], result)
@@ -737,7 +737,7 @@ class HorizontalPodAutoscalerSpec:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetric"]]]:
         '''metric block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
         '''
         result = self._values.get("metric")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetric"]]], result)
@@ -746,7 +746,7 @@ class HorizontalPodAutoscalerSpec:
     def min_replicas(self) -> typing.Optional[jsii.Number]:
         '''Lower limit for the number of pods that can be set by the autoscaler, defaults to ``1``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#min_replicas HorizontalPodAutoscaler#min_replicas}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#min_replicas HorizontalPodAutoscaler#min_replicas}
         '''
         result = self._values.get("min_replicas")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -757,7 +757,7 @@ class HorizontalPodAutoscalerSpec:
 
         If not specified the default autoscaling policy will be used.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target_cpu_utilization_percentage HorizontalPodAutoscaler#target_cpu_utilization_percentage}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target_cpu_utilization_percentage HorizontalPodAutoscaler#target_cpu_utilization_percentage}
         '''
         result = self._values.get("target_cpu_utilization_percentage")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -787,8 +787,8 @@ class HorizontalPodAutoscalerSpecBehavior:
         scale_up: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["HorizontalPodAutoscalerSpecBehaviorScaleUp", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param scale_down: scale_down block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#scale_down HorizontalPodAutoscaler#scale_down}
-        :param scale_up: scale_up block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#scale_up HorizontalPodAutoscaler#scale_up}
+        :param scale_down: scale_down block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#scale_down HorizontalPodAutoscaler#scale_down}
+        :param scale_up: scale_up block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#scale_up HorizontalPodAutoscaler#scale_up}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__12c3da8203cfd5b1d57e52081ae561d94ca2d0de78497fa0cd9ce59091358de5)
@@ -806,7 +806,7 @@ class HorizontalPodAutoscalerSpecBehavior:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecBehaviorScaleDown"]]]:
         '''scale_down block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#scale_down HorizontalPodAutoscaler#scale_down}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#scale_down HorizontalPodAutoscaler#scale_down}
         '''
         result = self._values.get("scale_down")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecBehaviorScaleDown"]]], result)
@@ -817,7 +817,7 @@ class HorizontalPodAutoscalerSpecBehavior:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecBehaviorScaleUp"]]]:
         '''scale_up block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#scale_up HorizontalPodAutoscaler#scale_up}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#scale_up HorizontalPodAutoscaler#scale_up}
         '''
         result = self._values.get("scale_up")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecBehaviorScaleUp"]]], result)
@@ -946,9 +946,9 @@ class HorizontalPodAutoscalerSpecBehaviorScaleDown:
         stabilization_window_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param policy: policy block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#policy HorizontalPodAutoscaler#policy}
-        :param select_policy: Used to specify which policy should be used. If not set, the default value Max is used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#select_policy HorizontalPodAutoscaler#select_policy}
-        :param stabilization_window_seconds: Number of seconds for which past recommendations should be considered while scaling up or scaling down. This value must be greater than or equal to zero and less than or equal to 3600 (one hour). If not set, use the default values: - For scale up: 0 (i.e. no stabilization is done). - For scale down: 300 (i.e. the stabilization window is 300 seconds long). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#stabilization_window_seconds HorizontalPodAutoscaler#stabilization_window_seconds}
+        :param policy: policy block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#policy HorizontalPodAutoscaler#policy}
+        :param select_policy: Used to specify which policy should be used. If not set, the default value Max is used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#select_policy HorizontalPodAutoscaler#select_policy}
+        :param stabilization_window_seconds: Number of seconds for which past recommendations should be considered while scaling up or scaling down. This value must be greater than or equal to zero and less than or equal to 3600 (one hour). If not set, use the default values: - For scale up: 0 (i.e. no stabilization is done). - For scale down: 300 (i.e. the stabilization window is 300 seconds long). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#stabilization_window_seconds HorizontalPodAutoscaler#stabilization_window_seconds}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6a90696c71006e6587039958f8d1e72e5f36941a2cf1950319f847fbf32ec315)
@@ -969,7 +969,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleDown:
     ) -> typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecBehaviorScaleDownPolicy"]]:
         '''policy block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#policy HorizontalPodAutoscaler#policy}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#policy HorizontalPodAutoscaler#policy}
         '''
         result = self._values.get("policy")
         assert result is not None, "Required property 'policy' is missing"
@@ -979,7 +979,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleDown:
     def select_policy(self) -> typing.Optional[builtins.str]:
         '''Used to specify which policy should be used. If not set, the default value Max is used.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#select_policy HorizontalPodAutoscaler#select_policy}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#select_policy HorizontalPodAutoscaler#select_policy}
         '''
         result = self._values.get("select_policy")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -990,7 +990,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleDown:
 
         This value must be greater than or equal to zero and less than or equal to 3600 (one hour). If not set, use the default values: - For scale up: 0 (i.e. no stabilization is done). - For scale down: 300 (i.e. the stabilization window is 300 seconds long).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#stabilization_window_seconds HorizontalPodAutoscaler#stabilization_window_seconds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#stabilization_window_seconds HorizontalPodAutoscaler#stabilization_window_seconds}
         '''
         result = self._values.get("stabilization_window_seconds")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -1225,9 +1225,9 @@ class HorizontalPodAutoscalerSpecBehaviorScaleDownPolicy:
         value: jsii.Number,
     ) -> None:
         '''
-        :param period_seconds: Period specifies the window of time for which the policy should hold true. PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#period_seconds HorizontalPodAutoscaler#period_seconds}
-        :param type: Type is used to specify the scaling policy: Percent or Pods. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param value: Value contains the amount of change which is permitted by the policy. It must be greater than zero. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param period_seconds: Period specifies the window of time for which the policy should hold true. PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#period_seconds HorizontalPodAutoscaler#period_seconds}
+        :param type: Type is used to specify the scaling policy: Percent or Pods. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param value: Value contains the amount of change which is permitted by the policy. It must be greater than zero. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3dd474516c6052f91512884c753d01761cfef643fe7be6d8e354d7259dfc5636)
@@ -1246,7 +1246,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleDownPolicy:
 
         PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#period_seconds HorizontalPodAutoscaler#period_seconds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#period_seconds HorizontalPodAutoscaler#period_seconds}
         '''
         result = self._values.get("period_seconds")
         assert result is not None, "Required property 'period_seconds' is missing"
@@ -1256,7 +1256,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleDownPolicy:
     def type(self) -> builtins.str:
         '''Type is used to specify the scaling policy: Percent or Pods.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -1266,7 +1266,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleDownPolicy:
     def value(self) -> jsii.Number:
         '''Value contains the amount of change which is permitted by the policy. It must be greater than zero.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
@@ -1490,9 +1490,9 @@ class HorizontalPodAutoscalerSpecBehaviorScaleUp:
         stabilization_window_seconds: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param policy: policy block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#policy HorizontalPodAutoscaler#policy}
-        :param select_policy: Used to specify which policy should be used. If not set, the default value Max is used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#select_policy HorizontalPodAutoscaler#select_policy}
-        :param stabilization_window_seconds: Number of seconds for which past recommendations should be considered while scaling up or scaling down. This value must be greater than or equal to zero and less than or equal to 3600 (one hour). If not set, use the default values: - For scale up: 0 (i.e. no stabilization is done). - For scale down: 300 (i.e. the stabilization window is 300 seconds long). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#stabilization_window_seconds HorizontalPodAutoscaler#stabilization_window_seconds}
+        :param policy: policy block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#policy HorizontalPodAutoscaler#policy}
+        :param select_policy: Used to specify which policy should be used. If not set, the default value Max is used. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#select_policy HorizontalPodAutoscaler#select_policy}
+        :param stabilization_window_seconds: Number of seconds for which past recommendations should be considered while scaling up or scaling down. This value must be greater than or equal to zero and less than or equal to 3600 (one hour). If not set, use the default values: - For scale up: 0 (i.e. no stabilization is done). - For scale down: 300 (i.e. the stabilization window is 300 seconds long). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#stabilization_window_seconds HorizontalPodAutoscaler#stabilization_window_seconds}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fe31fffaf0741da8129ef39c9813a3b041ded4927fd7e76a9750af5b8725687a)
@@ -1513,7 +1513,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleUp:
     ) -> typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecBehaviorScaleUpPolicy"]]:
         '''policy block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#policy HorizontalPodAutoscaler#policy}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#policy HorizontalPodAutoscaler#policy}
         '''
         result = self._values.get("policy")
         assert result is not None, "Required property 'policy' is missing"
@@ -1523,7 +1523,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleUp:
     def select_policy(self) -> typing.Optional[builtins.str]:
         '''Used to specify which policy should be used. If not set, the default value Max is used.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#select_policy HorizontalPodAutoscaler#select_policy}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#select_policy HorizontalPodAutoscaler#select_policy}
         '''
         result = self._values.get("select_policy")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1534,7 +1534,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleUp:
 
         This value must be greater than or equal to zero and less than or equal to 3600 (one hour). If not set, use the default values: - For scale up: 0 (i.e. no stabilization is done). - For scale down: 300 (i.e. the stabilization window is 300 seconds long).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#stabilization_window_seconds HorizontalPodAutoscaler#stabilization_window_seconds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#stabilization_window_seconds HorizontalPodAutoscaler#stabilization_window_seconds}
         '''
         result = self._values.get("stabilization_window_seconds")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -1769,9 +1769,9 @@ class HorizontalPodAutoscalerSpecBehaviorScaleUpPolicy:
         value: jsii.Number,
     ) -> None:
         '''
-        :param period_seconds: Period specifies the window of time for which the policy should hold true. PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#period_seconds HorizontalPodAutoscaler#period_seconds}
-        :param type: Type is used to specify the scaling policy: Percent or Pods. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param value: Value contains the amount of change which is permitted by the policy. It must be greater than zero. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param period_seconds: Period specifies the window of time for which the policy should hold true. PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#period_seconds HorizontalPodAutoscaler#period_seconds}
+        :param type: Type is used to specify the scaling policy: Percent or Pods. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param value: Value contains the amount of change which is permitted by the policy. It must be greater than zero. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2f8003de3aed5535332b2a2bb6592f1ee0625083170dc5caf04f24cb0841241f)
@@ -1790,7 +1790,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleUpPolicy:
 
         PeriodSeconds must be greater than zero and less than or equal to 1800 (30 min).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#period_seconds HorizontalPodAutoscaler#period_seconds}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#period_seconds HorizontalPodAutoscaler#period_seconds}
         '''
         result = self._values.get("period_seconds")
         assert result is not None, "Required property 'period_seconds' is missing"
@@ -1800,7 +1800,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleUpPolicy:
     def type(self) -> builtins.str:
         '''Type is used to specify the scaling policy: Percent or Pods.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -1810,7 +1810,7 @@ class HorizontalPodAutoscalerSpecBehaviorScaleUpPolicy:
     def value(self) -> jsii.Number:
         '''Value contains the amount of change which is permitted by the policy. It must be greater than zero.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         result = self._values.get("value")
         assert result is not None, "Required property 'value' is missing"
@@ -2040,12 +2040,12 @@ class HorizontalPodAutoscalerSpecMetric:
         resource: typing.Optional[typing.Union["HorizontalPodAutoscalerSpecMetricResource", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param type: type is the type of metric source. It should be one of "ContainerResource", "External", "Object", "Pods" or "Resource", each mapping to a matching field in the object. Note: "ContainerResource" type is available on when the feature-gate HPAContainerMetrics is enabled Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param container_resource: container_resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#container_resource HorizontalPodAutoscaler#container_resource}
-        :param external: external block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#external HorizontalPodAutoscaler#external}
-        :param object: object block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#object HorizontalPodAutoscaler#object}
-        :param pods: pods block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#pods HorizontalPodAutoscaler#pods}
-        :param resource: resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#resource HorizontalPodAutoscaler#resource}
+        :param type: type is the type of metric source. It should be one of "ContainerResource", "External", "Object", "Pods" or "Resource", each mapping to a matching field in the object. Note: "ContainerResource" type is available on when the feature-gate HPAContainerMetrics is enabled Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param container_resource: container_resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#container_resource HorizontalPodAutoscaler#container_resource}
+        :param external: external block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#external HorizontalPodAutoscaler#external}
+        :param object: object block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#object HorizontalPodAutoscaler#object}
+        :param pods: pods block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#pods HorizontalPodAutoscaler#pods}
+        :param resource: resource block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#resource HorizontalPodAutoscaler#resource}
         '''
         if isinstance(container_resource, dict):
             container_resource = HorizontalPodAutoscalerSpecMetricContainerResource(**container_resource)
@@ -2085,7 +2085,7 @@ class HorizontalPodAutoscalerSpecMetric:
 
         It should be one of "ContainerResource", "External", "Object", "Pods" or "Resource", each mapping to a matching field in the object. Note: "ContainerResource" type is available on when the feature-gate HPAContainerMetrics is enabled
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -2097,7 +2097,7 @@ class HorizontalPodAutoscalerSpecMetric:
     ) -> typing.Optional["HorizontalPodAutoscalerSpecMetricContainerResource"]:
         '''container_resource block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#container_resource HorizontalPodAutoscaler#container_resource}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#container_resource HorizontalPodAutoscaler#container_resource}
         '''
         result = self._values.get("container_resource")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecMetricContainerResource"], result)
@@ -2106,7 +2106,7 @@ class HorizontalPodAutoscalerSpecMetric:
     def external(self) -> typing.Optional["HorizontalPodAutoscalerSpecMetricExternal"]:
         '''external block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#external HorizontalPodAutoscaler#external}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#external HorizontalPodAutoscaler#external}
         '''
         result = self._values.get("external")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecMetricExternal"], result)
@@ -2115,7 +2115,7 @@ class HorizontalPodAutoscalerSpecMetric:
     def object(self) -> typing.Optional["HorizontalPodAutoscalerSpecMetricObject"]:
         '''object block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#object HorizontalPodAutoscaler#object}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#object HorizontalPodAutoscaler#object}
         '''
         result = self._values.get("object")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecMetricObject"], result)
@@ -2124,7 +2124,7 @@ class HorizontalPodAutoscalerSpecMetric:
     def pods(self) -> typing.Optional["HorizontalPodAutoscalerSpecMetricPods"]:
         '''pods block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#pods HorizontalPodAutoscaler#pods}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#pods HorizontalPodAutoscaler#pods}
         '''
         result = self._values.get("pods")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecMetricPods"], result)
@@ -2133,7 +2133,7 @@ class HorizontalPodAutoscalerSpecMetric:
     def resource(self) -> typing.Optional["HorizontalPodAutoscalerSpecMetricResource"]:
         '''resource block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#resource HorizontalPodAutoscaler#resource}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#resource HorizontalPodAutoscaler#resource}
         '''
         result = self._values.get("resource")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecMetricResource"], result)
@@ -2164,9 +2164,9 @@ class HorizontalPodAutoscalerSpecMetricContainerResource:
         target: typing.Optional[typing.Union["HorizontalPodAutoscalerSpecMetricContainerResourceTarget", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param container: name of the container in the pods of the scaling target. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#container HorizontalPodAutoscaler#container}
-        :param name: name of the resource in question. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        :param container: name of the container in the pods of the scaling target. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#container HorizontalPodAutoscaler#container}
+        :param name: name of the resource in question. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         if isinstance(target, dict):
             target = HorizontalPodAutoscalerSpecMetricContainerResourceTarget(**target)
@@ -2186,7 +2186,7 @@ class HorizontalPodAutoscalerSpecMetricContainerResource:
     def container(self) -> builtins.str:
         '''name of the container in the pods of the scaling target.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#container HorizontalPodAutoscaler#container}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#container HorizontalPodAutoscaler#container}
         '''
         result = self._values.get("container")
         assert result is not None, "Required property 'container' is missing"
@@ -2196,7 +2196,7 @@ class HorizontalPodAutoscalerSpecMetricContainerResource:
     def name(self) -> builtins.str:
         '''name of the resource in question.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -2208,7 +2208,7 @@ class HorizontalPodAutoscalerSpecMetricContainerResource:
     ) -> typing.Optional["HorizontalPodAutoscalerSpecMetricContainerResourceTarget"]:
         '''target block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         result = self._values.get("target")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecMetricContainerResourceTarget"], result)
@@ -2255,10 +2255,10 @@ class HorizontalPodAutoscalerSpecMetricContainerResourceOutputReference(
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
-        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
-        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         value_ = HorizontalPodAutoscalerSpecMetricContainerResourceTarget(
             type=type,
@@ -2359,10 +2359,10 @@ class HorizontalPodAutoscalerSpecMetricContainerResourceTarget:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
-        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
-        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__432ec4e2af67b22f2f1100b6f8057c5aca386b3a2ab8b93b55afd6edb8b761b8)
@@ -2384,7 +2384,7 @@ class HorizontalPodAutoscalerSpecMetricContainerResourceTarget:
     def type(self) -> builtins.str:
         '''type represents whether the metric type is Utilization, Value, or AverageValue.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -2396,7 +2396,7 @@ class HorizontalPodAutoscalerSpecMetricContainerResourceTarget:
 
         Currently only valid for Resource metric source type
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
         '''
         result = self._values.get("average_utilization")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -2405,7 +2405,7 @@ class HorizontalPodAutoscalerSpecMetricContainerResourceTarget:
     def average_value(self) -> typing.Optional[builtins.str]:
         '''averageValue is the target value of the average of the metric across all relevant pods (as a quantity).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
         '''
         result = self._values.get("average_value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2414,7 +2414,7 @@ class HorizontalPodAutoscalerSpecMetricContainerResourceTarget:
     def value(self) -> typing.Optional[builtins.str]:
         '''value is the target value of the metric (as a quantity).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2562,8 +2562,8 @@ class HorizontalPodAutoscalerSpecMetricExternal:
         target: typing.Optional[typing.Union["HorizontalPodAutoscalerSpecMetricExternalTarget", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
-        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         if isinstance(metric, dict):
             metric = HorizontalPodAutoscalerSpecMetricExternalMetric(**metric)
@@ -2583,7 +2583,7 @@ class HorizontalPodAutoscalerSpecMetricExternal:
     def metric(self) -> "HorizontalPodAutoscalerSpecMetricExternalMetric":
         '''metric block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
         '''
         result = self._values.get("metric")
         assert result is not None, "Required property 'metric' is missing"
@@ -2595,7 +2595,7 @@ class HorizontalPodAutoscalerSpecMetricExternal:
     ) -> typing.Optional["HorizontalPodAutoscalerSpecMetricExternalTarget"]:
         '''target block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         result = self._values.get("target")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecMetricExternalTarget"], result)
@@ -2625,8 +2625,8 @@ class HorizontalPodAutoscalerSpecMetricExternalMetric:
         selector: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["HorizontalPodAutoscalerSpecMetricExternalMetricSelector", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
+        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fe0cf092610e2a40dbacc9341ad7eea79db9241937df5290c60c6364803756f3)
@@ -2642,7 +2642,7 @@ class HorizontalPodAutoscalerSpecMetricExternalMetric:
     def name(self) -> builtins.str:
         '''name is the name of the given metric.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -2654,7 +2654,7 @@ class HorizontalPodAutoscalerSpecMetricExternalMetric:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricExternalMetricSelector"]]]:
         '''selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
         '''
         result = self._values.get("selector")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricExternalMetricSelector"]]], result)
@@ -2771,8 +2771,8 @@ class HorizontalPodAutoscalerSpecMetricExternalMetricSelector:
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d40d36e49e2fb452b443a68124669097b40e9203874088aa6cf36d3a1634fcab)
@@ -2790,7 +2790,7 @@ class HorizontalPodAutoscalerSpecMetricExternalMetricSelector:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricExternalMetricSelectorMatchExpressions"]]]:
         '''match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
         '''
         result = self._values.get("match_expressions")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricExternalMetricSelectorMatchExpressions"]]], result)
@@ -2803,7 +2803,7 @@ class HorizontalPodAutoscalerSpecMetricExternalMetricSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
         '''
         result = self._values.get("match_labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -2927,9 +2927,9 @@ class HorizontalPodAutoscalerSpecMetricExternalMetricSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d4d0ea6ce328f2b6153aa113f43da508704b16b6d964e3a8a33e04ba9f7db433)
@@ -2948,7 +2948,7 @@ class HorizontalPodAutoscalerSpecMetricExternalMetricSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         '''The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2957,7 +2957,7 @@ class HorizontalPodAutoscalerSpecMetricExternalMetricSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         '''A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
         '''
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -2968,7 +2968,7 @@ class HorizontalPodAutoscalerSpecMetricExternalMetricSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
         '''
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -3311,8 +3311,8 @@ class HorizontalPodAutoscalerSpecMetricExternalOutputReference(
         selector: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[HorizontalPodAutoscalerSpecMetricExternalMetricSelector, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
+        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
         '''
         value = HorizontalPodAutoscalerSpecMetricExternalMetric(
             name=name, selector=selector
@@ -3330,10 +3330,10 @@ class HorizontalPodAutoscalerSpecMetricExternalOutputReference(
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
-        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
-        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         value_ = HorizontalPodAutoscalerSpecMetricExternalTarget(
             type=type,
@@ -3412,10 +3412,10 @@ class HorizontalPodAutoscalerSpecMetricExternalTarget:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
-        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
-        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f6a1e0794b343d5d9650f97584a69e33e555475c4a4ce411d7f257c630d7b0f7)
@@ -3437,7 +3437,7 @@ class HorizontalPodAutoscalerSpecMetricExternalTarget:
     def type(self) -> builtins.str:
         '''type represents whether the metric type is Utilization, Value, or AverageValue.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -3449,7 +3449,7 @@ class HorizontalPodAutoscalerSpecMetricExternalTarget:
 
         Currently only valid for Resource metric source type
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
         '''
         result = self._values.get("average_utilization")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -3458,7 +3458,7 @@ class HorizontalPodAutoscalerSpecMetricExternalTarget:
     def average_value(self) -> typing.Optional[builtins.str]:
         '''averageValue is the target value of the average of the metric across all relevant pods (as a quantity).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
         '''
         result = self._values.get("average_value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3467,7 +3467,7 @@ class HorizontalPodAutoscalerSpecMetricExternalTarget:
     def value(self) -> typing.Optional[builtins.str]:
         '''value is the target value of the metric (as a quantity).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -3713,9 +3713,9 @@ class HorizontalPodAutoscalerSpecMetricObject:
         target: typing.Optional[typing.Union["HorizontalPodAutoscalerSpecMetricObjectTarget", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param described_object: described_object block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#described_object HorizontalPodAutoscaler#described_object}
-        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
-        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        :param described_object: described_object block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#described_object HorizontalPodAutoscaler#described_object}
+        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         if isinstance(described_object, dict):
             described_object = HorizontalPodAutoscalerSpecMetricObjectDescribedObject(**described_object)
@@ -3741,7 +3741,7 @@ class HorizontalPodAutoscalerSpecMetricObject:
     ) -> "HorizontalPodAutoscalerSpecMetricObjectDescribedObject":
         '''described_object block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#described_object HorizontalPodAutoscaler#described_object}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#described_object HorizontalPodAutoscaler#described_object}
         '''
         result = self._values.get("described_object")
         assert result is not None, "Required property 'described_object' is missing"
@@ -3751,7 +3751,7 @@ class HorizontalPodAutoscalerSpecMetricObject:
     def metric(self) -> "HorizontalPodAutoscalerSpecMetricObjectMetric":
         '''metric block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
         '''
         result = self._values.get("metric")
         assert result is not None, "Required property 'metric' is missing"
@@ -3763,7 +3763,7 @@ class HorizontalPodAutoscalerSpecMetricObject:
     ) -> typing.Optional["HorizontalPodAutoscalerSpecMetricObjectTarget"]:
         '''target block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         result = self._values.get("target")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecMetricObjectTarget"], result)
@@ -3794,9 +3794,9 @@ class HorizontalPodAutoscalerSpecMetricObjectDescribedObject:
         name: builtins.str,
     ) -> None:
         '''
-        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
-        :param kind: Kind of the referent; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
-        :param name: Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
+        :param kind: Kind of the referent; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
+        :param name: Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5e240b1834490b7e5260cbc1a4db6dbfc1a400328be932cd38aac4b32c01785e)
@@ -3813,7 +3813,7 @@ class HorizontalPodAutoscalerSpecMetricObjectDescribedObject:
     def api_version(self) -> builtins.str:
         '''API version of the referent.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
         '''
         result = self._values.get("api_version")
         assert result is not None, "Required property 'api_version' is missing"
@@ -3823,7 +3823,7 @@ class HorizontalPodAutoscalerSpecMetricObjectDescribedObject:
     def kind(self) -> builtins.str:
         '''Kind of the referent; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
         '''
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -3833,7 +3833,7 @@ class HorizontalPodAutoscalerSpecMetricObjectDescribedObject:
     def name(self) -> builtins.str:
         '''Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -3953,8 +3953,8 @@ class HorizontalPodAutoscalerSpecMetricObjectMetric:
         selector: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["HorizontalPodAutoscalerSpecMetricObjectMetricSelector", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
+        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0074dbd80d64a5540aae969585f366b759bcabea899515dd1b6baa16827a2ed3)
@@ -3970,7 +3970,7 @@ class HorizontalPodAutoscalerSpecMetricObjectMetric:
     def name(self) -> builtins.str:
         '''name is the name of the given metric.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -3982,7 +3982,7 @@ class HorizontalPodAutoscalerSpecMetricObjectMetric:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricObjectMetricSelector"]]]:
         '''selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
         '''
         result = self._values.get("selector")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricObjectMetricSelector"]]], result)
@@ -4099,8 +4099,8 @@ class HorizontalPodAutoscalerSpecMetricObjectMetricSelector:
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__662d8b0c38b55860a2370ca10a3f4f4b3a9319c4012eedf42c3df98cd207869f)
@@ -4118,7 +4118,7 @@ class HorizontalPodAutoscalerSpecMetricObjectMetricSelector:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricObjectMetricSelectorMatchExpressions"]]]:
         '''match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
         '''
         result = self._values.get("match_expressions")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricObjectMetricSelectorMatchExpressions"]]], result)
@@ -4131,7 +4131,7 @@ class HorizontalPodAutoscalerSpecMetricObjectMetricSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
         '''
         result = self._values.get("match_labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -4255,9 +4255,9 @@ class HorizontalPodAutoscalerSpecMetricObjectMetricSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a94599473ccbca7c7809a109baa9096f6cfe2f265a1159ca03acffb38f9d42e2)
@@ -4276,7 +4276,7 @@ class HorizontalPodAutoscalerSpecMetricObjectMetricSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         '''The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4285,7 +4285,7 @@ class HorizontalPodAutoscalerSpecMetricObjectMetricSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         '''A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
         '''
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4296,7 +4296,7 @@ class HorizontalPodAutoscalerSpecMetricObjectMetricSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
         '''
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -4640,9 +4640,9 @@ class HorizontalPodAutoscalerSpecMetricObjectOutputReference(
         name: builtins.str,
     ) -> None:
         '''
-        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
-        :param kind: Kind of the referent; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
-        :param name: Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
+        :param kind: Kind of the referent; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
+        :param name: Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
         '''
         value = HorizontalPodAutoscalerSpecMetricObjectDescribedObject(
             api_version=api_version, kind=kind, name=name
@@ -4658,8 +4658,8 @@ class HorizontalPodAutoscalerSpecMetricObjectOutputReference(
         selector: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[HorizontalPodAutoscalerSpecMetricObjectMetricSelector, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
+        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
         '''
         value = HorizontalPodAutoscalerSpecMetricObjectMetric(
             name=name, selector=selector
@@ -4677,10 +4677,10 @@ class HorizontalPodAutoscalerSpecMetricObjectOutputReference(
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
-        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
-        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         value_ = HorizontalPodAutoscalerSpecMetricObjectTarget(
             type=type,
@@ -4771,10 +4771,10 @@ class HorizontalPodAutoscalerSpecMetricObjectTarget:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
-        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
-        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__46c9f97b6b09ddabeb82e670b131459a58c1040ab7a20e0f93f94b1e1acffebb)
@@ -4796,7 +4796,7 @@ class HorizontalPodAutoscalerSpecMetricObjectTarget:
     def type(self) -> builtins.str:
         '''type represents whether the metric type is Utilization, Value, or AverageValue.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -4808,7 +4808,7 @@ class HorizontalPodAutoscalerSpecMetricObjectTarget:
 
         Currently only valid for Resource metric source type
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
         '''
         result = self._values.get("average_utilization")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -4817,7 +4817,7 @@ class HorizontalPodAutoscalerSpecMetricObjectTarget:
     def average_value(self) -> typing.Optional[builtins.str]:
         '''averageValue is the target value of the average of the metric across all relevant pods (as a quantity).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
         '''
         result = self._values.get("average_value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4826,7 +4826,7 @@ class HorizontalPodAutoscalerSpecMetricObjectTarget:
     def value(self) -> typing.Optional[builtins.str]:
         '''value is the target value of the metric (as a quantity).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -4996,9 +4996,9 @@ class HorizontalPodAutoscalerSpecMetricOutputReference(
         target: typing.Optional[typing.Union[HorizontalPodAutoscalerSpecMetricContainerResourceTarget, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param container: name of the container in the pods of the scaling target. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#container HorizontalPodAutoscaler#container}
-        :param name: name of the resource in question. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        :param container: name of the container in the pods of the scaling target. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#container HorizontalPodAutoscaler#container}
+        :param name: name of the resource in question. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         value = HorizontalPodAutoscalerSpecMetricContainerResource(
             container=container, name=name, target=target
@@ -5014,8 +5014,8 @@ class HorizontalPodAutoscalerSpecMetricOutputReference(
         target: typing.Optional[typing.Union[HorizontalPodAutoscalerSpecMetricExternalTarget, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
-        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         value = HorizontalPodAutoscalerSpecMetricExternal(metric=metric, target=target)
 
@@ -5030,9 +5030,9 @@ class HorizontalPodAutoscalerSpecMetricOutputReference(
         target: typing.Optional[typing.Union[HorizontalPodAutoscalerSpecMetricObjectTarget, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param described_object: described_object block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#described_object HorizontalPodAutoscaler#described_object}
-        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
-        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        :param described_object: described_object block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#described_object HorizontalPodAutoscaler#described_object}
+        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         value = HorizontalPodAutoscalerSpecMetricObject(
             described_object=described_object, metric=metric, target=target
@@ -5048,8 +5048,8 @@ class HorizontalPodAutoscalerSpecMetricOutputReference(
         target: typing.Optional[typing.Union["HorizontalPodAutoscalerSpecMetricPodsTarget", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
-        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         value = HorizontalPodAutoscalerSpecMetricPods(metric=metric, target=target)
 
@@ -5063,8 +5063,8 @@ class HorizontalPodAutoscalerSpecMetricOutputReference(
         target: typing.Optional[typing.Union["HorizontalPodAutoscalerSpecMetricResourceTarget", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param name: name is the name of the resource in question. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        :param name: name is the name of the resource in question. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         value = HorizontalPodAutoscalerSpecMetricResource(name=name, target=target)
 
@@ -5196,8 +5196,8 @@ class HorizontalPodAutoscalerSpecMetricPods:
         target: typing.Optional[typing.Union["HorizontalPodAutoscalerSpecMetricPodsTarget", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
-        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        :param metric: metric block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         if isinstance(metric, dict):
             metric = HorizontalPodAutoscalerSpecMetricPodsMetric(**metric)
@@ -5217,7 +5217,7 @@ class HorizontalPodAutoscalerSpecMetricPods:
     def metric(self) -> "HorizontalPodAutoscalerSpecMetricPodsMetric":
         '''metric block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#metric HorizontalPodAutoscaler#metric}
         '''
         result = self._values.get("metric")
         assert result is not None, "Required property 'metric' is missing"
@@ -5227,7 +5227,7 @@ class HorizontalPodAutoscalerSpecMetricPods:
     def target(self) -> typing.Optional["HorizontalPodAutoscalerSpecMetricPodsTarget"]:
         '''target block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         result = self._values.get("target")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecMetricPodsTarget"], result)
@@ -5257,8 +5257,8 @@ class HorizontalPodAutoscalerSpecMetricPodsMetric:
         selector: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union["HorizontalPodAutoscalerSpecMetricPodsMetricSelector", typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
+        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__27691f1eafa2df526fbe23ac3fa879592b8cf015e0843d43e01663fbaed4938c)
@@ -5274,7 +5274,7 @@ class HorizontalPodAutoscalerSpecMetricPodsMetric:
     def name(self) -> builtins.str:
         '''name is the name of the given metric.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -5286,7 +5286,7 @@ class HorizontalPodAutoscalerSpecMetricPodsMetric:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricPodsMetricSelector"]]]:
         '''selector block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
         '''
         result = self._values.get("selector")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricPodsMetricSelector"]]], result)
@@ -5403,8 +5403,8 @@ class HorizontalPodAutoscalerSpecMetricPodsMetricSelector:
         match_labels: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
         '''
-        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
-        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
+        :param match_expressions: match_expressions block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
+        :param match_labels: A map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ee076b9d18da55f8bea8a76a3eb0fdbea46bf040e56c907ee8640cf7f358f2cc)
@@ -5422,7 +5422,7 @@ class HorizontalPodAutoscalerSpecMetricPodsMetricSelector:
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricPodsMetricSelectorMatchExpressions"]]]:
         '''match_expressions block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_expressions HorizontalPodAutoscaler#match_expressions}
         '''
         result = self._values.get("match_expressions")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["HorizontalPodAutoscalerSpecMetricPodsMetricSelectorMatchExpressions"]]], result)
@@ -5435,7 +5435,7 @@ class HorizontalPodAutoscalerSpecMetricPodsMetricSelector:
 
         A single {key,value} in the matchLabels map is equivalent to an element of ``match_expressions``, whose key field is "key", the operator is "In", and the values array contains only "value". The requirements are ANDed.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#match_labels HorizontalPodAutoscaler#match_labels}
         '''
         result = self._values.get("match_labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -5559,9 +5559,9 @@ class HorizontalPodAutoscalerSpecMetricPodsMetricSelectorMatchExpressions:
         values: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
-        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
-        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
+        :param key: The label key that the selector applies to. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
+        :param operator: A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
+        :param values: An array of string values. If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__62a61a7e564ede98ddf1e67007921467f72a732e605a123ec0a8d2392e55b6bd)
@@ -5580,7 +5580,7 @@ class HorizontalPodAutoscalerSpecMetricPodsMetricSelectorMatchExpressions:
     def key(self) -> typing.Optional[builtins.str]:
         '''The label key that the selector applies to.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#key HorizontalPodAutoscaler#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5589,7 +5589,7 @@ class HorizontalPodAutoscalerSpecMetricPodsMetricSelectorMatchExpressions:
     def operator(self) -> typing.Optional[builtins.str]:
         '''A key's relationship to a set of values. Valid operators ard ``In``, ``NotIn``, ``Exists`` and ``DoesNotExist``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#operator HorizontalPodAutoscaler#operator}
         '''
         result = self._values.get("operator")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -5600,7 +5600,7 @@ class HorizontalPodAutoscalerSpecMetricPodsMetricSelectorMatchExpressions:
 
         If the operator is ``In`` or ``NotIn``, the values array must be non-empty. If the operator is ``Exists`` or ``DoesNotExist``, the values array must be empty. This array is replaced during a strategic merge patch.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#values HorizontalPodAutoscaler#values}
         '''
         result = self._values.get("values")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -5943,8 +5943,8 @@ class HorizontalPodAutoscalerSpecMetricPodsOutputReference(
         selector: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[HorizontalPodAutoscalerSpecMetricPodsMetricSelector, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
+        :param name: name is the name of the given metric. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param selector: selector block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#selector HorizontalPodAutoscaler#selector}
         '''
         value = HorizontalPodAutoscalerSpecMetricPodsMetric(
             name=name, selector=selector
@@ -5962,10 +5962,10 @@ class HorizontalPodAutoscalerSpecMetricPodsOutputReference(
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
-        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
-        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         value_ = HorizontalPodAutoscalerSpecMetricPodsTarget(
             type=type,
@@ -6040,10 +6040,10 @@ class HorizontalPodAutoscalerSpecMetricPodsTarget:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
-        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
-        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1bfd9c45cedaa920ec01c8be80f3daf7f38f8bfc02fafd8eb5f907689cd364f5)
@@ -6065,7 +6065,7 @@ class HorizontalPodAutoscalerSpecMetricPodsTarget:
     def type(self) -> builtins.str:
         '''type represents whether the metric type is Utilization, Value, or AverageValue.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -6077,7 +6077,7 @@ class HorizontalPodAutoscalerSpecMetricPodsTarget:
 
         Currently only valid for Resource metric source type
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
         '''
         result = self._values.get("average_utilization")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -6086,7 +6086,7 @@ class HorizontalPodAutoscalerSpecMetricPodsTarget:
     def average_value(self) -> typing.Optional[builtins.str]:
         '''averageValue is the target value of the average of the metric across all relevant pods (as a quantity).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
         '''
         result = self._values.get("average_value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6095,7 +6095,7 @@ class HorizontalPodAutoscalerSpecMetricPodsTarget:
     def value(self) -> typing.Optional[builtins.str]:
         '''value is the target value of the metric (as a quantity).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6243,8 +6243,8 @@ class HorizontalPodAutoscalerSpecMetricResource:
         target: typing.Optional[typing.Union["HorizontalPodAutoscalerSpecMetricResourceTarget", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param name: name is the name of the resource in question. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        :param name: name is the name of the resource in question. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param target: target block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         if isinstance(target, dict):
             target = HorizontalPodAutoscalerSpecMetricResourceTarget(**target)
@@ -6262,7 +6262,7 @@ class HorizontalPodAutoscalerSpecMetricResource:
     def name(self) -> builtins.str:
         '''name is the name of the resource in question.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -6274,7 +6274,7 @@ class HorizontalPodAutoscalerSpecMetricResource:
     ) -> typing.Optional["HorizontalPodAutoscalerSpecMetricResourceTarget"]:
         '''target block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#target HorizontalPodAutoscaler#target}
         '''
         result = self._values.get("target")
         return typing.cast(typing.Optional["HorizontalPodAutoscalerSpecMetricResourceTarget"], result)
@@ -6321,10 +6321,10 @@ class HorizontalPodAutoscalerSpecMetricResourceOutputReference(
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
-        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
-        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         value_ = HorizontalPodAutoscalerSpecMetricResourceTarget(
             type=type,
@@ -6408,10 +6408,10 @@ class HorizontalPodAutoscalerSpecMetricResourceTarget:
         value: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
-        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
-        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
-        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        :param type: type represents whether the metric type is Utilization, Value, or AverageValue. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        :param average_utilization: averageUtilization is the target value of the average of the resource metric across all relevant pods, represented as a percentage of the requested value of the resource for the pods. Currently only valid for Resource metric source type Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        :param average_value: averageValue is the target value of the average of the metric across all relevant pods (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        :param value: value is the target value of the metric (as a quantity). Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__925c6fe67a21a5ba5d4980f747e71b753e959c1eef5e41397346af6b88f91f37)
@@ -6433,7 +6433,7 @@ class HorizontalPodAutoscalerSpecMetricResourceTarget:
     def type(self) -> builtins.str:
         '''type represents whether the metric type is Utilization, Value, or AverageValue.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#type HorizontalPodAutoscaler#type}
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -6445,7 +6445,7 @@ class HorizontalPodAutoscalerSpecMetricResourceTarget:
 
         Currently only valid for Resource metric source type
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_utilization HorizontalPodAutoscaler#average_utilization}
         '''
         result = self._values.get("average_utilization")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -6454,7 +6454,7 @@ class HorizontalPodAutoscalerSpecMetricResourceTarget:
     def average_value(self) -> typing.Optional[builtins.str]:
         '''averageValue is the target value of the average of the metric across all relevant pods (as a quantity).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#average_value HorizontalPodAutoscaler#average_value}
         '''
         result = self._values.get("average_value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6463,7 +6463,7 @@ class HorizontalPodAutoscalerSpecMetricResourceTarget:
     def value(self) -> typing.Optional[builtins.str]:
         '''value is the target value of the metric (as a quantity).
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#value HorizontalPodAutoscaler#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -6626,8 +6626,8 @@ class HorizontalPodAutoscalerSpecOutputReference(
         scale_up: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.Sequence[typing.Union[HorizontalPodAutoscalerSpecBehaviorScaleUp, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
         '''
-        :param scale_down: scale_down block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#scale_down HorizontalPodAutoscaler#scale_down}
-        :param scale_up: scale_up block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#scale_up HorizontalPodAutoscaler#scale_up}
+        :param scale_down: scale_down block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#scale_down HorizontalPodAutoscaler#scale_down}
+        :param scale_up: scale_up block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#scale_up HorizontalPodAutoscaler#scale_up}
         '''
         value = HorizontalPodAutoscalerSpecBehavior(
             scale_down=scale_down, scale_up=scale_up
@@ -6657,9 +6657,9 @@ class HorizontalPodAutoscalerSpecOutputReference(
         api_version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param kind: Kind of the referent. e.g. ``ReplicationController``. More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#types-kinds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
+        :param kind: Kind of the referent. e.g. ``ReplicationController``. More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#types-kinds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
         '''
         value = HorizontalPodAutoscalerSpecScaleTargetRef(
             kind=kind, name=name, api_version=api_version
@@ -6800,9 +6800,9 @@ class HorizontalPodAutoscalerSpecScaleTargetRef:
         api_version: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param kind: Kind of the referent. e.g. ``ReplicationController``. More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#types-kinds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
-        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
+        :param kind: Kind of the referent. e.g. ``ReplicationController``. More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#types-kinds. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        :param api_version: API version of the referent. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d0c037d98a2c338fa3c20646113669bf534ea8920dd70235165898cbdf1247a0)
@@ -6820,7 +6820,7 @@ class HorizontalPodAutoscalerSpecScaleTargetRef:
     def kind(self) -> builtins.str:
         '''Kind of the referent. e.g. ``ReplicationController``. More info: http://releases.k8s.io/HEAD/docs/devel/api-conventions.md#types-kinds.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#kind HorizontalPodAutoscaler#kind}
         '''
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -6830,7 +6830,7 @@ class HorizontalPodAutoscalerSpecScaleTargetRef:
     def name(self) -> builtins.str:
         '''Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#name HorizontalPodAutoscaler#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -6840,7 +6840,7 @@ class HorizontalPodAutoscalerSpecScaleTargetRef:
     def api_version(self) -> typing.Optional[builtins.str]:
         '''API version of the referent.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/horizontal_pod_autoscaler#api_version HorizontalPodAutoscaler#api_version}
         '''
         result = self._values.get("api_version")
         return typing.cast(typing.Optional[builtins.str], result)

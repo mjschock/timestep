@@ -1,7 +1,7 @@
 '''
 # `kubernetes_labels`
 
-Refer to the Terraform Registory for docs: [`kubernetes_labels`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels).
+Refer to the Terraform Registory for docs: [`kubernetes_labels`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class Labels(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.labels.Labels",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels kubernetes_labels}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels kubernetes_labels}.'''
 
     def __init__(
         self,
@@ -48,17 +48,17 @@ class Labels(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels kubernetes_labels} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels kubernetes_labels} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param api_version: The apiVersion of the resource to label. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#api_version Labels#api_version}
-        :param kind: The kind of the resource to label. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#kind Labels#kind}
-        :param labels: A map of labels to apply to the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#labels Labels#labels}
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#metadata Labels#metadata}
-        :param field_manager: Set the name of the field manager for the specified labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#field_manager Labels#field_manager}
-        :param force: Force overwriting labels that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#force Labels#force}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#id Labels#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param api_version: The apiVersion of the resource to label. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#api_version Labels#api_version}
+        :param kind: The kind of the resource to label. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#kind Labels#kind}
+        :param labels: A map of labels to apply to the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#labels Labels#labels}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#metadata Labels#metadata}
+        :param field_manager: Set the name of the field manager for the specified labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#field_manager Labels#field_manager}
+        :param force: Force overwriting labels that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#force Labels#force}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#id Labels#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -98,8 +98,8 @@ class Labels(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param name: The name of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#name Labels#name}
-        :param namespace: The namespace of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#namespace Labels#namespace}
+        :param name: The name of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#name Labels#name}
+        :param namespace: The namespace of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#namespace Labels#namespace}
         '''
         value = LabelsMetadata(name=name, namespace=namespace)
 
@@ -293,13 +293,13 @@ class LabelsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param api_version: The apiVersion of the resource to label. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#api_version Labels#api_version}
-        :param kind: The kind of the resource to label. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#kind Labels#kind}
-        :param labels: A map of labels to apply to the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#labels Labels#labels}
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#metadata Labels#metadata}
-        :param field_manager: Set the name of the field manager for the specified labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#field_manager Labels#field_manager}
-        :param force: Force overwriting labels that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#force Labels#force}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#id Labels#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param api_version: The apiVersion of the resource to label. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#api_version Labels#api_version}
+        :param kind: The kind of the resource to label. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#kind Labels#kind}
+        :param labels: A map of labels to apply to the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#labels Labels#labels}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#metadata Labels#metadata}
+        :param field_manager: Set the name of the field manager for the specified labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#field_manager Labels#field_manager}
+        :param force: Force overwriting labels that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#force Labels#force}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#id Labels#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -416,7 +416,7 @@ class LabelsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def api_version(self) -> builtins.str:
         '''The apiVersion of the resource to label.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#api_version Labels#api_version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#api_version Labels#api_version}
         '''
         result = self._values.get("api_version")
         assert result is not None, "Required property 'api_version' is missing"
@@ -426,7 +426,7 @@ class LabelsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def kind(self) -> builtins.str:
         '''The kind of the resource to label.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#kind Labels#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#kind Labels#kind}
         '''
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -436,7 +436,7 @@ class LabelsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def labels(self) -> typing.Mapping[builtins.str, builtins.str]:
         '''A map of labels to apply to the resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#labels Labels#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#labels Labels#labels}
         '''
         result = self._values.get("labels")
         assert result is not None, "Required property 'labels' is missing"
@@ -446,7 +446,7 @@ class LabelsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "LabelsMetadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#metadata Labels#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#metadata Labels#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -456,7 +456,7 @@ class LabelsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def field_manager(self) -> typing.Optional[builtins.str]:
         '''Set the name of the field manager for the specified labels.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#field_manager Labels#field_manager}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#field_manager Labels#field_manager}
         '''
         result = self._values.get("field_manager")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -467,14 +467,14 @@ class LabelsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Force overwriting labels that were created or edited outside of Terraform.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#force Labels#force}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#force Labels#force}
         '''
         result = self._values.get("force")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#id Labels#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#id Labels#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -507,8 +507,8 @@ class LabelsMetadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param name: The name of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#name Labels#name}
-        :param namespace: The namespace of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#namespace Labels#namespace}
+        :param name: The name of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#name Labels#name}
+        :param namespace: The namespace of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#namespace Labels#namespace}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__77beb89f9ba3699ccb598af051d7ac6b51fb62f56aaae169bdf1239fa30a973d)
@@ -524,7 +524,7 @@ class LabelsMetadata:
     def name(self) -> builtins.str:
         '''The name of the resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#name Labels#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#name Labels#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -534,7 +534,7 @@ class LabelsMetadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         '''The namespace of the resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/labels#namespace Labels#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/labels#namespace Labels#namespace}
         '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)

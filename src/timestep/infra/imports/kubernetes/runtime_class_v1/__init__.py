@@ -1,7 +1,7 @@
 '''
 # `kubernetes_runtime_class_v1`
 
-Refer to the Terraform Registory for docs: [`kubernetes_runtime_class_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1).
+Refer to the Terraform Registory for docs: [`kubernetes_runtime_class_v1`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class RuntimeClassV1(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.runtimeClassV1.RuntimeClassV1",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1 kubernetes_runtime_class_v1}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1 kubernetes_runtime_class_v1}.'''
 
     def __init__(
         self,
@@ -44,13 +44,13 @@ class RuntimeClassV1(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1 kubernetes_runtime_class_v1} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1 kubernetes_runtime_class_v1} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param handler: Specifies the underlying runtime and configuration that the CRI implementation will use to handle pods of this class. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#handler RuntimeClassV1#handler}
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#metadata RuntimeClassV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#id RuntimeClassV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param handler: Specifies the underlying runtime and configuration that the CRI implementation will use to handle pods of this class. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#handler RuntimeClassV1#handler}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#metadata RuntimeClassV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#id RuntimeClassV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -88,10 +88,10 @@ class RuntimeClassV1(
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the runtimeclass that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#annotations RuntimeClassV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#generate_name RuntimeClassV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the runtimeclass. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#labels RuntimeClassV1#labels}
-        :param name: Name of the runtimeclass, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#name RuntimeClassV1#name}
+        :param annotations: An unstructured key value map stored with the runtimeclass that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#annotations RuntimeClassV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#generate_name RuntimeClassV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the runtimeclass. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#labels RuntimeClassV1#labels}
+        :param name: Name of the runtimeclass, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#name RuntimeClassV1#name}
         '''
         value = RuntimeClassV1Metadata(
             annotations=annotations,
@@ -199,9 +199,9 @@ class RuntimeClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param handler: Specifies the underlying runtime and configuration that the CRI implementation will use to handle pods of this class. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#handler RuntimeClassV1#handler}
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#metadata RuntimeClassV1#metadata}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#id RuntimeClassV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param handler: Specifies the underlying runtime and configuration that the CRI implementation will use to handle pods of this class. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#handler RuntimeClassV1#handler}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#metadata RuntimeClassV1#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#id RuntimeClassV1#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -308,7 +308,7 @@ class RuntimeClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def handler(self) -> builtins.str:
         '''Specifies the underlying runtime and configuration that the CRI implementation will use to handle pods of this class.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#handler RuntimeClassV1#handler}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#handler RuntimeClassV1#handler}
         '''
         result = self._values.get("handler")
         assert result is not None, "Required property 'handler' is missing"
@@ -318,7 +318,7 @@ class RuntimeClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "RuntimeClassV1Metadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#metadata RuntimeClassV1#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#metadata RuntimeClassV1#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -326,7 +326,7 @@ class RuntimeClassV1Config(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#id RuntimeClassV1#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#id RuntimeClassV1#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -366,10 +366,10 @@ class RuntimeClassV1Metadata:
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the runtimeclass that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#annotations RuntimeClassV1#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#generate_name RuntimeClassV1#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the runtimeclass. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#labels RuntimeClassV1#labels}
-        :param name: Name of the runtimeclass, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#name RuntimeClassV1#name}
+        :param annotations: An unstructured key value map stored with the runtimeclass that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#annotations RuntimeClassV1#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#generate_name RuntimeClassV1#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the runtimeclass. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#labels RuntimeClassV1#labels}
+        :param name: Name of the runtimeclass, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#name RuntimeClassV1#name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__acf96657aee86337889f134a785927455cfc0675be901dbb625fd8487edd7d42)
@@ -395,7 +395,7 @@ class RuntimeClassV1Metadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#annotations RuntimeClassV1#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#annotations RuntimeClassV1#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -406,7 +406,7 @@ class RuntimeClassV1Metadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#generate_name RuntimeClassV1#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#generate_name RuntimeClassV1#generate_name}
         '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -417,7 +417,7 @@ class RuntimeClassV1Metadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#labels RuntimeClassV1#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#labels RuntimeClassV1#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -426,7 +426,7 @@ class RuntimeClassV1Metadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the runtimeclass, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/runtime_class_v1#name RuntimeClassV1#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/runtime_class_v1#name RuntimeClassV1#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)

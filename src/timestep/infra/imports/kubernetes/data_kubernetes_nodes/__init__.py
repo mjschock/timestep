@@ -1,7 +1,7 @@
 '''
 # `data_kubernetes_nodes`
 
-Refer to the Terraform Registory for docs: [`data_kubernetes_nodes`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes).
+Refer to the Terraform Registory for docs: [`data_kubernetes_nodes`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class DataKubernetesNodes(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.dataKubernetesNodes.DataKubernetesNodes",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes kubernetes_nodes}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes kubernetes_nodes}.'''
 
     def __init__(
         self,
@@ -43,12 +43,12 @@ class DataKubernetesNodes(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes kubernetes_nodes} Data Source.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes kubernetes_nodes} Data Source.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#id DataKubernetesNodes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes#id DataKubernetesNodes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -82,7 +82,7 @@ class DataKubernetesNodes(
         labels: typing.Mapping[builtins.str, builtins.str],
     ) -> None:
         '''
-        :param labels: Select nodes with these labels. More info: http://kubernetes.io/docs/user-guide/labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
+        :param labels: Select nodes with these labels. More info: http://kubernetes.io/docs/user-guide/labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
         '''
         value = DataKubernetesNodesMetadata(labels=labels)
 
@@ -175,8 +175,8 @@ class DataKubernetesNodesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#id DataKubernetesNodes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes#id DataKubernetesNodes#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -279,7 +279,7 @@ class DataKubernetesNodesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#id DataKubernetesNodes#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes#id DataKubernetesNodes#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -291,7 +291,7 @@ class DataKubernetesNodesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> typing.Optional["DataKubernetesNodesMetadata"]:
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes#metadata DataKubernetesNodes#metadata}
         '''
         result = self._values.get("metadata")
         return typing.cast(typing.Optional["DataKubernetesNodesMetadata"], result)
@@ -316,7 +316,7 @@ class DataKubernetesNodesConfig(_cdktf_9a9027ec.TerraformMetaArguments):
 class DataKubernetesNodesMetadata:
     def __init__(self, *, labels: typing.Mapping[builtins.str, builtins.str]) -> None:
         '''
-        :param labels: Select nodes with these labels. More info: http://kubernetes.io/docs/user-guide/labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
+        :param labels: Select nodes with these labels. More info: http://kubernetes.io/docs/user-guide/labels. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ae01889a141a1a4226a2c3dadd3696db3882cc1aa7c2902db4235f2023994bbf)
@@ -329,7 +329,7 @@ class DataKubernetesNodesMetadata:
     def labels(self) -> typing.Mapping[builtins.str, builtins.str]:
         '''Select nodes with these labels. More info: http://kubernetes.io/docs/user-guide/labels.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/data-sources/nodes#labels DataKubernetesNodes#labels}
         '''
         result = self._values.get("labels")
         assert result is not None, "Required property 'labels' is missing"
@@ -1055,6 +1055,157 @@ class DataKubernetesNodesNodesStatus:
         )
 
 
+@jsii.data_type(
+    jsii_type="kubernetes.dataKubernetesNodes.DataKubernetesNodesNodesStatusAddresses",
+    jsii_struct_bases=[],
+    name_mapping={},
+)
+class DataKubernetesNodesNodesStatusAddresses:
+    def __init__(self) -> None:
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "DataKubernetesNodesNodesStatusAddresses(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+class DataKubernetesNodesNodesStatusAddressesList(
+    _cdktf_9a9027ec.ComplexList,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="kubernetes.dataKubernetesNodes.DataKubernetesNodesNodesStatusAddressesList",
+):
+    def __init__(
+        self,
+        terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
+        terraform_attribute: builtins.str,
+        wraps_set: builtins.bool,
+    ) -> None:
+        '''
+        :param terraform_resource: The parent resource.
+        :param terraform_attribute: The attribute on the parent resource this class is referencing.
+        :param wraps_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a3282e43469614a95e28cc79817dfad9f4d231ed1ce624384284c1924d3a3425)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument wraps_set", value=wraps_set, expected_type=type_hints["wraps_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, wraps_set])
+
+    @jsii.member(jsii_name="get")
+    def get(
+        self,
+        index: jsii.Number,
+    ) -> "DataKubernetesNodesNodesStatusAddressesOutputReference":
+        '''
+        :param index: the index of the item to return.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__33733925db5a5a1d82e61c3f180e289c0fe179714b030bf746d02ca0e3263f5d)
+            check_type(argname="argument index", value=index, expected_type=type_hints["index"])
+        return typing.cast("DataKubernetesNodesNodesStatusAddressesOutputReference", jsii.invoke(self, "get", [index]))
+
+    @builtins.property
+    @jsii.member(jsii_name="terraformAttribute")
+    def _terraform_attribute(self) -> builtins.str:
+        '''The attribute on the parent resource this class is referencing.'''
+        return typing.cast(builtins.str, jsii.get(self, "terraformAttribute"))
+
+    @_terraform_attribute.setter
+    def _terraform_attribute(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__011311910677340c150cf72d9ae6bc523ecd5489e4b60b1f21d97197c6a80fc1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "terraformAttribute", value)
+
+    @builtins.property
+    @jsii.member(jsii_name="terraformResource")
+    def _terraform_resource(self) -> _cdktf_9a9027ec.IInterpolatingParent:
+        '''The parent resource.'''
+        return typing.cast(_cdktf_9a9027ec.IInterpolatingParent, jsii.get(self, "terraformResource"))
+
+    @_terraform_resource.setter
+    def _terraform_resource(self, value: _cdktf_9a9027ec.IInterpolatingParent) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__14b38b227257345cb0ab28435ac73fe696ebcc9ad01da374d50594b6379bf4e6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "terraformResource", value)
+
+    @builtins.property
+    @jsii.member(jsii_name="wrapsSet")
+    def _wraps_set(self) -> builtins.bool:
+        '''whether the list is wrapping a set (will add tolist() to be able to access an item via an index).'''
+        return typing.cast(builtins.bool, jsii.get(self, "wrapsSet"))
+
+    @_wraps_set.setter
+    def _wraps_set(self, value: builtins.bool) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5feb28f852e13290830e82cc40733e7107b82dda8bebbd27809354e95ce1340f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "wrapsSet", value)
+
+
+class DataKubernetesNodesNodesStatusAddressesOutputReference(
+    _cdktf_9a9027ec.ComplexObject,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="kubernetes.dataKubernetesNodes.DataKubernetesNodesNodesStatusAddressesOutputReference",
+):
+    def __init__(
+        self,
+        terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
+        terraform_attribute: builtins.str,
+        complex_object_index: jsii.Number,
+        complex_object_is_from_set: builtins.bool,
+    ) -> None:
+        '''
+        :param terraform_resource: The parent resource.
+        :param terraform_attribute: The attribute on the parent resource this class is referencing.
+        :param complex_object_index: the index of this item in the list.
+        :param complex_object_is_from_set: whether the list is wrapping a set (will add tolist() to be able to access an item via an index).
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__decc99bf0c9e30ae876c1ddf5426d547a29a694aa8f84058cec2f4cd9eda439a)
+            check_type(argname="argument terraform_resource", value=terraform_resource, expected_type=type_hints["terraform_resource"])
+            check_type(argname="argument terraform_attribute", value=terraform_attribute, expected_type=type_hints["terraform_attribute"])
+            check_type(argname="argument complex_object_index", value=complex_object_index, expected_type=type_hints["complex_object_index"])
+            check_type(argname="argument complex_object_is_from_set", value=complex_object_is_from_set, expected_type=type_hints["complex_object_is_from_set"])
+        jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, complex_object_index, complex_object_is_from_set])
+
+    @builtins.property
+    @jsii.member(jsii_name="address")
+    def address(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "address"))
+
+    @builtins.property
+    @jsii.member(jsii_name="type")
+    def type(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "type"))
+
+    @builtins.property
+    @jsii.member(jsii_name="internalValue")
+    def internal_value(
+        self,
+    ) -> typing.Optional[DataKubernetesNodesNodesStatusAddresses]:
+        return typing.cast(typing.Optional[DataKubernetesNodesNodesStatusAddresses], jsii.get(self, "internalValue"))
+
+    @internal_value.setter
+    def internal_value(
+        self,
+        value: typing.Optional[DataKubernetesNodesNodesStatusAddresses],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__315761fd8576d621b78b989c66ba97e1fc65aabb441fdecafe643f141ce5fe5a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "internalValue", value)
+
+
 class DataKubernetesNodesNodesStatusList(
     _cdktf_9a9027ec.ComplexList,
     metaclass=jsii.JSIIMeta,
@@ -1347,6 +1498,11 @@ class DataKubernetesNodesNodesStatusOutputReference(
         jsii.create(self.__class__, self, [terraform_resource, terraform_attribute, complex_object_index, complex_object_is_from_set])
 
     @builtins.property
+    @jsii.member(jsii_name="addresses")
+    def addresses(self) -> DataKubernetesNodesNodesStatusAddressesList:
+        return typing.cast(DataKubernetesNodesNodesStatusAddressesList, jsii.get(self, "addresses"))
+
+    @builtins.property
     @jsii.member(jsii_name="allocatable")
     def allocatable(self) -> _cdktf_9a9027ec.StringMap:
         return typing.cast(_cdktf_9a9027ec.StringMap, jsii.get(self, "allocatable"))
@@ -1395,6 +1551,9 @@ __all__ = [
     "DataKubernetesNodesNodesSpecTaintsList",
     "DataKubernetesNodesNodesSpecTaintsOutputReference",
     "DataKubernetesNodesNodesStatus",
+    "DataKubernetesNodesNodesStatusAddresses",
+    "DataKubernetesNodesNodesStatusAddressesList",
+    "DataKubernetesNodesNodesStatusAddressesOutputReference",
     "DataKubernetesNodesNodesStatusList",
     "DataKubernetesNodesNodesStatusNodeInfo",
     "DataKubernetesNodesNodesStatusNodeInfoList",
@@ -1652,6 +1811,53 @@ def _typecheckingstub__7886e3619df320e063bd5ee1516f57f4997e508abe58af9706aa1c719
 
 def _typecheckingstub__0e22edb219d10a8f32350ed9688d2eda250fb8e949d1961a6f4fe98e98faa2aa(
     value: typing.Optional[DataKubernetesNodesNodesSpecTaints],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a3282e43469614a95e28cc79817dfad9f4d231ed1ce624384284c1924d3a3425(
+    terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
+    terraform_attribute: builtins.str,
+    wraps_set: builtins.bool,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__33733925db5a5a1d82e61c3f180e289c0fe179714b030bf746d02ca0e3263f5d(
+    index: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__011311910677340c150cf72d9ae6bc523ecd5489e4b60b1f21d97197c6a80fc1(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__14b38b227257345cb0ab28435ac73fe696ebcc9ad01da374d50594b6379bf4e6(
+    value: _cdktf_9a9027ec.IInterpolatingParent,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5feb28f852e13290830e82cc40733e7107b82dda8bebbd27809354e95ce1340f(
+    value: builtins.bool,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__decc99bf0c9e30ae876c1ddf5426d547a29a694aa8f84058cec2f4cd9eda439a(
+    terraform_resource: _cdktf_9a9027ec.IInterpolatingParent,
+    terraform_attribute: builtins.str,
+    complex_object_index: jsii.Number,
+    complex_object_is_from_set: builtins.bool,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__315761fd8576d621b78b989c66ba97e1fc65aabb441fdecafe643f141ce5fe5a(
+    value: typing.Optional[DataKubernetesNodesNodesStatusAddresses],
 ) -> None:
     """Type checking stubs"""
     pass
