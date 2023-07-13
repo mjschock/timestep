@@ -1,7 +1,7 @@
 '''
 # `kubernetes_certificate_signing_request`
 
-Refer to the Terraform Registory for docs: [`kubernetes_certificate_signing_request`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request).
+Refer to the Terraform Registory for docs: [`kubernetes_certificate_signing_request`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class CertificateSigningRequest(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.certificateSigningRequest.CertificateSigningRequest",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request kubernetes_certificate_signing_request}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request kubernetes_certificate_signing_request}.'''
 
     def __init__(
         self,
@@ -46,15 +46,15 @@ class CertificateSigningRequest(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request kubernetes_certificate_signing_request} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request kubernetes_certificate_signing_request} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#metadata CertificateSigningRequest#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#spec CertificateSigningRequest#spec}
-        :param auto_approve: Automatically approve the CertificateSigningRequest. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#auto_approve CertificateSigningRequest#auto_approve}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#id CertificateSigningRequest#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#timeouts CertificateSigningRequest#timeouts}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#metadata CertificateSigningRequest#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#spec CertificateSigningRequest#spec}
+        :param auto_approve: Automatically approve the CertificateSigningRequest. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#auto_approve CertificateSigningRequest#auto_approve}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#id CertificateSigningRequest#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#timeouts CertificateSigningRequest#timeouts}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -94,10 +94,10 @@ class CertificateSigningRequest(
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the certificate signing request that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#annotations CertificateSigningRequest#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#generate_name CertificateSigningRequest#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the certificate signing request. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#labels CertificateSigningRequest#labels}
-        :param name: Name of the certificate signing request, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#name CertificateSigningRequest#name}
+        :param annotations: An unstructured key value map stored with the certificate signing request that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#annotations CertificateSigningRequest#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#generate_name CertificateSigningRequest#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the certificate signing request. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#labels CertificateSigningRequest#labels}
+        :param name: Name of the certificate signing request, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#name CertificateSigningRequest#name}
         '''
         value = CertificateSigningRequestMetadata(
             annotations=annotations,
@@ -117,9 +117,9 @@ class CertificateSigningRequest(
         usages: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param request: Base64-encoded PKCS#10 CSR data. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#request CertificateSigningRequest#request}
-        :param signer_name: Requested signer for the request. It is a qualified name in the form: ``scope-hostname.io/name``.If empty, it will be defaulted: 1. If it's a kubelet client certificate, it is assigned ``kubernetes.io/kube-apiserver-client-kubelet``.2. If it's a kubelet serving certificate, it is assigned ``kubernetes.io/kubelet-serving``.3. Otherwise, it is assigned ``kubernetes.io/legacy-unknown``. Distribution of trust for signers happens out of band.You can select on this field using ``spec.signerName``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#signer_name CertificateSigningRequest#signer_name}
-        :param usages: allowedUsages specifies a set of usage contexts the key will be valid for. See: https://tools.ietf.org/html/rfc5280#section-4.2.1.3 https://tools.ietf.org/html/rfc5280#section-4.2.1.12 Valid values are: "signing", "digital signature", "content commitment", "key encipherment", "key agreement", "data encipherment", "cert sign", "crl sign", "encipher only", "decipher only", "any", "server auth", "client auth", "code signing", "email protection", "s/mime", "ipsec end system", "ipsec tunnel", "ipsec user", "timestamping", "ocsp signing", "microsoft sgc", "netscape sgc" Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#usages CertificateSigningRequest#usages}
+        :param request: Base64-encoded PKCS#10 CSR data. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#request CertificateSigningRequest#request}
+        :param signer_name: Requested signer for the request. It is a qualified name in the form: ``scope-hostname.io/name``.If empty, it will be defaulted: 1. If it's a kubelet client certificate, it is assigned ``kubernetes.io/kube-apiserver-client-kubelet``.2. If it's a kubelet serving certificate, it is assigned ``kubernetes.io/kubelet-serving``.3. Otherwise, it is assigned ``kubernetes.io/legacy-unknown``. Distribution of trust for signers happens out of band.You can select on this field using ``spec.signerName``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#signer_name CertificateSigningRequest#signer_name}
+        :param usages: allowedUsages specifies a set of usage contexts the key will be valid for. See: https://tools.ietf.org/html/rfc5280#section-4.2.1.3 https://tools.ietf.org/html/rfc5280#section-4.2.1.12 Valid values are: "signing", "digital signature", "content commitment", "key encipherment", "key agreement", "data encipherment", "cert sign", "crl sign", "encipher only", "decipher only", "any", "server auth", "client auth", "code signing", "email protection", "s/mime", "ipsec end system", "ipsec tunnel", "ipsec user", "timestamping", "ocsp signing", "microsoft sgc", "netscape sgc" Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#usages CertificateSigningRequest#usages}
         '''
         value = CertificateSigningRequestSpec(
             request=request, signer_name=signer_name, usages=usages
@@ -130,7 +130,7 @@ class CertificateSigningRequest(
     @jsii.member(jsii_name="putTimeouts")
     def put_timeouts(self, *, create: typing.Optional[builtins.str] = None) -> None:
         '''
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#create CertificateSigningRequest#create}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#create CertificateSigningRequest#create}.
         '''
         value = CertificateSigningRequestTimeouts(create=create)
 
@@ -277,11 +277,11 @@ class CertificateSigningRequestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#metadata CertificateSigningRequest#metadata}
-        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#spec CertificateSigningRequest#spec}
-        :param auto_approve: Automatically approve the CertificateSigningRequest. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#auto_approve CertificateSigningRequest#auto_approve}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#id CertificateSigningRequest#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#timeouts CertificateSigningRequest#timeouts}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#metadata CertificateSigningRequest#metadata}
+        :param spec: spec block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#spec CertificateSigningRequest#spec}
+        :param auto_approve: Automatically approve the CertificateSigningRequest. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#auto_approve CertificateSigningRequest#auto_approve}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#id CertificateSigningRequest#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param timeouts: timeouts block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#timeouts CertificateSigningRequest#timeouts}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -398,7 +398,7 @@ class CertificateSigningRequestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "CertificateSigningRequestMetadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#metadata CertificateSigningRequest#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#metadata CertificateSigningRequest#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -408,7 +408,7 @@ class CertificateSigningRequestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def spec(self) -> "CertificateSigningRequestSpec":
         '''spec block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#spec CertificateSigningRequest#spec}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#spec CertificateSigningRequest#spec}
         '''
         result = self._values.get("spec")
         assert result is not None, "Required property 'spec' is missing"
@@ -420,14 +420,14 @@ class CertificateSigningRequestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Automatically approve the CertificateSigningRequest.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#auto_approve CertificateSigningRequest#auto_approve}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#auto_approve CertificateSigningRequest#auto_approve}
         '''
         result = self._values.get("auto_approve")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#id CertificateSigningRequest#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#id CertificateSigningRequest#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -439,7 +439,7 @@ class CertificateSigningRequestConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def timeouts(self) -> typing.Optional["CertificateSigningRequestTimeouts"]:
         '''timeouts block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#timeouts CertificateSigningRequest#timeouts}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#timeouts CertificateSigningRequest#timeouts}
         '''
         result = self._values.get("timeouts")
         return typing.cast(typing.Optional["CertificateSigningRequestTimeouts"], result)
@@ -476,10 +476,10 @@ class CertificateSigningRequestMetadata:
         name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param annotations: An unstructured key value map stored with the certificate signing request that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#annotations CertificateSigningRequest#annotations}
-        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#generate_name CertificateSigningRequest#generate_name}
-        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the certificate signing request. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#labels CertificateSigningRequest#labels}
-        :param name: Name of the certificate signing request, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#name CertificateSigningRequest#name}
+        :param annotations: An unstructured key value map stored with the certificate signing request that may be used to store arbitrary metadata. More info: http://kubernetes.io/docs/user-guide/annotations Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#annotations CertificateSigningRequest#annotations}
+        :param generate_name: Prefix, used by the server, to generate a unique name ONLY IF the ``name`` field has not been provided. This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#generate_name CertificateSigningRequest#generate_name}
+        :param labels: Map of string keys and values that can be used to organize and categorize (scope and select) the certificate signing request. May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#labels CertificateSigningRequest#labels}
+        :param name: Name of the certificate signing request, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#name CertificateSigningRequest#name}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d2791a928a0b34d9800815a66daf376f1c16df7f6cf04033aa38a2494337970)
@@ -505,7 +505,7 @@ class CertificateSigningRequestMetadata:
 
         More info: http://kubernetes.io/docs/user-guide/annotations
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#annotations CertificateSigningRequest#annotations}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#annotations CertificateSigningRequest#annotations}
         '''
         result = self._values.get("annotations")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -516,7 +516,7 @@ class CertificateSigningRequestMetadata:
 
         This value will also be combined with a unique suffix. Read more: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#idempotency
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#generate_name CertificateSigningRequest#generate_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#generate_name CertificateSigningRequest#generate_name}
         '''
         result = self._values.get("generate_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -527,7 +527,7 @@ class CertificateSigningRequestMetadata:
 
         May match selectors of replication controllers and services. More info: http://kubernetes.io/docs/user-guide/labels
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#labels CertificateSigningRequest#labels}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#labels CertificateSigningRequest#labels}
         '''
         result = self._values.get("labels")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
@@ -536,7 +536,7 @@ class CertificateSigningRequestMetadata:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the certificate signing request, must be unique. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#name CertificateSigningRequest#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#name CertificateSigningRequest#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -710,9 +710,9 @@ class CertificateSigningRequestSpec:
         usages: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
-        :param request: Base64-encoded PKCS#10 CSR data. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#request CertificateSigningRequest#request}
-        :param signer_name: Requested signer for the request. It is a qualified name in the form: ``scope-hostname.io/name``.If empty, it will be defaulted: 1. If it's a kubelet client certificate, it is assigned ``kubernetes.io/kube-apiserver-client-kubelet``.2. If it's a kubelet serving certificate, it is assigned ``kubernetes.io/kubelet-serving``.3. Otherwise, it is assigned ``kubernetes.io/legacy-unknown``. Distribution of trust for signers happens out of band.You can select on this field using ``spec.signerName``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#signer_name CertificateSigningRequest#signer_name}
-        :param usages: allowedUsages specifies a set of usage contexts the key will be valid for. See: https://tools.ietf.org/html/rfc5280#section-4.2.1.3 https://tools.ietf.org/html/rfc5280#section-4.2.1.12 Valid values are: "signing", "digital signature", "content commitment", "key encipherment", "key agreement", "data encipherment", "cert sign", "crl sign", "encipher only", "decipher only", "any", "server auth", "client auth", "code signing", "email protection", "s/mime", "ipsec end system", "ipsec tunnel", "ipsec user", "timestamping", "ocsp signing", "microsoft sgc", "netscape sgc" Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#usages CertificateSigningRequest#usages}
+        :param request: Base64-encoded PKCS#10 CSR data. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#request CertificateSigningRequest#request}
+        :param signer_name: Requested signer for the request. It is a qualified name in the form: ``scope-hostname.io/name``.If empty, it will be defaulted: 1. If it's a kubelet client certificate, it is assigned ``kubernetes.io/kube-apiserver-client-kubelet``.2. If it's a kubelet serving certificate, it is assigned ``kubernetes.io/kubelet-serving``.3. Otherwise, it is assigned ``kubernetes.io/legacy-unknown``. Distribution of trust for signers happens out of band.You can select on this field using ``spec.signerName``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#signer_name CertificateSigningRequest#signer_name}
+        :param usages: allowedUsages specifies a set of usage contexts the key will be valid for. See: https://tools.ietf.org/html/rfc5280#section-4.2.1.3 https://tools.ietf.org/html/rfc5280#section-4.2.1.12 Valid values are: "signing", "digital signature", "content commitment", "key encipherment", "key agreement", "data encipherment", "cert sign", "crl sign", "encipher only", "decipher only", "any", "server auth", "client auth", "code signing", "email protection", "s/mime", "ipsec end system", "ipsec tunnel", "ipsec user", "timestamping", "ocsp signing", "microsoft sgc", "netscape sgc" Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#usages CertificateSigningRequest#usages}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0c05e43256fc753b34b2d42ecee7ef6b258797e1601eacf9e1315f4d2d2b121e)
@@ -731,7 +731,7 @@ class CertificateSigningRequestSpec:
     def request(self) -> builtins.str:
         '''Base64-encoded PKCS#10 CSR data.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#request CertificateSigningRequest#request}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#request CertificateSigningRequest#request}
         '''
         result = self._values.get("request")
         assert result is not None, "Required property 'request' is missing"
@@ -743,7 +743,7 @@ class CertificateSigningRequestSpec:
 
         It is a qualified name in the form: ``scope-hostname.io/name``.If empty, it will be defaulted: 1. If it's a kubelet client certificate, it is assigned ``kubernetes.io/kube-apiserver-client-kubelet``.2. If it's a kubelet serving certificate, it is assigned ``kubernetes.io/kubelet-serving``.3. Otherwise, it is assigned ``kubernetes.io/legacy-unknown``. Distribution of trust for signers happens out of band.You can select on this field using ``spec.signerName``.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#signer_name CertificateSigningRequest#signer_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#signer_name CertificateSigningRequest#signer_name}
         '''
         result = self._values.get("signer_name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -779,7 +779,7 @@ class CertificateSigningRequestSpec:
         "microsoft sgc",
         "netscape sgc"
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#usages CertificateSigningRequest#usages}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#usages CertificateSigningRequest#usages}
         '''
         result = self._values.get("usages")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
@@ -899,7 +899,7 @@ class CertificateSigningRequestSpecOutputReference(
 class CertificateSigningRequestTimeouts:
     def __init__(self, *, create: typing.Optional[builtins.str] = None) -> None:
         '''
-        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#create CertificateSigningRequest#create}.
+        :param create: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#create CertificateSigningRequest#create}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9fc12cd19934cdffd3257a2c4cf7ddb423b1d75054fa62302c924db74b264783)
@@ -910,7 +910,7 @@ class CertificateSigningRequestTimeouts:
 
     @builtins.property
     def create(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/certificate_signing_request#create CertificateSigningRequest#create}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/certificate_signing_request#create CertificateSigningRequest#create}.'''
         result = self._values.get("create")
         return typing.cast(typing.Optional[builtins.str], result)
 

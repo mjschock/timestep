@@ -1,7 +1,7 @@
 '''
 # `kubernetes_env`
 
-Refer to the Terraform Registory for docs: [`kubernetes_env`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env).
+Refer to the Terraform Registory for docs: [`kubernetes_env`](https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class Env(
     metaclass=jsii.JSIIMeta,
     jsii_type="kubernetes.env.Env",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env kubernetes_env}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env kubernetes_env}.'''
 
     def __init__(
         self,
@@ -50,19 +50,19 @@ class Env(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env kubernetes_env} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env kubernetes_env} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param api_version: Resource API version. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#api_version Env#api_version}
-        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#env Env#env}
-        :param kind: Resource Kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#kind Env#kind}
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#metadata Env#metadata}
-        :param container: Name of the container for which we are updating the environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#container Env#container}
-        :param field_manager: Set the name of the field manager for the specified environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#field_manager Env#field_manager}
-        :param force: Force overwriting environments that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#force Env#force}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#id Env#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param init_container: Name of the initContainer for which we are updating the environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#init_container Env#init_container}
+        :param api_version: Resource API version. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#api_version Env#api_version}
+        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#env Env#env}
+        :param kind: Resource Kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#kind Env#kind}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#metadata Env#metadata}
+        :param container: Name of the container for which we are updating the environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#container Env#container}
+        :param field_manager: Set the name of the field manager for the specified environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#field_manager Env#field_manager}
+        :param force: Force overwriting environments that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#force Env#force}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#id Env#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param init_container: Name of the initContainer for which we are updating the environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#init_container Env#init_container}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -117,8 +117,8 @@ class Env(
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param name: The name of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
-        :param namespace: The namespace of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#namespace Env#namespace}
+        :param name: The name of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
+        :param namespace: The namespace of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#namespace Env#namespace}
         '''
         value = EnvMetadata(name=name, namespace=namespace)
 
@@ -351,15 +351,15 @@ class EnvConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param api_version: Resource API version. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#api_version Env#api_version}
-        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#env Env#env}
-        :param kind: Resource Kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#kind Env#kind}
-        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#metadata Env#metadata}
-        :param container: Name of the container for which we are updating the environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#container Env#container}
-        :param field_manager: Set the name of the field manager for the specified environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#field_manager Env#field_manager}
-        :param force: Force overwriting environments that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#force Env#force}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#id Env#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param init_container: Name of the initContainer for which we are updating the environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#init_container Env#init_container}
+        :param api_version: Resource API version. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#api_version Env#api_version}
+        :param env: env block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#env Env#env}
+        :param kind: Resource Kind. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#kind Env#kind}
+        :param metadata: metadata block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#metadata Env#metadata}
+        :param container: Name of the container for which we are updating the environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#container Env#container}
+        :param field_manager: Set the name of the field manager for the specified environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#field_manager Env#field_manager}
+        :param force: Force overwriting environments that were created or edited outside of Terraform. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#force Env#force}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#id Env#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param init_container: Name of the initContainer for which we are updating the environment variables. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#init_container Env#init_container}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -482,7 +482,7 @@ class EnvConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def api_version(self) -> builtins.str:
         '''Resource API version.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#api_version Env#api_version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#api_version Env#api_version}
         '''
         result = self._values.get("api_version")
         assert result is not None, "Required property 'api_version' is missing"
@@ -492,7 +492,7 @@ class EnvConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def env(self) -> typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["EnvEnv"]]:
         '''env block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#env Env#env}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#env Env#env}
         '''
         result = self._values.get("env")
         assert result is not None, "Required property 'env' is missing"
@@ -502,7 +502,7 @@ class EnvConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def kind(self) -> builtins.str:
         '''Resource Kind.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#kind Env#kind}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#kind Env#kind}
         '''
         result = self._values.get("kind")
         assert result is not None, "Required property 'kind' is missing"
@@ -512,7 +512,7 @@ class EnvConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def metadata(self) -> "EnvMetadata":
         '''metadata block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#metadata Env#metadata}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#metadata Env#metadata}
         '''
         result = self._values.get("metadata")
         assert result is not None, "Required property 'metadata' is missing"
@@ -522,7 +522,7 @@ class EnvConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def container(self) -> typing.Optional[builtins.str]:
         '''Name of the container for which we are updating the environment variables.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#container Env#container}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#container Env#container}
         '''
         result = self._values.get("container")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -531,7 +531,7 @@ class EnvConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def field_manager(self) -> typing.Optional[builtins.str]:
         '''Set the name of the field manager for the specified environment variables.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#field_manager Env#field_manager}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#field_manager Env#field_manager}
         '''
         result = self._values.get("field_manager")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -542,14 +542,14 @@ class EnvConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Force overwriting environments that were created or edited outside of Terraform.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#force Env#force}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#force Env#force}
         '''
         result = self._values.get("force")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#id Env#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#id Env#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -561,7 +561,7 @@ class EnvConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def init_container(self) -> typing.Optional[builtins.str]:
         '''Name of the initContainer for which we are updating the environment variables.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#init_container Env#init_container}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#init_container Env#init_container}
         '''
         result = self._values.get("init_container")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -592,9 +592,9 @@ class EnvEnv:
         value_from: typing.Optional[typing.Union["EnvEnvValueFrom", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param name: Name of the environment variable. Must be a C_IDENTIFIER. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
-        :param value: Variable references $(VAR_NAME) are expanded using the previous defined environment variables in the container and any service environment variables. If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Defaults to "". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#value Env#value}
-        :param value_from: value_from block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#value_from Env#value_from}
+        :param name: Name of the environment variable. Must be a C_IDENTIFIER. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
+        :param value: Variable references $(VAR_NAME) are expanded using the previous defined environment variables in the container and any service environment variables. If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Defaults to "". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#value Env#value}
+        :param value_from: value_from block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#value_from Env#value_from}
         '''
         if isinstance(value_from, dict):
             value_from = EnvEnvValueFrom(**value_from)
@@ -615,7 +615,7 @@ class EnvEnv:
     def name(self) -> builtins.str:
         '''Name of the environment variable. Must be a C_IDENTIFIER.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -627,7 +627,7 @@ class EnvEnv:
 
         If a variable cannot be resolved, the reference in the input string will be unchanged. The $(VAR_NAME) syntax can be escaped with a double $$, ie: $$(VAR_NAME). Escaped references will never be expanded, regardless of whether the variable exists or not. Defaults to "".
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#value Env#value}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#value Env#value}
         '''
         result = self._values.get("value")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -636,7 +636,7 @@ class EnvEnv:
     def value_from(self) -> typing.Optional["EnvEnvValueFrom"]:
         '''value_from block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#value_from Env#value_from}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#value_from Env#value_from}
         '''
         result = self._values.get("value_from")
         return typing.cast(typing.Optional["EnvEnvValueFrom"], result)
@@ -779,10 +779,10 @@ class EnvEnvOutputReference(
         secret_key_ref: typing.Optional[typing.Union["EnvEnvValueFromSecretKeyRef", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param config_map_key_ref: config_map_key_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#config_map_key_ref Env#config_map_key_ref}
-        :param field_ref: field_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#field_ref Env#field_ref}
-        :param resource_field_ref: resource_field_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#resource_field_ref Env#resource_field_ref}
-        :param secret_key_ref: secret_key_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#secret_key_ref Env#secret_key_ref}
+        :param config_map_key_ref: config_map_key_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#config_map_key_ref Env#config_map_key_ref}
+        :param field_ref: field_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#field_ref Env#field_ref}
+        :param resource_field_ref: resource_field_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#resource_field_ref Env#resource_field_ref}
+        :param secret_key_ref: secret_key_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#secret_key_ref Env#secret_key_ref}
         '''
         value = EnvEnvValueFrom(
             config_map_key_ref=config_map_key_ref,
@@ -883,10 +883,10 @@ class EnvEnvValueFrom:
         secret_key_ref: typing.Optional[typing.Union["EnvEnvValueFromSecretKeyRef", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
-        :param config_map_key_ref: config_map_key_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#config_map_key_ref Env#config_map_key_ref}
-        :param field_ref: field_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#field_ref Env#field_ref}
-        :param resource_field_ref: resource_field_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#resource_field_ref Env#resource_field_ref}
-        :param secret_key_ref: secret_key_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#secret_key_ref Env#secret_key_ref}
+        :param config_map_key_ref: config_map_key_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#config_map_key_ref Env#config_map_key_ref}
+        :param field_ref: field_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#field_ref Env#field_ref}
+        :param resource_field_ref: resource_field_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#resource_field_ref Env#resource_field_ref}
+        :param secret_key_ref: secret_key_ref block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#secret_key_ref Env#secret_key_ref}
         '''
         if isinstance(config_map_key_ref, dict):
             config_map_key_ref = EnvEnvValueFromConfigMapKeyRef(**config_map_key_ref)
@@ -916,7 +916,7 @@ class EnvEnvValueFrom:
     def config_map_key_ref(self) -> typing.Optional["EnvEnvValueFromConfigMapKeyRef"]:
         '''config_map_key_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#config_map_key_ref Env#config_map_key_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#config_map_key_ref Env#config_map_key_ref}
         '''
         result = self._values.get("config_map_key_ref")
         return typing.cast(typing.Optional["EnvEnvValueFromConfigMapKeyRef"], result)
@@ -925,7 +925,7 @@ class EnvEnvValueFrom:
     def field_ref(self) -> typing.Optional["EnvEnvValueFromFieldRef"]:
         '''field_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#field_ref Env#field_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#field_ref Env#field_ref}
         '''
         result = self._values.get("field_ref")
         return typing.cast(typing.Optional["EnvEnvValueFromFieldRef"], result)
@@ -934,7 +934,7 @@ class EnvEnvValueFrom:
     def resource_field_ref(self) -> typing.Optional["EnvEnvValueFromResourceFieldRef"]:
         '''resource_field_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#resource_field_ref Env#resource_field_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#resource_field_ref Env#resource_field_ref}
         '''
         result = self._values.get("resource_field_ref")
         return typing.cast(typing.Optional["EnvEnvValueFromResourceFieldRef"], result)
@@ -943,7 +943,7 @@ class EnvEnvValueFrom:
     def secret_key_ref(self) -> typing.Optional["EnvEnvValueFromSecretKeyRef"]:
         '''secret_key_ref block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#secret_key_ref Env#secret_key_ref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#secret_key_ref Env#secret_key_ref}
         '''
         result = self._values.get("secret_key_ref")
         return typing.cast(typing.Optional["EnvEnvValueFromSecretKeyRef"], result)
@@ -974,9 +974,9 @@ class EnvEnvValueFromConfigMapKeyRef:
         optional: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param key: The key to select. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#key Env#key}
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
-        :param optional: Specify whether the ConfigMap or its key must be defined. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#optional Env#optional}
+        :param key: The key to select. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#key Env#key}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
+        :param optional: Specify whether the ConfigMap or its key must be defined. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#optional Env#optional}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__890d6ddc23e73b60bc8d0c71c794fd21f80952f7263239b2ff663089280cdaee)
@@ -995,7 +995,7 @@ class EnvEnvValueFromConfigMapKeyRef:
     def key(self) -> typing.Optional[builtins.str]:
         '''The key to select.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#key Env#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#key Env#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1004,7 +1004,7 @@ class EnvEnvValueFromConfigMapKeyRef:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1015,7 +1015,7 @@ class EnvEnvValueFromConfigMapKeyRef:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Specify whether the ConfigMap or its key must be defined.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#optional Env#optional}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#optional Env#optional}
         '''
         result = self._values.get("optional")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -1149,8 +1149,8 @@ class EnvEnvValueFromFieldRef:
         field_path: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_version: Version of the schema the FieldPath is written in terms of, defaults to "v1". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#api_version Env#api_version}
-        :param field_path: Path of the field to select in the specified API version. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#field_path Env#field_path}
+        :param api_version: Version of the schema the FieldPath is written in terms of, defaults to "v1". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#api_version Env#api_version}
+        :param field_path: Path of the field to select in the specified API version. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#field_path Env#field_path}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__efb030d56d5b6a5fc159b705729561c69e7a6b3178712259351a9e1a4025de90)
@@ -1166,7 +1166,7 @@ class EnvEnvValueFromFieldRef:
     def api_version(self) -> typing.Optional[builtins.str]:
         '''Version of the schema the FieldPath is written in terms of, defaults to "v1".
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#api_version Env#api_version}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#api_version Env#api_version}
         '''
         result = self._values.get("api_version")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1175,7 +1175,7 @@ class EnvEnvValueFromFieldRef:
     def field_path(self) -> typing.Optional[builtins.str]:
         '''Path of the field to select in the specified API version.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#field_path Env#field_path}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#field_path Env#field_path}
         '''
         result = self._values.get("field_path")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1296,9 +1296,9 @@ class EnvEnvValueFromOutputReference(
         optional: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param key: The key to select. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#key Env#key}
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
-        :param optional: Specify whether the ConfigMap or its key must be defined. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#optional Env#optional}
+        :param key: The key to select. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#key Env#key}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
+        :param optional: Specify whether the ConfigMap or its key must be defined. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#optional Env#optional}
         '''
         value = EnvEnvValueFromConfigMapKeyRef(key=key, name=name, optional=optional)
 
@@ -1312,8 +1312,8 @@ class EnvEnvValueFromOutputReference(
         field_path: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param api_version: Version of the schema the FieldPath is written in terms of, defaults to "v1". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#api_version Env#api_version}
-        :param field_path: Path of the field to select in the specified API version. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#field_path Env#field_path}
+        :param api_version: Version of the schema the FieldPath is written in terms of, defaults to "v1". Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#api_version Env#api_version}
+        :param field_path: Path of the field to select in the specified API version. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#field_path Env#field_path}
         '''
         value = EnvEnvValueFromFieldRef(api_version=api_version, field_path=field_path)
 
@@ -1328,9 +1328,9 @@ class EnvEnvValueFromOutputReference(
         divisor: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param resource: Resource to select. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#resource Env#resource}
-        :param container_name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#container_name Env#container_name}.
-        :param divisor: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#divisor Env#divisor}.
+        :param resource: Resource to select. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#resource Env#resource}
+        :param container_name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#container_name Env#container_name}.
+        :param divisor: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#divisor Env#divisor}.
         '''
         value = EnvEnvValueFromResourceFieldRef(
             resource=resource, container_name=container_name, divisor=divisor
@@ -1347,9 +1347,9 @@ class EnvEnvValueFromOutputReference(
         optional: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param key: The key of the secret to select from. Must be a valid secret key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#key Env#key}
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
-        :param optional: Specify whether the Secret or its key must be defined. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#optional Env#optional}
+        :param key: The key of the secret to select from. Must be a valid secret key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#key Env#key}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
+        :param optional: Specify whether the Secret or its key must be defined. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#optional Env#optional}
         '''
         value = EnvEnvValueFromSecretKeyRef(key=key, name=name, optional=optional)
 
@@ -1446,9 +1446,9 @@ class EnvEnvValueFromResourceFieldRef:
         divisor: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param resource: Resource to select. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#resource Env#resource}
-        :param container_name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#container_name Env#container_name}.
-        :param divisor: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#divisor Env#divisor}.
+        :param resource: Resource to select. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#resource Env#resource}
+        :param container_name: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#container_name Env#container_name}.
+        :param divisor: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#divisor Env#divisor}.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__015ef5725459082319e92735609992e52b92eff598c57531f5806c8fd7df785f)
@@ -1467,7 +1467,7 @@ class EnvEnvValueFromResourceFieldRef:
     def resource(self) -> builtins.str:
         '''Resource to select.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#resource Env#resource}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#resource Env#resource}
         '''
         result = self._values.get("resource")
         assert result is not None, "Required property 'resource' is missing"
@@ -1475,13 +1475,13 @@ class EnvEnvValueFromResourceFieldRef:
 
     @builtins.property
     def container_name(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#container_name Env#container_name}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#container_name Env#container_name}.'''
         result = self._values.get("container_name")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def divisor(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#divisor Env#divisor}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#divisor Env#divisor}.'''
         result = self._values.get("divisor")
         return typing.cast(typing.Optional[builtins.str], result)
 
@@ -1606,9 +1606,9 @@ class EnvEnvValueFromSecretKeyRef:
         optional: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param key: The key of the secret to select from. Must be a valid secret key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#key Env#key}
-        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
-        :param optional: Specify whether the Secret or its key must be defined. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#optional Env#optional}
+        :param key: The key of the secret to select from. Must be a valid secret key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#key Env#key}
+        :param name: Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
+        :param optional: Specify whether the Secret or its key must be defined. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#optional Env#optional}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a4fa7ce199550cb5f0774829377da44e3dad2880e001bad71c2e7027320eaa54)
@@ -1627,7 +1627,7 @@ class EnvEnvValueFromSecretKeyRef:
     def key(self) -> typing.Optional[builtins.str]:
         '''The key of the secret to select from. Must be a valid secret key.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#key Env#key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#key Env#key}
         '''
         result = self._values.get("key")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1636,7 +1636,7 @@ class EnvEnvValueFromSecretKeyRef:
     def name(self) -> typing.Optional[builtins.str]:
         '''Name of the referent. More info: http://kubernetes.io/docs/user-guide/identifiers#names.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -1647,7 +1647,7 @@ class EnvEnvValueFromSecretKeyRef:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Specify whether the Secret or its key must be defined.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#optional Env#optional}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#optional Env#optional}
         '''
         result = self._values.get("optional")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
@@ -1781,8 +1781,8 @@ class EnvMetadata:
         namespace: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
-        :param name: The name of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
-        :param namespace: The namespace of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#namespace Env#namespace}
+        :param name: The name of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
+        :param namespace: The namespace of the resource. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#namespace Env#namespace}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__87a08262ad9484983b5838752b26d88ae41482bc29b9c1b257ca9b0e9b1f9ffe)
@@ -1798,7 +1798,7 @@ class EnvMetadata:
     def name(self) -> builtins.str:
         '''The name of the resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#name Env#name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#name Env#name}
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
@@ -1808,7 +1808,7 @@ class EnvMetadata:
     def namespace(self) -> typing.Optional[builtins.str]:
         '''The namespace of the resource.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.21.1/docs/resources/env#namespace Env#namespace}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/hashicorp/kubernetes/2.22.0/docs/resources/env#namespace Env#namespace}
         '''
         result = self._values.get("namespace")
         return typing.cast(typing.Optional[builtins.str], result)

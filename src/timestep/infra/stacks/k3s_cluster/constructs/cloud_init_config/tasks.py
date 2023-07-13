@@ -65,6 +65,8 @@ def get_cloud_init_config_resource(
         package_upgrade=True,
         packages=[
             "build-essential",
+            # "ca-certificates",
+            "ca-certificates-java",
             "curl",
             "default-jdk",
             "direnv",
@@ -86,10 +88,12 @@ def get_cloud_init_config_resource(
             "zlib1g-dev",
         ],
         runcmd=[
-            "sed -i -E 's|^#?Port .*|Port 4444|' /etc/ssh/sshd_config",
+            # "sed -i -E 's|^#?Port .*|Port 4444|' /etc/ssh/sshd_config",
             "sed -i -E '/^#?PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config",  # noqa: E501
             f"sed -i -e '$aAllowUsers {username}' /etc/ssh/sshd_config",
-            "restart ssh",
+            "service ssh restart",
+            "curl -sLS https://get.arkade.dev | sudo sh",
+            # 'bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)" --unattended',  # noqa: E501
             # [
             #     "runuser",
             #     "-l",
@@ -184,27 +188,28 @@ def get_cloud_init_config_resource(
             #     "curl -sLS https://get.arkade.dev | sudo sh",
             # ],
             # ["runuser", "-l", "ubuntu", "-c", 'echo "" >> $HOME/.bashrc'],
-            # [
-            #     "runuser",
-            #     "-l",
-            #     "ubuntu",
-            #     "-c",
-            #     "echo export PATH=\\$HOME/.arkade/bin:\\$PATH >> $HOME/.bashrc",
-            # ],
-            #             ["runuser", "-l", "ubuntu", "-c", "arkade get k3sup"],
+            # 'echo "\nexport PATH=$HOME/.arkade/bin:$PATH" >> $HOME/.bashrc',
+            [
+                "runuser",
+                "-l",
+                username,
+                "-c",
+                'echo "\nexport PATH=\\$HOME/.arkade/bin:\\$PATH" >> $HOME/.bashrc',  # noqa: E501
+            ],
+            ["runuser", "-l", username, "-c", "arkade get k3sup"],
             #             ["runuser", "-l", "ubuntu", "-c", "mkdir $HOME/.kube"],
-            #             [
-            #                 "runuser",
-            #                 "-l",
-            #                 "ubuntu",
-            #                 "-c",
-            #                 f"""$HOME/.arkade/bin/k3sup install \
-            # --context {config.variables.get("kubecontext")} \
-            # --k3s-extra-args '--disable traefik' \
-            # --local \
-            # --local-path $HOME/.kube/config \
-            # --user ubuntu""",
-            #             ],
+            [
+                "runuser",
+                "-l",
+                username,
+                "-c",
+                f"""$HOME/.arkade/bin/k3sup install \
+            --cluster \
+            --context {config.variables.get("kubecontext")} \
+            --k3s-extra-args '--disable traefik' \
+            --local \
+            --user {username}""",
+            ],
             # [
             #     "runuser", "-l", "ubuntu", "-c", "wget https://raw.githubusercontent.com/hasura/graphql-engine/stable/install-manifests/docker-compose-https/docker-compose.yaml",
             # ],
