@@ -201,6 +201,6 @@ class CloudInitConfigConstruct(Construct):
                 value=cloud_init_config_data_source.rendered,
             )
 
-        self.data_source: TerraformDataSource = (
-            cloud_init_config_data_source  # noqa: E501
-        )
+        self.data_source: TerraformDataSource[
+            DataLocalFile | DataCloudinitConfig
+        ] = cloud_init_config_data_source

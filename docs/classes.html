@@ -114,7 +114,7 @@
             block_initialization()
           }
           class CloudInitConfigConstruct {
-            data_source
+            data_source : TerraformDataSource[DataLocalFile | DataCloudinitConfig]
           }
           class CloudInstanceProvider {
             name
@@ -175,7 +175,6 @@
           CloudInstanceDomainConstruct --* K3sClusterStack : cloud_instance_domain_construct
           DomainNameRegistrarConstruct --* K3sClusterStack : domain_name_registar_construct
           Dict --* AppConfig : variables
-          TerraformDataSource --o CloudInitConfigConstruct : data_source
           TerraformDataSource --o CloudInstanceConstruct : data_source
           TerraformDataSource --o CloudInitConfigConstruct : data_source
           TerraformDataSource --o CloudInstanceConstruct : data_source
