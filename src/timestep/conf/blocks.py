@@ -2,7 +2,6 @@ import os
 import pathlib
 import socket
 import tempfile
-from enum import StrEnum, auto
 from typing import Dict, Optional
 
 from prefect.blocks.core import Block
@@ -49,15 +48,6 @@ class SecureShellCredentials(Block):
 
                 self.public_key = pathlib.Path(f"{output_keyfile}.pub").read_text()
                 self.private_key = SecretStr(pathlib.Path(output_keyfile).read_text())
-
-
-class CloudInstanceProvider(StrEnum):
-    DIGITALOCEAN: str = auto()
-    MULTIPASS: str = auto()
-
-
-class DomainNameRegistrarProvider(StrEnum):
-    NAMECHEAP: str = auto()
 
 
 class AppConfig(Block):

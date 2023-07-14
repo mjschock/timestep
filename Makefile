@@ -17,7 +17,7 @@ pre-commit:
 	poetry run pre-commit run --all-files
 
 pyreverse:
-	mkdir docs && poetry run pyreverse --all-ancestors --all-associated --module-names y --colorized --output html --output-directory docs src.timestep
+	rm -rf docs && mkdir docs && poetry run pyreverse --all-ancestors --all-associated --module-names y --colorized --output html --output-directory docs src.timestep
 
 ssh:
 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.159.189.21

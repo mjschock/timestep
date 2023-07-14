@@ -22,8 +22,15 @@ from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.construc
 
 
 class K3sClusterStack(TerraformStack):
+    cloud_init_config_construct: CloudInitConfigConstruct
+    cloud_instance_construct: CloudInstanceConstruct
+    cloud_instance_domain_construct: CloudInstanceDomainConstruct
+    domain_name_registar_construct: DomainNameRegistrarConstruct
+
     def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
         super().__init__(scope, id)
+
+        stack_id: str = config.variables.get("primary_domain_name")
 
         self.cloud_init_config_construct = CloudInitConfigConstruct(
             config=config,
@@ -50,8 +57,6 @@ class K3sClusterStack(TerraformStack):
             id="domain_name_registar_construct",
             scope=self,
         )
-
-        stack_id: str = config.variables.get("primary_domain_name")
 
         if (
             config.variables.get("cloud_instance_provider")
