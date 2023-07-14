@@ -17,10 +17,10 @@ from timestep.infra.imports.local.file import File as LocalFileTerraformResource
 from timestep.infra.imports.local.provider import (
     LocalProvider as LocalTerraformProvider,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
+from timestep.infra.stacks.main.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
+from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
 )
 

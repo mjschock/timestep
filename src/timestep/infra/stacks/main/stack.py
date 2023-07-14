@@ -7,28 +7,28 @@ from cdktf import (
 from constructs import Construct
 
 from timestep.conf.blocks import AppConfig
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
+from timestep.infra.stacks.main.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
+from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance_domain.construct import (  # noqa: E501
+from timestep.infra.stacks.main.constructs.cloud_instance_domain.construct import (
     CloudInstanceDomainConstruct,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.construct import (  # noqa: E501
+from timestep.infra.stacks.main.constructs.domain_name_registrar.construct import (
     DomainNameRegistrarConstruct,
 )
 
 
-class K3sClusterStack(TerraformStack):
+class MainStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
         super().__init__(scope, id)
 
         stack_id: str = config.variables.get("primary_domain_name")
 
         self.cloud_init_config_construct: CloudInitConfigConstruct = (
-            CloudInitConfigConstruct(  # noqa: E501
+            CloudInitConfigConstruct(
                 config=config,
                 id="cloud_init_config_construct",
                 scope=self,
