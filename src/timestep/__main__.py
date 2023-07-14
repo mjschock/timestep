@@ -8,7 +8,7 @@ from timestep.conf.blocks import (
     AppConfig,
     SecureShellCredentials,
 )
-from timestep.infra.stacks.k3s_cluster.stack import K3sClusterStack
+from timestep.infra.stacks.main.stack import MainStack
 
 BASE_PATH = pathlib.Path.cwd()
 DIST_PATH: str = f"{BASE_PATH}/cdktf.out"
@@ -28,7 +28,7 @@ def main(config: AppConfig) -> None:
     assert app.node.get_context("allowSepCharsInLogicalIds") == "true"
     assert app.node.get_context("excludeStackIdFromLogicalIds") == "true"
 
-    K3sClusterStack(
+    MainStack(
         config=config,
         scope=app,
         id=config.variables.get("primary_domain_name"),

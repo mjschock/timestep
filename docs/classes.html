@@ -130,22 +130,11 @@
           class DomainNameRegistrarProvider {
             name
           }
-          class K3sClusterStack {
+          class MainStack {
             cloud_init_config_construct
             cloud_instance_construct
             cloud_instance_domain_construct
             domain_name_registar_construct
-          }
-          class CloudInitConfigConstruct {
-            data_source
-          }
-          class CloudInstanceConstruct {
-            data_source
-            provider
-          }
-          class CloudInstanceDomainConstruct {
-          }
-          class DomainNameRegistrarConstruct {
           }
           class Dict {
           }
@@ -164,21 +153,10 @@
           CloudInstanceDomainConstruct --|> Construct
           DomainNameRegistrarConstruct --|> Construct
           DomainNameRegistrarProvider --|> StrEnum
-          K3sClusterStack --|> TerraformStack
-          CloudInitConfigConstruct --|> Construct
-          CloudInstanceConstruct --|> Construct
-          CloudInstanceDomainConstruct --|> Construct
-          DomainNameRegistrarConstruct --|> Construct
+          MainStack --|> TerraformStack
           SecretDict --* AppConfig : secrets
-          CloudInitConfigConstruct --* K3sClusterStack : cloud_init_config_construct
-          CloudInstanceConstruct --* K3sClusterStack : cloud_instance_construct
-          CloudInstanceDomainConstruct --* K3sClusterStack : cloud_instance_domain_construct
-          DomainNameRegistrarConstruct --* K3sClusterStack : domain_name_registar_construct
           Dict --* AppConfig : variables
           TerraformDataSource --o CloudInstanceConstruct : data_source
-          TerraformDataSource --o CloudInitConfigConstruct : data_source
-          TerraformDataSource --o CloudInstanceConstruct : data_source
-          TerraformProvider --o CloudInstanceConstruct : provider
           TerraformProvider --o CloudInstanceConstruct : provider
   
        </div>
