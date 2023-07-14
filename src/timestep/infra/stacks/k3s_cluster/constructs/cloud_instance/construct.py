@@ -25,7 +25,6 @@ from timestep.infra.imports.multipass.provider import (
 )
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
-    CloudInstanceProvider,
 )
 
 
@@ -41,7 +40,7 @@ class CloudInstanceConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_instance_provider = MultipassTerraformProvider(
                 id="cloud_instance_provider",
@@ -50,7 +49,7 @@ class CloudInstanceConstruct(Construct):
 
         elif (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.DIGITALOCEAN
+            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
         ):
             cloud_instance_provider = DigitaloceanTerraformProvider(
                 id="cloud_instance_provider",
@@ -66,7 +65,7 @@ class CloudInstanceConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_instance_resource = MultipassInstanceTerraformResource(
                 cloudinit_file=cloud_init_config_construct.data_source.filename,
@@ -81,7 +80,7 @@ class CloudInstanceConstruct(Construct):
 
         elif (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.DIGITALOCEAN
+            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
         ):
             cloud_instance_ssh_key_resource = SshKey(
                 id_="cloud_instance_ssh_key_resource",
@@ -110,7 +109,7 @@ class CloudInstanceConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_instance_data_source = MultipassInstanceTerraformDataSource(
                 id="cloud_instance_data_source",
@@ -121,7 +120,7 @@ class CloudInstanceConstruct(Construct):
 
         elif (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.DIGITALOCEAN
+            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
         ):
             cloud_instance_data_source = DigitaloceanDropletTerraformDataSource(
                 id_="cloud_instance_data_source",
@@ -140,7 +139,7 @@ class CloudInstanceConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_instance_outputs["ipv4"] = TerraformOutput(
                 id="cloud_instance_outputs_ipv4",
@@ -150,7 +149,7 @@ class CloudInstanceConstruct(Construct):
 
         elif (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.DIGITALOCEAN
+            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
         ):
             cloud_instance_outputs["ipv4"] = TerraformOutput(
                 id="cloud_instance_outputs_ipv4",

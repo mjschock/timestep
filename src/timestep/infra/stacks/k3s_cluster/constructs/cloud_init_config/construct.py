@@ -19,18 +19,17 @@ from timestep.infra.imports.null.provider import NullProvider as NullTerraformPr
 from timestep.infra.imports.null.resource import Resource
 
 
-class CloudInstanceProvider(StrEnum):
-    DIGITALOCEAN: str = auto()
-    MULTIPASS: str = auto()
-
-
 class CloudInitConfigConstruct(Construct):
+    class CloudInstanceProvider(StrEnum):
+        DIGITALOCEAN: str = auto()
+        MULTIPASS: str = auto()
+
     def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
         super().__init__(scope, id)
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_init_config_provider = LocalProvider(
                 id="cloud_init_config_provider",
@@ -124,7 +123,7 @@ class CloudInitConfigConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_init_config_resource = File(
                 id="cloud_init_config_resource",
@@ -150,7 +149,7 @@ class CloudInitConfigConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_init_config_data_source = DataLocalFile(
                 id="cloud_init_config_data_source",
@@ -189,7 +188,7 @@ class CloudInitConfigConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_init_config_outputs["cloudinit_file"] = TerraformOutput(
                 scope=scope,
@@ -204,4 +203,6 @@ class CloudInitConfigConstruct(Construct):
                 value=cloud_init_config_data_source.rendered,
             )
 
-        self.data_source = cloud_init_config_data_source
+        self.data_source: DataLocalFile | DataCloudinitConfig = (
+            cloud_init_config_data_source  # noqa: E501
+        )
