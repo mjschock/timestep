@@ -1,8 +1,6 @@
 from enum import StrEnum, auto
 
-from cdktf import (
-    TerraformOutput,
-)
+from cdktf import TerraformDataSource, TerraformOutput
 from cloud_init_gen import CloudInitDoc
 from constructs import Construct
 
@@ -203,6 +201,6 @@ class CloudInitConfigConstruct(Construct):
                 value=cloud_init_config_data_source.rendered,
             )
 
-        self.data_source: DataLocalFile | DataCloudinitConfig = (
+        self.data_source: TerraformDataSource = (
             cloud_init_config_data_source  # noqa: E501
         )

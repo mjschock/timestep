@@ -1,5 +1,7 @@
 from cdktf import (
+    TerraformDataSource,
     TerraformOutput,
+    TerraformProvider,
 )
 from constructs import Construct
 
@@ -163,5 +165,5 @@ class CloudInstanceConstruct(Construct):
                 f"Unknown cloud_instance_provider: {cloud_instance_provider}"
             )
 
-        self.data_source = cloud_instance_data_source
-        self.provider = cloud_instance_provider
+        self.data_source: TerraformDataSource = cloud_instance_data_source
+        self.provider: TerraformProvider = cloud_instance_provider
