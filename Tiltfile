@@ -15,7 +15,7 @@ local_resource(
 
 local_resource(
     'poetry run cdktf get',
-    cmd='poetry run cdktf get --force --language python --log-level $CDKTF_LOG_LEVEL --output src/timestep/infra/imports',
+    cmd='make imports',
     deps=[
         'cdktf.json',
     ],
