@@ -8,7 +8,7 @@ from constructs import Construct
 from prefect import get_run_logger
 
 from timestep.conf.blocks import AppConfig, CloudInstanceProvider
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
 )
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
