@@ -6,6 +6,7 @@ from cdktf import (
 from constructs import Construct
 
 from timestep.conf.blocks import AppConfig
+from timestep.infra.imports.cloudinit.data_cloudinit_config import DataCloudinitConfig
 from timestep.infra.imports.digitalocean.data_digitalocean_droplet import (
     DataDigitaloceanDroplet as DigitaloceanDropletTerraformDataSource,
 )
@@ -16,6 +17,7 @@ from timestep.infra.imports.digitalocean.provider import (
     DigitaloceanProvider as DigitaloceanTerraformProvider,
 )
 from timestep.infra.imports.digitalocean.ssh_key import SshKey
+from timestep.infra.imports.local.data_local_file import DataLocalFile
 from timestep.infra.imports.multipass.data_multipass_instance import (
     DataMultipassInstance as MultipassInstanceTerraformDataSource,
 )
@@ -69,8 +71,12 @@ class CloudInstanceConstruct(Construct):
             config.variables.get("cloud_instance_provider")
             == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
+            cloud_init_config_construct_data_source: DataLocalFile = (
+                cloud_init_config_construct.data_source
+            )  # noqa: E501
             cloud_instance_resource = MultipassInstanceTerraformResource(
-                cloudinit_file=cloud_init_config_construct.data_source.filename,
+                # cloudinit_file=cloud_init_config_construct.data_source.filename,
+                cloudinit_file=cloud_init_config_construct_data_source.filename,
                 cpus=config.variables.get("multipass_instance_cpus"),
                 disk=config.variables.get("multipass_instance_disk"),
                 id="cloud_instance_resource",
@@ -91,6 +97,9 @@ class CloudInstanceConstruct(Construct):
                 public_key=config.variables.get("ssh_public_key"),
                 scope=scope,
             )
+            cloud_init_config_construct_data_source: DataCloudinitConfig = (
+                cloud_init_config_construct.data_source
+            )  # noqa: E501
             cloud_instance_resource = DigitaloceanDropletTerraformResource(
                 id_="cloud_instance_resource",
                 image=config.variables.get("do_droplet_image"),
@@ -100,7 +109,8 @@ class CloudInstanceConstruct(Construct):
                 scope=scope,
                 size=config.variables.get("do_droplet_size"),
                 ssh_keys=[cloud_instance_ssh_key_resource.fingerprint],
-                user_data=cloud_init_config_construct.data_source.rendered,
+                # user_data=cloud_init_config_construct.data_source.rendered,
+                user_data=cloud_init_config_construct_data_source.rendered,
             )
 
         else:
