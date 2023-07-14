@@ -56,12 +56,8 @@ local_resource(
         'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_init_config/tasks.py',
         'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance/blocks.py',
         'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance/tasks.py',
-        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance_domain/blocks.py',
-        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance_domain/tasks.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance_domain/construct.py',
         'src/timestep/infra/stacks/k3s_cluster/constructs/domain_name_registrar/construct.py',
-        'src/timestep/infra/stacks/k3s_cluster/constructs/kube_config/blocks.py',
-        'src/timestep/infra/stacks/k3s_cluster/constructs/kube_config/tasks.py',
-        'src/timestep/infra/stacks/kubernetes_config/constructs/ingress_controller/construct.py',
     ],
     env={
     },
