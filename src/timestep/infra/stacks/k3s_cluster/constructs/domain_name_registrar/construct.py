@@ -6,7 +6,7 @@ from timestep.infra.imports.http.data_http import DataHttp
 from timestep.infra.imports.http.provider import HttpProvider
 from timestep.infra.imports.namecheap.domain_records import DomainRecords
 from timestep.infra.imports.namecheap.provider import NamecheapProvider
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
 )
 
