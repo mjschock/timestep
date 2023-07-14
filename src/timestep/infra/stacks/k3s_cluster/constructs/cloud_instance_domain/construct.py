@@ -3,7 +3,7 @@ from cdktf import (
 )
 from constructs import Construct
 
-from timestep.conf.blocks import AppConfig, CloudInstanceProvider
+from timestep.conf.blocks import AppConfig
 from timestep.infra.imports.digitalocean.data_digitalocean_domain import (
     DataDigitaloceanDomain as DigitaloceanDomainTerraformDataSource,
 )
@@ -16,6 +16,9 @@ from timestep.infra.imports.local.data_local_file import (
 from timestep.infra.imports.local.file import File as LocalFileTerraformResource
 from timestep.infra.imports.local.provider import (
     LocalProvider as LocalTerraformProvider,
+)
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
+    CloudInstanceProvider,
 )
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,

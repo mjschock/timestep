@@ -3,7 +3,7 @@ from cdktf import (
 )
 from constructs import Construct
 
-from timestep.conf.blocks import AppConfig, CloudInstanceProvider
+from timestep.conf.blocks import AppConfig
 from timestep.infra.imports.digitalocean.data_digitalocean_droplet import (
     DataDigitaloceanDroplet as DigitaloceanDropletTerraformDataSource,
 )
@@ -25,6 +25,7 @@ from timestep.infra.imports.multipass.provider import (
 )
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
+    CloudInstanceProvider,
 )
 
 

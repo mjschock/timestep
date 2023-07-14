@@ -1,10 +1,12 @@
+from enum import StrEnum, auto
+
 from cdktf import (
     TerraformOutput,
 )
 from cloud_init_gen import CloudInitDoc
 from constructs import Construct
 
-from timestep.conf.blocks import AppConfig, CloudInstanceProvider
+from timestep.conf.blocks import AppConfig
 from timestep.infra.imports.cloudinit.data_cloudinit_config import (
     DataCloudinitConfig,
     DataCloudinitConfigPart,
@@ -15,6 +17,11 @@ from timestep.infra.imports.local.file import File
 from timestep.infra.imports.local.provider import LocalProvider
 from timestep.infra.imports.null.provider import NullProvider as NullTerraformProvider
 from timestep.infra.imports.null.resource import Resource
+
+
+class CloudInstanceProvider(StrEnum):
+    DIGITALOCEAN: str = auto()
+    MULTIPASS: str = auto()
 
 
 class CloudInitConfigConstruct(Construct):
