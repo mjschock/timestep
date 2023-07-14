@@ -38,11 +38,10 @@ class DomainNameRegistrarConstruct(Construct):
         if (
             config.variables.get("domain_name_registrar_provider")
             == DomainNameRegistrarProvider.NAMECHEAP
-        ):  # noqa: E501
+        ):
             domain_name_registrar_provider = NamecheapProvider(
                 api_key=config.secrets.get_secret_value().get("namecheap_api_key"),
                 api_user=config.secrets.get_secret_value().get("namecheap_api_user"),
-                # client_ip=config.variables.get("client_ip"),
                 client_ip=http_outputs_ip.value,
                 id="domain_name_registrar_provider",
                 scope=scope,
