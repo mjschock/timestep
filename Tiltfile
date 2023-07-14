@@ -24,16 +24,6 @@ local_resource(
 )
 
 local_resource(
-    'kompose convert',
-    cmd='kompose convert --build none --chart --out dist --secrets-as-files',
-    deps=[
-        'Caddyfile',
-        'docker-compose.yml',
-    ],
-    labels=['build'],
-)
-
-local_resource(
     'prefect server',
     links=[
         'http://127.0.0.1:4200',
