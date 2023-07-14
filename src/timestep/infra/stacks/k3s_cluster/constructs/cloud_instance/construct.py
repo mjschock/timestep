@@ -162,3 +162,6 @@ class CloudInstanceConstruct(Construct):
             raise ValueError(
                 f"Unknown cloud_instance_provider: {cloud_instance_provider}"
             )  # noqa: E501
+
+        self.data_source = cloud_instance_data_source
+        self.provider = cloud_instance_provider
