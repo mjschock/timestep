@@ -43,7 +43,7 @@ local_resource(
 
 local_resource(
     'poetry run cdktf deploy',
-    cmd='poetry run cdktf deploy --auto-approve',
+    cmd='poetry run cdktf deploy --auto-approve $STACK_ID',
     deps=[
         '.env',
         'cdktf.json',
@@ -58,6 +58,7 @@ local_resource(
         'src/timestep/infra/stacks/k3s_cluster/constructs/domain_name_registrar/construct.py',
     ],
     env={
+        'STACK_ID': os.getenv('PRIMARY_DOMAIN_NAME'),
     },
     labels=['deploy'],
     resource_deps=[
@@ -67,7 +68,10 @@ local_resource(
 )
 
 cmd_button('poetry run cdktf destroy',
-    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE'],
+    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $STACK_ID'],
+    env=[
+        'STACK_ID=' + os.getenv('PRIMARY_DOMAIN_NAME'),
+    ],
     icon_name='delete',
     inputs=[
         bool_input('AUTO_APPROVE', true_string='--auto-approve', false_string='', default=True),
