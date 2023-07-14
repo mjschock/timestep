@@ -48,7 +48,6 @@ class K3sClusterStack(TerraformStack):
         )
 
         self.domain_name_registar_construct = DomainNameRegistrarConstruct(
-            cloud_instance_construct=self.cloud_instance_construct,
             config=config,
             id="domain_name_registar_construct",
             scope=self,
