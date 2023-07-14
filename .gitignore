@@ -1,10 +1,12 @@
 actions-runner
 cdktf.out
+kubeconfig
 node_modules
+.obsidian
 *.pyc
 __pycache__
-.obsidian
 .pytest_cache
 .ruff_cache
+src/timestep/infra/imports
 .ssh
 .venv
