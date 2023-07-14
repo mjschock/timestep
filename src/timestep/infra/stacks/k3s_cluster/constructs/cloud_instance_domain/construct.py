@@ -17,7 +17,7 @@ from timestep.infra.imports.local.file import File as LocalFileTerraformResource
 from timestep.infra.imports.local.provider import (
     LocalProvider as LocalTerraformProvider,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
 )
 
