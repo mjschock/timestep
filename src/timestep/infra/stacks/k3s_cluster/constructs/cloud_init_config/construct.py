@@ -191,10 +191,10 @@ class CloudInitConfigConstruct(Construct):
                     username,
                     "-c",
                     f"""$HOME/.arkade/bin/k3sup install \
-                --context {config.variables.get("kubecontext")} \
-                --k3s-extra-args '--disable traefik' \
-                --local \
-                --user {username}""",
+--context {config.variables.get("kubecontext")} \
+--k3s-extra-args '--disable traefik' \
+--local \
+--user {username}""",
                 ],
                 # [
                 #     "runuser", "-l", "ubuntu", "-c", "wget https://raw.githubusercontent.com/hasura/graphql-engine/stable/install-manifests/docker-compose-https/docker-compose.yaml",

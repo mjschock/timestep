@@ -5,7 +5,6 @@ from cdktf import (
     TerraformStack,
 )
 from constructs import Construct
-from prefect import get_run_logger
 
 from timestep.conf.blocks import AppConfig, CloudInstanceProvider
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
@@ -25,7 +24,6 @@ from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.construc
 class K3sClusterStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
         super().__init__(scope, id)
-        get_run_logger()
 
         self.cloud_init_config_construct = CloudInitConfigConstruct(
             config=config,
