@@ -3,8 +3,8 @@ import pathlib
 
 from cdktf import App
 from dotenv import dotenv_values
-from prefect import flow, get_run_logger
 
+# from prefect import flow, get_run_logger
 from timestep.conf.blocks import (
     AppConfig,
     SecureShellCredentials,
@@ -15,10 +15,10 @@ BASE_PATH = pathlib.Path.cwd()
 DIST_PATH: str = f"{BASE_PATH}/cdktf.out"
 
 
-@flow()
+# @flow()
 def main(config: AppConfig) -> None:
-    logger = get_run_logger()
-    logger.debug(f"config: {config}")
+    # logger = get_run_logger()
+    # logger.debug(f"config: {config}")
 
     app: App = App(
         context={
