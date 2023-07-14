@@ -304,3 +304,5 @@ class CloudInitConfigConstruct(Construct):
                 id="cloud_init_config_outputs_user_data",
                 value=cloud_init_config_data_source.rendered,
             )
+
+        self.data_source = cloud_init_config_data_source
