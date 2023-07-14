@@ -6,51 +6,6 @@
         classDiagram
           class ABC {
           }
-          class TerraformDataSource {
-            count
-            depends_on
-            for_each
-            lifecycle
-            provider
-            terraform_generator_metadata
-            terraform_meta_arguments
-            terraform_resource_type
-            get_any_map_attribute(terraform_attribute: builtins.str) typing.Mapping[builtins.str, typing.Any]
-            get_boolean_attribute(terraform_attribute: builtins.str) IResolvable
-            get_boolean_map_attribute(terraform_attribute: builtins.str) typing.Mapping[builtins.str, builtins.bool]
-            get_list_attribute(terraform_attribute: builtins.str) typing.List[builtins.str]
-            get_number_attribute(terraform_attribute: builtins.str) jsii.Number
-            get_number_list_attribute(terraform_attribute: builtins.str) typing.List[jsii.Number]
-            get_number_map_attribute(terraform_attribute: builtins.str) typing.Mapping[builtins.str, jsii.Number]
-            get_string_attribute(terraform_attribute: builtins.str) builtins.str
-            get_string_map_attribute(terraform_attribute: builtins.str) typing.Mapping[builtins.str, builtins.str]
-            interpolation_for_attribute(terraform_attribute: builtins.str) IResolvable
-            is_terraform_data_source(x: typing.Any) builtins.bool
-            to_metadata() typing.Any
-            to_terraform() typing.Any
-          }
-          class TerraformElement {
-            cdktf_stack
-            fqn
-            friendly_unique_id
-            add_override(path: builtins.str, value: typing.Any) None
-            is_terraform_element(x: typing.Any) builtins.bool
-            override_logical_id(new_logical_id: builtins.str) None
-            reset_override_logical_id() None
-            to_metadata() typing.Any
-            to_terraform() typing.Any
-          }
-          class TerraformProvider {
-            alias
-            fqn
-            meta_attributes
-            terraform_generator_metadata
-            terraform_provider_source
-            terraform_resource_type
-            is_terraform_provider(x: typing.Any) builtins.bool
-            to_metadata() typing.Any
-            to_terraform() typing.Any
-          }
           class TerraformStack {
             dependencies
             synthesizer
@@ -120,8 +75,8 @@
             name
           }
           class CloudInstanceConstruct {
-            data_source
-            provider
+            data_source : TerraformDataSource[MultipassInstanceTerraformDataSource | DigitaloceanDropletTerraformDataSource]
+            provider : TerraformProvider[MultipassTerraformProvider | DigitaloceanTerraformProvider]
           }
           class CloudInstanceDomainConstruct {
           }
@@ -136,11 +91,19 @@
             cloud_instance_domain_construct
             domain_name_registar_construct
           }
+          class CloudInitConfigConstruct {
+            data_source : TerraformDataSource[DataLocalFile | DataCloudinitConfig]
+          }
+          class CloudInstanceConstruct {
+            data_source : TerraformDataSource[MultipassInstanceTerraformDataSource | DigitaloceanDropletTerraformDataSource]
+            provider : TerraformProvider[MultipassTerraformProvider | DigitaloceanTerraformProvider]
+          }
+          class CloudInstanceDomainConstruct {
+          }
+          class DomainNameRegistrarConstruct {
+          }
           class Dict {
           }
-          TerraformDataSource --|> TerraformElement
-          TerraformElement --|> Construct
-          TerraformProvider --|> TerraformElement
           TerraformStack --|> Construct
           ReprEnum --|> Enum
           StrEnum --|> ReprEnum
@@ -154,10 +117,16 @@
           DomainNameRegistrarConstruct --|> Construct
           DomainNameRegistrarProvider --|> StrEnum
           MainStack --|> TerraformStack
+          CloudInitConfigConstruct --|> Construct
+          CloudInstanceConstruct --|> Construct
+          CloudInstanceDomainConstruct --|> Construct
+          DomainNameRegistrarConstruct --|> Construct
           SecretDict --* AppConfig : secrets
+          CloudInitConfigConstruct --* MainStack : cloud_init_config_construct
+          CloudInstanceConstruct --* MainStack : cloud_instance_construct
+          CloudInstanceDomainConstruct --* MainStack : cloud_instance_domain_construct
+          DomainNameRegistrarConstruct --* MainStack : domain_name_registar_construct
           Dict --* AppConfig : variables
-          TerraformDataSource --o CloudInstanceConstruct : data_source
-          TerraformProvider --o CloudInstanceConstruct : provider
   
        </div>
   </body>
