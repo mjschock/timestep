@@ -11,7 +11,7 @@ from timestep.conf.blocks import AppConfig, CloudInstanceProvider
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.blocks import (
     CloudInitConfigConstruct,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.blocks import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
 )
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance_domain.construct import (  # noqa: E501

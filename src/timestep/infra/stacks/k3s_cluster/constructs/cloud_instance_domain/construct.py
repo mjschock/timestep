@@ -2,7 +2,6 @@ from cdktf import (
     TerraformOutput,
 )
 from constructs import Construct
-from prefect import get_run_logger
 
 from timestep.conf.blocks import AppConfig, CloudInstanceProvider
 from timestep.infra.imports.digitalocean.data_digitalocean_domain import (
@@ -32,7 +31,6 @@ class CloudInstanceDomainConstruct(Construct):
         cloud_instance_construct: CloudInstanceConstruct,
     ) -> None:
         super().__init__(scope, id)
-        get_run_logger()
 
         if (
             config.variables.get("cloud_instance_provider")
@@ -54,7 +52,7 @@ class CloudInstanceDomainConstruct(Construct):
             cloud_instance_provider = config.variables.get("cloud_instance_provider")
             raise ValueError(
                 f"Unknown cloud_instance_provider: {cloud_instance_provider}"
-            )  # noqa: E501
+            )
 
         if (
             config.variables.get("cloud_instance_provider")
@@ -73,7 +71,6 @@ class CloudInstanceDomainConstruct(Construct):
 {ipv4} {subdomains[1]}.{primary_domain_name}
 {ipv4} {primary_domain_name}
 """,
-                # filename=f"{config.BASE_PATH}/{config.HOSTS_FILE_PATH}",
                 filename="hosts",
                 provider=cloud_instance_domain_provider,
                 scope=scope,
@@ -85,7 +82,6 @@ class CloudInstanceDomainConstruct(Construct):
         ):
             cloud_instance_domain_resource = DigitaloceanDomainTerraformResource(
                 id_="cloud_instance_domain_resource",
-                # ip_address=cloud_instance_construct.outputs["ipv4"],
                 ip_address=cloud_instance_construct.data_source.ipv4_address,
                 name=config.variables.get("primary_domain_name"),
                 provider=cloud_instance_domain_provider,
@@ -96,7 +92,7 @@ class CloudInstanceDomainConstruct(Construct):
             cloud_instance_provider = config.variables.get("cloud_instance_provider")
             raise ValueError(
                 f"Unknown cloud_instance_provider: {cloud_instance_provider}"
-            )  # noqa: E501
+            )
 
         if (
             config.variables.get("cloud_instance_provider")
@@ -124,7 +120,7 @@ class CloudInstanceDomainConstruct(Construct):
             cloud_instance_provider = config.variables.get("cloud_instance_provider")
             raise ValueError(
                 f"Unknown cloud_instance_provider: {cloud_instance_provider}"
-            )  # noqa: E501
+            )
 
         cloud_instance_domain_outputs = {}
 
@@ -152,4 +148,4 @@ class CloudInstanceDomainConstruct(Construct):
             cloud_instance_provider = config.variables.get("cloud_instance_provider")
             raise ValueError(
                 f"Unknown cloud_instance_provider: {cloud_instance_provider}"
-            )  # noqa: E501
+            )
