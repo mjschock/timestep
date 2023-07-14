@@ -1,6 +1,5 @@
 from cdktf import TerraformOutput
 from constructs import Construct
-from prefect import get_run_logger
 
 from timestep.conf.blocks import AppConfig, DomainNameRegistrarProvider
 from timestep.infra.imports.http.data_http import DataHttp
@@ -21,7 +20,6 @@ class DomainNameRegistrarConstruct(Construct):
         cloud_instance_construct: CloudInstanceConstruct,
     ) -> None:
         super().__init__(scope, id)
-        get_run_logger()
 
         http_provider = HttpProvider(
             id="http_provider",
