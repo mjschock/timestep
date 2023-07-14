@@ -61,9 +61,6 @@
             secrets
             variables
           }
-          class DomainNameRegistrarProvider {
-            name
-          }
           class SecureShellCredentials {
             private_key
             private_key : Optional[SecretStr]
@@ -72,7 +69,7 @@
             block_initialization()
           }
           class CloudInitConfigConstruct {
-            data_source
+            data_source : DataLocalFile | DataCloudinitConfig
           }
           class CloudInstanceProvider {
             name
@@ -85,14 +82,13 @@
           }
           class DomainNameRegistrarConstruct {
           }
+          class DomainNameRegistrarProvider {
+            name
+          }
           class K3sClusterStack {
             cloud_init_config_construct
-            cloud_init_config_construct
-            cloud_instance_construct
             cloud_instance_construct
             cloud_instance_domain_construct
-            cloud_instance_domain_construct
-            domain_name_registar_construct
             domain_name_registar_construct
           }
           class CloudInitConfigConstruct {
@@ -113,13 +109,13 @@
           StrEnum --|> ReprEnum
           Block --|> ABC
           AppConfig --|> Block
-          DomainNameRegistrarProvider --|> StrEnum
           SecureShellCredentials --|> Block
           CloudInitConfigConstruct --|> Construct
           CloudInstanceProvider --|> StrEnum
           CloudInstanceConstruct --|> Construct
           CloudInstanceDomainConstruct --|> Construct
           DomainNameRegistrarConstruct --|> Construct
+          DomainNameRegistrarProvider --|> StrEnum
           K3sClusterStack --|> TerraformStack
           CloudInitConfigConstruct --|> Construct
           CloudInstanceConstruct --|> Construct

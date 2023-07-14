@@ -18,7 +18,7 @@ from timestep.infra.imports.local.provider import (
     LocalProvider as LocalTerraformProvider,
 )
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
-    CloudInstanceProvider,
+    CloudInitConfigConstruct,
 )
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
@@ -37,7 +37,7 @@ class CloudInstanceDomainConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_instance_domain_provider = LocalTerraformProvider(
                 alias="cloud_instance_domain_provider",
@@ -47,7 +47,7 @@ class CloudInstanceDomainConstruct(Construct):
 
         elif (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.DIGITALOCEAN
+            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
         ):
             cloud_instance_domain_provider = cloud_instance_construct.provider
 
@@ -59,7 +59,7 @@ class CloudInstanceDomainConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             ipv4 = cloud_instance_construct.data_source.ipv4
             primary_domain_name = config.variables.get("primary_domain_name")
@@ -81,7 +81,7 @@ class CloudInstanceDomainConstruct(Construct):
 
         elif (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.DIGITALOCEAN
+            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
         ):
             cloud_instance_domain_resource = DigitaloceanDomainTerraformResource(
                 id_="cloud_instance_domain_resource",
@@ -99,7 +99,7 @@ class CloudInstanceDomainConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_instance_domain_data_source = LocalFileTerraformDataSource(
                 id="cloud_instance_domain_data_source",
@@ -110,7 +110,7 @@ class CloudInstanceDomainConstruct(Construct):
 
         elif (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.DIGITALOCEAN
+            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
         ):
             cloud_instance_domain_data_source = DigitaloceanDomainTerraformDataSource(
                 id_="cloud_instance_domain_data_source",
@@ -129,7 +129,7 @@ class CloudInstanceDomainConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             cloud_instance_domain_outputs["hosts_file"] = TerraformOutput(
                 id="cloud_instance_domain_outputs_hosts_file",
@@ -139,7 +139,7 @@ class CloudInstanceDomainConstruct(Construct):
 
         elif (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.DIGITALOCEAN
+            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
         ):
             cloud_instance_domain_outputs["zone_file"] = TerraformOutput(
                 id="cloud_instance_domain_outputs_zone_file",

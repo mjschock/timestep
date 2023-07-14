@@ -6,7 +6,7 @@ from cdktf import (
 )
 from constructs import Construct
 
-from timestep.conf.blocks import AppConfig, CloudInstanceProvider
+from timestep.conf.blocks import AppConfig
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
 )
@@ -22,45 +22,46 @@ from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.construc
 
 
 class K3sClusterStack(TerraformStack):
-    cloud_init_config_construct: CloudInitConfigConstruct
-    cloud_instance_construct: CloudInstanceConstruct
-    cloud_instance_domain_construct: CloudInstanceDomainConstruct
-    domain_name_registar_construct: DomainNameRegistrarConstruct
-
     def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
         super().__init__(scope, id)
 
         stack_id: str = config.variables.get("primary_domain_name")
 
-        self.cloud_init_config_construct = CloudInitConfigConstruct(
-            config=config,
-            id="cloud_init_config_construct",
-            scope=self,
+        self.cloud_init_config_construct: CloudInitConfigConstruct = (
+            CloudInitConfigConstruct(  # noqa: E501
+                config=config,
+                id="cloud_init_config_construct",
+                scope=self,
+            )
         )
 
-        self.cloud_instance_construct = CloudInstanceConstruct(
+        self.cloud_instance_construct: CloudInstanceConstruct = CloudInstanceConstruct(
             cloud_init_config_construct=self.cloud_init_config_construct,
             config=config,
             id="cloud_instance_construct",
             scope=self,
         )
 
-        self.cloud_instance_domain_construct = CloudInstanceDomainConstruct(
-            cloud_instance_construct=self.cloud_instance_construct,
-            config=config,
-            id="cloud_instance_domain_construct",
-            scope=self,
+        self.cloud_instance_domain_construct: CloudInstanceDomainConstruct = (
+            CloudInstanceDomainConstruct(  # noqa: E501
+                cloud_instance_construct=self.cloud_instance_construct,
+                config=config,
+                id="cloud_instance_domain_construct",
+                scope=self,
+            )
         )
 
-        self.domain_name_registar_construct = DomainNameRegistrarConstruct(
-            config=config,
-            id="domain_name_registar_construct",
-            scope=self,
+        self.domain_name_registar_construct: DomainNameRegistrarConstruct = (
+            DomainNameRegistrarConstruct(  # noqa: E501
+                config=config,
+                id="domain_name_registar_construct",
+                scope=self,
+            )
         )
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
+            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
         ):
             LocalBackend(
                 path=f"terraform.{stack_id}.tfstate",
