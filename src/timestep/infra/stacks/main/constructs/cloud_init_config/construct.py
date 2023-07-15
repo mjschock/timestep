@@ -4,7 +4,7 @@ from cdktf import TerraformDataSource, TerraformOutput
 from cloud_init_gen import CloudInitDoc
 from constructs import Construct
 
-from timestep.conf.blocks import AppConfig
+from timestep.config import AppConfig
 from timestep.infra.imports.cloudinit.data_cloudinit_config import (
     DataCloudinitConfig,
     DataCloudinitConfigPart,
@@ -24,6 +24,8 @@ class CloudInitConfigConstruct(Construct):
 
     def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
         super().__init__(scope, id)
+
+        username = "ubuntu"  # TODO: use config
 
         if (
             config.variables.get("cloud_instance_provider")
@@ -46,8 +48,6 @@ class CloudInitConfigConstruct(Construct):
             "ssh_public_key", None
         ) or not config.secrets.get_secret_value().get("ssh_private_key", None):
             raise Exception("SSH credentials not found")
-
-        username = "ubuntu"
 
         cloud_cfg = dict(
             disable_root=True,

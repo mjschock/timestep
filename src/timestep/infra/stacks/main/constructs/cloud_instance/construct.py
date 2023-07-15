@@ -5,7 +5,7 @@ from cdktf import (
 )
 from constructs import Construct
 
-from timestep.conf.blocks import AppConfig
+from timestep.config import AppConfig
 from timestep.infra.imports.cloudinit.data_cloudinit_config import DataCloudinitConfig
 from timestep.infra.imports.digitalocean.data_digitalocean_droplet import (
     DataDigitaloceanDroplet as DigitaloceanDropletTerraformDataSource,

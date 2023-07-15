@@ -6,7 +6,7 @@ from cdktf import (
 )
 from constructs import Construct
 
-from timestep.conf.blocks import AppConfig
+from timestep.config import AppConfig
 from timestep.infra.stacks.main.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
 )
@@ -18,6 +18,12 @@ from timestep.infra.stacks.main.constructs.cloud_instance_domain.construct impor
 )
 from timestep.infra.stacks.main.constructs.domain_name_registrar.construct import (
     DomainNameRegistrarConstruct,
+)
+from timestep.infra.stacks.main.constructs.kube_config.construct import (
+    KubeConfigConstruct,
+)
+from timestep.infra.stacks.main.constructs.kubernetes_cluster_ingress.construct import (
+    KubernetesClusterIngressConstruct,
 )
 
 
@@ -55,6 +61,23 @@ class MainStack(TerraformStack):
             DomainNameRegistrarConstruct(  # noqa: E501
                 config=config,
                 id="domain_name_registar_construct",
+                scope=self,
+            )
+        )
+
+        self.kube_config_contruct: KubeConfigConstruct = KubeConfigConstruct(
+            cloud_instance_construct=self.cloud_instance_construct,
+            config=config,
+            id="kube_config_contruct",
+            scope=self,
+        )
+
+        self.kubernetes_cluster_ingress_construct: KubernetesClusterIngressConstruct = (
+            KubernetesClusterIngressConstruct(  # noqa: E501
+                cloud_instance_construct=self.cloud_instance_construct,
+                config=config,
+                id="kubernetes_cluster_ingress_construct",
+                kube_config_contruct=self.kube_config_contruct,
                 scope=self,
             )
         )
