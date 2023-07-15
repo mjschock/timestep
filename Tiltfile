@@ -51,11 +51,13 @@ local_resource(
         'poetry.lock',
         'src/timestep/__main__.py',
         'src/timestep/conf/blocks.py',
-        'src/timestep/infra/stacks/k3s_cluster/stack.py',
-        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_init_config/construct.py',
-        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance/construct.py',
-        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance_domain/construct.py',
-        'src/timestep/infra/stacks/k3s_cluster/constructs/domain_name_registrar/construct.py',
+        'src/timestep/infra/stacks/main/stack.py',
+        'src/timestep/infra/stacks/main/constructs/cloud_init_config/construct.py',
+        'src/timestep/infra/stacks/main/constructs/cloud_instance/construct.py',
+        'src/timestep/infra/stacks/main/constructs/cloud_instance_domain/construct.py',
+        'src/timestep/infra/stacks/main/constructs/domain_name_registrar/construct.py',
+        'src/timestep/infra/stacks/main/constructs/kube_config/construct.py',
+        'src/timestep/infra/stacks/main/constructs/kubernetes_cluster_ingress/construct.py',
     ],
     env={
         'STACK_ID': os.getenv('PRIMARY_DOMAIN_NAME'),
@@ -100,5 +102,3 @@ local_resource(
         "HOSTS_FILE_PATH": os.getenv('CDKTF_OUTPUT') + "/stacks/" + os.getenv('PRIMARY_DOMAIN_NAME') + "/hosts",
     },
 )
-
-# k8s_yaml(listdir('src/timestep/infra/stacks/k3s_cluster/constructs/kubernetes_cluster/sample'))

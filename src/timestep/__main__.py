@@ -4,7 +4,7 @@ import pathlib
 from cdktf import App
 from dotenv import dotenv_values
 
-from timestep.conf.blocks import (
+from timestep.config import (
     AppConfig,
     SecureShellCredentials,
 )
