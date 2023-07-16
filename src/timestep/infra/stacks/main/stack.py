@@ -7,6 +7,7 @@ from cdktf import (
 from constructs import Construct
 
 from timestep.config import AppConfig
+from timestep.infra.imports.helm.release import Release, ReleaseSet
 from timestep.infra.stacks.main.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
 )
@@ -81,6 +82,61 @@ class MainStack(TerraformStack):
                 scope=self,
             )
         )
+
+        Release(
+            id_="prefect_helm_release_resource",
+            atomic=True,
+            chart="prefect-server",
+            create_namespace=True,
+            name="prefect-server",
+            namespace="prefect",
+            repository="https://prefecthq.github.io/prefect-helm",
+            provider=self.kubernetes_cluster_ingress_construct.helm_provider,
+            set=[
+                ReleaseSet(
+                    name="ingress.enabled",
+                    value="true",
+                ),
+                ReleaseSet(
+                    name="ingress.className",
+                    value="caddy",
+                ),
+                ReleaseSet(
+                    name="ingress.host.hostname",
+                    value=config.variables.get("primary_domain_name"),
+                ),
+                ReleaseSet(
+                    name="ingress.host.path",
+                    value="/",
+                ),
+                ReleaseSet(
+                    name="pathType",
+                    value="Prefix",
+                ),
+                ReleaseSet(
+                    name="postgresql.enabled",
+                    value="false",
+                ),
+                ReleaseSet(
+                    name="publicApiUrl",
+                    value=f"https://{config.variables.get('primary_domain_name')}",  # noqa: E501
+                ),
+            ],
+            # set_sensitive=[
+            #     ReleaseSetSensitive(
+            #         name="postgresql.auth.password",
+            #         value=config.secrets.get_secret_value().get("postgresql_password"),  # noqa: E501
+            #     )
+            # ],
+            scope=self,
+        )
+
+        # prefect_server_ingress_resource = self.kubernetes_cluster_ingress_construct.create_ingress_resource(  # noqa: E501
+        #     config=config,
+        #     id="prefect_server_ingress_resource",
+        #     name="prefect-server",
+        #     port=4200,
+        # )
 
         if (
             config.variables.get("cloud_instance_provider")
