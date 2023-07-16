@@ -59,12 +59,14 @@ if __name__ == "__main__":
 
     CPUS: int = 1
     DISK_SIZE_GB: int = 25
+    MEMORY_SIZE_GB: int = 1
     DO_DROPLET_IMAGE: str = "ubuntu-22-04-x64"
     DO_DROPLET_REGION: str = "sfo3"
-    DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-1gb"
+    DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-{MEMORY_SIZE_GB}gb"
     MULTIPASS_INSTANCE_CPUS: int = CPUS
     MULTIPASS_INSTANCE_DISK: str = f"{DISK_SIZE_GB}G"
     MULTIPASS_INSTANCE_IMAGE: str = "22.04"
+    MULTIPASS_INSTANCE_MEMORY: int = f"{MEMORY_SIZE_GB}G"
 
     primary_domain_name = config.get("PRIMARY_DOMAIN_NAME")
     kubeconfig = f"{DIST_PATH}/stacks/{primary_domain_name}/kube-config.yaml"
@@ -74,6 +76,7 @@ if __name__ == "__main__":
             "namecheap_api_key": config.get("NAMECHEAP_API_KEY", None),
             "namecheap_api_user": config.get("NAMECHEAP_API_USER", None),
             "namecheap_user_name": config.get("NAMECHEAP_USER_NAME", None),
+            "postgresql_password": config.get("POSTGRESQL_PASSWORD", None),
             "ssh_private_key": ssh_credentials_block.private_key,
             "tf_api_token": config.get("TF_API_TOKEN", None),
         },
@@ -97,6 +100,9 @@ if __name__ == "__main__":
             ),
             "multipass_instance_image": config.get(
                 "MULTIPASS_INSTANCE_IMAGE", MULTIPASS_INSTANCE_IMAGE
+            ),
+            "multipass_instance_memory": config.get(
+                "MULTIPASS_INSTANCE_MEMORY", MULTIPASS_INSTANCE_MEMORY
             ),
             # "namecheap_client_ip": config.get("NAMECHEAP_CLIENT_IP", None),
             "primary_domain_name": config.get("PRIMARY_DOMAIN_NAME", None),

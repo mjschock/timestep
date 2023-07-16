@@ -80,6 +80,7 @@ class CloudInstanceConstruct(Construct):
                 disk=config.variables.get("multipass_instance_disk"),
                 id="cloud_instance_resource",
                 image=config.variables.get("multipass_instance_image"),
+                memory=config.variables.get("multipass_instance_memory"),
                 name=config.variables.get("cloud_instance_name"),
                 provider=cloud_instance_provider,
                 scope=scope,

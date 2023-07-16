@@ -3,6 +3,17 @@ from constructs import Construct
 from timestep.config import AppConfig
 from timestep.infra.imports.helm.provider import HelmProvider, HelmProviderKubernetes
 from timestep.infra.imports.helm.release import Release
+from timestep.infra.imports.kubernetes.ingress_v1 import (
+    IngressV1,
+    IngressV1Metadata,
+    IngressV1Spec,
+    IngressV1SpecRule,
+    IngressV1SpecRuleHttp,
+    IngressV1SpecRuleHttpPath,
+    IngressV1SpecRuleHttpPathBackend,
+    IngressV1SpecRuleHttpPathBackendService,
+    IngressV1SpecRuleHttpPathBackendServicePort,
+)
 from timestep.infra.imports.kubernetes.provider import KubernetesProvider
 from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
@@ -23,7 +34,7 @@ class KubernetesClusterIngressConstruct(Construct):
     ) -> None:
         super().__init__(scope, id)
 
-        kubernetes_provider = KubernetesProvider(
+        self.kubernetes_provider = KubernetesProvider(
             id="kubernetes_provider",
             # config_context=config.KUBE_CONTEXT,
             # config_path=config.KUBE_CONFIG_PATH,
@@ -32,18 +43,18 @@ class KubernetesClusterIngressConstruct(Construct):
             scope=self,
         )
 
-        helm_provider = HelmProvider(
+        self.helm_provider = HelmProvider(
             id="helm_provider",
             kubernetes=HelmProviderKubernetes(
                 # config_context=config.KUBE_CONTEXT,
                 # config_path=config.KUBE_CONFIG_PATH,
-                config_context=kubernetes_provider.config_context,
-                config_path=kubernetes_provider.config_path,
+                config_context=self.kubernetes_provider.config_context,
+                config_path=self.kubernetes_provider.config_path,
             ),
             scope=self,
         )
 
-        caddy_ingress_controller_helm_release_resource = Release(  # noqa: F841
+        self.caddy_ingress_controller_helm_release_resource = Release(  # noqa: F841
             id_="caddy_ingress_controller_helm_release_resource",
             atomic=True,
             chart="caddy-ingress-controller",
@@ -52,7 +63,7 @@ class KubernetesClusterIngressConstruct(Construct):
             name="caddy-ingress-controller",
             namespace="caddy-system",
             repository="https://caddyserver.github.io/ingress",
-            provider=helm_provider,
+            provider=self.helm_provider,
             # set=[
             # {
             #     "name": "ingressController.config.email",
@@ -64,4 +75,39 @@ class KubernetesClusterIngressConstruct(Construct):
             # },
             # ],
             scope=self,
+        )
+
+    def create_ingress_resource(self, config, id, name, port) -> None:
+        return IngressV1(
+            id_=id,
+            metadata=IngressV1Metadata(
+                annotations={
+                    "kubernetes.io/ingress.class": "caddy",
+                },
+                name=name,
+            ),
+            scope=self,
+            spec=IngressV1Spec(
+                rule=[
+                    IngressV1SpecRule(
+                        host=config.variables.get("primary_domain_name"),
+                        http=IngressV1SpecRuleHttp(
+                            path=[
+                                IngressV1SpecRuleHttpPath(
+                                    backend=IngressV1SpecRuleHttpPathBackend(
+                                        service=IngressV1SpecRuleHttpPathBackendService(
+                                            name=name,
+                                            port=IngressV1SpecRuleHttpPathBackendServicePort(
+                                                number=port,
+                                            ),
+                                        ),
+                                    ),
+                                    path="/",
+                                    path_type="Prefix",
+                                ),
+                            ]
+                        ),
+                    )
+                ]
+            ),
         )
