@@ -64,16 +64,30 @@ class CloudInstanceDomainConstruct(Construct):
             ipv4 = cloud_instance_construct.data_source.ipv4
             primary_domain_name = config.variables.get("primary_domain_name")
             subdomains = [
-                "registry",
+                # "alice",
+                # "api",
+                # "bob",
+                # "marvin",
+                # "example1",
+                # "prefect",
+                # "registry",
+                # "supabase",
+                # "supabase-studio",
+                # "studio",
+                # "talker",
                 "www",
             ]
 
+            content = ""
+
+            for subdomain in subdomains:
+                content += f"{ipv4} {subdomain}.{primary_domain_name}\n"
+
+            content += f"{ipv4} {primary_domain_name}\n"
+
             cloud_instance_domain_resource = LocalFileTerraformResource(
                 id="cloud_instance_domain_resource",
-                content=f"""{ipv4} {subdomains[0]}.{primary_domain_name}
-{ipv4} {subdomains[1]}.{primary_domain_name}
-{ipv4} {primary_domain_name}
-""",
+                content=content,
                 filename="hosts",
                 provider=cloud_instance_domain_provider,
                 scope=scope,

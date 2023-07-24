@@ -87,9 +87,16 @@ class CloudInitConfigConstruct(Construct):
                     "-l",
                     username,
                     "-c",
-                    'echo "\nexport PATH=\\$HOME/.arkade/bin:\\$PATH" >> $HOME/.bashrc',
+                    'echo "\nexport PATH=\\$HOME/.arkade/bin:\\$PATH" >> $HOME/.bashrc',  # noqa: E501
                 ],
-                ["runuser", "-l", username, "-c", "arkade get k3sup"],
+                ["runuser", "-l", username, "-c", "arkade get caddy k3sup krew"],
+                [
+                    "runuser",
+                    "-l",
+                    username,
+                    "-c",
+                    'echo "\nexport PATH=\\$HOME/.krew/bin:\\$PATH" >> $HOME/.bashrc',  # noqa: E501
+                ],
                 [
                     "runuser",
                     "-l",
@@ -101,6 +108,135 @@ class CloudInitConfigConstruct(Construct):
 --local \
 --user {username}""",
                 ],
+#                 [
+#                     "runuser",
+#                     "-l",
+#                     username,
+#                     "-c",
+#                     f"""$HOME/.arkade/bin/k3sup install \
+# --context {config.variables.get("kubecontext")} \
+# --local \
+# --user {username}""",
+#                 ],
+                [
+                    "runuser",
+                    "-l",
+                    username,
+                    "-c",
+                    "$HOME/.arkade/bin/krew install kvaps/build",
+                ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"$HOME/.arkade/bin/mkcert --install registry.{config.variables.get('primary_domain_name')}",  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo kubectl --kubeconfig /home/{username}/kubeconfig create secret tls docker-registry-tls --key /home/{username}/registry.{config.variables.get('primary_domain_name')}-key.pem --cert /home/{username}/registry.{config.variables.get('primary_domain_name')}.pem",  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig docker-registry --password password --set app.kubernetes.io/managed-by=Helm --set meta.helm.sh/release-name=docker-registry --set meta.helm.sh/release-namespace=default --set persistence.enabled=true --username admin"  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo kubectl -n default create secret generic supabase-jwt --from-literal=anonKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjc1NDAwNDAwLAogICAgImV4cCI6IDE4MzMxNjY4MDAKfQ.ztuiBzjaVoFHmoljUXWmnuDN6QU2WgJICeqwyzyZO88' --from-literal=serviceKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAic2VydmljZV9yb2xlIiwKICAgICJpc3MiOiAic3VwYWJhc2UiLAogICAgImlhdCI6IDE2NzU0MDA0MDAsCiAgICAiZXhwIjogMTgzMzE2NjgwMAp9.qNsmXzz4tG7eqJPh1Y58DbtIlJBauwpqx39UF-MwM8k' --from-literal=secret='abcdefghijklmnopqrstuvwxyz123456'"  # noqa: E501, F541
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo kubectl -n default create secret generic supabase-smtp --from-literal=username='m@mjschock.com' --from-literal=password='password'"  # noqa: F541, E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo kubectl -n default create secret generic supabase-db --from-literal=username='postgres' --from-literal=password='postgres'"  # noqa: E501, F541
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig ingress-nginx",  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig chart --namespace caddy-system --repo-name caddyserver/caddy-ingress-controller --repo-url https://caddyserver.github.io/ingress/ --set ingressController.config.acmeCA=https://acme-staging-v02.api.letsencrypt.org/directory --set ingressController.config.debug=true --set ingressController.config.email=m@mjschock.com --set ingressController.config.onDemandTLS=true",  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig cert-manager",  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig docker-registry",  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                    # f"sudo arkade install --kubeconfig /home/{username}/kubeconfig docker-registry --password password --set app.kubernetes.io/managed-by=Helm --set ingress.annotations.cert-manager.io/cluster-issuer=letsencrypt-staging --set ingress.annotations.kubernetes.io/ingress.class=traefik-internal --set ingress.className=traefik-internal --set ingress.enabled=true --set ingress.hosts[0]=registry.{config.variables.get('primary_domain_name')} --set meta.helm.sh/release-name=docker-registry --set meta.helm.sh/release-namespace=default --set persistence.enabled=true --username admin --set ingress.tls="  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig docker-registry --password password --set app.kubernetes.io/managed-by=Helm --set ingress.annotations.cert-manager.io/cluster-issuer=letsencrypt-staging --set ingress.annotations.kubernetes.io/ingress.class=traefik-internal --set ingress.className=traefik-internal --set meta.helm.sh/release-name=docker-registry --set meta.helm.sh/release-namespace=default --set persistence.enabled=true --username admin"  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig docker-registry --password password --set app.kubernetes.io/managed-by=Helm --set ingress.annotations.cert-manager.io/cluster-issuer=letsencrypt-staging --set ingress.annotations.kubernetes.io/ingress.class=caddy --set ingress.className=caddy --set meta.helm.sh/release-name=docker-registry --set meta.helm.sh/release-namespace=default --set persistence.enabled=true --username admin"  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig chart --repo-name twuni/docker-registry --repo-url https://helm.twun.io --set ingress.annotations.cert-manager.io/cluster-issuer=letsencrypt-staging --set ingress.annotations.kubernetes.io/ingress.class=traefik-internal --set ingress.className=traefik-internal --set ingress.enabled=true --set ingress.hosts[0]=registry.{config.variables.get('primary_domain_name')} --set persistence.enabled=true --values-file - docker-registry",  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig docker-registry-ingress --ingress-class traefik-internal --domain registry.{config.variables.get('primary_domain_name')} --email agent@{config.variables.get('primary_domain_name')} --staging",  # noqa: E501
+                # ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     username,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig docker-registry-ingress --ingress-class caddy --domain registry.{config.variables.get('primary_domain_name')} --email m@mjschock.com --staging",  # noqa: E501
+                # ],
             ],
             users=[
                 "default",
@@ -114,6 +250,15 @@ class CloudInitConfigConstruct(Construct):
                     "sudo": "ALL=(ALL) NOPASSWD:ALL",
                 },
             ],
+    #         write_files=[
+    #             {
+    #                 "path": "/etc/rancher/k3s/registries.yaml",
+    #                 "content": f"""mirrors:
+    # docker.io:
+    #     endpoint:
+    #         - "https://registry.{config.variables.get('primary_domain_name')}"
+    #             },
+    #         ]
         )
 
         user_data = CloudInitDoc()

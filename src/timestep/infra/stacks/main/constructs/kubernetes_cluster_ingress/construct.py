@@ -13,6 +13,7 @@ from timestep.infra.imports.kubernetes.ingress_v1 import (
     IngressV1SpecRuleHttpPathBackend,
     IngressV1SpecRuleHttpPathBackendService,
     IngressV1SpecRuleHttpPathBackendServicePort,
+    IngressV1SpecTls,
 )
 from timestep.infra.imports.kubernetes.provider import KubernetesProvider
 from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
@@ -54,43 +55,54 @@ class KubernetesClusterIngressConstruct(Construct):
             scope=self,
         )
 
-        self.caddy_ingress_controller_helm_release_resource = Release(  # noqa: F841
-            id_="caddy_ingress_controller_helm_release_resource",
-            atomic=True,
-            chart="caddy-ingress-controller",
-            # chart=config.CADDY_INGRESS_CONTROLLER_CHART_PATH,
-            create_namespace=True,
-            name="caddy-ingress-controller",
-            namespace="caddy-system",
-            repository="https://caddyserver.github.io/ingress",
-            provider=self.helm_provider,
-            # set=[
-            # {
-            #     "name": "ingressController.config.email",
-            #     "value": config.CADDY_INGRESS_CONTROLLER_EMAIL,
-            # },
-            # {
-            #     "name": "ingressController.config.onDemandTLS",
-            #     "value": "true",
-            # },
-            # ],
-            scope=self,
-        )
+        # self.caddy_ingress_controller_helm_release_resource = Release(  # noqa: F841
+        #     id_="caddy_ingress_controller_helm_release_resource",
+        #     atomic=True,
+        #     chart="caddy-ingress-controller",
+        #     create_namespace=True,
+        #     name="caddy-ingress-controller",
+        #     namespace="caddy-system",
+        #     repository="https://caddyserver.github.io/ingress",
+        #     provider=self.helm_provider,
+        #     set=[
+        #         {
+        #             "name": "ingressController.config.acmeCA",
+        #             "value": "https://acme-staging-v02.api.letsencrypt.org/directory",
+        #         },
+        #         {
+        #             "name": "ingressController.config.debug",
+        #             "value": "true",
+        #         },
+        #         {
+        #             "name": "ingressController.config.email",
+        #             "value": "m@mjschock.com",
+        #         },
+        #         {
+        #             "name": "ingressController.config.onDemandTLS",
+        #             "value": "true",
+        #         },
+        #     ],
+        #     scope=self,
+        # )
 
-    def create_ingress_resource(self, config, id, name, port) -> None:
-        return IngressV1(
+    def create_ingress_resource(self, config, depends_on, host, id, ingress_class, name, namespace="default", port=80, path="/", path_type="ImplementationSpecific", issue_type="letsencrypt-prod-issue"):  # noqa: E501
+        IngressV1(
+            depends_on=depends_on,
             id_=id,
             metadata=IngressV1Metadata(
                 annotations={
-                    "kubernetes.io/ingress.class": "caddy",
+                    # "cert-manager.io/issuer": issue_type,
+                    "kubernetes.io/ingress.class": ingress_class,
                 },
                 name=name,
+                namespace=namespace,
             ),
             scope=self,
             spec=IngressV1Spec(
+                # ingress_class_name=ingress_class,
                 rule=[
                     IngressV1SpecRule(
-                        host=config.variables.get("primary_domain_name"),
+                        host=host,
                         http=IngressV1SpecRuleHttp(
                             path=[
                                 IngressV1SpecRuleHttpPath(
@@ -102,12 +114,19 @@ class KubernetesClusterIngressConstruct(Construct):
                                             ),
                                         ),
                                     ),
-                                    path="/",
-                                    path_type="Prefix",
+                                    path=path,
+                                    # path_type="Prefix",
+                                    path_type=path_type,
                                 ),
                             ]
                         ),
                     )
-                ]
+                ],
+                # tls=[
+                #     IngressV1SpecTls(
+                #         hosts=[host],
+                #         secret_name=f"{name}-secret",
+                #     )
+                # ],
             ),
         )

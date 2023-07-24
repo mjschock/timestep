@@ -1,0 +1,4 @@
+timestep.local {
+	root * /srv/www
+	file_server
+}
