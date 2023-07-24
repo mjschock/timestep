@@ -1,8 +1,6 @@
 actions-runner
 cdktf.out
-kubeconfig
 node_modules
-.obsidian
 *.pyc
 __pycache__
 .pytest_cache

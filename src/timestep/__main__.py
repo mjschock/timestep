@@ -57,9 +57,9 @@ if __name__ == "__main__":
             overwrite=False,
         )
 
-    CPUS: int = 1
-    DISK_SIZE_GB: int = 25
-    MEMORY_SIZE_GB: int = 1
+    CPUS: int = 2
+    DISK_SIZE_GB: int = 60
+    MEMORY_SIZE_GB: int = 2
     DO_DROPLET_IMAGE: str = "ubuntu-22-04-x64"
     DO_DROPLET_REGION: str = "sfo3"
     DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-{MEMORY_SIZE_GB}gb"
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     MULTIPASS_INSTANCE_MEMORY: int = f"{MEMORY_SIZE_GB}G"
 
     primary_domain_name = config.get("PRIMARY_DOMAIN_NAME")
-    kubeconfig = f"{DIST_PATH}/stacks/{primary_domain_name}/kube-config.yaml"
+    # kubeconfig = f"{DIST_PATH}/stacks/{primary_domain_name}/kube-config.yaml"
     app_config_block = AppConfig(
         secrets={
             "do_token": config.get("DO_TOKEN", None),
@@ -90,7 +90,7 @@ if __name__ == "__main__":
             "domain_name_registrar_provider": config.get(
                 "DOMAIN_NAME_REGISTRAR_PROVIDER", None
             ),
-            "kubeconfig": kubeconfig,
+            # "kubeconfig": kubeconfig,
             "kubecontext": config.get("KUBECONTEXT", None),
             "multipass_instance_cpus": config.get(
                 "MULTIPASS_INSTANCE_CPUS", MULTIPASS_INSTANCE_CPUS

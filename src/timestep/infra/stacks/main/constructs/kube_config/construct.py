@@ -85,6 +85,7 @@ class KubeConfigConstruct(Construct):
         )
 
         self.data_source = DataLocalFile(
+            depends_on=[kube_config_resource],
             id="kube_config_data_source",
             filename=local_path,
             scope=scope,
