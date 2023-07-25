@@ -5,7 +5,7 @@ from cdktf import (
 )
 from constructs import Construct
 
-from timestep.config import AppConfig
+from timestep.config import MainConfig
 from timestep.infra.imports.cloudinit.data_cloudinit_config import DataCloudinitConfig
 from timestep.infra.imports.digitalocean.data_digitalocean_droplet import (
     DataDigitaloceanDroplet as DigitaloceanDropletTerraformDataSource,
@@ -37,7 +37,7 @@ class CloudInstanceConstruct(Construct):
         self,
         scope: Construct,
         id: str,
-        config: AppConfig,
+        config: MainConfig,
         cloud_init_config_construct: CloudInitConfigConstruct,
     ) -> None:
         super().__init__(scope, id)

@@ -3,8 +3,7 @@ import tempfile
 from cdktf import LocalExecProvisioner
 from constructs import Construct
 from pydantic import SecretStr
-
-from timestep.config import AppConfig
+from timestep.config import MainConfig
 from timestep.infra.imports.local.data_local_file import DataLocalFile
 from timestep.infra.imports.local.provider import LocalProvider
 from timestep.infra.imports.null.provider import NullProvider
@@ -22,7 +21,7 @@ class KubeConfigConstruct(Construct):
         self,
         scope: Construct,
         id: str,
-        config: AppConfig,
+        config: MainConfig,
         cloud_instance_construct: CloudInstanceConstruct,
     ) -> None:
         super().__init__(scope, id)

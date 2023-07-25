@@ -8,3 +8,6 @@ __pycache__
 src/timestep/infra/imports
 .ssh
 .venv
+
+.env
+data

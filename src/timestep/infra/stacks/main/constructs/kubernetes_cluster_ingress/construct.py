@@ -1,8 +1,6 @@
 from constructs import Construct
-
-from timestep.config import AppConfig
+from timestep.config import MainConfig
 from timestep.infra.imports.helm.provider import HelmProvider, HelmProviderKubernetes
-from timestep.infra.imports.helm.release import Release
 from timestep.infra.imports.kubernetes.ingress_v1 import (
     IngressV1,
     IngressV1Metadata,
@@ -13,7 +11,6 @@ from timestep.infra.imports.kubernetes.ingress_v1 import (
     IngressV1SpecRuleHttpPathBackend,
     IngressV1SpecRuleHttpPathBackendService,
     IngressV1SpecRuleHttpPathBackendServicePort,
-    IngressV1SpecTls,
 )
 from timestep.infra.imports.kubernetes.provider import KubernetesProvider
 from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
@@ -29,7 +26,7 @@ class KubernetesClusterIngressConstruct(Construct):
         self,
         scope: Construct,
         id: str,
-        config: AppConfig,
+        config: MainConfig,
         cloud_instance_construct: CloudInstanceConstruct,
         kube_config_contruct: KubeConfigConstruct,
     ) -> None:
@@ -85,7 +82,20 @@ class KubernetesClusterIngressConstruct(Construct):
         #     scope=self,
         # )
 
-    def create_ingress_resource(self, config, depends_on, host, id, ingress_class, name, namespace="default", port=80, path="/", path_type="ImplementationSpecific", issue_type="letsencrypt-prod-issue"):  # noqa: E501
+    def create_ingress_resource(
+        self,
+        config,
+        depends_on,
+        host,
+        id,
+        ingress_class,
+        name,
+        namespace="default",
+        port=80,
+        path="/",
+        path_type="ImplementationSpecific",
+        issue_type="letsencrypt-prod-issue",
+    ):  # noqa: E501
         IngressV1(
             depends_on=depends_on,
             id_=id,
