@@ -3,7 +3,7 @@ from enum import StrEnum, auto
 from cdktf import TerraformOutput
 from constructs import Construct
 
-from timestep.config import AppConfig
+from timestep.config import MainConfig
 from timestep.infra.imports.http.data_http import DataHttp
 from timestep.infra.imports.http.provider import HttpProvider
 from timestep.infra.imports.namecheap.domain_records import DomainRecords
@@ -19,7 +19,7 @@ class DomainNameRegistrarConstruct(Construct):
         self,
         scope: Construct,
         id: str,
-        config: AppConfig,
+        config: MainConfig,
     ) -> None:
         super().__init__(scope, id)
 

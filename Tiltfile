@@ -43,7 +43,7 @@ local_resource(
         'pyproject.toml',
         'poetry.lock',
         'src/timestep/__main__.py',
-        'src/timestep/conf/blocks.py',
+        'src/timestep/config.py,
         'src/timestep/infra/stacks/main/stack.py',
         'src/timestep/infra/stacks/main/constructs/cloud_init_config/construct.py',
         'src/timestep/infra/stacks/main/constructs/cloud_instance/construct.py',
@@ -108,4 +108,6 @@ local_resource(
 #     host_from_cluster='docker-registry:5000'
 # )
 
-include('./src/timestep/projects/www/Tiltfile')
+# include('./src/timestep/projects/www/Tiltfile')
+
+# docker_compose('docker-compose.yml')

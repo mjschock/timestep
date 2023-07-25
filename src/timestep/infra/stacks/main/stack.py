@@ -1,4 +1,3 @@
-import os
 from cdktf import (
     CloudBackend,
     LocalBackend,
@@ -7,12 +6,7 @@ from cdktf import (
 )
 from constructs import Construct
 
-from timestep.config import AppConfig
-from timestep.infra.imports.helm.release import Release, ReleaseSet, ReleaseSetSensitive
-from timestep.infra.imports.kubernetes.deployment_v1 import DeploymentV1, DeploymentV1Metadata, DeploymentV1Spec, DeploymentV1SpecSelector, DeploymentV1SpecTemplate, DeploymentV1SpecTemplateMetadata, DeploymentV1SpecTemplateSpec, DeploymentV1SpecTemplateSpecContainer, DeploymentV1SpecTemplateSpecContainerPort
-from timestep.infra.imports.kubernetes.service_v1 import ServiceV1, ServiceV1Metadata, ServiceV1Spec, ServiceV1SpecPort
-from timestep.infra.imports.kubernetes.secret_v1 import SecretV1
-from timestep.infra.imports.kubernetes.config_map_v1 import ConfigMapV1
+# from timestep.config import AppConfig
 from timestep.infra.stacks.main.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
 )
@@ -34,17 +28,61 @@ from timestep.infra.stacks.main.constructs.kubernetes_cluster_ingress.construct 
 
 
 class MainStack(TerraformStack):
-    def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
+    # def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
+    def __init__(self, scope: Construct, id: str, config: dict[str, str]) -> None:
         super().__init__(scope, id)
 
-        stack_id: str = config.variables.get("primary_domain_name")
+        # cloud_instance_provider = TerraformVariable(
+        #     scope=self,
+        #     id="cloud_instance_provider",
+        #     type=VariableType.STRING,
+        #     default=config.get("CLOUD_INSTANCE_PROVIDER", None),
+        #     nullable=False,
+        # )
 
-        self.cloud_init_config_construct: CloudInitConfigConstruct = (
-            CloudInitConfigConstruct(
-                config=config,
-                id="cloud_init_config_construct",
-                scope=self,
-            )
+        # primary_domain_name = TerraformVariable(
+        #     scope=self,
+        #     id="primary_domain_name",
+        #     type=VariableType.STRING,
+        #     default=config.get("PRIMARY_DOMAIN_NAME", None),
+        #     nullable=False,
+        # )
+
+        # public_variables = TerraformVariable(
+        #     scope=self,
+        #     id="public_variables",
+        #     type=VariableType.MAP,
+        #     nullable=False,
+        #     default={
+        #         "primary_domain_name": primary_domain_name,
+        #     },
+        # )
+
+        # public_variables = TerraformVariable(
+        #     scope=self,
+        #     id="public_variables",
+        #     # type=VariableType.MAP,
+        #     type=VariableType.object({
+        #         "primary_domain_name": VariableType.STRING,
+        #     }),
+        #     nullable=False,
+        #     default={
+        #         "primary_domain_name": primary_domain_name,
+        #     },
+        # )
+
+        # stack_id: str = config.variables.get("primary_domain_name")
+        # stack_id: str = config.value.get("primary_domain_name")
+        # stack_id: str = config.
+
+        self.cloud_init_config_construct: CloudInitConfigConstruct = CloudInitConfigConstruct(  # noqa: E501
+            # config=config,
+            # config=public_variables,
+            # config=primary_domain_name,
+            # config=cloud_instance_provider,
+            config=config,
+            id="cloud_init_config_construct",
+            scope=self,
         )
 
         self.cloud_instance_construct: CloudInstanceConstruct = CloudInstanceConstruct(
@@ -258,7 +296,7 @@ class MainStack(TerraformStack):
         #     set_sensitive=[
         #         ReleaseSetSensitive(
         #             name="postgresql.auth.postgresPassword",
-        #             value=config.secrets.get_secret_value().get("postgresql_password"),
+        #             value=config.secrets.get_secret_value().get("postgresql_password"),  # noqa: E501
         #         )
         #     ],
         #     scope=self,
@@ -355,7 +393,7 @@ class MainStack(TerraformStack):
         #         ),
         #         # ReleaseSet(
         #         #     name="studio.ingress.hostname",
-        #         #     value=f"supabase-studio.{config.variables.get('primary_domain_name')}",
+        #         #     value=f"supabase-studio.{config.variables.get('primary_domain_name')}",  # noqa: E501
         #         # ),
         #         ReleaseSet(
         #             name="studio.publicURL",
@@ -366,7 +404,7 @@ class MainStack(TerraformStack):
         #     set_sensitive=[
         #         ReleaseSetSensitive(
         #             name="postgresql.auth.postgresPassword",
-        #             value=config.secrets.get_secret_value().get("postgresql_password"),
+        #             value=config.secrets.get_secret_value().get("postgresql_password"),  # noqa: E501
         #         )
         #     ],
         #     scope=self,
@@ -399,7 +437,7 @@ class MainStack(TerraformStack):
         #     set_sensitive=[
         #         ReleaseSetSensitive(
         #             name="postgresql.auth.password",
-        #             value=config.secrets.get_secret_value().get("postgresql_password"),
+        #             value=config.secrets.get_secret_value().get("postgresql_password"),  # noqa: E501
         #         )
         #     ],
         #     scope=self,
@@ -471,6 +509,8 @@ class MainStack(TerraformStack):
         #     path_type="Prefix",
         #     port=4200,
         # )
+
+        stack_id = config.primary_domain_name
 
         if (
             config.variables.get("cloud_instance_provider")

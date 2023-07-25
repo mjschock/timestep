@@ -1,10 +1,10 @@
-from enum import StrEnum, auto
-
 from cdktf import TerraformDataSource, TerraformOutput
 from cloud_init_gen import CloudInitDoc
 from constructs import Construct
 
-from timestep.config import AppConfig
+from timestep.config import CloudInstanceProvider, MainConfig
+
+# from timestep.config import AppConfig
 from timestep.infra.imports.cloudinit.data_cloudinit_config import (
     DataCloudinitConfig,
     DataCloudinitConfigPart,
@@ -18,18 +18,18 @@ from timestep.infra.imports.null.resource import Resource
 
 
 class CloudInitConfigConstruct(Construct):
-    class CloudInstanceProvider(StrEnum):
-        DIGITALOCEAN: str = auto()
-        MULTIPASS: str = auto()
-
-    def __init__(self, scope: Construct, id: str, config: AppConfig) -> None:
+    def __init__(self, scope: Construct, id: str, config: MainConfig) -> None:
         super().__init__(scope, id)
 
-        username = "ubuntu"  # TODO: use config
+        # username = "ubuntu"  # TODO: use config
+
+        # print(config.value)
 
         if (
-            config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
+            # config.variables.get("cloud_instance_provider")
+            # config.string_value
+            config.cloud_instance_provider
+            == CloudInstanceProvider.MULTIPASS
         ):
             cloud_init_config_provider = LocalProvider(
                 id="cloud_init_config_provider",
@@ -44,10 +44,10 @@ class CloudInitConfigConstruct(Construct):
                 alias=None,
             )
 
-        if not config.variables.get(
-            "ssh_public_key", None
-        ) or not config.secrets.get_secret_value().get("ssh_private_key", None):
-            raise Exception("SSH credentials not found")
+        # if not config.ssh_public_key
+        #     "ssh_public_key", None
+        # ) or not config.secrets.get_secret_value().get("ssh_private_key", None):
+        #     raise Exception("SSH credentials not found")
 
         cloud_cfg = dict(
             disable_root=True,
@@ -79,49 +79,55 @@ class CloudInitConfigConstruct(Construct):
             ],
             runcmd=[
                 "sed -i -E '/^#?PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config",  # noqa: E501
-                f"sed -i -e '$aAllowUsers {username}' /etc/ssh/sshd_config",
+                f"sed -i -e '$aAllowUsers {config.cloud_instance_cloud_init_config_username}' /etc/ssh/sshd_config",  # noqa: E501
                 "service ssh restart",
                 "curl -sLS https://get.arkade.dev | sudo sh",
                 [
                     "runuser",
                     "-l",
-                    username,
+                    config.cloud_instance_cloud_init_config_username,
                     "-c",
                     'echo "\nexport PATH=\\$HOME/.arkade/bin:\\$PATH" >> $HOME/.bashrc',  # noqa: E501
                 ],
-                ["runuser", "-l", username, "-c", "arkade get caddy k3sup krew"],
                 [
                     "runuser",
                     "-l",
-                    username,
+                    config.cloud_instance_cloud_init_config_username,
+                    "-c",
+                    "arkade get caddy k3sup krew",
+                ],  # noqa: E501
+                [
+                    "runuser",
+                    "-l",
+                    config.cloud_instance_cloud_init_config_username,
                     "-c",
                     'echo "\nexport PATH=\\$HOME/.krew/bin:\\$PATH" >> $HOME/.bashrc',  # noqa: E501
                 ],
                 [
                     "runuser",
                     "-l",
-                    username,
+                    config.cloud_instance_cloud_init_config_username,
                     "-c",
                     f"""$HOME/.arkade/bin/k3sup install \
---context {config.variables.get("kubecontext")} \
+--context {config.kubecontext} \
 --k3s-extra-args '--disable traefik' \
 --local \
---user {username}""",
+--user {config.cloud_instance_cloud_init_config_username}""",
                 ],
-#                 [
-#                     "runuser",
-#                     "-l",
-#                     username,
-#                     "-c",
-#                     f"""$HOME/.arkade/bin/k3sup install \
-# --context {config.variables.get("kubecontext")} \
-# --local \
-# --user {username}""",
-#                 ],
+                #                 [
+                #                     "runuser",
+                #                     "-l",
+                #                     username,
+                #                     "-c",
+                #                     f"""$HOME/.arkade/bin/k3sup install \
+                # --context {config.variables.get("kubecontext")} \
+                # --local \
+                # --user {username}""",
+                #                 ],
                 [
                     "runuser",
                     "-l",
-                    username,
+                    config.cloud_instance_cloud_init_config_username,
                     "-c",
                     "$HOME/.arkade/bin/krew install kvaps/build",
                 ],
@@ -200,7 +206,7 @@ class CloudInitConfigConstruct(Construct):
                 #     "-l",
                 #     username,
                 #     "-c",
-                    # f"sudo arkade install --kubeconfig /home/{username}/kubeconfig docker-registry --password password --set app.kubernetes.io/managed-by=Helm --set ingress.annotations.cert-manager.io/cluster-issuer=letsencrypt-staging --set ingress.annotations.kubernetes.io/ingress.class=traefik-internal --set ingress.className=traefik-internal --set ingress.enabled=true --set ingress.hosts[0]=registry.{config.variables.get('primary_domain_name')} --set meta.helm.sh/release-name=docker-registry --set meta.helm.sh/release-namespace=default --set persistence.enabled=true --username admin --set ingress.tls="  # noqa: E501
+                # f"sudo arkade install --kubeconfig /home/{username}/kubeconfig docker-registry --password password --set app.kubernetes.io/managed-by=Helm --set ingress.annotations.cert-manager.io/cluster-issuer=letsencrypt-staging --set ingress.annotations.kubernetes.io/ingress.class=traefik-internal --set ingress.className=traefik-internal --set ingress.enabled=true --set ingress.hosts[0]=registry.{config.variables.get('primary_domain_name')} --set meta.helm.sh/release-name=docker-registry --set meta.helm.sh/release-namespace=default --set persistence.enabled=true --username admin --set ingress.tls="  # noqa: E501
                 # ],
                 # [
                 #     "runuser",
@@ -242,23 +248,24 @@ class CloudInitConfigConstruct(Construct):
                 "default",
                 {
                     "groups": "sudo",
-                    "name": username,
+                    "name": config.cloud_instance_cloud_init_config_username,
                     "shell": "/bin/bash",
                     "ssh_authorized_keys": [
-                        config.variables.get("ssh_public_key").strip(),
+                        # config.variables.get("ssh_public_key").strip(),
+                        config.ssh_public_key.strip(),
                     ],
                     "sudo": "ALL=(ALL) NOPASSWD:ALL",
                 },
             ],
-    #         write_files=[
-    #             {
-    #                 "path": "/etc/rancher/k3s/registries.yaml",
-    #                 "content": f"""mirrors:
-    # docker.io:
-    #     endpoint:
-    #         - "https://registry.{config.variables.get('primary_domain_name')}"
-    #             },
-    #         ]
+            #         write_files=[
+            #             {
+            #                 "path": "/etc/rancher/k3s/registries.yaml",
+            #                 "content": f"""mirrors:
+            # docker.io:
+            #     endpoint:
+            #         - "https://registry.{config.variables.get('primary_domain_name')}"
+            #             },
+            #         ]
         )
 
         user_data = CloudInitDoc()
@@ -266,7 +273,7 @@ class CloudInitConfigConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
+            == CloudInstanceProvider.MULTIPASS
         ):
             cloud_init_config_resource = File(
                 id="cloud_init_config_resource",
@@ -292,7 +299,7 @@ class CloudInitConfigConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
+            == CloudInstanceProvider.MULTIPASS
         ):
             cloud_init_config_data_source = DataLocalFile(
                 id="cloud_init_config_data_source",
@@ -331,7 +338,7 @@ class CloudInitConfigConstruct(Construct):
 
         if (
             config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
+            == CloudInstanceProvider.MULTIPASS
         ):
             cloud_init_config_outputs["cloudinit_file"] = TerraformOutput(
                 scope=scope,

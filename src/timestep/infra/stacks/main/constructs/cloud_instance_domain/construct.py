@@ -3,7 +3,7 @@ from cdktf import (
 )
 from constructs import Construct
 
-from timestep.config import AppConfig
+from timestep.config import MainConfig
 from timestep.infra.imports.digitalocean.data_digitalocean_domain import (
     DataDigitaloceanDomain as DigitaloceanDomainTerraformDataSource,
 )
@@ -30,7 +30,7 @@ class CloudInstanceDomainConstruct(Construct):
         self,
         scope: Construct,
         id: str,
-        config: AppConfig,
+        config: MainConfig,
         cloud_instance_construct: CloudInstanceConstruct,
     ) -> None:
         super().__init__(scope, id)
