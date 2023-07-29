@@ -1,5 +1,5 @@
 from constructs import Construct
-from timestep.config import MainConfig
+from timestep.config import Settings
 from timestep.infra.imports.helm.provider import HelmProvider, HelmProviderKubernetes
 from timestep.infra.imports.kubernetes.ingress_v1 import (
     IngressV1,
@@ -26,7 +26,7 @@ class KubernetesClusterIngressConstruct(Construct):
         self,
         scope: Construct,
         id: str,
-        config: MainConfig,
+        config: Settings,
         cloud_instance_construct: CloudInstanceConstruct,
         kube_config_contruct: KubeConfigConstruct,
     ) -> None:
@@ -36,7 +36,7 @@ class KubernetesClusterIngressConstruct(Construct):
             id="kubernetes_provider",
             # config_context=config.KUBE_CONTEXT,
             # config_path=config.KUBE_CONFIG_PATH,
-            config_context=config.variables.get("kubecontext"),
+            config_context=config.kubecontext,
             config_path=kube_config_contruct.data_source.filename,
             scope=self,
         )

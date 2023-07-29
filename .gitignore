@@ -1,13 +1,14 @@
 actions-runner
 cdktf.out
+data
+.env
 node_modules
 *.pyc
 __pycache__
 .pytest_cache
 .ruff_cache
+secrets/*
+!secrets/.gitkeep
 src/timestep/infra/imports
 .ssh
 .venv
-
-.env
-data

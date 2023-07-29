@@ -58,7 +58,7 @@
 import pathlib
 from enum import StrEnum, auto
 
-from pydantic import BaseModel, Field, SecretStr
+from pydantic import BaseSettings, Field, SecretStr
 
 BASE_PATH = pathlib.Path.cwd()
 CPUS: int = 2
@@ -71,7 +71,7 @@ DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-{MEMORY_SIZE_GB}gb"
 MULTIPASS_INSTANCE_CPUS: int = CPUS
 MULTIPASS_INSTANCE_DISK: str = f"{DISK_SIZE_GB}G"
 MULTIPASS_INSTANCE_IMAGE: str = "22.04"
-MULTIPASS_INSTANCE_MEMORY: int = f"{MEMORY_SIZE_GB}G"
+MULTIPASS_INSTANCE_MEMORY: str = f"{MEMORY_SIZE_GB}G"
 
 
 class CloudInstanceProvider(StrEnum):
@@ -79,27 +79,39 @@ class CloudInstanceProvider(StrEnum):
     MULTIPASS: str = auto()
 
 
-class MainConfig(BaseModel):
-    base_path: str = BASE_PATH
-    cdktf_outdir: str = Field(alias="CDKTF_OUTDIR")
-    cloud_instance_cloud_init_config_username: str = Field(
-        alias="CLOUD_INSTANCE_CLOUD_INIT_CONFIG_USERNAME", default="ubuntu"
-    )  # noqa: E501
+class DomainNameRegistrarProvider(StrEnum):
+    NAMECHEAP: str = auto()
+    NONE: str = auto()
+
+
+class Settings(BaseSettings):
+    cdktf_outdir: str = Field(env="CDKTF_OUTDIR")
+    cloud_instance_name: str = Field(env="CLOUD_INSTANCE_NAME")
     cloud_instance_provider: str = Field(
-        alias="CLOUD_INSTANCE_PROVIDER", default=CloudInstanceProvider.MULTIPASS
-    )  # noqa: E501
-    cpus: int = CPUS
-    disk_size_gb: int = DISK_SIZE_GB
-    dist_path: str = DIST_PATH
-    do_droplet_image: str = DO_DROPLET_IMAGE
-    do_droplet_region: str = DO_DROPLET_REGION
-    do_droplet_size: str = DO_DROPLET_SIZE
-    kubecontext: str = Field(alias="KUBECONTEXT")
-    memory_size_gb: int = MEMORY_SIZE_GB
-    multipass_instance_cpus: int = MULTIPASS_INSTANCE_CPUS
-    multipass_instance_disk: str = MULTIPASS_INSTANCE_DISK
-    multipass_instance_image: str = MULTIPASS_INSTANCE_IMAGE
-    multipass_instance_memory: int = MULTIPASS_INSTANCE_MEMORY
-    primary_domain_name: str = Field(alias="PRIMARY_DOMAIN_NAME")
-    ssh_public_key: str = Field(alias="SSH_PUBLIC_KEY")
-    ssh_private_key: SecretStr = Field(alias="SSH_PRIVATE_KEY")
+        default=CloudInstanceProvider.MULTIPASS, env="CLOUD_INSTANCE_PROVIDER"
+    )
+    cloud_instance_user: str = Field(env="CLOUD_INSTANCE_USER")
+    domain_name_registrar_provider: str = Field(
+        default=DomainNameRegistrarProvider.NONE, env="DOMAIN_NAME_REGISTRAR_PROVIDER"
+    )
+    kubecontext: str = Field(env="KUBECONTEXT")
+    multipass_instance_cpus: int = Field(
+        default=MULTIPASS_INSTANCE_CPUS, env="MULTIPASS_INSTANCE_CPUS"
+    )
+    multipass_instance_disk: str = Field(
+        default=MULTIPASS_INSTANCE_DISK, env="MULTIPASS_INSTANCE_DISK"
+    )
+    multipass_instance_image: str = Field(
+        default=MULTIPASS_INSTANCE_IMAGE, env="MULTIPASS_INSTANCE_IMAGE"
+    )
+    multipass_instance_memory: str = Field(
+        default=MULTIPASS_INSTANCE_MEMORY, env="MULTIPASS_INSTANCE_MEMORY"
+    )
+    primary_domain_name: str = Field(env="PRIMARY_DOMAIN_NAME")
+    ssh_private_key: SecretStr = Field(env="SSH_PRIVATE_KEY")
+    ssh_public_key: str = Field(env="SSH_PUBLIC_KEY")
+
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+        secrets_dir = "./secrets"

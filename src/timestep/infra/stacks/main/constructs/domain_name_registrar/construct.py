@@ -1,17 +1,11 @@
-from enum import StrEnum, auto
-
 from cdktf import TerraformOutput
 from constructs import Construct
 
-from timestep.config import MainConfig
+from timestep.config import DomainNameRegistrarProvider, Settings
 from timestep.infra.imports.http.data_http import DataHttp
 from timestep.infra.imports.http.provider import HttpProvider
 from timestep.infra.imports.namecheap.domain_records import DomainRecords
 from timestep.infra.imports.namecheap.provider import NamecheapProvider
-
-
-class DomainNameRegistrarProvider(StrEnum):
-    NAMECHEAP: str = auto()
 
 
 class DomainNameRegistrarConstruct(Construct):
@@ -19,7 +13,7 @@ class DomainNameRegistrarConstruct(Construct):
         self,
         scope: Construct,
         id: str,
-        config: MainConfig,
+        config: Settings,
     ) -> None:
         super().__init__(scope, id)
 
@@ -42,7 +36,7 @@ class DomainNameRegistrarConstruct(Construct):
         )
 
         if (
-            config.variables.get("domain_name_registrar_provider")
+            config.domain_name_registrar_provider
             == DomainNameRegistrarProvider.NAMECHEAP
         ):
             domain_name_registrar_provider = NamecheapProvider(
@@ -55,7 +49,7 @@ class DomainNameRegistrarConstruct(Construct):
             )
 
             DomainRecords(
-                domain=config.variables.get("primary_domain_name"),
+                domain=config.primary_domain_name,
                 id_="domain_name_registrar_resource",
                 mode="OVERWRITE",
                 nameservers=[  # TODO: Get these dynamically

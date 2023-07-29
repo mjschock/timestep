@@ -1,0 +1,58 @@
+# Welcome to your prefect.yaml file! You can you this file for storing and managing
+# configuration for deploying your flows. We recommend committing this file to source
+# control along with your flow code.
+
+# Generic metadata about this project
+name: texas_holdem_no_limit
+prefect-version: 2.11.0
+
+# build section allows you to manage and build docker images
+build:
+- prefect_docker.deployments.steps.build_docker_image:
+    id: build_image
+    requires: prefect-docker>=0.3.1
+    image_name: osrf/ros
+    tag: humble-desktop-jammy
+    dockerfile: auto
+
+# push section allows you to manage if and how this project is uploaded to remote locations
+push:
+# - prefect_docker.deployments.steps.push_docker_image:
+#     requires: prefect-docker>=0.3.1
+#     image_name: '{{ build_image.image_name }}'
+#     tag: '{{ build_image.tag }}'
+
+# pull section allows you to provide instructions for cloning this project in remote locations
+pull:
+- prefect.deployments.steps.set_working_directory:
+    directory: /opt/prefect/texas_holdem_no_limit
+
+# the deployments section allows you to provide configuration for deploying flows
+deployments:
+- name:
+  version:
+  tags: []
+  description:
+  schedule: {}
+  flow_name:
+  entrypoint:
+  parameters: {}
+  work_pool:
+    name:
+    work_queue_name:
+    job_variables:
+      image: '{{ build_image.image }}'
+- name: default
+  version:
+  tags: []
+  description:
+  entrypoint: flows.py:texas_holdem_no_limit
+  parameters: {}
+  work_pool:
+    name: docker
+    work_queue_name:
+    job_variables: {}
+  schedule:
+    interval: 3600.0
+    anchor_date: '2023-07-27T01:27:18.343861+00:00'
+    timezone: UTC

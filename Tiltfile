@@ -43,7 +43,7 @@ local_resource(
         'pyproject.toml',
         'poetry.lock',
         'src/timestep/__main__.py',
-        'src/timestep/config.py,
+        'src/timestep/config.py',
         'src/timestep/infra/stacks/main/stack.py',
         'src/timestep/infra/stacks/main/constructs/cloud_init_config/construct.py',
         'src/timestep/infra/stacks/main/constructs/cloud_instance/construct.py',
@@ -77,26 +77,26 @@ allow_k8s_contexts(
     os.getenv('KUBECONTEXT'),
 )
 
-local_resource(
-    'hostctl watch',
-    serve_cmd='cat $HOSTS_FILE_PATH | sudo $(which hostctl) add $PRIMARY_DOMAIN_NAME --wait 0',
-    deps=[
-        '$HOSTS_FILE_PATH',
-        '.env',
-        os.getenv('CDKTF_OUTPUT') + "/stacks/" + os.getenv('PRIMARY_DOMAIN_NAME') + "/hosts",
-    ],
-    labels=['release'],
-    links=[
-        "https://" + str(local(command='echo $PRIMARY_DOMAIN_NAME')).strip(),
-    ],
-    resource_deps=[
-        'poetry run cdktf deploy',
-    ],
-    serve_env={
-        "PRIMARY_DOMAIN_NAME": os.getenv('PRIMARY_DOMAIN_NAME'),
-        "HOSTS_FILE_PATH": os.getenv('CDKTF_OUTPUT') + "/stacks/" + os.getenv('PRIMARY_DOMAIN_NAME') + "/hosts",
-    },
-)
+# local_resource(
+#     'hostctl watch',
+#     serve_cmd='cat $HOSTS_FILE_PATH | sudo $(which hostctl) add $PRIMARY_DOMAIN_NAME --wait 0',
+#     deps=[
+#         '$HOSTS_FILE_PATH',
+#         '.env',
+#         os.getenv('CDKTF_OUTPUT') + "/stacks/" + os.getenv('PRIMARY_DOMAIN_NAME') + "/hosts",
+#     ],
+#     labels=['release'],
+#     links=[
+#         "https://" + str(local(command='echo $PRIMARY_DOMAIN_NAME')).strip(),
+#     ],
+#     resource_deps=[
+#         'poetry run cdktf deploy',
+#     ],
+#     serve_env={
+#         "PRIMARY_DOMAIN_NAME": os.getenv('PRIMARY_DOMAIN_NAME'),
+#         "HOSTS_FILE_PATH": os.getenv('CDKTF_OUTPUT') + "/stacks/" + os.getenv('PRIMARY_DOMAIN_NAME') + "/hosts",
+#     },
+# )
 
 # # k8s_resource('docker-registry', port_forwards=5000)
 # port_forward(5000, host='registry.timestep.local')

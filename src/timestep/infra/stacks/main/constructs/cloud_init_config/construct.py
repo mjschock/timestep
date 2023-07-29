@@ -2,7 +2,7 @@ from cdktf import TerraformDataSource, TerraformOutput
 from cloud_init_gen import CloudInitDoc
 from constructs import Construct
 
-from timestep.config import CloudInstanceProvider, MainConfig
+from timestep.config import CloudInstanceProvider, Settings
 
 # from timestep.config import AppConfig
 from timestep.infra.imports.cloudinit.data_cloudinit_config import (
@@ -18,7 +18,7 @@ from timestep.infra.imports.null.resource import Resource
 
 
 class CloudInitConfigConstruct(Construct):
-    def __init__(self, scope: Construct, id: str, config: MainConfig) -> None:
+    def __init__(self, scope: Construct, id: str, config: Settings) -> None:
         super().__init__(scope, id)
 
         # username = "ubuntu"  # TODO: use config
@@ -26,7 +26,7 @@ class CloudInitConfigConstruct(Construct):
         # print(config.value)
 
         if (
-            # config.variables.get("cloud_instance_provider")
+            # config.cloud_instance_provider
             # config.string_value
             config.cloud_instance_provider
             == CloudInstanceProvider.MULTIPASS
@@ -79,40 +79,47 @@ class CloudInitConfigConstruct(Construct):
             ],
             runcmd=[
                 "sed -i -E '/^#?PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config",  # noqa: E501
-                f"sed -i -e '$aAllowUsers {config.cloud_instance_cloud_init_config_username}' /etc/ssh/sshd_config",  # noqa: E501
+                f"sed -i -e '$aAllowUsers {config.cloud_instance_user}' /etc/ssh/sshd_config",  # noqa: E501
                 "service ssh restart",
                 "curl -sLS https://get.arkade.dev | sudo sh",
                 [
                     "runuser",
                     "-l",
-                    config.cloud_instance_cloud_init_config_username,
+                    config.cloud_instance_user,
                     "-c",
                     'echo "\nexport PATH=\\$HOME/.arkade/bin:\\$PATH" >> $HOME/.bashrc',  # noqa: E501
                 ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     config.cloud_instance_user,
+                #     "-c",
+                #     "arkade get caddy k3sup krew",
+                # ],  # noqa: E501
                 [
                     "runuser",
                     "-l",
-                    config.cloud_instance_cloud_init_config_username,
+                    config.cloud_instance_user,
                     "-c",
-                    "arkade get caddy k3sup krew",
+                    "arkade get k3sup",
                 ],  # noqa: E501
                 [
                     "runuser",
                     "-l",
-                    config.cloud_instance_cloud_init_config_username,
+                    config.cloud_instance_user,
                     "-c",
                     'echo "\nexport PATH=\\$HOME/.krew/bin:\\$PATH" >> $HOME/.bashrc',  # noqa: E501
                 ],
                 [
                     "runuser",
                     "-l",
-                    config.cloud_instance_cloud_init_config_username,
+                    config.cloud_instance_user,
                     "-c",
                     f"""$HOME/.arkade/bin/k3sup install \
 --context {config.kubecontext} \
 --k3s-extra-args '--disable traefik' \
 --local \
---user {config.cloud_instance_cloud_init_config_username}""",
+--user {config.cloud_instance_user}""",
                 ],
                 #                 [
                 #                     "runuser",
@@ -120,17 +127,17 @@ class CloudInitConfigConstruct(Construct):
                 #                     username,
                 #                     "-c",
                 #                     f"""$HOME/.arkade/bin/k3sup install \
-                # --context {config.variables.get("kubecontext")} \
+                # --context {config.kubecontext} \
                 # --local \
                 # --user {username}""",
                 #                 ],
-                [
-                    "runuser",
-                    "-l",
-                    config.cloud_instance_cloud_init_config_username,
-                    "-c",
-                    "$HOME/.arkade/bin/krew install kvaps/build",
-                ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     config.cloud_instance_user,
+                #     "-c",
+                #     "$HOME/.arkade/bin/krew install kvaps/build",
+                # ],
                 # [
                 #     "runuser",
                 #     "-l",
@@ -248,7 +255,7 @@ class CloudInitConfigConstruct(Construct):
                 "default",
                 {
                     "groups": "sudo",
-                    "name": config.cloud_instance_cloud_init_config_username,
+                    "name": config.cloud_instance_user,
                     "shell": "/bin/bash",
                     "ssh_authorized_keys": [
                         # config.variables.get("ssh_public_key").strip(),
@@ -271,10 +278,7 @@ class CloudInitConfigConstruct(Construct):
         user_data = CloudInitDoc()
         user_data.add(cloud_cfg)
 
-        if (
-            config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
-        ):
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             cloud_init_config_resource = File(
                 id="cloud_init_config_resource",
                 content=user_data.render(),
@@ -297,10 +301,7 @@ class CloudInitConfigConstruct(Construct):
                 },
             )
 
-        if (
-            config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
-        ):
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             cloud_init_config_data_source = DataLocalFile(
                 id="cloud_init_config_data_source",
                 filename=cloud_init_config_resource.filename,
@@ -336,10 +337,7 @@ class CloudInitConfigConstruct(Construct):
 
         cloud_init_config_outputs = {}
 
-        if (
-            config.variables.get("cloud_instance_provider")
-            == CloudInstanceProvider.MULTIPASS
-        ):
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             cloud_init_config_outputs["cloudinit_file"] = TerraformOutput(
                 scope=scope,
                 id="cloud_init_config_outputs_cloudinit_file",
