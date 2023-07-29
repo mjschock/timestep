@@ -5,7 +5,7 @@ from cdktf import (
 )
 from constructs import Construct
 
-from timestep.config import MainConfig
+from timestep.config import CloudInstanceProvider, Settings
 from timestep.infra.imports.cloudinit.data_cloudinit_config import DataCloudinitConfig
 from timestep.infra.imports.digitalocean.data_digitalocean_droplet import (
     DataDigitaloceanDroplet as DigitaloceanDropletTerraformDataSource,
@@ -37,24 +37,18 @@ class CloudInstanceConstruct(Construct):
         self,
         scope: Construct,
         id: str,
-        config: MainConfig,
+        config: Settings,
         cloud_init_config_construct: CloudInitConfigConstruct,
     ) -> None:
         super().__init__(scope, id)
 
-        if (
-            config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
-        ):
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             cloud_instance_provider = MultipassTerraformProvider(
                 id="cloud_instance_provider",
                 scope=scope,
             )
 
-        elif (
-            config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
-        ):
+        elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
             cloud_instance_provider = DigitaloceanTerraformProvider(
                 id="cloud_instance_provider",
                 scope=scope,
@@ -63,38 +57,32 @@ class CloudInstanceConstruct(Construct):
 
         else:
             raise ValueError(
-                f"Unknown cloud_instance_provider: {config.variables.get('cloud_instance_provider')}"  # noqa: E501
+                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
             )
 
-        if (
-            config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
-        ):
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             cloud_init_config_construct_data_source: DataLocalFile = (
                 cloud_init_config_construct.data_source
             )  # noqa: E501
             cloud_instance_resource = MultipassInstanceTerraformResource(
                 # cloudinit_file=cloud_init_config_construct.data_source.filename,
                 cloudinit_file=cloud_init_config_construct_data_source.filename,
-                cpus=config.variables.get("multipass_instance_cpus"),
-                disk=config.variables.get("multipass_instance_disk"),
+                cpus=config.multipass_instance_cpus,
+                disk=config.multipass_instance_disk,
                 id="cloud_instance_resource",
-                image=config.variables.get("multipass_instance_image"),
-                memory=config.variables.get("multipass_instance_memory"),
-                name=config.variables.get("cloud_instance_name"),
+                image=config.multipass_instance_image,
+                memory=config.multipass_instance_memory,
+                name=config.cloud_instance_name,
                 provider=cloud_instance_provider,
                 scope=scope,
             )
 
-        elif (
-            config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
-        ):
+        elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
             cloud_instance_ssh_key_resource = SshKey(
                 id_="cloud_instance_ssh_key_resource",
-                name=f'{config.variables.get("cloud_instance_name")}_ssh_key',
+                name=f"{config.cloud_instance_name}_ssh_key",
                 provider=cloud_instance_provider,
-                public_key=config.variables.get("ssh_public_key"),
+                public_key=config.ssh_public_key,
                 scope=scope,
             )
             cloud_init_config_construct_data_source: DataCloudinitConfig = (
@@ -102,12 +90,12 @@ class CloudInstanceConstruct(Construct):
             )  # noqa: E501
             cloud_instance_resource = DigitaloceanDropletTerraformResource(
                 id_="cloud_instance_resource",
-                image=config.variables.get("do_droplet_image"),
-                name=config.variables.get("cloud_instance_name"),
+                image=config.do_droplet_image,
+                name=config.cloud_instance_name,
                 provider=cloud_instance_provider,
-                region=config.variables.get("do_droplet_region"),
+                region=config.do_droplet_region,
                 scope=scope,
-                size=config.variables.get("do_droplet_size"),
+                size=config.do_droplet_size,
                 ssh_keys=[cloud_instance_ssh_key_resource.fingerprint],
                 # user_data=cloud_init_config_construct.data_source.rendered,
                 user_data=cloud_init_config_construct_data_source.rendered,
@@ -115,13 +103,10 @@ class CloudInstanceConstruct(Construct):
 
         else:
             raise ValueError(
-                f"Unknown cloud_instance_provider: {config.variables.get('cloud_instance_provider')}"  # noqa: E501
+                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
             )
 
-        if (
-            config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
-        ):
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             cloud_instance_data_source = MultipassInstanceTerraformDataSource(
                 id="cloud_instance_data_source",
                 name=cloud_instance_resource.name,
@@ -129,10 +114,7 @@ class CloudInstanceConstruct(Construct):
                 scope=scope,
             )
 
-        elif (
-            config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
-        ):
+        elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
             cloud_instance_data_source = DigitaloceanDropletTerraformDataSource(
                 id_="cloud_instance_data_source",
                 name=cloud_instance_resource.name,
@@ -142,25 +124,19 @@ class CloudInstanceConstruct(Construct):
 
         else:
             raise ValueError(
-                f"Unknown cloud_instance_provider: {config.variables.get('cloud_instance_provider')}"  # noqa: E501
+                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
             )
 
         cloud_instance_outputs = {}
 
-        if (
-            config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
-        ):
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             cloud_instance_outputs["ipv4"] = TerraformOutput(
                 id="cloud_instance_outputs_ipv4",
                 value=cloud_instance_data_source.ipv4,
                 scope=scope,
             )
 
-        elif (
-            config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.DIGITALOCEAN
-        ):
+        elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
             cloud_instance_outputs["ipv4"] = TerraformOutput(
                 id="cloud_instance_outputs_ipv4",
                 value=cloud_instance_data_source.ipv4_address,
@@ -169,7 +145,7 @@ class CloudInstanceConstruct(Construct):
 
         else:
             raise ValueError(
-                f"Unknown cloud_instance_provider: {config.variables.get('cloud_instance_provider')}"  # noqa: E501
+                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
             )
 
         self.data_source: TerraformDataSource[

@@ -1,9 +1,6 @@
-import os
-
 from cdktf import App
-from dotenv import dotenv_values
 
-from timestep.config import MainConfig
+from timestep.config import Settings
 
 # from timestep.config import (
 # AppConfig,
@@ -12,7 +9,10 @@ from timestep.config import MainConfig
 from timestep.infra.stacks.main.stack import MainStack
 
 
-def main(config: MainConfig) -> None:
+# def main(config: Settings) -> None:
+def main() -> None:
+    config = Settings()
+
     app: App = App(
         context={
             "allowSepCharsInLogicalIds": "true",
@@ -187,7 +187,7 @@ def main(config: MainConfig) -> None:
         config=config,
         id=config.primary_domain_name,
         scope=app,
-        # id=config.variables.get("primary_domain_name"),
+        # id=config.primary_domain_name,
         # id=primary_domain_name.string_value,
         # id=primary_domain_name,
         # id=config.get("PRIMARY_DOMAIN_NAME", None),
@@ -197,10 +197,10 @@ def main(config: MainConfig) -> None:
 
 
 if __name__ == "__main__":
-    external_data: dict[str, str] = {
-        **dotenv_values(verbose=True),
-        **os.environ,  # override loaded values with environment variables
-    }
+    # external_data: dict[str, str] = {
+    #     **dotenv_values(verbose=True),
+    #     **os.environ,  # override loaded values with environment variables
+    # }
 
     # try:
     #     ssh_credentials_block = SecureShellCredentials.load("ssh-credentials")
@@ -216,6 +216,7 @@ if __name__ == "__main__":
     #         overwrite=False,
     #     )
 
-    main_config = MainConfig(**external_data)
+    # main_config = Settings(**external_data)
 
-    main(config=main_config)
+    # main(config=main_config)
+    main()

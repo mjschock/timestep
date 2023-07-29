@@ -3,14 +3,11 @@ import tempfile
 from cdktf import LocalExecProvisioner
 from constructs import Construct
 from pydantic import SecretStr
-from timestep.config import MainConfig
+from timestep.config import CloudInstanceProvider, Settings
 from timestep.infra.imports.local.data_local_file import DataLocalFile
 from timestep.infra.imports.local.provider import LocalProvider
 from timestep.infra.imports.null.provider import NullProvider
 from timestep.infra.imports.null.resource import Resource
-from timestep.infra.stacks.main.constructs.cloud_init_config.construct import (
-    CloudInitConfigConstruct,
-)
 from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
 )
@@ -21,26 +18,24 @@ class KubeConfigConstruct(Construct):
         self,
         scope: Construct,
         id: str,
-        config: MainConfig,
+        config: Settings,
         cloud_instance_construct: CloudInstanceConstruct,
     ) -> None:
         super().__init__(scope, id)
 
-        if (
-            config.variables.get("cloud_instance_provider")
-            == CloudInitConfigConstruct.CloudInstanceProvider.MULTIPASS
-        ):
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             ipv4 = (
                 cloud_instance_construct.data_source.ipv4
             )  # TODO: can I use the output  # noqa: E501
         else:
             ipv4 = cloud_instance_construct.data_source.ipv4_address
 
-        kubecontext = config.variables.get("kubecontext")
+        kubecontext = config.kubecontext
         local_path = "kubeconfig"
-        ssh_private_key: SecretStr = config.secrets.get_secret_value().get(
-            "ssh_private_key"
-        )
+        # ssh_private_key: SecretStr = config.secrets.get_secret_value().get(
+        #     "ssh_private_key"
+        # )
+        ssh_private_key: SecretStr = config.ssh_private_key
         username = "ubuntu"  # TODO: use config
 
         with tempfile.NamedTemporaryFile(

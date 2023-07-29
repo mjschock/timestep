@@ -24,5 +24,5 @@ quasar-dev-android:
 	cd src/timestep/projects/www && npx quasar dev -m capacitor -T android
 
 ssh:
-	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.159.189.23
+	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.159.189.175
 	# ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@146.190.169.137
