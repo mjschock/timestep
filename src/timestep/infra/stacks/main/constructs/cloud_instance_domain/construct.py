@@ -55,14 +55,17 @@ class CloudInstanceDomainConstruct(Construct):
                 # "alice",
                 # "api",
                 # "bob",
+                "example1",
+                "example2",
+                # "notary",
                 # "marvin",
-                # "example1",
-                # "prefect",
+                "prefect-server",
                 # "registry",
+                # "studio",
                 # "supabase",
                 # "supabase-studio",
-                # "studio",
                 # "talker",
+                # "traefik",
                 "www",
             ]
 
@@ -72,6 +75,8 @@ class CloudInstanceDomainConstruct(Construct):
                 content += f"{ipv4} {subdomain}.{primary_domain_name}\n"
 
             content += f"{ipv4} {primary_domain_name}\n"
+
+            # content += f"{ipv4} core.harbor.domain\n"
 
             cloud_instance_domain_resource = LocalFileTerraformResource(
                 id="cloud_instance_domain_resource",

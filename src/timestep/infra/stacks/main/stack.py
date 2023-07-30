@@ -23,6 +23,7 @@ from timestep.infra.stacks.main.constructs.kube_config.construct import (
 from timestep.infra.stacks.main.constructs.kubernetes_cluster_ingress.construct import (
     KubernetesClusterIngressConstruct,
 )
+from timestep.infra.stacks.main.constructs.prefect.construct import PrefectConstruct
 
 
 class MainStack(TerraformStack):
@@ -124,6 +125,22 @@ class MainStack(TerraformStack):
             )
         )
 
+        self.prefect_contruct: PrefectConstruct = PrefectConstruct(
+            config=config,
+            id="prefect_contruct",
+            kubernetes_cluster_ingress_construct=self.kubernetes_cluster_ingress_construct,  # noqa: E501
+            scope=self,
+        )
+
+        # self.kubernetes_container_registry_construct: RegistryConstruct = (
+        #     RegistryConstruct(
+        #         config=config,
+        #         id="kubernetes_container_registry_construct",
+        #         kubernetes_cluster_ingress_construct=self.kubernetes_cluster_ingress_construct,  # noqa: E501
+        #         scope=self,
+        #     )
+        # )
+
         # example1_deployment_resource = DeploymentV1(
         #     id_="example1_deployment_resource",
         #     metadata=DeploymentV1Metadata(
@@ -178,6 +195,7 @@ class MainStack(TerraformStack):
         #     spec=ServiceV1Spec(
         #         port=[
         #             ServiceV1SpecPort(
+        #                 name="http",
         #                 port=8080,
         #                 protocol="TCP",
         #                 target_port="8080",
@@ -190,16 +208,95 @@ class MainStack(TerraformStack):
         #     )
         # )
 
-        # self.kubernetes_cluster_ingress_construct.create_ingress_resource(
+        # example1_ingress_resource = self.kubernetes_cluster_ingress_construct.create_ingress_resource(  # noqa: E501
         #     config=config,
         #     depends_on=[example1_service_resource],
-        #     host=f"example1.{config.variables.get('primary_domain_name')}",
+        #     # helm_release_chart_version=self.release_resource.version,
+        #     # helm_release_name=self.release_resource.name,
+        #     # helm_release_namespace=self.release_resource.namespace,
+        #     host=f"example1.{config.primary_domain_name}",
         #     id="example1_ingress_resource",
+        #     # ingress_class="traefik",
         #     ingress_class="caddy",
-        #     name="example1",
-        #     path="/",
-        #     path_type="Prefix",
-        #     port=8080,
+        #     # ingress_name="registry-ingress", # harbor-ingress
+        #     ingress_name="example",
+        #     namespace="default",
+        #     paths=[
+        #         {
+        #             "path": "/hello1",
+        #             "path_type": "Prefix",
+        #             "service_name": "example1",
+        #             "service_port_name": None,
+        #             "service_port_number": 8080,
+        #         },
+        #         # {
+        #         #     "path": "/hello2",
+        #         #     "path_type": "Prefix",
+        #         #     "service_name": "whoami",
+        #         #     "service_port_name": None,
+        #         #     "service_port_number": 5678,
+        #         # },
+        #         # {
+        #         #     "path": "/",
+        #         #     "path_type": "Prefix",
+        #         #     "service_name": "whoami",
+        #         #     "service_port_name": None,
+        #         #     "service_port_number": 5678,
+        #         # },
+        #     ],
+        #     cert_manager_cluster_issuer="letsencrypt-staging",
+        # )
+
+        # traefik_dashboard_service_resource = ServiceV1(
+        #     # depends_on=[whoami_deployment_resource],
+        #     id_="traefik_dashboard_service_resource",
+        #     metadata=ServiceV1Metadata(
+        #         labels={
+        #             "app.kubernetes.io/instance": "traefik",
+        #             "app.kubernetes.io/name": "traefik-dashboard",
+        #         },
+        #         name="traefik-dashboard",
+        #         namespace="kube-system",
+        #     ),
+        #     scope=self,
+        #     spec=ServiceV1Spec(
+        #         port=[
+        #             ServiceV1SpecPort(
+        #                 port=9000,
+        #                 # protocol="TCP",
+        #                 target_port="traefik",
+        #             ),
+        #         ],
+        #         selector={
+        #             "app.kubernetes.io/instance": "traefik-kube-system",
+        #             "app.kubernetes.io/name": "traefik",
+        #         },
+        #         type="ClusterIP",
+        #     )
+        # )
+
+        # traefik_dashboard_ingress_resource = self.kubernetes_cluster_ingress_construct.create_ingress_resource(  # noqa: E501
+        #     config=config,
+        #     depends_on=[traefik_dashboard_service_resource],
+        #     # helm_release_chart_version=self.release_resource.version,
+        #     # helm_release_name=self.release_resource.name,
+        #     # helm_release_namespace=self.release_resource.namespace,
+        #     host=f"traefik.{config.primary_domain_name}",
+        #     id="traefik_dashboard_ingress_resource",
+        #     ingress_class="traefik",
+        #     # ingress_name="registry-ingress", # harbor-ingress
+        #     ingress_name="traefik-ingress",
+        #     namespace="kube-system",
+        #     paths=[
+        #         {
+        #             "path": "/",
+        #             "path_type": "Prefix",
+        #             "service_name": "traefik-dashboard",
+        #             "service_port_name": None,
+        #             "service_port_number": 9000,
+        #         },
+        #     ],
+        #     cert_manager_cluster_issuer="letsencrypt-staging",
         # )
 
         stack_id = config.primary_domain_name

@@ -12,62 +12,73 @@ services:
 #       - "9090:8080"
 #     volumes:
 #       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  backend:
+  # backend:
+  #   build: .
+  #   environment:
+  #     - PREFECT_API_URL=http://prefect-server:4200/api
+  #   ports: 
+  #     - "8000:80"
+  # tic-tac-toe-env:
+  #   build: src/timestep/projects/farama/pettingzoo/classic/tictactoe
+  rps:
+    # build: src/timestep/projects
     build: .
-    environment:
-      - PREFECT_API_URL=http://prefect-server:4200/api
-    ports: 
-      - "8000:80"
-  tic-tac-toe-env:
-    build: src/timestep/projects/farama/pettingzoo/classic/tictactoe
-  caddy:
-    build: src/timestep/projects
-    ports:
-      - "8484:80"
-      - "8443:443"
+    # ports:
+    #   - "8484:80"
+    #   - "8443:443"
     volumes:
       - caddy_data:/data
       - caddy_conf:/config
-  graphql-engine:
-    depends_on:
-      - 'postgres'
-    environment:
-      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
-      HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
-      HASURA_GRAPHQL_LOG_LEVEL: debug
-      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
-    # expose:
-    #   - 8080
-    image: hasura/graphql-engine:v2.15.2
-    ports:
-      - '8080:8080'
-    restart: always
-  postgres:
-    environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secretpgpassword}
-    image: postgres
-    # ports:
-    #   - '5432:5432'
-    restart: always
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
-      - ./initdb.d:/docker-entrypoint-initdb.d:ro
-  prefect-server:
-    command: ["prefect", "server", "start", "--host", "0.0.0.0"]
-    environment:
-      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
-    image: prefecthq/prefect:2.11.0-python3.11
-    ports:
-      - '4200:4200'
-  prefect-worker-agent:
-    build: .
-    command: ["prefect", "agent", "start", "--pool", "default-agent-pool", "--work-queue", "default"]
-    environment:
-      - PREFECT_API_URL=http://prefect-server:4200/api
-      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
-    # image: prefecthq/prefect:2.11.0-python3.11
+  # client:
+  #   build: src/timestep/projects
+  #   ports:
+  #     - "3000:3000"
+  # server:
+  #   build: .
+  #   environment:
+  #     - PREFECT_API_URL=http://prefect-server:4200/api
+  #   ports: 
+  #     - "8000:80"
+  # graphql-engine:
+  #   depends_on:
+  #     - 'postgres'
+  #   environment:
+  #     HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+  #     HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+  #     HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+  #     HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
+  #     HASURA_GRAPHQL_LOG_LEVEL: debug
+  #     HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
+  #   # expose:
+  #   #   - 8080
+  #   image: hasura/graphql-engine:v2.15.2
+  #   ports:
+  #     - '8080:8080'
+  #   restart: always
+  # postgres:
+  #   environment:
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secretpgpassword}
+  #   image: postgres
+  #   # ports:
+  #   #   - '5432:5432'
+  #   restart: always
+  #   volumes:
+  #     - ./data/db:/var/lib/postgresql/data
+  #     - ./initdb.d:/docker-entrypoint-initdb.d:ro
+  # prefect-server:
+  #   command: ["prefect", "server", "start", "--host", "0.0.0.0"]
+  #   environment:
+  #     - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+  #   image: prefecthq/prefect:2.11.0-python3.11
+  #   ports:
+  #     - '4200:4200'
+  # prefect-worker-agent:
+  #   build: .
+  #   command: ["prefect", "agent", "start", "--pool", "default-agent-pool", "--work-queue", "default"]
+  #   environment:
+  #     - PREFECT_API_URL=http://prefect-server:4200/api
+  #     - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+  #   # image: prefecthq/prefect:2.11.0-python3.11
 version: '3'
 volumes:
   caddy_data:

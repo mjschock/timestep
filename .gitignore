@@ -12,3 +12,18 @@ secrets/*
 src/timestep/infra/imports
 .ssh
 .venv
+
+src/timestep/projects/farama/pettingzoo/classic/tic_tac_toe
+src/timestep/projects/farama/pettingzoo/classic/tictactoe.bak
+
+## API / PYTHON ##
+*.pyc
+
+## WEB / JS ##
+node_modules/
+dist/
+
+## META / OS ##
+*.tmp
+.DS_Store
+.idea/
