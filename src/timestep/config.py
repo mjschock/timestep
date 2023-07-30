@@ -94,6 +94,8 @@ class Settings(BaseSettings):
     domain_name_registrar_provider: str = Field(
         default=DomainNameRegistrarProvider.NONE, env="DOMAIN_NAME_REGISTRAR_PROVIDER"
     )
+    htpasswd: SecretStr = Field(env="HTPASSWD")
+    ingress_controller_email: str = Field(env="INGRESS_CONTROLLER_EMAIL")
     kubecontext: str = Field(env="KUBECONTEXT")
     multipass_instance_cpus: int = Field(
         default=MULTIPASS_INSTANCE_CPUS, env="MULTIPASS_INSTANCE_CPUS"
@@ -107,9 +109,13 @@ class Settings(BaseSettings):
     multipass_instance_memory: str = Field(
         default=MULTIPASS_INSTANCE_MEMORY, env="MULTIPASS_INSTANCE_MEMORY"
     )
+    postgresql_password: SecretStr = Field(env="POSTGRESQL_PASSWORD")
     primary_domain_name: str = Field(env="PRIMARY_DOMAIN_NAME")
     ssh_private_key: SecretStr = Field(env="SSH_PRIVATE_KEY")
     ssh_public_key: str = Field(env="SSH_PUBLIC_KEY")
+    registry_admin_password: SecretStr = Field(
+        env="REGISTRY_ADMIN_PASSWORD"
+    )  # TODO: HARBOR_ADMIN_PASSWORD?  # noqa: E501
 
     class Config:
         env_file = ".env"

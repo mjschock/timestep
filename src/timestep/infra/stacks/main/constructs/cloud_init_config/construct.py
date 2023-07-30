@@ -103,13 +103,13 @@ class CloudInitConfigConstruct(Construct):
                     "-c",
                     "arkade get k3sup",
                 ],  # noqa: E501
-                [
-                    "runuser",
-                    "-l",
-                    config.cloud_instance_user,
-                    "-c",
-                    'echo "\nexport PATH=\\$HOME/.krew/bin:\\$PATH" >> $HOME/.bashrc',  # noqa: E501
-                ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     config.cloud_instance_user,
+                #     "-c",
+                #     'echo "\nexport PATH=\\$HOME/.krew/bin:\\$PATH" >> $HOME/.bashrc',  # noqa: E501
+                # ],
                 [
                     "runuser",
                     "-l",
@@ -121,6 +121,16 @@ class CloudInitConfigConstruct(Construct):
 --local \
 --user {config.cloud_instance_user}""",
                 ],
+                #                 [
+                #                     "runuser",
+                #                     "-l",
+                #                     config.cloud_instance_user,
+                #                     "-c",
+                #                     f"""$HOME/.arkade/bin/k3sup install \
+                # --context {config.kubecontext} \
+                # --local \
+                # --user {config.cloud_instance_user}""",
+                #                 ],
                 #                 [
                 #                     "runuser",
                 #                     "-l",
@@ -141,16 +151,16 @@ class CloudInitConfigConstruct(Construct):
                 # [
                 #     "runuser",
                 #     "-l",
-                #     username,
+                #     config.cloud_instance_user,
                 #     "-c",
-                #     f"$HOME/.arkade/bin/mkcert --install registry.{config.variables.get('primary_domain_name')}",  # noqa: E501
+                #     f"$HOME/.arkade/bin/mkcert --install registry.{config.primary_domain_name}",  # noqa: E501
                 # ],
                 # [
                 #     "runuser",
                 #     "-l",
-                #     username,
+                #     config.cloud_instance_user,
                 #     "-c",
-                #     f"sudo kubectl --kubeconfig /home/{username}/kubeconfig create secret tls docker-registry-tls --key /home/{username}/registry.{config.variables.get('primary_domain_name')}-key.pem --cert /home/{username}/registry.{config.variables.get('primary_domain_name')}.pem",  # noqa: E501
+                #     f"sudo kubectl --kubeconfig /home/{config.cloud_instance_user}/kubeconfig create secret tls registry.{config.primary_domain_name}-tls --key /home/{config.cloud_instance_user}/registry.{config.primary_domain_name}-key.pem --cert /home/{config.cloud_instance_user}/registry.{config.primary_domain_name}.pem",  # noqa: E501
                 # ],
                 # [
                 #     "runuser",
@@ -194,13 +204,13 @@ class CloudInitConfigConstruct(Construct):
                 #     "-c",
                 #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig chart --namespace caddy-system --repo-name caddyserver/caddy-ingress-controller --repo-url https://caddyserver.github.io/ingress/ --set ingressController.config.acmeCA=https://acme-staging-v02.api.letsencrypt.org/directory --set ingressController.config.debug=true --set ingressController.config.email=m@mjschock.com --set ingressController.config.onDemandTLS=true",  # noqa: E501
                 # ],
-                # [
-                #     "runuser",
-                #     "-l",
-                #     username,
-                #     "-c",
-                #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig cert-manager",  # noqa: E501
-                # ],
+                [
+                    "runuser",
+                    "-l",
+                    config.cloud_instance_user,
+                    "-c",
+                    f"sudo arkade install --kubeconfig /home/{config.cloud_instance_user}/kubeconfig cert-manager",  # noqa: E501
+                ],
                 # [
                 #     "runuser",
                 #     "-l",
@@ -264,15 +274,25 @@ class CloudInitConfigConstruct(Construct):
                     "sudo": "ALL=(ALL) NOPASSWD:ALL",
                 },
             ],
-            #         write_files=[
-            #             {
-            #                 "path": "/etc/rancher/k3s/registries.yaml",
-            #                 "content": f"""mirrors:
-            # docker.io:
+            #             write_files=[
+            #                 {
+            #                     "path": "/etc/rancher/k3s/registries.yaml",
+            #                     "content": f"""mirrors:
+            #   docker.io:
             #     endpoint:
-            #         - "https://registry.{config.variables.get('primary_domain_name')}"
-            #             },
-            #         ]
+            #       - "https://registry.{config.primary_domain_name}:5000"
+            # configs:
+            #   "registry.{config.primary_domain_name}:5000":
+            #     auth:
+            #         password: password
+            #         username: user
+            #     tls:
+            #         ca_file: /home/{config.cloud_instance_user}/.local/share/mkcert/rootCA.pem  # noqa: E501
+            #         cert_file: /home/{config.cloud_instance_user}/registry.{config.primary_domain_name}.pem  # noqa: E501
+            #         key_file: /home/{config.cloud_instance_user}/registry.{config.primary_domain_name}-key.pem  # noqa: E501
+            # """
+            #                 },
+            #             ],
         )
 
         user_data = CloudInitDoc()

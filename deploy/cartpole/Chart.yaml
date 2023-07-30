@@ -1,0 +1,8 @@
+name: deploy/cartpole
+description: A generated Helm Chart for deploy/cartpole from Skippbox Kompose
+version: 0.0.1
+apiVersion: v2
+keywords:
+  - deploy/cartpole
+sources:
+home:

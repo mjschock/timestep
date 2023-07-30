@@ -36,7 +36,7 @@ class KubeConfigConstruct(Construct):
         #     "ssh_private_key"
         # )
         ssh_private_key: SecretStr = config.ssh_private_key
-        username = "ubuntu"  # TODO: use config
+        username = config.cloud_instance_user
 
         with tempfile.NamedTemporaryFile(
             delete=False,
