@@ -3,7 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert --out deploy/rps.yaml
+    kompose.cmd: kompose convert --file docker-compose.yml --out deploy/rps.yaml --secrets-as-files
+    kompose.image-pull-secret: regcred
     kompose.version: 1.30.0 (HEAD)
   creationTimestamp: null
   labels:
@@ -20,7 +21,8 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert --out deploy/rps.yaml
+        kompose.cmd: kompose convert --file docker-compose.yml --out deploy/rps.yaml --secrets-as-files
+        kompose.image-pull-secret: regcred
         kompose.version: 1.30.0 (HEAD)
       creationTimestamp: null
       labels:
@@ -36,6 +38,8 @@ spec:
               name: caddy-data
             - mountPath: /config
               name: caddy-conf
+      imagePullSecrets:
+        - name: regcred
       restartPolicy: Always
       volumes:
         - name: caddy-data

@@ -91,6 +91,10 @@ class Settings(BaseSettings):
         default=CloudInstanceProvider.MULTIPASS, env="CLOUD_INSTANCE_PROVIDER"
     )
     cloud_instance_user: str = Field(env="CLOUD_INSTANCE_USER")
+    docker_registry_email: str = Field(env="DOCKER_REGISTRY_EMAIL")
+    docker_registry_password: SecretStr = Field(env="DOCKER_REGISTRY_PASSWORD")
+    docker_registry_server: str = Field(env="DOCKER_REGISTRY_SERVER")
+    docker_registry_username: str = Field(env="DOCKER_REGISTRY_USERNAME")
     domain_name_registrar_provider: str = Field(
         default=DomainNameRegistrarProvider.NONE, env="DOMAIN_NAME_REGISTRAR_PROVIDER"
     )

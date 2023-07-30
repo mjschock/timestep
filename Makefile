@@ -7,6 +7,9 @@ clean:
 	rm -rf docs
 	rm -rf src/timestep/infra/imports
 
+hosts:
+	cat cdktf.out/stacks/timestep.local/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
+
 imports:
 	poetry run cdktf get --force --language python --log-level ${CDKTF_LOG_LEVEL} --output src/timestep/infra/imports
 
@@ -24,5 +27,4 @@ quasar-dev-android:
 	cd src/timestep/projects/www && npx quasar dev -m capacitor -T android
 
 ssh:
-	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.159.189.175
-	# ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@146.190.169.137
+	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.159.189.31
