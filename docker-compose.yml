@@ -26,6 +26,8 @@ services:
     # ports:
     #   - "8484:80"
     #   - "8443:443"
+    labels:
+      kompose.image-pull-secret: "regcred"
     volumes:
       - caddy_data:/data
       - caddy_conf:/config
