@@ -335,6 +335,48 @@ class KubernetesClusterIngressConstruct(Construct):
                             ]
                         ),
                     ),
+                    #     IngressV1SpecRule(
+                    #         host=f"www.{config.primary_domain_name}",
+                    #         http=IngressV1SpecRuleHttp(
+                    #             path=[
+                    #                 IngressV1SpecRuleHttpPath(
+                    #                     backend=IngressV1SpecRuleHttpPathBackend(
+                    #                         service=IngressV1SpecRuleHttpPathBackendService(  # noqa: E501
+                    #                             name="www",
+                    #                             port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
+                    #                                 # name=path["service_port_name"],
+                    #                                 number=8080,
+                    #                             ),
+                    #                         ),
+                    #                     ),
+                    #                     path="/",
+                    #                     path_type="Prefix",
+                    #                     # path_type=path["path_type"],
+                    #                 ),
+                    #             ]
+                    #         ),
+                    #     ),
+                    #     IngressV1SpecRule(
+                    #         host=f"{config.primary_domain_name}",
+                    #         http=IngressV1SpecRuleHttp(
+                    #             path=[
+                    #                 IngressV1SpecRuleHttpPath(
+                    #                     backend=IngressV1SpecRuleHttpPathBackend(
+                    #                         service=IngressV1SpecRuleHttpPathBackendService(  # noqa: E501
+                    #                             name="www",
+                    #                             port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
+                    #                                 # name=path["service_port_name"],
+                    #                                 number=8080,
+                    #                             ),
+                    #                         ),
+                    #                     ),
+                    #                     path="/",
+                    #                     path_type="Prefix",
+                    #                     # path_type=path["path_type"],
+                    #                 ),
+                    #             ]
+                    #         ),
+                    #     ),
                 ],
                 # tls=[
                 #     IngressV1SpecTls(

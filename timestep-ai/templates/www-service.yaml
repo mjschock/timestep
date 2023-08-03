@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --build local --build-command helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
+    kompose.image-pull-secret: regcred
+    kompose.service.expose: timestep.local,www.timestep.local
+    kompose.service.expose.ingress-class-name: caddy
+    kompose.version: 1.30.0 (HEAD)
+    kubernetes.io/ingress.class: caddy
+  creationTimestamp: null
+  labels:
+    io.kompose.service: www
+  name: www
+  namespace: default
+spec:
+  ports:
+    - name: "8000"
+      port: 8000
+      targetPort: 80
+    - name: "8443"
+      port: 8443
+      targetPort: 443
+    - name: 8443-udp
+      port: 8443
+      protocol: UDP
+      targetPort: 443
+  selector:
+    io.kompose.service: www
+status:
+  loadBalancer: {}

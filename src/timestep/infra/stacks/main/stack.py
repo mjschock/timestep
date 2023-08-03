@@ -23,7 +23,9 @@ from timestep.infra.stacks.main.constructs.kube_config.construct import (
 from timestep.infra.stacks.main.constructs.kubernetes_cluster_ingress.construct import (
     KubernetesClusterIngressConstruct,
 )
-from timestep.infra.stacks.main.constructs.prefect.construct import PrefectConstruct
+from timestep.infra.stacks.main.constructs.timestep_ai.construct import (
+    TimestepAIConstruct,
+)
 
 
 class MainStack(TerraformStack):
@@ -125,12 +127,19 @@ class MainStack(TerraformStack):
             )
         )
 
-        self.prefect_contruct: PrefectConstruct = PrefectConstruct(
-            config=config,
-            id="prefect_contruct",
-            kubernetes_cluster_ingress_construct=self.kubernetes_cluster_ingress_construct,  # noqa: E501
-            scope=self,
-        )
+        # self.postgresql_construct: PostgreSQLConstruct = PostgreSQLConstruct(
+        #     config=config,
+        #     id="postgresql_construct",
+        #     kubernetes_cluster_ingress_construct=self.kubernetes_cluster_ingress_construct,  # noqa: E501
+        #     scope=self,
+        # )
+
+        # self.prefect_contruct: PrefectConstruct = PrefectConstruct(
+        #     config=config,
+        #     id="prefect_contruct",
+        #     kubernetes_cluster_ingress_construct=self.kubernetes_cluster_ingress_construct,  # noqa: E501
+        #     scope=self,
+        # )
 
         # self.kubernetes_container_registry_construct: RegistryConstruct = (
         #     RegistryConstruct(
@@ -140,6 +149,13 @@ class MainStack(TerraformStack):
         #         scope=self,
         #     )
         # )
+
+        self.timestep_ai_contruct: TimestepAIConstruct = TimestepAIConstruct(
+            config=config,
+            id="timestep_ai_contruct",
+            kubernetes_cluster_ingress_construct=self.kubernetes_cluster_ingress_construct,  # noqa: E501
+            scope=self,
+        )
 
         # example1_deployment_resource = DeploymentV1(
         #     id_="example1_deployment_resource",

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert --file docker-compose.yml --out deploy/rps.yaml --secrets-as-files
+    kompose.cmd: kompose convert --build none --file docker-compose.yml --push-image --push-image-registry registry.gitlab.com --out deploy/rps.yaml --secrets-as-files --verbose
     kompose.image-pull-secret: regcred
     kompose.version: 1.30.0 (HEAD)
   creationTimestamp: null
@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert --file docker-compose.yml --out deploy/rps.yaml --secrets-as-files
+        kompose.cmd: kompose convert --build none --file docker-compose.yml --push-image --push-image-registry registry.gitlab.com --out deploy/rps.yaml --secrets-as-files --verbose
         kompose.image-pull-secret: regcred
         kompose.version: 1.30.0 (HEAD)
       creationTimestamp: null
@@ -30,7 +30,10 @@ spec:
         io.kompose.service: rps
     spec:
       containers:
-        - image: rps
+        - env:
+            - name: PROJECT_NAME
+              value: rps
+          image: rps
           name: rps
           resources: {}
           volumeMounts:
