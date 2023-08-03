@@ -1,4 +1,5 @@
 load('ext://dotenv', 'dotenv')
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
 load('ext://kubectl_build', 'kubectl_build')
 load('ext://uibutton', 'cmd_button', 'bool_input', 'location', 'text_input')
 
@@ -53,6 +54,9 @@ local_resource(
         'src/timestep/infra/stacks/main/constructs/kubernetes_cluster_ingress/construct.py',
         'src/timestep/infra/stacks/main/constructs/prefect/construct.py',
         'src/timestep/infra/stacks/main/constructs/registry/construct.py',
+        'src/timestep/infra/stacks/main/constructs/timestep_ai/construct.py',
+        'timestep-ai',
+        'timestep-ai-0.0.1.tgz',
     ],
     env={
         'STACK_ID': os.getenv('PRIMARY_DOMAIN_NAME'),
@@ -205,26 +209,85 @@ default_registry('registry.gitlab.com/timestep-ai/timestep')
 #     labels=['frontend']
 # )
 
-docker_build(
-    'rps',
-    context='.',
-    dockerfile='./deploy/rps.dockerfile',
-    only=['./rps/'],
-    ignore=['./rps/dist/'],
+# docker_build(
+#     'www',
+#     context='.',
+#     dockerfile='Dockerfile',
+#     # env={
+#     #     'PROJECT_NAME': 'rps',
+#     # },
+#     only=[
+#         './www/',
+#         'pyproject.toml',
+#         'poetry.lock',
+#         'Caddyfile',
+#     ],
+#     ignore=['./www/dist/'],
+# )
+
+# k8s_yaml('deploy/www.yaml')
+
+# k8s_resource(
+#     'www',
+#     # port_forwards='9999:11345',
+#     # port_forwards='9999:80',
+#     # labels=['world']
+# )
+
+k8s_yaml(local('helm template timestep-ai'))
+watch_file('timestep-ai')
+
+# local_resource(
+#     'docker build',
+#     # cmd='docker build --tag registry.gitlab.com/timestep-ai/timestep/www .',
+#     cmd='docker build --tag $EXPECTED_REF .',
+#     deps=[
+#         'Caddyfile',
+#         'docker-compose.yml',
+#         'www',
+#     ],
+#     labels=['build'],
+# )
+
+custom_build(
+    # 'docker build',
+    'registry.gitlab.com/timestep-ai/timestep/www',
+    # cmd='docker build --tag registry.gitlab.com/timestep-ai/timestep/www .',
+    'docker build --tag $EXPECTED_REF .',
+    deps=[
+        'Caddyfile',
+        'docker-compose.yml',
+        'www',
+    ],
+    # labels=['build'],
 )
 
-k8s_yaml('deploy/rps.yaml')
-
-k8s_resource(
-    'rps',
-    port_forwards='9999:11345', # 5173 is the port Vite listens on in the container
-    labels=['frontend', 'backend']
-)
+# local_resource(
+#     'docker push',
+#     cmd='docker push registry.gitlab.com/timestep-ai/timestep/www',
+#     deps=[
+#         'Caddyfile',
+#         'docker-compose.yml',
+#         'www',
+#     ],
+#     labels=['build'],
+#     resource_deps=[
+#         'docker build',
+#     ]
+# )
 
 local_resource(
     'kompose convert',
-    cmd='kompose convert --file docker-compose.yml --out deploy/rps.yaml --secrets-as-files',
+    # cmd='kompose convert --build local --build-command "docker build -t registry.gitlab.com/timestep-ai/timestep/www ." --file docker-compose.yml --push-image --push-command "docker push registry.gitlab.com/timestep-ai/timestep/www" --push-image-registry registry.gitlab.com --out deploy/www.yaml --secrets-as-files --verbose',
+    cmd='kompose convert --build local --build-command "helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    # cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
     deps=[
+        # 'Caddyfile',
         'docker-compose.yml',
+        # 'www',
     ],
+    labels=['build'],
+    # resource_deps=[
+    #     'docker push',
+    # ]
 )
