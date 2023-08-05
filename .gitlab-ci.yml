@@ -10,7 +10,7 @@ Update Readme:on-schedule:
       echo "-P ubuntu-22.04=catthehacker/ubuntu:act-22.04" >> ~/.actrc
       echo "-P ubuntu-20.04=catthehacker/ubuntu:act-20.04" >> ~/.actrc
       echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
-script:
+  script:
     - |-
       echo "#### Updating Sponsors and Blog Posts and Contribution Graph ####"
       act -v \
@@ -20,6 +20,6 @@ script:
         -s GITLAB_TOKEN=$GITLAB_TOKEN \
         -s CI_SERVER_HOST=$CI_SERVER_HOST \
         workflow_dispatch
-after_script:
+  after_script:
     - |-
       echo "Done."
