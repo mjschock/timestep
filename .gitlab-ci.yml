@@ -18,7 +18,7 @@
 build-job:       # This job runs in the build stage, which runs first.
   script:
     - echo "Compiling the code..."
-    - curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+    - curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash
     - echo "Compile complete."
   stage: build
 
