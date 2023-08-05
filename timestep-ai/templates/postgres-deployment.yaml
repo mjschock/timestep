@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --build local --build-command docker compose build && helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
+    kompose.image-pull-secret: regcred
+    kompose.version: 1.30.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: postgres
+  name: postgres
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --build local --build-command docker compose build && helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
+        kompose.image-pull-secret: regcred
+        kompose.version: 1.30.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/timestep-default: "true"
+        io.kompose.service: postgres
+    spec:
+      containers:
+        - env:
+            - name: POSTGRESQL_PASSWORD
+              value: secret-pg-password-never-use-this-value
+          image: registry.gitlab.com/timestep-ai/timestep/postgres:latest
+          name: postgres
+          ports:
+            - containerPort: 5432
+              hostPort: 5432
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /bitnami/postgresql
+              name: postgres
+      imagePullSecrets:
+        - name: regcred
+      restartPolicy: Always
+      volumes:
+        - name: postgres
+          persistentVolumeClaim:
+            claimName: postgres
+status: {}

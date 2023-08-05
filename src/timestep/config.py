@@ -62,9 +62,9 @@ from pydantic import BaseSettings, Field, SecretStr
 
 BASE_PATH = pathlib.Path.cwd()
 CPUS: int = 2
-DISK_SIZE_GB: int = 60
+DISK_SIZE_GB: int = 80
 DIST_PATH: str = f"{BASE_PATH}/cdktf.out"
-MEMORY_SIZE_GB: int = 2
+MEMORY_SIZE_GB: int = 4
 DO_DROPLET_IMAGE: str = "ubuntu-22-04-x64"
 DO_DROPLET_REGION: str = "sfo3"
 DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-{MEMORY_SIZE_GB}gb"

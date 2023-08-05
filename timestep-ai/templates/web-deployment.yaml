@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --build local --build-command docker compose build && helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
+    kompose.image-pull-secret: regcred
+    kompose.version: 1.30.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: web
+  name: web
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: web
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --build local --build-command docker compose build && helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
+        kompose.image-pull-secret: regcred
+        kompose.version: 1.30.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/timestep-default: "true"
+        io.kompose.service: web
+    spec:
+      containers:
+        - env:
+            - name: VITE_CLIENT_PORT
+              value: "5735"
+          image: registry.gitlab.com/timestep-ai/timestep/web:latest
+          name: web
+          ports:
+            - containerPort: 3000
+              hostPort: 3000
+              protocol: TCP
+            - containerPort: 5735
+              hostPort: 5735
+              protocol: TCP
+          resources: {}
+      imagePullSecrets:
+        - name: regcred
+      restartPolicy: Always
+status: {}

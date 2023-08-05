@@ -1,1 +1,7 @@
-web/node_modules/
+*
+
+!api
+!Caddyfile
+!docker-entrypoint-initdb.d
+!web
+web/node_modules
