@@ -5,11 +5,11 @@ ENV YARN_CACHE_FOLDER=/cache/yarn
 WORKDIR /app
 
 # install dependencies
-COPY web/package.json web/yarn.lock ./
+COPY package.json yarn.lock ./
 RUN --mount=type=cache,target=/cache/yarn \
   yarn install
 
 # copy app source
-COPY web/ ./
+COPY . ./
 
 CMD ["yarn", "dev"]
