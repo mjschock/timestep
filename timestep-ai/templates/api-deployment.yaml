@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --build local --build-command docker compose build && helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
+    kompose.image-pull-secret: regcred
+    kompose.service.healthcheck.readiness.http_get_path: /ready
+    kompose.service.healthcheck.readiness.http_get_port: "5000"
+    kompose.version: 1.30.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: api
+  name: api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: api
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --build local --build-command docker compose build && helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
+        kompose.image-pull-secret: regcred
+        kompose.service.healthcheck.readiness.http_get_path: /ready
+        kompose.service.healthcheck.readiness.http_get_port: "5000"
+        kompose.version: 1.30.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/timestep-default: "true"
+        io.kompose.service: api
+    spec:
+      containers:
+        - image: registry.gitlab.com/timestep-ai/timestep/api:latest
+          name: api
+          ports:
+            - containerPort: 5000
+              hostPort: 5000
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 5000
+          resources: {}
+      imagePullSecrets:
+        - name: regcred
+      restartPolicy: Always
+status: {}

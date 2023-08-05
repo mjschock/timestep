@@ -15,6 +15,7 @@ src/timestep/infra/imports
 
 src/timestep/projects/farama/pettingzoo/classic/tic_tac_toe
 src/timestep/projects/farama/pettingzoo/classic/tictactoe.bak
+tilt-avatars
 
 ## API / PYTHON ##
 *.pyc

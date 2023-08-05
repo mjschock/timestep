@@ -1,0 +1,314 @@
+services:
+#   traefik:
+#     image: "traefik:v2.5"
+#     container_name: "traefik"
+#     command:
+#       - "--api.insecure=true"
+#       - "--providers.docker=true"
+#       - "--providers.docker.exposedbydefault=false"
+#       - "--entrypoints.web.address=:1337"
+#     ports:
+#       - "1337:1337"
+#       - "9090:8080"
+#     volumes:
+#       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  # backend:
+  #   build: .
+  #   environment:
+  #     - PREFECT_API_URL=http://prefect-server:4200/api
+  #   ports: 
+  #     - "8000:80"
+  # tic-tac-toe-env:
+  #   build: src/timestep/projects/farama/pettingzoo/classic/tictactoe
+  bitnami-postgresql:
+    # ports:
+    #   - '5432:5432'
+    environment:
+      # - 'ALLOW_EMPTY_PASSWORD=yes'
+      # POSTGRESQL_PASSWORD: ${POSTGRES_PASSWORD:-secretpgpassword}
+      # POSTGRESQL_PASSWORD_FILE: /run/secrets/postgres_password
+      - POSTGRESQL_USERNAME=agent
+      - POSTGRESQL_PASSWORD=password123
+      - POSTGRESQL_DATABASE=timestep_ai
+    expose:
+      - 5432
+    image: docker.io/bitnami/postgresql:15.3.0
+    volumes:
+      - 'postgresql_data:/bitnami/postgresql'
+  hasura-graphql-engine:
+    # args: ["serve", "--enable-console"]
+    # command: ["graphql-engine"]
+    depends_on:
+      - "bitnami-postgresql"
+    # environment:
+    #   # HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+    #   HASURA_GRAPHQL_DATABASE_URL: postgres://prefect:prefect-rocks@postgres:5432/postgres
+    #   HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+    environment:
+      # HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@bitnami-postgresql:5432/postgres
+      # HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
+      # HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      HASURA_GRAPHQL_ADMIN_SECRET: nhost-admin-secret
+      HASURA_GRAPHQL_DATABASE_URL: postgres://agent:password123@bitnami-postgresql:5432/timestep_ai
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256", "key":"5152fa850c02dc222631cca898ed1485821a70912a6e3649c49076912daa3b62182ba013315915d64f40cddfbb8b58eb5bd11ba225336a6af45bbae07ca873f3","issuer":"hasura-auth"}'
+      HASURA_GRAPHQL_LOG_LEVEL: debug
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
+    expose:
+      - 8080
+    image: hasura/graphql-engine:v2.31.0
+    restart: always
+    # ports:
+    # - "8080:8080"
+  www:
+    # build: src/timestep/projects
+    build:
+      # args:
+      #   - PROJECT_NAME=rps
+      context: www
+      dockerfile: Dockerfile
+    # command:
+    #   - caddy
+    #   - run
+    #   - --config
+    #   - /home/base/Caddyfile
+    #   - --adapter
+    #   - caddyfile
+    # working_dir: /home/base/www
+    # command:
+    #   - npm
+    #   - run
+    #   - dev
+    # command:
+    #   - uvicorn
+    #   - app.main:app
+    #   - --host 0.0.0.0
+    #   - --port 80
+    # environment:
+    #   - PROJECT_NAME=www
+    image: registry.gitlab.com/timestep-ai/timestep/www:latest
+    ports:
+      # - "8443:443"
+      # - "8080:9000"
+      # - "8080:80"
+      - "8000:80"
+      - "8443:443"
+      - "8443:443/udp"
+    labels:
+      kubernetes.io/ingress.class: "caddy"
+      kompose.image-pull-secret: "regcred"
+      kompose.service.expose: "timestep.local,www.timestep.local"
+      kompose.service.expose.ingress-class-name: "caddy"
+      # kompose.service.expose.tls-secret: "example-secret"
+    volumes:
+      - caddy_data:/data
+      - caddy_conf:/config
+  # client:
+  #   build: src/timestep/projects
+  #   ports:
+  #     - "3000:3000"
+  # server:
+  #   build: .
+  #   environment:
+  #     - PREFECT_API_URL=http://prefect-server:4200/api
+  #   ports: 
+  #     - "8000:80"
+  # graphql-engine:
+  #   depends_on:
+  #     - 'postgres'
+  #   environment:
+  #     HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+  #     HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+  #     HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+  #     HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
+  #     HASURA_GRAPHQL_LOG_LEVEL: debug
+  #     HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
+  #   # expose:
+  #   #   - 8080
+  #   image: hasura/graphql-engine:v2.15.2
+  #   ports:
+  #     - '8080:8080'
+  #   restart: always
+  # postgres:
+  #   environment:
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secretpgpassword}
+  #   image: postgres
+  #   # ports:
+  #   #   - '5432:5432'
+  #   restart: always
+  #   volumes:
+  #     - ./data/db:/var/lib/postgresql/data
+  #     - ./initdb.d:/docker-entrypoint-initdb.d:ro
+  # prefect-server:
+  #   command: ["prefect", "server", "start", "--host", "0.0.0.0"]
+  #   environment:
+  #     - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+  #   image: prefecthq/prefect:2.11.0-python3.11
+  #   ports:
+  #     - '4200:4200'
+  # prefect-worker-agent:
+  #   build: .
+  #   command: ["prefect", "agent", "start", "--pool", "default-agent-pool", "--work-queue", "default"]
+  #   environment:
+  #     - PREFECT_API_URL=http://prefect-server:4200/api
+  #     - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+  #   # image: prefecthq/prefect:2.11.0-python3.11
+  # www:
+  #   # build: src/timestep/projects
+  #   build:
+  #     # args:
+  #     #   - PROJECT_NAME=rps
+  #     context: .
+  #     # dockerfile: www.dockerfile
+  #     dockerfile: Dockerfile
+  #   # command:
+  #   #   - caddy
+  #   #   - run
+  #   #   - --config
+  #   #   - /home/base/Caddyfile
+  #   #   - --adapter
+  #   #   - caddyfile
+  #   # working_dir: /home/base/www
+  #   # command:
+  #   #   - npm
+  #   #   - run
+  #   #   - dev
+  #   # command:
+  #   #   - uvicorn
+  #   #   - app.main:app
+  #   #   - --host 0.0.0.0
+  #   #   - --port 80
+  #   # environment:
+  #   #   - PROJECT_NAME=www
+  #   expose:
+  #     - 9000
+  #   image: registry.gitlab.com/timestep-ai/timestep/www:latest
+  #   # ports:
+  #   #   # - "8443:443"
+  #   #   # - "8080:9000"
+  #   #   # - "8080:80"
+  #   #   - "8000:80"
+  #   #   - "8443:443"
+  #   #   - "8443:443/udp"
+  #   labels:
+  #     kubernetes.io/ingress.class: "caddy"
+  #     kompose.image-pull-secret: "regcred"
+  #     kompose.service.expose: "www.timestep.local"
+  #     kompose.service.expose.ingress-class-name: "caddy"
+  #   # volumes:
+  #   #   - caddy_data:/data
+  #   #   - caddy_conf:/config
+version: '3'
+volumes:
+  caddy_data:
+  caddy_conf:
+  postgresql_data:
+#     labels:
+#       - "traefik.enable=true"
+#       - "traefik.http.routers.hasura.rule=Host(`localhost`) && PathPrefix(`/`)"
+#       - "traefik.http.routers.hasura.entrypoints=web"
+#   auth:
+#     image: nhost/hasura-auth:0.16.2
+#     depends_on:
+#       - postgres
+#       - graphql-engine
+#     restart: always
+#     volumes:
+#       - ./emails:/app/email-templates
+#     environment:
+#       AUTH_HOST: '0.0.0.0'
+#       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+#       HASURA_GRAPHQL_GRAPHQL_URL: http://graphql-engine:8080/v1/graphql
+#       HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
+#       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+#       AUTH_CLIENT_URL: ${AUTH_CLIENT_URL:-http://localhost:3000}
+#       AUTH_SMTP_HOST: mailhog
+#       AUTH_SMTP_PORT: 1025
+#       AUTH_SMTP_USER: user
+#       AUTH_SMTP_PASS: password
+#       AUTH_SMTP_SENDER: mail@example.com
+#     expose: 
+#       - 4000
+#     labels:
+#       - "traefik.enable=true"
+#       - "traefik.http.middlewares.strip-auth.stripprefix.prefixes=/v1/auth"
+#       - "traefik.http.routers.auth.rule=Host(`localhost`) && PathPrefix(`/v1/auth`)"
+#       - "traefik.http.routers.auth.middlewares=strip-auth@docker"
+#       - "traefik.http.routers.auth.entrypoints=web"
+#   storage:
+#     image: nhost/hasura-storage:0.3.1
+#     depends_on:
+#       - postgres
+#       - graphql-engine
+#       - minio
+#     restart: always
+#     expose:
+#       - 8000
+#     environment:
+#       PUBLIC_URL: http://localhost:${PROXY_PORT:-1337}
+#       HASURA_METADATA: 1
+#       HASURA_ENDPOINT: http://graphql-engine:8080/v1
+#       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+#       S3_ACCESS_KEY: ${STORAGE_ACCESS_KEY}
+#       S3_SECRET_KEY: ${STORAGE_SECRET_KEY}
+#       S3_ENDPOINT: http://minio:8484
+#       S3_BUCKET: nhost
+#       POSTGRES_MIGRATIONS: 1
+#       POSTGRES_MIGRATIONS_SOURCE: postgres://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres?sslmode=disable
+#     labels:
+#       - "traefik.enable=true"
+#       - "traefik.http.routers.storage.rule=Host(`localhost`) && PathPrefix(`/v1/storage`)"
+#       - "traefik.http.routers.storage.entrypoints=web"
+#       # Rewrite the path so it matches with the new storage API path introduced in hasura-storage 0.2
+#       - "traefik.http.middlewares.strip-suffix.replacepathregex.regex=^/v1/storage/(.*)"
+#       - "traefik.http.middlewares.strip-suffix.replacepathregex.replacement=/v1/$$1"
+#       - "traefik.http.routers.storage.middlewares=strip-suffix@docker"
+#     command: serve
+#   functions:
+#     image: nhost/functions:0.1.8
+#     labels:
+#       - "traefik.enable=true"
+#       - "traefik.http.middlewares.strip-functions.stripprefix.prefixes=/v1/functions"
+#       - "traefik.http.routers.functions.rule=Host(`localhost`) && PathPrefix(`/v1/functions`)"
+#       - "traefik.http.routers.functions.middlewares=strip-functions@docker"
+#       - "traefik.http.routers.functions.entrypoints=web"
+#     restart: always
+#     expose: 
+#       - 3000
+#     volumes:
+#       - .:/opt/project
+#       - functions_node_modules:/opt/project/node_modules
+#       - /opt/project/data/
+#       - /opt/project/initdb.d/
+#   minio:
+#     image: minio/minio:RELEASE.2021-09-24T00-24-24Z
+#     entrypoint: sh
+#     command: -c 'mkdir -p /data/nhost && /opt/bin/minio server --address :8484 /data'
+#     environment:
+#       MINIO_ROOT_USER: ${STORAGE_ACCESS_KEY}
+#       MINIO_ROOT_PASSWORD: ${STORAGE_SECRET_KEY}
+#     ports:
+#       - ${MINIO_PORT:-8484}:8484
+#     volumes:
+#       - ./data/minio:/data
+#   mailhog:
+#     image: mailhog/mailhog
+#     environment:
+#       SMTP_HOST: ${AUTH_SMTP_HOST:-mailhog}
+#       SMTP_PORT: ${AUTH_SMTP_PORT:-1025}
+#       SMTP_PASS: ${AUTH_SMTP_PASS:-password}
+#       SMTP_USER: ${AUTH_SMTP_USER:-user}
+#       SMTP_SECURE: "${AUTH_SMTP_SECURE:-false}"
+#       SMTP_SENDER: ${AUTH_SMTP_SENDER:-hbp@hbp.com}
+#     ports:
+#       - ${AUTH_SMTP_PORT:-1025}:1025 
+#       - 8025:8025
+#     volumes:
+#       - ./data/mailhog:/maildir
+#   dashboard:
+#     image: nhost/dashboard:0.7.4
+#     ports:
+#       - "3030:3000"
+# volumes:
+#   functions_node_modules:

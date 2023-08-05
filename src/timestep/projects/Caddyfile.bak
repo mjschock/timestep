@@ -1,0 +1,84 @@
+# # timestep.local {
+# http://localhost:2019 {
+# 	# redir http://www.{host}{uri}
+# 	redir https://www.timestep.local{uri}
+
+# 	# root * /srv/www
+# 	# file_server
+# 	# encode gzip
+
+# 	# handle /api/* {
+# 	# 	reverse_proxy backend:80
+# 	# }
+
+# 	# handle /console/* {
+# 	# 	reverse_proxy graphql-engine:8080
+# 	# }
+
+# 	# handle {
+# 	# 	root * /home/base/www/dist
+# 	# 	try_files {path} /index.html
+# 	# 	file_server
+# 	# }
+# }
+
+# # www.timestep.local {
+# http://www.localhost:2019 {
+# 	#   reverse_proxy netdata:19999
+# 	#   tls admin@example.org
+
+# 	encode gzip
+
+# 	# handle /api/* {
+# 	# 	reverse_proxy backend:8000
+# 	# }
+
+# 	handle {
+# 		root * /home/base/www/dist
+# 		try_files {path} /index.html
+# 		file_server
+# 	}
+# }
+
+# The Caddyfile is an easy way to configure your Caddy web server.
+#
+# Unless the file starts with a global options block, the first
+# uncommented line is always the address of your site.
+#
+# To use your own domain name (with automatic HTTPS), first make
+# sure your domain's A/AAAA DNS records are properly pointed to
+# this machine's public IP, then replace ":80" below with your
+# domain name.
+
+http://timestep.local:80 {
+	redir http://www.timestep.local{uri}
+}
+
+# :80 {
+http://www.timestep.local:80 {
+	encode gzip
+
+	# handle /docs/* {
+	# 	reverse_proxy prefect-server.prefect-system:4200
+	# }
+
+	handle /console/* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	handle /v1/* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	handle /v2/* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	handle {
+		# root * /home/base/www/dist/spa
+		# root * /home/base/dist/spa
+		# try_files {path} /index.html
+		# file_server
+		reverse_proxy wwww:9000
+	}
+}

@@ -204,13 +204,13 @@ class CloudInitConfigConstruct(Construct):
                 #     "-c",
                 #     f"sudo arkade install --kubeconfig /home/{username}/kubeconfig chart --namespace caddy-system --repo-name caddyserver/caddy-ingress-controller --repo-url https://caddyserver.github.io/ingress/ --set ingressController.config.acmeCA=https://acme-staging-v02.api.letsencrypt.org/directory --set ingressController.config.debug=true --set ingressController.config.email=m@mjschock.com --set ingressController.config.onDemandTLS=true",  # noqa: E501
                 # ],
-                [
-                    "runuser",
-                    "-l",
-                    config.cloud_instance_user,
-                    "-c",
-                    f"sudo arkade install --kubeconfig /home/{config.cloud_instance_user}/kubeconfig cert-manager",  # noqa: E501
-                ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     config.cloud_instance_user,
+                #     "-c",
+                #     f"sudo arkade install --kubeconfig /home/{config.cloud_instance_user}/kubeconfig cert-manager",  # noqa: E501
+                # ],
                 [
                     "runuser",
                     "-l",
