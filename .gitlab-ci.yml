@@ -1,8 +1,9 @@
 image: ghcr.io/griefed/gitlab-ci-cd:2.1.0
 
 Update Readme:on-schedule:
-  only:
-    - schedules
+  after_script:
+    - |-
+      echo "Done."
   before_script:
     - |-
       echo "#### Ensuring act-config ####"
@@ -10,6 +11,8 @@ Update Readme:on-schedule:
       echo "-P ubuntu-22.04=catthehacker/ubuntu:act-22.04" >> ~/.actrc
       echo "-P ubuntu-20.04=catthehacker/ubuntu:act-20.04" >> ~/.actrc
       echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
+  only:
+    - schedules
   script:
     - |-
       echo "#### Updating Sponsors and Blog Posts and Contribution Graph ####"
@@ -20,6 +23,3 @@ Update Readme:on-schedule:
         -s GITLAB_TOKEN=$GITLAB_TOKEN \
         -s CI_SERVER_HOST=$CI_SERVER_HOST \
         workflow_dispatch
-  after_script:
-    - |-
-      echo "Done."
