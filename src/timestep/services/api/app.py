@@ -71,8 +71,8 @@ def avatar():
     clothing_color = tilt_green
 
     # ↓↓↓ remove the leading # to uncomment ↓↓↓
-    # clothing = 'docker_shirt'
-    # clothing_color = docker_blue
+    clothing = "docker_shirt"
+    clothing_color = docker_blue
     # ↑↑↑ remove the leading # to uncomment ↑↑↑
 
     svg = pa.Avatar(

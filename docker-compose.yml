@@ -1,8 +1,8 @@
 services:
   api:
     build:
-      context: .
-      dockerfile: ./api.Dockerfile
+      context: src/timestep/services/api
+      dockerfile: Dockerfile
     expose:
       - 5000
     image: registry.gitlab.com/timestep-ai/timestep/api:latest
@@ -125,8 +125,8 @@ services:
   #     - '5432:5432'
   postgres:
     build:
-      context: .
-      dockerfile: ./postgres.Dockerfile
+      context: src/timestep/services/postgres
+      dockerfile: src/timestep/services/postgres/Dockerfile
     # ports:
     #   - '5432:5432'
     environment:
@@ -161,7 +161,7 @@ services:
     entrypoint: ["/usr/bin/tini", "-g", "--", "/opt/prefect/entrypoint.sh"]
     environment:
       # - HOME=/home/prefect
-      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/prefect
     expose:
       - 4200
     image: prefecthq/prefect:2.11.0-python3.11
@@ -195,14 +195,26 @@ services:
     restart: always
   web:
     build:
-      context: .
-      dockerfile: ./web.Dockerfile
+      context: src/timestep/services/web
+      dockerfile: Dockerfile
     environment:
       VITE_CLIENT_PORT: '5735'
     expose:
       - 3000
       - 5735
     image: registry.gitlab.com/timestep-ai/timestep/web:latest
+    labels:
+      kompose.image-pull-secret: "regcred"
+  www:
+    build:
+      context: src/timestep/services/www
+      dockerfile: Dockerfile
+    # environment:
+      # VITE_CLIENT_PORT: '5735'
+    # expose:
+    #   - 9000
+      # - 5735
+    image: registry.gitlab.com/timestep-ai/timestep/www:latest
     labels:
       kompose.image-pull-secret: "regcred"
 version: '3.6'

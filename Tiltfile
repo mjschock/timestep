@@ -240,30 +240,46 @@ watch_file('timestep-ai')
 if os.path.exists('timestep-ai'):
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/api',
-        context='.',
-        dockerfile='./api.Dockerfile',
-        only=['./api/'],
+        context='./src/timestep/services/api',
+        dockerfile='./src/timestep/services/api/Dockerfile',
+        only=['.'],
         live_update=[
-            sync('./api/', '/app/api/'),
+            sync('./src/timestep/services/api/', '/app/api/'),
             run(
                 'pip install -r /app/requirements.txt',
-                trigger=['./api/requirements.txt']
+                trigger=['./src/timestep/services/api/requirements.txt']
             )
         ]
     )
 
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/web',
-        context='.',
-        dockerfile='./web.Dockerfile',
-        only=['./web/'],
-        ignore=['./web/dist/'],
+        context='src/timestep/services/web',
+        dockerfile='src/timestep/services/web/Dockerfile',
+        only=['.'],
+        ignore=['./dist/'],
         live_update=[
-            fall_back_on('./web/vite.config.js'),
-            sync('./web/', '/app/'),
+            fall_back_on('./src/timestep/services/web/vite.config.js'),
+            sync('./src/timestep/services/web/', '/app/'),
             run(
                 'yarn install',
-                trigger=['./web/package.json', './web/yarn.lock']
+                trigger=['./src/timestep/services/web/package.json', './src/timestep/services/web/yarn.lock']
+            )
+        ]
+    )
+
+    docker_build(
+        'registry.gitlab.com/timestep-ai/timestep/www',
+        context='src/timestep/services/www',
+        dockerfile='src/timestep/services/www/Dockerfile',
+        only=['.'],
+        ignore=['./dist/', './src-capacitor/', './src-electron/'],
+        live_update=[
+            fall_back_on('./src/timestep/services/www/quasar.config.js'),
+            sync('./src/timestep/services/www/', '/app/'),
+            run(
+                'npm install',
+                trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
             )
         ]
     )
@@ -287,12 +303,18 @@ if os.path.exists('timestep-ai'):
     k8s_resource(
         'prefect-server',
         port_forwards='4200:4200',
-        labels=['backend', 'frontend'],
+        # labels=['backend', 'frontend'],
     )
 
     k8s_resource(
         'web',
         port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
+        labels=['frontend'],
+    )
+
+    k8s_resource(
+        'www',
+        # port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
         labels=['frontend'],
     )
 
