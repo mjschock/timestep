@@ -1,0 +1,25 @@
+image: ghcr.io/griefed/gitlab-ci-cd:2.1.0
+
+Update Readme:on-schedule:
+  only:
+    - schedules
+  before_script:
+    - |-
+      echo "#### Ensuring act-config ####"
+      echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.actrc
+      echo "-P ubuntu-22.04=catthehacker/ubuntu:act-22.04" >> ~/.actrc
+      echo "-P ubuntu-20.04=catthehacker/ubuntu:act-20.04" >> ~/.actrc
+      echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
+script:
+    - |-
+      echo "#### Updating Sponsors and Blog Posts and Contribution Graph ####"
+      act -v \
+        -s GITHUB_TOKEN=$GITHUB_TOKEN \
+        -s GIT_USER=$GIT_USER \
+        -s GIT_MAIL=$GIT_MAIL \
+        -s GITLAB_TOKEN=$GITLAB_TOKEN \
+        -s CI_SERVER_HOST=$CI_SERVER_HOST \
+        workflow_dispatch
+after_script:
+    - |-
+      echo "Done."
