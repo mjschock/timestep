@@ -2,10 +2,7 @@ default:
 	./tilt-up.sh
 
 clean:
-	rm -rf */**/__pycache__
 	rm -rf cdktf.out
-	rm -rf docs
-	rm -rf src/timestep/infra/imports
 
 hosts:
 	cat cdktf.out/stacks/timestep.local/hosts | sudo $(shell which hostctl) add timestep.local --wait 0

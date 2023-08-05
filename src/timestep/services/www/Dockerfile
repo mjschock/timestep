@@ -114,4 +114,8 @@ COPY --chown=node:node package.json package-lock.json ./
 # RUN --mount=type=cache,target=/home/node/.npm,uid=999,gid=999 \
 #   npm install
 
+# RUN npm install
+
+# COPY --chown=node:node . ./
+
 CMD ["tail", "-f", "/dev/null"]

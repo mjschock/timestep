@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert --build local --build-command docker compose build && helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
+    kompose.cmd: kompose convert --build local --build-command docker compose build && helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
     kompose.image-pull-secret: regcred
     kompose.service.healthcheck.readiness.http_get_path: /ready
     kompose.service.healthcheck.readiness.http_get_port: "5000"
@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert --build local --build-command docker compose build && helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
+        kompose.cmd: kompose convert --build local --build-command docker compose build && helm package timestep-ai --chart --file docker-compose.yml --push-image --push-command helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose
         kompose.image-pull-secret: regcred
         kompose.service.healthcheck.readiness.http_get_path: /ready
         kompose.service.healthcheck.readiness.http_get_port: "5000"
