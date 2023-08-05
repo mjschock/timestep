@@ -38,8 +38,8 @@ services:
     restart: always
   caddy:
     build:
-      context: .
-      dockerfile: ./caddy.Dockerfile
+      context: src/timestep/services/caddy
+      dockerfile: Dockerfile
     depends_on:
       - "graphql-engine"
     image: registry.gitlab.com/timestep-ai/timestep/caddy:latest
@@ -126,7 +126,7 @@ services:
   postgres:
     build:
       context: src/timestep/services/postgres
-      dockerfile: src/timestep/services/postgres/Dockerfile
+      dockerfile: Dockerfile
     # ports:
     #   - '5432:5432'
     environment:
