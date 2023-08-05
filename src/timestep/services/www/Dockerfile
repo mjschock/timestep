@@ -111,7 +111,7 @@ WORKDIR /home/node
 
 COPY --chown=node:node package.json package-lock.json ./
 
-RUN --mount=type=cache,target=/home/node/.npm,uid=999,gid=999 \
-  npm install
+# RUN --mount=type=cache,target=/home/node/.npm,uid=999,gid=999 \
+#   npm install
 
 CMD ["tail", "-f", "/dev/null"]
