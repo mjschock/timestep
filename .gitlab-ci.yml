@@ -15,48 +15,65 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
-build-job:       # This job runs in the build stage, which runs first.
-  image: $CI_REGISTRY/group/project/docker:20.10.16
+# build-job:       # This job runs in the build stage, which runs first.
+#   image: $CI_REGISTRY/group/project/docker:20.10.16
+#   script:
+#     - echo "Compiling the code..."
+#     # - curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash
+#     # - ./bin/act -l
+#     # - ./bin/act pull_request -l
+#     # - ./bin/act push -l
+#     # - ./bin/arkade get docker-compose
+#     # - export PATH=$PATH:$HOME/.arkade/bin/
+#     # - docker-compose build
+#     # - docker-compose push
+#     # - docker build -t my-docker-image .
+#     - docker compose build
+#     - echo "Compile complete."
+#   services:
+#     - alias: docker
+#       name: $CI_REGISTRY/group/project/docker:20.10.16-dind
+#   stage: build
+
+build:
+  before_script:
+    - echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
   script:
-    - echo "Compiling the code..."
-    # - curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash
-    # - ./bin/act -l
-    # - ./bin/act pull_request -l
-    # - ./bin/act push -l
-    # - ./bin/arkade get docker-compose
-    # - export PATH=$PATH:$HOME/.arkade/bin/
-    # - docker-compose build
-    # - docker-compose push
     # - docker build -t my-docker-image .
     - docker compose build
-    - echo "Compile complete."
-  services:
-    - alias: docker
-      name: $CI_REGISTRY/group/project/docker:20.10.16-dind
+    # - docker run my-docker-image /script/to/run/tests
   stage: build
 
-deploy-job:      # This job runs in the deploy stage.
-  environment: production
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+default:
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
 
-lint-test-job:   # This job also runs in the test stage.
-  script:
-    - echo "Linting code... This will take about 10 seconds."
-    - sleep 10
-    - echo "No lint issues found."
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
+# deploy-job:      # This job runs in the deploy stage.
+#   environment: production
+#   script:
+#     - echo "Deploying application..."
+#     - echo "Application successfully deployed."
+#   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
 
-stages:          # List of stages for jobs, and their order of execution
-  - build
-  - test
-  - deploy
+# lint-test-job:   # This job also runs in the test stage.
+#   script:
+#     - echo "Linting code... This will take about 10 seconds."
+#     - sleep 10
+#     - echo "No lint issues found."
+#   stage: test    # It can run at the same time as unit-test-job (in parallel).
 
-unit-test-job:   # This job runs in the test stage.
-  script:
-    - echo "Running unit tests... This will take about 60 seconds."
-    - sleep 60
-    - echo "Code coverage is 90%"
-  stage: test    # It only starts when the job in the build stage completes successfully.
+# stages:          # List of stages for jobs, and their order of execution
+#   - build
+#   - test
+#   - deploy
+
+# unit-test-job:   # This job runs in the test stage.
+#   script:
+#     - echo "Running unit tests... This will take about 60 seconds."
+#     - sleep 60
+#     - echo "Code coverage is 90%"
+#   stage: test    # It only starts when the job in the build stage completes successfully.
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
