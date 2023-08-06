@@ -44,6 +44,16 @@
 #     # - docker run my-docker-image /script/to/run/tests
 #   stage: build
 
+build:
+  before_script:
+    - echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
+  # script:
+    # - docker build -t my-docker-image .
+    # - docker run my-docker-image /script/to/run/tests
+  script:
+    - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$(cat secrets/docker_registry_password)"
+  stage: build
+
 default:
   image: docker:20.10.16
   services:
@@ -75,8 +85,8 @@ default:
 #     - echo "Code coverage is 90%"
 #   stage: test    # It only starts when the job in the build stage completes successfully.
 
-# variables:
-#   DOCKER_TLS_CERTDIR: "/certs"
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
 
 # variables:
 #   PROJECT1_PIPELINE_NAME: 'Default pipeline name'  # A default is not required.
@@ -95,5 +105,5 @@ workflow:
   rules:
     # - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       - if: $CI_PIPELINE_SOURCE == "push"
-  script:
-    - ./bin/act
+  # script:
+  #   - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$(cat secrets/docker_registry_password)"
