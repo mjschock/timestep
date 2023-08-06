@@ -69,11 +69,6 @@ build:
     - docker compose pull || true
     - docker compose build
     - docker compose push
-    - pwd
-    - ls -al
-    - python --version
-    - which python
-    - poetry install
   stage: build
 
 default:
@@ -81,15 +76,22 @@ default:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   image: docker:20.10.16
   services:
-    - docker:20.10.16-dind
+    - docker:20.10.16-dind-rootless
+    - python:3.11.3
 
 deploy:
   before_script:
+    - pwd
+    - ls -al
+    - python --version
+    - which python
+    - poetry install
     - poetry run cdktf get
   dependencies:
     - build
   environment:
     name: $TF_STATE_NAME
+  image: python:3.11.3
   script:
     - poetry run cdktf plan
   stage: deploy

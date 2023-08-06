@@ -321,7 +321,7 @@ if os.path.exists('timestep-ai'):
         command='docker build -t $EXPECTED_REF src/timestep/services/www',
         deps=['src/timestep/services/www'],
         disable_push=True,
-        # entrypoint=['npm', 'run', 'dev'],
+        entrypoint=['npm', 'run', 'dev'],
         # entrypoint=['npm', 'run', 'serve'],
         # entrypoint=['tail', '-f', '/dev/null'],
         ignore=['dist', 'src-capacitor', 'src-electron'],
@@ -367,7 +367,7 @@ if os.path.exists('timestep-ai'):
     k8s_resource(
         'www',
         # port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
-        # port_forwards='9000:9000',
+        port_forwards='9000:9000',
         # labels=['frontend'],
     )
 
