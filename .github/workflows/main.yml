@@ -21,6 +21,7 @@ jobs:
           docker info
           echo "Docker buildx:"
           docker buildx version
+          echo DOCKER_REGISTRY_USERNAME: ${{ vars.DOCKER_REGISTRY_USERNAME }}
 
       - uses: docker/login-action@v2
         with:
