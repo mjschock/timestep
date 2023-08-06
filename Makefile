@@ -4,6 +4,9 @@ default:
 clean:
 	rm -rf cdktf.out
 
+docker-compoze-viz:
+	docker run --rm -it --name dcv -v $(shell pwd):/input pmsipilot/docker-compose-viz render -m image docker-compose.yml
+
 hosts:
 	cat cdktf.out/stacks/timestep.local/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
 

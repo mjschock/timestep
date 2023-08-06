@@ -238,6 +238,37 @@ default_registry('registry.gitlab.com/timestep-ai/timestep')
 watch_file('timestep-ai')
 
 if os.path.exists('timestep-ai'):
+    # docker_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/caddy',
+    #     context='./src/timestep/services/caddy',
+    #     dockerfile='./src/timestep/services/caddy/Dockerfile',
+    #     only=['.'],
+    #     # live_update=[
+    #     #     sync('./src/timestep/services/caddy/', '/etc/caddy/'),
+    #     #     run(
+    #     #         'caddy reload',
+    #     #         trigger=['./src/timestep/services/caddy/Caddyfile']
+    #     #     )
+    #     # ]
+    # )
+
+    custom_build(
+        'registry.gitlab.com/timestep-ai/timestep/caddy',
+        command='docker build -t $EXPECTED_REF src/timestep/services/caddy',
+        deps=['src/timestep/services/caddy'],
+        disable_push=True,
+        live_update=[
+            sync('./src/timestep/services/caddy/', '/etc/caddy/'),
+            run(
+                'caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile',
+                trigger=['./src/timestep/services/caddy/Caddyfile']
+            )
+        ],
+        skips_local_docker=True,
+        tag='latest',
+        # tag=str(local(command='echo $VERSION')).strip(),
+    )
+
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/api',
         context='./src/timestep/services/api',
@@ -291,6 +322,7 @@ if os.path.exists('timestep-ai'):
         deps=['src/timestep/services/www'],
         disable_push=True,
         # entrypoint=['npm', 'run', 'dev'],
+        # entrypoint=['npm', 'run', 'serve'],
         ignore=['dist', 'src-capacitor', 'src-electron'],
         skips_local_docker=True,
         # tag='latest',
@@ -334,6 +366,7 @@ if os.path.exists('timestep-ai'):
     k8s_resource(
         'www',
         # port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
+        port_forwards='9000:9000',
         labels=['frontend'],
     )
 
@@ -401,9 +434,11 @@ if os.path.exists('timestep-ai'):
 local_resource(
     'kompose convert',
     # cmd='kompose convert --build local --build-command "docker build -t registry.gitlab.com/timestep-ai/timestep/www ." --file docker-compose.yml --push-image --push-command "docker push registry.gitlab.com/timestep-ai/timestep/www" --push-image-registry registry.gitlab.com --out deploy/www.yaml --secrets-as-files --verbose',
-    cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
     # cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
     # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    # cmd='kompose convert --build local --build-command "helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
     deps=[
         # 'Caddyfile',
         'docker-compose.yml',

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
+    kompose.service.healthcheck.liveness.http_get_path: /api/health
+    kompose.service.healthcheck.liveness.http_get_port: "4200"
+    kompose.service.healthcheck.readiness.http_get_path: /api/ready
+    kompose.service.healthcheck.readiness.http_get_port: "4200"
+    kompose.version: 1.30.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: prefect-server
+  name: prefect-server
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: prefect-server
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
+        kompose.service.healthcheck.liveness.http_get_path: /api/health
+        kompose.service.healthcheck.liveness.http_get_port: "4200"
+        kompose.service.healthcheck.readiness.http_get_path: /api/ready
+        kompose.service.healthcheck.readiness.http_get_port: "4200"
+        kompose.version: 1.30.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/timestep-default: "true"
+        io.kompose.service: prefect-server
+    spec:
+      containers:
+        - args:
+            - prefect
+            - server
+            - start
+            - --host
+            - 0.0.0.0
+            - --log-level
+            - WARNING
+          command:
+            - /usr/bin/tini
+            - -g
+            - --
+            - /opt/prefect/entrypoint.sh
+          env:
+            - name: PREFECT_API_DATABASE_CONNECTION_URL
+              value: postgresql+asyncpg://postgres:secret-pg-password-never-use-this-value@postgres:5432/prefect
+          image: prefecthq/prefect:2.11.0-python3.11
+          name: prefect-server
+          ports:
+            - containerPort: 4200
+              hostPort: 4200
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /api/ready
+              port: 4200
+          resources: {}
+      restartPolicy: Always
+status: {}
