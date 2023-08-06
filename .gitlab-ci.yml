@@ -69,6 +69,7 @@
     - apk add docker-cli
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - ./bin/arkade get docker-compose
+    - export PATH=$PATH:$HOME/.arkade/bin/
   extends: [.docker]
 
 .docker:
