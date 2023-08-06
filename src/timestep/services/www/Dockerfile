@@ -107,13 +107,12 @@ RUN ark system install node --version v18.15.0
 
 RUN groupadd -r node && useradd --no-log-init -r -g node -s /bin/bash node
 WORKDIR /home/node
-RUN mkdir -p /home/node/.npm && chown -R node:node /home/node/.npm
-USER node
-
-COPY --chown=node:node package.json package-lock.json ./
-
+COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/home/node/.npm,uid=999,gid=999 \
   npm install
+RUN chown -R node:node /home/node/
+
+USER node
 
 COPY --chown=node:node . ./
 
