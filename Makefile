@@ -1,5 +1,6 @@
 default:
-	./tilt-up.sh
+	curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
+	tilt up
 
 clean:
 	rm -rf cdktf.out

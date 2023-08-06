@@ -58,11 +58,22 @@
 #     - docker compose build
 #     - docker compose push
 #   stage: build
+
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Terraform.gitlab-ci.yml
+
 build:
   script:
     - docker compose pull || true
     - docker compose build
     - docker compose push
+    - pwd
+    - ls -al
+    - python --version
+    - which python
+    - poetry install
   stage: build
 
 default:
@@ -71,6 +82,21 @@ default:
   image: docker:20.10.16
   services:
     - docker:20.10.16-dind
+
+deploy:
+  before_script:
+    - poetry run cdktf get
+  dependencies:
+    - build
+  environment:
+    name: $TF_STATE_NAME
+  script:
+    - poetry run cdktf plan
+  stage: deploy
+
+# include:
+#   - template: Terraform/Base.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.gitlab-ci.yml
+#   - template: Jobs/SAST-IaC.gitlab-ci.yml   # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Jobs/SAST-IaC.gitlab-ci.yml
 
 # deploy-job:      # This job runs in the deploy stage.
 #   environment: production
@@ -98,11 +124,6 @@ default:
 #     - echo "Code coverage is 90%"
 #   stage: test    # It only starts when the job in the build stage completes successfully.
 
-variables:
-  # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
-  DOCKER_HOST: tcp://docker:2376
-  DOCKER_TLS_CERTDIR: "/certs"
-
 # variables:
 #   PROJECT1_PIPELINE_NAME: 'Default pipeline name'  # A default is not required.
 
@@ -115,6 +136,41 @@ variables:
 #     - if: '$CI_MERGE_REQUEST_LABELS =~ /pipeline:run-in-ruby3/'
 #       variables:
 #         PROJECT1_PIPELINE_NAME: 'Ruby 3 pipeline'
+
+stages:
+  # - validate
+  # - test
+  - build
+  - deploy
+  # - cleanup
+
+# fmt:
+#   extends: .terraform:fmt
+#   needs: []
+
+validate:
+  extends: .terraform:validate
+  needs: []
+
+variables:
+  # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  TF_STATE_NAME: timestep.ai
+
+# build:
+#   extends: .terraform:build
+#   environment:
+#     name: $TF_STATE_NAME
+#     action: prepare
+
+# deploy:
+#   extends: .terraform:deploy
+#   dependencies:
+#     - build
+#   environment:
+#     name: $TF_STATE_NAME
+#     action: start
 
 workflow:
   rules:
