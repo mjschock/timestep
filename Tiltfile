@@ -293,7 +293,8 @@ if os.path.exists('timestep-ai'):
         # entrypoint=['npm', 'run', 'dev'],
         ignore=['dist', 'src-capacitor', 'src-electron'],
         skips_local_docker=True,
-        tag='latest',
+        # tag='latest',
+        tag=str(local(command='echo $VERSION')).strip(),
     )
 
     k8s_yaml(local('helm template timestep-ai'))
