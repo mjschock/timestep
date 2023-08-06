@@ -1,4 +1,5 @@
 from cdktf import (
+    HttpBackend,
     LocalBackend,
     TerraformStack,
 )
@@ -330,6 +331,12 @@ class MainStack(TerraformStack):
             #     workspaces=NamedCloudWorkspace(config.variables.get("tf_workspace")),
             # )
 
-            raise NotImplementedError(
-                f"CloudInstanceProvider: {config.cloud_instance_provider}"
-            )  # noqa: E501
+            # raise NotImplementedError(
+            #     f"CloudInstanceProvider: {config.cloud_instance_provider}"
+            # )  # noqa: E501
+
+            HttpBackend(
+                address=config.variables.get("tf_http_address"),
+                password=config.secrets.get_secret_value().get("tf_api_token"),
+                username=config.variables.get("tf_username"),
+            )
