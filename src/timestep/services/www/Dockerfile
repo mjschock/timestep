@@ -122,4 +122,4 @@ RUN npm install
 COPY --chown=node:node . ./
 RUN npm run build
 
-CMD ["tail", "-f", "/dev/null"]
+CMD ["quasar", "serve", "dist/spa", "-p", "9000"]
