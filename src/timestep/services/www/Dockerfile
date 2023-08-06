@@ -106,14 +106,17 @@ RUN curl -sLS https://get.arkade.dev | sh
 RUN ark system install node --version v18.15.0
 
 RUN groupadd -r node && useradd --no-log-init -r -g node -s /bin/bash node
-WORKDIR /home/node
-COPY package.json package-lock.json ./
-RUN --mount=type=cache,target=/home/node/.npm,uid=999,gid=999 \
-  npm install
-RUN chown -R node:node /home/node/
+# WORKDIR /home/node
+# COPY package.json package-lock.json ./
+# RUN --mount=type=cache,target=/home/node/.npm,uid=999,gid=999 \
+#   npm install
+# RUN chown -R node:node /home/node/
 
 USER node
+WORKDIR /home/node
 
+COPY --chown=node:node package.json package-lock.json ./
+RUN npm install
 COPY --chown=node:node . ./
 
 CMD ["tail", "-f", "/dev/null"]
