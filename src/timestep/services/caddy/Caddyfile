@@ -24,7 +24,6 @@ http://www.timestep.local:80 {
 		# root * /home/base/dist/spa
 		# try_files {path} /index.html
 		# file_server
-		reverse_proxy wwww:9000
-		# reverse_proxy web:3000
+		reverse_proxy www:9000
 	}
 }

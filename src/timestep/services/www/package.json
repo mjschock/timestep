@@ -14,9 +14,11 @@
     "dev:capacitor:android": "quasar dev -m capacitor -T android",
     "dev:capacitor:ios": "quasar dev -m capacitor -T ios",
     "build": "quasar build",
-    "serve": "quasar serve dist/spa -p 4000"
+    "preserve": "npm run build",
+    "serve": "quasar serve dist/spa -p 9000"
   },
   "dependencies": {
+    "@quasar/cli": "^2.2.1",
     "@quasar/extras": "^1.0.0",
     "quasar": "^2.6.0",
     "vue": "^3.0.0",

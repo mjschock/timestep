@@ -42,7 +42,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - "graphql-engine"
-    image: registry.gitlab.com/timestep-ai/timestep/caddy:latest
+    image: registry.gitlab.com/timestep-ai/timestep/caddy:${VERSION:-latest}
     labels:
       kompose.image-pull-secret: "regcred"
       kompose.service.expose: "timestep.local,www.timestep.local"
@@ -209,10 +209,11 @@ services:
     build:
       context: src/timestep/services/www
       dockerfile: Dockerfile
+    command: ["npm", "run", "serve"]
     # environment:
       # VITE_CLIENT_PORT: '5735'
-    # expose:
-    #   - 9000
+    expose:
+      - 9000
       # - 5735
     # image: registry.gitlab.com/timestep-ai/timestep/www:latest
     # image: registry.gitlab.com/timestep-ai/timestep/www:${CI_COMMIT_SHORT_SHA:-latest}
