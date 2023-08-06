@@ -106,8 +106,9 @@ RUN curl -sLS https://get.arkade.dev | sh
 RUN ark system install node --version v18.15.0
 
 RUN groupadd -r node && useradd --no-log-init -r -g node -s /bin/bash node
-USER node
 WORKDIR /home/node
+RUN mkdir -p /home/node/.npm && chown -R node:node /home/node/.npm
+USER node
 
 COPY --chown=node:node package.json package-lock.json ./
 
