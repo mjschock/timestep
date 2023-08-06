@@ -44,10 +44,10 @@
 #     # - docker run my-docker-image /script/to/run/tests
 #   stage: build
 
-# default:
-#   image: docker:20.10.16
-#   services:
-#     - docker:20.10.16-dind
+default:
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
 
 # deploy-job:      # This job runs in the deploy stage.
 #   environment: production
