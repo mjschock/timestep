@@ -1,3 +1,9 @@
+## 1.0.27 (2023-08-06)
+
+### Fix
+
+- npm install --save @vue/apollo-composable
+
 ## 1.0.26 (2023-08-06)
 
 ### Fix
