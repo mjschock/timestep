@@ -252,41 +252,59 @@ if os.path.exists('timestep-ai'):
         ]
     )
 
-    docker_build(
-        'registry.gitlab.com/timestep-ai/timestep/web',
-        context='src/timestep/services/web',
-        dockerfile='src/timestep/services/web/Dockerfile',
-        only=['.'],
-        ignore=['./dist/'],
-        live_update=[
-            fall_back_on('./src/timestep/services/web/vite.config.js'),
-            sync('./src/timestep/services/web/', '/app/'),
-            run(
-                'yarn install',
-                trigger=['./src/timestep/services/web/package.json', './src/timestep/services/web/yarn.lock']
-            )
-        ]
-    )
+    # docker_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/web',
+    #     context='src/timestep/services/web',
+    #     dockerfile='src/timestep/services/web/Dockerfile',
+    #     only=['.'],
+    #     ignore=['./dist/'],
+    #     live_update=[
+    #         fall_back_on('./src/timestep/services/web/vite.config.js'),
+    #         sync('./src/timestep/services/web/', '/app/'),
+    #         run(
+    #             'yarn install',
+    #             trigger=['./src/timestep/services/web/package.json', './src/timestep/services/web/yarn.lock']
+    #         )
+    #     ]
+    # )
 
-    docker_build(
+    # docker_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/www',
+    #     context='src/timestep/services/www',
+    #     dockerfile='src/timestep/services/www/Dockerfile',
+    #     entrypoint='quasar dev',
+    #     only=['.'],
+    #     ignore=['./dist/', './src-capacitor/', './src-electron/'],
+    #     live_update=[
+    #         fall_back_on('./src/timestep/services/www/quasar.config.js'),
+    #         sync('./src/timestep/services/www/', '/app/'),
+    #         run(
+    #             'npm install',
+    #             trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
+    #         )
+    #     ]
+    # )
+
+    custom_build(
         'registry.gitlab.com/timestep-ai/timestep/www',
-        context='src/timestep/services/www',
-        dockerfile='src/timestep/services/www/Dockerfile',
-        only=['.'],
-        ignore=['./dist/', './src-capacitor/', './src-electron/'],
-        live_update=[
-            fall_back_on('./src/timestep/services/www/quasar.config.js'),
-            sync('./src/timestep/services/www/', '/app/'),
-            run(
-                'npm install',
-                trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
-            )
-        ]
+        command='docker build -t $EXPECTED_REF src/timestep/services/www',
+        deps=['src/timestep/services/www'],
+        disable_push=True,
+        # entrypoint=['npm', 'run', 'dev'],
+        ignore=['dist', 'src-capacitor', 'src-electron'],
+        skips_local_docker=True,
+        tag='latest',
     )
 
     k8s_yaml(local('helm template timestep-ai'))
 
 # watch_file('timestep-ai')
+
+    k8s_resource(
+        'caddy',
+        labels=['release'],
+        links=['https://' + str(local(command='echo $PRIMARY_DOMAIN_NAME')).strip()],
+    )
 
     k8s_resource(
         'api',
@@ -306,11 +324,11 @@ if os.path.exists('timestep-ai'):
         # labels=['backend', 'frontend'],
     )
 
-    k8s_resource(
-        'web',
-        port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
-        labels=['frontend'],
-    )
+    # k8s_resource(
+    #     'web',
+    #     port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
+    #     labels=['frontend'],
+    # )
 
     k8s_resource(
         'www',

@@ -72,7 +72,7 @@ env:
   NAMECHEAP_API_KEY: ${{ secrets.NAMECHEAP_API_KEY }}
   NAMECHEAP_API_USER: ${{ secrets.NAMECHEAP_API_USER }}
   NAMECHEAP_USER_NAME: ${{ secrets.NAMECHEAP_USER_NAME }}
-  PREFECT_CLOUD_WORKSPACE: ${{ vars.PREFECT_CLOUD_WORKSPACE }}
+  # PREFECT_CLOUD_WORKSPACE: ${{ vars.PREFECT_CLOUD_WORKSPACE }}
   PRIMARY_DOMAIN_NAME: ${{ vars.PRIMARY_DOMAIN_NAME }}
   SSH_PUBLIC_KEY: ${{ vars.SSH_PUBLIC_KEY }}
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -119,7 +119,7 @@ jobs:
           python -m pipx ensurepath
           pipx install poetry
           poetry install
-          poetry run prefect cloud login --key ${{ secrets.PREFECT_API_KEY }} --workspace ${{ env.PREFECT_CLOUD_WORKSPACE }}
+          # poetry run prefect cloud login --key ${{ secrets.PREFECT_API_KEY }} --workspace ${{ env.PREFECT_CLOUD_WORKSPACE }}
           make imports
 
       - uses: alexellis/arkade-get@master
