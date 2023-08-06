@@ -366,32 +366,32 @@ if os.path.exists('timestep-ai'):
 #     ]
 # )
 
-local_resource(
-    'docker save www',
-    cmd='docker save registry.gitlab.com/timestep-ai/timestep/www > www.tar',
-)
+# local_resource(
+#     'docker save www',
+#     cmd='docker save registry.gitlab.com/timestep-ai/timestep/www > www.tar',
+# )
 
-local_resource(
-    'regctl image import www',
-    cmd='./regctl image import registry.gitlab.com/timestep-ai/timestep/www www.tar -v debug',
-    resource_deps=[
-        'docker save www',
-    ],
-)
+# local_resource(
+#     'regctl image import www',
+#     cmd='./bin/regctl image import registry.gitlab.com/timestep-ai/timestep/www www.tar -v debug',
+#     resource_deps=[
+#         'docker save www',
+#     ],
+# )
 
 local_resource(
     'kompose convert',
     # cmd='kompose convert --build local --build-command "docker build -t registry.gitlab.com/timestep-ai/timestep/www ." --file docker-compose.yml --push-image --push-command "docker push registry.gitlab.com/timestep-ai/timestep/www" --push-image-registry registry.gitlab.com --out deploy/www.yaml --secrets-as-files --verbose',
-    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
     # cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
-    cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
     deps=[
         # 'Caddyfile',
         'docker-compose.yml',
         # 'www',
     ],
     labels=['build'],
-    resource_deps=[
-        'regctl image import www',
-    ]
+    # resource_deps=[
+    #     'regctl image import www',
+    # ]
 )
