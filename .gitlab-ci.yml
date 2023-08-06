@@ -53,7 +53,8 @@ build:
   script:
     # - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$(cat secrets/docker_registry_password)"
     # - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$DOCKER_REGISTRY_PASS"
-    - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$CI_REGISTRY_PASSWORD"
+    # - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$CI_REGISTRY_PASSWORD"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   stage: build
 
 default:
