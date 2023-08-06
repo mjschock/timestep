@@ -68,6 +68,7 @@
   before_script:
     - apk add docker-cli
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - ./bin/arkade get docker-compose
   extends: [.docker]
 
 .docker:
