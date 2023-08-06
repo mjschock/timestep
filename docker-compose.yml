@@ -210,6 +210,13 @@ services:
       context: src/timestep/services/www
       dockerfile: Dockerfile
     # command: ["npm", "run", "serve"]
+    # command: [
+    #   "quasar",
+    #   "serve",
+    #   "dist/spa",
+    #   "-p",
+    #   "9000"
+    # ]
     # environment:
       # VITE_CLIENT_PORT: '5735'
     expose:
