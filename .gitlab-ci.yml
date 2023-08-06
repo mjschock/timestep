@@ -16,17 +16,23 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 build-job:       # This job runs in the build stage, which runs first.
+  image: $CI_REGISTRY/group/project/docker:20.10.16
   script:
     - echo "Compiling the code..."
     # - curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash
-    - ./bin/act -l
-    - ./bin/act pull_request -l
-    - ./bin/act push -l
-    - ./bin/arkade get docker-compose
-    - export PATH=$PATH:$HOME/.arkade/bin/
-    - docker-compose build
-    - docker-compose push
+    # - ./bin/act -l
+    # - ./bin/act pull_request -l
+    # - ./bin/act push -l
+    # - ./bin/arkade get docker-compose
+    # - export PATH=$PATH:$HOME/.arkade/bin/
+    # - docker-compose build
+    # - docker-compose push
+    # - docker build -t my-docker-image .
+    - docker compose build
     - echo "Compile complete."
+  services:
+    - alias: docker
+      name: $CI_REGISTRY/group/project/docker:20.10.16-dind
   stage: build
 
 deploy-job:      # This job runs in the deploy stage.
