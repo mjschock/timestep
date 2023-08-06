@@ -209,7 +209,7 @@ services:
     build:
       context: src/timestep/services/www
       dockerfile: Dockerfile
-    command: ["npm", "run", "serve"]
+    # command: ["npm", "run", "serve"]
     # environment:
       # VITE_CLIENT_PORT: '5735'
     expose:

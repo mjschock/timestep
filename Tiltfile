@@ -265,8 +265,8 @@ if os.path.exists('timestep-ai'):
             )
         ],
         skips_local_docker=True,
-        tag='latest',
-        # tag=str(local(command='echo $VERSION')).strip(),
+        # tag='latest',
+        tag=str(local(command='echo $VERSION')).strip(),
     )
 
     docker_build(
@@ -323,6 +323,7 @@ if os.path.exists('timestep-ai'):
         disable_push=True,
         # entrypoint=['npm', 'run', 'dev'],
         # entrypoint=['npm', 'run', 'serve'],
+        # entrypoint=['tail', '-f', '/dev/null'],
         ignore=['dist', 'src-capacitor', 'src-electron'],
         skips_local_docker=True,
         # tag='latest',
@@ -366,7 +367,7 @@ if os.path.exists('timestep-ai'):
     k8s_resource(
         'www',
         # port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
-        port_forwards='9000:9000',
+        # port_forwards='9000:9000',
         labels=['frontend'],
     )
 
