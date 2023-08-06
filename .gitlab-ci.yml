@@ -51,7 +51,8 @@ build:
     # - docker build -t my-docker-image .
     # - docker run my-docker-image /script/to/run/tests
   script:
-    - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$(cat secrets/docker_registry_password)"
+    # - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$(cat secrets/docker_registry_password)"
+    - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$DOCKER_REGISTRY_PASS"
   stage: build
 
 default:
