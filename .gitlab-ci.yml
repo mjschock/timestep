@@ -35,19 +35,19 @@
 #       name: $CI_REGISTRY/group/project/docker:20.10.16-dind
 #   stage: build
 
-build:
-  before_script:
-    - echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
-  script:
-    # - docker build -t my-docker-image .
-    - docker compose build
-    # - docker run my-docker-image /script/to/run/tests
-  stage: build
+# build:
+#   before_script:
+#     - echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
+#   script:
+#     # - docker build -t my-docker-image .
+#     - docker compose build
+#     # - docker run my-docker-image /script/to/run/tests
+#   stage: build
 
-default:
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
+# default:
+#   image: docker:20.10.16
+#   services:
+#     - docker:20.10.16-dind
 
 # deploy-job:      # This job runs in the deploy stage.
 #   environment: production
@@ -75,5 +75,24 @@ default:
 #     - echo "Code coverage is 90%"
 #   stage: test    # It only starts when the job in the build stage completes successfully.
 
-variables:
-  DOCKER_TLS_CERTDIR: "/certs"
+# variables:
+#   DOCKER_TLS_CERTDIR: "/certs"
+
+# variables:
+#   PROJECT1_PIPELINE_NAME: 'Default pipeline name'  # A default is not required.
+
+# workflow:
+#   name: '$PROJECT1_PIPELINE_NAME'
+#   rules:
+#     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+#       variables:
+#         PROJECT1_PIPELINE_NAME: 'MR pipeline: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME'
+#     - if: '$CI_MERGE_REQUEST_LABELS =~ /pipeline:run-in-ruby3/'
+#       variables:
+#         PROJECT1_PIPELINE_NAME: 'Ruby 3 pipeline'
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - echo "Running in Ruby 3"
