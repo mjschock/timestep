@@ -21,13 +21,13 @@ jobs:
           docker info
           echo "Docker buildx:"
           docker buildx version
-          echo DOCKER_REGISTRY_USERNAME: ${{ vars.DOCKER_REGISTRY_USERNAME }}
+          echo DOCKER_REGISTRY_USERNAME: ${{ env.DOCKER_REGISTRY_USERNAME }}
 
-      - uses: docker/login-action@v2
-        with:
-          registry: registry.gitlab.com
-          username: ${{ env.DOCKER_REGISTRY_USERNAME }}
-          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+      # - uses: docker/login-action@v2
+      #   with:
+      #     registry: registry.gitlab.com
+      #     username: ${{ env.DOCKER_REGISTRY_USERNAME }}
+      #     password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
       # - name: Build and push
       #   uses: docker/build-push-action@v4
