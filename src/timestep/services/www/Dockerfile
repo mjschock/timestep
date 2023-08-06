@@ -104,6 +104,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN curl -sLS https://get.arkade.dev | sh
 RUN ark system install node --version v18.15.0
+RUN npm i -g @quasar/cli
 
 RUN groupadd -r node && useradd --no-log-init -r -g node -s /bin/bash node
 # WORKDIR /home/node
