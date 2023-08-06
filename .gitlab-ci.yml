@@ -93,7 +93,7 @@ build:
     - docker compose pull || true
     - docker compose build
     - docker compose push
-    - python3 --version
+    - python --version
     # - pip install .
     # - python main.py
   stage: build
