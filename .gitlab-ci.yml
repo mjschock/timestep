@@ -45,14 +45,15 @@
 #   stage: build
 
 build:
-  before_script:
-    - echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
+  # before_script:
+  #   - echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
   # script:
     # - docker build -t my-docker-image .
     # - docker run my-docker-image /script/to/run/tests
   script:
     # - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$(cat secrets/docker_registry_password)"
-    - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$DOCKER_REGISTRY_PASS"
+    # - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$DOCKER_REGISTRY_PASS"
+    - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$CI_REGISTRY_PASSWORD"
   stage: build
 
 default:
