@@ -336,14 +336,14 @@ if os.path.exists('timestep-ai'):
 
     k8s_resource(
         'caddy',
-        labels=['release'],
+        # labels=['release'],
         links=['https://' + str(local(command='echo $PRIMARY_DOMAIN_NAME')).strip()],
     )
 
     k8s_resource(
         'api',
         port_forwards='5734:5000',
-        labels=['backend'],
+        # labels=['backend'],
     )
 
     # k8s_resource(
@@ -368,7 +368,7 @@ if os.path.exists('timestep-ai'):
         'www',
         # port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
         # port_forwards='9000:9000',
-        labels=['frontend'],
+        # labels=['frontend'],
     )
 
 # local_resource(
@@ -439,8 +439,8 @@ local_resource(
     # cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
     # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
     # cmd='kompose convert --build local --build-command "helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
-    # cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
-    cmd="./scripts/kompose-convert.sh",
+    cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
+    # cmd="./scripts/kompose-convert.sh",
     deps=[
         '.env',
         # 'Caddyfile',
