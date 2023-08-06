@@ -64,37 +64,46 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Terraform.gitlab-ci.yml
 
-.dagger:
-  before_script:
-    - apk add docker-cli
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - ./bin/arkade get docker-compose
-    - export PATH=$PATH:$HOME/.arkade/bin/
-  extends: [.docker]
+# .dagger:
+#   before_script:
+#     - apk add docker-cli
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - ./bin/arkade get docker-compose
+#     - export PATH=$PATH:$HOME/.arkade/bin/
+#   extends: [.docker]
 
-.docker:
-  image: python:3.11-alpine
-  services:
-    - docker:${DOCKER_VERSION}-dind
-  variables:
-    DOCKER_CERT_PATH: '/certs/client'
-    DOCKER_DRIVER: overlay2
-    DOCKER_HOST: tcp://docker:2376
-    DOCKER_TLS_CERTDIR: '/certs'
-    DOCKER_TLS_VERIFY: '1'
-    DOCKER_VERSION: '20.10.16'
+# .docker:
+#   image: python:3.11-alpine
+#   services:
+#     - docker:${DOCKER_VERSION}-dind
+#   variables:
+#     DOCKER_CERT_PATH: '/certs/client'
+#     DOCKER_DRIVER: overlay2
+#     DOCKER_HOST: tcp://docker:2376
+#     DOCKER_TLS_CERTDIR: '/certs'
+#     DOCKER_TLS_VERIFY: '1'
+#     DOCKER_VERSION: '20.10.16'
 
 build:
-  extends: [.dagger]
+  # extends: [.dagger]
+  # image: python:3.11-alpine
+  # services:
+  #   - docker:${DOCKER_VERSION}-dind
   script:
     - docker compose pull || true
     - docker compose build
     - docker compose push
-    - pip --version
-    - python --version
+    - python3 --version
     # - pip install .
     # - python main.py
   stage: build
+  # variables:
+  #   DOCKER_CERT_PATH: '/certs/client'
+  #   DOCKER_DRIVER: overlay2
+  #   DOCKER_HOST: tcp://docker:2376
+  #   DOCKER_TLS_CERTDIR: '/certs'
+  #   DOCKER_TLS_VERIFY: '1'
+  #   DOCKER_VERSION: '20.10.16'
 
 # build:
 #   script:
@@ -103,13 +112,13 @@ build:
 #     - docker compose push
 #   stage: build
 
-# default:
-#   before_script:
-#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#   image: docker:20.10.16
-#   services:
-#     - docker:20.10.16-dind-rootless
-#     - python:3.11.3
+default:
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  image: docker:${DOCKER_VERSION}
+  services:
+    - docker:${DOCKER_VERSION}-dind
+    - python:3.11.3-alpine
 
 deploy:
   before_script:
@@ -191,6 +200,14 @@ stages:
 #   DOCKER_HOST: tcp://docker:2376
 #   DOCKER_TLS_CERTDIR: "/certs"
 #   TF_STATE_NAME: timestep.ai
+
+variables:
+  DOCKER_CERT_PATH: '/certs/client'
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: '/certs'
+  DOCKER_TLS_VERIFY: '1'
+  DOCKER_VERSION: '20.10.16'
 
 # build:
 #   extends: .terraform:build
