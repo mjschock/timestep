@@ -84,7 +84,7 @@
 #     DOCKER_TLS_VERIFY: '1'
 #     DOCKER_VERSION: '20.10.16'
 
-build:
+build-docker:
   # extends: [.dagger]
   # image: python:3.11-alpine
   # services:
@@ -93,14 +93,14 @@ build:
     - docker compose pull || true
     - docker compose build
     - docker compose push
-    - python3 --version
-    - which python3
-    - pip3 --version
-    - which pip3
-    - python3 -m pip install --user pipx
-    - python3 -m pipx ensurepath
-    - pipx install poetry
-    - poetry install
+    # - python3 --version
+    # - which python3
+    # - pip3 --version
+    # - which pip3
+    # - python3 -m pip install --user pipx
+    # - python3 -m pipx ensurepath
+    # - pipx install poetry
+    # - poetry install
     # - pip install .
     # - python main.py
   stage: build
@@ -112,6 +112,26 @@ build:
   #   DOCKER_TLS_VERIFY: '1'
   #   DOCKER_VERSION: '20.10.16'
 
+build-python:
+  dependencies:
+    - build-docker
+  # extends: [.dagger]
+  image: python:3.11-alpine
+  # services:
+  #   - docker:${DOCKER_VERSION}-dind
+  script:
+    - python3 --version
+    - which python3
+    - pip3 --version
+    - which pip3
+    - python3 -m pip install --user pipx
+    - python3 -m pipx ensurepath
+    - pipx install poetry
+    - poetry install
+    # - pip install .
+    # - python main.py
+  stage: build
+
 # build:
 #   script:
 #     - docker compose pull || true
@@ -122,8 +142,8 @@ build:
 default:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - apk add python3=~3.11.3
-    - apk add py3-pip=~21.2.4
+    # - apk add python3=~3.11.3
+    # - apk add py3-pip=~21.2.4
   image: docker:${DOCKER_VERSION}
   services:
     - docker:${DOCKER_VERSION}-dind
@@ -137,8 +157,8 @@ deploy:
     - which python
     - poetry install
     - poetry run cdktf get
-  dependencies:
-    - build
+  # dependencies:
+    # - build-
   environment:
     name: $TF_STATE_NAME
   image: python:3.11.3
