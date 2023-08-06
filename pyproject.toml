@@ -19,7 +19,6 @@ major_version_zero = false
 name = "cz_conventional_commits"
 tag_format = "$VERSION"
 update_changelog_on_bump = true
-version = "1.0.2"
 version_provider = "poetry"
 version_scheme = "semver"
 
