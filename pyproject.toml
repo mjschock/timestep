@@ -17,7 +17,7 @@ target-version = ['py311']
 [tool.commitizen]
 major_version_zero = false
 name = "cz_conventional_commits"
-tag_format = "$VERSION"
+tag_format = "$version"
 update_changelog_on_bump = true
 version_provider = "poetry"
 version_scheme = "semver"
