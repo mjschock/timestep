@@ -22,17 +22,17 @@ jobs:
           echo "Docker buildx:"
           docker buildx version
 
-      - uses: docker/login-action@v2
-        with:
-          registry: registry.gitlab.com
-          username: ${{ vars.DOCKER_REGISTRY_USERNAME }}
-          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+      # - uses: docker/login-action@v2
+      #   with:
+      #     registry: registry.gitlab.com
+      #     username: ${{ vars.DOCKER_REGISTRY_USERNAME }}
+      #     password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: user/app:latest
+      # - name: Build and push
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     push: true
+      #     tags: user/app:latest
   # test:
   #   runs-on: ubuntu-latest
   #   steps:
