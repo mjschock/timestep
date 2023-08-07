@@ -35,7 +35,7 @@ spec:
         io.kompose.service: caddy
     spec:
       containers:
-        - image: registry.gitlab.com/timestep-ai/timestep/caddy:1.0.29
+        - image: registry.gitlab.com/timestep-ai/timestep/caddy:1.0.30
           name: caddy
           ports:
             - containerPort: 80
