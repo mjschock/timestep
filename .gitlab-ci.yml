@@ -154,14 +154,14 @@ default:
     # - python:3.11.3-alpine
 
 deploy:
-  before_script:
-    # - pwd
-    # - ls -al
-    # - python --version
-    # - which python
-    # - poetry install
-    # - poetry run cdktf get
-    - docker run timestep poetry run cdktf plan
+  # before_script:
+  #   # - pwd
+  #   # - ls -al
+  #   # - python --version
+  #   # - which python
+  #   # - poetry install
+  #   # - poetry run cdktf get
+  #   - docker run timestep poetry run cdktf plan
   # dependencies:
     # - build-
   environment:
