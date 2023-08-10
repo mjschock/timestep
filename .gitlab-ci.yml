@@ -84,7 +84,7 @@
 #     DOCKER_TLS_VERIFY: '1'
 #     DOCKER_VERSION: '20.10.16'
 
-build-docker:
+build:
   # extends: [.dagger]
   # image: python:3.11-alpine
   # services:
@@ -92,6 +92,7 @@ build-docker:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
+    - docker build -t timestep:latest --build-arg GO_VERSION=1.20.2 --progress=plain .
     - docker compose pull || true
     - docker compose build
     - docker compose push
@@ -114,26 +115,26 @@ build-docker:
   #   DOCKER_TLS_VERIFY: '1'
   #   DOCKER_VERSION: '20.10.16'
 
-build-python:
-  dependencies:
-    - build-docker
-  # extends: [.dagger]
-  image: python:3.11-bookworm
-  # services:
-  #   - docker:${DOCKER_VERSION}-dind
-  script:
-    - python3 --version
-    - which python3
-    - pip3 --version
-    - which pip3
-    - python3 -m pip install --user pipx
-    - python3 -m pipx ensurepath
-    - export PATH=$PATH:$HOME/.local/bin
-    - pipx install poetry
-    - poetry install
-    # - pip install .
-    # - python main.py
-  stage: build
+# build-python:
+#   dependencies:
+#     - build-docker
+#   # extends: [.dagger]
+#   image: python:3.11-bookworm
+#   # services:
+#   #   - docker:${DOCKER_VERSION}-dind
+#   script:
+#     - python3 --version
+#     - which python3
+#     - pip3 --version
+#     - which pip3
+#     - python3 -m pip install --user pipx
+#     - python3 -m pipx ensurepath
+#     - export PATH=$PATH:$HOME/.local/bin
+#     - pipx install poetry
+#     - poetry install
+#     # - pip install .
+#     # - python main.py
+#   stage: build
 
 # build:
 #   script:
@@ -150,23 +151,25 @@ default:
   image: docker:${DOCKER_VERSION}
   services:
     - docker:${DOCKER_VERSION}-dind
-    - python:3.11.3-alpine
+    # - python:3.11.3-alpine
 
 deploy:
   before_script:
-    - pwd
-    - ls -al
-    - python --version
-    - which python
-    - poetry install
-    - poetry run cdktf get
+    # - pwd
+    # - ls -al
+    # - python --version
+    # - which python
+    # - poetry install
+    # - poetry run cdktf get
+    - docker run timestep poetry run cdktf plan
   # dependencies:
     # - build-
   environment:
     name: $TF_STATE_NAME
-  image: python:3.11.3
+  # image: python:3.11.3
   script:
-    - poetry run cdktf plan
+    # - poetry run cdktf plan
+    - docker run timestep poetry run cdktf deploy
   stage: deploy
 
 # include:
