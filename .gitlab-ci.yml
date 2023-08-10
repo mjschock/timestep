@@ -164,8 +164,8 @@ deploy:
   #   - docker run timestep poetry run cdktf plan
   # dependencies:
     # - build-
-  environment:
-    name: $TF_STATE_NAME
+  # environment:
+    # name: $TF_STATE_NAME
   # image: python:3.11.3
   script:
     # - poetry run cdktf plan
