@@ -161,7 +161,8 @@ services:
     entrypoint: ["/usr/bin/tini", "-g", "--", "/opt/prefect/entrypoint.sh"]
     environment:
       # - HOME=/home/prefect
-      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/prefect
+      # - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/prefect
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
     expose:
       - 4200
     image: prefecthq/prefect:2.11.0-python3.11

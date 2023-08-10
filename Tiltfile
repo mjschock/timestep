@@ -367,7 +367,7 @@ if os.path.exists('timestep-ai'):
     k8s_resource(
         'www',
         # port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
-        port_forwards='9000:9000',
+        port_forwards='9200:9000',
         # labels=['frontend'],
     )
 

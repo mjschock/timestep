@@ -49,7 +49,7 @@ spec:
             - /opt/prefect/entrypoint.sh
           env:
             - name: PREFECT_API_DATABASE_CONNECTION_URL
-              value: postgresql+asyncpg://postgres:secret-pg-password-never-use-this-value@postgres:5432/prefect
+              value: postgresql+asyncpg://postgres:secret-pg-password-never-use-this-value@postgres:5432/postgres
           image: prefecthq/prefect:2.11.0-python3.11
           name: prefect-server
           ports:
