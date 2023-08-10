@@ -78,6 +78,9 @@ WORKDIR /home/ubuntu
 
 # RUN git clone https://github.com/anyenv/anyenv /home/ubuntu/.anyenv
 # RUN git clone https://github.com/anyenv/anyenv
+RUN whoami
+RUN pwd
+RUN ls -al
 RUN mkdir -p /home/ubuntu/.anyenv/
 # ENV PATH="/home/ubuntu/.anyenv/bin:${PATH}"
 # RUN anyenv install --force-init
