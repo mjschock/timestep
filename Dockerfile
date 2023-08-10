@@ -76,7 +76,7 @@ WORKDIR /home/ubuntu
 
 ENV PATH="/home/ubuntu/.arkade/bin:/home/ubuntu/.local/bin:${PATH}"
 
-RUN git clone https://github.com/anyenv/anyenv ~/.anyenv
+RUN git clone https://github.com/anyenv/anyenv /home/ubuntu/.anyenv
 ENV PATH="/home/ubuntu/.anyenv/bin:${PATH}"
 RUN anyenv install --force-init
 
