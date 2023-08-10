@@ -69,6 +69,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # RUN update-alternatives --config python3 --skip-auto
 
 RUN groupadd -r ubuntu && useradd --no-log-init -r -g ubuntu -s /bin/bash ubuntu
+RUN chown -R ubuntu:ubuntu /home/ubuntu
 
 SHELL [ "/bin/bash", "-c" ]
 USER ubuntu
