@@ -194,18 +194,6 @@ services:
       - 8000
     image: nhost/hasura-storage:0.3.1
     restart: always
-  # web:
-  #   build:
-  #     context: src/timestep/services/web
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     VITE_CLIENT_PORT: '5735'
-  #   expose:
-  #     - 3000
-  #     - 5735
-  #   image: registry.gitlab.com/timestep-ai/timestep/web:latest
-  #   labels:
-  #     kompose.image-pull-secret: "regcred"
   www:
     build:
       context: src/timestep/services/www

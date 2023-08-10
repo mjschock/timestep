@@ -149,43 +149,6 @@ default_registry('registry.gitlab.com/timestep-ai/timestep')
 #     labels=['backend']
 # )
 
-
-# # tilt-avatar-web is the frontend (ReactJS/vite app)
-# # live_update syncs changed source files to the correct place for vite to pick up
-# # and runs yarn (JS dependency manager) to update dependencies when changed
-# # if vite.config.js changes, a full rebuild is performed because it cannot be
-# # changed dynamically at runtime
-# # https://docs.tilt.dev/api.html#api.docker_build
-# # https://docs.tilt.dev/live_update_reference.html
-# docker_build(
-#     'tilt-avatar-web',
-#     context='.',
-#     dockerfile='./deploy/web.dockerfile',
-#     only=['./web/'],
-#     ignore=['./web/dist/'],
-#     live_update=[
-#         fall_back_on('./web/vite.config.js'),
-#         sync('./web/', '/app/'),
-#         run(
-#             'yarn install',
-#             trigger=['./web/package.json', './web/yarn.lock']
-#         )
-#     ]
-# )
-
-# # k8s_yaml automatically creates resources in Tilt for the entities
-# # and will inject any images referenced in the Tiltfile when deploying
-# # https://docs.tilt.dev/api.html#api.k8s_yaml
-# k8s_yaml('deploy/web.yaml')
-
-# # k8s_resource allows customization where necessary such as adding port forwards and labels
-# # https://docs.tilt.dev/api.html#api.k8s_resource
-# k8s_resource(
-#     'web',
-#     port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
-#     labels=['frontend']
-# )
-
 # docker_build(
 #     'tilt-avatar-www',
 #     context='.',
