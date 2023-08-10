@@ -74,39 +74,39 @@ SHELL [ "/bin/bash", "-c" ]
 USER ubuntu
 WORKDIR /home/ubuntu
 
-ENV PATH="/home/ubuntu/.arkade/bin:/home/ubuntu/.local/bin:${PATH}"
+# ENV PATH="/home/ubuntu/.arkade/bin:/home/ubuntu/.local/bin:${PATH}"
 
-RUN git clone https://github.com/anyenv/anyenv /home/ubuntu/.anyenv
-ENV PATH="/home/ubuntu/.anyenv/bin:${PATH}"
-RUN anyenv install --force-init
+# RUN git clone https://github.com/anyenv/anyenv /home/ubuntu/.anyenv
+# ENV PATH="/home/ubuntu/.anyenv/bin:${PATH}"
+# RUN anyenv install --force-init
 
-RUN anyenv install nodenv
-ENV PATH="/home/ubuntu/.anyenv/envs/nodenv/shims:/home/ubuntu/.anyenv/envs/nodenv/bin:${PATH}"
-RUN eval "$(anyenv init -)" && nodenv install ${NODENV_VERSION}
-ENV CDKTF_CLI_VERSION=latest
-RUN npm install --global cdktf-cli@${CDKTF_CLI_VERSION}
+# RUN anyenv install nodenv
+# ENV PATH="/home/ubuntu/.anyenv/envs/nodenv/shims:/home/ubuntu/.anyenv/envs/nodenv/bin:${PATH}"
+# RUN eval "$(anyenv init -)" && nodenv install ${NODENV_VERSION}
+# ENV CDKTF_CLI_VERSION=latest
+# RUN npm install --global cdktf-cli@${CDKTF_CLI_VERSION}
 
-RUN anyenv install pyenv
-ENV PATH="/home/ubuntu/.anyenv/envs/pyenv/shims:/home/ubuntu/.anyenv/envs/pyenv/bin:${PATH}"
-RUN eval "$(anyenv init -)" && pyenv install ${PYENV_VERSION}
-RUN python3 -m pip install --user pipx
-RUN pipx install poetry
-COPY --chown=ubuntu:ubuntu ./pyproject.toml ./poetry.lock* ./
-ENV CMAKE_VERSION=3.27.1
-RUN pip install --user CMake==${CMAKE_VERSION}
-RUN poetry install --no-root
+# RUN anyenv install pyenv
+# ENV PATH="/home/ubuntu/.anyenv/envs/pyenv/shims:/home/ubuntu/.anyenv/envs/pyenv/bin:${PATH}"
+# RUN eval "$(anyenv init -)" && pyenv install ${PYENV_VERSION}
+# RUN python3 -m pip install --user pipx
+# RUN pipx install poetry
+# COPY --chown=ubuntu:ubuntu ./pyproject.toml ./poetry.lock* ./
+# ENV CMAKE_VERSION=3.27.1
+# RUN pip install --user CMake==${CMAKE_VERSION}
+# RUN poetry install --no-root
 
 COPY --chown=ubuntu:ubuntu . ./
-RUN poetry install
+# RUN poetry install
 
-RUN curl -sLS https://get.arkade.dev | sh
-RUN mv arkade /home/ubuntu/.local/bin/arkade
-RUN ln -sf /home/ubuntu/.local/bin/arkade /home/ubuntu/.local/bin/ark
-ENV TERRAFORM_VERSION=1.5.5
-RUN ark get terraform --version ${TERRAFORM_VERSION}
-RUN terraform --version
+# RUN curl -sLS https://get.arkade.dev | sh
+# RUN mv arkade /home/ubuntu/.local/bin/arkade
+# RUN ln -sf /home/ubuntu/.local/bin/arkade /home/ubuntu/.local/bin/ark
+# ENV TERRAFORM_VERSION=1.5.5
+# RUN ark get terraform --version ${TERRAFORM_VERSION}
+# RUN terraform --version
 
-RUN poetry run cdktf get
+# RUN poetry run cdktf get
 
-ENTRYPOINT ["/home/ubuntu/docker-entrypoint.sh"]
-CMD ["--help"]
+# ENTRYPOINT ["/home/ubuntu/docker-entrypoint.sh"]
+# CMD ["--help"]
