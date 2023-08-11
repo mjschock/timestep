@@ -1,20 +1,20 @@
 from cdktf import TerraformDataSource, TerraformOutput
+
+# from timestep.config import AppConfig
+from cdktf_cdktf_provider_cloudinit.data_cloudinit_config import (
+    DataCloudinitConfig,
+    DataCloudinitConfigPart,
+)
+from cdktf_cdktf_provider_cloudinit.provider import CloudinitProvider
+from cdktf_cdktf_provider_local.data_local_file import DataLocalFile
+from cdktf_cdktf_provider_local.file import File
+from cdktf_cdktf_provider_local.provider import LocalProvider
+from cdktf_cdktf_provider_null.provider import NullProvider as NullTerraformProvider
+from cdktf_cdktf_provider_null.resource import Resource
 from cloud_init_gen import CloudInitDoc
 from constructs import Construct
 
 from timestep.config import CloudInstanceProvider, Settings
-
-# from timestep.config import AppConfig
-from timestep.infra.imports.cloudinit.data_cloudinit_config import (
-    DataCloudinitConfig,
-    DataCloudinitConfigPart,
-)
-from timestep.infra.imports.cloudinit.provider import CloudinitProvider
-from timestep.infra.imports.local.data_local_file import DataLocalFile
-from timestep.infra.imports.local.file import File
-from timestep.infra.imports.local.provider import LocalProvider
-from timestep.infra.imports.null.provider import NullProvider as NullTerraformProvider
-from timestep.infra.imports.null.resource import Resource
 
 
 class CloudInitConfigConstruct(Construct):
