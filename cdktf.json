@@ -11,15 +11,7 @@
   "sendCrashReports": "false",
   "terraformModules": [],
   "terraformProviders": [
-    "digitalocean/digitalocean@~> 2.28",
-    "hashicorp/cloudinit@~> 2.3",
     "larstobi/multipass@~> 1.4",
-    "hashicorp/helm@~> 2.10",
-    "hashicorp/kubernetes@~> 2.20",
-    "hashicorp/external@~> 2.3",
-    "namecheap/namecheap@~> 2.1",
-    "hashicorp/local@~> 2.4",
-    "hashicorp/null@~> 3.2",
-    "hashicorp/http@~> 3.4"
+    "namecheap/namecheap@~> 2.1"
   ]
 }

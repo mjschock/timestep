@@ -7,7 +7,7 @@ __pycache__
 .ruff_cache
 secrets/*
 !secrets/.gitkeep
-src/timestep/infra/imports/**/*.jsii.tgz
+# src/timestep/infra/imports/**/*.jsii.tgz
 .ssh
 .venv
 

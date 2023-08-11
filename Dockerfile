@@ -126,10 +126,10 @@ COPY --chown=ubuntu:ubuntu ./pyproject.toml ./poetry.lock* ./
 RUN poetry install --no-root
 
 # Generate cdktf imports with cdktf (requires cdktf-cli from npm, cdktf-lib from poetry, and terraform from arkade)
-RUN mkdir -p src/timestep/infra/imports
-COPY --chown=ubuntu:ubuntu ./src/timestep/infra/imports/ ./src/timestep/infra/imports/
-COPY --chown=ubuntu:ubuntu ./cdktf.json ./
-RUN poetry run cdktf get --language python --log-level WARNING --output src/timestep/infra/imports
+# RUN mkdir -p src/timestep/infra/imports
+# COPY --chown=ubuntu:ubuntu ./src/timestep/infra/imports/ ./src/timestep/infra/imports/
+# COPY --chown=ubuntu:ubuntu ./cdktf.json ./
+# RUN poetry run cdktf get --language python --log-level WARNING --output src/timestep/infra/imports
 
 # Copy the rest of the project and install it with poetry
 COPY --chown=ubuntu:ubuntu . ./
