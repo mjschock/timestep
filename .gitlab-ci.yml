@@ -92,12 +92,16 @@ build:
   # before_script:
   #   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker compose pull || true
-    - docker compose build
-    - docker compose push
-    - docker pull $CI_REGISTRY_IMAGE:latest || true
-    - docker build -t $CI_REGISTRY_IMAGE:latest --build-arg GOENV_VERSION=1.20.2 --progress=plain .
+    # - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE:latest
+    # - docker compose pull || true
+    # - docker compose build
+    # - docker compose push
+    # - docker pull $CI_REGISTRY_IMAGE:latest || true
+    # - docker build -t $CI_REGISTRY_IMAGE:latest --build-arg GOENV_VERSION=1.20.2 --progress=plain .
+    # - docker push $CI_REGISTRY_IMAGE:latest
     # - docker run timestep kompose convert --build local --build-command "helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
   stage: build
   # variables:
@@ -139,6 +143,7 @@ build:
 default:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
   image: docker:${DOCKER_VERSION}
   services:
     - docker:${DOCKER_VERSION}-dind
@@ -160,8 +165,8 @@ deploy:
   # image: python:3.11.3
   script:
     # - docker pull $CI_REGISTRY_IMAGE/timestep:latest || true
-    - docker pull $CI_REGISTRY_IMAGE:latest
-    - docker run timestep poetry run cdktf deploy
+    # - docker pull $CI_REGISTRY_IMAGE:latest
+    - docker run $CI_REGISTRY_IMAGE:latest poetry run cdktf deploy
   stage: deploy
 
 # include:
