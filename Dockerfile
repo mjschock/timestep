@@ -114,6 +114,9 @@ RUN python3 -m pip install --user pipx
 # Install poetry with pipx
 RUN pipx install poetry
 
+# Create virtual env
+RUN python -m venv /home/ubuntu/.venv
+
 # Install CMake with pip
 ENV CMAKE_VERSION=3.27.1
 RUN pip install --user CMake==${CMAKE_VERSION}
