@@ -448,6 +448,150 @@ publication = ">=0.0.3"
 typeguard = ">=2.13.3,<2.14.0"
 
 [[package]]
+name = "cdktf-cdktf-provider-cloudinit"
+version = "7.0.0"
+description = "Prebuilt cloudinit Provider for Terraform CDK (cdktf)"
+optional = false
+python-versions = "~=3.7"
+files = [
+    {file = "cdktf-cdktf-provider-cloudinit-7.0.0.tar.gz", hash = "sha256:528a6556c8f0266da54ee7cad38678c5e69edce629306347c7ab113470169775"},
+    {file = "cdktf_cdktf_provider_cloudinit-7.0.0-py3-none-any.whl", hash = "sha256:d0f74459209ccf87083990b81e6997b251d04b1abebc9155e5844eb199eebbce"},
+]
+
+[package.dependencies]
+cdktf = ">=0.17.0,<0.18.0"
+constructs = ">=10.0.0,<11.0.0"
+jsii = ">=1.84.0,<2.0.0"
+publication = ">=0.0.3"
+typeguard = ">=2.13.3,<2.14.0"
+
+[[package]]
+name = "cdktf-cdktf-provider-digitalocean"
+version = "8.0.0"
+description = "Prebuilt digitalocean Provider for Terraform CDK (cdktf)"
+optional = false
+python-versions = "~=3.7"
+files = [
+    {file = "cdktf-cdktf-provider-digitalocean-8.0.0.tar.gz", hash = "sha256:5d86a556981ec2dec11e51628a7f085ebb01621f00d4c833f80536108158b574"},
+    {file = "cdktf_cdktf_provider_digitalocean-8.0.0-py3-none-any.whl", hash = "sha256:5592314604fa6b403ca26a4d325ed08061c6c7196b385fa4a29da7f48f4dca3d"},
+]
+
+[package.dependencies]
+cdktf = ">=0.17.0,<0.18.0"
+constructs = ">=10.0.0,<11.0.0"
+jsii = ">=1.84.0,<2.0.0"
+publication = ">=0.0.3"
+typeguard = ">=2.13.3,<2.14.0"
+
+[[package]]
+name = "cdktf-cdktf-provider-external"
+version = "7.0.0"
+description = "Prebuilt external Provider for Terraform CDK (cdktf)"
+optional = false
+python-versions = "~=3.7"
+files = [
+    {file = "cdktf-cdktf-provider-external-7.0.0.tar.gz", hash = "sha256:57876a1ac7d62c5a625c85c7f28ea87a988bcc7f0472f62ec6779193a307d75d"},
+    {file = "cdktf_cdktf_provider_external-7.0.0-py3-none-any.whl", hash = "sha256:198d8554dbcff6c0f8d659128a769eba989372a59373a9a11a7574200104e836"},
+]
+
+[package.dependencies]
+cdktf = ">=0.17.0,<0.18.0"
+constructs = ">=10.0.0,<11.0.0"
+jsii = ">=1.84.0,<2.0.0"
+publication = ">=0.0.3"
+typeguard = ">=2.13.3,<2.14.0"
+
+[[package]]
+name = "cdktf-cdktf-provider-helm"
+version = "7.0.0"
+description = "Prebuilt helm Provider for Terraform CDK (cdktf)"
+optional = false
+python-versions = "~=3.7"
+files = [
+    {file = "cdktf-cdktf-provider-helm-7.0.0.tar.gz", hash = "sha256:b5fe478a4695e94896cf7e32ac10301116697e985291f3e79ae82a2223b7170c"},
+    {file = "cdktf_cdktf_provider_helm-7.0.0-py3-none-any.whl", hash = "sha256:7ebaeb81a1cfba110e9f813353f1f5a53f103cadd63e3b01f57a6920a78f33b2"},
+]
+
+[package.dependencies]
+cdktf = ">=0.17.0,<0.18.0"
+constructs = ">=10.0.0,<11.0.0"
+jsii = ">=1.84.0,<2.0.0"
+publication = ">=0.0.3"
+typeguard = ">=2.13.3,<2.14.0"
+
+[[package]]
+name = "cdktf-cdktf-provider-http"
+version = "6.0.0"
+description = "Prebuilt http Provider for Terraform CDK (cdktf)"
+optional = false
+python-versions = "~=3.7"
+files = [
+    {file = "cdktf-cdktf-provider-http-6.0.0.tar.gz", hash = "sha256:f7e725fd5aee234905ec862bffd4b95b42ae34cd8f0012eab8a62c4598776887"},
+    {file = "cdktf_cdktf_provider_http-6.0.0-py3-none-any.whl", hash = "sha256:7b29d305328e156f1efe91954ea24ed08c3b576554b575a3119e8a2bb3cdccc4"},
+]
+
+[package.dependencies]
+cdktf = ">=0.17.0,<0.18.0"
+constructs = ">=10.0.0,<11.0.0"
+jsii = ">=1.84.0,<2.0.0"
+publication = ">=0.0.3"
+typeguard = ">=2.13.3,<2.14.0"
+
+[[package]]
+name = "cdktf-cdktf-provider-kubernetes"
+version = "8.0.0"
+description = "Prebuilt kubernetes Provider for Terraform CDK (cdktf)"
+optional = false
+python-versions = "~=3.7"
+files = [
+    {file = "cdktf-cdktf-provider-kubernetes-8.0.0.tar.gz", hash = "sha256:a27c1dbfcea772208c07aa7e7a113ce7bd7f2844d2a3217931841d5d713e1c78"},
+    {file = "cdktf_cdktf_provider_kubernetes-8.0.0-py3-none-any.whl", hash = "sha256:c682f007a49dd105716b5ff1464fd60ef3388c99aba9c79de277eb4a65bf27d0"},
+]
+
+[package.dependencies]
+cdktf = ">=0.17.0,<0.18.0"
+constructs = ">=10.0.0,<11.0.0"
+jsii = ">=1.84.0,<2.0.0"
+publication = ">=0.0.3"
+typeguard = ">=2.13.3,<2.14.0"
+
+[[package]]
+name = "cdktf-cdktf-provider-local"
+version = "7.0.0"
+description = "Prebuilt local Provider for Terraform CDK (cdktf)"
+optional = false
+python-versions = "~=3.7"
+files = [
+    {file = "cdktf-cdktf-provider-local-7.0.0.tar.gz", hash = "sha256:58c9792c38c08d0467bef9b2ebca426674f9f5c6a3c3ef956f6c464c4664f963"},
+    {file = "cdktf_cdktf_provider_local-7.0.0-py3-none-any.whl", hash = "sha256:bf5c54000dfebe06231bc352b7ef15f9fdcd330c2bf740bb4cb9616a4b533759"},
+]
+
+[package.dependencies]
+cdktf = ">=0.17.0,<0.18.0"
+constructs = ">=10.0.0,<11.0.0"
+jsii = ">=1.84.0,<2.0.0"
+publication = ">=0.0.3"
+typeguard = ">=2.13.3,<2.14.0"
+
+[[package]]
+name = "cdktf-cdktf-provider-null"
+version = "7.0.0"
+description = "Prebuilt null Provider for Terraform CDK (cdktf)"
+optional = false
+python-versions = "~=3.7"
+files = [
+    {file = "cdktf-cdktf-provider-null-7.0.0.tar.gz", hash = "sha256:9cc019545a53c85656d39ad126c09d5c6acc4fe5822ee1ae98df5592fa692bd2"},
+    {file = "cdktf_cdktf_provider_null-7.0.0-py3-none-any.whl", hash = "sha256:38395578909b5cff4f6f7e0381c25c4e94c7d641c275f91889f82f9d50baa6f9"},
+]
+
+[package.dependencies]
+cdktf = ">=0.17.0,<0.18.0"
+constructs = ">=10.0.0,<11.0.0"
+jsii = ">=1.84.0,<2.0.0"
+publication = ">=0.0.3"
+typeguard = ">=2.13.3,<2.14.0"
+
+[[package]]
 name = "certifi"
 version = "2023.7.22"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -4110,4 +4254,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "8958cde181ea2d7c25808799b4815dc6f37c205345bae936942117779468395f"
+content-hash = "9ff954066fec50e1af5921ce5b890992b9d23bb9ddd58468667b4a1a1eabcb65"
