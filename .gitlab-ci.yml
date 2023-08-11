@@ -166,7 +166,7 @@ deploy:
   script:
     # - docker pull $CI_REGISTRY_IMAGE/timestep:latest || true
     # - docker pull $CI_REGISTRY_IMAGE:latest
-    - docker run $CI_REGISTRY_IMAGE:latest make imports
+    # - docker run $CI_REGISTRY_IMAGE:latest make imports
     - docker run $CI_REGISTRY_IMAGE:latest poetry run cdktf deploy --auto-approve timestep.ai
   stage: deploy
 
