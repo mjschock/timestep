@@ -30,7 +30,7 @@ spec:
         io.kompose.service: www
     spec:
       containers:
-        - image: registry.gitlab.com/timestep-ai/timestep/www:1.0.33
+        - image: registry.gitlab.com/timestep-ai/timestep/www:1.0.34
           imagePullPolicy: Always
           name: www
           ports:
