@@ -1,22 +1,21 @@
-ARG UBUNTU_VERSION
+ARG UBUNTU_VERSION=22.04
 
-FROM ubuntu:${UBUNTU_VERSION:-22.04} as base
+FROM ubuntu:${UBUNTU_VERSION} as base
 
 ARG GOENV_VERSION
 ARG NODENV_VERSION
 ARG PYENV_VERSION
 
 ENV GOENV_VERSION=${GOENV_VERSION:-1.20.2}
+ENV LANG en_US.utf8
 ENV NODENV_VERSION=${NODENV_VERSION:-18.15.0}
 ENV PYENV_VERSION=${PYENV_VERSION:-3.11.3}
+ENV TZ=America/Los_Angeles
 
-RUN apt-get update && apt-get install -y \
-  locales \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  locales=2.35-0ubuntu3.1 \
   && rm -rf /var/lib/apt/lists/* \
   && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-
-ENV LANG en_US.utf8
-ENV TZ=America/Los_Angeles
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -124,8 +123,8 @@ COPY --chown=ubuntu:ubuntu ./pyproject.toml ./poetry.lock* ./
 RUN poetry install --no-root
 
 # Generate cdktf imports with cdktf (requires cdktf-cli from npm, cdktf-lib from poetry, and terraform from arkade)
-COPY --chown=ubuntu:ubuntu ./cdktf.json ./
-RUN poetry run cdktf get --force --language python --log-level WARNING --output src/timestep/infra/imports
+# COPY --chown=ubuntu:ubuntu ./cdktf.json ./
+# RUN poetry run cdktf get --force --language python --log-level WARNING --output src/timestep/infra/imports
 
 # Copy the rest of the project and install it with poetry
 COPY --chown=ubuntu:ubuntu . ./
