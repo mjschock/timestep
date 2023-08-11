@@ -20,7 +20,6 @@
     "namecheap/namecheap@~> 2.1",
     "hashicorp/local@~> 2.4",
     "hashicorp/null@~> 3.2",
-    "hashicorp/http@~> 3.4",
-    "timescale/timescale@~> 0.3"
+    "hashicorp/http@~> 3.4"
   ]
 }
