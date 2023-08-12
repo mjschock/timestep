@@ -1,8 +1,8 @@
 import os
 
+from cdktf_cdktf_provider_helm.release import Release
 from constructs import Construct
 from timestep.config import Settings
-from timestep.infra.imports.helm.release import Release
 from timestep.infra.stacks.main.constructs.kubernetes_cluster_ingress.construct import (
     KubernetesClusterIngressConstruct,
 )

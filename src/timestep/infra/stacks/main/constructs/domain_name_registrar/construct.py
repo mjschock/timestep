@@ -1,9 +1,9 @@
 from cdktf import TerraformOutput
+from cdktf_cdktf_provider_http.data_http import DataHttp
+from cdktf_cdktf_provider_http.provider import HttpProvider
 from constructs import Construct
 
 from timestep.config import DomainNameRegistrarProvider, Settings
-from timestep.infra.imports.http.data_http import DataHttp
-from timestep.infra.imports.http.provider import HttpProvider
 from timestep.infra.imports.namecheap.domain_records import DomainRecords
 from timestep.infra.imports.namecheap.provider import NamecheapProvider
 

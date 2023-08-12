@@ -3,21 +3,21 @@ from cdktf import (
     TerraformOutput,
     TerraformProvider,
 )
+from cdktf_cdktf_provider_cloudinit.data_cloudinit_config import DataCloudinitConfig
+from cdktf_cdktf_provider_digitalocean.data_digitalocean_droplet import (
+    DataDigitaloceanDroplet as DigitaloceanDropletTerraformDataSource,
+)
+from cdktf_cdktf_provider_digitalocean.droplet import (
+    Droplet as DigitaloceanDropletTerraformResource,
+)
+from cdktf_cdktf_provider_digitalocean.provider import (
+    DigitaloceanProvider as DigitaloceanTerraformProvider,
+)
+from cdktf_cdktf_provider_digitalocean.ssh_key import SshKey
+from cdktf_cdktf_provider_local.data_local_file import DataLocalFile
 from constructs import Construct
 
 from timestep.config import CloudInstanceProvider, Settings
-from timestep.infra.imports.cloudinit.data_cloudinit_config import DataCloudinitConfig
-from timestep.infra.imports.digitalocean.data_digitalocean_droplet import (
-    DataDigitaloceanDroplet as DigitaloceanDropletTerraformDataSource,
-)
-from timestep.infra.imports.digitalocean.droplet import (
-    Droplet as DigitaloceanDropletTerraformResource,
-)
-from timestep.infra.imports.digitalocean.provider import (
-    DigitaloceanProvider as DigitaloceanTerraformProvider,
-)
-from timestep.infra.imports.digitalocean.ssh_key import SshKey
-from timestep.infra.imports.local.data_local_file import DataLocalFile
 from timestep.infra.imports.multipass.data_multipass_instance import (
     DataMultipassInstance as MultipassInstanceTerraformDataSource,
 )

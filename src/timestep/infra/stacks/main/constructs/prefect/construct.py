@@ -1,7 +1,5 @@
-from constructs import Construct
-from timestep.config import Settings
-from timestep.infra.imports.helm.release import Release, ReleaseSet, ReleaseSetSensitive
-from timestep.infra.imports.kubernetes.ingress_v1 import (
+from cdktf_cdktf_provider_helm.release import Release, ReleaseSet, ReleaseSetSensitive
+from cdktf_cdktf_provider_kubernetes.ingress_v1 import (
     IngressV1,
     IngressV1Metadata,
     IngressV1Spec,
@@ -12,6 +10,8 @@ from timestep.infra.imports.kubernetes.ingress_v1 import (
     IngressV1SpecRuleHttpPathBackendService,
     IngressV1SpecRuleHttpPathBackendServicePort,
 )
+from constructs import Construct
+from timestep.config import Settings
 from timestep.infra.stacks.main.constructs.kubernetes_cluster_ingress.construct import (
     KubernetesClusterIngressConstruct,
 )
