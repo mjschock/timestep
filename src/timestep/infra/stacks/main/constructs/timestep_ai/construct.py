@@ -1,5 +1,3 @@
-import os
-
 from cdktf_cdktf_provider_helm.release import Release
 from constructs import Construct
 from timestep.config import Settings
@@ -23,7 +21,8 @@ class TimestepAIConstruct(Construct):
             id_="timestep_ai_helm_release_resource",
             atomic=True,
             # chart="timestep-ai",
-            chart=f"{os.getcwd()}/timestep-ai",
+            # chart=f"{os.getcwd()}/timestep-ai",
+            chart=f"{config.base_path}/timestep-ai",
             create_namespace=True,
             name="timestep-ai",
             # namespace="registry",

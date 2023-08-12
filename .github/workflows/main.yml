@@ -21,7 +21,7 @@ env:
     NAMECHEAP_API_KEY: ${{ secrets.NAMECHEAP_API_KEY }}
     NAMECHEAP_API_USER: ${{ secrets.NAMECHEAP_API_USER }}
     NAMECHEAP_USER_NAME: ${{ secrets.NAMECHEAP_USER_NAME }}
-    SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+    SSH_PUBLIC_KEY: ${{ vars.SSH_PUBLIC_KEY }}
     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
     TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 
