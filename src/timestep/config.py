@@ -85,12 +85,14 @@ class DomainNameRegistrarProvider(StrEnum):
 
 
 class Settings(BaseSettings):
+    base_path: pathlib.Path = Field(default=BASE_PATH, env="BASE_PATH")
     cdktf_outdir: str = Field(env="CDKTF_OUTDIR")
     cloud_instance_name: str = Field(env="CLOUD_INSTANCE_NAME")
     cloud_instance_provider: str = Field(
         default=CloudInstanceProvider.MULTIPASS, env="CLOUD_INSTANCE_PROVIDER"
     )
     cloud_instance_user: str = Field(env="CLOUD_INSTANCE_USER")
+    dist_path: str = Field(default=DIST_PATH, env="DIST_PATH")
     do_droplet_image: str = Field(default=DO_DROPLET_IMAGE, env="DO_DROPLET_IMAGE")
     do_droplet_region: str = Field(default=DO_DROPLET_REGION, env="DO_DROPLET_REGION")
     do_droplet_size: str = Field(default=DO_DROPLET_SIZE, env="DO_DROPLET_SIZE")
@@ -123,6 +125,9 @@ class Settings(BaseSettings):
     postgresql_password: SecretStr = Field(env="POSTGRESQL_PASSWORD")
     primary_domain_name: str = Field(env="PRIMARY_DOMAIN_NAME")
     ssh_private_key: SecretStr = Field(env="SSH_PRIVATE_KEY")
+    ssh_private_key_path: str = Field(
+        default=f"{BASE_PATH}/secrets/ssh_private_key", env="SSH_PRIVATE_KEY_PATH"
+    )
     ssh_public_key: str = Field(env="SSH_PUBLIC_KEY")
     tf_api_token: SecretStr = Field(default=None, env="TF_API_TOKEN")
     tf_http_address: str = Field(default=None, env="TF_HTTP_ADDRESS")
