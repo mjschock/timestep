@@ -52,7 +52,7 @@ class CloudInstanceConstruct(Construct):
             cloud_instance_provider = DigitaloceanTerraformProvider(
                 id="cloud_instance_provider",
                 scope=scope,
-                token=config.secrets.get_secret_value().get("do_token"),
+                token=config.do_token.get_secret_value(),
             )
 
         else:

@@ -91,6 +91,10 @@ class Settings(BaseSettings):
         default=CloudInstanceProvider.MULTIPASS, env="CLOUD_INSTANCE_PROVIDER"
     )
     cloud_instance_user: str = Field(env="CLOUD_INSTANCE_USER")
+    do_droplet_image: str = Field(default=DO_DROPLET_IMAGE, env="DO_DROPLET_IMAGE")
+    do_droplet_region: str = Field(default=DO_DROPLET_REGION, env="DO_DROPLET_REGION")
+    do_droplet_size: str = Field(default=DO_DROPLET_SIZE, env="DO_DROPLET_SIZE")
+    do_token: SecretStr = Field(env="DO_TOKEN")
     docker_registry_email: str = Field(env="DOCKER_REGISTRY_EMAIL")
     docker_registry_password: SecretStr = Field(env="DOCKER_REGISTRY_PASSWORD")
     docker_registry_server: str = Field(env="DOCKER_REGISTRY_SERVER")
@@ -113,6 +117,9 @@ class Settings(BaseSettings):
     multipass_instance_memory: str = Field(
         default=MULTIPASS_INSTANCE_MEMORY, env="MULTIPASS_INSTANCE_MEMORY"
     )
+    namecheap_api_key: SecretStr = Field(env="NAMECHEAP_API_KEY")
+    namecheap_api_user: str = Field(env="NAMECHEAP_API_USER")
+    namecheap_user_name: str = Field(env="NAMECHEAP_USER_NAME")
     postgresql_password: SecretStr = Field(env="POSTGRESQL_PASSWORD")
     primary_domain_name: str = Field(env="PRIMARY_DOMAIN_NAME")
     ssh_private_key: SecretStr = Field(env="SSH_PRIVATE_KEY")
