@@ -96,6 +96,11 @@ class MainStack(TerraformStack):
             )
 
         else:
+            print(f"Using {config.cloud_instance_provider} backend...")
+            print(f"config.tf_http_address: {config.tf_http_address}")
+            print(f"config.tf_api_token: {config.tf_api_token}")
+            print(f"config.tf_username: {config.tf_username}")
+
             HttpBackend(
                 address=config.tf_http_address,
                 password=config.tf_api_token.get_secret_value(),
