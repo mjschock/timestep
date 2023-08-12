@@ -6,19 +6,31 @@ on:
 #   pull_request:
     # branches: [ "main" ]
 
-# env:
-#   CI_REGISTRY_USER: m.schock
-#   CI_REGISTRY
-#   CI_REGISTRY_IMAGE
-#   CI_REGISTRY_PASSWORD
+env:
+    CI_COMMIT_SHA: ${{ github.sha }}
+    CI_REGISTRY_USER: m.schock
+    CI_REGISTRY: registry.gitlab.com
+    CI_REGISTRY_IMAGE: registry.gitlab.com/timestep-ai/timestep
+    CI_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+    CLOUD_INSTANCE_PROVIDER: ${{ env.CLOUD_INSTANCE_PROVIDER }}
+    DOMAIN_NAME_REGISTRAR_PROVIDER: ${{ env.DOMAIN_NAME_REGISTRAR_PROVIDER }}
+    DO_TOKEN: ${{ secrets.DO_TOKEN }}
+    HTPASSWD: ${{ secrets.HTPASSWD }}
+    KUBECONTEXT: ${{ env.KUBECONTEXT }}
+    PRIMARY_DOMAIN_NAME: ${{ env.PRIMARY_DOMAIN_NAME }}
+    NAMECHEAP_API_KEY: ${{ secrets.NAMECHEAP_API_KEY }}
+    NAMECHEAP_API_USER: ${{ secrets.NAMECHEAP_API_USER }}
+    NAMECHEAP_USER_NAME: ${{ secrets.NAMECHEAP_USER_NAME }}
+    SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+    TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: ./scripts/build.sh
+      run: |
+        ./scripts/before.sh
+        ./scripts/build.sh

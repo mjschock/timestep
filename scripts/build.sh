@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 set -x # echo on
 
-docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
-docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-docker push $CI_REGISTRY_IMAGE:latest
+docker build --cache-from '$CI_REGISTRY_IMAGE':latest --tag '$CI_REGISTRY_IMAGE':'$CI_COMMIT_SHA' --tag '$CI_REGISTRY_IMAGE':latest .
+docker push '$CI_REGISTRY_IMAGE':'$CI_COMMIT_SHA'
+docker push '$CI_REGISTRY_IMAGE':latest
 # docker compose pull || true
 # docker compose build
 # docker compose push
