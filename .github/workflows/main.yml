@@ -24,6 +24,7 @@ env:
     SSH_PUBLIC_KEY: ${{ vars.SSH_PUBLIC_KEY }}
     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
     TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+    TF_USERNAME: ${{ vars.TF_USERNAME }}
 
 jobs:
   build:
