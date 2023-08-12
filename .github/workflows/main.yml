@@ -34,3 +34,12 @@ jobs:
       run: |
         ./scripts/before.sh
         ./scripts/build.sh
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+    - name: Deploy
+      run: |
+        ./scripts/deploy.sh
