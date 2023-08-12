@@ -117,9 +117,9 @@ class Settings(BaseSettings):
     multipass_instance_memory: str = Field(
         default=MULTIPASS_INSTANCE_MEMORY, env="MULTIPASS_INSTANCE_MEMORY"
     )
-    namecheap_api_key: SecretStr = Field(env="NAMECHEAP_API_KEY")
-    namecheap_api_user: str = Field(env="NAMECHEAP_API_USER")
-    namecheap_user_name: str = Field(env="NAMECHEAP_USER_NAME")
+    namecheap_api_key: SecretStr = Field(default=None, env="NAMECHEAP_API_KEY")
+    namecheap_api_user: str = Field(default=None, env="NAMECHEAP_API_USER")
+    namecheap_user_name: str = Field(default=None, env="NAMECHEAP_USER_NAME")
     postgresql_password: SecretStr = Field(env="POSTGRESQL_PASSWORD")
     primary_domain_name: str = Field(env="PRIMARY_DOMAIN_NAME")
     ssh_private_key: SecretStr = Field(env="SSH_PRIVATE_KEY")
