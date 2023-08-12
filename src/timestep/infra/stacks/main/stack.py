@@ -336,7 +336,7 @@ class MainStack(TerraformStack):
             # )  # noqa: E501
 
             HttpBackend(
-                address=config.variables.get("tf_http_address"),
-                password=config.secrets.get_secret_value().get("tf_api_token"),
-                username=config.variables.get("tf_username"),
+                address=config.tf_http_address,
+                password=config.tf_api_token.get_secret_value(),
+                username=config.tf_username,
             )

@@ -124,6 +124,9 @@ class Settings(BaseSettings):
     primary_domain_name: str = Field(env="PRIMARY_DOMAIN_NAME")
     ssh_private_key: SecretStr = Field(env="SSH_PRIVATE_KEY")
     ssh_public_key: str = Field(env="SSH_PUBLIC_KEY")
+    tf_api_token: SecretStr = Field(default=None, env="TF_API_TOKEN")
+    tf_http_address: str = Field(default=None, env="TF_HTTP_ADDRESS")
+    tf_username: str = Field(default=None, env="TF_USERNAME")
     registry_admin_password: SecretStr = Field(
         env="REGISTRY_ADMIN_PASSWORD"
     )  # TODO: HARBOR_ADMIN_PASSWORD?  # noqa: E501

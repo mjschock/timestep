@@ -176,7 +176,7 @@ deploy:
     # - docker pull $CI_REGISTRY_IMAGE/timestep:latest || true
     # - docker pull $CI_REGISTRY_IMAGE:latest
     # - docker run $CI_REGISTRY_IMAGE:latest make imports
-    - docker run --env-file .env --env SSH_PRIVATE_KEY='$SSH_PRIVATE_KEY' --env PRIMARY_DOMAIN_NAME='$PRIMARY_DOMAIN_NAME' --env CLOUD_INSTANCE_PROVIDER=$CLOUD_INSTANCE_PROVIDER $CI_REGISTRY_IMAGE:latest poetry run cdktf deploy --auto-approve $PRIMARY_DOMAIN_NAME
+    - docker run --env-file .env --env SSH_PRIVATE_KEY='$SSH_PRIVATE_KEY' --env PRIMARY_DOMAIN_NAME='$PRIMARY_DOMAIN_NAME' --env CLOUD_INSTANCE_PROVIDER=$CLOUD_INSTANCE_PROVIDER --env TF_API_TOKEN=${CI_JOB_TOKEN} $CI_REGISTRY_IMAGE:latest poetry run cdktf deploy --auto-approve $PRIMARY_DOMAIN_NAME
   stage: deploy
 
 # include:
