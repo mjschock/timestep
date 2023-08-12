@@ -103,7 +103,12 @@ class MainStack(TerraformStack):
 
             HttpBackend(
                 address=config.tf_http_address,
+                lock_address=f"{config.tf_http_address}/lock",
+                lock_method="POST",
                 password=config.tf_api_token.get_secret_value(),
+                retry_wait_min=5,
                 scope=self,
+                unlock_address=f"{config.tf_http_address}/lock",
+                unlock_method="DELETE",
                 username=config.tf_username,
             )
