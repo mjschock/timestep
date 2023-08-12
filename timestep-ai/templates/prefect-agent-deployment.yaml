@@ -42,7 +42,7 @@ spec:
           env:
             - name: PREFECT_API_URL
               value: http://prefect-server:4200/api
-          image: prefecthq/prefect:2.11.0-python3.11
+          image: prefecthq/prefect:2.11.3-python3.11
           name: prefect-agent
           resources: {}
       restartPolicy: Always
