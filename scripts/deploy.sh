@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -x # echo on
 
 docker run \
  --env-file .env \
