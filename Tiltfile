@@ -228,9 +228,9 @@ local_resource(
     # ]
 )
 
-watch_file('timestep-ai')
+# watch_file('timestep-ai')
 
-if os.path.exists('timestep-ai'):
+# if os.path.exists('timestep-ai'):
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/caddy',
     #     context='./src/timestep/services/caddy',
@@ -245,36 +245,36 @@ if os.path.exists('timestep-ai'):
     #     # ]
     # )
 
-    custom_build(
-        'registry.gitlab.com/timestep-ai/timestep/caddy',
-        command='docker build -t $EXPECTED_REF src/timestep/services/caddy',
-        deps=['src/timestep/services/caddy'],
-        disable_push=True,
-        live_update=[
-            sync('./src/timestep/services/caddy/', '/etc/caddy/'),
-            run(
-                'caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile',
-                trigger=['./src/timestep/services/caddy/Caddyfile']
-            )
-        ],
-        skips_local_docker=True,
-        # tag='latest',
-        tag=str(local(command='echo $VERSION')).strip(),
-    )
+    # custom_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/caddy',
+    #     command='docker build -t $EXPECTED_REF src/timestep/services/caddy',
+    #     deps=['src/timestep/services/caddy'],
+    #     disable_push=True,
+    #     live_update=[
+    #         sync('./src/timestep/services/caddy/', '/etc/caddy/'),
+    #         run(
+    #             'caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile',
+    #             trigger=['./src/timestep/services/caddy/Caddyfile']
+    #         )
+    #     ],
+    #     skips_local_docker=True,
+    #     # tag='latest',
+    #     tag=str(local(command='echo $VERSION')).strip(),
+    # )
 
-    docker_build(
-        'registry.gitlab.com/timestep-ai/timestep/api',
-        context='./src/timestep/services/api',
-        dockerfile='./src/timestep/services/api/Dockerfile',
-        only=['.'],
-        live_update=[
-            sync('./src/timestep/services/api/', '/app/api/'),
-            run(
-                'pip install -r /app/requirements.txt',
-                trigger=['./src/timestep/services/api/requirements.txt']
-            )
-        ]
-    )
+    # docker_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/api',
+    #     context='./src/timestep/services/api',
+    #     dockerfile='./src/timestep/services/api/Dockerfile',
+    #     only=['.'],
+    #     live_update=[
+    #         sync('./src/timestep/services/api/', '/app/api/'),
+    #         run(
+    #             'pip install -r /app/requirements.txt',
+    #             trigger=['./src/timestep/services/api/requirements.txt']
+    #         )
+    #     ]
+    # )
 
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/web',
@@ -309,19 +309,19 @@ if os.path.exists('timestep-ai'):
     #     ]
     # )
 
-    custom_build(
-        'registry.gitlab.com/timestep-ai/timestep/www',
-        command='docker build -t $EXPECTED_REF src/timestep/services/www',
-        deps=['src/timestep/services/www'],
-        disable_push=True,
-        entrypoint=['npm', 'run', 'dev'],
-        # entrypoint=['npm', 'run', 'serve'],
-        # entrypoint=['tail', '-f', '/dev/null'],
-        ignore=['dist', 'src-capacitor', 'src-electron'],
-        skips_local_docker=True,
-        # tag='latest',
-        tag=str(local(command='echo $VERSION')).strip(),
-    )
+    # custom_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/www',
+    #     command='docker build -t $EXPECTED_REF src/timestep/services/www',
+    #     deps=['src/timestep/services/www'],
+    #     disable_push=True,
+    #     entrypoint=['npm', 'run', 'dev'],
+    #     # entrypoint=['npm', 'run', 'serve'],
+    #     # entrypoint=['tail', '-f', '/dev/null'],
+    #     ignore=['dist', 'src-capacitor', 'src-electron'],
+    #     skips_local_docker=True,
+    #     # tag='latest',
+    #     tag=str(local(command='echo $VERSION')).strip(),
+    # )
 
     # k8s_yaml(local('helm template timestep-ai'))
 
