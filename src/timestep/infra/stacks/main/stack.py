@@ -86,11 +86,9 @@ class MainStack(TerraformStack):
         #     scope=self,
         # )
 
-        stack_id = config.primary_domain_name
-
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             LocalBackend(
-                path=f"terraform.{stack_id}.tfstate",
+                path=f"terraform.{config.primary_domain_name}.tfstate",
                 scope=self,
                 workspace_dir=None,
             )

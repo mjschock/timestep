@@ -47,7 +47,7 @@ local_resource(
 
 local_resource(
     'poetry run cdktf deploy',
-    cmd='poetry run cdktf deploy --auto-approve $STACK_ID',
+    cmd='poetry run cdktf deploy --auto-approve $PRIMARY_DOMAIN_NAME',
     deps=[
         '.env',
         'cdktf.json',
@@ -69,7 +69,7 @@ local_resource(
         'timestep-ai-0.0.1.tgz',
     ],
     env={
-        'STACK_ID': os.getenv('PRIMARY_DOMAIN_NAME'),
+        'PRIMARY_DOMAIN_NAME': os.getenv('PRIMARY_DOMAIN_NAME'),
     },
     labels=['deploy'],
     resource_deps=[
@@ -77,9 +77,9 @@ local_resource(
 )
 
 cmd_button('poetry run cdktf destroy',
-    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $STACK_ID'],
+    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $PRIMARY_DOMAIN_NAME'],
     env=[
-        'STACK_ID=' + os.getenv('PRIMARY_DOMAIN_NAME'),
+        'PRIMARY_DOMAIN_NAME=' + os.getenv('PRIMARY_DOMAIN_NAME'),
     ],
     icon_name='delete',
     inputs=[
