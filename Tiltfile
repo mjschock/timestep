@@ -17,6 +17,15 @@ local_resource(
 )
 
 local_resource(
+    'prefect server start',
+    auto_init=False,
+    serve_cmd='poetry run prefect server start',
+    resource_deps=[
+        'poetry install',
+    ],
+)
+
+local_resource(
     'poetry run cdktf get',
     auto_init=False,
     cmd='make imports',
