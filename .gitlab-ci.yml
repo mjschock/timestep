@@ -1,144 +1,13 @@
-# This is a sample GitLab CI/CD configuration file that should run without any modifications.
-# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
-# it uses echo commands to simulate the pipeline execution.
-#
-# A pipeline is composed of independent jobs that run scripts, grouped into stages.
-# Stages run in sequential order, but jobs within stages run in parallel.
-#
-# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-#
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
-
-# build-job:       # This job runs in the build stage, which runs first.
-#   image: $CI_REGISTRY/group/project/docker:20.10.16
-#   script:
-#     - echo "Compiling the code..."
-#     # - curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash
-#     # - ./bin/act -l
-#     # - ./bin/act pull_request -l
-#     # - ./bin/act push -l
-#     # - ./bin/arkade get docker-compose
-#     # - export PATH=$PATH:$HOME/.arkade/bin/
-#     # - docker-compose build
-#     # - docker-compose push
-#     # - docker build -t my-docker-image .
-#     - docker compose build
-#     - echo "Compile complete."
-#   services:
-#     - alias: docker
-#       name: $CI_REGISTRY/group/project/docker:20.10.16-dind
-#   stage: build
-
-# build:
-#   before_script:
-#     - echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
-#   script:
-#     # - docker build -t my-docker-image .
-#     - docker compose build
-#     # - docker run my-docker-image /script/to/run/tests
-#   stage: build
-
-# build:
-#   # before_script:
-#   #   - echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
-#   # script:
-#     # - docker build -t my-docker-image .
-#     # - docker run my-docker-image /script/to/run/tests
-#   script:
-#     # - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$(cat secrets/docker_registry_password)"
-#     # - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$DOCKER_REGISTRY_PASS"
-#     # - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$CI_REGISTRY_PASSWORD"
-#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#     - docker compose build
-#     - docker compose push
-#   stage: build
-
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Terraform.gitlab-ci.yml
-
-# .dagger:
-#   before_script:
-#     - apk add docker-cli
-#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#     - ./bin/arkade get docker-compose
-#     - export PATH=$PATH:$HOME/.arkade/bin/
-#   extends: [.docker]
-
-# .docker:
-#   image: python:3.11-alpine
-#   services:
-#     - docker:${DOCKER_VERSION}-dind
-#   variables:
-#     DOCKER_CERT_PATH: '/certs/client'
-#     DOCKER_DRIVER: overlay2
-#     DOCKER_HOST: tcp://docker:2376
-#     DOCKER_TLS_CERTDIR: '/certs'
-#     DOCKER_TLS_VERIFY: '1'
-#     DOCKER_VERSION: '20.10.16'
-
 build:
-  # extends: [.dagger]
-  # image: python:3.11-alpine
-  # services:
-  #   - docker:${DOCKER_VERSION}-dind
-  # before_script:
-  #   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    # - docker pull $CI_REGISTRY_IMAGE:latest || true
     - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY_IMAGE:latest
     # - docker compose pull || true
     # - docker compose build
     # - docker compose push
-    # - docker pull $CI_REGISTRY_IMAGE:latest || true
-    # - docker build -t $CI_REGISTRY_IMAGE:latest --build-arg GOENV_VERSION=1.20.2 --progress=plain .
-    # - docker push $CI_REGISTRY_IMAGE:latest
     # - docker run timestep kompose convert --build local --build-command "helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
   stage: build
-  # variables:
-  #   DOCKER_CERT_PATH: '/certs/client'
-  #   DOCKER_DRIVER: overlay2
-  #   DOCKER_HOST: tcp://docker:2376
-  #   DOCKER_TLS_CERTDIR: '/certs'
-  #   DOCKER_TLS_VERIFY: '1'
-  #   DOCKER_VERSION: '20.10.16'
-
-# build-python:
-#   dependencies:
-#     - build-docker
-#   # extends: [.dagger]
-#   image: python:3.11-bookworm
-#   # services:
-#   #   - docker:${DOCKER_VERSION}-dind
-#   script:
-#     - python3 --version
-#     - which python3
-#     - pip3 --version
-#     - which pip3
-#     - python3 -m pip install --user pipx
-#     - python3 -m pipx ensurepath
-#     - export PATH=$PATH:$HOME/.local/bin
-#     - pipx install poetry
-#     - poetry install
-#     # - pip install .
-#     # - python main.py
-#   stage: build
-
-# build:
-#   script:
-#     - docker compose pull || true
-#     - docker compose build
-#     - docker compose push
-#   stage: build
 
 default:
   before_script:
@@ -147,101 +16,22 @@ default:
   image: docker:${DOCKER_VERSION}
   services:
     - docker:${DOCKER_VERSION}-dind
-    # - python:3.11.3-alpine
 
 deploy:
-  # before_script:
-  #   # - pwd
-  #   # - ls -al
-  #   # - python --version
-  #   # - which python
-  #   # - poetry install
-  #   # - poetry run cdktf get
-  #   - docker run timestep poetry run cdktf plan
-  # dependencies:
-    # - build-
-  # environment:
-    # name: $CI_ENVIRONMENT_SLUG
-    # url: https://$CI_ENVIRONMENT_SLUG.$CI_PAGES_DOMAIN
-  #   docker_registry_password: glpat-u7WdRLVwfxoM2ydy4FUy
-  #   htpasswd: user:$2y$05$kd9NmZYT9qykQ.do1r29V.Ag9vGk.Jp8MZqlfBdc3zfdD1qHNxyjm
-  #   postgresql_password: prefect-rocks
-  #   registry_admin_password: c92d32a8-2db1-11ee-9c19-074530778110
-  #   ssh_private_key: ssh_private_key
-      # input: DOCKER_REGISTRY_PASSWORD
-      # variable: DOCKER_REGISTRY_PASSWORD
-    # name: $TF_STATE_NAME
-  # image: python:3.11.3
   script:
-    # - docker pull $CI_REGISTRY_IMAGE/timestep:latest || true
-    # - docker pull $CI_REGISTRY_IMAGE:latest
-    # - docker run $CI_REGISTRY_IMAGE:latest make imports
-    - docker run --env-file .env --env SSH_PRIVATE_KEY='$SSH_PRIVATE_KEY' --env PRIMARY_DOMAIN_NAME='$PRIMARY_DOMAIN_NAME' --env CLOUD_INSTANCE_PROVIDER=$CLOUD_INSTANCE_PROVIDER --env TF_API_TOKEN=${CI_JOB_TOKEN} $CI_REGISTRY_IMAGE:latest poetry run cdktf deploy --auto-approve $PRIMARY_DOMAIN_NAME
+    - docker run \
+      --env-file .env \
+      --env CLOUD_INSTANCE_PROVIDER=$CLOUD_INSTANCE_PROVIDER \
+      --env HTPASSWD=$HTPASSWD \
+      --env PRIMARY_DOMAIN_NAME=$PRIMARY_DOMAIN_NAME \
+      --env SSH_PRIVATE_KEY=$SSH_PRIVATE_KEY \
+      --env TF_API_TOKEN=$CI_JOB_TOKEN \
+      $CI_REGISTRY_IMAGE:latest poetry run cdktf deploy --auto-approve $PRIMARY_DOMAIN_NAME
   stage: deploy
 
-# include:
-#   - template: Terraform/Base.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.gitlab-ci.yml
-#   - template: Jobs/SAST-IaC.gitlab-ci.yml   # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Jobs/SAST-IaC.gitlab-ci.yml
-
-# deploy-job:      # This job runs in the deploy stage.
-#   environment: production
-#   script:
-#     - echo "Deploying application..."
-#     - echo "Application successfully deployed."
-#   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-
-# lint-test-job:   # This job also runs in the test stage.
-#   script:
-#     - echo "Linting code... This will take about 10 seconds."
-#     - sleep 10
-#     - echo "No lint issues found."
-#   stage: test    # It can run at the same time as unit-test-job (in parallel).
-
-# stages:          # List of stages for jobs, and their order of execution
-#   - build
-#   - test
-#   - deploy
-
-# unit-test-job:   # This job runs in the test stage.
-#   script:
-#     - echo "Running unit tests... This will take about 60 seconds."
-#     - sleep 60
-#     - echo "Code coverage is 90%"
-#   stage: test    # It only starts when the job in the build stage completes successfully.
-
-# variables:
-#   PROJECT1_PIPELINE_NAME: 'Default pipeline name'  # A default is not required.
-
-# workflow:
-#   name: '$PROJECT1_PIPELINE_NAME'
-#   rules:
-#     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-#       variables:
-#         PROJECT1_PIPELINE_NAME: 'MR pipeline: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME'
-#     - if: '$CI_MERGE_REQUEST_LABELS =~ /pipeline:run-in-ruby3/'
-#       variables:
-#         PROJECT1_PIPELINE_NAME: 'Ruby 3 pipeline'
-
 stages:
-  # - validate
-  # - test
   - build
   - deploy
-  # - cleanup
-
-# fmt:
-#   extends: .terraform:fmt
-#   needs: []
-
-# validate:
-#   extends: .terraform:validate
-#   needs: []
-
-# variables:
-#   # Use TLS https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#tls-enabled
-#   DOCKER_HOST: tcp://docker:2376
-#   DOCKER_TLS_CERTDIR: "/certs"
-#   TF_STATE_NAME: timestep.ai
 
 variables:
   CLOUD_INSTANCE_PROVIDER: 'digitalocean'
@@ -254,29 +44,13 @@ variables:
   DOCKER_VERSION: '20.10.16'
   HTPASSWD: 'user:$2y$05$kd9NmZYT9qykQ.do1r29V.Ag9vGk.Jp8MZqlfBdc3zfdD1qHNxyjm'
   POSTGRESQL_PASSWORD: 'prefect-rocks'
-  # PRIMARY_DOMAIN_NAME: 'timestep.ai'
-  PRIMARY_DOMAIN_NAME: 'timestep.local'
+  PRIMARY_DOMAIN_NAME: 'timestep.ai'
+  # PRIMARY_DOMAIN_NAME: 'timestep.local'
   REGISTRY_ADMIN_PASSWORD: 'c92d32a8-2db1-11ee-9c19-074530778110'
   SSH_PRIVATE_KEY: 'ssh_private_key_from_variables_in_gitlab'
   # STACK_ID: 'timestep.ai'
-
-# build:
-#   extends: .terraform:build
-#   environment:
-#     name: $TF_STATE_NAME
-#     action: prepare
-
-# deploy:
-#   extends: .terraform:deploy
-#   dependencies:
-#     - build
-#   environment:
-#     name: $TF_STATE_NAME
-#     action: start
 
 workflow:
   rules:
     # - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       - if: $CI_PIPELINE_SOURCE == "push"
-  # script:
-  #   - ./bin/act -s DOCKER_REGISTRY_PASSWORD="$(cat secrets/docker_registry_password)"
