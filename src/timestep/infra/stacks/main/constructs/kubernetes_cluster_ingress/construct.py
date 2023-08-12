@@ -1,8 +1,8 @@
+from cdktf_cdktf_provider_helm.provider import HelmProvider, HelmProviderKubernetes
+from cdktf_cdktf_provider_helm.release import Release
+from cdktf_cdktf_provider_kubernetes.provider import KubernetesProvider
 from constructs import Construct
 from timestep.config import Settings
-from timestep.infra.imports.helm.provider import HelmProvider, HelmProviderKubernetes
-from timestep.infra.imports.helm.release import Release
-from timestep.infra.imports.kubernetes.provider import KubernetesProvider
 from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
 )

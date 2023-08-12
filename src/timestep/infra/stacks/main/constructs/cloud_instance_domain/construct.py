@@ -1,22 +1,22 @@
 from cdktf import (
     TerraformOutput,
 )
+from cdktf_cdktf_provider_digitalocean.data_digitalocean_domain import (
+    DataDigitaloceanDomain as DigitaloceanDomainTerraformDataSource,
+)
+from cdktf_cdktf_provider_digitalocean.domain import (
+    Domain as DigitaloceanDomainTerraformResource,
+)
+from cdktf_cdktf_provider_local.data_local_file import (
+    DataLocalFile as LocalFileTerraformDataSource,
+)
+from cdktf_cdktf_provider_local.file import File as LocalFileTerraformResource
+from cdktf_cdktf_provider_local.provider import (
+    LocalProvider as LocalTerraformProvider,
+)
 from constructs import Construct
 
 from timestep.config import CloudInstanceProvider, Settings
-from timestep.infra.imports.digitalocean.data_digitalocean_domain import (
-    DataDigitaloceanDomain as DigitaloceanDomainTerraformDataSource,
-)
-from timestep.infra.imports.digitalocean.domain import (
-    Domain as DigitaloceanDomainTerraformResource,
-)
-from timestep.infra.imports.local.data_local_file import (
-    DataLocalFile as LocalFileTerraformDataSource,
-)
-from timestep.infra.imports.local.file import File as LocalFileTerraformResource
-from timestep.infra.imports.local.provider import (
-    LocalProvider as LocalTerraformProvider,
-)
 from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
 )

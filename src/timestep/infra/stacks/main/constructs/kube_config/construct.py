@@ -1,13 +1,13 @@
 import tempfile
 
 from cdktf import LocalExecProvisioner
+from cdktf_cdktf_provider_local.data_local_file import DataLocalFile
+from cdktf_cdktf_provider_local.provider import LocalProvider
+from cdktf_cdktf_provider_null.provider import NullProvider
+from cdktf_cdktf_provider_null.resource import Resource
 from constructs import Construct
 from pydantic import SecretStr
 from timestep.config import CloudInstanceProvider, Settings
-from timestep.infra.imports.local.data_local_file import DataLocalFile
-from timestep.infra.imports.local.provider import LocalProvider
-from timestep.infra.imports.null.provider import NullProvider
-from timestep.infra.imports.null.resource import Resource
 from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
 )
