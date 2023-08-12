@@ -176,7 +176,7 @@ deploy:
     # - docker pull $CI_REGISTRY_IMAGE/timestep:latest || true
     # - docker pull $CI_REGISTRY_IMAGE:latest
     # - docker run $CI_REGISTRY_IMAGE:latest make imports
-    - docker run --env-file .env --env SSH_PRIVATE_KEY='$SSH_PRIVATE_KEY' $CI_REGISTRY_IMAGE:latest poetry run cdktf deploy --auto-approve timestep.ai
+    - docker run --env-file .env --env SSH_PRIVATE_KEY='$SSH_PRIVATE_KEY' --env PRIMARY_DOMAIN_NAME='$PRIMARY_DOMAIN_NAME' $CI_REGISTRY_IMAGE:latest poetry run cdktf deploy --auto-approve $PRIMARY_DOMAIN_NAME
   stage: deploy
 
 # include:
@@ -253,8 +253,10 @@ variables:
   DOCKER_VERSION: '20.10.16'
   HTPASSWD: 'user:$2y$05$kd9NmZYT9qykQ.do1r29V.Ag9vGk.Jp8MZqlfBdc3zfdD1qHNxyjm'
   POSTGRESQL_PASSWORD: 'prefect-rocks'
+  PRIMARY_DOMAIN_NAME: 'timestep.ai'
   REGISTRY_ADMIN_PASSWORD: 'c92d32a8-2db1-11ee-9c19-074530778110'
   SSH_PRIVATE_KEY: 'ssh_private_key_from_variables_in_gitlab'
+  # STACK_ID: 'timestep.ai'
 
 # build:
 #   extends: .terraform:build
