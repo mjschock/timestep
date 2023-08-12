@@ -32,25 +32,39 @@ class KubeConfigConstruct(Construct):
 
         kubecontext = config.kubecontext
         local_path = "kubeconfig"
-        # ssh_private_key: SecretStr = config.secrets.get_secret_value().get(
-        #     "ssh_private_key"
-        # )
-        ssh_private_key: SecretStr = config.ssh_private_key
         username = config.cloud_instance_user
 
-        with tempfile.NamedTemporaryFile(
-            delete=False,
-            # dir=DIST_PATH,
-        ) as fp:
-            fp.write(ssh_private_key.get_secret_value().encode())
-            fp.flush()
+        if config.ssh_private_key is not None:
+            print("Using ssh_private_key")
+            ssh_private_key: SecretStr = config.ssh_private_key
 
-            ssh_key_path = fp.name
+            with tempfile.NamedTemporaryFile(
+                delete=False,
+                dir=config.dist_path,
+            ) as fp:
+                fp.write(ssh_private_key.get_secret_value().encode())
+                fp.flush()
+
+                ssh_key_path = fp.name
+
+                local_exec_provisioner = LocalExecProvisioner(
+                    command=f"k3sup install --context {kubecontext} --ip {ipv4} --k3s-extra-args '--disable traefik' --local-path {local_path} --skip-install --ssh-key {ssh_key_path} --user {username} && rm {ssh_key_path}",  # noqa: E501
+                    type="local-exec",
+                )
+
+        elif config.ssh_private_key_path is not None:
+            print("Using ssh_private_key_path")
+            ssh_key_path = config.ssh_private_key_path
 
             local_exec_provisioner = LocalExecProvisioner(
-                command=f"k3sup install --context {kubecontext} --ip {ipv4} --k3s-extra-args '--disable traefik' --local-path {local_path} --skip-install --ssh-key {ssh_key_path} --user {username} && rm {ssh_key_path}",  # noqa: E501
+                command=f"k3sup install --context {kubecontext} --ip {ipv4} --k3s-extra-args '--disable traefik' --local-path {local_path} --skip-install --ssh-key {ssh_key_path} --user {username}",  # noqa: E501
                 type="local-exec",
             )
+
+        else:
+            raise ValueError(
+                "Must provide either ssh_private_key or ssh_private_key_path"
+            )  # noqa: E501
 
         kube_config_provider = NullProvider(
             alias="kube_config_provider",
