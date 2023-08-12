@@ -207,6 +207,27 @@ default_registry('registry.gitlab.com/timestep-ai/timestep')
 #     # labels=['world']
 # )
 
+local_resource(
+    'kompose convert',
+    # cmd='kompose convert --build local --build-command "docker build -t registry.gitlab.com/timestep-ai/timestep/www ." --file docker-compose.yml --push-image --push-command "docker push registry.gitlab.com/timestep-ai/timestep/www" --push-image-registry registry.gitlab.com --out deploy/www.yaml --secrets-as-files --verbose',
+    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    # cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
+    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    # cmd='kompose convert --build local --build-command "helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
+    # cmd="./scripts/kompose-convert.sh",
+    deps=[
+        '.env',
+        # 'Caddyfile',
+        'docker-compose.yml',
+        # 'www',
+    ],
+    labels=['build'],
+    # resource_deps=[
+    #     'regctl image import www',
+    # ]
+)
+
 watch_file('timestep-ai')
 
 if os.path.exists('timestep-ai'):
@@ -302,21 +323,21 @@ if os.path.exists('timestep-ai'):
         tag=str(local(command='echo $VERSION')).strip(),
     )
 
-    k8s_yaml(local('helm template timestep-ai'))
+    # k8s_yaml(local('helm template timestep-ai'))
 
 # watch_file('timestep-ai')
 
-    k8s_resource(
-        'caddy',
-        # labels=['release'],
-        links=['https://' + str(local(command='echo $PRIMARY_DOMAIN_NAME')).strip()],
-    )
+    # k8s_resource(
+    #     'caddy',
+    #     # labels=['release'],
+    #     links=['https://' + str(local(command='echo $PRIMARY_DOMAIN_NAME')).strip()],
+    # )
 
-    k8s_resource(
-        'api',
-        port_forwards='5734:5000',
-        # labels=['backend'],
-    )
+    # k8s_resource(
+    #     'api',
+    #     port_forwards='5734:5000',
+    #     # labels=['backend'],
+    # )
 
     # k8s_resource(
     #     'dashboard',
@@ -324,11 +345,11 @@ if os.path.exists('timestep-ai'):
     #     labels=['backend', 'frontend'],
     # )
 
-    k8s_resource(
-        'prefect-server',
-        port_forwards='4200:4200',
-        # labels=['backend', 'frontend'],
-    )
+    # k8s_resource(
+    #     'prefect-server',
+    #     port_forwards='4200:4200',
+    #     # labels=['backend', 'frontend'],
+    # )
 
     # k8s_resource(
     #     'web',
@@ -336,12 +357,12 @@ if os.path.exists('timestep-ai'):
     #     labels=['frontend'],
     # )
 
-    k8s_resource(
-        'www',
-        # port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
-        port_forwards='9200:9000',
-        # labels=['frontend'],
-    )
+    # k8s_resource(
+    #     'www',
+    #     # port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
+    #     port_forwards='9200:9000',
+    #     # labels=['frontend'],
+    # )
 
 # local_resource(
 #     'docker build',
@@ -403,24 +424,3 @@ if os.path.exists('timestep-ai'):
 #         'docker save www',
 #     ],
 # )
-
-local_resource(
-    'kompose convert',
-    # cmd='kompose convert --build local --build-command "docker build -t registry.gitlab.com/timestep-ai/timestep/www ." --file docker-compose.yml --push-image --push-command "docker push registry.gitlab.com/timestep-ai/timestep/www" --push-image-registry registry.gitlab.com --out deploy/www.yaml --secrets-as-files --verbose',
-    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
-    # cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
-    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
-    # cmd='kompose convert --build local --build-command "helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
-    cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
-    # cmd="./scripts/kompose-convert.sh",
-    deps=[
-        '.env',
-        # 'Caddyfile',
-        'docker-compose.yml',
-        # 'www',
-    ],
-    labels=['build'],
-    # resource_deps=[
-    #     'regctl image import www',
-    # ]
-)

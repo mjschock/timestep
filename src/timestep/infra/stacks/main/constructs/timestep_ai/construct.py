@@ -1,4 +1,4 @@
-from cdktf_cdktf_provider_helm.release import Release
+from cdktf_cdktf_provider_helm.release import Release, ReleaseSet
 from constructs import Construct
 from timestep.config import Settings
 from timestep.infra.stacks.main.constructs.kubernetes_cluster_ingress.construct import (
@@ -30,6 +30,14 @@ class TimestepAIConstruct(Construct):
             # repository="https://charts.bitnami.com/bitnami",
             provider=kubernetes_cluster_ingress_construct.helm_provider,
             set=[
+                ReleaseSet(
+                    name="app.kubernetes.io\\/managed-by",
+                    value="Helm",
+                ),
+                ReleaseSet(
+                    name="meta.helm.sh\\/release-name",
+                    value="timestep-ai",
+                ),
                 # ReleaseSet(
                 #     name="externalURL",
                 #     value=f"https://registry.{config.primary_domain_name}",
