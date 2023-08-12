@@ -161,6 +161,13 @@ deploy:
   # dependencies:
     # - build-
   # environment:
+  #   docker_registry_password: glpat-u7WdRLVwfxoM2ydy4FUy
+  #   htpasswd: user:$2y$05$kd9NmZYT9qykQ.do1r29V.Ag9vGk.Jp8MZqlfBdc3zfdD1qHNxyjm
+  #   postgresql_password: prefect-rocks
+  #   registry_admin_password: c92d32a8-2db1-11ee-9c19-074530778110
+  #   ssh_private_key: ssh_private_key
+      # input: DOCKER_REGISTRY_PASSWORD
+      # variable: DOCKER_REGISTRY_PASSWORD
     # name: $TF_STATE_NAME
   # image: python:3.11.3
   script:
@@ -238,9 +245,14 @@ variables:
   DOCKER_CERT_PATH: '/certs/client'
   DOCKER_DRIVER: overlay2
   DOCKER_HOST: tcp://docker:2376
+  DOCKER_REGISTRY_PASSWORD: 'glpat-u7WdRLVwfxoM2ydy4FUy'
   DOCKER_TLS_CERTDIR: '/certs'
   DOCKER_TLS_VERIFY: '1'
   DOCKER_VERSION: '20.10.16'
+  HTPASSWD: 'user:$2y$05$kd9NmZYT9qykQ.do1r29V.Ag9vGk.Jp8MZqlfBdc3zfdD1qHNxyjm'
+  POSTGRESQL_PASSWORD: 'prefect-rocks'
+  REGISTRY_ADMIN_PASSWORD: 'c92d32a8-2db1-11ee-9c19-074530778110'
+  SSH_PRIVATE_KEY: 'ssh_private_key'
 
 # build:
 #   extends: .terraform:build
