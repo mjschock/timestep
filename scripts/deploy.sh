@@ -16,5 +16,6 @@ docker run \
  --env PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
  --env TF_API_TOKEN=${TF_API_TOKEN} \
  --env TF_USERNAME=${TF_USERNAME} \
+ --user $(id -u):$(id -g) \
  --volume $(pwd)/secrets:/home/ubuntu/secrets:ro \
  ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}
