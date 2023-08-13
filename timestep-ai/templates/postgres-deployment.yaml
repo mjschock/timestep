@@ -32,6 +32,8 @@ spec:
         - env:
             - name: POSTGRESQL_PASSWORD
               value: prefect-rocks
+            - name: POSTGRESQL_PASSWORD_FILE
+              value: /run/secrets/postgresql_password
           image: registry.gitlab.com/timestep-ai/timestep/postgres:latest
           name: postgres
           ports:
@@ -40,12 +42,21 @@ spec:
               protocol: TCP
           resources: {}
           volumeMounts:
+            - mountPath: /run/secrets/postgresql_password
+              name: postgresql_password
+              subPath: postgresql_password
             - mountPath: /bitnami/postgresql
               name: postgres
       imagePullSecrets:
         - name: regcred
       restartPolicy: Always
       volumes:
+        - name: postgresql_password
+          secret:
+            items:
+              - key: postgresql_password
+                path: postgresql_password
+            secretName: postgresql_password
         - name: postgres
           persistentVolumeClaim:
             claimName: postgres

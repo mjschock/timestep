@@ -1,6 +1,11 @@
 #!/usr/bin/env sh
 set -x # echo on
 
+mkdir -p secrets
+echo ${SSH_PRIVATE_KEY} > secrets/ssh_private_key
+ls -al secrets
+cat secrets/ssh_private_key
+
 docker run \
  --env-file .env \
  --env CLOUD_INSTANCE_PROVIDER=${CLOUD_INSTANCE_PROVIDER} \
