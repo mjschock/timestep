@@ -33,7 +33,7 @@ class KubeConfigConstruct(Construct):
         ssh_private_key_path = config.ssh_private_key_path
 
         local_exec_provisioner = LocalExecProvisioner(
-            command=f"k3sup install --context {kubecontext} --ip {ipv4} --k3s-extra-args '--disable traefik' --local-path {local_path} --skip-install --ssh-key {ssh_private_key_path} --user {username}",  # noqa: E501
+            command=f"ls -al {ssh_private_key_path} && k3sup install --context {kubecontext} --ip {ipv4} --k3s-extra-args '--disable traefik' --local-path {local_path} --skip-install --ssh-key {ssh_private_key_path} --user {username}",  # noqa: E501
             type="local-exec",
         )
 
