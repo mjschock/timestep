@@ -83,12 +83,10 @@ ENV PATH="/home/ubuntu/.arkade/bin:/home/ubuntu/.local/bin:${PATH}"
 # Install terraform with arkade
 ENV TERRAFORM_VERSION=1.5.5
 RUN ark get terraform --version ${TERRAFORM_VERSION}
-RUN terraform --version
 
 # Install k3sup with arkade
 ENV K3SUP_VERSION=0.12.14
 RUN ark get k3sup --version ${K3SUP_VERSION}
-RUN k3sup --version
 
 # Install anyenv
 RUN git clone https://github.com/anyenv/anyenv ~/.anyenv

@@ -1,4 +1,5 @@
 .github/workflows/main.yml
 .gitlab-ci.yml
+Dockerfile
 scripts
 Tiltfile
