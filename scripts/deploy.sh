@@ -3,8 +3,6 @@ set -x # echo on
 
 mkdir -p secrets
 echo ${SSH_PRIVATE_KEY} > secrets/ssh_private_key
-ls -al secrets
-cat secrets/ssh_private_key
 
 docker run \
  --env-file .env \
@@ -19,4 +17,5 @@ docker run \
  --env SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
  --env TF_API_TOKEN=${TF_API_TOKEN} \
  --env TF_USERNAME=${TF_USERNAME} \
+ --volume $(pwd)/secrets:/home/ubuntu/secrets \
  ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}
