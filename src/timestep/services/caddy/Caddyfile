@@ -1,10 +1,12 @@
 # replace :80 with your domain name to get automatic https via LetsEncrypt
 # :80 {
-http://timestep.local:80 {
+# http://timestep.local:80 {
+http://{$PRIMARY_DOMAIN_NAME}:80 {
 	redir http://www.timestep.local{uri}
 }
 
-http://www.timestep.local:80 {
+# http://www.timestep.local:80 {
+http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 	encode gzip
 
 	handle /console/* {
