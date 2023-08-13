@@ -42,10 +42,13 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - "graphql-engine"
+    environment:
+      PRIMARY_DOMAIN_NAME: ${PRIMARY_DOMAIN_NAME:-timestep.local}
     image: registry.gitlab.com/timestep-ai/timestep/caddy:${VERSION:-latest}
     labels:
       kompose.image-pull-secret: "regcred"
-      kompose.service.expose: "timestep.local,www.timestep.local"
+      # kompose.service.expose: "timestep.local,www.timestep.local"
+      kompose.service.expose: "${PRIMARY_DOMAIN_NAME:-timestep.local},www.${PRIMARY_DOMAIN_NAME:-timestep.local}"
       kompose.service.expose.ingress-class-name: "caddy"
       # kompose.service.expose.tls-secret: "example-secret"
       kubernetes.io/ingress.class: "caddy"
