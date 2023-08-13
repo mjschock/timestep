@@ -7,6 +7,6 @@ docker run \
  --env HTPASSWD=${HTPASSWD} \
  --env PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
  --env SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY} \
- --env TF_API_TOKEN=${CI_JOB_TOKEN} \
+ --env TF_API_TOKEN=${TF_API_TOKEN} \
  --env TF_USERNAME=${CI_REGISTRY_USER} \
  ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}
