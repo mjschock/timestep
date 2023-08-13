@@ -2,10 +2,13 @@
 set -x # echo on
 
 # docker build --cache-from ${CI_REGISTRY_IMAGE}:latest --tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA} --tag ${CI_REGISTRY_IMAGE}:latest .
-docker build --cache-from ${CI_REGISTRY_IMAGE}:latest --tag ${CI_REGISTRY_IMAGE}:latest .
+# docker build --cache-from ${CI_REGISTRY_IMAGE}:latest --tag ${CI_REGISTRY_IMAGE}:latest .
 # docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
-docker push ${CI_REGISTRY_IMAGE}:latest
+# docker push ${CI_REGISTRY_IMAGE}:latest
 # docker compose pull || true
+docker buildx build --push -t ${CI_REGISTRY_IMAGE}:latest \
+  --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}:latest \
+  --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}:latest .
 
 # docker build --cache-from registry.gitlab.com/timestep-ai/caddy:latest --tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA} --tag ${CI_REGISTRY_IMAGE}:latest .
 # docker compose build

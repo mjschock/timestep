@@ -5,5 +5,5 @@ set -x # echo on
 # docker pull ${CI_REGISTRY_IMAGE}:latest || true
 
 docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY_SERVER}
-docker pull ${CI_REGISTRY_IMAGE}:latest || true
-docker compose pull || true
+# docker pull ${CI_REGISTRY_IMAGE}:latest || true
+# docker compose pull || true
