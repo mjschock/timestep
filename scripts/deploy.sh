@@ -14,8 +14,7 @@ docker run \
  --env KUBECONTEXT=${KUBECONTEXT} \
  --env POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD} \
  --env PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
- --env SSH_PRIVATE_KEY='${SSH_PRIVATE_KEY}' \
  --env TF_API_TOKEN=${TF_API_TOKEN} \
  --env TF_USERNAME=${TF_USERNAME} \
- --volume $(pwd)/secrets:/home/ubuntu/secrets \
+ --volume $(pwd)/secrets:/home/ubuntu/secrets:ro \
  ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}
