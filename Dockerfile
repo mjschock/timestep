@@ -85,10 +85,26 @@ ENV TERRAFORM_VERSION=1.5.5
 RUN ark get terraform --version ${TERRAFORM_VERSION}
 RUN terraform --version
 
+# Install k3sup with arkade
+ENV K3SUP_VERSION=0.12.14
+RUN ark get k3sup --version ${K3SUP_VERSION}
+RUN k3sup --version
+
 # Install anyenv
 RUN git clone https://github.com/anyenv/anyenv ~/.anyenv
 ENV PATH="/home/ubuntu/.anyenv/bin:${PATH}"
 RUN anyenv install --force-init
+
+# Install goenv with anyenv
+RUN anyenv install goenv
+ENV PATH="/home/ubuntu/.anyenv/envs/goenv/shims:/home/ubuntu/.anyenv/envs/goenv/bin:${PATH}"
+
+# Install ${GOENV_VERSION} with goenv
+RUN eval "$(anyenv init -)" && goenv install ${GOENV_VERSION}
+
+# Install Kompose with go
+ENV KOMPOSE_VERSION=latest
+RUN go install github.com/kubernetes/kompose@${KOMPOSE_VERSION}
 
 # Install nodenv with anyenv
 RUN anyenv install nodenv
