@@ -42,21 +42,21 @@ spec:
               protocol: TCP
           resources: {}
           volumeMounts:
-            - mountPath: /run/secrets/postgresql_password
-              name: postgresql_password
-              subPath: postgresql_password
+            - mountPath: /run/secrets/postgresql-password
+              name: postgresql-password
+              subPath: postgresql-password
             - mountPath: /bitnami/postgresql
               name: postgres
       imagePullSecrets:
         - name: regcred
       restartPolicy: Always
       volumes:
-        - name: postgresql_password
+        - name: postgresql-password
           secret:
             items:
-              - key: postgresql_password
-                path: postgresql_password
-            secretName: postgresql_password
+              - key: postgresql-password
+                path: postgresql-password
+            secretName: postgresql-password
         - name: postgres
           persistentVolumeClaim:
             claimName: postgres

@@ -1,5 +1,5 @@
 secrets:
-   postgresql_password:
+   postgresql-password:
      file: ./secrets/postgresql_password
 services:
   api:
@@ -137,7 +137,7 @@ services:
     ports:
       - '5432:5432'
     secrets:
-      - postgresql_password
+      - postgresql-password
     volumes:
       - 'postgres:/bitnami/postgresql'
   prefect-agent:
