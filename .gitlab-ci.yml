@@ -31,8 +31,6 @@ variables:
   HTPASSWD: 'user:$2y$05$kd9NmZYT9qykQ.do1r29V.Ag9vGk.Jp8MZqlfBdc3zfdD1qHNxyjm'
   POSTGRESQL_PASSWORD: 'prefect-rocks'
   PRIMARY_DOMAIN_NAME: 'timestep.ai'
-  REGISTRY_ADMIN_PASSWORD: 'c92d32a8-2db1-11ee-9c19-074530778110'
-  SSH_PRIVATE_KEY: 'ssh_private_key_from_variables_in_gitlab'
   TF_API_TOKEN: ${CI_JOB_TOKEN}
   TF_USERNAME: ${CI_REGISTRY_USER}
 
