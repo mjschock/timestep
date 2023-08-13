@@ -8,10 +8,10 @@ on:
 
 env:
     CI_COMMIT_SHA: ${{ github.sha }}
-    CI_REGISTRY_USER: m.schock
-    CI_REGISTRY: registry.gitlab.com
+    # CI_REGISTRY_USER: m.schock
+    # CI_REGISTRY: registry.gitlab.com
     CI_REGISTRY_IMAGE: registry.gitlab.com/timestep-ai/timestep
-    CI_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+    # CI_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
     CLOUD_INSTANCE_PROVIDER: ${{ vars.CLOUD_INSTANCE_PROVIDER }}
     DOMAIN_NAME_REGISTRAR_PROVIDER: ${{ vars.DOMAIN_NAME_REGISTRAR_PROVIDER }}
     DO_TOKEN: ${{ secrets.DO_TOKEN }}
@@ -43,4 +43,5 @@ jobs:
     - uses: actions/checkout@v3
     - name: Deploy
       run: |
+        ./scripts/before.sh
         ./scripts/deploy.sh

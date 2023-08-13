@@ -31,7 +31,7 @@ spec:
       containers:
         - env:
             - name: POSTGRESQL_PASSWORD
-              value: secret-pg-password-never-use-this-value
+              value: prefect-rocks
           image: registry.gitlab.com/timestep-ai/timestep/postgres:latest
           name: postgres
           ports:

@@ -26,7 +26,7 @@ services:
       AUTH_SMTP_SENDER: mail@example.com
       AUTH_SMTP_USER: user
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres
       HASURA_GRAPHQL_GRAPHQL_URL: http://graphql-engine:8080/v1/graphql
       HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
     expose:
@@ -76,7 +76,7 @@ services:
       - 'postgres'
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
       HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
       HASURA_GRAPHQL_LOG_LEVEL: debug
@@ -112,17 +112,6 @@ services:
     volumes:
       # - ./data/minio:/data
       - minio:/data
-  # postgres:
-  #   image: postgres
-  #   restart: always
-  #   volumes:
-  #     # - ./data/db:/var/lib/postgresql/data
-  #     # - ./initdb.d:/docker-entrypoint-initdb.d:ro
-  #     - postgres:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secretpgpassword}
-  #   ports:
-  #     - '5432:5432'
   postgres:
     build:
       context: src/timestep/services/postgres
@@ -131,12 +120,7 @@ services:
     #   - '5432:5432'
     environment:
       # - 'ALLOW_EMPTY_PASSWORD=yes'
-      # POSTGRESQL_PASSWORD: ${POSTGRES_PASSWORD:-secretpgpassword}
-      # POSTGRESQL_PASSWORD_FILE: /run/secrets/postgres_password
-      # - POSTGRESQL_USERNAME=agent
-      # - POSTGRESQL_PASSWORD=password123
-      # - POSTGRESQL_DATABASE=timestep_ai
-      POSTGRESQL_PASSWORD: ${POSTGRES_PASSWORD:-secretpgpassword}
+      POSTGRESQL_PASSWORD: ${POSTGRESQL_PASSWORD:-secretpgpassword}
     # expose:
     #   - 5432
     # image: docker.io/bitnami/postgresql:15.3.0
@@ -161,8 +145,7 @@ services:
     entrypoint: ["/usr/bin/tini", "-g", "--", "/opt/prefect/entrypoint.sh"]
     environment:
       # - HOME=/home/prefect
-      # - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/prefect
-      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres
     expose:
       - 4200
     image: prefecthq/prefect:2.11.3-python3.11
@@ -184,7 +167,7 @@ services:
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       HASURA_METADATA: 1
       POSTGRES_MIGRATIONS: 1
-      POSTGRES_MIGRATIONS_SOURCE: postgres://postgres:${POSTGRES_PASSWORD:-secretpgpassword}@postgres:5432/postgres?sslmode=disable
+      POSTGRES_MIGRATIONS_SOURCE: postgres://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres?sslmode=disable
       PUBLIC_URL: http://localhost:${PROXY_PORT:-1337}
       S3_ACCESS_KEY: ${STORAGE_ACCESS_KEY}
       S3_BUCKET: nhost
