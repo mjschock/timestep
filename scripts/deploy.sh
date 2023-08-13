@@ -3,6 +3,9 @@ set -x # echo on
 
 mkdir -p secrets
 echo ${SSH_PRIVATE_KEY} > secrets/ssh_private_key
+ls -al secrets
+# chmod 600 secrets/ssh_private_key
+id
 
 docker run \
  --env-file .env \
