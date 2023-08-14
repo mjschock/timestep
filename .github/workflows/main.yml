@@ -27,8 +27,8 @@ env:
     NAMECHEAP_API_USER: ${{ secrets.NAMECHEAP_API_USER }}
     NAMECHEAP_USER_NAME: ${{ secrets.NAMECHEAP_USER_NAME }}
     SSH_PUBLIC_KEY: ${{ vars.SSH_PUBLIC_KEY }}
-    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-    SSH_PRIVATE_KEY_ENV_VAR: ${{ vars.SSH_PRIVATE_KEY_ENV_VAR }}
+    # SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+    # SSH_PRIVATE_KEY_ENV_VAR: ${{ vars.SSH_PRIVATE_KEY_ENV_VAR }}
     TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
     TF_USERNAME: ${{ vars.TF_USERNAME }}
 
@@ -48,6 +48,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Deploy
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
         ./scripts/before.sh
+        mkdir -p secrets && echo "$SSH_PRIVATE_KEY" > secrets/ssh_private_key
+        ls -al secrets
         ./scripts/deploy.sh
