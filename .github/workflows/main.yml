@@ -53,5 +53,4 @@ jobs:
       run: |
         ./scripts/before.sh
         mkdir -p secrets && echo "$SSH_PRIVATE_KEY" > secrets/ssh_private_key
-        ls -al secrets
         ./scripts/deploy.sh
