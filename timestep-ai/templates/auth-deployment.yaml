@@ -46,7 +46,7 @@ spec:
             - name: HASURA_GRAPHQL_ADMIN_SECRET
               value: nhost-admin-secret
             - name: HASURA_GRAPHQL_DATABASE_URL
-              value: postgres://postgres:prefect-rocks@postgres:5432/postgres
+              value: postgres://postgres:secretpgpassword@postgres:5432/postgres
             - name: HASURA_GRAPHQL_GRAPHQL_URL
               value: http://graphql-engine:8080/v1/graphql
             - name: HASURA_GRAPHQL_JWT_SECRET

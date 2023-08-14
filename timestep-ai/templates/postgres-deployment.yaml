@@ -31,7 +31,7 @@ spec:
       containers:
         - env:
             - name: POSTGRESQL_PASSWORD
-              value: prefect-rocks
+              value: secretpgpassword
             - name: POSTGRESQL_PASSWORD_FILE
               value: /run/secrets/postgresql_password
           image: registry.gitlab.com/timestep-ai/timestep/postgres:latest
