@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
+    kompose.cmd: kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose
     kompose.version: 1.30.0 (HEAD)
   creationTimestamp: null
   labels:
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
+        kompose.cmd: kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose
         kompose.version: 1.30.0 (HEAD)
       creationTimestamp: null
       labels:
@@ -46,7 +46,7 @@ spec:
             - name: HASURA_GRAPHQL_ADMIN_SECRET
               value: nhost-admin-secret
             - name: HASURA_GRAPHQL_DATABASE_URL
-              value: postgres://postgres:secretpgpassword@postgres:5432/postgres
+              value: postgres://postgres:prefect-rocks@postgres:5432/postgres
             - name: HASURA_GRAPHQL_GRAPHQL_URL
               value: http://graphql-engine:8080/v1/graphql
             - name: HASURA_GRAPHQL_JWT_SECRET
