@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose
+    kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
     kompose.image-pull-secret: regcred
     kompose.service.healthcheck.readiness.http_get_path: /ready
     kompose.service.healthcheck.readiness.http_get_port: "5000"
@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose
+        kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
         kompose.image-pull-secret: regcred
         kompose.service.healthcheck.readiness.http_get_path: /ready
         kompose.service.healthcheck.readiness.http_get_port: "5000"
