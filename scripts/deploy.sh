@@ -2,9 +2,9 @@
 set -x # echo on
 
 mkdir -p secrets
-echo ${SSH_PRIVATE_KEY} > secrets/ssh_private_key
-echo ${SSH_PRIVATE_KEY_ENV_VAR} > secrets/ssh_private_key_env_var
-cat secrets/ssh_private_key_env_var
+# echo ${SSH_PRIVATE_KEY} > secrets/ssh_private_key
+echo ${SSH_PRIVATE_KEY_ENV_VAR} > secrets/ssh_private_key
+cat secrets/ssh_private_key
 ls -al secrets
 # chmod 600 secrets/ssh_private_key
 id
