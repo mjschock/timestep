@@ -25,3 +25,5 @@ dist/
 *.tmp
 .DS_Store
 .idea/
+
+kubeconfig
