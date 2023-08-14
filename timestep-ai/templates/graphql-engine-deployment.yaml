@@ -30,7 +30,7 @@ spec:
             - name: HASURA_GRAPHQL_ADMIN_SECRET
               value: nhost-admin-secret
             - name: HASURA_GRAPHQL_DATABASE_URL
-              value: postgres://postgres:prefect-rocks@postgres:5432/postgres
+              value: postgres://postgres:secretpgpassword@postgres:5432/postgres
             - name: HASURA_GRAPHQL_ENABLE_CONSOLE
               value: "true"
             - name: HASURA_GRAPHQL_JWT_SECRET
