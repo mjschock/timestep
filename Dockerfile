@@ -67,7 +67,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 111
 # RUN update-alternatives --config python3 --skip-auto
 
-RUN groupadd --gid 1001 --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid 1001 ubuntu
+RUN groupadd --gid 123 --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid 1001 ubuntu
 
 SHELL [ "/bin/bash", "-c" ]
 USER ubuntu
