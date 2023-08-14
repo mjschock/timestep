@@ -28,6 +28,7 @@ env:
     NAMECHEAP_USER_NAME: ${{ secrets.NAMECHEAP_USER_NAME }}
     SSH_PUBLIC_KEY: ${{ vars.SSH_PUBLIC_KEY }}
     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+    SSH_PRIVATE_KEY_ENV_VAR: ${{ vars.SSH_PRIVATE_KEY_ENV_VAR }}
     TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
     TF_USERNAME: ${{ vars.TF_USERNAME }}
 
