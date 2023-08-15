@@ -1,3 +1,5 @@
+import datetime
+
 from cdktf import LocalExecProvisioner
 from cdktf_cdktf_provider_local.data_local_file import DataLocalFile
 from cdktf_cdktf_provider_local.provider import LocalProvider
@@ -33,7 +35,7 @@ class KubeConfigConstruct(Construct):
         ssh_private_key_path = config.ssh_private_key_path
 
         local_exec_provisioner = LocalExecProvisioner(
-            command=f"ls -al ~/secrets && k3sup install --context {kubecontext} --ip {ipv4} --k3s-extra-args '--disable traefik' --local-path {local_path} --skip-install --ssh-key {ssh_private_key_path} --user {username}",  # noqa: E501
+            command=f"k3sup install --context {kubecontext} --ip {ipv4} --k3s-extra-args '--disable traefik' --local-path {local_path} --skip-install --ssh-key {ssh_private_key_path} --user {username}",  # noqa: E501
             type="local-exec",
         )
 
@@ -83,6 +85,7 @@ class KubeConfigConstruct(Construct):
             ],
             scope=scope,
             triggers={
+                "always": str(datetime.datetime.now()),
                 # "ipv4": cloud_instance_construct.data_source.ipv4_address,
                 "ipv4": ipv4,
                 # "ssh_private_key": config.secrets.get_secret_value().get("ssh_private_key")  # noqa: E501
