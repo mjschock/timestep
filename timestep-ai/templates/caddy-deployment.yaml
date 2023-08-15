@@ -38,7 +38,7 @@ spec:
         - env:
             - name: PRIMARY_DOMAIN_NAME
               value: timestep.local
-          image: registry.gitlab.com/timestep-ai/timestep/caddy:1.0.42
+          image: registry.gitlab.com/timestep-ai/timestep/caddy:1.0.43
           name: caddy
           ports:
             - containerPort: 80
