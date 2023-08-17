@@ -17,28 +17,28 @@ class DomainNameRegistrarConstruct(Construct):
     ) -> None:
         super().__init__(scope, id)
 
-        http_provider = HttpProvider(
-            id="http_provider",
-            scope=scope,
-        )
-
-        http_data_source = DataHttp(
-            id="http_data_source",
-            provider=http_provider,
-            scope=scope,
-            url="https://api.ipify.org",
-        )
-
-        http_outputs_ip = TerraformOutput(
-            id="http_outputs_ip",
-            scope=scope,
-            value=http_data_source.response_body,
-        )
-
         if (
             config.domain_name_registrar_provider
             == DomainNameRegistrarProvider.NAMECHEAP
         ):
+            http_provider = HttpProvider(
+                id="http_provider",
+                scope=scope,
+            )
+
+            http_data_source = DataHttp(
+                id="http_data_source",
+                provider=http_provider,
+                scope=scope,
+                url="https://api.ipify.org",
+            )
+
+            http_outputs_ip = TerraformOutput(
+                id="http_outputs_ip",
+                scope=scope,
+                value=http_data_source.response_body,
+            )
+
             domain_name_registrar_provider = NamecheapProvider(
                 api_key=config.secrets.get_secret_value().get("namecheap_api_key"),
                 api_user=config.secrets.get_secret_value().get("namecheap_api_user"),

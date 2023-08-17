@@ -1,6 +1,3 @@
-from cdktf import (
-    TerraformOutput,
-)
 from cdktf_cdktf_provider_digitalocean.data_digitalocean_domain import (
     DataDigitaloceanDomain as DigitaloceanDomainTerraformDataSource,
 )
@@ -17,7 +14,7 @@ from cdktf_cdktf_provider_local.provider import (
 from constructs import Construct
 
 from timestep.config import CloudInstanceProvider, Settings
-from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
     CloudInstanceConstruct,
 )
 
@@ -102,7 +99,7 @@ class CloudInstanceDomainConstruct(Construct):
             )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
-            cloud_instance_domain_data_source = LocalFileTerraformDataSource(
+            LocalFileTerraformDataSource(
                 id="cloud_instance_domain_data_source",
                 filename=cloud_instance_domain_resource.filename,
                 provider=cloud_instance_domain_resource.provider,
@@ -110,7 +107,7 @@ class CloudInstanceDomainConstruct(Construct):
             )
 
         elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
-            cloud_instance_domain_data_source = DigitaloceanDomainTerraformDataSource(
+            DigitaloceanDomainTerraformDataSource(
                 id_="cloud_instance_domain_data_source",
                 name=cloud_instance_domain_resource.name,
                 provider=cloud_instance_domain_resource.provider,
@@ -123,24 +120,24 @@ class CloudInstanceDomainConstruct(Construct):
                 f"Unknown cloud_instance_provider: {cloud_instance_provider}"
             )
 
-        cloud_instance_domain_outputs = {}
+        # cloud_instance_domain_outputs = {}
 
-        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
-            cloud_instance_domain_outputs["hosts_file"] = TerraformOutput(
-                id="cloud_instance_domain_outputs_hosts_file",
-                value=cloud_instance_domain_data_source.filename,
-                scope=scope,
-            )
+        # if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
+        #     cloud_instance_domain_outputs["hosts_file"] = TerraformOutput(
+        #         id="cloud_instance_domain_outputs_hosts_file",
+        #         value=cloud_instance_domain_data_source.filename,
+        #         scope=scope,
+        #     )
 
-        elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
-            cloud_instance_domain_outputs["zone_file"] = TerraformOutput(
-                id="cloud_instance_domain_outputs_zone_file",
-                value=cloud_instance_domain_data_source.zone_file,
-                scope=scope,
-            )
+        # elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
+        #     cloud_instance_domain_outputs["zone_file"] = TerraformOutput(
+        #         id="cloud_instance_domain_outputs_zone_file",
+        #         value=cloud_instance_domain_data_source.zone_file,
+        #         scope=scope,
+        #     )
 
-        else:
-            cloud_instance_provider = config.cloud_instance_provider
-            raise ValueError(
-                f"Unknown cloud_instance_provider: {cloud_instance_provider}"
-            )
+        # else:
+        #     cloud_instance_provider = config.cloud_instance_provider
+        #     raise ValueError(
+        #         f"Unknown cloud_instance_provider: {cloud_instance_provider}"
+        #     )
