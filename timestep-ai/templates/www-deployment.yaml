@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
+    kompose.cmd: kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose
     kompose.image-pull-policy: Always
     kompose.image-pull-secret: regcred
     kompose.version: 1.30.0 (HEAD)
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
+        kompose.cmd: kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose
         kompose.image-pull-policy: Always
         kompose.image-pull-secret: regcred
         kompose.version: 1.30.0 (HEAD)
@@ -30,7 +30,7 @@ spec:
         io.kompose.service: www
     spec:
       containers:
-        - image: registry.gitlab.com/timestep-ai/timestep/www:1.0.43
+        - image: registry.gitlab.com/timestep-ai/timestep/www:1.0.44
           imagePullPolicy: Always
           name: www
           ports:

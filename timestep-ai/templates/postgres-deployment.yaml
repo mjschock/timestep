@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
+    kompose.cmd: kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose
     kompose.image-pull-secret: regcred
     kompose.version: 1.30.0 (HEAD)
   creationTimestamp: null
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
+        kompose.cmd: kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose
         kompose.image-pull-secret: regcred
         kompose.version: 1.30.0 (HEAD)
       creationTimestamp: null
@@ -31,7 +31,7 @@ spec:
       containers:
         - env:
             - name: POSTGRESQL_PASSWORD
-              value: secretpgpassword
+              value: prefect-rocks
             - name: POSTGRESQL_PASSWORD_FILE
               value: /run/secrets/postgresql_password
           image: registry.gitlab.com/timestep-ai/timestep/postgres:latest
