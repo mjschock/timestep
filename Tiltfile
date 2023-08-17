@@ -47,7 +47,7 @@ local_resource(
 
 local_resource(
     'poetry run cdktf deploy',
-    cmd='poetry run cdktf deploy --auto-approve $PRIMARY_DOMAIN_NAME',
+    cmd='poetry run cdktf deploy --auto-approve $PRIMARY_DOMAIN_NAME.k3s_cluster $PRIMARY_DOMAIN_NAME.kubernetes_config',
     deps=[
         '.env',
         'cdktf.json',
@@ -77,7 +77,7 @@ local_resource(
 )
 
 cmd_button('poetry run cdktf destroy',
-    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $PRIMARY_DOMAIN_NAME'],
+    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $PRIMARY_DOMAIN_NAME.k3s_cluster $PRIMARY_DOMAIN_NAME.kubernetes_config'],
     env=[
         'PRIMARY_DOMAIN_NAME=' + os.getenv('PRIMARY_DOMAIN_NAME'),
     ],

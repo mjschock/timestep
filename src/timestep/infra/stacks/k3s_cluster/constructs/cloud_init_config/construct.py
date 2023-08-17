@@ -1,4 +1,4 @@
-from cdktf import TerraformDataSource, TerraformOutput
+from cdktf import TerraformDataSource
 
 # from timestep.config import AppConfig
 from cdktf_cdktf_provider_cloudinit.data_cloudinit_config import (
@@ -362,21 +362,21 @@ class CloudInitConfigConstruct(Construct):
                 provisioners=None,
             )
 
-        cloud_init_config_outputs = {}
+        # cloud_init_config_outputs = {}
 
-        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
-            cloud_init_config_outputs["cloudinit_file"] = TerraformOutput(
-                scope=scope,
-                id="cloud_init_config_outputs_cloudinit_file",
-                value=cloud_init_config_data_source.filename,
-            )
+        # if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
+        #     cloud_init_config_outputs["cloudinit_file"] = TerraformOutput(
+        #         scope=scope,
+        #         id="cloud_init_config_outputs_cloudinit_file",
+        #         value=cloud_init_config_data_source.filename,
+        #     )
 
-        else:
-            cloud_init_config_outputs["user_data"] = TerraformOutput(
-                scope=scope,
-                id="cloud_init_config_outputs_user_data",
-                value=cloud_init_config_data_source.rendered,
-            )
+        # else:
+        #     cloud_init_config_outputs["user_data"] = TerraformOutput(
+        #         scope=scope,
+        #         id="cloud_init_config_outputs_user_data",
+        #         value=cloud_init_config_data_source.rendered,
+        #     )
 
         self.data_source: TerraformDataSource[
             DataLocalFile | DataCloudinitConfig

@@ -1,6 +1,5 @@
 from cdktf import (
     TerraformDataSource,
-    TerraformOutput,
     TerraformProvider,
 )
 from cdktf_cdktf_provider_cloudinit.data_cloudinit_config import DataCloudinitConfig
@@ -27,7 +26,7 @@ from timestep.infra.imports.multipass.instance import (
 from timestep.infra.imports.multipass.provider import (
     MultipassProvider as MultipassTerraformProvider,
 )
-from timestep.infra.stacks.main.constructs.cloud_init_config.construct import (
+from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
 )
 
@@ -127,26 +126,26 @@ class CloudInstanceConstruct(Construct):
                 f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
             )
 
-        cloud_instance_outputs = {}
+        # cloud_instance_outputs = {}
 
-        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
-            cloud_instance_outputs["ipv4"] = TerraformOutput(
-                id="cloud_instance_outputs_ipv4",
-                value=cloud_instance_data_source.ipv4,
-                scope=scope,
-            )
+        # if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
+        #     cloud_instance_outputs["ipv4"] = TerraformOutput(
+        #         id="cloud_instance_outputs_ipv4",
+        #         value=cloud_instance_data_source.ipv4,
+        #         scope=scope,
+        #     )
 
-        elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
-            cloud_instance_outputs["ipv4"] = TerraformOutput(
-                id="cloud_instance_outputs_ipv4",
-                value=cloud_instance_data_source.ipv4_address,
-                scope=scope,
-            )
+        # elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
+        #     cloud_instance_outputs["ipv4"] = TerraformOutput(
+        #         id="cloud_instance_outputs_ipv4",
+        #         value=cloud_instance_data_source.ipv4_address,
+        #         scope=scope,
+        #     )
 
-        else:
-            raise ValueError(
-                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
-            )
+        # else:
+        #     raise ValueError(
+        #         f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
+        #     )
 
         self.data_source: TerraformDataSource[
             MultipassInstanceTerraformDataSource

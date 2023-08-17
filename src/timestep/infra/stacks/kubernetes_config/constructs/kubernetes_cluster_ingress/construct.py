@@ -1,14 +1,14 @@
-from cdktf_cdktf_provider_helm.provider import HelmProvider, HelmProviderKubernetes
+from cdktf_cdktf_provider_helm.provider import HelmProvider
 from cdktf_cdktf_provider_helm.release import Release
-from cdktf_cdktf_provider_kubernetes.provider import KubernetesProvider
 from constructs import Construct
 from timestep.config import Settings
-from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
-    CloudInstanceConstruct,
-)
-from timestep.infra.stacks.main.constructs.kube_config.construct import (
-    KubeConfigConstruct,
-)
+
+# from timestep.infra.stacks.main.constructs.cloud_instance.construct import (
+#     CloudInstanceConstruct,
+# )
+# from timestep.infra.stacks.main.constructs.kube_config.construct import (
+#     KubeConfigConstruct,
+# )
 
 
 class KubernetesClusterIngressConstruct(Construct):
@@ -17,30 +17,51 @@ class KubernetesClusterIngressConstruct(Construct):
         scope: Construct,
         id: str,
         config: Settings,
-        cloud_instance_construct: CloudInstanceConstruct,
-        kube_config_contruct: KubeConfigConstruct,
+        # cloud_instance_construct: CloudInstanceConstruct,
+        # kube_config_contruct: KubeConfigConstruct,
+        helm_provider: HelmProvider,
     ) -> None:
         super().__init__(scope, id)
 
-        self.kubernetes_provider = KubernetesProvider(
-            id="kubernetes_provider",
-            # config_context=config.KUBE_CONTEXT,
-            # config_path=config.KUBE_CONFIG_PATH,
-            config_context=config.kubecontext,
-            config_path=kube_config_contruct.data_source.filename,
-            scope=self,
-        )
+        # if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
+        #     ipv4 = (
+        #         cloud_instance_construct.data_source.ipv4
+        #     )  # TODO: can I use the output  # noqa: E501
+        # else:
+        #     ipv4 = cloud_instance_construct.data_source.ipv4_address
 
-        self.helm_provider = HelmProvider(
-            id="helm_provider",
-            kubernetes=HelmProviderKubernetes(
-                # config_context=config.KUBE_CONTEXT,
-                # config_path=config.KUBE_CONFIG_PATH,
-                config_context=self.kubernetes_provider.config_context,
-                config_path=self.kubernetes_provider.config_path,
-            ),
-            scope=self,
-        )
+        # kubecontext = config.kubecontext
+        # local_kube_config_path = f"{config.dist_path}/stacks/{config.primary_domain_name}/kubeconfig"  # noqa: E501
+        # # username = config.cloud_instance_user
+        # # ssh_private_key_path = config.ssh_private_key_path
+
+        # self.kubernetes_provider = KubernetesProvider(
+        #     # depends_on=[kube_config_contruct.data_source],
+        #     id="kubernetes_provider",
+        #     # config_context=config.KUBE_CONTEXT,
+        #     # config_path=config.KUBE_CONFIG_PATH,
+        #     config_context=config.kubecontext,
+        #     # config_path=kube_config_contruct.data_source.filename,
+        #     config_path=local_kube_config_path,
+        #     # exec=KubernetesProviderExec(
+        #     #     api_version="client.authentication.k8s.io/v1beta1",
+        #     #     args=[],
+        #     #     command=f"k3sup install --context {kubecontext} --ip {ipv4} --k3s-extra-args '--disable traefik' --local-path {local_kube_config_path} --skip-install --ssh-key {ssh_private_key_path} --user {username}",  # noqa: E501
+        #     # ),
+        #     scope=self,
+        # )
+
+        # self.helm_provider = HelmProvider(
+        #     # depends_on=[kube_config_contruct.data_source],
+        #     id="helm_provider",
+        #     kubernetes=HelmProviderKubernetes(
+        #         # config_context=config.KUBE_CONTEXT,
+        #         # config_path=config.KUBE_CONFIG_PATH,
+        #         config_context=self.kubernetes_provider.config_context,
+        #         config_path=self.kubernetes_provider.config_path,
+        #     ),
+        #     scope=self,
+        # )
 
         self.caddy_ingress_controller_helm_release_resource = Release(  # noqa: F841
             id_="caddy_ingress_controller_helm_release_resource",
@@ -50,7 +71,7 @@ class KubernetesClusterIngressConstruct(Construct):
             name="caddy-ingress-controller",
             namespace="caddy-system",
             repository="https://caddyserver.github.io/ingress",
-            provider=self.helm_provider,
+            provider=helm_provider,
             set=[
                 {
                     "name": "ingressController.config.acmeCA",

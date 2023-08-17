@@ -1,9 +1,7 @@
+from cdktf_cdktf_provider_helm.provider import HelmProvider
 from cdktf_cdktf_provider_helm.release import Release, ReleaseSet
 from constructs import Construct
 from timestep.config import Settings
-from timestep.infra.stacks.main.constructs.kubernetes_cluster_ingress.construct import (
-    KubernetesClusterIngressConstruct,
-)
 
 
 class TimestepAIConstruct(Construct):
@@ -12,12 +10,13 @@ class TimestepAIConstruct(Construct):
         scope: Construct,
         id: str,
         config: Settings,
-        kubernetes_cluster_ingress_construct: KubernetesClusterIngressConstruct,
+        # kubernetes_cluster_ingress_construct: KubernetesClusterIngressConstruct,
+        helm_provider: HelmProvider,
     ) -> None:
         super().__init__(scope, id)
 
         self.release_resource = Release(
-            depends_on=[kubernetes_cluster_ingress_construct],
+            # depends_on=[kubernetes_cluster_ingress_construct],
             id_="timestep_ai_helm_release_resource",
             atomic=True,
             # chart="timestep-ai",
@@ -28,7 +27,8 @@ class TimestepAIConstruct(Construct):
             # namespace="registry",
             namespace="default",
             # repository="https://charts.bitnami.com/bitnami",
-            provider=kubernetes_cluster_ingress_construct.helm_provider,
+            # provider=kubernetes_cluster_ingress_construct.helm_provider,
+            provider=helm_provider,
             set=[
                 ReleaseSet(
                     name="app.kubernetes.io\\/managed-by",
