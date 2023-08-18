@@ -55,16 +55,17 @@ local_resource(
         'poetry.lock',
         'src/timestep/__main__.py',
         'src/timestep/config.py',
-        'src/timestep/infra/stacks/main/stack.py',
-        'src/timestep/infra/stacks/main/constructs/cloud_init_config/construct.py',
-        'src/timestep/infra/stacks/main/constructs/cloud_instance/construct.py',
-        'src/timestep/infra/stacks/main/constructs/cloud_instance_domain/construct.py',
-        'src/timestep/infra/stacks/main/constructs/domain_name_registrar/construct.py',
-        'src/timestep/infra/stacks/main/constructs/kube_config/construct.py',
-        'src/timestep/infra/stacks/main/constructs/kubernetes_cluster_ingress/construct.py',
-        'src/timestep/infra/stacks/main/constructs/prefect/construct.py',
-        'src/timestep/infra/stacks/main/constructs/registry/construct.py',
-        'src/timestep/infra/stacks/main/constructs/timestep_ai/construct.py',
+        'src/timestep/infra/stacks/k3s_cluster/stack.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_init_config/construct.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance/construct.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance_domain/construct.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/domain_name_registrar/construct.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/kube_config/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/stack.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/kubernetes_cluster_ingress/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/prefect/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/registry/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/timestep_ai/construct.py',
         'timestep-ai',
         'timestep-ai-0.0.1.tgz',
     ],
@@ -214,7 +215,8 @@ local_resource(
     # cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
     # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
     # cmd='kompose convert --build local --build-command "helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
-    cmd='kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose',
+    # cmd='rm -rf timestep-ai && kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose',
+    cmd='rm -rf timestep-ai && kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
     # cmd="./scripts/kompose-convert.sh",
     deps=[
         '.env',
@@ -228,9 +230,9 @@ local_resource(
     # ]
 )
 
-# watch_file('timestep-ai')
+watch_file('timestep-ai')
 
-# if os.path.exists('timestep-ai'):
+if os.path.exists('timestep-ai'):
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/caddy',
     #     context='./src/timestep/services/caddy',
@@ -245,22 +247,22 @@ local_resource(
     #     # ]
     # )
 
-    # custom_build(
-    #     'registry.gitlab.com/timestep-ai/timestep/caddy',
-    #     command='docker build -t $EXPECTED_REF src/timestep/services/caddy',
-    #     deps=['src/timestep/services/caddy'],
-    #     disable_push=True,
-    #     live_update=[
-    #         sync('./src/timestep/services/caddy/', '/etc/caddy/'),
-    #         run(
-    #             'caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile',
-    #             trigger=['./src/timestep/services/caddy/Caddyfile']
-    #         )
-    #     ],
-    #     skips_local_docker=True,
-    #     # tag='latest',
-    #     tag=str(local(command='echo $VERSION')).strip(),
-    # )
+    custom_build(
+        'registry.gitlab.com/timestep-ai/timestep/caddy',
+        command='docker build -t $EXPECTED_REF src/timestep/services/caddy',
+        deps=['src/timestep/services/caddy'],
+        disable_push=True,
+        live_update=[
+            sync('./src/timestep/services/caddy/', '/etc/caddy/'),
+            run(
+                'caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile',
+                trigger=['./src/timestep/services/caddy/Caddyfile']
+            )
+        ],
+        skips_local_docker=True,
+        # tag='latest',
+        tag=str(local(command='echo $VERSION')).strip(),
+    )
 
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/api',
@@ -296,34 +298,34 @@ local_resource(
     #     'registry.gitlab.com/timestep-ai/timestep/www',
     #     context='src/timestep/services/www',
     #     dockerfile='src/timestep/services/www/Dockerfile',
-    #     entrypoint='quasar dev',
+    #     # entrypoint='quasar dev',
     #     only=['.'],
     #     ignore=['./dist/', './src-capacitor/', './src-electron/'],
-    #     live_update=[
-    #         fall_back_on('./src/timestep/services/www/quasar.config.js'),
-    #         sync('./src/timestep/services/www/', '/app/'),
-    #         run(
-    #             'npm install',
-    #             trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
-    #         )
-    #     ]
+    #     # live_update=[
+    #     #     fall_back_on('./src/timestep/services/www/quasar.config.js'),
+    #     #     sync('./src/timestep/services/www/', '/app/'),
+    #     #     run(
+    #     #         'npm install',
+    #     #         trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
+    #     #     )
+    #     # ]
     # )
 
-    # custom_build(
-    #     'registry.gitlab.com/timestep-ai/timestep/www',
-    #     command='docker build -t $EXPECTED_REF src/timestep/services/www',
-    #     deps=['src/timestep/services/www'],
-    #     disable_push=True,
-    #     entrypoint=['npm', 'run', 'dev'],
-    #     # entrypoint=['npm', 'run', 'serve'],
-    #     # entrypoint=['tail', '-f', '/dev/null'],
-    #     ignore=['dist', 'src-capacitor', 'src-electron'],
-    #     skips_local_docker=True,
-    #     # tag='latest',
-    #     tag=str(local(command='echo $VERSION')).strip(),
-    # )
+    custom_build(
+        'registry.gitlab.com/timestep-ai/timestep/www',
+        command='docker build -t $EXPECTED_REF src/timestep/services/www',
+        deps=['src/timestep/services/www'],
+        disable_push=True,
+        # entrypoint=['npm', 'run', 'dev'],
+        # entrypoint=['npm', 'run', 'serve'],
+        # entrypoint=['tail', '-f', '/dev/null'],
+        ignore=['dist', 'src-capacitor', 'src-electron'],
+        skips_local_docker=True,
+        # tag='latest',
+        tag=str(local(command='echo $VERSION')).strip(),
+    )
 
-    # k8s_yaml(local('helm template timestep-ai'))
+    k8s_yaml(local('helm template timestep-ai'))
 
 # watch_file('timestep-ai')
 

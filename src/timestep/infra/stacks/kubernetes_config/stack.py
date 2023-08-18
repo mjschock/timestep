@@ -1,10 +1,13 @@
 from cdktf import (
+    HttpBackend,
+    LocalBackend,
     TerraformStack,
 )
 from cdktf_cdktf_provider_helm.provider import HelmProvider, HelmProviderKubernetes
 from cdktf_cdktf_provider_kubernetes.provider import KubernetesProvider
 from constructs import Construct
 
+from timestep.config import CloudInstanceProvider
 from timestep.infra.stacks.kubernetes_config.constructs.kubernetes_cluster_ingress.construct import (  # noqa: E501
     KubernetesClusterIngressConstruct,
 )
@@ -16,14 +19,16 @@ from timestep.infra.stacks.kubernetes_config.constructs.timestep_ai.construct im
 class KubernetesConfigStack(TerraformStack):
     id: str = None
 
-    def __init__(self, scope: Construct, id: str, config: dict[str, str], kube_config):
+    def __init__(
+        self, scope: Construct, id: str, config: dict[str, str], kube_config=None
+    ):  # noqa: E501
         super().__init__(scope, id)
         self.id = id
 
         self.kubernetes_provider = KubernetesProvider(
             id="kubernetes_provider",
             config_context=config.kubecontext,
-            config_path=kube_config,
+            config_path=f"{config.base_path}/secrets/kubeconfig",
             scope=self,
         )
 
@@ -31,7 +36,7 @@ class KubernetesConfigStack(TerraformStack):
             id="helm_provider",
             kubernetes=HelmProviderKubernetes(
                 config_context=self.kubernetes_provider.config_context,
-                config_path=kube_config,
+                config_path=self.kubernetes_provider.config_path,
             ),
             scope=self,
         )
@@ -51,3 +56,23 @@ class KubernetesConfigStack(TerraformStack):
             helm_provider=self.helm_provider,
             scope=self,
         )
+
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
+            LocalBackend(
+                path=f"{config.dist_path}/terraform.{self.id}.tfstate",
+                scope=self,
+                workspace_dir=None,
+            )
+
+        else:
+            HttpBackend(
+                address=config.tf_http_address,
+                lock_address=f"{config.tf_http_address}/lock",
+                lock_method="POST",
+                password=config.tf_api_token.get_secret_value(),
+                retry_wait_min=5,
+                scope=self,
+                unlock_address=f"{config.tf_http_address}/lock",
+                unlock_method="DELETE",
+                username=config.tf_username,
+            )

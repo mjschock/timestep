@@ -27,3 +27,4 @@ dist/
 .idea/
 
 kubeconfig
+timestep-ai

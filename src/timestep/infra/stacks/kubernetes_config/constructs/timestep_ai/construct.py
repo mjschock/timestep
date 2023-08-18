@@ -23,6 +23,8 @@ class TimestepAIConstruct(Construct):
             # chart=f"{os.getcwd()}/timestep-ai",
             chart=f"{config.base_path}/timestep-ai",
             create_namespace=True,
+            lint=True,
+            # force_update=True,
             name="timestep-ai",
             # namespace="registry",
             namespace="default",
