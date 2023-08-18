@@ -1,50 +1,54 @@
-secrets:
-   postgresql-password:
-     file: ./secrets/postgresql_password
+# secrets:
+#    postgresql-password:
+#      file: ./secrets/postgresql_password
 services:
-  api:
-    build:
-      context: src/timestep/services/api
-      dockerfile: Dockerfile
-    expose:
-      - 5000
-    image: registry.gitlab.com/timestep-ai/timestep/api:latest
-    labels:
-      kompose.image-pull-secret: "regcred"
-      kompose.service.healthcheck.readiness.http_get_path: /ready
-      kompose.service.healthcheck.readiness.http_get_port: 5000
+  # api:
+  #   build:
+  #     context: src/timestep/services/api
+  #     dockerfile: Dockerfile
+  #   expose:
+  #     - 5000
+  #   image: registry.gitlab.com/timestep-ai/timestep/api:latest
+  #   labels:
+  #     kompose.image-pull-secret: "regcred"
+  #     kompose.service.healthcheck.readiness.http_get_path: /ready
+  #     kompose.service.healthcheck.readiness.http_get_port: 5000
     # ports:
     #   - '80:5000'
-  auth:
-    depends_on:
-      - postgres
-      - graphql-engine
-    environment:
-      AUTH_CLIENT_URL: ${AUTH_CLIENT_URL:-http://localhost:3000}
-      AUTH_HOST: '0.0.0.0'
-      AUTH_PORT: 4000
-      AUTH_SMTP_HOST: mailhog
-      AUTH_SMTP_PASS: password
-      AUTH_SMTP_PORT: 1025
-      AUTH_SMTP_SENDER: mail@example.com
-      AUTH_SMTP_USER: user
-      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres
-      HASURA_GRAPHQL_GRAPHQL_URL: http://graphql-engine:8080/v1/graphql
-      HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
-    expose:
-      - 4000
-    # volumes:
-      # - ./emails:/app/email-templates
-      # - auth:/app
-    image: nhost/hasura-auth:0.16.2
-    restart: always
+  # auth:
+  #   depends_on:
+  #     - postgres
+  #     - graphql-engine
+  #   environment:
+  #     AUTH_CLIENT_URL: ${AUTH_CLIENT_URL:-http://localhost:3000}
+  #     AUTH_HOST: '0.0.0.0'
+  #     AUTH_PORT: 4000
+  #     AUTH_SMTP_HOST: mailhog
+  #     AUTH_SMTP_PASS: password
+  #     AUTH_SMTP_PORT: 1025
+  #     AUTH_SMTP_SENDER: mail@example.com
+  #     AUTH_SMTP_USER: user
+  #     HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+  #     HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+  #     HASURA_GRAPHQL_GRAPHQL_URL: http://graphql-engine:8080/v1/graphql
+  #     HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
+  #   expose:
+  #     - 4000
+  #   # volumes:
+  #     # - ./emails:/app/email-templates
+  #     # - auth:/app
+  #   image: nhost/hasura-auth:0.16.2
+  #   restart: always
+  #   secrets:
+  #     - postgresql-password
   caddy:
     build:
       context: src/timestep/services/caddy
       dockerfile: Dockerfile
-    depends_on:
-      - "graphql-engine"
+    # depends_on:
+    #   - "graphql-engine"
+    # command: ["caddy", "run", "--config", "/home/ubuntu/Caddyfile", "--adapter", "caddyfile"]
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
     environment:
       PRIMARY_DOMAIN_NAME: ${PRIMARY_DOMAIN_NAME:-timestep.local}
     image: registry.gitlab.com/timestep-ai/timestep/caddy:${VERSION:-latest}
@@ -62,6 +66,7 @@ services:
     restart: always
     volumes:
       - caddy_certs:/root/.caddy
+      # - caddy_certs:/home/ubuntu/.caddy
   # dashboard:
   #   image: nhost/dashboard:0.7.4
   #   ports:
@@ -77,127 +82,130 @@ services:
   #     # - /opt/project/data/
   #     # - /opt/project/initdb.d/
   #     - functions:/opt/project
-  graphql-engine:
-    depends_on:
-      - 'postgres'
-    environment:
-      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
-      HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
-      HASURA_GRAPHQL_LOG_LEVEL: debug
-      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
-    expose:
-      - 8080
-    image: hasura/graphql-engine:v2.15.2
-    restart: always
-  # mailhog:
+  # graphql-engine:
+  #   depends_on:
+  #     - 'postgres'
   #   environment:
-  #     SMTP_HOST: ${AUTH_SMTP_HOST:-mailhog}
-  #     SMTP_PASS: ${AUTH_SMTP_PASS:-password}
-  #     SMTP_PORT: ${AUTH_SMTP_PORT:-1025}
-  #     SMTP_SECURE: "${AUTH_SMTP_SECURE:-false}"
-  #     SMTP_SENDER: ${AUTH_SMTP_SENDER:-hbp@hbp.com}
-  #     SMTP_USER: ${AUTH_SMTP_USER:-user}
-  #   image: mailhog/mailhog
+  #     HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+  #     HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+  #     HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+  #     HASURA_GRAPHQL_JWT_SECRET: ${HASURA_GRAPHQL_JWT_SECRET}
+  #     HASURA_GRAPHQL_LOG_LEVEL: debug
+  #     HASURA_GRAPHQL_UNAUTHORIZED_ROLE: public
+  #   expose:
+  #     - 8080
+  #   image: hasura/graphql-engine:v2.15.2
+  #   restart: always
+  # # mailhog:
+  # #   environment:
+  # #     SMTP_HOST: ${AUTH_SMTP_HOST:-mailhog}
+  # #     SMTP_PASS: ${AUTH_SMTP_PASS:-password}
+  # #     SMTP_PORT: ${AUTH_SMTP_PORT:-1025}
+  # #     SMTP_SECURE: "${AUTH_SMTP_SECURE:-false}"
+  # #     SMTP_SENDER: ${AUTH_SMTP_SENDER:-hbp@hbp.com}
+  # #     SMTP_USER: ${AUTH_SMTP_USER:-user}
+  # #   image: mailhog/mailhog
+  # #   ports:
+  # #     - ${AUTH_SMTP_PORT:-1025}:1025 
+  # #     - 8025:8025
+  #   secrets:
+  #     - postgresql-password
+  # #   volumes:
+  # #     # - ./data/mailhog:/maildir
+  # #     - mailhog:/maildir
+  # minio:
+  #   command: -c 'mkdir -p /data/nhost && /opt/bin/minio server --address :8484 /data'
+  #   entrypoint: sh
+  #   environment:
+  #     MINIO_ROOT_PASSWORD: ${STORAGE_SECRET_KEY}
+  #     MINIO_ROOT_USER: ${STORAGE_ACCESS_KEY}
+  #   image: minio/minio:RELEASE.2021-09-24T00-24-24Z
   #   ports:
-  #     - ${AUTH_SMTP_PORT:-1025}:1025 
-  #     - 8025:8025
+  #     - ${MINIO_PORT:-8484}:8484
   #   volumes:
-  #     # - ./data/mailhog:/maildir
-  #     - mailhog:/maildir
-  minio:
-    command: -c 'mkdir -p /data/nhost && /opt/bin/minio server --address :8484 /data'
-    entrypoint: sh
-    environment:
-      MINIO_ROOT_PASSWORD: ${STORAGE_SECRET_KEY}
-      MINIO_ROOT_USER: ${STORAGE_ACCESS_KEY}
-    image: minio/minio:RELEASE.2021-09-24T00-24-24Z
-    ports:
-      - ${MINIO_PORT:-8484}:8484
-    volumes:
-      # - ./data/minio:/data
-      - minio:/data
-  postgres:
-    build:
-      context: src/timestep/services/postgres
-      dockerfile: Dockerfile
-    # ports:
-    #   - '5432:5432'
-    environment:
-      # - 'ALLOW_EMPTY_PASSWORD=yes'
-      POSTGRESQL_PASSWORD: ${POSTGRESQL_PASSWORD:-secretpgpassword}
-      POSTGRESQL_PASSWORD_FILE: /run/secrets/postgresql_password
-    # expose:
-    #   - 5432
-    # image: docker.io/bitnami/postgresql:15.3.0
-    image: registry.gitlab.com/timestep-ai/timestep/postgres:latest
-    labels:
-      kompose.image-pull-secret: "regcred"
-    ports:
-      - '5432:5432'
-    secrets:
-      - postgresql-password
-    volumes:
-      - 'postgres:/bitnami/postgresql'
-  prefect-agent:
-    # build: .
-    command: ["prefect", "agent", "start", "--pool", "default-agent-pool", "--work-queue", "default"]
-    depends_on:
-      - prefect-server
-    entrypoint: ["/usr/bin/tini", "-g", "--", "/opt/prefect/entrypoint.sh"]
-    environment:
-      - PREFECT_API_URL=http://prefect-server:4200/api
-    image: prefecthq/prefect:2.11.3-python3.11
-  prefect-server:
-    command: ["prefect", "server", "start", "--host", "0.0.0.0", "--log-level", "WARNING"]
-    entrypoint: ["/usr/bin/tini", "-g", "--", "/opt/prefect/entrypoint.sh"]
-    environment:
-      # - HOME=/home/prefect
-      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres
-    expose:
-      - 4200
-    image: prefecthq/prefect:2.11.3-python3.11
-    labels:
-      kompose.service.healthcheck.liveness.http_get_path: /api/health
-      kompose.service.healthcheck.liveness.http_get_port: 4200
-      kompose.service.healthcheck.readiness.http_get_path: /api/ready
-      kompose.service.healthcheck.readiness.http_get_port: 4200
+  #     # - ./data/minio:/data
+  #     - minio:/data
+  # postgres:
+  #   build:
+  #     context: src/timestep/services/postgres
+  #     dockerfile: Dockerfile
+  #   # ports:
+  #   #   - '5432:5432'
+  #   environment:
+  #     # - 'ALLOW_EMPTY_PASSWORD=yes'
+  #     # POSTGRESQL_PASSWORD: ${POSTGRESQL_PASSWORD:-secretpgpassword}
+  #     POSTGRESQL_PASSWORD_FILE: /run/secrets/postgresql_password
+  #   # expose:
+  #   #   - 5432
+  #   # image: docker.io/bitnami/postgresql:15.3.0
+  #   image: registry.gitlab.com/timestep-ai/timestep/postgres:latest
+  #   labels:
+  #     kompose.image-pull-secret: "regcred"
   #   ports:
-  #     - '4200:4200'
-  storage:
-    command: serve
-    depends_on:
-      - postgres
-      - graphql-engine
-      - minio
-    environment:
-      HASURA_ENDPOINT: http://graphql-engine:8080/v1
-      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
-      HASURA_METADATA: 1
-      POSTGRES_MIGRATIONS: 1
-      POSTGRES_MIGRATIONS_SOURCE: postgres://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres?sslmode=disable
-      PUBLIC_URL: http://localhost:${PROXY_PORT:-1337}
-      S3_ACCESS_KEY: ${STORAGE_ACCESS_KEY}
-      S3_BUCKET: nhost
-      S3_ENDPOINT: http://minio:8484
-      S3_SECRET_KEY: ${STORAGE_SECRET_KEY}
-    expose:
-      - 8000
-    image: nhost/hasura-storage:0.3.1
-    restart: always
+  #     - '5432:5432'
+  #   secrets:
+  #     - postgresql-password
+  #   volumes:
+  #     - 'postgres:/bitnami/postgresql'
+  # prefect-agent:
+  #   # build: .
+  #   command: ["prefect", "agent", "start", "--pool", "default-agent-pool", "--work-queue", "default"]
+  #   depends_on:
+  #     - prefect-server
+  #   entrypoint: ["/usr/bin/tini", "-g", "--", "/opt/prefect/entrypoint.sh"]
+  #   environment:
+  #     - PREFECT_API_URL=http://prefect-server:4200/api
+  #   image: prefecthq/prefect:2.11.3-python3.11
+  # prefect-server:
+  #   command: ["prefect", "server", "start", "--host", "0.0.0.0", "--log-level", "WARNING"]
+  #   entrypoint: ["/usr/bin/tini", "-g", "--", "/opt/prefect/entrypoint.sh"]
+  #   environment:
+  #     - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres
+  #     # POSTGRESQL_PASSWORD_FILE: /run/secrets/postgresql_password
+  #     # - HOME=/home/prefect
+  #     # PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://postgres:${PREFECT_API_DATABASE_PASSWORD}@postgres:5432/postgres
+  #     # PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://postgres:${POSTGRESQL_PASSWORD_FILE:-secretpgpassword}@postgres:5432/postgres
+  #     # - PREFECT_API_DATABASE_CONNECTION_URL='postgresql+asyncpg://postgres:${PREFECT_API_DATABASE_PASSWORD}@localhost/prefect'
+  #     # PREFECT_API_DATABASE_PASSWORD: mypassword
+  #   expose:
+  #     - 4200
+  #   image: prefecthq/prefect:2.11.3-python3.11
+  #   labels:
+  #     kompose.service.healthcheck.liveness.http_get_path: /api/health
+  #     kompose.service.healthcheck.liveness.http_get_port: 4200
+  #     kompose.service.healthcheck.readiness.http_get_path: /api/ready
+  #     kompose.service.healthcheck.readiness.http_get_port: 4200
+  #   secrets:
+  #     - postgresql-password
+  # storage:
+  #   command: serve
+  #   depends_on:
+  #     - postgres
+  #     - graphql-engine
+  #     - minio
+  #   environment:
+  #     HASURA_ENDPOINT: http://graphql-engine:8080/v1
+  #     HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+  #     HASURA_METADATA: 1
+  #     POSTGRES_MIGRATIONS: 1
+  #     POSTGRES_MIGRATIONS_SOURCE: postgres://postgres:${POSTGRESQL_PASSWORD:-secretpgpassword}@postgres:5432/postgres?sslmode=disable
+  #     PUBLIC_URL: http://localhost:${PROXY_PORT:-1337}
+  #     S3_ACCESS_KEY: ${STORAGE_ACCESS_KEY}
+  #     S3_BUCKET: nhost
+  #     S3_ENDPOINT: http://minio:8484
+  #     S3_SECRET_KEY: ${STORAGE_SECRET_KEY}
+  #   expose:
+  #     - 8000
+  #   image: nhost/hasura-storage:0.3.1
+  #   restart: always
+  #   secrets:
+  #     - postgresql-password
   www:
     build:
       context: src/timestep/services/www
       dockerfile: Dockerfile
     # command: ["npm", "run", "serve"]
-    # command: [
-    #   "quasar",
-    #   "serve",
-    #   "dist/spa",
-    #   "-p",
-    #   "9000"
-    # ]
+    command: ["quasar", "serve", "dist/spa", "--hostname", "0.0.0.0", "-p", "9000"]
     # environment:
       # VITE_CLIENT_PORT: '5735'
     expose:
@@ -209,12 +217,12 @@ services:
     labels:
       kompose.image-pull-policy: "Always"
       kompose.image-pull-secret: "regcred"
-version: '3.6'
+version: '3.8'
 volumes:
   # auth:
   caddy_certs:
   # functions_node_modules:
   # functions:
   # mailhog:
-  minio:
-  postgres:
+  # minio:
+  # postgres:
