@@ -49,4 +49,4 @@ docker run \
  --env TF_USERNAME=${TF_USERNAME} \
  --user $(id -u):$(id -g) \
  --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
- ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}.kubernetes_config
+ ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve --ignore-missing-stack-dependencies ${PRIMARY_DOMAIN_NAME}.kubernetes_config
