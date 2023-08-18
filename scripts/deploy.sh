@@ -22,7 +22,7 @@ docker run \
  --env TF_USERNAME=${TF_USERNAME} \
  --user $(id -u):$(id -g) \
  --volume $(pwd)/secrets:/home/ubuntu/secrets:ro \
- ${CI_REGISTRY_IMAGE}:latest kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose
+ ${CI_REGISTRY_IMAGE}:latest kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
 
 docker run \
  --env-file .env \
