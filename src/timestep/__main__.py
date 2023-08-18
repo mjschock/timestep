@@ -1,6 +1,6 @@
-from cdktf import App, HttpBackend, LocalBackend
+from cdktf import App
 
-from timestep.config import CloudInstanceProvider, Settings
+from timestep.config import Settings
 from timestep.infra.stacks.k3s_cluster.stack import K3sClusterStack
 from timestep.infra.stacks.kubernetes_config.stack import KubernetesConfigStack
 
@@ -28,33 +28,33 @@ def main() -> None:
 
     kubernetes_config_stack = KubernetesConfigStack(
         config=config,
-        kube_config=k3s_cluster_stack.kube_config_contruct.data_source.filename,
+        # kube_config=k3s_cluster_stack.kube_config_contruct.data_source.filename,
         id=f"{config.primary_domain_name}.kubernetes_config",
         scope=app,
     )
 
     kubernetes_config_stack.add_dependency(k3s_cluster_stack)
 
-    for stack in [k3s_cluster_stack, kubernetes_config_stack]:
-        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
-            LocalBackend(
-                path=f"{config.dist_path}/terraform.{stack.id}.tfstate",
-                scope=stack,
-                workspace_dir=None,
-            )
+    # for stack in [k3s_cluster_stack, kubernetes_config_stack]:
+    #     if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
+    #         LocalBackend(
+    #             path=f"{config.dist_path}/terraform.{stack.id}.tfstate",
+    #             scope=stack,
+    #             workspace_dir=None,
+    #         )
 
-        else:
-            HttpBackend(
-                address=config.tf_http_address,
-                lock_address=f"{config.tf_http_address}/lock",
-                lock_method="POST",
-                password=config.tf_api_token.get_secret_value(),
-                retry_wait_min=5,
-                scope=stack,
-                unlock_address=f"{config.tf_http_address}/lock",
-                unlock_method="DELETE",
-                username=config.tf_username,
-            )
+    #     else:
+    #         HttpBackend(
+    #             address=config.tf_http_address,
+    #             lock_address=f"{config.tf_http_address}/lock",
+    #             lock_method="POST",
+    #             password=config.tf_api_token.get_secret_value(),
+    #             retry_wait_min=5,
+    #             scope=stack,
+    #             unlock_address=f"{config.tf_http_address}/lock",
+    #             unlock_method="DELETE",
+    #             username=config.tf_username,
+    #         )
 
     app.synth()
 

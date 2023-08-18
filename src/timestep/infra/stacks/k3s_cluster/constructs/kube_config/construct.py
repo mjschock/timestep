@@ -30,7 +30,8 @@ class KubeConfigConstruct(Construct):
             ipv4 = cloud_instance_construct.data_source.ipv4_address
 
         kubecontext = config.kubecontext
-        local_kube_config_path = f"{config.dist_path}/kube-config.yml"
+        # local_kube_config_path = f"{config.dist_path}/kube-config.yml"
+        local_kube_config_path = f"{config.base_path}/secrets/kubeconfig"
         # local_kube_config_path = "kube-config.yml"
         username = config.cloud_instance_user
         ssh_private_key_path = config.ssh_private_key_path
@@ -46,7 +47,8 @@ class KubeConfigConstruct(Construct):
             provider=kube_config_provider,
             provisioners=[
                 LocalExecProvisioner(
-                    command=f"k3sup install --context {kubecontext} --ip {ipv4} --k3s-extra-args '--disable traefik' --local-path {local_kube_config_path} --skip-install --ssh-key {ssh_private_key_path} --user {username}",  # noqa: E501
+                    # command=f"k3sup install --context {kubecontext} --ip {ipv4} --k3s-extra-args '--disable traefik' --local-path {local_kube_config_path} --skip-install --ssh-key {ssh_private_key_path} --user {username}",  # noqa: E501
+                    command=f"k3sup install --context {kubecontext} --ip {ipv4} --local-path {local_kube_config_path} --skip-install --ssh-key {ssh_private_key_path} --user {username}",  # noqa: E501
                     type="local-exec",
                     when="create",
                 ),

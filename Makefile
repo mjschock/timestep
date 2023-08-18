@@ -9,7 +9,7 @@ docker-compoze-viz:
 	docker run --rm -it --name dcv -v $(shell pwd):/input pmsipilot/docker-compose-viz render -m image docker-compose.yml
 
 hosts:
-	cat cdktf.out/stacks/timestep.local/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
+	cat cdktf.out/stacks/timestep.local.k3s_cluster/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
 
 imports:
 	poetry run cdktf get --force --language python --log-level ${CDKTF_LOG_LEVEL} --output src/timestep/infra/imports

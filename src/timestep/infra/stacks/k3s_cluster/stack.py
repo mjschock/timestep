@@ -1,8 +1,11 @@
 from cdktf import (
+    HttpBackend,
+    LocalBackend,
     TerraformStack,
 )
 from constructs import Construct
 
+from timestep.config import CloudInstanceProvider
 from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
     CloudInitConfigConstruct,
 )
@@ -65,3 +68,23 @@ class K3sClusterStack(TerraformStack):
             id="kube_config_contruct",
             scope=self,
         )
+
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
+            LocalBackend(
+                path=f"{config.dist_path}/terraform.{self.id}.tfstate",
+                scope=self,
+                workspace_dir=None,
+            )
+
+        else:
+            HttpBackend(
+                address=config.tf_http_address,
+                lock_address=f"{config.tf_http_address}/lock",
+                lock_method="POST",
+                password=config.tf_api_token.get_secret_value(),
+                retry_wait_min=5,
+                scope=self,
+                unlock_address=f"{config.tf_http_address}/lock",
+                unlock_method="DELETE",
+                username=config.tf_username,
+            )

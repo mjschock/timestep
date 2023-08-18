@@ -9,17 +9,17 @@ http://{$PRIMARY_DOMAIN_NAME}:80 {
 http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 	encode gzip
 
-	handle /console/* {
-		reverse_proxy graphql-engine:8080
-	}
+	# handle /console/* {
+	# 	reverse_proxy graphql-engine:8080
+	# }
 
-	handle /v1/* {
-		reverse_proxy graphql-engine:8080
-	}
+	# handle /v1/* {
+	# 	reverse_proxy graphql-engine:8080
+	# }
 
-	handle /v2/* {
-		reverse_proxy graphql-engine:8080
-	}
+	# handle /v2/* {
+	# 	reverse_proxy graphql-engine:8080
+	# }
 
 	handle {
 		# root * /home/base/www/dist/spa
