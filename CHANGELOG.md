@@ -1,3 +1,13 @@
+## 1.0.44 (2023-08-18)
+
+### Fix
+
+- f
+
+### Refactor
+
+- 2 stacks, cross-stack kube_config.yml
+
 ## 1.0.43 (2023-08-14)
 
 ### Fix
