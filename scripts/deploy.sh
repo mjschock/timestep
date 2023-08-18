@@ -21,7 +21,7 @@ docker run \
  --env TF_API_TOKEN=${TF_API_TOKEN} \
  --env TF_USERNAME=${TF_USERNAME} \
  --user $(id -u):$(id -g) \
- --volume $(pwd)/secrets:/home/ubuntu/secrets:ro \
+ --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
  ${CI_REGISTRY_IMAGE}:latest kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
 
 docker run \
@@ -36,5 +36,5 @@ docker run \
  --env TF_API_TOKEN=${TF_API_TOKEN} \
  --env TF_USERNAME=${TF_USERNAME} \
  --user $(id -u):$(id -g) \
- --volume $(pwd)/secrets:/home/ubuntu/secrets:ro \
+ --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
  ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}.k3s_cluster ${PRIMARY_DOMAIN_NAME}.kubernetes_config
