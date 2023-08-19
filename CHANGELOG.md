@@ -1,3 +1,9 @@
+## 1.5.0 (2023-08-19)
+
+### Feat
+
+- HMR working for timestep.local, cleanup UI a bit
+
 ## 1.4.1 (2023-08-18)
 
 ### Fix
