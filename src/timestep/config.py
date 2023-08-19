@@ -105,6 +105,11 @@ class Settings(BaseSettings):
         default=DomainNameRegistrarProvider.NONE, env="DOMAIN_NAME_REGISTRAR_PROVIDER"
     )
     htpasswd: SecretStr = Field(env="HTPASSWD")
+    ingress_controller_acme_ca: str = Field(
+        default="https://acme-staging-v02.api.letsencrypt.org/directory",
+        # default="https://acme-v02.api.letsencrypt.org/directory",
+        env="INGRESS_CONTROLLER_ACME_CA",
+    )
     ingress_controller_debug: str = Field(
         default="true",
         env="INGRESS_CONTROLLER_DEBUG",

@@ -75,7 +75,7 @@ class KubernetesClusterIngressConstruct(Construct):
             set=[
                 {
                     "name": "ingressController.config.acmeCA",
-                    "value": "https://acme-staging-v02.api.letsencrypt.org/directory",
+                    "value": config.ingress_controller_acme_ca,
                 },
                 {
                     "name": "ingressController.config.debug",
