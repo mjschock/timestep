@@ -11,6 +11,9 @@ from timestep.config import CloudInstanceProvider
 from timestep.infra.stacks.kubernetes_config.constructs.kubernetes_cluster_ingress.construct import (  # noqa: E501
     KubernetesClusterIngressConstruct,
 )
+from timestep.infra.stacks.kubernetes_config.constructs.timestep_ai.construct import (
+    TimestepAIConstruct,
+)
 
 
 class KubernetesConfigStack(TerraformStack):
@@ -47,12 +50,12 @@ class KubernetesConfigStack(TerraformStack):
             )
         )
 
-        # self.timestep_ai_contruct: TimestepAIConstruct = TimestepAIConstruct(
-        #     config=config,
-        #     id="timestep_ai_contruct",
-        #     helm_provider=self.helm_provider,
-        #     scope=self,
-        # )
+        self.timestep_ai_contruct: TimestepAIConstruct = TimestepAIConstruct(
+            config=config,
+            id="timestep_ai_contruct",
+            helm_provider=self.helm_provider,
+            scope=self,
+        )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             LocalBackend(
