@@ -50,6 +50,15 @@ class KubernetesConfigStack(TerraformStack):
             )
         )
 
+        # self.kubernetes_dashboard_contruct: KubernetesDashboardConstruct = (
+        #     KubernetesDashboardConstruct(
+        #         config=config,
+        #         id="kubernetes_dashboard",
+        #         helm_provider=self.helm_provider,
+        #         scope=self,
+        #     )
+        # )
+
         self.timestep_ai_contruct: TimestepAIConstruct = TimestepAIConstruct(
             config=config,
             id="timestep_ai_contruct",
