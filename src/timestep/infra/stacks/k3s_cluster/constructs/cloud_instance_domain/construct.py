@@ -29,6 +29,10 @@ class CloudInstanceDomainConstruct(Construct):
     ) -> None:
         super().__init__(scope, id)
 
+        subdomains = [
+            "www",
+        ]
+
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             cloud_instance_domain_provider = LocalTerraformProvider(
                 alias="cloud_instance_domain_provider",
@@ -48,32 +52,12 @@ class CloudInstanceDomainConstruct(Construct):
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             ipv4 = cloud_instance_construct.data_source.ipv4
             primary_domain_name = config.primary_domain_name
-            subdomains = [
-                # "alice",
-                # "api",
-                # "bob",
-                # "example1",
-                # "example2",
-                # "notary",
-                # "marvin",
-                # "prefect-server",
-                # "registry",
-                # "studio",
-                # "supabase",
-                # "supabase-studio",
-                # "talker",
-                # "traefik",
-                "www",
-            ]
-
             content = ""
 
             for subdomain in subdomains:
                 content += f"{ipv4} {subdomain}.{primary_domain_name}\n"
 
             content += f"{ipv4} {primary_domain_name}\n"
-
-            # content += f"{ipv4} core.harbor.domain\n"
 
             cloud_instance_domain_resource = LocalFileTerraformResource(
                 id="cloud_instance_domain_resource",
@@ -84,6 +68,15 @@ class CloudInstanceDomainConstruct(Construct):
             )
 
         elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
+            for subdomain in subdomains:
+                DigitaloceanDomainTerraformResource(
+                    id_=f"cloud_instance_domain_resource_{subdomain}",
+                    ip_address=cloud_instance_construct.data_source.ipv4_address,
+                    name=f"{subdomain}.{config.primary_domain_name}",
+                    provider=cloud_instance_domain_provider,
+                    scope=scope,
+                )
+
             cloud_instance_domain_resource = DigitaloceanDomainTerraformResource(
                 id_="cloud_instance_domain_resource",
                 ip_address=cloud_instance_construct.data_source.ipv4_address,
