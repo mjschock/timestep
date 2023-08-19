@@ -1,3 +1,14 @@
+## 1.4.0 (2023-08-18)
+
+### Feat
+
+- adds ingress_controller_acme_ca
+- adds kubernetes dashboard
+
+### Fix
+
+- f
+
 ## 1.3.0 (2023-08-18)
 
 ### Feat
