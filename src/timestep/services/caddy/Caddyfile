@@ -2,7 +2,8 @@
 # :80 {
 # http://timestep.local:80 {
 http://{$PRIMARY_DOMAIN_NAME}:80 {
-	redir http://www.timestep.local{uri}
+	# redir http://www.timestep.local{uri}
+	redir http://www.{$PRIMARY_DOMAIN_NAME}{uri}
 }
 
 # http://www.timestep.local:80 {
