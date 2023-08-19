@@ -346,7 +346,9 @@ if os.path.exists('timestep-ai'):
                 'npm install',
                 trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
             )
-        ]
+        ],
+        pull=True,
+        # skips_local_docker=True,
     )
 
     # custom_build(
