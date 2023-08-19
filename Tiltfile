@@ -7,6 +7,15 @@ load('ext://uibutton', 'cmd_button', 'bool_input', 'location', 'text_input')
 dotenv('.env')
 
 local_resource(
+    'npm install -g cdktf-cli',
+    cmd='npm install -g cdktf-cli@$CDKTF_CLI_VERSION',
+    env={
+        'PRIMARY_DOMAIN_NAME': os.getenv('CDKTF_CLI_VERSION'),
+    },
+    labels=['build'],
+)
+
+local_resource(
     'poetry install',
     cmd='poetry install',
     deps=[
@@ -14,6 +23,21 @@ local_resource(
         'poetry.lock',
     ],
     labels=['build'],
+    resource_deps=[
+        'npm install -g cdktf-cli',
+    ],
+)
+
+local_resource(
+    'poetry add cdktf',
+    cmd='poetry add cdktf@$CDKTF_LIB_VERSION',
+    env={
+        'PRIMARY_DOMAIN_NAME': os.getenv('CDKTF_LIB_VERSION'),
+    },
+    labels=['build'],
+    resource_deps=[
+        'poetry install',
+    ],
 )
 
 local_resource(
@@ -294,36 +318,40 @@ if os.path.exists('timestep-ai'):
     #     ]
     # )
 
-    # docker_build(
-    #     'registry.gitlab.com/timestep-ai/timestep/www',
-    #     context='src/timestep/services/www',
-    #     dockerfile='src/timestep/services/www/Dockerfile',
-    #     # entrypoint='quasar dev',
-    #     only=['.'],
-    #     ignore=['./dist/', './src-capacitor/', './src-electron/'],
-    #     # live_update=[
-    #     #     fall_back_on('./src/timestep/services/www/quasar.config.js'),
-    #     #     sync('./src/timestep/services/www/', '/app/'),
-    #     #     run(
-    #     #         'npm install',
-    #     #         trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
-    #     #     )
-    #     # ]
-    # )
-
-    custom_build(
+    docker_build(
         'registry.gitlab.com/timestep-ai/timestep/www',
-        command='docker build -t $EXPECTED_REF src/timestep/services/www',
-        deps=['src/timestep/services/www'],
-        disable_push=True,
-        # entrypoint=['npm', 'run', 'dev'],
-        # entrypoint=['npm', 'run', 'serve'],
-        # entrypoint=['tail', '-f', '/dev/null'],
-        ignore=['dist', 'src-capacitor', 'src-electron'],
-        skips_local_docker=True,
-        # tag='latest',
-        tag=str(local(command='echo $VERSION')).strip(),
+        build_args={
+         'NODENV_VERSION': os.getenv('NODENV_VERSION'),
+        },
+        context='src/timestep/services/www',
+        dockerfile='src/timestep/services/www/Dockerfile',
+        entrypoint='quasar dev -m spa -p 9000',
+        # entrypoint='quasar dev --hostname 127.0.0.1 -m spa -p 9000',
+        only=['.'],
+        ignore=['./dist/', './src-capacitor/', './src-electron/'],
+        live_update=[
+            fall_back_on('./src/timestep/services/www/quasar.config.js'),
+            sync('./src/timestep/services/www/', '/home/node/app'),
+            run(
+                'npm install',
+                trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
+            )
+        ]
     )
+
+    # custom_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/www',
+    #     command='docker build -t $EXPECTED_REF src/timestep/services/www',
+    #     deps=['src/timestep/services/www'],
+    #     disable_push=True,
+    #     # entrypoint=['npm', 'run', 'dev'],
+    #     # entrypoint=['npm', 'run', 'serve'],
+    #     # entrypoint=['tail', '-f', '/dev/null'],
+    #     ignore=['dist', 'src-capacitor', 'src-electron'],
+    #     skips_local_docker=True,
+    #     # tag='latest',
+    #     tag=str(local(command='echo $VERSION')).strip(),
+    # )
 
     k8s_yaml(local('helm template timestep-ai'))
 
