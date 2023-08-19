@@ -79,7 +79,7 @@ class KubernetesClusterIngressConstruct(Construct):
                 },
                 {
                     "name": "ingressController.config.debug",
-                    "value": "true",
+                    "value": config.ingress_controller_debug,
                 },
                 {
                     "name": "ingressController.config.email",

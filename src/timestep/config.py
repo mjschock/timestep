@@ -105,6 +105,10 @@ class Settings(BaseSettings):
         default=DomainNameRegistrarProvider.NONE, env="DOMAIN_NAME_REGISTRAR_PROVIDER"
     )
     htpasswd: SecretStr = Field(env="HTPASSWD")
+    ingress_controller_debug: str = Field(
+        default="true",
+        env="INGRESS_CONTROLLER_DEBUG",
+    )
     ingress_controller_email: str = Field(env="INGRESS_CONTROLLER_EMAIL")
     kubecontext: str = Field(env="KUBECONTEXT")
     multipass_instance_cpus: int = Field(
