@@ -15,8 +15,7 @@ imports:
 	poetry run cdktf get --force --language python --log-level ${CDKTF_LOG_LEVEL} --output src/timestep/infra/imports
 
 k3s-cluster:
-	k3sup install --context timestep.local --ip 10.61.136.72 --k3s-extra-args '--disable traefik' --local-path kubeconfig --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
-	k3sup install --context timestep.ai --ip 146.190.62.56 --k3s-extra-args '--disable traefik' --local-path kubeconfig --merge --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
+	k3sup install --context timestep.ai --ip 143.244.178.23 --local-path secrets/kubeconfig --merge --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
 
 pre-commit:
 	poetry run pre-commit run --all-files
@@ -28,4 +27,4 @@ quasar-dev-android:
 	cd src/timestep/projects/www && npx quasar dev -m capacitor -T android
 
 ssh:
-	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.159.189.54
+	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@143.244.178.23
