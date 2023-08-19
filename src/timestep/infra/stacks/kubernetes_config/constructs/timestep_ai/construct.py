@@ -32,7 +32,7 @@ class TimestepAIConstruct(Construct):
             # repository="https://charts.bitnami.com/bitnami",
             # provider=kubernetes_cluster_ingress_construct.helm_provider,
             provider=helm_provider,
-            recreate_pods=True,
+            # recreate_pods=True,
             set=[
                 ReleaseSet(
                     name="app.kubernetes.io\\/managed-by",

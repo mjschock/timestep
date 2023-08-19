@@ -217,6 +217,7 @@ services:
     labels:
       kompose.image-pull-policy: "Always"
       kompose.image-pull-secret: "regcred"
+      rollme: "{{ randAlphaNum 5 | quote }}"
 version: '3.8'
 volumes:
   # auth:
