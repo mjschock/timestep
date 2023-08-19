@@ -22,6 +22,7 @@ class TimestepAIConstruct(Construct):
             # chart="timestep-ai",
             # chart=f"{os.getcwd()}/timestep-ai",
             chart=f"{config.base_path}/timestep-ai",
+            # chart=f"{config.base_path}/timestep-ai-{config.version}.tgz",
             create_namespace=True,
             lint=True,
             # force_update=True,
@@ -31,6 +32,7 @@ class TimestepAIConstruct(Construct):
             # repository="https://charts.bitnami.com/bitnami",
             # provider=kubernetes_cluster_ingress_construct.helm_provider,
             provider=helm_provider,
+            recreate_pods=True,
             set=[
                 ReleaseSet(
                     name="app.kubernetes.io\\/managed-by",
@@ -108,6 +110,7 @@ class TimestepAIConstruct(Construct):
                 # )
             ],
             scope=self,
+            # version=config.version,
         )
 
         # kubernetes_cluster_ingress_construct.create_ingress_resource(
