@@ -1,3 +1,23 @@
+## 1.1.0 (2023-08-18)
+
+### Feat
+
+- Add TimestepAIConstruct to KubernetesConfigStack
+
+### Fix
+
+- Fix www redirect
+- Adds volume for Helm chart
+- f
+- f
+- f
+- Split up k3s_cluster deploy and kubernetes_config and remove KUBECONFIG env var from docker run commands
+- Sets secrets to rw in deploy.sh
+- **f**: f
+- f
+
+## 1.0.44 (2023-08-16)
+
 ## 1.0.45 (2023-08-18)
 
 ### Fix
