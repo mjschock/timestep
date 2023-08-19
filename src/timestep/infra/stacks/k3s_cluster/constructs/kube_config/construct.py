@@ -43,6 +43,7 @@ class KubeConfigConstruct(Construct):
         )
 
         kube_config_resource = Resource(  # noqa: F841
+            depends_on=[cloud_instance_construct.data_source],  # noqa: F841
             id="kube_config_resource",
             provider=kube_config_provider,
             provisioners=[
