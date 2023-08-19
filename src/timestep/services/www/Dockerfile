@@ -67,7 +67,7 @@
 #   && rm -rf /var/lib/apt/lists/*
 
 # RUN curl -sLS https://get.arkade.dev | sudo sh
-# RUN ark system install node --version v18.15.0
+# RUN ark system install node --version v18.17.1
 
 # RUN groupadd -r base && useradd --no-log-init -r -g base -s /bin/bash base
 # USER base
@@ -103,7 +103,7 @@
 #   && rm -rf /var/lib/apt/lists/*
 
 # RUN curl -sLS https://get.arkade.dev | sh
-# RUN ark system install node --version v18.15.0
+# RUN ark system install node --version v18.17.1
 # RUN npm i -g @quasar/cli
 
 # RUN groupadd -r node && useradd --no-log-init -r -g node -s /bin/bash node

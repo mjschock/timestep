@@ -70,7 +70,7 @@
 # RUN anyenv install pyenv
 # RUN ark get caddy
 
-# ENV NODENV_VERSION=18.15.0
+# ENV NODENV_VERSION=18.17.1
 # RUN ["/bin/bash", "-c", "eval \"$(anyenv init -)\" && nodenv install $NODENV_VERSION"]
 
 # ENV PYENV_VERSION=3.11.3
@@ -117,7 +117,7 @@
 #     && rm -rf /var/lib/apt/lists/*
 
 # RUN curl -sLS https://get.arkade.dev | sh
-# RUN ark system install node --version v18.15.0
+# RUN ark system install node --version v18.17.1
 
 # RUN groupadd -r base && useradd --no-log-init -r -g base -s /bin/bash base
 # USER base
@@ -147,7 +147,7 @@
 
 # # RUN curl -sLS https://get.arkade.dev | sh
 # # ENV PATH=/home/base/.arkade/bin:$PATH
-# # RUN ark system install node --version v18.15.0
+# # RUN ark system install node --version v18.17.1
 
 # # COPY www /tmp/www
 # # WORKDIR /tmp/www
@@ -165,7 +165,7 @@
 
 # RUN curl -sLS https://get.arkade.dev | sh
 # ENV PATH=/home/base/.arkade/bin:$PATH
-# RUN ark system install node --version v18.15.0
+# RUN ark system install node --version v18.17.1
 
 FROM ubuntu:22.04
 
@@ -203,14 +203,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sLS https://get.arkade.dev | sudo sh
-RUN ark system install node --version v18.15.0
+RUN ark system install node --version v18.17.1
 
 RUN groupadd -r base && useradd --no-log-init -r -g base -s /bin/bash base
 USER base
 WORKDIR /home/base
 
 RUN ark get caddy
-# RUN ark system install node --version v18.15.0
+# RUN ark system install node --version v18.17.1
 
 # COPY --chown=base:base www /home/base/www
 # WORKDIR /home/base/www
