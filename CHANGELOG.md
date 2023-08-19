@@ -1,3 +1,9 @@
+## 1.2.0 (2023-08-18)
+
+### Feat
+
+- makes ingress_controller_debug configurable through an env var
+
 ## 1.1.0 (2023-08-18)
 
 ### Feat
