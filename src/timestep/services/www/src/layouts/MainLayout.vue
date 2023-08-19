@@ -27,8 +27,8 @@
         />
       </q-toolbar>
 
-      <q-linear-progress dark indeterminate color="secondary" class="q-mt-sm" />
-      <q-linear-progress dark query color="secondary" class="q-mt-sm" />
+      <!-- <q-linear-progress dark indeterminate color="secondary" class="q-mt-sm" /> -->
+      <!-- <q-linear-progress dark query color="secondary" class="q-mt-sm" /> -->
       <!-- <q-tabs align="left">
         <q-route-tab to="/agents" label="Agents" />
         <q-route-tab to="/environments" label="Environments" />
@@ -69,7 +69,7 @@
         <q-item-label
           header
         >
-          Settings
+         Environments
         </q-item-label>
       </q-list>
     </q-drawer>
