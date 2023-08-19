@@ -28,3 +28,4 @@ dist/
 
 kubeconfig
 timestep-ai
+timestep-ai-*.tgz

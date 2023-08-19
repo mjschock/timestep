@@ -257,6 +257,16 @@ local_resource(
 watch_file('timestep-ai')
 
 if os.path.exists('timestep-ai'):
+    local_resource(
+        'helm package',
+        cmd='helm package timestep-ai --version $VERSION',
+        deps=['timestep-ai'],
+        labels=['build'],
+        resource_deps=[
+            'kompose convert',
+        ]
+    )
+
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/caddy',
     #     context='./src/timestep/services/caddy',

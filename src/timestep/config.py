@@ -141,9 +141,7 @@ class Settings(BaseSettings):
     tf_api_token: SecretStr = Field(default=None, env="TF_API_TOKEN")
     tf_http_address: str = Field(default=None, env="TF_HTTP_ADDRESS")
     tf_username: str = Field(default=None, env="TF_USERNAME")
-    # registry_admin_password: SecretStr = Field(
-    #     env="REGISTRY_ADMIN_PASSWORD"
-    # )  # TODO: HARBOR_ADMIN_PASSWORD?  # noqa: E501
+    version: str = Field(env="VERSION")
 
     class Config:
         env_file = ".env"
