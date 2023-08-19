@@ -55,4 +55,5 @@ jobs:
         mkdir -p secrets
         echo "$POSTGRESQL_PASSWORD" > secrets/postgresql_password
         echo "$SSH_PRIVATE_KEY" > secrets/ssh_private_key
+        mkdir -p timestep-ai
         ./scripts/deploy.sh
