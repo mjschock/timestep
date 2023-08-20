@@ -1246,6 +1246,22 @@ reauth = ["pyu2f (>=0.1.5)"]
 requests = ["requests (>=2.20.0,<3.0.0dev)"]
 
 [[package]]
+name = "graphviz"
+version = "0.20.1"
+description = "Simple Python interface for Graphviz"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "graphviz-0.20.1-py3-none-any.whl", hash = "sha256:587c58a223b51611c0cf461132da386edd896a029524ca61a1462b880bf97977"},
+    {file = "graphviz-0.20.1.zip", hash = "sha256:8c58f14adaa3b947daf26c19bc1e98c4e0702cdc31cf99153e6f06904d492bf8"},
+]
+
+[package.extras]
+dev = ["flake8", "pep8-naming", "tox (>=3)", "twine", "wheel"]
+docs = ["sphinx (>=5)", "sphinx-autodoc-typehints", "sphinx-rtd-theme"]
+test = ["coverage", "mock (>=4)", "pytest (>=7)", "pytest-cov", "pytest-mock (>=3)"]
+
+[[package]]
 name = "greenlet"
 version = "2.0.2"
 description = "Lightweight in-process concurrent programming"
@@ -2546,13 +2562,13 @@ virtualenv = ">=20.10.0"
 
 [[package]]
 name = "prefect"
-version = "2.11.3"
+version = "2.11.4"
 description = "Workflow orchestration and management."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "prefect-2.11.3-py3-none-any.whl", hash = "sha256:aad9db1de0bb7a6f0a52302ad508454dedbb412090f839efc4e905c271ce5dc0"},
-    {file = "prefect-2.11.3.tar.gz", hash = "sha256:78c2a15770d821f8fc89b8fdd729bd7346d024d476fc42bf172671bcd4c7d331"},
+    {file = "prefect-2.11.4-py3-none-any.whl", hash = "sha256:d40af8cc6e4d3c3841fb0b90dedcea5381a2cbc821acaaa398025754ed78dd62"},
+    {file = "prefect-2.11.4.tar.gz", hash = "sha256:bcc7d5b23665bbb97d87c0cd44a9e8147a987aeb1a1455019d1efbebde2b6064"},
 ]
 
 [package.dependencies]
@@ -2571,6 +2587,7 @@ dateparser = ">=1.1.1"
 docker = ">=4.0"
 fastapi = ">=0.93"
 fsspec = ">=2022.5.0"
+graphviz = ">=0.20.1"
 griffe = ">=0.20.0"
 httpx = {version = ">=0.23,<0.23.2 || >0.23.2", extras = ["http2"]}
 jinja2 = ">=3.0.0"
@@ -4254,4 +4271,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ebfaf81fe46c3bf4b60a17b18bc928e57156a7938afc413710fe8eeff118b8e7"
+content-hash = "d1e54cb4045c7f53e518a40a6b7a962ef05a99fc4196692b274cdbefaccd5b6e"

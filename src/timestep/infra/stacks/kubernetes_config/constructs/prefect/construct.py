@@ -1,3 +1,4 @@
+from cdktf_cdktf_provider_helm.provider import HelmProvider
 from cdktf_cdktf_provider_helm.release import Release, ReleaseSet, ReleaseSetSensitive
 from cdktf_cdktf_provider_kubernetes.ingress_v1 import (
     IngressV1,
@@ -12,9 +13,6 @@ from cdktf_cdktf_provider_kubernetes.ingress_v1 import (
 )
 from constructs import Construct
 from timestep.config import Settings
-from timestep.infra.stacks.main.constructs.kubernetes_cluster_ingress.construct import (
-    KubernetesClusterIngressConstruct,
-)
 
 
 class PrefectConstruct(Construct):
@@ -23,22 +21,19 @@ class PrefectConstruct(Construct):
         scope: Construct,
         id: str,
         config: Settings,
-        kubernetes_cluster_ingress_construct: KubernetesClusterIngressConstruct,
-        # postgresql_helm_release_resource: PostgreSQLConstruct,
+        helm_provider: HelmProvider,
     ) -> None:
         super().__init__(scope, id)
 
-        self.prefect_helm_release_resource = Release(
-            depends_on=[kubernetes_cluster_ingress_construct],
-            # depends_on=[postgresql_helm_release_resource],
-            id_="prefect_helm_release_resource",
+        self.prefect_server_helm_release_resource = Release(
+            id_="prefect_server_helm_release_resource",
             atomic=True,
             chart="prefect-server",
             create_namespace=True,
             name="prefect-server",
             namespace="prefect-system",
             repository="https://prefecthq.github.io/prefect-helm",
-            provider=kubernetes_cluster_ingress_construct.helm_provider,
+            provider=helm_provider,
             set=[
                 # ReleaseSet(
                 #     name="ingress.annotations.kubernetes\\.io/ingress\\.class",
@@ -82,7 +77,7 @@ class PrefectConstruct(Construct):
                 ),
                 ReleaseSet(
                     name="server.image.prefectTag",
-                    value="2.11-python3.11",
+                    value="2.11.4-python3.11",
                 ),
                 ReleaseSet(
                     name="server.image.repository",
@@ -92,6 +87,10 @@ class PrefectConstruct(Construct):
                     name="server.publicApiUrl",
                     value=f"https://prefect-server.{config.primary_domain_name}/api",
                 ),
+                # ReleaseSet(
+                #     name="server.publicApiUrl",
+                #     value=f"https://{config.primary_domain_name}/api",
+                # ),
             ],
             set_sensitive=[
                 ReleaseSetSensitive(
@@ -104,9 +103,9 @@ class PrefectConstruct(Construct):
 
         IngressV1(
             depends_on=[
-                self.prefect_helm_release_resource,
+                self.prefect_server_helm_release_resource,
             ],
-            id_="prefect_system_ingress",
+            id_="prefect_server_ingress",
             metadata=IngressV1Metadata(
                 annotations={
                     # "cert-manager.io/cluster-issuer": cert_manager_cluster_issuer,

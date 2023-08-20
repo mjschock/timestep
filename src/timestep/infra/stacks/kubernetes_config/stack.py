@@ -11,6 +11,9 @@ from timestep.config import CloudInstanceProvider
 from timestep.infra.stacks.kubernetes_config.constructs.kubernetes_cluster_ingress.construct import (  # noqa: E501
     KubernetesClusterIngressConstruct,
 )
+from timestep.infra.stacks.kubernetes_config.constructs.prefect.construct import (
+    PrefectConstruct,
+)
 from timestep.infra.stacks.kubernetes_config.constructs.timestep_ai.construct import (
     TimestepAIConstruct,
 )
@@ -54,6 +57,22 @@ class KubernetesConfigStack(TerraformStack):
         #     KubernetesDashboardConstruct(
         #         config=config,
         #         id="kubernetes_dashboard",
+        #         helm_provider=self.helm_provider,
+        #         scope=self,
+        #     )
+        # )
+
+        self.prefect_construct: PrefectConstruct = PrefectConstruct(
+            config=config,
+            id="prefect_construct",
+            helm_provider=self.helm_provider,
+            scope=self,
+        )
+
+        # self.supabase_construct: SupabaseConstruct = (
+        #     SupabaseConstruct(
+        #         config=config,
+        #         id="supabase",
         #         helm_provider=self.helm_provider,
         #         scope=self,
         #     )
