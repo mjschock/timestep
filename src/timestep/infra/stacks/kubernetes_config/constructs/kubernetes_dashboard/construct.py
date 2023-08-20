@@ -1,5 +1,5 @@
 from cdktf_cdktf_provider_helm.provider import HelmProvider
-from cdktf_cdktf_provider_helm.release import Release
+from cdktf_cdktf_provider_helm.release import Release, ReleaseSet
 from cdktf_cdktf_provider_kubernetes.ingress_v1 import (
     IngressV1,
     IngressV1Metadata,
@@ -35,18 +35,18 @@ class KubernetesDashboardConstruct(Construct):
             repository="https://kubernetes.github.io/dashboard",
             provider=helm_provider,
             set=[
-                {
-                    "name": "app.ingress.enabled",
-                    "value": "false",
-                },
-                {
-                    "name": "cert-manager.enabled",
-                    "value": "false",
-                },
-                {
-                    "name": "nginx.enabled",
-                    "value": "false",
-                },
+                ReleaseSet(
+                    name="app.ingress.enabled",
+                    value="false",
+                ),
+                ReleaseSet(
+                    name="cert-manager.enabled",
+                    value="false",
+                ),
+                ReleaseSet(
+                    name="nginx.enabled",
+                    value="false",
+                ),
             ],
             scope=self,
         )
@@ -92,7 +92,7 @@ class KubernetesDashboardConstruct(Construct):
                                             name="kubernetes-dashboard",
                                             port=IngressV1SpecRuleHttpPathBackendServicePort(
                                                 # name=path["service_port_name"],
-                                                number=443,
+                                                number=443,  # https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard#networkpolicy
                                             ),
                                         ),
                                     ),
