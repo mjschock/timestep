@@ -213,59 +213,59 @@ class PrefectConstruct(Construct):
             ),
         )
 
-        # prefect_helm_agent_release_resource = Release(
-        #     depends_on=[prefect_helm_release_resource],
-        #     id_="prefect_helm_agent_release_resource",
-        #     atomic=True,
-        #     chart="prefect-agent",
-        #     # create_namespace=True,
-        #     name="prefect-agent",
-        #     namespace="prefect-system",
-        #     repository="https://prefecthq.github.io/prefect-helm",
-        #     provider=self.kubernetes_cluster_ingress_construct.helm_provider,
-        #     set=[
-        #         ReleaseSet(
-        #             name="agent.apiConfig",
-        #             value="server",
-        #         ),
-        #         ReleaseSet(
-        #             name="agent.config.workPool",
-        #             value="default-agent-pool",
-        #         ),
-        #         ReleaseSet(
-        #             name="agent.serverApiConfig.apiUrl",
-        #             value="http://prefect-server.prefect-system.svc.cluster.local:4200/api",  # noqa: E501
-        #         ),
-        #     ],
-        #     scope=self,
-        # )
+        self.prefect_default_agent_helm_release_resource = Release(
+            depends_on=[self.prefect_server_helm_release_resource],
+            id_="prefect_default_agent_helm_release_resource",
+            atomic=True,
+            chart="prefect-agent",
+            # create_namespace=True,
+            name="prefect-agent",
+            namespace="prefect-system",
+            repository="https://prefecthq.github.io/prefect-helm",
+            provider=helm_provider,
+            set=[
+                ReleaseSet(
+                    name="agent.apiConfig",
+                    value="server",
+                ),
+                ReleaseSet(
+                    name="agent.config.workPool",
+                    value="default-agent-pool",
+                ),
+                ReleaseSet(
+                    name="agent.serverApiConfig.apiUrl",
+                    value="http://prefect-server.prefect-system.svc.cluster.local:4200/api",  # noqa: E501
+                ),
+            ],
+            scope=self,
+        )
 
-        # prefect_helm_worker_release_resource = Release(
-        #     depends_on=[prefect_helm_release_resource],
-        #     id_="prefect_helm_worker_release_resource",
-        #     atomic=True,
-        #     chart="prefect-worker",
-        #     # create_namespace=True,
-        #     name="prefect-worker",
-        #     namespace="prefect-system",
-        #     repository="https://prefecthq.github.io/prefect-helm",
-        #     provider=self.kubernetes_cluster_ingress_construct.helm_provider,
-        #     set=[
-        #         ReleaseSet(
-        #             name="worker.apiConfig",
-        #             value="server",
-        #         ),
-        #         ReleaseSet(
-        #             name="worker.config.workPool",
-        #             value="default-worker-pool",
-        #         ),
-        #         ReleaseSet(
-        #             name="worker.serverApiConfig.apiUrl",
-        #             value="http://prefect-server.prefect-system.svc.cluster.local:4200/api",  # noqa: E501
-        #         ),
-        #     ],
-        #     scope=self,
-        # )
+        self.prefect_default_worker_helm_release_resource = Release(
+            depends_on=[self.prefect_server_helm_release_resource],
+            id_="prefect_default_worker_helm_release_resource",
+            atomic=True,
+            chart="prefect-worker",
+            # create_namespace=True,
+            name="prefect-worker",
+            namespace="prefect-system",
+            repository="https://prefecthq.github.io/prefect-helm",
+            provider=helm_provider,
+            set=[
+                ReleaseSet(
+                    name="worker.apiConfig",
+                    value="server",
+                ),
+                ReleaseSet(
+                    name="worker.config.workPool",
+                    value="default-worker-pool",
+                ),
+                ReleaseSet(
+                    name="worker.serverApiConfig.apiUrl",
+                    value="http://prefect-server.prefect-system.svc.cluster.local:4200/api",  # noqa: E501
+                ),
+            ],
+            scope=self,
+        )
 
         # kubernetes_cluster_ingress_construct.create_ingress_resource(
         #     config=config,
