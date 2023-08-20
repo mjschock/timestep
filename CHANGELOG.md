@@ -1,3 +1,13 @@
+## 1.8.0 (2023-08-20)
+
+### Feat
+
+- Adds default Prefect Agent and Worker
+
+### Fix
+
+- f
+
 ## 1.7.0 (2023-08-20)
 
 ### Feat
