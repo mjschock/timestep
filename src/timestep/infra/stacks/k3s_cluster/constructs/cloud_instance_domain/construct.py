@@ -30,6 +30,7 @@ class CloudInstanceDomainConstruct(Construct):
         super().__init__(scope, id)
 
         subdomains = [
+            "prefect-server",
             "www",
         ]
 
