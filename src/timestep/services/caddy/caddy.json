@@ -1,0 +1,187 @@
+{
+    "apps": {
+        "http": {
+            "servers": {
+                "srv0": {
+                    "listen": [
+                        ":80"
+                    ],
+                    "routes": [
+                        {
+                            "match": [
+                                {
+                                    "host": [
+                                        "www.timestep.local"
+                                    ]
+                                }
+                            ],
+                            "handle": [
+                                {
+                                    "handler": "subroute",
+                                    "routes": [
+                                        {
+                                            "handle": [
+                                                {
+                                                    "encodings": {
+                                                        "gzip": {}
+                                                    },
+                                                    "handler": "encode"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "group": "group5",
+                                            "handle": [
+                                                {
+                                                    "handler": "subroute",
+                                                    "routes": [
+                                                        {
+                                                            "handle": [
+                                                                {
+                                                                    "handler": "reverse_proxy",
+                                                                    "upstreams": [
+                                                                        {
+                                                                            "dial": "graphql-engine:8080"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "match": [
+                                                {
+                                                    "path": [
+                                                        "/console/*"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "group": "group5",
+                                            "handle": [
+                                                {
+                                                    "handler": "subroute",
+                                                    "routes": [
+                                                        {
+                                                            "handle": [
+                                                                {
+                                                                    "handler": "reverse_proxy",
+                                                                    "upstreams": [
+                                                                        {
+                                                                            "dial": "graphql-engine:8080"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "match": [
+                                                {
+                                                    "path": [
+                                                        "/v1/*"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "group": "group5",
+                                            "handle": [
+                                                {
+                                                    "handler": "subroute",
+                                                    "routes": [
+                                                        {
+                                                            "handle": [
+                                                                {
+                                                                    "handler": "reverse_proxy",
+                                                                    "upstreams": [
+                                                                        {
+                                                                            "dial": "graphql-engine:8080"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "match": [
+                                                {
+                                                    "path": [
+                                                        "/v2/*"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "group": "group5",
+                                            "handle": [
+                                                {
+                                                    "handler": "subroute",
+                                                    "routes": [
+                                                        {
+                                                            "handle": [
+                                                                {
+                                                                    "handler": "reverse_proxy",
+                                                                    "upstreams": [
+                                                                        {
+                                                                            "dial": "www:9000"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "terminal": true
+                        },
+                        {
+                            "match": [
+                                {
+                                    "host": [
+                                        "timestep.local"
+                                    ]
+                                }
+                            ],
+                            "handle": [
+                                {
+                                    "handler": "subroute",
+                                    "routes": [
+                                        {
+                                            "handle": [
+                                                {
+                                                    "handler": "static_response",
+                                                    "headers": {
+                                                        "Location": [
+                                                            "http://www.timestep.local{http.request.uri}"
+                                                        ]
+                                                    },
+                                                    "status_code": 302
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "terminal": true
+                        }
+                    ],
+                    "automatic_https": {
+                        "skip": [
+                            "www.timestep.local",
+                            "timestep.local"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

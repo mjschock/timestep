@@ -1,0 +1,62 @@
+name: GitHub CI/CD
+
+on:
+  push:
+    # branches: [ "main" ]
+#   pull_request:
+    # branches: [ "main" ]
+
+env:
+    CI_COMMIT_SHA: ${{ github.sha }}
+    # CI_REGISTRY_USER: m.schock
+    # CI_REGISTRY: registry.gitlab.com
+    CI_REGISTRY_IMAGE: registry.gitlab.com/timestep-ai/timestep
+    # CI_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+    CLOUD_INSTANCE_PROVIDER: ${{ vars.CLOUD_INSTANCE_PROVIDER }}
+    DOCKER_REGISTRY_USERNAME: ${{ vars.DOCKER_REGISTRY_USERNAME }}
+    DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+    DOCKER_REGISTRY_SERVER: ${{ vars.DOCKER_REGISTRY_SERVER }}
+    DOMAIN_NAME_REGISTRAR_PROVIDER: ${{ vars.DOMAIN_NAME_REGISTRAR_PROVIDER }}
+    DO_TOKEN: ${{ secrets.DO_TOKEN }}
+    HTPASSWD: ${{ secrets.HTPASSWD }}
+    INGRESS_CONTROLLER_ACME_CA: ${{ vars.INGRESS_CONTROLLER_ACME_CA }}
+    INGRESS_CONTROLLER_DEBUG: ${{ vars.INGRESS_CONTROLLER_DEBUG }}
+    INGRESS_CONTROLLER_EMAIL: ${{ vars.INGRESS_CONTROLLER_EMAIL }}
+    KUBECONFIG: ${{ vars.KUBECONFIG }}
+    KUBECONTEXT: ${{ vars.KUBECONTEXT }}
+    PRIMARY_DOMAIN_NAME: ${{ vars.PRIMARY_DOMAIN_NAME }}
+    NAMECHEAP_API_KEY: ${{ secrets.NAMECHEAP_API_KEY }}
+    NAMECHEAP_API_USER: ${{ secrets.NAMECHEAP_API_USER }}
+    NAMECHEAP_USER_NAME: ${{ secrets.NAMECHEAP_USER_NAME }}
+    SSH_PUBLIC_KEY: ${{ vars.SSH_PUBLIC_KEY }}
+    # SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+    # SSH_PRIVATE_KEY_ENV_VAR: ${{ vars.SSH_PRIVATE_KEY_ENV_VAR }}
+    TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+    TF_USERNAME: ${{ vars.TF_USERNAME }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: |
+        ./scripts/before.sh
+        ./scripts/build.sh
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+    - name: Deploy
+      env:
+        POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        ./scripts/before.sh
+        mkdir -p secrets
+        echo "$POSTGRESQL_PASSWORD" > secrets/postgresql_password
+        echo "$SSH_PRIVATE_KEY" > secrets/ssh_private_key
+        mkdir -p timestep-ai
+        ./scripts/deploy.sh

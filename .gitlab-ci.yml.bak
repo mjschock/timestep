@@ -1,0 +1,40 @@
+build:
+  script:
+    - ./scripts/build.sh
+  stage: build
+
+default:
+  before_script:
+    - ./scripts/before.sh
+  image: docker:${DOCKER_VERSION}
+  services:
+    - docker:${DOCKER_VERSION}-dind
+
+deploy:
+  script:
+    - ./scripts/deploy.sh
+  stage: deploy
+
+stages:
+  - build
+  - deploy
+
+variables:
+  CLOUD_INSTANCE_PROVIDER: 'digitalocean'
+  DOCKER_CERT_PATH: '/certs/client'
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: '/certs'
+  DOCKER_TLS_VERIFY: '1'
+  DOCKER_VERSION: '20.10.16'
+  DOMAIN_NAME_REGISTRAR_PROVIDER: 'namecheap'
+  HTPASSWD: 'user:$2y$05$kd9NmZYT9qykQ.do1r29V.Ag9vGk.Jp8MZqlfBdc3zfdD1qHNxyjm'
+  POSTGRESQL_PASSWORD: 'prefect-rocks'
+  PRIMARY_DOMAIN_NAME: 'timestep.ai'
+  TF_API_TOKEN: ${CI_JOB_TOKEN}
+  TF_USERNAME: ${CI_REGISTRY_USER}
+
+workflow:
+  rules:
+    # - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      - if: $CI_PIPELINE_SOURCE == "push"

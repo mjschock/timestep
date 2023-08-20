@@ -7,6 +7,15 @@ load('ext://uibutton', 'cmd_button', 'bool_input', 'location', 'text_input')
 dotenv('.env')
 
 local_resource(
+    'npm install -g cdktf-cli',
+    cmd='npm install -g cdktf-cli@$CDKTF_CLI_VERSION',
+    env={
+        'PRIMARY_DOMAIN_NAME': os.getenv('CDKTF_CLI_VERSION'),
+    },
+    labels=['build'],
+)
+
+local_resource(
     'poetry install',
     cmd='poetry install',
     deps=[
@@ -14,6 +23,30 @@ local_resource(
         'poetry.lock',
     ],
     labels=['build'],
+    resource_deps=[
+        'npm install -g cdktf-cli',
+    ],
+)
+
+local_resource(
+    'poetry add cdktf',
+    cmd='poetry add cdktf@$CDKTF_LIB_VERSION',
+    env={
+        'PRIMARY_DOMAIN_NAME': os.getenv('CDKTF_LIB_VERSION'),
+    },
+    labels=['build'],
+    resource_deps=[
+        'poetry install',
+    ],
+)
+
+local_resource(
+    'prefect server start',
+    auto_init=False,
+    serve_cmd='poetry run prefect server start',
+    resource_deps=[
+        'poetry install',
+    ],
 )
 
 local_resource(
@@ -38,7 +71,7 @@ local_resource(
 
 local_resource(
     'poetry run cdktf deploy',
-    cmd='poetry run cdktf deploy --auto-approve $STACK_ID',
+    cmd='poetry run cdktf deploy --auto-approve $PRIMARY_DOMAIN_NAME.k3s_cluster $PRIMARY_DOMAIN_NAME.kubernetes_config',
     deps=[
         '.env',
         'cdktf.json',
@@ -46,21 +79,23 @@ local_resource(
         'poetry.lock',
         'src/timestep/__main__.py',
         'src/timestep/config.py',
-        'src/timestep/infra/stacks/main/stack.py',
-        'src/timestep/infra/stacks/main/constructs/cloud_init_config/construct.py',
-        'src/timestep/infra/stacks/main/constructs/cloud_instance/construct.py',
-        'src/timestep/infra/stacks/main/constructs/cloud_instance_domain/construct.py',
-        'src/timestep/infra/stacks/main/constructs/domain_name_registrar/construct.py',
-        'src/timestep/infra/stacks/main/constructs/kube_config/construct.py',
-        'src/timestep/infra/stacks/main/constructs/kubernetes_cluster_ingress/construct.py',
-        'src/timestep/infra/stacks/main/constructs/prefect/construct.py',
-        'src/timestep/infra/stacks/main/constructs/registry/construct.py',
-        'src/timestep/infra/stacks/main/constructs/timestep_ai/construct.py',
+        'src/timestep/infra/stacks/k3s_cluster/stack.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_init_config/construct.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance/construct.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/cloud_instance_domain/construct.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/domain_name_registrar/construct.py',
+        'src/timestep/infra/stacks/k3s_cluster/constructs/kube_config/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/stack.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/kubernetes_cluster_ingress/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/kubernetes_dashboard/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/prefect/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/registry/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/timestep_ai/construct.py',
         'timestep-ai',
         'timestep-ai-0.0.1.tgz',
     ],
     env={
-        'STACK_ID': os.getenv('PRIMARY_DOMAIN_NAME'),
+        'PRIMARY_DOMAIN_NAME': os.getenv('PRIMARY_DOMAIN_NAME'),
     },
     labels=['deploy'],
     resource_deps=[
@@ -68,9 +103,9 @@ local_resource(
 )
 
 cmd_button('poetry run cdktf destroy',
-    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $STACK_ID'],
+    argv=['sh', '-c', 'poetry run cdktf destroy $AUTO_APPROVE $PRIMARY_DOMAIN_NAME.k3s_cluster $PRIMARY_DOMAIN_NAME.kubernetes_config'],
     env=[
-        'STACK_ID=' + os.getenv('PRIMARY_DOMAIN_NAME'),
+        'PRIMARY_DOMAIN_NAME=' + os.getenv('PRIMARY_DOMAIN_NAME'),
     ],
     icon_name='delete',
     inputs=[
@@ -198,9 +233,41 @@ default_registry('registry.gitlab.com/timestep-ai/timestep')
 #     # labels=['world']
 # )
 
+local_resource(
+    'kompose convert',
+    # cmd='kompose convert --build local --build-command "docker build -t registry.gitlab.com/timestep-ai/timestep/www ." --file docker-compose.yml --push-image --push-command "docker push registry.gitlab.com/timestep-ai/timestep/www" --push-image-registry registry.gitlab.com --out deploy/www.yaml --secrets-as-files --verbose',
+    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    # cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
+    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    # cmd='kompose convert --build local --build-command "helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
+    # cmd='rm -rf timestep-ai && kompose convert --chart --file docker-compose.yml --generate-network-policies --out timestep-ai --secrets-as-files --verbose',
+    cmd='rm -rf timestep-ai && kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
+    # cmd="./scripts/kompose-convert.sh",
+    deps=[
+        '.env',
+        # 'Caddyfile',
+        'docker-compose.yml',
+        # 'www',
+    ],
+    labels=['build'],
+    # resource_deps=[
+    #     'regctl image import www',
+    # ]
+)
+
 watch_file('timestep-ai')
 
 if os.path.exists('timestep-ai'):
+    local_resource(
+        'helm package',
+        cmd='helm package timestep-ai --version $VERSION',
+        deps=['timestep-ai'],
+        labels=['build'],
+        resource_deps=[
+            'kompose convert',
+        ]
+    )
+
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/caddy',
     #     context='./src/timestep/services/caddy',
@@ -232,19 +299,19 @@ if os.path.exists('timestep-ai'):
         tag=str(local(command='echo $VERSION')).strip(),
     )
 
-    docker_build(
-        'registry.gitlab.com/timestep-ai/timestep/api',
-        context='./src/timestep/services/api',
-        dockerfile='./src/timestep/services/api/Dockerfile',
-        only=['.'],
-        live_update=[
-            sync('./src/timestep/services/api/', '/app/api/'),
-            run(
-                'pip install -r /app/requirements.txt',
-                trigger=['./src/timestep/services/api/requirements.txt']
-            )
-        ]
-    )
+    # docker_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/api',
+    #     context='./src/timestep/services/api',
+    #     dockerfile='./src/timestep/services/api/Dockerfile',
+    #     only=['.'],
+    #     live_update=[
+    #         sync('./src/timestep/services/api/', '/app/api/'),
+    #         run(
+    #             'pip install -r /app/requirements.txt',
+    #             trigger=['./src/timestep/services/api/requirements.txt']
+    #         )
+    #     ]
+    # )
 
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/web',
@@ -262,52 +329,58 @@ if os.path.exists('timestep-ai'):
     #     ]
     # )
 
-    # docker_build(
-    #     'registry.gitlab.com/timestep-ai/timestep/www',
-    #     context='src/timestep/services/www',
-    #     dockerfile='src/timestep/services/www/Dockerfile',
-    #     entrypoint='quasar dev',
-    #     only=['.'],
-    #     ignore=['./dist/', './src-capacitor/', './src-electron/'],
-    #     live_update=[
-    #         fall_back_on('./src/timestep/services/www/quasar.config.js'),
-    #         sync('./src/timestep/services/www/', '/app/'),
-    #         run(
-    #             'npm install',
-    #             trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
-    #         )
-    #     ]
-    # )
-
-    custom_build(
+    docker_build(
         'registry.gitlab.com/timestep-ai/timestep/www',
-        command='docker build -t $EXPECTED_REF src/timestep/services/www',
-        deps=['src/timestep/services/www'],
-        disable_push=True,
-        entrypoint=['npm', 'run', 'dev'],
-        # entrypoint=['npm', 'run', 'serve'],
-        # entrypoint=['tail', '-f', '/dev/null'],
-        ignore=['dist', 'src-capacitor', 'src-electron'],
-        skips_local_docker=True,
-        # tag='latest',
-        tag=str(local(command='echo $VERSION')).strip(),
+        build_args={
+         'NODENV_VERSION': os.getenv('NODENV_VERSION'),
+        },
+        context='src/timestep/services/www',
+        dockerfile='src/timestep/services/www/Dockerfile',
+        entrypoint='quasar dev -m spa -p 9000',
+        # entrypoint='quasar dev --hostname 127.0.0.1 -m spa -p 9000',
+        only=['.'],
+        ignore=['./dist/', './src-capacitor/', './src-electron/'],
+        live_update=[
+            fall_back_on('./src/timestep/services/www/quasar.config.js'),
+            sync('./src/timestep/services/www/', '/home/node/app'),
+            run(
+                'npm install',
+                trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
+            )
+        ],
+        pull=True,
+        # skips_local_docker=True,
     )
+
+    # custom_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/www',
+    #     command='docker build -t $EXPECTED_REF src/timestep/services/www',
+    #     deps=['src/timestep/services/www'],
+    #     disable_push=True,
+    #     # entrypoint=['npm', 'run', 'dev'],
+    #     # entrypoint=['npm', 'run', 'serve'],
+    #     # entrypoint=['tail', '-f', '/dev/null'],
+    #     ignore=['dist', 'src-capacitor', 'src-electron'],
+    #     skips_local_docker=True,
+    #     # tag='latest',
+    #     tag=str(local(command='echo $VERSION')).strip(),
+    # )
 
     k8s_yaml(local('helm template timestep-ai'))
 
 # watch_file('timestep-ai')
 
-    k8s_resource(
-        'caddy',
-        # labels=['release'],
-        links=['https://' + str(local(command='echo $PRIMARY_DOMAIN_NAME')).strip()],
-    )
+    # k8s_resource(
+    #     'caddy',
+    #     # labels=['release'],
+    #     links=['https://' + str(local(command='echo $PRIMARY_DOMAIN_NAME')).strip()],
+    # )
 
-    k8s_resource(
-        'api',
-        port_forwards='5734:5000',
-        # labels=['backend'],
-    )
+    # k8s_resource(
+    #     'api',
+    #     port_forwards='5734:5000',
+    #     # labels=['backend'],
+    # )
 
     # k8s_resource(
     #     'dashboard',
@@ -315,11 +388,11 @@ if os.path.exists('timestep-ai'):
     #     labels=['backend', 'frontend'],
     # )
 
-    k8s_resource(
-        'prefect-server',
-        port_forwards='4200:4200',
-        # labels=['backend', 'frontend'],
-    )
+    # k8s_resource(
+    #     'prefect-server',
+    #     port_forwards='4200:4200',
+    #     # labels=['backend', 'frontend'],
+    # )
 
     # k8s_resource(
     #     'web',
@@ -327,12 +400,12 @@ if os.path.exists('timestep-ai'):
     #     labels=['frontend'],
     # )
 
-    k8s_resource(
-        'www',
-        # port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
-        port_forwards='9200:9000',
-        # labels=['frontend'],
-    )
+    # k8s_resource(
+    #     'www',
+    #     # port_forwards='5735:5173', # 5173 is the port Vite listens on in the container
+    #     port_forwards='9200:9000',
+    #     # labels=['frontend'],
+    # )
 
 # local_resource(
 #     'docker build',
@@ -394,24 +467,3 @@ if os.path.exists('timestep-ai'):
 #         'docker save www',
 #     ],
 # )
-
-local_resource(
-    'kompose convert',
-    # cmd='kompose convert --build local --build-command "docker build -t registry.gitlab.com/timestep-ai/timestep/www ." --file docker-compose.yml --push-image --push-command "docker push registry.gitlab.com/timestep-ai/timestep/www" --push-image-registry registry.gitlab.com --out deploy/www.yaml --secrets-as-files --verbose',
-    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "docker compose push && helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
-    # cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
-    # cmd='rm -rf timestep-ai && kompose convert --build local --build-command "docker compose pull && docker compose build && helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
-    # cmd='kompose convert --build local --build-command "helm package timestep-ai" --chart --file docker-compose.yml --push-image --push-command "helm push timestep-ai-0.0.1.tgz oci://registry.gitlab.com/timestep-ai/timestep" --push-image-registry registry.gitlab.com --out timestep-ai --secrets-as-files --verbose',
-    cmd='kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
-    # cmd="./scripts/kompose-convert.sh",
-    deps=[
-        '.env',
-        # 'Caddyfile',
-        'docker-compose.yml',
-        # 'www',
-    ],
-    labels=['build'],
-    # resource_deps=[
-    #     'regctl image import www',
-    # ]
-)
