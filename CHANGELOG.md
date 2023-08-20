@@ -1,3 +1,9 @@
+## 1.7.0 (2023-08-20)
+
+### Feat
+
+- Adds Kubernetes Dashboard
+
 ## 1.6.0 (2023-08-20)
 
 ### Feat
