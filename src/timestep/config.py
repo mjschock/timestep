@@ -85,12 +85,18 @@ class DomainNameRegistrarProvider(StrEnum):
 
 
 class Settings(BaseSettings):
+    base_path: pathlib.Path = Field(default=BASE_PATH, env="BASE_PATH")
     cdktf_outdir: str = Field(env="CDKTF_OUTDIR")
     cloud_instance_name: str = Field(env="CLOUD_INSTANCE_NAME")
     cloud_instance_provider: str = Field(
         default=CloudInstanceProvider.MULTIPASS, env="CLOUD_INSTANCE_PROVIDER"
     )
     cloud_instance_user: str = Field(env="CLOUD_INSTANCE_USER")
+    dist_path: str = Field(default=DIST_PATH, env="DIST_PATH")
+    do_droplet_image: str = Field(default=DO_DROPLET_IMAGE, env="DO_DROPLET_IMAGE")
+    do_droplet_region: str = Field(default=DO_DROPLET_REGION, env="DO_DROPLET_REGION")
+    do_droplet_size: str = Field(default=DO_DROPLET_SIZE, env="DO_DROPLET_SIZE")
+    do_token: SecretStr = Field(env="DO_TOKEN")
     docker_registry_email: str = Field(env="DOCKER_REGISTRY_EMAIL")
     docker_registry_password: SecretStr = Field(env="DOCKER_REGISTRY_PASSWORD")
     docker_registry_server: str = Field(env="DOCKER_REGISTRY_SERVER")
@@ -99,6 +105,15 @@ class Settings(BaseSettings):
         default=DomainNameRegistrarProvider.NONE, env="DOMAIN_NAME_REGISTRAR_PROVIDER"
     )
     htpasswd: SecretStr = Field(env="HTPASSWD")
+    ingress_controller_acme_ca: str = Field(
+        default="https://acme-staging-v02.api.letsencrypt.org/directory",
+        # default="https://acme-v02.api.letsencrypt.org/directory",
+        env="INGRESS_CONTROLLER_ACME_CA",
+    )
+    ingress_controller_debug: str = Field(
+        default="true",
+        env="INGRESS_CONTROLLER_DEBUG",
+    )
     ingress_controller_email: str = Field(env="INGRESS_CONTROLLER_EMAIL")
     kubecontext: str = Field(env="KUBECONTEXT")
     multipass_instance_cpus: int = Field(
@@ -113,13 +128,20 @@ class Settings(BaseSettings):
     multipass_instance_memory: str = Field(
         default=MULTIPASS_INSTANCE_MEMORY, env="MULTIPASS_INSTANCE_MEMORY"
     )
+    namecheap_api_key: SecretStr = Field(default=None, env="NAMECHEAP_API_KEY")
+    namecheap_api_user: str = Field(default=None, env="NAMECHEAP_API_USER")
+    namecheap_user_name: str = Field(default=None, env="NAMECHEAP_USER_NAME")
     postgresql_password: SecretStr = Field(env="POSTGRESQL_PASSWORD")
     primary_domain_name: str = Field(env="PRIMARY_DOMAIN_NAME")
     ssh_private_key: SecretStr = Field(env="SSH_PRIVATE_KEY")
+    ssh_private_key_path: str = Field(
+        default=f"{BASE_PATH}/secrets/ssh_private_key", env="SSH_PRIVATE_KEY_PATH"
+    )
     ssh_public_key: str = Field(env="SSH_PUBLIC_KEY")
-    registry_admin_password: SecretStr = Field(
-        env="REGISTRY_ADMIN_PASSWORD"
-    )  # TODO: HARBOR_ADMIN_PASSWORD?  # noqa: E501
+    tf_api_token: SecretStr = Field(default=None, env="TF_API_TOKEN")
+    tf_http_address: str = Field(default=None, env="TF_HTTP_ADDRESS")
+    tf_username: str = Field(default=None, env="TF_USERNAME")
+    version: str = Field(env="VERSION")
 
     class Config:
         env_file = ".env"

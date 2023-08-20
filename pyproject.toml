@@ -35,7 +35,7 @@ description = ""
 name = "timestep"
 packages = [{from = "src", include = "timestep"}]
 readme = "README.md"
-version = "1.0.38"
+version = "2.0.0"
 
 [tool.poetry.dependencies]
 cdktf = "^0.17.3"
@@ -53,7 +53,7 @@ fastapi = "^0.100.1"
 langchain = "^0.0.247"
 marvin = "^1.2.1"
 pettingzoo = {extras = ["all"], version = "^1.23.1"}
-prefect = "^2.11.1"
+prefect = "^2.11.4"
 prefect-kubernetes = "^0.2.11"
 prefect-shell = "^0.1.5"
 python = "^3.11"

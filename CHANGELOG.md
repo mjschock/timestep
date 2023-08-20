@@ -1,3 +1,150 @@
+## 2.0.0 (2023-08-20)
+
+### Feat
+
+- Adds back Timestep AI Helm chart
+
+## 1.8.0 (2023-08-20)
+
+### Feat
+
+- Adds default Prefect Agent and Worker
+
+### Fix
+
+- f
+
+## 1.7.0 (2023-08-20)
+
+### Feat
+
+- Adds Kubernetes Dashboard
+
+## 1.6.0 (2023-08-20)
+
+### Feat
+
+- Adds Prefect Server
+
+### Fix
+
+- f
+- f
+
+## 1.5.1 (2023-08-19)
+
+### Fix
+
+- f
+
+## 1.5.0 (2023-08-19)
+
+### Feat
+
+- HMR working for timestep.local, cleanup UI a bit
+
+## 1.4.1 (2023-08-18)
+
+### Fix
+
+- f
+
+## 1.4.0 (2023-08-18)
+
+### Feat
+
+- adds ingress_controller_acme_ca
+- adds kubernetes dashboard
+
+### Fix
+
+- f
+
+## 1.3.0 (2023-08-18)
+
+### Feat
+
+- add www
+
+## 1.2.0 (2023-08-18)
+
+### Feat
+
+- makes ingress_controller_debug configurable through an env var
+
+## 1.1.0 (2023-08-18)
+
+### Feat
+
+- Add TimestepAIConstruct to KubernetesConfigStack
+
+### Fix
+
+- Fix www redirect
+- Adds volume for Helm chart
+- f
+- f
+- f
+- Split up k3s_cluster deploy and kubernetes_config and remove KUBECONFIG env var from docker run commands
+- Sets secrets to rw in deploy.sh
+- **f**: f
+- f
+
+## 1.0.44 (2023-08-16)
+
+## 1.0.45 (2023-08-18)
+
+### Fix
+
+- f
+
+## 1.0.44 (2023-08-18)
+
+### Fix
+
+- f
+
+### Refactor
+
+- 2 stacks, cross-stack kube_config.yml
+
+## 1.0.43 (2023-08-14)
+
+### Fix
+
+- f
+
+## 1.0.42 (2023-08-14)
+
+### Fix
+
+- f
+- f
+- f
+- f
+- f
+- f
+
+## 1.0.41 (2023-08-13)
+
+### Fix
+
+- f
+
+## 1.0.40 (2023-08-12)
+
+### Fix
+
+- f
+
+## 1.0.39 (2023-08-12)
+
+### Fix
+
+- f
+- f
+- f
+
 ## 1.0.38 (2023-08-11)
 
 ### Fix

@@ -25,3 +25,7 @@ dist/
 *.tmp
 .DS_Store
 .idea/
+
+kubeconfig
+timestep-ai
+timestep-ai-*.tgz

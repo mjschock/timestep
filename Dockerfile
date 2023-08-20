@@ -8,7 +8,7 @@ ARG PYENV_VERSION
 
 ENV GOENV_VERSION=${GOENV_VERSION:-1.20.2}
 ENV LANG en_US.utf8
-ENV NODENV_VERSION=${NODENV_VERSION:-18.15.0}
+ENV NODENV_VERSION=${NODENV_VERSION:-18.17.1}
 ENV PYENV_VERSION=${PYENV_VERSION:-3.11.3}
 ENV TZ=America/Los_Angeles
 
@@ -67,7 +67,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 111
 # RUN update-alternatives --config python3 --skip-auto
 
-RUN groupadd -r ubuntu && useradd --create-home --no-log-init -r -g ubuntu -s /bin/bash ubuntu
+RUN groupadd --gid 123 --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid 1001 ubuntu
 
 SHELL [ "/bin/bash", "-c" ]
 USER ubuntu
@@ -83,12 +83,26 @@ ENV PATH="/home/ubuntu/.arkade/bin:/home/ubuntu/.local/bin:${PATH}"
 # Install terraform with arkade
 ENV TERRAFORM_VERSION=1.5.5
 RUN ark get terraform --version ${TERRAFORM_VERSION}
-RUN terraform --version
+
+# Install k3sup with arkade
+ENV K3SUP_VERSION=0.12.14
+RUN ark get k3sup --version ${K3SUP_VERSION}
 
 # Install anyenv
 RUN git clone https://github.com/anyenv/anyenv ~/.anyenv
 ENV PATH="/home/ubuntu/.anyenv/bin:${PATH}"
 RUN anyenv install --force-init
+
+# Install goenv with anyenv
+RUN anyenv install goenv
+ENV PATH="/home/ubuntu/.anyenv/envs/goenv/shims:/home/ubuntu/.anyenv/envs/goenv/bin:${PATH}"
+
+# Install ${GOENV_VERSION} with goenv
+RUN eval "$(anyenv init -)" && goenv install ${GOENV_VERSION}
+
+# Install Kompose with go
+ENV KOMPOSE_VERSION=latest
+RUN go install github.com/kubernetes/kompose@${KOMPOSE_VERSION}
 
 # Install nodenv with anyenv
 RUN anyenv install nodenv
@@ -135,5 +149,6 @@ RUN poetry install --no-root
 COPY --chown=ubuntu:ubuntu . ./
 RUN poetry install
 
+VOLUME /home/ubuntu/secrets
 ENTRYPOINT ["/home/ubuntu/docker-entrypoint.sh"]
 CMD ["--help"]
