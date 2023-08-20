@@ -1,3 +1,9 @@
+## 2.0.0 (2023-08-20)
+
+### Feat
+
+- Adds back Timestep AI Helm chart
+
 ## 1.8.0 (2023-08-20)
 
 ### Feat
