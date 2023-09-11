@@ -6,15 +6,21 @@ services:
   #   build:
   #     context: src/timestep/services/api
   #     dockerfile: Dockerfile
+  #   # env_file:
+  #   #   - .env
+  #   environment:
+  #     MARVIN_OPENAI_API_KEY: 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
   #   expose:
   #     - 5000
-  #   image: registry.gitlab.com/timestep-ai/timestep/api:latest
+  #   image: registry.gitlab.com/timestep-ai/timestep/api:${VERSION:-latest}
   #   labels:
+  #     kompose.image-pull-policy: "Always"
   #     kompose.image-pull-secret: "regcred"
   #     kompose.service.healthcheck.readiness.http_get_path: /ready
   #     kompose.service.healthcheck.readiness.http_get_port: 5000
-    # ports:
-    #   - '80:5000'
+  #     rollme: "{{ randAlphaNum 5 | quote }}"
+  #   # ports:
+  #   #   - '5000:5000'
   # auth:
   #   depends_on:
   #     - postgres

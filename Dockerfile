@@ -22,6 +22,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
   ca-certificates-java \
+  clang \
   curl \
   default-jdk \
   direnv \
@@ -36,6 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libreadline-dev \
   libsqlite3-dev \
   libssl-dev \
+  libstdc++-12-dev \
   libxml2-dev \
   libxmlsec1-dev \
   net-tools \

@@ -38,6 +38,8 @@ readme = "README.md"
 version = "2.0.0"
 
 [tool.poetry.dependencies]
+autorom = "^0.6.1"
+awscli = {git = "https://github.com/aws/aws-cli.git", rev = "v2"}
 cdktf = "^0.17.3"
 cdktf-cdktf-provider-cloudinit = "^7.0.0"
 cdktf-cdktf-provider-digitalocean = "^8.0.0"
@@ -49,22 +51,27 @@ cdktf-cdktf-provider-local = "^7.0.0"
 cdktf-cdktf-provider-null = "^7.0.0"
 cloud-init-gen = "^1.2.0"
 cmake = "^3.27.1"
-fastapi = "^0.100.1"
-langchain = "^0.0.247"
+gymnasium = {extras = ["all"], version = "^0.29.1"}
+langchain = "^0.0.279"
 marvin = "^1.2.1"
+minari = "^0.4.1"
+open-spiel = "^1.3"
 pettingzoo = {extras = ["all"], version = "^1.23.1"}
 prefect = "^2.11.4"
 prefect-kubernetes = "^0.2.11"
+prefect-ray = "^0.2.5"
 prefect-shell = "^0.1.5"
-python = "^3.11"
+prefect-sqlalchemy = "^0.2.4"
+python = ">=3.11,<3.12"
 python-dotenv = "^1.0.0"
+skypilot = {extras = ["all"], path = "src/skypilot"}
 uvicorn = {extras = ["standard"], version = "^0.23.1"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
 commitizen = "^3.6.0"
 pre-commit = "^3.3.3"
-pylint = "^2.17.4"
+pylint = "^2.17.5"
 ruff = "^0.0.282"
 toml-sort = "^0.23.1"
 

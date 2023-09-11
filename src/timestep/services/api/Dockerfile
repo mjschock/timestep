@@ -1,16 +1,11 @@
-FROM python:3.10-slim-bullseye
+FROM python:3.11
 
-ENV PIP_DISABLE_PIP_VERSION_CHECK="1"
+WORKDIR /code
 
-WORKDIR /app
-COPY requirements.txt ./
-# COPY requirements.txt requirements.txt
-RUN --mount=type=cache,target=/root/.cache/pip \
-  pip install -r requirements.txt
+COPY ./requirements.txt /code/requirements.txt
 
-COPY . ./api/
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-ENV FLASK_APP=./api/app.py
-ENV FLASK_ENV=development
+COPY ./app /code/app
 
-CMD [ "flask", "run", "--host", "0.0.0.0" ]
+CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "5000"]
