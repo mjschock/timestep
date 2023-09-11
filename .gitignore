@@ -29,3 +29,5 @@ dist/
 kubeconfig
 timestep-ai
 timestep-ai-*.tgz
+
+saved_observations

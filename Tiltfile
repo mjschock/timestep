@@ -269,6 +269,46 @@ if os.path.exists('timestep-ai'):
     )
 
     # docker_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/api',
+    #     context='./src/timestep/services/api',
+    #     entrypoint=[
+    #         "uvicorn",
+    #         "app.main:app",
+    #         "--proxy-headers",
+    #         "--host",
+    #         "0.0.0.0",
+    #         "--port",
+    #         "5000",
+    #         "--reload",
+    #         "--reload-dir",
+    #         "/code/app",
+    #     ],
+    #     dockerfile='./src/timestep/services/api/Dockerfile',
+    #     only=['.'],
+    #     live_update=[
+    #         sync('./src/timestep/services/api/app/', '/code/app/'),
+    #     #     run(
+    #     #         'caddy reload',
+    #     #         trigger=['./src/timestep/services/caddy/Caddyfile']
+    #     #     )
+    #     ]
+    # )
+
+    # k8s_resource(
+    #     'api',
+    #     port_forwards='5000:5000',
+    # )
+
+    # # custom_build(
+    # #     'registry.gitlab.com/timestep-ai/timestep/api',
+    # #     command='docker build -t $EXPECTED_REF src/timestep/services/api',
+    # #     deps=['src/timestep/services/api'],
+    # #     # disable_push=True,
+    # #     # skips_local_docker=True,
+    # #     tag=str(local(command='echo $VERSION')).strip(),
+    # # )
+
+    # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/caddy',
     #     context='./src/timestep/services/caddy',
     #     dockerfile='./src/timestep/services/caddy/Dockerfile',
