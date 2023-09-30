@@ -4,15 +4,12 @@ from typing import Any
 import numpy as np
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
+from timestep.platform.envs.wrappers.env_spec import EnvSpecWrapper
 
 import gymnasium as gym
 from gymnasium.core import ActType, ObsType
 from gymnasium.envs.registration import EnvSpec
 from gymnasium.spaces import Discrete
-
-from gymnasium_robotics.core import GoalEnv
-
-from timestep.platform.envs.wrappers.env_spec import EnvSpecWrapper
 
 
 class RawEnv(AECEnv):

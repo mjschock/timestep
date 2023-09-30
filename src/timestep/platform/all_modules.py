@@ -1,62 +1,3 @@
-import os
-import gymnasium
-from pettingzoo.atari import (
-    basketball_pong_v3,
-    boxing_v2,
-    combat_plane_v2,
-    combat_tank_v2,
-    double_dunk_v3,
-    entombed_competitive_v3,
-    entombed_cooperative_v3,
-    flag_capture_v2,
-    foozpong_v3,
-    ice_hockey_v2,
-    joust_v3,
-    mario_bros_v3,
-    maze_craze_v3,
-    othello_v3,
-    pong_v3,
-    quadrapong_v4,
-    space_invaders_v2,
-    space_war_v2,
-    surround_v2,
-    tennis_v3,
-    video_checkers_v4,
-    volleyball_pong_v3,
-    warlords_v3,
-    wizard_of_wor_v3,
-)
-from pettingzoo.butterfly import (
-    cooperative_pong_v5,
-    knights_archers_zombies_v10,
-    pistonball_v6,
-)
-from pettingzoo.classic import (
-    # chess_v6,
-    chess_v5,
-    connect_four_v3,
-    gin_rummy_v4,
-    go_v5,
-    # hanabi_v5,
-    hanabi_v4,
-    leduc_holdem_v4,
-    rps_v2,
-    texas_holdem_no_limit_v6,
-    texas_holdem_v4,
-    tictactoe_v3,
-)
-from pettingzoo.mpe import (
-    simple_adversary_v3,
-    simple_crypto_v3,
-    simple_push_v3,
-    simple_reference_v3,
-    simple_speaker_listener_v4,
-    simple_spread_v3,
-    simple_tag_v3,
-    simple_v3,
-    simple_world_comm_v3,
-)
-from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v4
 
 # from gymnasium_robotics.envs.multiagent_mujoco import (
 #     pusher_v2,
@@ -69,45 +10,8 @@ from pettingzoo.sisl import multiwalker_v9, pursuit_v4, waterworld_v4
 #     "butterfly/cooperative_pong",
 #     "sisl/pursuit",
 # }
-from timestep.platform.envs.gymnasium.atari import adventure_v5
-from timestep.platform.envs.gymnasium.box2d import (
-    bipedal_walker_v3,
-    car_racing_v2,
-    lunar_lander_v2,
-)
-from timestep.platform.envs.gymnasium.classic_control import (
-    acrobot_v1,
-    cart_pole_v1,
-    mountain_car_continuous_v0,
-    mountain_car_v0,
-    pendulum_v1,
-)
-from timestep.platform.envs.gymnasium.mujoco import (
-    ant_v4,
-    half_cheetah_v4,
-    hopper_v4,
-    humanoid_standup_v4,
-    humanoid_v4,
-    inverted_double_pendulum_v4,
-    inverted_pendulum_v4,
-    pusher_v4,
-    reacher_v4,
-    swimmer_v4,
-    walker2d_v4,
-)
 from timestep.platform.envs.gymnasium.toy_text import (
-    blackjack_v1,
-    cliff_walking_v0,
     frozen_lake_v1,
-    taxi_v3,
-)
-
-from timestep.platform.envs.gymnasium_robotics.fetch import (
-    fetch_pick_and_place_v2,
-)
-
-from timestep.platform.envs.gymnasium_robotics.franka_kitchen import (
-    franka_kitchen_v2,
 )
 
 # gym_envs = gymnasium.envs.registry

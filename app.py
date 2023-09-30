@@ -17,41 +17,24 @@
 #     env.step(action)
 
 # import random
+# from torch.distributions.categorical import Categorical
+# gym.pprint_registry()
 from collections import deque
-from typing import List, TypeVar
-import uuid
-from datetime import datetime
-from gymnasium.spaces import Discrete
+from typing import Any, List, TypeVar
 
+import gymnasium as gym
 import ivy
 import jax
-import marvin
-
-# from marvin import AIApplication
-# from marvin.engine.executors import OpenAIFunctionsExecutor
-from marvin.engine.language_models import ChatLLM, chat_llm
-# from marvin.prompts import library as prompt_library
-# from marvin.prompts.base import Prompt
-# from marvin.tools import Tool, tool
-from marvin.utilities.async_utils import run_sync
 import numpy as np
-# from marvin.utilities.history import History, HistoryFilter
-# from marvin.utilities.messages import Message, Role
-# from marvin.utilities.types import LoggerMixin, MarvinBaseModel
-from pydantic import BaseModel, Field, PrivateAttr, validator
+from gymnasium.spaces import Discrete
 
 # PRINT_STREAM = True
-
-
 # class User(BaseModel):
 #     id: uuid.UUID
 #     name: str
 #     signup_ts: datetime | None
-
 # class State(BaseModel):
 #     user: User | None = None
-
-
 # def stream_handler(message: Message):
 #     if PRINT_STREAM:
 #         print("=== Begin message ===")
@@ -63,54 +46,36 @@ from pydantic import BaseModel, Field, PrivateAttr, validator
 #         print(f"message.llm_response: {message.llm_response}")
 #         # print(f"message.data['streaming_delta']: {message.data['streaming_delta']}")
 #         print("=== End message ===\n")
-
 # @tool
 # def roll_dice(n_dice: int = 1) -> list[int]:
 #     return [random.randint(1, 6) for _ in range(n_dice)]
-
 # @tool
 # def generate_uuid() -> uuid.UUID:
 #     return uuid.uuid4()
-
 # app = AIApplication(
 #     state=State(),
 #     stream_handler=stream_handler,
 #     tools=[generate_uuid],
 # )
-
 # model: ChatLLM = None
-
 # input_text = "What's my name?"
 # response = run_sync(app.run(input_text=input_text, model=model))
 # print(f"response.content: {response.content}")
-
 # print(f"app.history: {app.history}")
 # print(f"app.plan: {app.plan}")
 # print(f"app.state: {app.state}")
-
-
 # response = app("My name is Marvin")
-
 # print(response.content)
 # print(app.state)
-
 # assert app.state.user is not None, "app.state.user is None"
-
 # response = app("What's my name?")
-
 # print(response.content)
 # print(app.state)
-
 # assert app.state.user is not None, "app.state.user is None"
-
-
 # import time
-
 # import gymnasium
 # from miniwob.action import ActionTypes
-
 # env = gymnasium.make('miniwob/click-test-2-v1', render_mode='human')
-
 # # Wrap the code in try-finally to ensure proper cleanup.
 # try:
 #   # Start a new episode.
@@ -118,27 +83,24 @@ from pydantic import BaseModel, Field, PrivateAttr, validator
 #   assert obs["utterance"] == "Click button ONE."
 #   assert obs["fields"] == (("target", "ONE"),)
 #   time.sleep(2)       # Only here to let you look at the environment.
-
 #   # Find the HTML element with text "ONE".
 #   for element in obs["dom_elements"]:
 #     if element["text"] == "ONE":
 #       break
-
 #   # Click on the element.
 #   action = env.unwrapped.create_action(ActionTypes.CLICK_ELEMENT, ref=element["ref"])
 #   obs, reward, terminated, truncated, info = env.step(action)
-
 #   # Check if the action was correct.
 #   print(reward)      # Should be around 0.8 since 2 seconds has passed.
 #   assert terminated is True
 #   time.sleep(2)
-
 # finally:
 #   env.close()
-
-from langchain.output_parsers import RegexParser
-
-import gymnasium as gym
+# from marvin import AIApplication
+# from marvin.engine.executors import OpenAIFunctionsExecutor
+# from marvin.prompts import library as prompt_library
+# from marvin.prompts.base import Prompt
+# from marvin.tools import Tool, tool
 from pettingzoo.test import (
     api_test,
     max_cycles_test,
@@ -151,37 +113,19 @@ from pettingzoo.test import (
 )
 from pettingzoo.utils.conversions import aec_to_parallel
 from pettingzoo.utils.env import AECEnv, AgentID, ParallelEnv
-# import torch
 
-# from pettingzoo.utils.all_modules import all_environments
-from src.timestep.platform.all_modules import all_environments
-from minari import DataCollectorV0, EpisodeData
-from marvin import AIApplication, settings as marvin_settings
-from marvin.components.ai_application import AppPlan, FreeformState
+# from marvin.utilities.history import History, HistoryFilter
+# from marvin.utilities.messages import Message, Role
+# from marvin.utilities.types import LoggerMixin, MarvinBaseModel
+from pydantic import BaseModel
+
 # from src.timestep.platform.agents.ppo.ppo_agent import Agent as PPOAgent
 # from src.timestep.platform.agents.dqn.dqn_agent import Agent as DQNAgent
 from src.timestep.platform.agents.ddpg.ddpg_agent import Agent as DDPGAgent
 
-# from torch.distributions.categorical import Categorical
-
-# gym.pprint_registry()
-
-import inspect
-from enum import Enum
-from typing import Any, Callable, Union
-
-from jsonpatch import JsonPatch
-from pydantic import BaseModel, Field, PrivateAttr, validator
-
-from marvin.engine.executors import OpenAIFunctionsExecutor
-from marvin.engine.language_models import ChatLLM, chat_llm
-from marvin.prompts import library as prompt_library
-from marvin.prompts.base import Prompt
-from marvin.tools import Tool
-from marvin.utilities.async_utils import run_sync
-from marvin.utilities.history import History, HistoryFilter
-from marvin.utilities.messages import Message, Role
-from marvin.utilities.types import LoggerMixin, MarvinBaseModel
+# import torch
+# from pettingzoo.utils.all_modules import all_environments
+from src.timestep.platform.all_modules import all_environments
 
 jax.config.update('jax_enable_x64', True)
 ivy.set_inplace_mode('strict')
@@ -278,13 +222,13 @@ class Agent():
 
         else:
             if "action_mask" in info:
-                mask = info["action_mask"]
+                info["action_mask"]
 
             elif isinstance(observation, dict) and "action_mask" in observation:
-                mask = observation["action_mask"]
+                observation["action_mask"]
 
             else:
-                mask = None
+                pass
 
             # action = env.action_space(agent_id).sample(mask)
 
