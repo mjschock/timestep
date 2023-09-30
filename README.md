@@ -19,3 +19,5 @@ classDiagram
 
     Agent --|> Environment
 ```
+
+<img src="IntelligentAgent-Learning.png" />

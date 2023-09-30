@@ -29,6 +29,9 @@ version_files = [
 version_provider = "poetry"
 version_scheme = "semver"
 
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+
 [tool.poetry]
 authors = ["Michael Schock <m@mjschock.com>"]
 description = ""
@@ -51,25 +54,37 @@ cdktf-cdktf-provider-local = "^7.0.0"
 cdktf-cdktf-provider-null = "^7.0.0"
 cloud-init-gen = "^1.2.0"
 cmake = "^3.27.1"
+dm-haiku = "^0.0.10"
+flax = "^0.7.4"
 gymnasium = {extras = ["all"], version = "^0.29.1"}
+gymnasium-robotics = "^1.2.2"
+ivy = "^0.0.3.0"
+jax = {extras = ["cuda12-pip"], version = "^0.4.16"}
 langchain = "^0.0.279"
 marvin = "^1.2.1"
 minari = "^0.4.1"
+mujoco = "^2.3.3"
 open-spiel = "^1.3"
+patchelf = "^0.17.2.1"
 pettingzoo = {extras = ["all"], version = "^1.23.1"}
 prefect = "^2.11.4"
+prefect-jupyter = "^0.2.0"
 prefect-kubernetes = "^0.2.11"
 prefect-ray = "^0.2.5"
 prefect-shell = "^0.1.5"
 prefect-sqlalchemy = "^0.2.4"
+pygbag = "^0.8.2"
 python = ">=3.11,<3.12"
 python-dotenv = "^1.0.0"
 skypilot = {extras = ["all"], path = "src/skypilot"}
+supersuit = "^3.9.0"
+sympy = "^1.12"
 uvicorn = {extras = ["standard"], version = "^0.23.1"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
 commitizen = "^3.6.0"
+mypy = "^1.5.1"
 pre-commit = "^3.3.3"
 pylint = "^2.17.5"
 ruff = "^0.0.282"
@@ -77,6 +92,20 @@ toml-sort = "^0.23.1"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.3.1"
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "jax"
+priority = "primary"
+url = "https://storage.googleapis.com/jax-releases/jax_releases.html"
+
+[[tool.poetry.source]]
+name = "jax-cuda"
+priority = "primary"
+url = "https://storage.googleapis.com/jax-releases/jax_cuda_releases.html"
 
 [tool.ruff]
 # Allow unused variables when underscore-prefixed.
