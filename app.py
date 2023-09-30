@@ -17,20 +17,28 @@
 #     env.step(action)
 
 # import random
-# import uuid
-# from datetime import datetime
+from collections import deque
+from typing import List, TypeVar
+import uuid
+from datetime import datetime
+from gymnasium.spaces import Discrete
+
+import ivy
+import jax
+import marvin
 
 # from marvin import AIApplication
 # from marvin.engine.executors import OpenAIFunctionsExecutor
-# from marvin.engine.language_models import ChatLLM, chat_llm
+from marvin.engine.language_models import ChatLLM, chat_llm
 # from marvin.prompts import library as prompt_library
 # from marvin.prompts.base import Prompt
 # from marvin.tools import Tool, tool
-# from marvin.utilities.async_utils import run_sync
+from marvin.utilities.async_utils import run_sync
+import numpy as np
 # from marvin.utilities.history import History, HistoryFilter
 # from marvin.utilities.messages import Message, Role
 # from marvin.utilities.types import LoggerMixin, MarvinBaseModel
-# from pydantic import BaseModel, Field, PrivateAttr, validator
+from pydantic import BaseModel, Field, PrivateAttr, validator
 
 # PRINT_STREAM = True
 
@@ -128,6 +136,8 @@
 # finally:
 #   env.close()
 
+from langchain.output_parsers import RegexParser
+
 import gymnasium as gym
 from pettingzoo.test import (
     api_test,
@@ -141,23 +151,128 @@ from pettingzoo.test import (
 )
 from pettingzoo.utils.conversions import aec_to_parallel
 from pettingzoo.utils.env import AECEnv, AgentID, ParallelEnv
+# import torch
 
 # from pettingzoo.utils.all_modules import all_environments
 from src.timestep.platform.all_modules import all_environments
+from minari import DataCollectorV0, EpisodeData
+from marvin import AIApplication, settings as marvin_settings
+from marvin.components.ai_application import AppPlan, FreeformState
+# from src.timestep.platform.agents.ppo.ppo_agent import Agent as PPOAgent
+# from src.timestep.platform.agents.dqn.dqn_agent import Agent as DQNAgent
+from src.timestep.platform.agents.ddpg.ddpg_agent import Agent as DDPGAgent
 
-gym.pprint_registry()
+# from torch.distributions.categorical import Categorical
 
+# gym.pprint_registry()
 
+import inspect
+from enum import Enum
+from typing import Any, Callable, Union
+
+from jsonpatch import JsonPatch
+from pydantic import BaseModel, Field, PrivateAttr, validator
+
+from marvin.engine.executors import OpenAIFunctionsExecutor
+from marvin.engine.language_models import ChatLLM, chat_llm
+from marvin.prompts import library as prompt_library
+from marvin.prompts.base import Prompt
+from marvin.tools import Tool
+from marvin.utilities.async_utils import run_sync
+from marvin.utilities.history import History, HistoryFilter
+from marvin.utilities.messages import Message, Role
+from marvin.utilities.types import LoggerMixin, MarvinBaseModel
+
+jax.config.update('jax_enable_x64', True)
+ivy.set_inplace_mode('strict')
+ivy.set_backend("jax", dynamic=False)
+
+# class Agent(AIApplication):
 class Agent():
     id: AgentID
+    # env: AECEnv
 
-    def __init__(self, id: AgentID):
+    prev_observation: Any = None
+    prev_action: Any = None
+
+    score: float = 0.
+    # eps: float = 0.
+
+    # name: str = None
+    # description: str = None
+    # state: BaseModel = Field(default_factory=FreeformState)
+    # plan: AppPlan = Field(default_factory=AppPlan)
+    # tools: list[Union[Tool, Callable]] = []
+    # history: History = Field(default_factory=History)
+    # additional_prompts: list[Prompt] = Field(
+    #     [],
+    #     description=(
+    #         "Additional prompts that will be added to the prompt stack for rendering."
+    #     ),
+    # )
+    # stream_handler: Callable[[Message], None] = None
+    # state_enabled: bool = True
+    # plan_enabled: bool = True
+
+    # def __init__(self, id: AgentID, env):
+    #     self.id = id
+
+        # self.observation_space = env.observation_space(self.id) # TODO: what about varying size?
+        # self.action_space = env.action_space(self.id)
+
+    # def __init__(
+    #         self,
+    #         id: AgentID,
+    #         name: str = None,
+    #         description: str = None,
+    #         state: BaseModel = None,
+    #         plan: AppPlan = None,
+    #         tools: list[Union[Tool, Callable]] = [],
+    #         history: History = None,
+    #         additional_prompts: list[Prompt] = None,
+    #         stream_handler: Callable[[Message], None] = None,
+    #         state_enabled: bool = True,
+    #         plan_enabled: bool = True,
+    #     ):
+    #     super().__init__(
+    #         name=name,
+    #         description=description,
+    #         state=state,
+    #         plan=plan,
+    #         tools=tools,
+    #         history=history,
+    #         additional_prompts=additional_prompts,
+    #         stream_handler=stream_handler,
+    #         state_enabled=state_enabled,
+    #         plan_enabled=plan_enabled
+    #     )
+    #     self.id = id
+
+    def __init__(self, id, state_size, action_size, **kwargs):
+        # super().__init__(*args, **kwargs)
+
+        # self.state.episodes = []
+
         self.id = id
 
-    def reset(self, seed: int | None = None, options: dict | None = None) -> None:
-        pass
+        # self.agent = DQNAgent(
+        #     state_size=state_size,
+        #     action_size=action_size,
+        #     seed=42,
+        # )
 
-    def step(self, env, agent_id, observation, termination, truncation, info):
+        self.agent = DDPGAgent(
+            state_size=state_size,
+            action_size=action_size,
+            random_seed=42,
+        )
+
+        # self.eps = 0.
+
+    def reset(self, seed: int | None = None, options: dict | None = None) -> None:
+        self.score = 0.
+
+    def step(self, env, agent_id, observation, reward, termination, truncation, info):
         if termination or truncation:
             action = None
 
@@ -171,7 +286,65 @@ class Agent():
             else:
                 mask = None
 
-            action = env.action_space(agent_id).sample(mask)
+            # action = env.action_space(agent_id).sample(mask)
+
+#             marvin.settings.llm_model = 'openai/gpt-3.5-turbo'
+#             model: ChatLLM = None
+
+#             # if len(self.state.episodes) > 0:
+#             # episode_return = self.state.episodes[]
+#             episode_return = reward
+
+#             input_text = f"""
+# Observation: {observation}
+# Reward: {reward}
+# Termination: {termination}
+# Truncation: {truncation}
+# Return: {episode_return}
+#             """
+#             response = run_sync(self.run(input_text=input_text, model=model))
+#             print(f"response.content: {response.content}")
+
+#             action_parser = RegexParser(
+#                 regex=r"Action: (.*)", output_keys=["action"], default_output_key="action"
+#             )
+
+#             action = int(action_parser.parse(response.content)["action"])
+
+            self.score += reward
+
+            # if isinstance()
+
+            if self.prev_observation is not None and self.prev_action is not None:
+                self.agent.step(
+                    state=self.prev_observation,
+                    action=self.prev_action,
+                    reward=reward,
+                    next_state=observation,
+                    done=termination or truncation,
+                )
+
+            # action = self.agent.act(observation, self.eps)
+
+            # ivy.set_backend("numpy")
+            action = self.agent.act(observation)
+            action = action.to_native()
+            action = action.tolist()
+            action = np.asarray(action)
+
+            # action = env.action_space(agent_id).sample()
+
+            # if isinstance(env.action_space(agent_id), Discrete):
+            #     action = np.argmax(action)
+
+            # Epsilon-greedy action selection
+            # if random.random() > eps:
+            #     return np.argmax(action_values.cpu().data.numpy())
+            # else:
+            #     return random.choice(np.arange(self.action_size))
+
+        self.prev_action = action
+        self.prev_observation = observation
 
         return action
 
@@ -184,6 +357,11 @@ for env_name, env_module in all_environments.items():
     # assert "ManualPolicy" in env_module.__all__
 
     env: AECEnv = env_module.env()
+
+    # print('=== GoalEnv check ===')
+    # print('type: ', type(env))
+    # print('type unwrapped: ', type(env.unwrapped))
+
     api_test(env, num_cycles=100, verbose_progress=False)
 
     env_fn = env_module.env
@@ -204,23 +382,252 @@ for env_name, env_module in all_environments.items():
     performance_benchmark(env)
     test_save_obs(env)
 
+
+    # ### BEGIN TESTING
+    # import random
+    # import time
+
+    # print("BEGIN TESTING")
+
+    # cycles = 0
+    # turn = 0
+    # env.reset()
+    # start = time.time()
+    # end = 0
+
+    # while True:
+    #     cycles += 1
+    #     for agent in env.agent_iter(
+    #         env.num_agents
+    #     ):  # step through every agent once with observe=True
+    #         obs, reward, termination, truncation, info = env.last()
+
+    #         if termination or truncation:
+    #             action = None
+
+    #         elif isinstance(obs, dict) and "action_mask" in obs:
+    #             action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
+
+    #         else:
+    #             action = env.action_space(agent).sample()
+
+    #         env.step(action)
+    #         turn += 1
+
+    #         if all(env.terminations.values()) or all(env.truncations.values()):
+    #             env.reset()
+
+    #     if time.time() - start > 5:
+    #         end = time.time()
+    #         break
+
+    # # length = end - start
+
+    # # turns_per_time = turn / length
+    # # cycles_per_time = cycles / length
+    # # print(str(turns_per_time) + " turns per second")
+    # # print(str(cycles_per_time) + " cycles per second")
+    # print("END TESTING")
+
+    ### END TESTING
+
     print("Starting agent-environment loop")
-    env: AECEnv = env_module.env(render_mode="human")
+    # env: AECEnv = env_module.env(render_mode="human") # ~2 turns/sec
+    env: AECEnv = env_module.env() # ~28k turns/sec
+    # env = DataCollectorV0(env, record_infos=True, max_buffer_steps=100000)
     env.reset(seed=42)
 
+    agents_db = {}
+
+    ObsType = TypeVar("ObsType")
+    ActType = TypeVar("ActType")
+
+    class Episode(BaseModel):
+        observations: List[ObsType] = []
+        actions: List[ActType] = []
+        rewards: List[float] = []
+        terminations: List[bool] = []
+        truncations: List[bool] = []
+
+    class State(BaseModel):
+        # episodes: List[EpisodeData] = []
+        episodes: List[Episode] = []
+        # class Config:
+        #     arbitrary_types_allowed = True
+
     for agent_id in env.possible_agents:
-        agent = Agent(id=agent_id)
+        action_space: gym.Space = env.action_space(agent_id)
+        print(f"action_space: {action_space}")
+        observation_space: gym.Space = env.observation_space(agent_id)
+        print(f"observation_space: {observation_space}")
 
-        print(f"=== Agent: {agent.id} ===")
+        if isinstance(action_space, Discrete):
+            action_size = action_space.n
+        else:
+            action_size = action_space.shape[0]
 
-        agent.reset(seed=42)
+        if isinstance(observation_space, Discrete):
+            state_size = observation_space.n
+        else:
+            state_size = observation_space.shape[0]
 
-    for agent_id in env.agent_iter():
-        observation, reward, termination, truncation, info = env.last()
+        print('action_size: ', action_size)
+        print('state_size: ', state_size)
 
-        action = agent.step(env, agent_id, observation, termination, truncation, info)
+        agents_db[agent_id] = Agent(
+            id=agent_id,
+            action_size=action_size,
+            state_size=state_size,
+#             name=agent_id,
+#             description=f"""
+# Your goal is to maximize your return, i.e. the sum of the rewards you receive.
+# I will give you an observation, reward, termination flag, truncation flag, and the return so far, formatted as:
 
-        env.step(action)
+# Observation: <observation>
+# Reward: <reward>
+# Termination: <termination>
+# Truncation: <truncation>
+# Return: <sum_of_rewards>
+
+# You will respond with an action, formatted as:
+
+# Action: <action>
+
+# where you replace <action> with your actual action.
+# Do nothing else but return the action.
+# """,
+#             state=State(),
+#             # plan=,
+#             # tools=[],
+#             # history=[],
+#             # additional_prompts=,
+#             stream_handler=None,
+#             state_enabled=True,
+#             plan_enabled=True,
+        )
+        agents_db[agent_id].reset(seed=42)
+
+        assert agents_db[agent_id].id == agent_id, f"agents_db[{agent_id}].id != {agent_id}"
+        # print(f"=== Agent: {agents_db[agent_id].id} ===")
+        # print(f"app.history: {agents_db[agent_id].history}")
+        # print(f"app.plan: {agents_db[agent_id].plan}")
+        # print(f"app.state: {agents_db[agent_id].state}")
+
+    # eps_start=1.0
+    # eps_end=0.01
+    # eps_decay=0.995
+    scores = { agent_id: [] for agent_id in agents_db.keys() }                        # list containing scores from each episode
+    scores_window = { agent_id: deque(maxlen=100) for agent_id in agents_db.keys() }  # last 100 scores
+    # eps = eps_start                    # initialize epsilon
+    n_episodes=1
+
+
+    ### BEGIN TESTING
+    import random
+    import time
+
+    print("BEGIN TESTING")
+
+    cycles = 0
+    turn = 0
+    env.reset(seed=42)
+    start = time.time()
+    end = 0
+
+    while True:
+        cycles += 1
+        for agent in env.agent_iter(
+            env.num_agents
+        ):  # step through every agent once with observe=True
+            obs, reward, termination, truncation, info = env.last()
+
+            if termination or truncation:
+                action = None
+
+            elif isinstance(obs, dict) and "action_mask" in obs:
+                action = random.choice(np.flatnonzero(obs["action_mask"]).tolist())
+
+            else:
+                action = env.action_space(agent).sample()
+
+            # print('action: ', action)
+            env.step(action)
+            turn += 1
+
+            if all(env.terminations.values()) or all(env.truncations.values()):
+                env.reset(seed=42)
+
+        if time.time() - start > 5:
+            end = time.time()
+            break
+
+    length = end - start
+
+    turns_per_time = turn / length
+    cycles_per_time = cycles / length
+    print(str(turns_per_time) + " turns per second")
+    print(str(cycles_per_time) + " cycles per second")
+    print("END TESTING")
+
+    for i_episode in range(1, n_episodes+1):
+        env.reset(seed=42)
+        agents_db[agent_id].reset(seed=42)
+        # agents_db[agent_id].eps = eps
+
+        i_iter = 0
+        cycles = 0
+        turn = 0
+        start = time.time()
+
+        while True:
+            cycles += 1
+            for agent_id in env.agent_iter(max_iter=env.num_agents):
+                observation, reward, termination, truncation, info = env.last()
+                # print('reward: ', reward)
+
+                if isinstance(env.observation_space(agent_id), Discrete):
+                    # one-hot encode the observation
+                    observation_one_hot = np.zeros((1, env.observation_space(agent_id).n))
+                    observation_one_hot[0][observation] = 1
+                    observation = observation_one_hot
+
+                # print('observation: ', observation, 'type(observation): ', type(observation))
+                # action = agents_db[agent_id].step(env, agent_id, observation, reward, termination, truncation, info)
+
+                # if isinstance(env.action_space(agent_id), Discrete) and action is not None:
+                #     action = np.argmax(action)
+
+                # print('action: ', action, 'type(action): ', type(action))
+                # print('action: ', action)
+                action = env.action_space(agent_id).sample()
+                env.step(action)
+                turn += 1
+
+                # print('\rEpisode {}\tIteration: {:.2f}'.format(i_episode, i_iter), end="")
+                i_iter += 1
+
+                if all(env.terminations.values()) or all(env.truncations.values()):
+                    env.reset(seed=42)
+
+            if time.time() - start > 5:
+                end = time.time()
+                break
+
+        for agent_id in agents_db.keys():
+            scores_window[agent_id].append(agents_db[agent_id].score)       # save most recent score
+            scores[agent_id].append(agents_db[agent_id].score)              # save most recent score
+            # eps = max(eps_end, eps_decay*eps) # decrease epsilon
+            print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window[agent_id])), end="")
+
+            if i_episode % 10 == 0:
+                print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window[agent_id])))
+
+            if np.mean(scores_window[agent_id])>=200.0:
+                print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode-100, np.mean(scores_window[agent_id])))
+                # torch.save(agents_db[agent_id].agent.qnetwork_local.state_dict(), 'checkpoint.pth')
+                torch.save(agents_db[agent_id].agent.actor_local.state_dict(), 'checkpoint_actor.pth')
+                torch.save(agents_db[agent_id].agent.critic_local.state_dict(), 'checkpoint.critic.pth')
+                break
 
     env.close()
-    print("Finished agent-environment loop\n")
+    print("\nFinished agent-environment loop\n")
