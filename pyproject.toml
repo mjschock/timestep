@@ -76,6 +76,7 @@ prefect-sqlalchemy = "^0.2.4"
 pygbag = "^0.8.2"
 python = ">=3.11,<3.12"
 python-dotenv = "^1.0.0"
+ray = "^2.7.0"
 seaborn = "^0.13.0"
 skypilot = {extras = ["all"], path = "src/skypilot"}
 supersuit = "^3.9.0"
