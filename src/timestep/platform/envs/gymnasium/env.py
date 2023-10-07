@@ -236,8 +236,8 @@ class RawEnv(AECEnv):
         observation, reward, terminated, truncated, info = self.env.step(action)
         # print('reward: ', reward)
 
-        if reward > 0.0:
-            print(f'GOT REWARD OF {reward}!')
+        # if reward > 0.0:
+            # print(f'GOT REWARD OF {reward}!')
 
         # collect reward if it is the last agent to act
         # if self._agent_selector.is_last():

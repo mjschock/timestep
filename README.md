@@ -21,3 +21,7 @@ classDiagram
 ```
 
 <img src="IntelligentAgent-Learning.png" />
+
+## TODO:
+
+from shimmy import GymnasiumMultiAgentCompatibilityV0
