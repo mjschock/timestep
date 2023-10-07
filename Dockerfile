@@ -41,6 +41,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libxml2-dev \
   libxmlsec1-dev \
   net-tools \
+  socat \
   sudo \
   swig \
   tk-dev \

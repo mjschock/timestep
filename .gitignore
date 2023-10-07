@@ -33,3 +33,6 @@ timestep-ai-*.tgz
 saved_observations
 
 docs
+
+src/CrowdPlay
+src/udacity
