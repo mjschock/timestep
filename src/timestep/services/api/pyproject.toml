@@ -58,7 +58,7 @@ gymnasium = {extras = ["all"], version = "^0.29.1"}
 gymnasium-robotics = "^1.2.2"
 ivy = "^0.0.3.0"
 jaxlib = {url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-0.4.18+cuda12.cudnn89-cp311-cp311-manylinux2014_x86_64.whl"}
-langchain = "^0.0.279"
+langchain = ">=0.0.279,<0.0.313"
 marvin = "^1.2.1"
 mujoco = "^2.3.3"
 open-spiel = "^1.3"
