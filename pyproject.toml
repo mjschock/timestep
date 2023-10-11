@@ -38,7 +38,7 @@ description = ""
 name = "timestep"
 packages = [{from = "src", include = "timestep"}]
 readme = "README.md"
-version = "2.0.4"
+version = "2.0.5"
 
 [tool.poetry.dependencies]
 autorom = "^0.6.1"
