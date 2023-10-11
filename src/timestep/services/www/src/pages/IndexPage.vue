@@ -6,25 +6,25 @@
       :todos="todos"
       :meta="meta"
     ></example-component> -->
-    <skeleton-component
+    <!-- <skeleton-component
       title="Example component"
       active
       :todos="todos"
       :meta="meta"
-    ></skeleton-component>
+    ></skeleton-component> -->
   </q-page>
 </template>
 
 <script lang="ts">
 import { Todo, Meta } from 'components/models';
 // import ExampleComponent from 'components/ExampleComponent.vue';
-import SkeletonComponent from 'components/SkeletonComponent.vue';
+// import SkeletonComponent from 'components/SkeletonComponent.vue';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'IndexPage',
   // components: { ExampleComponent },
-  components: { SkeletonComponent },
+  // components: { SkeletonComponent },
   setup () {
     const todos = ref<Todo[]>([
       {

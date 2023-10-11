@@ -88,6 +88,7 @@ local_resource(
         'src/timestep/infra/stacks/kubernetes_config/stack.py',
         'src/timestep/infra/stacks/kubernetes_config/constructs/kubernetes_cluster_ingress/construct.py',
         'src/timestep/infra/stacks/kubernetes_config/constructs/kubernetes_dashboard/construct.py',
+        'src/timestep/infra/stacks/kubernetes_config/constructs/minio/construct.py',
         'src/timestep/infra/stacks/kubernetes_config/constructs/prefect/construct.py',
         'src/timestep/infra/stacks/kubernetes_config/constructs/registry/construct.py',
         'src/timestep/infra/stacks/kubernetes_config/constructs/timestep_ai/construct.py',
@@ -339,19 +340,41 @@ if os.path.exists('timestep-ai'):
         tag=str(local(command='echo $VERSION')).strip(),
     )
 
-    # docker_build(
-    #     'registry.gitlab.com/timestep-ai/timestep/api',
-    #     context='./src/timestep/services/api',
-    #     dockerfile='./src/timestep/services/api/Dockerfile',
-    #     only=['.'],
-    #     live_update=[
-    #         sync('./src/timestep/services/api/', '/app/api/'),
-    #         run(
-    #             'pip install -r /app/requirements.txt',
-    #             trigger=['./src/timestep/services/api/requirements.txt']
-    #         )
-    #     ]
-    # )
+    docker_build(
+        'registry.gitlab.com/timestep-ai/timestep/api',
+        context='./src/timestep/services/api',
+        # dockerfile='./src/timestep/services/api/Dockerfile',
+        dockerfile='./src/timestep/services/api/Dockerfile.api',
+        entrypoint=[
+            "poetry",
+            "run",
+            "uvicorn",
+            "app.main:app",
+            "--proxy-headers",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "5000",
+            "--reload",
+        ],
+        # context=".",
+        # dockerfile="Dockerfile",
+        # only=['src/timestep/services/api'],
+        live_update=[
+            # sync('./src/timestep/services/api/app/', '/home/ubuntu/code/app/'),
+            # sync('./src/timestep/services/api/requirements.txt', '/home/ubuntu/code/requirements.txt'),
+            sync('./src/timestep/services/api/app/', '/home/ubuntu/app/'),
+            sync('./src/timestep/services/api/pyproject.toml', '/home/ubuntu/pyproject.toml'),
+            sync('./src/timestep/services/api/poetry.lock', '/home/ubuntu/poetry.lock'),
+            run(
+                # 'pip install -r /home/ubuntu/code/requirements.txt',
+                # trigger=['./src/timestep/services/api/requirements.txt']
+                'poetry install',
+                trigger=['./src/timestep/services/api/pyproject.toml', './src/timestep/services/api/poetry.lock']
+            )
+        ],
+        pull=True,
+    )
 
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/web',
