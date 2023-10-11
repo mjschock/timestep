@@ -127,19 +127,20 @@ from src.timestep.platform.agents.ddpg.ddpg_agent import Agent as DDPGAgent
 # from pettingzoo.utils.all_modules import all_environments
 from src.timestep.platform.all_modules import all_environments
 
-jax.config.update('jax_enable_x64', True)
-ivy.set_inplace_mode('strict')
+jax.config.update("jax_enable_x64", True)
+ivy.set_inplace_mode("strict")
 ivy.set_backend("jax", dynamic=False)
 
+
 # class Agent(AIApplication):
-class Agent():
+class Agent:
     id: AgentID
     # env: AECEnv
 
     prev_observation: Any = None
     prev_action: Any = None
 
-    score: float = 0.
+    score: float = 0.0
     # eps: float = 0.
 
     # name: str = None
@@ -161,8 +162,8 @@ class Agent():
     # def __init__(self, id: AgentID, env):
     #     self.id = id
 
-        # self.observation_space = env.observation_space(self.id) # TODO: what about varying size?
-        # self.action_space = env.action_space(self.id)
+    # self.observation_space = env.observation_space(self.id) # TODO: what about varying size?  # noqa: E501
+    # self.action_space = env.action_space(self.id)
 
     # def __init__(
     #         self,
@@ -214,7 +215,7 @@ class Agent():
         # self.eps = 0.
 
     def reset(self, seed: int | None = None, options: dict | None = None) -> None:
-        self.score = 0.
+        self.score = 0.0
 
     def step(self, env, agent_id, observation, reward, termination, truncation, info):
         if termination or truncation:
@@ -232,28 +233,28 @@ class Agent():
 
             # action = env.action_space(agent_id).sample(mask)
 
-#             marvin.settings.llm_model = 'openai/gpt-3.5-turbo'
-#             model: ChatLLM = None
+            #             marvin.settings.llm_model = 'openai/gpt-3.5-turbo'
+            #             model: ChatLLM = None
 
-#             # if len(self.state.episodes) > 0:
-#             # episode_return = self.state.episodes[]
-#             episode_return = reward
+            #             # if len(self.state.episodes) > 0:
+            #             # episode_return = self.state.episodes[]
+            #             episode_return = reward
 
-#             input_text = f"""
-# Observation: {observation}
-# Reward: {reward}
-# Termination: {termination}
-# Truncation: {truncation}
-# Return: {episode_return}
-#             """
-#             response = run_sync(self.run(input_text=input_text, model=model))
-#             print(f"response.content: {response.content}")
+            #             input_text = f"""
+            # Observation: {observation}
+            # Reward: {reward}
+            # Termination: {termination}
+            # Truncation: {truncation}
+            # Return: {episode_return}
+            #             """
+            #             response = run_sync(self.run(input_text=input_text, model=model))  # noqa: E501
+            #             print(f"response.content: {response.content}")
 
-#             action_parser = RegexParser(
-#                 regex=r"Action: (.*)", output_keys=["action"], default_output_key="action"
-#             )
+            #             action_parser = RegexParser(
+            #                 regex=r"Action: (.*)", output_keys=["action"], default_output_key="action"  # noqa: E501
+            #             )
 
-#             action = int(action_parser.parse(response.content)["action"])
+            #             action = int(action_parser.parse(response.content)["action"])
 
             self.score += reward
 
@@ -326,7 +327,6 @@ for env_name, env_module in all_environments.items():
     performance_benchmark(env)
     test_save_obs(env)
 
-
     # ### BEGIN TESTING
     # import random
     # import time
@@ -377,7 +377,7 @@ for env_name, env_module in all_environments.items():
 
     print("Starting agent-environment loop")
     # env: AECEnv = env_module.env(render_mode="human") # ~2 turns/sec
-    env: AECEnv = env_module.env() # ~28k turns/sec
+    env: AECEnv = env_module.env()  # ~28k turns/sec
     # env = DataCollectorV0(env, record_infos=True, max_buffer_steps=100000)
     env.reset(seed=42)
 
@@ -415,43 +415,41 @@ for env_name, env_module in all_environments.items():
         else:
             state_size = observation_space.shape[0]
 
-        print('action_size: ', action_size)
-        print('state_size: ', state_size)
+        print("action_size: ", action_size)
+        print("state_size: ", state_size)
 
         agents_db[agent_id] = Agent(
             id=agent_id,
             action_size=action_size,
             state_size=state_size,
-#             name=agent_id,
-#             description=f"""
-# Your goal is to maximize your return, i.e. the sum of the rewards you receive.
-# I will give you an observation, reward, termination flag, truncation flag, and the return so far, formatted as:
-
-# Observation: <observation>
-# Reward: <reward>
-# Termination: <termination>
-# Truncation: <truncation>
-# Return: <sum_of_rewards>
-
-# You will respond with an action, formatted as:
-
-# Action: <action>
-
-# where you replace <action> with your actual action.
-# Do nothing else but return the action.
-# """,
-#             state=State(),
-#             # plan=,
-#             # tools=[],
-#             # history=[],
-#             # additional_prompts=,
-#             stream_handler=None,
-#             state_enabled=True,
-#             plan_enabled=True,
+            #             name=agent_id,
+            #             description=f"""
+            # Your goal is to maximize your return, i.e. the sum of the rewards you receive.  # noqa: E501
+            # I will give you an observation, reward, termination flag, truncation flag, and the return so far, formatted as:  # noqa: E501
+            # Observation: <observation>
+            # Reward: <reward>
+            # Termination: <termination>
+            # Truncation: <truncation>
+            # Return: <sum_of_rewards>
+            # You will respond with an action, formatted as:
+            # Action: <action>
+            # where you replace <action> with your actual action.
+            # Do nothing else but return the action.
+            # """,
+            #             state=State(),
+            #             # plan=,
+            #             # tools=[],
+            #             # history=[],
+            #             # additional_prompts=,
+            #             stream_handler=None,
+            #             state_enabled=True,
+            #             plan_enabled=True,
         )
         agents_db[agent_id].reset(seed=42)
 
-        assert agents_db[agent_id].id == agent_id, f"agents_db[{agent_id}].id != {agent_id}"
+        assert (
+            agents_db[agent_id].id == agent_id
+        ), f"agents_db[{agent_id}].id != {agent_id}"  # noqa: E501
         # print(f"=== Agent: {agents_db[agent_id].id} ===")
         # print(f"app.history: {agents_db[agent_id].history}")
         # print(f"app.plan: {agents_db[agent_id].plan}")
@@ -460,11 +458,14 @@ for env_name, env_module in all_environments.items():
     # eps_start=1.0
     # eps_end=0.01
     # eps_decay=0.995
-    scores = { agent_id: [] for agent_id in agents_db.keys() }                        # list containing scores from each episode
-    scores_window = { agent_id: deque(maxlen=100) for agent_id in agents_db.keys() }  # last 100 scores
+    scores = {
+        agent_id: [] for agent_id in agents_db.keys()
+    }  # list containing scores from each episode  # noqa: E501
+    scores_window = {
+        agent_id: deque(maxlen=100) for agent_id in agents_db.keys()
+    }  # last 100 scores  # noqa: E501
     # eps = eps_start                    # initialize epsilon
-    n_episodes=1
-
+    n_episodes = 1
 
     ### BEGIN TESTING
     import random
@@ -513,7 +514,7 @@ for env_name, env_module in all_environments.items():
     print(str(cycles_per_time) + " cycles per second")
     print("END TESTING")
 
-    for i_episode in range(1, n_episodes+1):
+    for i_episode in range(1, n_episodes + 1):
         env.reset(seed=42)
         agents_db[agent_id].reset(seed=42)
         # agents_db[agent_id].eps = eps
@@ -531,14 +532,16 @@ for env_name, env_module in all_environments.items():
 
                 if isinstance(env.observation_space(agent_id), Discrete):
                     # one-hot encode the observation
-                    observation_one_hot = np.zeros((1, env.observation_space(agent_id).n))
+                    observation_one_hot = np.zeros(
+                        (1, env.observation_space(agent_id).n)
+                    )  # noqa: E501
                     observation_one_hot[0][observation] = 1
                     observation = observation_one_hot
 
-                # print('observation: ', observation, 'type(observation): ', type(observation))
-                # action = agents_db[agent_id].step(env, agent_id, observation, reward, termination, truncation, info)
+                # print('observation: ', observation, 'type(observation): ', type(observation))  # noqa: E501
+                # action = agents_db[agent_id].step(env, agent_id, observation, reward, termination, truncation, info)  # noqa: E501
 
-                # if isinstance(env.action_space(agent_id), Discrete) and action is not None:
+                # if isinstance(env.action_space(agent_id), Discrete) and action is not None:  # noqa: E501
                 #     action = np.argmax(action)
 
                 # print('action: ', action, 'type(action): ', type(action))
@@ -547,7 +550,7 @@ for env_name, env_module in all_environments.items():
                 env.step(action)
                 turn += 1
 
-                # print('\rEpisode {}\tIteration: {:.2f}'.format(i_episode, i_iter), end="")
+                # print('\rEpisode {}\tIteration: {:.2f}'.format(i_episode, i_iter), end="")  # noqa: E501
                 i_iter += 1
 
                 if all(env.terminations.values()) or all(env.truncations.values()):
@@ -558,19 +561,36 @@ for env_name, env_module in all_environments.items():
                 break
 
         for agent_id in agents_db.keys():
-            scores_window[agent_id].append(agents_db[agent_id].score)       # save most recent score
-            scores[agent_id].append(agents_db[agent_id].score)              # save most recent score
+            scores_window[agent_id].append(
+                agents_db[agent_id].score
+            )  # save most recent score  # noqa: E501
+            scores[agent_id].append(
+                agents_db[agent_id].score
+            )  # save most recent score  # noqa: E501
             # eps = max(eps_end, eps_decay*eps) # decrease epsilon
-            print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window[agent_id])), end="")
+            print(
+                "\rEpisode {}\tAverage Score: {:.2f}".format(
+                    i_episode, np.mean(scores_window[agent_id])
+                ),
+                end="",
+            )  # noqa: E501
 
             if i_episode % 10 == 0:
-                print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode, np.mean(scores_window[agent_id])))
+                print(
+                    "\rEpisode {}\tAverage Score: {:.2f}".format(
+                        i_episode, np.mean(scores_window[agent_id])
+                    )
+                )  # noqa: E501
 
-            if np.mean(scores_window[agent_id])>=200.0:
-                print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(i_episode-100, np.mean(scores_window[agent_id])))
-                # torch.save(agents_db[agent_id].agent.qnetwork_local.state_dict(), 'checkpoint.pth')
-                torch.save(agents_db[agent_id].agent.actor_local.state_dict(), 'checkpoint_actor.pth')
-                torch.save(agents_db[agent_id].agent.critic_local.state_dict(), 'checkpoint.critic.pth')
+            if np.mean(scores_window[agent_id]) >= 200.0:
+                print(
+                    "\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}".format(  # noqa: E501
+                        i_episode - 100, np.mean(scores_window[agent_id])
+                    )
+                )  # noqa: E501
+                # torch.save(agents_db[agent_id].agent.qnetwork_local.state_dict(), 'checkpoint.pth')  # noqa: E501
+                # torch.save(agents_db[agent_id].agent.actor_local.state_dict(), 'checkpoint_actor.pth')  # noqa: E501
+                # torch.save(agents_db[agent_id].agent.critic_local.state_dict(), 'checkpoint.critic.pth')  # noqa: E501
                 break
 
     env.close()

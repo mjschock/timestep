@@ -1,4 +1,3 @@
-
 # from gymnasium_robotics.envs.multiagent_mujoco import (
 #     pusher_v2,
 # )
@@ -23,12 +22,12 @@ from timestep.platform.envs.gymnasium.toy_text import (
 #     # print('gymnasium_env_spec: ', gymnasium_env_spec)
 
 #     assert isinstance(gymnasium_env_spec, gymnasium.envs.registration.EnvSpec)
-#     assert gymnasium_env_spec.id == gymnasium_env_id, f"{gymnasium_env_spec.id} != {gymnasium_env_id}"
+#     assert gymnasium_env_spec.id == gymnasium_env_id, f"{gymnasium_env_spec.id} != {gymnasium_env_id}"  # noqa: E501
 
 #     if gymnasium_env_spec.name not in gymnasium_env_latest_versions:
-#         gymnasium_env_latest_versions[gymnasium_env_spec.name] = gymnasium_env_spec.version
-#     elif gymnasium_env_spec.version > gymnasium_env_latest_versions[gymnasium_env_spec.name]:
-#         gymnasium_env_latest_versions[gymnasium_env_spec.name] = gymnasium_env_spec.version
+#         gymnasium_env_latest_versions[gymnasium_env_spec.name] = gymnasium_env_spec.version  # noqa: E501
+#     elif gymnasium_env_spec.version > gymnasium_env_latest_versions[gymnasium_env_spec.name]:  # noqa: E501
+#         gymnasium_env_latest_versions[gymnasium_env_spec.name] = gymnasium_env_spec.version  # noqa: E501
 
 #     entry_point = gymnasium_env_spec.entry_point
 #     print(f"entry_point: {entry_point}")
@@ -36,13 +35,13 @@ from timestep.platform.envs.gymnasium.toy_text import (
 #     version = gymnasium_env_spec.version
 
 #     if entry_point.startswith("gymnasium.envs"):
-#         env_path = entry_point.replace("gymnasium.envs", "gymnasium").replace(".", "/").replace(f"_v{version}", "").split(":")[0]
+#         env_path = entry_point.replace("gymnasium.envs", "gymnasium").replace(".", "/").replace(f"_v{version}", "").split(":")[0]  # noqa: E501
 #         env_name = env_path.split("/")[-1]
 #         env_folder = env_path.replace(f"/{env_name}", "")
 
 #         os.makedirs(f"src/timestep/platform/envs/gym/{env_folder}", exist_ok=True)
 
-#         with open(f"src/timestep/platform/envs/gym/{env_folder}/{env_name}_v{version}.py", 'w') as file:
+#         with open(f"src/timestep/platform/envs/gym/{env_folder}/{env_name}_v{version}.py", 'w') as file:  # noqa: E501
 #             file.write(f"""from functools import partial
 
 # from timestep.platform.envs.gymnasium.env import (
@@ -64,11 +63,11 @@ from timestep.platform.envs.gymnasium.toy_text import (
 # __all__ = ["env", "raw_env"]
 
 # """)
-    # elif entry_point.startswith("gymnasium_robotics.envs"):
-    #     os.makedirs(f"src/timestep/platform/envs/{entry_point}", exist_ok=True)
+# elif entry_point.startswith("gymnasium_robotics.envs"):
+#     os.makedirs(f"src/timestep/platform/envs/{entry_point}", exist_ok=True)
 
 
-    # break
+# break
 
 # print(f"gymnasium_env_latest_versions: {gymnasium_env_latest_versions}")
 
@@ -97,9 +96,7 @@ all_environments = {
     # "toy_text/cliff_walking_v0": cliff_walking_v0,
     "toy_text/frozen_lake_v1": frozen_lake_v1,
     # "toy_text/taxi_v3": taxi_v3,
-
     # "gymnasium_robotics/fetch/fetch_pick_and_place_v2": fetch_pick_and_place_v2,
-
     # "atari/basketball_pong_v3": basketball_pong_v3,
     # "atari/boxing_v2": boxing_v2,
     # "atari/combat_tank_v2": combat_tank_v2,
