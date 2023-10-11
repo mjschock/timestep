@@ -42,7 +42,7 @@ version = "2.0.2"
 
 [tool.poetry.dependencies]
 autorom = "^0.6.1"
-awscli = {git = "https://github.com/aws/aws-cli.git", rev = "v2"}
+awscli = {url = "https://github.com/aws/aws-cli/archive/refs/tags/2.13.25.tar.gz"}
 cdktf = "^0.17.3"
 cdktf-cdktf-provider-cloudinit = "^7.0.0"
 cdktf-cdktf-provider-digitalocean = "^8.0.0"
