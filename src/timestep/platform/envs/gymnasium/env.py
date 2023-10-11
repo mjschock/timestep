@@ -20,7 +20,7 @@ class RawEnv(AECEnv):
     metadata which specifies which modes can be put into the render() method.
     At least human mode should be supported.
     The "name" metadata allows the environment to be pretty printed.
-    """
+    """  # noqa: E501
     metadata = {"is_parallelizable": False}
 
     def __init__(self, id, name, render_mode=None, **kwargs: Any):
@@ -35,7 +35,7 @@ class RawEnv(AECEnv):
         If these methods are not overridden, spaces will be inferred from self.observation_spaces/action_spaces, raising a warning.
 
         These attributes should not be changed after initialization.
-        """
+        """  # noqa: E501
 
         self.id = id
         self.metadata["name"] = name
@@ -72,10 +72,12 @@ class RawEnv(AECEnv):
 
         # self.metadata["render_modes"] = self.gym_env.metadata["render_modes"]
         self.metadata.update(self.env.metadata)
-        assert "human" in self.metadata["render_modes"], "At least human mode should be supported."
+        assert (
+            "human" in self.metadata["render_modes"]
+        ), "At least human mode should be supported."  # noqa: E501
         # print('self.metadata: ', self.metadata)
 
-        # # optional: we can define the observation and action spaces here as attributes to be used in their corresponding methods
+        # # optional: we can define the observation and action spaces here as attributes to be used in their corresponding methods  # noqa: E501
         # self._action_spaces = {agent: Discrete(3) for agent in self.possible_agents}
         # self._observation_spaces = {
         #     agent: Discrete(4) for agent in self.possible_agents
@@ -91,7 +93,7 @@ class RawEnv(AECEnv):
         self.render_mode = self.env.render_mode
 
     # Observation space should be defined here.
-    # lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.
+    # lru_cache allows observation and action spaces to be memoized, reducing clock cycles required to get each agent's space.  # noqa: E501
     # If your spaces change over time, remove this line (disable caching).
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
@@ -101,7 +103,7 @@ class RawEnv(AECEnv):
         # raise NotImplementedError
 
         # if isinstance(self.gym_env.unwrapped, GoalEnv):
-            # return self.gym_env.observation_space.spaces["observation"]
+        # return self.gym_env.observation_space.spaces["observation"]
 
         return self.env.observation_space
 
@@ -119,7 +121,7 @@ class RawEnv(AECEnv):
         """
         Renders the environment. In human mode, it can print to terminal, open
         up a graphical window, or open up some other display that a human can see and understand.
-        """
+        """  # noqa: E501
         if self.render_mode is None:
             gym.logger.warn(
                 "You are calling render method without specifying any render mode."
@@ -143,7 +145,7 @@ class RawEnv(AECEnv):
         Observe should return the observation of the specified agent. This function
         should return a sane observation (though not necessarily the most up to date possible)
         at any time after reset() is called.
-        """
+        """  # noqa: E501
         # observation of one agent is the previous state of the other
         # return np.array(self.observations[agent])
 
@@ -175,7 +177,7 @@ class RawEnv(AECEnv):
         And must set up the environment so that render(), step(), and observe()
         can be called without issues.
         Here it sets up the state dictionary which is used by step() and the observations dictionary which is used by step() and observe()
-        """
+        """  # noqa: E501
         self.agents = self.possible_agents[:]
         self.rewards = {agent: 0.0 for agent in self.agents}
         self._cumulative_rewards = {agent: 0.0 for agent in self.agents}
@@ -195,11 +197,11 @@ class RawEnv(AECEnv):
 
         observation, info = self.env.reset(seed=seed, options=options)
 
-        self.infos = {agent: info for agent in self.agents} # TOOD: deep copy info?
-        # self.state = {agent: observation for agent in self.agents} # TODO: get from unwrapped env?
+        self.infos = {agent: info for agent in self.agents}  # TOOD: deep copy info?
+        # self.state = {agent: observation for agent in self.agents} # TODO: get from unwrapped env?  # noqa: E501
         self.observations = {agent: observation for agent in self.agents}
 
-        # return self.observations, self.infos # This is the behavior for Gym not Zoo and used by DataCollector
+        # return self.observations, self.infos # This is the behavior for Gym not Zoo and used by DataCollector  # noqa: E501
 
     def step(self, action):
         """
@@ -219,7 +221,7 @@ class RawEnv(AECEnv):
         ):
             # handles stepping an agent which is already dead
             # accepts a None action for the one agent, and moves the agent_selection to
-            # the next dead agent,  or if there are no more dead agents, to the next live agent
+            # the next dead agent,  or if there are no more dead agents, to the next live agent  # noqa: E501
             self._was_dead_step(action)
             return
 
@@ -237,7 +239,7 @@ class RawEnv(AECEnv):
         # print('reward: ', reward)
 
         # if reward > 0.0:
-            # print(f'GOT REWARD OF {reward}!')
+        # print(f'GOT REWARD OF {reward}!')
 
         # collect reward if it is the last agent to act
         # if self._agent_selector.is_last():
@@ -258,7 +260,7 @@ class RawEnv(AECEnv):
         #             self.agents[1 - self.agent_name_mapping[i]]
         #         ]
         # else:
-        #     # necessary so that observe() returns a reasonable observation at all times.
+        #     # necessary so that observe() returns a reasonable observation at all times.  # noqa: E501
         #     self.state[self.agents[1 - self.agent_name_mapping[agent]]] = NONE
         #     # no rewards are allocated until both players give an action
         #     self._clear_rewards()
@@ -316,10 +318,10 @@ def env_creator(id, name, render_mode=None):
 
 
 def envy(__name__, namespace=None):
-    name = __name__.split('.')[-1]
-    version = name.split('_')[-1]
-    name_without_version = name.replace('_' + version, '')
-    words_in_name_without_version = name_without_version.split('_')
+    name = __name__.split(".")[-1]
+    version = name.split("_")[-1]
+    name_without_version = name.replace("_" + version, "")
+    words_in_name_without_version = name_without_version.split("_")
     capitalized_words_in_name_without_version = [
         word.capitalize() for word in words_in_name_without_version
     ]
@@ -328,8 +330,8 @@ def envy(__name__, namespace=None):
     if namespace is not None:
         id = f"{namespace}/{id}"
 
-    print('name: ', name)
-    print('id: ', id)
+    print("name: ", name)
+    print("id: ", id)
 
     env = functools.partial(
         env_creator,
