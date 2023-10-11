@@ -79,15 +79,6 @@ class KubernetesConfigStack(TerraformStack):
             scope=self,
         )
 
-        # self.supabase_construct: SupabaseConstruct = (
-        #     SupabaseConstruct(
-        #         config=config,
-        #         id="supabase",
-        #         helm_provider=self.helm_provider,
-        #         scope=self,
-        #     )
-        # )
-
         self.timestep_ai_contruct: TimestepAIConstruct = TimestepAIConstruct(
             config=config,
             id="timestep_ai_contruct",
