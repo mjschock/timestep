@@ -1,3 +1,7 @@
+.ruff_cache
 Dockerfile
 Dockerfile.api
+requirements.txt
+poetry.lock
+pyproject.toml
 requirements.txt

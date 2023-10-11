@@ -342,14 +342,28 @@ if os.path.exists('timestep-ai'):
 
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/api',
-        context='./src/timestep/services/api',
+        # context='./src/timestep/services/api',
+        context=".",
         # dockerfile='./src/timestep/services/api/Dockerfile',
-        dockerfile='./src/timestep/services/api/Dockerfile.api',
+        dockerfile="Dockerfile",
+        # dockerfile='./src/timestep/services/api/Dockerfile.api',
+        # entrypoint=[
+        #     "poetry",
+        #     "run",
+        #     "uvicorn",
+        #     "app.main:app",
+        #     "--proxy-headers",
+        #     "--host",
+        #     "0.0.0.0",
+        #     "--port",
+        #     "5000",
+        #     "--reload",
+        # ],
         entrypoint=[
             "poetry",
             "run",
             "uvicorn",
-            "app.main:app",
+            "src/timestep/services/api/app.main:app",
             "--proxy-headers",
             "--host",
             "0.0.0.0",
@@ -363,14 +377,15 @@ if os.path.exists('timestep-ai'):
         live_update=[
             # sync('./src/timestep/services/api/app/', '/home/ubuntu/code/app/'),
             # sync('./src/timestep/services/api/requirements.txt', '/home/ubuntu/code/requirements.txt'),
-            sync('./src/timestep/services/api/app/', '/home/ubuntu/app/'),
-            sync('./src/timestep/services/api/pyproject.toml', '/home/ubuntu/pyproject.toml'),
-            sync('./src/timestep/services/api/poetry.lock', '/home/ubuntu/poetry.lock'),
+            sync('./src/timestep/services/api/app/', '/home/ubuntu/src/timestep/services/api/app'),
+            sync('./pyproject.toml', '/home/ubuntu/pyproject.toml'),
+            sync('./poetry.lock', '/home/ubuntu/poetry.lock'),
             run(
                 # 'pip install -r /home/ubuntu/code/requirements.txt',
                 # trigger=['./src/timestep/services/api/requirements.txt']
                 'poetry install',
-                trigger=['./src/timestep/services/api/pyproject.toml', './src/timestep/services/api/poetry.lock']
+                # trigger=['./src/timestep/services/api/pyproject.toml', './src/timestep/services/api/poetry.lock']
+                trigger=['./pyproject.toml', './poetry.lock']
             )
         ],
         pull=True,
