@@ -19,8 +19,32 @@ services:
   #     kompose.service.healthcheck.readiness.http_get_path: /ready
   #     kompose.service.healthcheck.readiness.http_get_port: 5000
   #     rollme: "{{ randAlphaNum 5 | quote }}"
-  #   # ports:
-  #   #   - '5000:5000'
+  #   ports:
+  #     - '5000:5000'
+  api:
+    build:
+      context: src/timestep/services/api
+      # dockerfile: Dockerfile
+      dockerfile: Dockerfile.api
+    # build:
+      # context: .
+      # dockerfile: Dockerfile
+    command: ["poetry", "run", "uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "5000"]
+    # command: ["poetry", "run", "uvicorn", "src/timestep/services/api/app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "5000"]
+    environment:
+      - PREFECT_API_URL=http://prefect-server.prefect-system.svc.cluster.local:4200/api
+    expose:
+      - 5000
+      # - 5735
+    # image: registry.gitlab.com/timestep-ai/timestep/www:latest
+    # image: registry.gitlab.com/timestep-ai/timestep/www:${CI_COMMIT_SHORT_SHA:-latest}
+    image: registry.gitlab.com/timestep-ai/timestep/api:${VERSION:-latest}
+    labels:
+      kompose.image-pull-policy: "Always"
+      kompose.image-pull-secret: "regcred"
+      kompose.service.healthcheck.readiness.http_get_path: /ready
+      kompose.service.healthcheck.readiness.http_get_port: 5000
+      rollme: "{{ randAlphaNum 5 | quote }}"
   # auth:
   #   depends_on:
   #     - postgres
@@ -212,7 +236,8 @@ services:
       dockerfile: Dockerfile
     # command: ["npm", "run", "serve"]
     command: ["quasar", "serve", "dist/spa", "--hostname", "0.0.0.0", "-p", "9000"]
-    # environment:
+    environment:
+      GRAPHQL_URI: https://www.${PRIMARY_DOMAIN_NAME}/graphql
       # VITE_CLIENT_PORT: '5735'
     expose:
       - 9000

@@ -2,13 +2,48 @@
 # :80 {
 # http://timestep.local:80 {
 http://{$PRIMARY_DOMAIN_NAME}:80 {
+	# @origin header Origin {http.request.header.Origin}
+	# header @origin Access-Control-Allow-Origin "https://www.timestep.local"
+	# header @origin Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
 	# redir http://www.timestep.local{uri}
 	redir http://www.{$PRIMARY_DOMAIN_NAME}{uri}
 }
 
 # http://www.timestep.local:80 {
 http://www.{$PRIMARY_DOMAIN_NAME}:80 {
+	# @origin header Origin {http.request.header.Origin}
+	# header @origin Access-Control-Allow-Origin "https://www.timestep.local"
+	# header @origin Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
+
 	encode gzip
+
+	handle /ap {
+		reverse_proxy api:5000
+	}
+
+	handle /docs {
+		reverse_proxy api:5000
+	}
+
+	handle /flows {
+		reverse_proxy api:5000
+	}
+
+	handle /graphql {
+		reverse_proxy api:5000
+	}
+
+	handle /openapi.json {
+		reverse_proxy api:5000
+	}
+
+	handle /ready {
+		reverse_proxy api:5000
+	}
+
+	handle /redoc {
+		reverse_proxy api:5000
+	}
 
 	# handle /console/* {
 	# 	reverse_proxy graphql-engine:8080

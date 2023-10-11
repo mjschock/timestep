@@ -11,20 +11,23 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
+        <q-toolbar-title
+          class="my-box cursor-pointer q-hoverable"
+          @click="this.$router.push(`/`)"
+        >
           Timestep AI
         </q-toolbar-title>
 
         <!-- <div>Quasar v{{ $q.version }}</div> -->
 
-        <q-btn
+        <!-- <q-btn
           flat
           dense
           round
           icon="more_vert"
           aria-label="More"
           @click="toggleRightDrawer"
-        />
+        /> -->
       </q-toolbar>
 
       <!-- <q-linear-progress dark indeterminate color="secondary" class="q-mt-sm" /> -->
@@ -47,18 +50,27 @@
         <q-item-label
           header
         >
-          Agents
+          Environments
         </q-item-label>
 
-        <EssentialLink
+        <!-- <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
-        />
+        /> -->
+
+        <q-item v-for="environment in environments" :key="environment.id">
+          <q-item-section class="my-box cursor-pointer q-hoverable">
+            <q-item-label @click="fetchAgents(environment)">
+              {{ environment.name }}
+            </q-item-label>
+            <q-item-label caption>ID: {{ environment.id }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
-    <q-drawer
+    <!-- <q-drawer
       behavior="desktop"
       v-model="rightDrawerOpen"
       overlay
@@ -69,10 +81,10 @@
         <q-item-label
           header
         >
-         Environments
+         Agents
         </q-item-label>
       </q-list>
-    </q-drawer>
+    </q-drawer> -->
 
     <q-page-container>
       <router-view />
@@ -89,10 +101,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import EssentialLink from 'components/EssentialLink.vue';
+import { defineComponent, ref, watch } from 'vue';
+// import EssentialLink from 'components/EssentialLink.vue';
+import { useRouter } from "vue-router";
+import { useQuery, useResult } from "@vue/apollo-composable";
+import gql from "graphql-tag";
 
-const linksList = [
+// const linksList = [
   // {
   //   title: 'Docs',
   //   caption: 'quasar.dev',
@@ -135,30 +150,49 @@ const linksList = [
   //   icon: 'favorite',
   //   link: 'https://awesome.quasar.dev'
   // }
-];
+// ];
 
 export default defineComponent({
   name: 'MainLayout',
 
-  components: {
-    EssentialLink
-  },
+  // components: {
+  //   // EssentialLink
+  // },
 
   setup () {
-    const leftDrawerOpen = ref(false)
-    const rightDrawerOpen = ref(false)
+    const leftDrawerOpen = ref(false);
+    // const rightDrawerOpen = ref(false)
+    const router = useRouter();
+
+    const { result, loading, error } = useQuery(gql`
+      query getEnvs {
+        envs
+      }
+    `);
+
+    watch(result, (newValue, oldValue) => {
+      console.log(newValue)
+    })
+
+    // const environments = useResult(result, null, (data) => data.environment);
+
+    const fetchAgents = (environment) => {
+      return router.push(`/envs/${environment.id}`);
+    };
 
     return {
-      essentialLinks: linksList,
+      "environments": result.value?.data?.envs,
+      // essentialLinks: linksList,
       leftDrawerOpen,
+      fetchAgents,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
 
-      rightDrawerOpen,
-      toggleRightDrawer () {
-        rightDrawerOpen.value = !rightDrawerOpen.value
-      }
+      // rightDrawerOpen,
+      // toggleRightDrawer () {
+      //   rightDrawerOpen.value = !rightDrawerOpen.value
+      // }
     }
   }
 });
