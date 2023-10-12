@@ -1,5 +1,5 @@
 from cdktf_cdktf_provider_helm.provider import HelmProvider
-from cdktf_cdktf_provider_helm.release import Release
+from cdktf_cdktf_provider_helm.release import Release, ReleaseSet
 from constructs import Construct
 from timestep.config import Settings
 
@@ -73,22 +73,22 @@ class KubernetesClusterIngressConstruct(Construct):
             repository="https://caddyserver.github.io/ingress",
             provider=helm_provider,
             set=[
-                {
-                    "name": "ingressController.config.acmeCA",
-                    "value": config.ingress_controller_acme_ca,
-                },
-                {
-                    "name": "ingressController.config.debug",
-                    "value": config.ingress_controller_debug,
-                },
-                {
-                    "name": "ingressController.config.email",
-                    "value": config.ingress_controller_email,
-                },
-                # {
-                #     "name": "ingressController.config.onDemandTLS",
-                #     "value": "true",
-                # },
+                ReleaseSet(
+                    name="ingressController.config.acmeCA",
+                    value=config.ingress_controller_acme_ca,
+                ),
+                ReleaseSet(
+                    name="ingressController.config.debug",
+                    value=config.ingress_controller_debug,
+                ),
+                ReleaseSet(
+                    name="ingressController.config.email",
+                    value=config.ingress_controller_email,
+                ),
+                # ReleaseSet(
+                #     name="ingressController.config.onDemandTLS",
+                #     value="true",
+                # ),
             ],
             scope=self,
         )

@@ -62,6 +62,7 @@ prefect-shell = "^0.1.5"
 prefect-sqlalchemy = "^0.2.4"
 python = ">=3.11,<3.12"
 python-dotenv = "^1.0.0"
+s3fs = "^2023.9.2"
 strawberry-graphql = {extras = ["fastapi"], version = "^0.209.6"}
 uvicorn = {extras = ["standard"], version = "^0.23.1"}
 
