@@ -39,6 +39,18 @@ class KubernetesDashboardConstruct(Construct):
                     name="app.ingress.enabled",
                     value="false",
                 ),
+                # ReleaseSet(
+                #     name="app.ingress.hosts",
+                #     value=f"kubernetes-dashboard.{config.primary_domain_name}",
+                # ),
+                # ReleaseSet(
+                #     name="app.ingress.ingressClassName",
+                #     value="caddy",
+                # ),
+                # ReleaseSet(
+                #     name="app.ingress.issuer.scope",
+                #     value="disabled",
+                # ),
                 ReleaseSet(
                     name="cert-manager.enabled",
                     value="false",
@@ -47,6 +59,14 @@ class KubernetesDashboardConstruct(Construct):
                     name="nginx.enabled",
                     value="false",
                 ),
+                # # ReleaseSet(
+                # #     name="networkPolicy.enabled",
+                # #     value="true",
+                # # ),
+                # ReleaseSet(
+                #     name="protocolHttp",
+                #     value="true",
+                # ),
             ],
             scope=self,
         )
@@ -155,9 +175,9 @@ class KubernetesDashboardConstruct(Construct):
                 ],
                 # tls=[
                 #     IngressV1SpecTls(
-                #         hosts=[host],
+                #         hosts=[f"kubernetes-dashboard.{config.primary_domain_name}"],
                 #         # secret_name=f"{host}-tls",
-                #         secret_name=f"{ingress_name}-tls",
+                #         # secret_name=f"{kubernetes_dashboard_ingress}-tls",
                 #     )
                 # ],
             ),

@@ -2,11 +2,8 @@ import typing
 
 import strawberry
 from fastapi import FastAPI
-from prefect.deployments import Deployment
-from prefect.filesystems import S3
+from prefect_aws import AwsClientParameters, MinIOCredentials, S3Bucket
 from strawberry.fastapi import GraphQLRouter
-
-from app.flows.my_flow import repo_info
 
 # def custom_context_dependency() -> list[dict[str, str]]:
 #     return [
@@ -106,50 +103,54 @@ def create_agent_task_step(task_id: str):
     return {"agent_task_step": "created"}
 
 
+# @flow
 @app.post("/flows")
+# @flow
 def create_flow():
     # return repo_info()
 
-    # minio_credentials = MinIOCredentials(
-    #     minio_root_user = "minioadmin",
-    #     minio_root_password = "minioadmin"
-    # )
-    # s3_client = minio_credentials.get_boto3_session().client(
-    #     service="s3",
-    #     # endpoint_url="http://localhost:9000"
-    #     # endpoint_url="http://minio.minio.svc.cluster.local:9000"
-    #     endpoint_url="https://play.min.io/",
-    # )
-    # # minio_credentials_block = MinIOCredentials.load("BLOCK_NAME")
-    # s3_bucket = S3Bucket.load("my-bucket")
+    minio_credentials_block = MinIOCredentials(
+        aws_client_parameters=AwsClientParameters(
+            region_name="us-east-1",
+            endpoint_url="https://play.min.io/",
+        ),
+        minio_root_user="minioadmin",
+        minio_root_password="minioadmin",
+    )
+
+    minio_credentials_block.save("minio-credentials", overwrite=True)
+    minio_credentials_block = MinIOCredentials.load("minio-credentials")
+
+    minio_credentials_block.get_boto3_session().client(
+        service_name="s3",
+        endpoint_url="https://play.min.io/",
+    )
+
+    s3_bucket_block = S3Bucket(
+        bucket_name="dev-bucket",
+        # bucket_folder="tmp",
+        credentials=minio_credentials_block,
+    )
+
+    s3_bucket_block.save("dev-bucket", overwrite=True)
+    s3_bucket_block = S3Bucket.load("dev-bucket")
+
+    s3_bucket_block.download_folder_to_path("alice", "bob")
+
+    # storage = S3(bucket=s3_bucket_block, secrets=["minio-credentials"])
 
     # deployment = Deployment.build_from_flow(
     #     flow=repo_info,
-    #     name="example-deployment",
-    #     version=1,
-    #     work_queue_name="demo",
+    #     name="s3-example",
+    #     version=2,
+    #     work_queue_name="aws",
     #     work_pool_name="default-agent-pool",
+    #     storage=s3_bucket_block,
+    #     # storage=storage,
+    #     infra_overrides={"env": {"ENV_VAR": "value"}},
     # )
 
-    # block = S3(bucket_path="my-bucket/a-sub-directory",
-    #         aws_access_key_id="foo",
-    #         aws_secret_access_key="bar"
-    # )
-    # block.save("dev-bucket")
-
-    storage = S3.load("dev-bucket")  # load a pre-defined block
-
-    deployment = Deployment.build_from_flow(
-        flow=repo_info,
-        name="s3-example",
-        version=2,
-        work_queue_name="aws",
-        work_pool_name="default-agent-pool",
-        storage=storage,
-        infra_overrides={"env": {"ENV_VAR": "value"}},
-    )
-
-    deployment.apply()
+    # deployment.apply()
 
 
 # if __name__ == "__main__":
