@@ -1,9 +1,8 @@
-import typing
-
-import strawberry
 from fastapi import FastAPI
-from prefect_aws import AwsClientParameters, MinIOCredentials, S3Bucket
-from strawberry.fastapi import GraphQLRouter
+from prefect import flow
+from prefect_shell import shell_run_command
+
+DEFAULT_DOCKER_IMAGE_REF = "registry.gitlab.com/timestep-ai/timestep/api:latest"
 
 # def custom_context_dependency() -> list[dict[str, str]]:
 #     return [
@@ -22,45 +21,45 @@ from strawberry.fastapi import GraphQLRouter
 #     }
 
 
-def get_author_for_book(root) -> "Author":
-    return Author(name="Michael Crichton")
+# def get_author_for_book(root) -> "Author":
+#     return Author(name="Michael Crichton")
 
 
-@strawberry.type
-class Book:
-    title: str
-    author: "Author" = strawberry.field(resolver=get_author_for_book)
+# @strawberry.type
+# class Book:
+#     title: str
+#     author: "Author" = strawberry.field(resolver=get_author_for_book)
 
 
-def get_books_for_author(root):
-    return [Book(title="Jurassic Park")]
+# def get_books_for_author(root):
+#     return [Book(title="Jurassic Park")]
 
 
-@strawberry.type
-class Author:
-    name: str
-    books: typing.List[Book] = strawberry.field(resolver=get_books_for_author)
+# @strawberry.type
+# class Author:
+#     name: str
+#     books: typing.List[Book] = strawberry.field(resolver=get_books_for_author)
 
 
-def get_authors(root) -> typing.List[Author]:
-    return [Author(name="Michael Crichton")]
+# def get_authors(root) -> typing.List[Author]:
+#     return [Author(name="Michael Crichton")]
 
 
-@strawberry.type
-class Environment:
-    name: str
-    value: str
+# @strawberry.type
+# class Environment:
+#     name: str
+#     value: str
 
 
-def get_envs(root) -> typing.List[Environment]:
-    return [Environment(name="foo", value="bar")]
+# def get_envs(root) -> typing.List[Environment]:
+#     return [Environment(name="foo", value="bar")]
 
 
-@strawberry.type
-class Query:
-    authors: typing.List[Author] = strawberry.field(resolver=get_authors)
-    books: typing.List[Book] = strawberry.field(resolver=get_books_for_author)
-    envs: typing.List[Environment] = strawberry.field(resolver=get_envs)
+# @strawberry.type
+# class Query:
+#     authors: typing.List[Author] = strawberry.field(resolver=get_authors)
+#     books: typing.List[Book] = strawberry.field(resolver=get_books_for_author)
+#     envs: typing.List[Environment] = strawberry.field(resolver=get_envs)
 
 
 # @strawberry.type
@@ -71,17 +70,17 @@ class Query:
 #         # return f"Hello {info.context['custom_value']}"
 #         return info.context['custom_value']
 
-schema = strawberry.Schema(Query)
+# schema = strawberry.Schema(Query)
 
-graphql_app = GraphQLRouter(
-    schema=schema,
-    graphiql=True,
-    allow_queries_via_get=False,
-    # context_getter=get_context,
-)
+# graphql_app = GraphQLRouter(
+#     schema=schema,
+#     graphiql=True,
+#     allow_queries_via_get=False,
+#     # context_getter=get_context,
+# )
 
 app = FastAPI()
-app.include_router(graphql_app, prefix="/graphql")
+# app.include_router(graphql_app, prefix="/graphql")
 
 # @app.get("/")
 # def read_root():
@@ -103,54 +102,75 @@ def create_agent_task_step(task_id: str):
     return {"agent_task_step": "created"}
 
 
-# @flow
+@flow
+def flow_example_shell_run_command_flow():
+    return shell_run_command(
+        command="poetry run python hello.py", cwd="/app/app/flows", return_all=True
+    )
+
+
+@flow
+def deploy_example_shell_run_command_flow(docker_image_ref: str):
+    return shell_run_command(
+        command="poetry run prefect deploy --all",
+        cwd="/app/app",
+        env={"DOCKER_IMAGE_REF": docker_image_ref},
+        return_all=True,
+    )
+
+
 @app.post("/flows")
-# @flow
-def create_flow():
+def create_flow(docker_image_ref: str = DEFAULT_DOCKER_IMAGE_REF):
+    resp = flow_example_shell_run_command_flow()
+
+    print("resp: ", resp)
+
+    return deploy_example_shell_run_command_flow(docker_image_ref)
+
     # return repo_info()
 
-    minio_credentials_block = MinIOCredentials(
-        aws_client_parameters=AwsClientParameters(
-            region_name="us-east-1",
-            endpoint_url="https://play.min.io/",
-        ),
-        minio_root_user="minioadmin",
-        minio_root_password="minioadmin",
-    )
-
-    minio_credentials_block.save("minio-credentials", overwrite=True)
-    minio_credentials_block = MinIOCredentials.load("minio-credentials")
-
-    minio_credentials_block.get_boto3_session().client(
-        service_name="s3",
-        endpoint_url="https://play.min.io/",
-    )
-
-    s3_bucket_block = S3Bucket(
-        bucket_name="dev-bucket",
-        # bucket_folder="tmp",
-        credentials=minio_credentials_block,
-    )
-
-    s3_bucket_block.save("dev-bucket", overwrite=True)
-    s3_bucket_block = S3Bucket.load("dev-bucket")
-
-    s3_bucket_block.download_folder_to_path("alice", "bob")
-
-    # storage = S3(bucket=s3_bucket_block, secrets=["minio-credentials"])
-
-    # deployment = Deployment.build_from_flow(
-    #     flow=repo_info,
-    #     name="s3-example",
-    #     version=2,
-    #     work_queue_name="aws",
-    #     work_pool_name="default-agent-pool",
-    #     storage=s3_bucket_block,
-    #     # storage=storage,
-    #     infra_overrides={"env": {"ENV_VAR": "value"}},
+    # minio_credentials_block = MinIOCredentials(
+    #     aws_client_parameters=AwsClientParameters(
+    #         region_name="us-east-1",
+    #         # endpoint_url="https://play.min.io/",
+    #         endpoint_url="http://minio.minio.svc.cluster.local:9000/",
+    #     ),
+    #     minio_root_user="minioadmin",
+    #     minio_root_password="minioadmin",
     # )
 
+    # minio_credentials_block.save("minio-credentials", overwrite=True)
+    # minio_credentials_block: MinIOCredentials = MinIOCredentials.load("minio-credentials")  # noqa: E501
+
+    # # minio_credentials_block.get_boto3_session().client(
+    # #     service_name="s3",
+    # #     endpoint_url="https://play.min.io/",
+    # # )
+
+    # s3_bucket_block = S3Bucket(
+    #     bucket_name="dev-bucket",
+    #     # bucket_folder="tmp",
+    #     credentials=minio_credentials_block,
+    # )
+
+    # s3_bucket_block.save("dev-bucket", overwrite=True)
+    # s3_bucket_block: S3Bucket = S3Bucket.load("dev-bucket")
+
+    # client: S3Client = s3_bucket_block.credentials.get_s3_client()
+
+    # s3_bucket_block.download_folder_to_path("alice", "bob")
+
+    # # storage = S3(bucket=s3_bucket_block, secrets=["minio-credentials"])
+
     # deployment.apply()
+
+    # return deployment
+
+    # registry: PrefectObjectRegistry = load_deployments_from_yaml(
+    #     path="/app/app/prefect.yaml",
+    # )
+
+    # print('registry: ', registry)
 
 
 # if __name__ == "__main__":
