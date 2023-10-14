@@ -1,3 +1,9 @@
+## 2.0.10 (2023-10-14)
+
+### Fix
+
+- Deployment working with DOCKER_IMAGE_REF
+
 ## 2.0.9 (2023-10-11)
 
 ### Fix
