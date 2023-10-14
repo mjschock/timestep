@@ -7,12 +7,8 @@ __pycache__
 .ruff_cache
 secrets/*
 !secrets/.gitkeep
-# src/timestep/infra/imports/**/*.jsii.tgz
 .ssh
 .venv
-
-src/timestep/projects/farama/pettingzoo/classic/tic_tac_toe
-src/timestep/projects/farama/pettingzoo/classic/tictactoe.bak
 
 ## API / PYTHON ##
 *.pyc
@@ -26,16 +22,9 @@ dist/
 .DS_Store
 .idea/
 
+## MISC ##
+actions-runner
+docs
 kubeconfig
 timestep-ai
 timestep-ai-*.tgz
-
-saved_observations
-
-docs
-
-src/CrowdPlay
-src/skypilot
-src/udacity
-
-actions-runner

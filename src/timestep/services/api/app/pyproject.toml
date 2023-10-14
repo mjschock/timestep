@@ -37,7 +37,7 @@ description = ""
 name = "timestep"
 packages = [{from = "src", include = "timestep"}]
 readme = "README.md"
-version = "2.0.9"
+version = "2.0.10"
 
 [tool.poetry.dependencies]
 cdktf = "^0.17.3"
@@ -64,6 +64,7 @@ pydantic = "<2.0.0"
 python = ">=3.11,<3.12"
 python-dotenv = "^1.0.0"
 s3fs = "^2023.9.2"
+skypilot = {extras = ["kubernetes"], git = "https://github.com/mjschock/skypilot.git", rev = "master"}
 strawberry-graphql = {extras = ["fastapi"], version = "^0.209.6"}
 uvicorn = {extras = ["standard"], version = "^0.23.1"}
 
