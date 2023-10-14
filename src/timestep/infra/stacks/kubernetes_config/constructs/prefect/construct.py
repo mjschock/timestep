@@ -1,5 +1,10 @@
 from cdktf_cdktf_provider_helm.provider import HelmProvider
-from cdktf_cdktf_provider_helm.release import Release, ReleaseSet, ReleaseSetSensitive
+from cdktf_cdktf_provider_helm.release import (
+    Release,
+    ReleaseSet,
+    ReleaseSetListStruct,
+    ReleaseSetSensitive,
+)
 from cdktf_cdktf_provider_kubernetes.ingress_v1 import (
     IngressV1,
     IngressV1Metadata,
@@ -10,6 +15,17 @@ from cdktf_cdktf_provider_kubernetes.ingress_v1 import (
     IngressV1SpecRuleHttpPathBackend,
     IngressV1SpecRuleHttpPathBackendService,
     IngressV1SpecRuleHttpPathBackendServicePort,
+)
+from cdktf_cdktf_provider_kubernetes.role_binding_v1 import (
+    RoleBindingV1,
+    RoleBindingV1Metadata,
+    RoleBindingV1RoleRef,
+    RoleBindingV1Subject,
+)
+from cdktf_cdktf_provider_kubernetes.role_v1 import (
+    RoleV1,
+    RoleV1Metadata,
+    RoleV1Rule,
 )
 from constructs import Construct
 from timestep.config import Settings
@@ -31,42 +47,11 @@ class PrefectConstruct(Construct):
             chart="prefect-server",
             create_namespace=True,
             name="prefect-server",
-            namespace="prefect-system",
+            # namespace="prefect-system",
+            namespace="default",
             repository="https://prefecthq.github.io/prefect-helm",
             provider=helm_provider,
             set=[
-                # ReleaseSet(
-                #     name="ingress.annotations.kubernetes\\.io/ingress\\.class",
-                #     value="caddy",
-                # ),
-                # # ReleaseSet(
-                # #     name="ingress.className",
-                # #     value="caddy",
-                # # ),
-                # ReleaseSet(
-                #     name="ingress.enabled",
-                #     value="true",
-                # ),
-                # ReleaseSet(
-                #     name="ingress.host.hostname",
-                #     value=f"prefect-server.{config.primary_domain_name}",
-                # ),
-                # ReleaseSet(
-                #     name="ingress.host.path",
-                #     value="/",
-                # ),
-                # ReleaseSet(
-                #     name="ingress.host.pathType",
-                #     value="Prefix",
-                # ),
-                # ReleaseSet(
-                #     name="ingress.selfSigned",
-                #     value="true",
-                # ),
-                # ReleaseSet(
-                #     name="ingress.tls",
-                #     value="true",
-                # ),
                 ReleaseSet(
                     name="postgresql.enabled",
                     value="true",
@@ -77,7 +62,7 @@ class PrefectConstruct(Construct):
                 ),
                 ReleaseSet(
                     name="server.image.prefectTag",
-                    value="2.11.4-python3.11",
+                    value="2.13.7-python3.11",
                 ),
                 ReleaseSet(
                     name="server.image.repository",
@@ -87,10 +72,6 @@ class PrefectConstruct(Construct):
                     name="server.publicApiUrl",
                     value=f"https://prefect-server.{config.primary_domain_name}/api",
                 ),
-                # ReleaseSet(
-                #     name="server.publicApiUrl",
-                #     value=f"https://{config.primary_domain_name}/api",
-                # ),
             ],
             set_sensitive=[
                 ReleaseSetSensitive(
@@ -108,29 +89,13 @@ class PrefectConstruct(Construct):
             id_="prefect_server_ingress",
             metadata=IngressV1Metadata(
                 annotations={
-                    # "cert-manager.io/cluster-issuer": cert_manager_cluster_issuer,
-                    # "cert-manager.io/issuer": issuer_type,
-                    # "ingress.kubernetes.io/proxy-body-size": "0",
-                    # "ingress.kubernetes.io/ssl-redirect": "true",
                     "kubernetes.io/ingress.class": "caddy",
-                    # "meta.helm.sh/release-name": helm_release_name,
-                    # "meta.helm.sh/release-namespace": helm_release_namespace,
-                    # f"{ingress_class}.ingress.kubernetes.io/proxy-body-size": "0",
-                    # f"{ingress_class}.ingress.kubernetes.io/ssl-redirect": "true",
                 },
-                # labels={
-                #     "app.kubernetes.io/instance": helm_release_name,
-                #     "app.kubernetes.io/managed-by": "Helm",
-                #     "app.kubernetes.io/name": helm_release_name,
-                #     "helm.sh/chart": f"{helm_release_name}-{helm_release_chart_version}",  # noqa: E501
-                # },
                 name="prefect-server",
-                namespace="prefect-system",
-                # namespace=namespace,
+                namespace=self.prefect_server_helm_release_resource.namespace,
             ),
             scope=self,
             spec=IngressV1Spec(
-                # ingress_class_name=ingress_class,
                 rule=[
                     IngressV1SpecRule(
                         host=f"prefect-server.{config.primary_domain_name}",
@@ -141,76 +106,17 @@ class PrefectConstruct(Construct):
                                         service=IngressV1SpecRuleHttpPathBackendService(
                                             name="prefect-server",
                                             port=IngressV1SpecRuleHttpPathBackendServicePort(
-                                                # name=path["service_port_name"],
-                                                # name="server-svc-port",
                                                 number=4200,
                                             ),
                                         ),
                                     ),
                                     path="/",
                                     path_type="Prefix",
-                                    # path_type=path["path_type"],
                                 ),
-                                # IngressV1SpecRuleHttpPath(
-                                #     backend=IngressV1SpecRuleHttpPathBackend(
-                                #         service=IngressV1SpecRuleHttpPathBackendService(  # noqa: E501
-                                #             name="example2",
-                                #             port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
-                                #                 # name=path["service_port_name"],
-                                #                 number=8080,
-                                #             ),
-                                #         ),
-                                #     ),
-                                #     path="/hello2",
-                                #     path_type="Prefix",
-                                #     # path_type=path["path_type"],
-                                # ),
                             ]
                         ),
                     ),
-                    # IngressV1SpecRule(
-                    #     host=f"example2.{config.primary_domain_name}",
-                    #     http=IngressV1SpecRuleHttp(
-                    #         path=[
-                    #             IngressV1SpecRuleHttpPath(
-                    #                 backend=IngressV1SpecRuleHttpPathBackend(
-                    #                     service=IngressV1SpecRuleHttpPathBackendService(  # noqa: E501
-                    #                         name="example1",
-                    #                         port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
-                    #                             # name=path["service_port_name"],
-                    #                             number=8080,
-                    #                         ),
-                    #                     ),
-                    #                 ),
-                    #                 path="/hello1",
-                    #                 path_type="Prefix",
-                    #                 # path_type=path["path_type"],
-                    #             ),
-                    #             IngressV1SpecRuleHttpPath(
-                    #                 backend=IngressV1SpecRuleHttpPathBackend(
-                    #                     service=IngressV1SpecRuleHttpPathBackendService(  # noqa: E501
-                    #                         name="example2",
-                    #                         port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
-                    #                             # name=path["service_port_name"],
-                    #                             number=8080,
-                    #                         ),
-                    #                     ),
-                    #                 ),
-                    #                 path="/hello2",
-                    #                 path_type="Prefix",
-                    #                 # path_type=path["path_type"],
-                    #             ),
-                    #         ]
-                    #     ),
-                    # )
                 ],
-                # tls=[
-                #     IngressV1SpecTls(
-                #         hosts=[host],
-                #         # secret_name=f"{host}-tls",
-                #         secret_name=f"{ingress_name}-tls",
-                #     )
-                # ],
             ),
         )
 
@@ -219,9 +125,8 @@ class PrefectConstruct(Construct):
             id_="prefect_default_agent_helm_release_resource",
             atomic=True,
             chart="prefect-agent",
-            # create_namespace=True,
             name="prefect-agent",
-            namespace="prefect-system",
+            namespace=self.prefect_server_helm_release_resource.namespace,
             repository="https://prefecthq.github.io/prefect-helm",
             provider=helm_provider,
             set=[
@@ -235,7 +140,7 @@ class PrefectConstruct(Construct):
                 ),
                 ReleaseSet(
                     name="agent.serverApiConfig.apiUrl",
-                    value="http://prefect-server.prefect-system.svc.cluster.local:4200/api",  # noqa: E501
+                    value=f"http://prefect-server.{self.prefect_server_helm_release_resource.namespace}.svc.cluster.local:4200/api",  # noqa: E501
                 ),
             ],
             scope=self,
@@ -246,9 +151,8 @@ class PrefectConstruct(Construct):
             id_="prefect_default_worker_helm_release_resource",
             atomic=True,
             chart="prefect-worker",
-            # create_namespace=True,
             name="prefect-worker",
-            namespace="prefect-system",
+            namespace=self.prefect_server_helm_release_resource.namespace,
             repository="https://prefecthq.github.io/prefect-helm",
             provider=helm_provider,
             set=[
@@ -261,31 +165,70 @@ class PrefectConstruct(Construct):
                     value="default-worker-pool",
                 ),
                 ReleaseSet(
+                    name="worker.image.debug",
+                    value="true",
+                ),
+                # ReleaseSet(
+                #     name="worker.image.prefectTag",
+                #     value="latest",
+                # ),
+                # ReleaseSet(
+                #     name="worker.image.repository",
+                #     value="registry.gitlab.com/timestep-ai/timestep/api",
+                # ),
+                ReleaseSet(
                     name="worker.serverApiConfig.apiUrl",
-                    value="http://prefect-server.prefect-system.svc.cluster.local:4200/api",  # noqa: E501
+                    value=f"http://prefect-server.{self.prefect_server_helm_release_resource.namespace}.svc.cluster.local:4200/api",  # noqa: E501
+                ),
+            ],
+            set_list=[
+                ReleaseSetListStruct(
+                    name="worker.image.pullSecrets",
+                    value=["regcred"],
                 ),
             ],
             scope=self,
         )
 
-        # kubernetes_cluster_ingress_construct.create_ingress_resource(
-        #     config=config,
-        #     depends_on=[self.prefect_helm_release_resource],
-        #     helm_release_chart_version=self.prefect_helm_release_resource.version,
-        #     helm_release_name=self.prefect_helm_release_resource.name,
-        #     helm_release_namespace=self.prefect_helm_release_resource.namespace,
-        #     host=f"prefect-server.{config.primary_domain_name}",
-        #     id="prefect_ingress_resource",
-        #     ingress_class="caddy",
-        #     ingress_name=f"{self.prefect_helm_release_resource.name}-ingress",
-        #     namespace=self.prefect_helm_release_resource.namespace,
-        #     paths=[
-        #         {
-        #             "path": "/",
-        #             "path_type": "Prefix",
-        #             "service_name": "prefect-server",
-        #             "service_port_name": "server-svc-port",
-        #             "service_port_number": None,
-        #         },
-        #     ],
-        # )
+        self.prefect_worker_event_lister_role = RoleV1(
+            depends_on=[
+                self.prefect_default_worker_helm_release_resource,
+            ],
+            id_="prefect_worker_event_lister_role",
+            metadata=RoleV1Metadata(
+                name="event-lister",
+                namespace=self.prefect_default_worker_helm_release_resource.namespace,
+            ),
+            rule=[
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["events"],
+                    verbs=["list"],
+                )
+            ],
+            scope=self,
+        )
+
+        RoleBindingV1(
+            depends_on=[
+                self.prefect_default_worker_helm_release_resource,
+            ],
+            id_="prefect_worker_list_events_role_binding",
+            metadata=RoleBindingV1Metadata(
+                name="list-events",
+                namespace=self.prefect_default_worker_helm_release_resource.namespace,
+            ),
+            subject=[
+                RoleBindingV1Subject(
+                    kind="ServiceAccount",
+                    name=self.prefect_default_worker_helm_release_resource.name,
+                    api_group="",
+                )
+            ],
+            role_ref=RoleBindingV1RoleRef(
+                kind="Role",
+                name=self.prefect_worker_event_lister_role.metadata.name,
+                api_group="rbac.authorization.k8s.io",
+            ),
+            scope=self,
+        )

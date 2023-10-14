@@ -64,7 +64,6 @@ class CloudInstanceConstruct(Construct):
                 cloud_init_config_construct.data_source
             )  # noqa: E501
             cloud_instance_resource = MultipassInstanceTerraformResource(
-                # cloudinit_file=cloud_init_config_construct.data_source.filename,
                 cloudinit_file=cloud_init_config_construct_data_source.filename,
                 cpus=config.multipass_instance_cpus,
                 disk=config.multipass_instance_disk,
@@ -96,7 +95,6 @@ class CloudInstanceConstruct(Construct):
                 scope=scope,
                 size=config.do_droplet_size,
                 ssh_keys=[cloud_instance_ssh_key_resource.fingerprint],
-                # user_data=cloud_init_config_construct.data_source.rendered,
                 user_data=cloud_init_config_construct_data_source.rendered,
             )
 
@@ -125,27 +123,6 @@ class CloudInstanceConstruct(Construct):
             raise ValueError(
                 f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
             )
-
-        # cloud_instance_outputs = {}
-
-        # if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
-        #     cloud_instance_outputs["ipv4"] = TerraformOutput(
-        #         id="cloud_instance_outputs_ipv4",
-        #         value=cloud_instance_data_source.ipv4,
-        #         scope=scope,
-        #     )
-
-        # elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
-        #     cloud_instance_outputs["ipv4"] = TerraformOutput(
-        #         id="cloud_instance_outputs_ipv4",
-        #         value=cloud_instance_data_source.ipv4_address,
-        #         scope=scope,
-        #     )
-
-        # else:
-        #     raise ValueError(
-        #         f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
-        #     )
 
         self.data_source: TerraformDataSource[
             MultipassInstanceTerraformDataSource

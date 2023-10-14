@@ -75,12 +75,26 @@ class KubernetesConfigStack(TerraformStack):
             scope=self,
         )
 
+        # self.postgresql_construct: PostgreSQLConstruct = PostgreSQLConstruct(
+        #     config=config,
+        #     id="postgresql_construct",
+        #     helm_provider=self.helm_provider,
+        #     scope=self,
+        # )
+
         self.prefect_construct: PrefectConstruct = PrefectConstruct(
             config=config,
             id="prefect_construct",
             helm_provider=self.helm_provider,
             scope=self,
         )
+
+        # self.registry_construct: RegistryConstruct = RegistryConstruct(
+        #     config=config,
+        #     id="registry_construct",
+        #     helm_provider=self.helm_provider,
+        #     scope=self,
+        # )
 
         self.timestep_ai_contruct: TimestepAIConstruct = TimestepAIConstruct(
             config=config,

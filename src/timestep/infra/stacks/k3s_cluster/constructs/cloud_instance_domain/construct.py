@@ -115,25 +115,3 @@ class CloudInstanceDomainConstruct(Construct):
             raise ValueError(
                 f"Unknown cloud_instance_provider: {cloud_instance_provider}"
             )
-
-        # cloud_instance_domain_outputs = {}
-
-        # if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
-        #     cloud_instance_domain_outputs["hosts_file"] = TerraformOutput(
-        #         id="cloud_instance_domain_outputs_hosts_file",
-        #         value=cloud_instance_domain_data_source.filename,
-        #         scope=scope,
-        #     )
-
-        # elif config.cloud_instance_provider == CloudInstanceProvider.DIGITALOCEAN:
-        #     cloud_instance_domain_outputs["zone_file"] = TerraformOutput(
-        #         id="cloud_instance_domain_outputs_zone_file",
-        #         value=cloud_instance_domain_data_source.zone_file,
-        #         scope=scope,
-        #     )
-
-        # else:
-        #     cloud_instance_provider = config.cloud_instance_provider
-        #     raise ValueError(
-        #         f"Unknown cloud_instance_provider: {cloud_instance_provider}"
-        #     )

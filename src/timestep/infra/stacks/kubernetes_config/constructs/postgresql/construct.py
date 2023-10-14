@@ -1,9 +1,7 @@
+from cdktf_cdktf_provider_helm.provider import HelmProvider
 from cdktf_cdktf_provider_helm.release import Release, ReleaseSet, ReleaseSetSensitive
 from constructs import Construct
 from timestep.config import Settings
-from timestep.infra.stacks.main.constructs.kubernetes_cluster_ingress.construct import (
-    KubernetesClusterIngressConstruct,
-)
 
 
 class PostgreSQLConstruct(Construct):
@@ -12,7 +10,7 @@ class PostgreSQLConstruct(Construct):
         scope: Construct,
         id: str,
         config: Settings,
-        kubernetes_cluster_ingress_construct: KubernetesClusterIngressConstruct,
+        helm_provider: HelmProvider,
     ) -> None:
         super().__init__(scope, id)
 

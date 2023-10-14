@@ -18,7 +18,6 @@ target-version = ['py311']
 major_version_zero = false
 name = "cz_conventional_commits"
 pre_bump_hooks = [
-  "scripts/kompose-convert.sh"
 ]
 tag_format = "$version"
 update_changelog_on_bump = true

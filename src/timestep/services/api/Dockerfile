@@ -8,6 +8,14 @@
 
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11
 
+# ARG DOCKER_IMAGE_REF
+# ENV DOCKER_IMAGE_REF=$DOCKER_IMAGE_REF
+
+# RUN echo "Bulding Docker image ref: $DOCKER_IMAGE_REF"
+
+# ARG IMAGE_TASK="registry.gitlab.com/timestep-ai/timestep/api"
+# ENV IMAGE_TASK=$IMAGE_TASK
+
 WORKDIR /app/
 
 # Install Poetry
