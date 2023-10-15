@@ -1,3 +1,11 @@
+## 2.0.13 (2023-10-15)
+
+### Fix
+
+- Add DigitalOcean badges
+- Remove MX records
+- f
+
 ## 2.0.12 (2023-10-15)
 
 ### Fix
