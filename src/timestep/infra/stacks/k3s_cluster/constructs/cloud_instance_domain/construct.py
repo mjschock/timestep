@@ -91,26 +91,26 @@ class CloudInstanceDomainConstruct(Construct):
                 scope=scope,
             )
 
-            # mx_records = [
-            #     ("aspmx.l.google.com.", 1),
-            #     ("alt1.aspmx.l.google.com.", 5),
-            #     ("alt2.aspmx.l.google.com.", 5),
-            #     ("alt3.aspmx.l.google.com.", 10),
-            #     ("alt4.aspmx.l.google.com.", 10),
-            # ]
+            mx_records = [
+                ("aspmx.l.google.com.", 1),
+                ("alt1.aspmx.l.google.com.", 5),
+                ("alt2.aspmx.l.google.com.", 5),
+                ("alt3.aspmx.l.google.com.", 10),
+                ("alt4.aspmx.l.google.com.", 10),
+            ]
 
-            # for idx, (value, priority) in enumerate(mx_records):
-            #     DigitaloceanRecordTerraformResource(
-            #         id_=f"cloud_instance_mx_record_resource_{idx}",
-            #         domain=cloud_instance_domain_resource.id,
-            #         type="MX",
-            #         name="@",
-            #         priority=priority,
-            #         value=value,
-            #         provider=cloud_instance_domain_provider,
-            #         scope=scope,
-            #         ttl=1800,
-            #     )
+            for idx, (value, priority) in enumerate(mx_records):
+                DigitaloceanRecordTerraformResource(
+                    id_=f"cloud_instance_mx_record_resource_{idx}",
+                    domain=cloud_instance_domain_resource.id,
+                    type="MX",
+                    name="@",
+                    priority=priority,
+                    value=value,
+                    provider=cloud_instance_domain_provider,
+                    scope=scope,
+                    ttl=1800,
+                )
 
         else:
             cloud_instance_provider = config.cloud_instance_provider
