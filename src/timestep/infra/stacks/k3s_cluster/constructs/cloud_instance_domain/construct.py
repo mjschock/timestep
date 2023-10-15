@@ -99,9 +99,9 @@ class CloudInstanceDomainConstruct(Construct):
                 ("alt4.aspmx.l.google.com.", 10),
             ]
 
-            for value, priority in mx_records:
+            for idx, (value, priority) in enumerate(mx_records):
                 DigitaloceanRecordTerraformResource(
-                    id_=f"cloud_instance_mx_record_resource_{priority}",
+                    id_=f"cloud_instance_mx_record_resource_{idx}",
                     domain=cloud_instance_domain_resource.id,
                     type="MX",
                     name="@",
