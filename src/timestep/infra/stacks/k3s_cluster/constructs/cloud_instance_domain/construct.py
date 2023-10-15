@@ -4,6 +4,9 @@ from cdktf_cdktf_provider_digitalocean.data_digitalocean_domain import (
 from cdktf_cdktf_provider_digitalocean.domain import (
     Domain as DigitaloceanDomainTerraformResource,
 )
+from cdktf_cdktf_provider_digitalocean.record import (
+    Record as DigitaloceanRecordTerraformResource,
+)
 from cdktf_cdktf_provider_local.data_local_file import (
     DataLocalFile as LocalFileTerraformDataSource,
 )
@@ -87,6 +90,27 @@ class CloudInstanceDomainConstruct(Construct):
                 provider=cloud_instance_domain_provider,
                 scope=scope,
             )
+
+            mx_records = [
+                ("aspmx.l.google.com.", 1),
+                ("alt1.aspmx.l.google.com.", 5),
+                ("alt2.aspmx.l.google.com.", 5),
+                ("alt3.aspmx.l.google.com.", 10),
+                ("alt4.aspmx.l.google.com.", 10),
+            ]
+
+            for value, priority in mx_records:
+                DigitaloceanRecordTerraformResource(
+                    id_=f"cloud_instance_mx_record_resource_{priority}",
+                    domain=cloud_instance_domain_resource.id,
+                    type="MX",
+                    name="@",
+                    priority=priority,
+                    value=value,
+                    provider=cloud_instance_domain_provider,
+                    scope=scope,
+                    ttl=1800,
+                )
 
         else:
             cloud_instance_provider = config.cloud_instance_provider
