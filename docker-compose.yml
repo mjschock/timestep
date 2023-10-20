@@ -1,3 +1,6 @@
+secrets:
+  kubeconfig:
+    file: ./secrets/kubeconfig
 services:
   api:
     build:
@@ -16,6 +19,8 @@ services:
       kompose.service.healthcheck.readiness.http_get_path: /ready
       kompose.service.healthcheck.readiness.http_get_port: 5000
       rollme: "{{ randAlphaNum 5 | quote }}"
+    secrets:
+      - kubeconfig
   caddy:
     build:
       context: src/timestep/services/caddy
