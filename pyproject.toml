@@ -120,6 +120,7 @@ per-file-ignores = {}
 select = [
   "C90", # mccabe
   "E", # pycodestyle (errors)
+  "ERA", # eradicate
   "F", # Pyflakes
   "I", # isort
   "N", # pep8-naming
