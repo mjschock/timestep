@@ -89,7 +89,13 @@ app = FastAPI()
 
 @app.get("/ready")
 def get_ready():
-    return {"ready": "ok"}
+    # return {"ready": "ok"}
+
+    # return ready_flow()
+    return {
+        "ready": "ok",
+        # "output": ready_flow(),
+    }
 
 
 @app.post("/ap/v1/agent/tasks")
@@ -102,11 +108,23 @@ def create_agent_task_step(task_id: str):
     return {"agent_task_step": "created"}
 
 
-@flow
+@flow(log_prints=True)
 def flow_example_shell_run_command_flow():
-    return shell_run_command(
-        command="poetry run python hello.py", cwd="/app/app/flows", return_all=True
+    print("=== flow_example_shell_run_command_flow (start) ===")
+
+    output = shell_run_command(
+        # command="poetry run python hello.py", cwd="/app/app/flows", return_all=True
+        # command="poetry run python hello.py", cwd="/home/ubuntu/src/timestep/services/api/app/app/flows", return_all=True  # noqa: E501
+        command="poetry run python echo_app.py",
+        cwd="/home/ubuntu/src/timestep/services/api/app/app/flows",
+        return_all=True,  # noqa: E501
     )
+
+    print("output: ", output)
+
+    print("=== flow_example_shell_run_command_flow (end) ===")
+
+    return output
 
 
 @flow
@@ -125,7 +143,9 @@ def create_flow(docker_image_ref: str = DEFAULT_DOCKER_IMAGE_REF):
 
     print("resp: ", resp)
 
-    return deploy_example_shell_run_command_flow(docker_image_ref)
+    return resp
+
+    # return deploy_example_shell_run_command_flow(docker_image_ref)
 
     # return repo_info()
 

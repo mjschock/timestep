@@ -41,6 +41,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libxml2-dev \
   libxmlsec1-dev \
   net-tools \
+  rsync \
   socat \
   sudo \
   swig \
