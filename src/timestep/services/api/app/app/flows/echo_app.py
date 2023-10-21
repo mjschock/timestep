@@ -9,14 +9,7 @@ from sky.clouds.kubernetes import CREDENTIAL_PATH
 @flow(log_prints=True)
 def sky_flow():
     if not os.path.exists(os.path.expanduser(CREDENTIAL_PATH)):
-        # print("CREDENTIAL_PATH does not exist, locating incluster config")
-        # kubernetes.config.load_incluster_config()
-        # config: Configuration = Configuration.get_default_copy()
-
-        # print("config: ", config)
-
         # with open(os.path.expanduser(CREDENTIAL_PATH), "w") as f:
-        #     f.write(config.api_key["authorization"])
 
         output = shell_run_command(
             command="ls -al /run/secrets",
@@ -45,8 +38,6 @@ def sky_flow():
         return_all=True,
     )
 
-    print("output: ", output)
-
     with sky.Dag() as dag:
         # The setup command to build the container image
         setup = "docker build -t echo:v0 /echo_app"
@@ -64,8 +55,6 @@ def sky_flow():
         )
 
         # echo_app.set_resources(
-        #     sky.Resources(cloud=sky.AWS(), accelerators='V100:4')
-        # )
 
         # Configure file mounts to copy local contents to remote
         echo_app.set_file_mounts(
@@ -76,28 +65,17 @@ def sky_flow():
         )
 
         # Configure outputs for the task - we'll write to a bucket using Sky Storage
-        # output_bucket_name = ''.join(random.choices(string.ascii_lowercase, k=15))
         # # output_storage = sky.Storage(name=output_bucket_name,
         # #                             mode=sky.StorageMode.MOUNT)
 
-        # LOCAL_SOURCE_PATH = os.path.join(os.getcwd(), 'echo_app/bucket')
-        # print("LOCAL_SOURCE_PATH: ", LOCAL_SOURCE_PATH)
-
         # output_storage = sky.Storage(name=output_bucket_name,
-        #                             # mode=sky.StorageMode.MOUNT,
         #                             source=LOCAL_SOURCE_PATH)
-        # # output_storage.add_store(StoreType.S3)
 
         # echo_app.set_storage_mounts({
         #     '/outputs': output_storage,
-        # })
 
         # Set resources if required
         # echo_app.set_resources({
-        #     sky.Resources(accelerators='V100'),
-        # })
-
-    # sky.Resources(sky.clouds.Kubernetes())
 
     sky.launch(dag)
 
