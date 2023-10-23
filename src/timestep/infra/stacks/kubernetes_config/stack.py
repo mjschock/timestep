@@ -11,9 +11,6 @@ from timestep.config import CloudInstanceProvider
 from timestep.infra.stacks.kubernetes_config.constructs.kubernetes_cluster_ingress.construct import (  # noqa: E501
     KubernetesClusterIngressConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.constructs.minio.construct import (
-    MinioConstruct,
-)
 from timestep.infra.stacks.kubernetes_config.constructs.prefect.construct import (
     PrefectConstruct,
 )
@@ -65,12 +62,12 @@ class KubernetesConfigStack(TerraformStack):
         #     )
         # )
 
-        self.minio_construct: MinioConstruct = MinioConstruct(
-            config=config,
-            id="minio_construct",
-            helm_provider=self.helm_provider,
-            scope=self,
-        )
+        # self.minio_construct: MinioConstruct = MinioConstruct(
+        #     config=config,
+        #     id="minio_construct",
+        #     helm_provider=self.helm_provider,
+        #     scope=self,
+        # )
 
         # self.postgresql_construct: PostgreSQLConstruct = PostgreSQLConstruct(
         #     config=config,
