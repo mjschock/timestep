@@ -13,7 +13,7 @@
 
         <q-toolbar-title
           class="my-box cursor-pointer q-hoverable"
-          @click="this.$router.push(`/`)"
+          @click="toolbarOnclick"
         >
           Timestep AI
         </q-toolbar-title>
@@ -59,12 +59,13 @@
           v-bind="link"
         /> -->
 
-        <q-item v-for="environment in environments" :key="environment.id">
+        <q-item v-for="env of envs" :key="env.id">
           <q-item-section class="my-box cursor-pointer q-hoverable">
-            <q-item-label @click="fetchAgents(environment)">
-              {{ environment.name }}
+            <q-item-label @click="fetchEnv(env)">
+            <!-- <q-item-label @click="this.$router.push(`/envs/${env.id}`)"> -->
+              {{ env.name }}
             </q-item-label>
-            <q-item-label caption>ID: {{ environment.id }}</q-item-label>
+            <q-item-label caption>ID: {{ env.id }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -93,9 +94,9 @@
     <q-footer>
       <q-toolbar>
         <q-toolbar-title>
-          <a href="https://www.digitalocean.com/?refcode=2184d1107783&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge">
+          <!-- <a href="https://www.digitalocean.com/?refcode=2184d1107783&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge">
             <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" />
-          </a>
+          </a> -->
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
@@ -104,7 +105,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 // import EssentialLink from 'components/EssentialLink.vue';
 import { useRouter } from "vue-router";
 import { useQuery, useResult } from "@vue/apollo-composable";
@@ -169,28 +170,47 @@ export default defineComponent({
 
     const { result, loading, error } = useQuery(gql`
       query getEnvs {
-        envs
+        envs {
+          id
+          name
+        }
       }
     `);
 
-    watch(result, (newValue, oldValue) => {
-      console.log(newValue)
-    })
+    // watch(result, (newValue, oldValue) => {
+    //   console.log(newValue)
+    //   console.log(oldValue)
+    //   console.log(result.value)
+    // })
 
     // const environments = useResult(result, null, (data) => data.environment);
 
-    const fetchAgents = (environment) => {
-      return router.push(`/envs/${environment.id}`);
+    const fetchEnv = (env) => {
+      return router.push(`/envs/${env.id}`);
     };
+  
+    const toolbarOnclick = () => {
+      console.log('toolbarOnclick')
+      router.push(`/`)
+    }
+  
+    const envs = computed(() => result.value?.envs ?? [])
 
     return {
-      "environments": result.value?.data?.envs,
+      // "environments": result.value?.data?.envs,
+      // environments: result.value?.data?.envs,
+      // environments: result.value?.data?.envs,
+      // result,
+      envs,
+      loading,
+      error,
       // essentialLinks: linksList,
       leftDrawerOpen,
-      fetchAgents,
+      fetchEnv,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
+      toolbarOnclick,
 
       // rightDrawerOpen,
       // toggleRightDrawer () {

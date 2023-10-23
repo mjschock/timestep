@@ -172,18 +172,20 @@ if os.path.exists('timestep-ai'):
         # command='docker build --build-arg DOCKER_IMAGE_REF=$EXPECTED_REF -t $EXPECTED_REF src/timestep/services/api && tilt dump image-deploy-ref $EXPECTED_REF',
         command='docker build -t $EXPECTED_REF src/timestep/services/api',
         deps=['src/timestep/services/api'],
+        # entrypoint=["poetry", "run", "uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "5000", "--reload"],
+        entrypoint="poetry run uvicorn app.main:app --proxy-headers --host 0.0.0.0 --port 5000 --reload",
         # env={
         #     # 'CI_TAG': '1.2.0',
         #     'CI_TAG': '$EXPECTED_REF',
         # },
         # disable_push=True,
-        # live_update=[
-        #     sync('./src/timestep/services/caddy/', '/etc/caddy/'),
-        #     run(
-        #         'caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile',
-        #         trigger=['./src/timestep/services/caddy/Caddyfile']
-        #     )
-        # ],
+        live_update=[
+            sync('./src/timestep/services/api/app/', '/home/ubuntu/src/timestep/services/api/app/'),
+            # run(
+            #     'caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile',
+            #     trigger=['./src/timestep/services/caddy/Caddyfile']
+            # )
+        ],
         # match_in_env_vars=True,
         # skips_local_docker=True,
         # tag=str(local(command='echo $VERSION')).strip(),

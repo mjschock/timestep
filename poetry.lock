@@ -4761,7 +4761,7 @@ scp = ["ray[default] (>=2.2.0,!=2.6.0)"]
 type = "git"
 url = "https://github.com/mjschock/skypilot.git"
 reference = "master"
-resolved_reference = "831a3c45d5c5e367732c4c4ec30400b265ef491c"
+resolved_reference = "2407cb47d499a448b4a87d67216d0f3571cd720f"
 
 [[package]]
 name = "smart-open"
