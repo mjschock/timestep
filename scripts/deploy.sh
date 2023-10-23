@@ -31,7 +31,7 @@ docker run \
  --env TF_USERNAME=${TF_USERNAME} \
  --user $(id -u):$(id -g) \
  --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
- --volume $(pwd)/timestep-ai:/home/ubuntu/timestep-ai:r \
+ --volume $(pwd)/timestep-ai:/home/ubuntu/timestep-ai:rw \
  --volume $(pwd)/timestep-ai:/home/ubuntu/timestep-ai-2.0.19.tgz:rw \
  ${CI_REGISTRY_IMAGE}:latest helm package timestep-ai --version $(cat .env | grep ^VERSION | cut -d '=' -f2)
 
@@ -49,7 +49,8 @@ docker run \
  --env TF_API_TOKEN=${TF_API_TOKEN} \
  --env TF_USERNAME=${TF_USERNAME} \
  --user $(id -u):$(id -g) \
- --volume $(pwd)/secrets:/home/ubuntu/secrets:r \
- --volume $(pwd)/timestep-ai:/home/ubuntu/timestep-ai-2.0.19.tgz:r \
+ --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
+ --volume $(pwd)/timestep-ai:/home/ubuntu/timestep-ai:rw \
+ --volume $(pwd)/timestep-ai:/home/ubuntu/timestep-ai-2.0.19.tgz:rw \
  ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}.k3s_cluster ${PRIMARY_DOMAIN_NAME}.kubernetes_config
  
