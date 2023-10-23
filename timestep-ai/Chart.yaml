@@ -1,8 +1,0 @@
-name: timestep-ai
-description: A generated Helm Chart for timestep-ai from Skippbox Kompose
-version: 2.0.19
-apiVersion: v2
-keywords:
-  - timestep-ai
-sources:
-home:
