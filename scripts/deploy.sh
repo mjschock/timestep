@@ -31,7 +31,7 @@ docker run \
  --user $(id -u):$(id -g) \
  --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
  --volume $(pwd)/timestep-ai:/home/ubuntu/timestep-ai:rw \
- ${CI_REGISTRY_IMAGE}:latest helm package timestep-ai --version $VERSION
+ ${CI_REGISTRY_IMAGE}:latest helm package timestep-ai --version 2.0.17
 
 docker run \
  --env-file .env \
