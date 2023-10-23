@@ -24,7 +24,6 @@ update_changelog_on_bump = true
 version_files = [
   ".env:VERSION",
   "pyproject.toml:version",
-  "timestep-ai/Chart.yaml:version",
 ]
 version_provider = "poetry"
 version_scheme = "semver"

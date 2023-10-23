@@ -39,8 +39,10 @@ class TimestepAIConstruct(Construct):
         self.release_resource = Release(
             id_="timestep_ai_helm_release_resource",
             atomic=True,
-            chart=f"{config.base_path}/timestep-ai",
+            chart=f"{config.base_path}/timestep-ai-{config.version}.tgz",
+            cleanup_on_fail=True,
             create_namespace=True,
+            force_update=True,
             lint=True,
             name="timestep-ai",
             namespace="default",
@@ -62,6 +64,7 @@ class TimestepAIConstruct(Construct):
             ],
             set_sensitive=[],
             scope=self,
+            version=config.version,
         )
 
         default_sa_role = RoleV1(
