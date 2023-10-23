@@ -24,6 +24,21 @@ docker run \
  --env DO_TOKEN=${DO_TOKEN} \
  --env DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD} \
  --env HTPASSWD=${HTPASSWD} \
+ --env KUBECONTEXT=${KUBECONTEXT} \
+ --env PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
+ --env TF_API_TOKEN=${TF_API_TOKEN} \
+ --env TF_USERNAME=${TF_USERNAME} \
+ --user $(id -u):$(id -g) \
+ --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
+ --volume $(pwd)/timestep-ai:/home/ubuntu/timestep-ai:rw \
+ ${CI_REGISTRY_IMAGE}:latest helm package timestep-ai --version $VERSION
+
+docker run \
+ --env-file .env \
+ --env CLOUD_INSTANCE_PROVIDER=${CLOUD_INSTANCE_PROVIDER} \
+ --env DO_TOKEN=${DO_TOKEN} \
+ --env DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD} \
+ --env HTPASSWD=${HTPASSWD} \
  --env INGRESS_CONTROLLER_ACME_CA=${INGRESS_CONTROLLER_ACME_CA} \
  --env INGRESS_CONTROLLER_DEBUG=${INGRESS_CONTROLLER_DEBUG} \
  --env INGRESS_CONTROLLER_EMAIL=${INGRESS_CONTROLLER_EMAIL} \

@@ -33,8 +33,8 @@ class CloudInstanceDomainConstruct(Construct):
         super().__init__(scope, id)
 
         subdomains = [
-            "kubernetes-dashboard",
-            "minio",
+            # "kubernetes-dashboard",
+            # "minio",
             "prefect-server",
             "www",
         ]
