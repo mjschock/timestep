@@ -6,8 +6,8 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
-        path: "/environments/:environmentId",
-        component: () => import("pages/AgentsPage.vue"),
+        path: "/envs/:envId",
+        component: () => import("pages/EnvPage.vue"),
       },
       { path: '', component: () => import('pages/IndexPage.vue') }
     ],
