@@ -163,7 +163,7 @@ COPY --chown=ubuntu:ubuntu . ./
 RUN poetry install
 
 RUN touch /home/ubuntu/timestep-ai-2.0.19.tgz
-VOLUME [ "/home/ubuntu/timestep-ai-2.0.19.tgz" ]
+# VOLUME [ "/home/ubuntu/timestep-ai-2.0.19.tgz" ]
 
 VOLUME /home/ubuntu/secrets
 ENTRYPOINT ["/home/ubuntu/docker-entrypoint.sh"]
