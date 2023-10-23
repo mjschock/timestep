@@ -26,6 +26,6 @@ dist/
 actions-runner
 docs
 kubeconfig
-timestep-ai
+timestep-ai/templates
 timestep-ai-*.tgz
 src/timestep/transducers

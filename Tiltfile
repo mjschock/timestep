@@ -122,7 +122,7 @@ allow_k8s_contexts(
 
 local_resource(
     'kompose convert',
-    cmd='rm -rf timestep-ai && kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
+    cmd='rm -rf timestep-ai/templates && kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
     deps=[
         '.env',
         'docker-compose.yml',
