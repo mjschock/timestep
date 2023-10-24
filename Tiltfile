@@ -120,15 +120,15 @@ allow_k8s_contexts(
     os.getenv('KUBECONTEXT'),
 )
 
-local_resource(
-    'kompose convert',
-    cmd='rm -rf timestep-ai/templates && kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
-    deps=[
-        '.env',
-        'docker-compose.yml',
-    ],
-    labels=['build'],
-)
+# local_resource(
+#     'kompose convert',
+#     cmd='rm -rf timestep-ai/templates && kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose',
+#     deps=[
+#         '.env',
+#         'docker-compose.yml',
+#     ],
+#     labels=['build'],
+# )
 
 watch_file('timestep-ai')
 
@@ -138,9 +138,9 @@ if os.path.exists('timestep-ai'):
         cmd='helm package timestep-ai --version $VERSION',
         deps=['timestep-ai'],
         labels=['build'],
-        resource_deps=[
-            'kompose convert',
-        ]
+        # resource_deps=[
+        #     'kompose convert',
+        # ]
     )
 
     custom_build(
