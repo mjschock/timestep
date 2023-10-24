@@ -135,7 +135,7 @@ watch_file('timestep-ai')
 if os.path.exists('timestep-ai'):
     local_resource(
         'helm package',
-        cmd='helm package timestep-ai --version $VERSION',
+        cmd='helm package timestep-ai --destination dist --version $VERSION',
         deps=['timestep-ai'],
         labels=['build'],
         # resource_deps=[
