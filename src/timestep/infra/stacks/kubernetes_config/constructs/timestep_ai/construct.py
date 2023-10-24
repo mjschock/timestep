@@ -39,19 +39,24 @@ class TimestepAIConstruct(Construct):
         self.release_resource = Release(
             id_="timestep_ai_helm_release_resource",
             atomic=True,
-            chart=f"{config.base_path}/timestep-ai-{config.version}.tgz",
+            chart=f"{config.base_path}/dist/timestep-ai-{config.version}.tgz",
             cleanup_on_fail=True,
             create_namespace=True,
-            force_update=True,
+            # force_update=True,
             lint=True,
             name="timestep-ai",
             namespace="default",
             provider=helm_provider,
             recreate_pods=True,
+            # replace=True,
             set=[
                 ReleaseSet(
                     name="app.kubernetes.io\\/managed-by",
                     value="Helm",
+                ),
+                ReleaseSet(
+                    name="ingress.hosts[0].host",
+                    value=f"{config.primary_domain_name}",
                 ),
                 ReleaseSet(
                     name="meta.helm.sh\\/release-name",
