@@ -48,7 +48,7 @@ class TimestepAIConstruct(Construct):
             namespace="default",
             provider=helm_provider,
             recreate_pods=True,
-            replace=True,
+            # replace=True,
             set=[
                 ReleaseSet(
                     name="app.kubernetes.io\\/managed-by",
