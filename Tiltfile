@@ -212,4 +212,4 @@ if os.path.exists('timestep-ai'):
         pull=True,
     )
 
-    k8s_yaml(local('helm template timestep-ai'))
+    # k8s_yaml(local('helm template timestep-ai'))

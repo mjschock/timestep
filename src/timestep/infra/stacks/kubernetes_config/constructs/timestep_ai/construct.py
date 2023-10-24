@@ -42,13 +42,13 @@ class TimestepAIConstruct(Construct):
             chart=f"{config.base_path}/dist/timestep-ai-{config.version}.tgz",
             cleanup_on_fail=True,
             create_namespace=True,
-            # force_update=True,
+            force_update=True,
             lint=True,
             name="timestep-ai",
             namespace="default",
             provider=helm_provider,
             recreate_pods=True,
-            # replace=True,
+            replace=True,
             set=[
                 ReleaseSet(
                     name="app.kubernetes.io\\/managed-by",
