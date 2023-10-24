@@ -28,3 +28,4 @@ docs
 kubeconfig
 timestep-ai-*.tgz
 src/timestep/transducers
+!dist/.gitkeep

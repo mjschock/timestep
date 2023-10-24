@@ -33,7 +33,7 @@ docker run \
  --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
  --volume $(pwd)/timestep-ai:/home/ubuntu/timestep-ai:rw \
  --volume $(pwd)/dist:/home/ubuntu/dist:rw \
- ${CI_REGISTRY_IMAGE}:latest helm package timestep-ai --destination dist /home/ubuntu/dist --version $(cat .env | grep ^VERSION | cut -d '=' -f2)
+ ${CI_REGISTRY_IMAGE}:latest helm package timestep-ai --destination /home/ubuntu/dist --version $(cat .env | grep ^VERSION | cut -d '=' -f2)
 
 docker run \
  --env-file .env \
