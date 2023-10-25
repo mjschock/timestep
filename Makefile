@@ -24,7 +24,10 @@ pyreverse:
 	rm -rf docs && rm -rf */**/__pycache__ && mkdir docs && poetry run pyreverse --all-ancestors --all-associated --module-names y --colorized --output html --output-directory docs src.timestep
 
 quasar-dev-android:
-	cd src/timestep/projects/www && npx quasar dev -m capacitor -T android
+	cd src/timestep/services/www && npx quasar dev -m capacitor -T android
+
+quasar-dev-electron:
+	cd src/timestep/services/www && npx quasar dev -m electron
 
 ssh:
 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@143.244.178.23

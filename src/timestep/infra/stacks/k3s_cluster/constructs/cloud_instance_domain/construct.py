@@ -35,7 +35,7 @@ class CloudInstanceDomainConstruct(Construct):
         subdomains = [
             # "kubernetes-dashboard",
             # "minio",
-            "prefect-server",
+            # "prefect-server",
             "www",
         ]
 

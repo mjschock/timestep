@@ -2,10 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
-    kompose.image-pull-policy: Always
-    kompose.image-pull-secret: regcred
-    kompose.version: 1.30.0 (HEAD)
     rollme: '{{ randAlphaNum 5 | quote }}'
   creationTimestamp: null
   labels:
@@ -21,10 +17,6 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
-        kompose.image-pull-policy: Always
-        kompose.image-pull-secret: regcred
-        kompose.version: 1.30.0 (HEAD)
         rollme: '{{ randAlphaNum 5 | quote }}'
       creationTimestamp: null
       labels:

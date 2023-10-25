@@ -11,8 +11,10 @@
 
 const { configure } = require('quasar/wrappers');
 
+// Accessing terminal variables
+console.log(process.env)
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
   return {
     eslint: {
       // fix: true,
@@ -68,7 +70,13 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      // passing down to UI code from the quasar.config file
+      env: {
+        GRAPHQL_URI: process.env.GRAPHQL_URI,
+        // GRAPHQL_URI: ctx.dev
+        //   ? 'https://www.timestep.local/graphql'
+        //   : 'https://www.timestep.ai/graphql'
+      }
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,

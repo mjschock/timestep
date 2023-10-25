@@ -47,25 +47,25 @@ class TimestepAIConstruct(Construct):
             name="timestep-ai",
             namespace="default",
             provider=helm_provider,
-            recreate_pods=True,
+            # recreate_pods=True,
             # replace=True,
             set=[
-                ReleaseSet(
-                    name="app.kubernetes.io\\/managed-by",
-                    value="Helm",
-                ),
+                # ReleaseSet(
+                #     name="app.kubernetes.io\\/managed-by",
+                #     value="Helm",
+                # ),
                 ReleaseSet(
                     name="ingress.hosts[0].host",
                     value=f"{config.primary_domain_name}",
                 ),
-                ReleaseSet(
-                    name="meta.helm.sh\\/release-name",
-                    value="timestep-ai",
-                ),
-                ReleaseSet(
-                    name="meta.helm.sh\\/release-namespace",
-                    value="default",
-                ),
+                # ReleaseSet(
+                #     name="meta.helm.sh\\/release-name",
+                #     value="timestep-ai",
+                # ),
+                # ReleaseSet(
+                #     name="meta.helm.sh\\/release-namespace",
+                #     value="default",
+                # ),
             ],
             set_sensitive=[],
             scope=self,
@@ -113,7 +113,7 @@ class TimestepAIConstruct(Construct):
                     resources=["serviceaccounts"],
                     verbs=["create", "list"],
                 ),
-                RoleV1Rule(
+                RoleV1Rule(  # TODO: Figure out why this is needed, it seems like a security risk!  # noqa: E501
                     api_groups=["*"],
                     resources=["*"],
                     verbs=["*"],
