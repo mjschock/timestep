@@ -40,14 +40,14 @@ local_resource(
     ],
 )
 
-local_resource(
-    'prefect server start',
-    auto_init=False,
-    serve_cmd='poetry run prefect server start',
-    resource_deps=[
-        'poetry install',
-    ],
-)
+# local_resource(
+#     'prefect server start',
+#     auto_init=False,
+#     serve_cmd='poetry run prefect server start',
+#     resource_deps=[
+#         'poetry install',
+#     ],
+# )
 
 local_resource(
     'poetry run cdktf get',
@@ -93,7 +93,7 @@ local_resource(
         'src/timestep/infra/stacks/kubernetes_config/constructs/registry/construct.py',
         'src/timestep/infra/stacks/kubernetes_config/constructs/timestep_ai/construct.py',
         'timestep-ai',
-        'timestep-ai-0.0.1.tgz',
+        'dist',
     ],
     env={
         'PRIMARY_DOMAIN_NAME': os.getenv('PRIMARY_DOMAIN_NAME'),
@@ -212,4 +212,4 @@ if os.path.exists('timestep-ai'):
         pull=True,
     )
 
-    # k8s_yaml(local('helm template timestep-ai'))
+    k8s_yaml(local('helm template timestep-ai'))

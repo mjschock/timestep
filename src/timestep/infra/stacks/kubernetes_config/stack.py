@@ -7,7 +7,7 @@ from cdktf_cdktf_provider_helm.provider import HelmProvider, HelmProviderKuberne
 from cdktf_cdktf_provider_kubernetes.provider import KubernetesProvider
 from constructs import Construct
 
-from timestep.config import CloudInstanceProvider
+from timestep.config import CloudInstanceProvider, Settings
 from timestep.infra.stacks.kubernetes_config.constructs.kubernetes_cluster_ingress.construct import (  # noqa: E501
     KubernetesClusterIngressConstruct,
 )
@@ -23,7 +23,7 @@ class KubernetesConfigStack(TerraformStack):
     id: str = None
 
     def __init__(
-        self, scope: Construct, id: str, config: dict[str, str], kube_config=None
+        self, scope: Construct, id: str, config: Settings, kube_config=None
     ):  # noqa: E501
         super().__init__(scope, id)
         self.id = id

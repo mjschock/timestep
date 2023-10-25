@@ -5,17 +5,6 @@ from cdktf_cdktf_provider_helm.release import (
     ReleaseSetListStruct,
     ReleaseSetSensitive,
 )
-from cdktf_cdktf_provider_kubernetes.ingress_v1 import (
-    IngressV1,
-    IngressV1Metadata,
-    IngressV1Spec,
-    IngressV1SpecRule,
-    IngressV1SpecRuleHttp,
-    IngressV1SpecRuleHttpPath,
-    IngressV1SpecRuleHttpPathBackend,
-    IngressV1SpecRuleHttpPathBackendService,
-    IngressV1SpecRuleHttpPathBackendServicePort,
-)
 from cdktf_cdktf_provider_kubernetes.role_binding_v1 import (
     RoleBindingV1,
     RoleBindingV1Metadata,
@@ -82,43 +71,43 @@ class PrefectConstruct(Construct):
             scope=self,
         )
 
-        IngressV1(
-            depends_on=[
-                self.prefect_server_helm_release_resource,
-            ],
-            id_="prefect_server_ingress",
-            metadata=IngressV1Metadata(
-                annotations={
-                    "kubernetes.io/ingress.class": "caddy",
-                },
-                name="prefect-server",
-                namespace=self.prefect_server_helm_release_resource.namespace,
-            ),
-            scope=self,
-            spec=IngressV1Spec(
-                rule=[
-                    IngressV1SpecRule(
-                        host=f"prefect-server.{config.primary_domain_name}",
-                        http=IngressV1SpecRuleHttp(
-                            path=[
-                                IngressV1SpecRuleHttpPath(
-                                    backend=IngressV1SpecRuleHttpPathBackend(
-                                        service=IngressV1SpecRuleHttpPathBackendService(
-                                            name="prefect-server",
-                                            port=IngressV1SpecRuleHttpPathBackendServicePort(
-                                                number=4200,
-                                            ),
-                                        ),
-                                    ),
-                                    path="/",
-                                    path_type="Prefix",
-                                ),
-                            ]
-                        ),
-                    ),
-                ],
-            ),
-        )
+        # IngressV1(
+        #     depends_on=[
+        #         self.prefect_server_helm_release_resource,
+        #     ],
+        #     id_="prefect_server_ingress",
+        #     metadata=IngressV1Metadata(
+        #         annotations={
+        #             "kubernetes.io/ingress.class": "caddy",
+        #         },
+        #         name="prefect-server",
+        #         namespace=self.prefect_server_helm_release_resource.namespace,
+        #     ),
+        #     scope=self,
+        #     spec=IngressV1Spec(
+        #         rule=[
+        #             IngressV1SpecRule(
+        #                 host=f"prefect-server.{config.primary_domain_name}",
+        #                 http=IngressV1SpecRuleHttp(
+        #                     path=[
+        #                         IngressV1SpecRuleHttpPath(
+        #                             backend=IngressV1SpecRuleHttpPathBackend(
+        #                                 service=IngressV1SpecRuleHttpPathBackendService(  # noqa: E501
+        #                                     name="prefect-server",
+        #                                     port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
+        #                                         number=4200,
+        #                                     ),
+        #                                 ),
+        #                             ),
+        #                             path="/",
+        #                             path_type="Prefix",
+        #                         ),
+        #                     ]
+        #                 ),
+        #             ),
+        #         ],
+        #     ),
+        # )
 
         self.prefect_default_agent_helm_release_resource = Release(
             depends_on=[self.prefect_server_helm_release_resource],
