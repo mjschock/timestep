@@ -6,7 +6,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: web_api
-  name: web_api
+  name: web-api
   namespace: default
 spec:
   replicas: 1
@@ -39,7 +39,7 @@ spec:
               value: http://prefect-server.default.svc.cluster.local:4200/api
           image: registry.gitlab.com/timestep-ai/timestep/web_api:{{ .Chart.AppVersion }}
           imagePullPolicy: Always
-          name: web_api
+          name: web-api
           ports:
             - containerPort: 5000
               hostPort: 5000

@@ -6,7 +6,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: web_api
-  name: web_api
+  name: web-api
   namespace: default
 spec:
   ports:
