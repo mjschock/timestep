@@ -104,6 +104,9 @@ class Settings(BaseSettings):
     domain_name_registrar_provider: str = Field(
         default=DomainNameRegistrarProvider.NONE, env="DOMAIN_NAME_REGISTRAR_PROVIDER"
     )
+    github_api_token: SecretStr = Field(
+        default=f"{BASE_PATH}/secrets/github_api_token", env="GITHUB_API_TOKEN"
+    )
     htpasswd: SecretStr = Field(env="HTPASSWD")
     ingress_controller_acme_ca: str = Field(
         default="https://acme-staging-v02.api.letsencrypt.org/directory",
