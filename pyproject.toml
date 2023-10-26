@@ -24,7 +24,7 @@ update_changelog_on_bump = true
 version_files = [
   ".env:VERSION",
   "pyproject.toml:version",
-  "src/timestep/infra/stacks/platform/Chart.yaml:appVersion",
+  "src.timestep.infra.stacks.platform.Chart.yaml:appVersion",
   "src/timestep/infra/stacks/platform/Chart.yaml:version"
 ]
 version_provider = "poetry"
