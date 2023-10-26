@@ -5,14 +5,14 @@ metadata:
     rollme: '{{ randAlphaNum 5 | quote }}'
   creationTimestamp: null
   labels:
-    io.kompose.service: web-api
-  name: web-api
+    io.kompose.service: web_api
+  name: web_api
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: web-api
+      io.kompose.service: web_api
   strategy: {}
   template:
     metadata:
@@ -21,7 +21,7 @@ spec:
       creationTimestamp: null
       labels:
         io.kompose.network/timestep-default: "true"
-        io.kompose.service: web-api
+        io.kompose.service: web_api
     spec:
       containers:
         - args:
@@ -37,9 +37,9 @@ spec:
           env:
             - name: PREFECT_API_URL
               value: http://prefect-server.default.svc.cluster.local:4200/api
-          image: registry.gitlab.com/timestep-ai/timestep/web-api:{{ .Chart.AppVersion }}
+          image: registry.gitlab.com/timestep-ai/timestep/web_api:{{ .Chart.AppVersion }}
           imagePullPolicy: Always
-          name: web-api
+          name: web_api
           ports:
             - containerPort: 5000
               hostPort: 5000

@@ -6,19 +6,19 @@ from cdktf import (
 from constructs import Construct
 
 from timestep.config import CloudInstanceProvider
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_init_config.construct import (
+from timestep.infra.stacks.k3s_cluster.cloud_init_config import (
     CloudInitConfigConstruct,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
+from timestep.infra.stacks.k3s_cluster.cloud_instance import (
     CloudInstanceConstruct,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance_domain.construct import (  # noqa: E501
+from timestep.infra.stacks.k3s_cluster.cloud_instance_domain import (
     CloudInstanceDomainConstruct,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.domain_name_registrar.construct import (  # noqa: E501
+from timestep.infra.stacks.k3s_cluster.domain_name_registrar import (
     DomainNameRegistrarConstruct,
 )
-from timestep.infra.stacks.k3s_cluster.constructs.kube_config.construct import (
+from timestep.infra.stacks.k3s_cluster.kube_config import (
     KubeConfigConstruct,
 )
 

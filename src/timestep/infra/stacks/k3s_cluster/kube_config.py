@@ -6,8 +6,9 @@ from cdktf_cdktf_provider_local.provider import LocalProvider
 from cdktf_cdktf_provider_null.provider import NullProvider
 from cdktf_cdktf_provider_null.resource import Resource
 from constructs import Construct
+
 from timestep.config import CloudInstanceProvider, Settings
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
+from timestep.infra.stacks.k3s_cluster.cloud_instance import (
     CloudInstanceConstruct,
 )
 

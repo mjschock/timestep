@@ -1,10 +1,10 @@
 FROM registry.gitlab.com/timestep-ai/timestep:latest
 
 # WORKDIR /home/ubuntu/src/timestep/services/api/app
-WORKDIR /home/ubuntu/src/timestep/platform/services/web-api
+WORKDIR /home/ubuntu/src/timestep/platform/services/web_api
 
 # COPY --chown=ubuntu:ubuntu ./app /home/ubuntu/src/timestep/services/api/app/
-COPY --chown=ubuntu:ubuntu . /home/ubuntu/src/timestep/platform/services/web-api
+COPY --chown=ubuntu:ubuntu . /home/ubuntu/src/timestep/platform/services/web_api
 
 EXPOSE 5000
 

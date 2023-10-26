@@ -17,6 +17,7 @@ from cdktf_cdktf_provider_kubernetes.cluster_role_v1 import (
     ClusterRoleV1Rule,
 )
 from cdktf_cdktf_provider_kubernetes.manifest import Manifest
+from cdktf_cdktf_provider_kubernetes.provider import KubernetesProvider
 from cdktf_cdktf_provider_kubernetes.role_binding_v1 import (
     RoleBindingV1,
     RoleBindingV1Metadata,
@@ -40,6 +41,13 @@ class PlatformStack(TerraformStack):
     def __init__(self, scope: Construct, id: str, config: Settings, kube_config=None):
         super().__init__(scope, id)
         self.id = id
+
+        self.kubernetes_provider = KubernetesProvider(
+            id="kubernetes_provider",
+            config_context=config.kubecontext,
+            config_path=f"{config.base_path}/secrets/kubeconfig",
+            scope=self,
+        )
 
         # self.release_resource = Release(
         #     id_="timestep_ai_helm_release_resource",

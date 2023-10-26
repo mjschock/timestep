@@ -5,7 +5,7 @@ from cdktf_cdktf_provider_digitalocean.domain import (
     Domain as DigitaloceanDomainTerraformResource,
 )
 from cdktf_cdktf_provider_digitalocean.record import (
-    Record as DigitaloceanRecordTerraformResource,  # noqa: F401
+    Record as DigitaloceanRecordTerraformResource,
 )
 from cdktf_cdktf_provider_local.data_local_file import (
     DataLocalFile as LocalFileTerraformDataSource,
@@ -17,7 +17,7 @@ from cdktf_cdktf_provider_local.provider import (
 from constructs import Construct
 
 from timestep.config import CloudInstanceProvider, Settings
-from timestep.infra.stacks.k3s_cluster.constructs.cloud_instance.construct import (
+from timestep.infra.stacks.k3s_cluster.cloud_instance import (
     CloudInstanceConstruct,
 )
 
