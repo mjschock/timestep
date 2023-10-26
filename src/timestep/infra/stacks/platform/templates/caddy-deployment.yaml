@@ -43,7 +43,7 @@ spec:
             - caddy
             - run
             - --config
-            - /etc/caddy/Caddyfile
+            - /home/ubuntu/src/timestep/platform/services/caddy/Caddyfile
             - --adapter
             - caddyfile
           env:
