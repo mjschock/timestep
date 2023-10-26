@@ -29,7 +29,8 @@ spec:
         kompose.service.healthcheck.readiness.http_get_path: /ready
         kompose.service.healthcheck.readiness.http_get_port: "5000"
         kompose.version: 1.30.0 (HEAD)
-        rollme: '{{ randAlphaNum 5 | quote }}'
+        # rollme: '{{ randAlphaNum 5 | quote }}'
+        rollme: {{ randAlphaNum 5 | quote }}
       creationTimestamp: null
       labels:
         io.kompose.network/timestep-default: "true"
