@@ -1,10 +1,11 @@
 from cdktf_cdktf_provider_helm.provider import HelmProvider
-from cdktf_cdktf_provider_helm.release import Release
+from cdktf_cdktf_provider_helm.release import Release, ReleaseSetSensitive
 from constructs import Construct
+
 from timestep.config import Settings
 
 
-class ArgoCDConstruct(Construct):
+class RegistryConstruct(Construct):
     def __init__(
         self,
         scope: Construct,
@@ -14,14 +15,21 @@ class ArgoCDConstruct(Construct):
     ) -> None:
         super().__init__(scope, id)
 
-        self.argo_cd_helm_release_resource = Release(
-            id_="argo_cd_helm_release_resource",
+        self.release_resource = Release(
+            id_="registry_helm_release_resource",
             atomic=True,
-            chart="argo-cd",
+            chart="harbor",
             create_namespace=True,
-            name="argo-cd",
+            name="harbor",
             namespace="default",
             repository="https://charts.bitnami.com/bitnami",
             provider=helm_provider,
+            set=[],
+            set_sensitive=[
+                ReleaseSetSensitive(
+                    name="adminPassword",
+                    value=config.registry_admin_password.get_secret_value(),
+                )
+            ],
             scope=self,
         )

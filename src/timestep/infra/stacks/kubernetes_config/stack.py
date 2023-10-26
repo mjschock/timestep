@@ -5,20 +5,19 @@ from cdktf import (
 )
 from cdktf_cdktf_provider_helm.provider import HelmProvider, HelmProviderKubernetes
 from cdktf_cdktf_provider_kubernetes.provider import KubernetesProvider
-from cdktf_cdktf_provider_kubernetes.secret_v1 import SecretV1, SecretV1Metadata
 from constructs import Construct
 
 from timestep.config import CloudInstanceProvider, Settings
-from timestep.infra.stacks.kubernetes_config.constructs.argo_cd.construct import (
+from timestep.infra.stacks.kubernetes_config.argo_cd import (
     ArgoCDConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.constructs.kubeapps.construct import (
+from timestep.infra.stacks.kubernetes_config.kubeapps import (
     KubeappsConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.constructs.kubernetes_cluster_ingress.construct import (  # noqa: E501
+from timestep.infra.stacks.kubernetes_config.kubernetes_cluster_ingress import (  # noqa: E501
     KubernetesClusterIngressConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.constructs.sealed_secrets.construct import (  # noqa: E501
+from timestep.infra.stacks.kubernetes_config.sealed_secrets import (  # noqa: E501
     SealedSecretsConstruct,
 )
 
@@ -114,54 +113,6 @@ class KubernetesConfigStack(TerraformStack):
             helm_provider=self.helm_provider,
             scope=self,
         )
-
-        SecretV1(
-            id_="private_repo_secret",
-            data={
-                "password": config.github_api_token.get_secret_value(),
-                "project": "default",
-                "url": "https://github.com/mjschock/timestep.git",
-                "username": "mjschock",
-                "type": "git",
-            },
-            metadata=SecretV1Metadata(
-                labels={
-                    "argocd.argoproj.io/secret-type": "repository",
-                },
-                name="private-repo",
-                namespace="default",
-            ),
-            scope=self,
-        )
-
-        # Manifest(
-        #     id="private_repo_manifest",
-        #     manifest={
-        #         "apiVersion": "bitnami.com/v1alpha1",
-        #         "kind": "SealedSecret",
-        #         "metadata": {
-        #             "name": "private-repo",
-        #             "namespace": "default",
-        #         },
-        #         "spec": {
-        #             "encryptedData": {
-        #                 "password": config.github_api_token.get_secret_value(),
-        #                 "project": "default",
-        #                 "url": "https://github.com/mjschock/timestep.git",
-        #                 "username": "mjschock",
-        #                 "type": "git",
-        #             },
-        #             "template": {
-        #                 "metadata": {
-        #                     "labels": {
-        #                         "argocd.argoproj.io/secret-type": "repository",
-        #                     }
-        #                 }
-        #             },
-        #         },
-        #     },
-        #     scope=self,
-        # )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             LocalBackend(

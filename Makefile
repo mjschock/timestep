@@ -4,9 +4,7 @@ default:
 
 clean:
 	rm -rf cdktf.out
-
-docker-compoze-viz:
-	docker run --rm -it --name dcv -v $(shell pwd):/input pmsipilot/docker-compose-viz render -m image docker-compose.yml
+	rm -rf */**/__pycache__
 
 hosts:
 	cat cdktf.out/stacks/timestep.local.k3s_cluster/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
@@ -21,13 +19,13 @@ pre-commit:
 	poetry run pre-commit run --all-files
 
 pyreverse:
-	rm -rf docs && rm -rf */**/__pycache__ && mkdir docs && poetry run pyreverse --all-ancestors --all-associated --module-names y --colorized --output html --output-directory docs src.timestep
+	rm -rf docs/Architecture && rm -rf */**/__pycache__ && mkdir docs/Architecture && poetry run pyreverse --all-ancestors --all-associated --module-names y --colorized --output html --output-directory docs/Architecture src.timestep
 
 quasar-dev-android:
-	cd src/timestep/services/www && npx quasar dev -m capacitor -T android
+	cd src/timestep/services/frontend && npx quasar dev -m capacitor -T android
 
 quasar-dev-electron:
-	cd src/timestep/services/www && npx quasar dev -m electron
+	cd src/timestep/services/frontend && npx quasar dev -m electron
 
 ssh:
 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@143.244.178.23

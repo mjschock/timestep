@@ -52,5 +52,5 @@ docker run \
  --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
  --volume $(pwd)/timestep-ai:/home/ubuntu/timestep-ai:rw \
  --volume $(pwd)/dist:/home/ubuntu/dist:rw \
- ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}.k3s_cluster ${PRIMARY_DOMAIN_NAME}.kubernetes_config
+ ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}.k3s_cluster ${PRIMARY_DOMAIN_NAME}.kubernetes_config ${PRIMARY_DOMAIN_NAME}.platform
  
