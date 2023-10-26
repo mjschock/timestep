@@ -35,7 +35,7 @@ docker buildx build \
   --cache-from ${CI_REGISTRY_IMAGE}/caddy:${VERSION} \
   --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/caddy:latest \
   --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/caddy:${VERSION} \
-  --push
+  --push \
   --tag ${CI_REGISTRY_IMAGE}/caddy:latest \
   --tag ${CI_REGISTRY_IMAGE}/caddy:${VERSION} \
   src/timestep/services/caddy
@@ -45,7 +45,7 @@ docker buildx build \
   --cache-from ${CI_REGISTRY_IMAGE}/www:${VERSION} \
   --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/www:latest \
   --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/www:${VERSION} \
-  --push
+  --push \
   --tag ${CI_REGISTRY_IMAGE}/www:latest \
   --tag ${CI_REGISTRY_IMAGE}/www:${VERSION} \
   src/timestep/services/www
