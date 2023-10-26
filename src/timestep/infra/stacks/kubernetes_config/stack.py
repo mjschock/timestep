@@ -4,7 +4,6 @@ from cdktf import (
     TerraformStack,
 )
 from cdktf_cdktf_provider_helm.provider import HelmProvider, HelmProviderKubernetes
-from cdktf_cdktf_provider_kubernetes.manifest import Manifest
 from cdktf_cdktf_provider_kubernetes.provider import KubernetesProvider
 from cdktf_cdktf_provider_kubernetes.secret_v1 import SecretV1, SecretV1Metadata
 from constructs import Construct
@@ -55,13 +54,6 @@ class KubernetesConfigStack(TerraformStack):
             helm_provider=self.helm_provider,
             scope=self,
         )
-
-        # self.flux_construct: FluxConstruct = FluxConstruct(
-        #     config=config,
-        #     id="flux_construct",
-        #     helm_provider=self.helm_provider,
-        #     scope=self,
-        # )
 
         self.kubeapps_contruct: KubeappsConstruct = KubeappsConstruct(
             config=config,
@@ -123,19 +115,6 @@ class KubernetesConfigStack(TerraformStack):
             scope=self,
         )
 
-        # apiVersion: v1
-        # kind: Secret
-        # metadata:
-        #   name: private-repo
-        #   namespace: default
-        #   labels:
-        #     argocd.argoproj.io/secret-type: repository
-        # stringData:
-        #   type: git
-        #   url: https://github.com/mjschock/timestep.git
-        #   password: mjschock
-        #   username: my-username
-
         SecretV1(
             id_="private_repo_secret",
             data={
@@ -181,45 +160,6 @@ class KubernetesConfigStack(TerraformStack):
         #             },
         #         },
         #     },
-        #     scope=self,
-        # )
-
-        Manifest(
-            id="timestep_ai_manifest",
-            manifest={
-                "apiVersion": "argoproj.io/v1alpha1",
-                "kind": "Application",
-                "metadata": {
-                    "name": "timestep-ai",
-                    "namespace": "default",
-                },
-                "spec": {
-                    "destination": {
-                        "namespace": "default",
-                        "server": "https://kubernetes.default.svc",
-                    },
-                    "project": "default",
-                    "source": {
-                        "path": "timestep-ai",
-                        "repoURL": "https://github.com/mjschock/timestep.git",
-                        "targetRevision": "HEAD",
-                    },
-                    "syncPolicy": {
-                        "automated": {
-                            "prune": True,
-                            "selfHeal": True,
-                        },
-                        "syncOptions": ["CreateNamespace=true"],
-                    },
-                },
-            },
-            scope=self,
-        )
-
-        # self.timestep_ai_contruct: TimestepAIConstruct = TimestepAIConstruct(
-        #     config=config,
-        #     id="timestep_ai_contruct",
-        #     helm_provider=self.helm_provider,
         #     scope=self,
         # )
 
