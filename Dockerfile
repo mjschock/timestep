@@ -67,18 +67,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   ros-iron-ros-base \
   && rm -rf /var/lib/apt/lists/*
 
-# RUN add-apt-repository ppa:deadsnakes/ppa && apt-get update && apt-get install -y --no-install-recommends \
-#   python-is-python3 \
-#   python3.11 \
-#   python3.11-dev \
-#   python3.11-distutils \
-#   python3.11-venv \
-#   && rm -rf /var/lib/apt/lists/*
-
-# RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 110
-# RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 111
-# RUN update-alternatives --config python3 --skip-auto
-
 RUN groupadd --gid 123 --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid 1001 ubuntu
 
 SHELL [ "/bin/bash", "-c" ]
