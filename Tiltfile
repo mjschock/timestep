@@ -114,9 +114,9 @@ allow_k8s_contexts(
     os.getenv('KUBECONTEXT'),
 )
 
-watch_file('src/timestep/infra/stacks/platform/constructs/timestep_ai/app')
+watch_file('src/timestep/infra/stacks/platform')
 
-if os.path.exists('src/timestep/infra/stacks/platform/constructs/timestep_ai/app'):
+if os.path.exists('src/timestep/infra/stacks/platform'):
     # custom_build(
     #     'registry.gitlab.com/timestep-ai/timestep/caddy',
     #     command='docker build -t $EXPECTED_REF src/timestep/platform/services/caddy',
@@ -186,4 +186,4 @@ if os.path.exists('src/timestep/infra/stacks/platform/constructs/timestep_ai/app
     #     pull=True,
     # )
 
-    k8s_yaml(local('helm template src/timestep/infra/stacks/platform/constructs/timestep_ai/app'))
+    k8s_yaml(local('helm template src/timestep/infra/stacks/platform'))
