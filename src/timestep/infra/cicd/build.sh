@@ -16,20 +16,6 @@ docker buildx build \
   --tag ${CI_REGISTRY_IMAGE}:${VERSION} \
   .
 
-# docker buildx bake --pull --push
-
-docker buildx build \
-  --cache-from ${CI_REGISTRY_IMAGE}:latest \
-  --cache-from ${CI_REGISTRY_IMAGE}:${VERSION} \
-  --cache-from ${CI_REGISTRY_IMAGE}/api:latest \
-  --cache-from ${CI_REGISTRY_IMAGE}/api:${VERSION} \
-  --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/api:latest \
-  --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/api:${VERSION} \
-  --push \
-  --tag ${CI_REGISTRY_IMAGE}/api:latest \
-  --tag ${CI_REGISTRY_IMAGE}/api:${VERSION} \
-  src/timestep/services/api
-
 docker buildx build \
   --cache-from ${CI_REGISTRY_IMAGE}/caddy:latest \
   --cache-from ${CI_REGISTRY_IMAGE}/caddy:${VERSION} \
@@ -41,11 +27,23 @@ docker buildx build \
   src/timestep/services/caddy
 
 docker buildx build \
-  --cache-from ${CI_REGISTRY_IMAGE}/www:latest \
-  --cache-from ${CI_REGISTRY_IMAGE}/www:${VERSION} \
-  --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/www:latest \
-  --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/www:${VERSION} \
+  --cache-from ${CI_REGISTRY_IMAGE}/frontend:latest \
+  --cache-from ${CI_REGISTRY_IMAGE}/frontend:${VERSION} \
+  --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/frontend:latest \
+  --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/frontend:${VERSION} \
   --push \
-  --tag ${CI_REGISTRY_IMAGE}/www:latest \
-  --tag ${CI_REGISTRY_IMAGE}/www:${VERSION} \
-  src/timestep/services/www
+  --tag ${CI_REGISTRY_IMAGE}/frontend:latest \
+  --tag ${CI_REGISTRY_IMAGE}/frontend:${VERSION} \
+  src/timestep/services/frontend
+
+docker buildx build \
+  --cache-from ${CI_REGISTRY_IMAGE}:latest \
+  --cache-from ${CI_REGISTRY_IMAGE}:${VERSION} \
+  --cache-from ${CI_REGISTRY_IMAGE}/web-api:latest \
+  --cache-from ${CI_REGISTRY_IMAGE}/web-api:${VERSION} \
+  --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/web-api:latest \
+  --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/web-api:${VERSION} \
+  --push \
+  --tag ${CI_REGISTRY_IMAGE}/api:latest \
+  --tag ${CI_REGISTRY_IMAGE}/api:${VERSION} \
+  src/timestep/services/web-api

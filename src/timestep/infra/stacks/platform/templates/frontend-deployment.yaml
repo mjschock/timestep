@@ -5,14 +5,14 @@ metadata:
     rollme: '{{ randAlphaNum 5 | quote }}'
   creationTimestamp: null
   labels:
-    io.kompose.service: www
-  name: www
+    io.kompose.service: frontend
+  name: frontend
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: www
+      io.kompose.service: frontend
   strategy: {}
   template:
     metadata:
@@ -22,7 +22,7 @@ spec:
       creationTimestamp: null
       labels:
         io.kompose.network/timestep-default: "true"
-        io.kompose.service: www
+        io.kompose.service: frontend
     spec:
       containers:
         - args:
@@ -38,9 +38,9 @@ spec:
             - name: GRAPHQL_URI
               value: https://www.{{ .host }}/graphql
           {{- end }}
-          image: registry.gitlab.com/timestep-ai/timestep/www:{{ .Chart.AppVersion }}
+          image: registry.gitlab.com/timestep-ai/timestep/frontend:{{ .Chart.AppVersion }}
           imagePullPolicy: Always
-          name: www
+          name: frontend
           ports:
             - containerPort: 9000
               hostPort: 9000

@@ -5,8 +5,8 @@ metadata:
     rollme: '{{ randAlphaNum 5 | quote }}'
   creationTimestamp: null
   labels:
-    io.kompose.service: www
-  name: www
+    io.kompose.service: frontend
+  name: frontend
   namespace: default
 spec:
   ports:
@@ -14,6 +14,6 @@ spec:
       port: 9000
       targetPort: 9000
   selector:
-    io.kompose.service: www
+    io.kompose.service: frontend
 status:
   loadBalancer: {}
