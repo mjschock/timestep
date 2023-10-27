@@ -59,7 +59,7 @@ spec:
               protocol: TCP
           resources: {}
           volumeMounts:
-            - mountPath: /root/.caddy
+            - mountPath: /home/ubuntu/.caddy
               name: caddy-certs
       imagePullSecrets:
         - name: regcred
