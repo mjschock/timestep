@@ -158,7 +158,10 @@ class PlatformStack(TerraformStack):
                             "prune": True,
                             "selfHeal": True,
                         },
-                        "syncOptions": ["CreateNamespace=true"],
+                        "syncOptions": [
+                            "ApplyOutOfSyncOnly=true",
+                            "CreateNamespace=true",
+                        ],
                     },
                 },
             },
