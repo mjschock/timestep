@@ -1,5 +1,3 @@
-import os
-
 from cdktf import (
     HttpBackend,
     LocalBackend,
@@ -149,7 +147,7 @@ class PlatformStack(TerraformStack):
                     },
                     "project": "default",
                     "source": {
-                        "path": os.path.relpath(os.getcwd(), config.base_path),
+                        "path": f"src/{__name__.replace('.', '/').replace('stack', '')}",  # noqa: E501
                         "repoURL": "https://github.com/mjschock/timestep.git",
                         "targetRevision": "HEAD",
                     },

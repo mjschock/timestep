@@ -22,7 +22,7 @@ classDiagram
     Agent --|> Environment
 ```
 
-<img src="src/timestep/platform/services/web/service/flows/IntelligentAgent-Learning.png" />
+<img src="src/timestep/services/web/service/flows/IntelligentAgent-Learning.png" />
 
 ## TODO:
 
