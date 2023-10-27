@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    rollme: '{{ randAlphaNum 5 | quote }}'
-  creationTimestamp: null
+  # annotations:
+    # rollme: '{{ randAlphaNum 5 | quote }}'
+  # creationTimestamp: null
   labels:
-    io.kompose.service: web
+    app: web
   name: web
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: web
-  strategy: {}
+      app: web
+  # strategy: {}
   template:
     metadata:
-      annotations:
-        rollme: {{ randAlphaNum 5 | quote }}
-      creationTimestamp: null
+      # annotations:
+        # rollme: {{ randAlphaNum 5 | quote }}
+      # creationTimestamp: null
       labels:
-        io.kompose.network/timestep-default: "true"
-        io.kompose.service: web
+        # io.kompose.network/timestep-default: "true"
+        app: web
     spec:
       containers:
         - args:
@@ -52,4 +52,4 @@ spec:
       imagePullSecrets:
         - name: regcred
       restartPolicy: Always
-status: {}
+# status: {}
