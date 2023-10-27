@@ -110,10 +110,6 @@ ENV PATH="/home/ubuntu/.anyenv/envs/goenv/shims:/home/ubuntu/.anyenv/envs/goenv/
 # Install ${GOENV_VERSION} with goenv
 RUN eval "$(anyenv init -)" && goenv install ${GOENV_VERSION}
 
-# Install Kompose with go
-ENV KOMPOSE_VERSION=latest
-RUN go install github.com/kubernetes/kompose@${KOMPOSE_VERSION}
-
 # Install nodenv with anyenv
 RUN anyenv install nodenv
 ENV PATH="/home/ubuntu/.anyenv/envs/nodenv/shims:/home/ubuntu/.anyenv/envs/nodenv/bin:${PATH}"

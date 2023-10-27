@@ -2,48 +2,41 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
-    kompose.image-pull-secret: regcred
-    {{- with (first .Values.ingress.hosts) }}
-    kompose.service.expose: {{ .host }},www.{{ .host }}
-    {{- end }}
-    kompose.service.expose.ingress-class-name: caddy
-    kompose.version: 1.30.0 (HEAD)
     kubernetes.io/ingress.class: caddy
-  creationTimestamp: null
+  # creationTimestamp: null
   labels:
-    io.kompose.service: caddy
+    app: caddy
   name: caddy
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: caddy
+      app: caddy
   strategy:
     type: Recreate
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert --chart --file docker-compose.yml --out timestep-ai --secrets-as-files --verbose
-        kompose.image-pull-secret: regcred
-        {{- with (first .Values.ingress.hosts) }}
-        kompose.service.expose: {{ .host }},www.{{ .host }}
-        {{- end }}
-        kompose.service.expose.ingress-class-name: caddy
-        kompose.version: 1.30.0 (HEAD)
         kubernetes.io/ingress.class: caddy
-      creationTimestamp: null
+      # creationTimestamp: null
       labels:
-        io.kompose.network/timestep-default: "true"
-        io.kompose.service: caddy
+        # io.kompose.network/timestep-default: "true"
+        app: caddy
     spec:
       containers:
+        # - args:
+        #     - caddy
+        #     - run
+        #     - --config
+        #     - /home/ubuntu/src/timestep/platform/services/caddy/Caddyfile
+        #     - --adapter
+        #     - caddyfile
         - args:
             - caddy
             - run
             - --config
-            - /home/ubuntu/src/timestep/platform/services/caddy/Caddyfile
+            - Caddyfile
             - --adapter
             - caddyfile
           env:
@@ -68,4 +61,4 @@ spec:
         - name: caddy-certs
           persistentVolumeClaim:
             claimName: caddy-certs
-status: {}
+# status: {}
