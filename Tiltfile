@@ -9,9 +9,9 @@ dotenv('.env')
 local_resource(
     'npm install -g cdktf-cli',
     cmd='npm install -g cdktf-cli@$CDKTF_CLI_VERSION',
-    env={
-        'PRIMARY_DOMAIN_NAME': os.getenv('CDKTF_CLI_VERSION'),
-    },
+    # env={
+    #     'CDKTF_CLI_VERSION': os.getenv('CDKTF_CLI_VERSION'),
+    # },
     labels=['build'],
 )
 

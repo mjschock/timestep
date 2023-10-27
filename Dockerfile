@@ -2,10 +2,12 @@ ARG UBUNTU_VERSION=22.04
 
 FROM ubuntu:${UBUNTU_VERSION} as base
 
+ARG CDKTF_CLI_VERSION
 ARG GOENV_VERSION
 ARG NODENV_VERSION
 ARG PYENV_VERSION
 
+ENV CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION:-0.17.3}
 ENV GOENV_VERSION=${GOENV_VERSION:-1.20.2}
 ENV LANG en_US.utf8
 ENV NODENV_VERSION=${NODENV_VERSION:-18.17.1}
@@ -119,8 +121,12 @@ ENV PATH="/home/ubuntu/.anyenv/envs/nodenv/shims:/home/ubuntu/.anyenv/envs/noden
 # Install ${NODENV_VERSION} with nodenv
 RUN eval "$(anyenv init -)" && nodenv install ${NODENV_VERSION}
 
+# Install npm with npm
+ENV NPM_VERSION=9.8.1
+RUN npm install --global npm@${NPM_VERSION}
+
 # Install cdktf-cli with npm
-ENV CDKTF_CLI_VERSION=latest
+# ENV CDKTF_CLI_VERSION=latest
 RUN npm install --global cdktf-cli@${CDKTF_CLI_VERSION}
 
 # Install pyenv with anyenv
