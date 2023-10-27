@@ -18,31 +18,31 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 	encode gzip
 
 	handle /ap {
-		reverse_proxy web-api:5000
+		reverse_proxy web:5000
 	}
 
 	handle /docs {
-		reverse_proxy web-api:5000
+		reverse_proxy web:5000
 	}
 
 	handle /flows {
-		reverse_proxy web-api:5000
+		reverse_proxy web:5000
 	}
 
 	handle /graphql {
-		reverse_proxy web-api:5000
+		reverse_proxy web:5000
 	}
 
 	handle /openapi.json {
-		reverse_proxy web-api:5000
+		reverse_proxy web:5000
 	}
 
 	handle /ready {
-		reverse_proxy web-api:5000
+		reverse_proxy web:5000
 	}
 
 	handle /redoc {
-		reverse_proxy web-api:5000
+		reverse_proxy web:5000
 	}
 
 	# handle /console/* {

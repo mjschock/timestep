@@ -72,11 +72,11 @@ fi
 # docker buildx build \
 #   --cache-from ${CI_REGISTRY_IMAGE}:latest \
 #   --cache-from ${CI_REGISTRY_IMAGE}:${VERSION} \
-#   --cache-from ${CI_REGISTRY_IMAGE}/web_api:latest \
-#   --cache-from ${CI_REGISTRY_IMAGE}/web_api:${VERSION} \
-#   --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/web_api:latest \
-#   --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/web_api:${VERSION} \
+#   --cache-from ${CI_REGISTRY_IMAGE}/web:latest \
+#   --cache-from ${CI_REGISTRY_IMAGE}/web:${VERSION} \
+#   --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/web:latest \
+#   --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/web:${VERSION} \
 #   --push \
-#   --tag ${CI_REGISTRY_IMAGE}/web_api:latest \
-#   --tag ${CI_REGISTRY_IMAGE}/web_api:${VERSION} \
-#   src/timestep/services/web_api
+#   --tag ${CI_REGISTRY_IMAGE}/web:latest \
+#   --tag ${CI_REGISTRY_IMAGE}/web:${VERSION} \
+#   src/timestep/services/web
