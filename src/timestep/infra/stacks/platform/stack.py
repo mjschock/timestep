@@ -1,3 +1,5 @@
+import os
+
 from cdktf import (
     HttpBackend,
     LocalBackend,
@@ -147,7 +149,7 @@ class PlatformStack(TerraformStack):
                     },
                     "project": "default",
                     "source": {
-                        "path": f"src/{__name__.replace('.', '/').replace('stack', '')}",  # noqa: E501
+                        "path": os.path.dirname(__file__) # noqa: E501
                         "repoURL": "https://github.com/mjschock/timestep.git",
                         "targetRevision": "HEAD",
                     },
