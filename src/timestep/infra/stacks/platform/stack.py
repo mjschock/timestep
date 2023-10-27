@@ -149,7 +149,7 @@ class PlatformStack(TerraformStack):
                     },
                     "project": "default",
                     "source": {
-                        "path": os.path.dirname(__file__) # noqa: E501
+                        "path": os.path.dirname(__file__), # noqa: E501
                         "repoURL": "https://github.com/mjschock/timestep.git",
                         "targetRevision": "HEAD",
                     },
