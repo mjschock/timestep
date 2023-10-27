@@ -7,6 +7,7 @@ on:
     # branches: [ "main" ]
 
 env:
+    ARGO_CD_GITHUB_API_TOKEN: ${{ secrets.ARGO_CD_GITHUB_API_TOKEN }}
     CI_COMMIT_SHA: ${{ github.sha }}
     # CI_REGISTRY_USER: m.schock
     # CI_REGISTRY: registry.gitlab.com
@@ -71,6 +72,7 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
         mkdir -p secrets
+        echo "$ARGO_CD_GITHUB_API_TOKEN" > secrets/github_api_token
         echo "$POSTGRESQL_PASSWORD" > secrets/postgresql_password
         echo "$SSH_PRIVATE_KEY" > secrets/ssh_private_key
         mkdir -p timestep-ai
