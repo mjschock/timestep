@@ -77,6 +77,10 @@ local_resource(
     env={
         'PRIMARY_DOMAIN_NAME': os.getenv('PRIMARY_DOMAIN_NAME'),
     },
+    ignore=[
+        '__pycache__',
+        '*/**/__pycache__',
+    ],
     labels=['deploy'],
     resource_deps=[
     ]
@@ -171,4 +175,8 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
     #     pull=True,
     # )
 
-    k8s_yaml(local('helm template src/timestep/infra/stacks/platform'))
+    k8s_yaml(
+        local(
+            'helm template --values src/timestep/infra/stacks/platform/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.yaml src/timestep/infra/stacks/platform'
+        )
+    )
