@@ -147,6 +147,22 @@ class PlatformStack(TerraformStack):
                     },
                     "project": "default",
                     "source": {
+                        "helm": {
+                            "valueFiles": [
+                                # "values.yaml",
+                                # "values-production.yaml",
+                                f"values.{config.primary_domain_name}.yaml",
+                            ],
+                            # "valuesObject": {
+                            #     "ingress": {
+                            #         "hosts": [
+                            #             {
+                            #                 "host": f"{config.primary_domain_name}",
+                            #             }
+                            #         ]
+                            #     },
+                            # },
+                        },
                         "path": "src/timestep/infra/stacks/platform",
                         "repoURL": "https://github.com/mjschock/timestep.git",
                         "targetRevision": "HEAD",
