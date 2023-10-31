@@ -2,8 +2,4 @@
 .gitlab-ci.yml
 docs
 Dockerfile
-scripts
-src/CrowdPlay
-src/skypilot
-src/udacity
 Tiltfile
