@@ -15,5 +15,5 @@ spec:
       targetPort: 9000
   selector:
     app: frontend
-status:
-  loadBalancer: {}
+# status:
+#   loadBalancer: {}
