@@ -19,4 +19,4 @@ docker run \
  --env TF_USERNAME=${TF_USERNAME} \
  --user $(id -u):$(id -g) \
  --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
- ${CI_REGISTRY_IMAGE}:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}.k3s_cluster ${PRIMARY_DOMAIN_NAME}.kubernetes_config ${PRIMARY_DOMAIN_NAME}.platform
+ ${CI_REGISTRY_IMAGE}/cicd:latest poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}.k3s_cluster ${PRIMARY_DOMAIN_NAME}.kubernetes_config ${PRIMARY_DOMAIN_NAME}.platform

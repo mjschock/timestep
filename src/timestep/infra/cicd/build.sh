@@ -11,6 +11,7 @@ docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD} ${DOC
 if [ -z ${IMAGE_NAME+x} ]; then
   docker buildx build \
     --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \
+    --build-arg PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
     --cache-from ${CI_REGISTRY_IMAGE}:latest \
     --cache-from ${CI_REGISTRY_IMAGE}:${VERSION} \
     --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}:latest \
@@ -18,6 +19,21 @@ if [ -z ${IMAGE_NAME+x} ]; then
     --push \
     --tag ${CI_REGISTRY_IMAGE}:latest \
     --tag ${CI_REGISTRY_IMAGE}:${VERSION} \
+    .
+
+elif [ ${IMAGE_NAME} = "cicd" ]; then
+  docker buildx build \
+    --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \
+    --build-arg PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
+    --cache-from ${CI_REGISTRY_IMAGE}:latest \
+    --cache-from ${CI_REGISTRY_IMAGE}:${VERSION} \
+    --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
+    --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
+    --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
+    --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
+    --push \
+    --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
+    --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
     .
 
 else
