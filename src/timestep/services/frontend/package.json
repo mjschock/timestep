@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.0.1",
+  "version": "3.0.25",
   "description": "Timestep AI (frontend)",
   "productName": "Timestep AI",
   "author": "Michael Schock <m@mjschock.com>",
@@ -29,7 +29,7 @@
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
     "autoprefixer": "^10.4.2",
-    "electron": "^25.4.0",
+    "electron": "^27.0.2",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^9.0.0",
