@@ -56,7 +56,7 @@ spec:
               name: caddy-certs
       imagePullSecrets:
         - name: regcred
-      restartPolicy: Always
+      # restartPolicy: Always
       volumes:
         - name: caddy-certs
           persistentVolumeClaim:

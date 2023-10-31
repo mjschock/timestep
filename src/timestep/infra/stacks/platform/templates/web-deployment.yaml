@@ -42,14 +42,14 @@ spec:
           name: web
           ports:
             - containerPort: 5000
-              hostPort: 5000
-              protocol: TCP
+              # hostPort: 5000
+              # protocol: TCP
           readinessProbe:
             httpGet:
               path: /ready
               port: 5000
-          resources: {}
+          # resources: {}
       imagePullSecrets:
         - name: regcred
-      restartPolicy: Always
+      # restartPolicy: Always
 # status: {}

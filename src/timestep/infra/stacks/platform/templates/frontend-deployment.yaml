@@ -42,10 +42,10 @@ spec:
           name: frontend
           ports:
             - containerPort: 9000
-              hostPort: 9000
-              protocol: TCP
-          resources: {}
+              # hostPort: 9000
+              # protocol: TCP
+          # resources: {}
       imagePullSecrets:
         - name: regcred
-      restartPolicy: Always
+      # restartPolicy: Always
 # status: {}

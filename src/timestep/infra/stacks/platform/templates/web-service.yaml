@@ -15,5 +15,5 @@ spec:
       targetPort: 5000
   selector:
     app: web
-status:
-  loadBalancer: {}
+# status:
+#   loadBalancer: {}
