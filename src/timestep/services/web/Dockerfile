@@ -1,6 +1,6 @@
 FROM registry.gitlab.com/timestep-ai/timestep:latest
 
-WORKDIR /home/ubuntu/src/timestep/platform/services/web
+WORKDIR /home/ubuntu/src/timestep/services/web
 
 COPY --chown=ubuntu:ubuntu . .
 

@@ -10,7 +10,7 @@ ENV QUASAR_CLI_VERSION=${QUASAR_CLI_VERSION:-2.2.3}
 
 RUN npm install -g @quasar/cli@${QUASAR_CLI_VERSION}
 
-WORKDIR /home/ubuntu/src/timestep/platform/services/frontend
+WORKDIR /home/ubuntu/src/timestep/services/frontend
 
 COPY --chown=ubuntu:ubuntu package.json package-lock.json ./
 RUN npm install

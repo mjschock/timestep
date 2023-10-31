@@ -62,6 +62,10 @@ class Settings(BaseSettings):
     )
     ingress_controller_email: str = Field(env="INGRESS_CONTROLLER_EMAIL")
     kubecontext: str = Field(env="KUBECONTEXT")
+    minio_root_user: str = Field(env="MINIO_ROOT_USER")
+    minio_root_password: SecretStr = Field(
+        default=f"{BASE_PATH}/secrets/minio_root_password", env="MINIO_ROOT_PASSWORD"
+    )
     multipass_instance_cpus: int = Field(
         default=MULTIPASS_INSTANCE_CPUS, env="MULTIPASS_INSTANCE_CPUS"
     )
@@ -77,7 +81,9 @@ class Settings(BaseSettings):
     namecheap_api_key: SecretStr = Field(default=None, env="NAMECHEAP_API_KEY")
     namecheap_api_user: str = Field(default=None, env="NAMECHEAP_API_USER")
     namecheap_user_name: str = Field(default=None, env="NAMECHEAP_USER_NAME")
-    postgresql_password: SecretStr = Field(env="POSTGRESQL_PASSWORD")
+    postgresql_password: SecretStr = Field(
+        default=f"{BASE_PATH}/secrets/postgresql_password", env="POSTGRESQL_PASSWORD"
+    )
     primary_domain_name: str = Field(env="PRIMARY_DOMAIN_NAME")
     ssh_private_key: SecretStr = Field(env="SSH_PRIVATE_KEY")
     ssh_private_key_path: str = Field(

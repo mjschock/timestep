@@ -99,6 +99,8 @@ cmd_button('poetry run cdktf destroy',
     text='poetry run cdktf destroy',
 )
 
+# watch_file('secrets/kubeconfig')
+
 allow_k8s_contexts(
     os.getenv('KUBECONTEXT'),
 )
@@ -108,19 +110,42 @@ watch_file('src/timestep/infra/stacks/platform')
 if os.path.exists('src/timestep/infra/stacks/platform'):
     # custom_build(
     #     'registry.gitlab.com/timestep-ai/timestep/caddy',
-    #     command='docker build -t $EXPECTED_REF src/timestep/platform/services/caddy',
-    #     deps=['src/timestep/platform/services/caddy'],
+    #     command='docker build -t $EXPECTED_REF src/timestep/services/caddy',
+    #     deps=['src/timestep/services/caddy'],
     #     # disable_push=True,
     #     live_update=[
-    #         sync('./src/timestep/platform/services/caddy/', '/etc/caddy/'),
+    #         sync('./src/timestep/services/caddy/', '/etc/caddy/'),
     #         run(
     #             'caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile',
-    #             trigger=['./src/timestep/platform/services/caddy/Caddyfile']
+    #             trigger=['./src/timestep/services/caddy/Caddyfile']
     #         )
     #     ],
     #     # skips_local_docker=True,
     #     # tag=str(local(command='echo $VERSION')).strip(),
     # )
+
+    docker_build(
+        'registry.gitlab.com/timestep-ai/timestep/frontend',
+        build_args={
+            'CDKTF_CLI_VERSION': os.getenv('CDKTF_CLI_VERSION'),
+            'NODENV_VERSION': os.getenv('NODENV_VERSION'),
+            'PRIMARY_DOMAIN_NAME': os.getenv('PRIMARY_DOMAIN_NAME'),
+        },
+        context='src/timestep/services/frontend',
+        dockerfile='src/timestep/services/frontend/Dockerfile',
+        entrypoint='quasar dev -m spa -p 9000',
+        only=['.'],
+        ignore=['./dist/', './src-capacitor/', './src-electron/'],
+        live_update=[
+            fall_back_on('./src/timestep/services/frontend/quasar.config.js'),
+            sync('./src/timestep/services/frontend/', '/home/ubuntu/src/timestep/services/frontend'),
+            run(
+                'npm install',
+                trigger=['./src/timestep/services/frontend/package.json', './src/timestep/services/frontend/package-lock.json']
+            )
+        ],
+        pull=True,
+    )
 
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/api',
@@ -152,27 +177,6 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
     #     # match_in_env_vars=True,
     #     # skips_local_docker=True,
     #     # tag=str(local(command='echo $VERSION')).strip(),
-    # )
-
-    # docker_build(
-    #     'registry.gitlab.com/timestep-ai/timestep/www',
-    #     build_args={
-    #      'NODENV_VERSION': os.getenv('NODENV_VERSION'),
-    #     },
-    #     context='src/timestep/services/www',
-    #     dockerfile='src/timestep/services/www/Dockerfile',
-    #     entrypoint='quasar dev -m spa -p 9000',
-    #     only=['.'],
-    #     ignore=['./dist/', './src-capacitor/', './src-electron/'],
-    #     live_update=[
-    #         fall_back_on('./src/timestep/services/www/quasar.config.js'),
-    #         sync('./src/timestep/services/www/', '/home/node/app'),
-    #         run(
-    #             'npm install',
-    #             trigger=['./src/timestep/services/www/package.json', './src/timestep/services/www/package-lock.json']
-    #         )
-    #     ],
-    #     pull=True,
     # )
 
     k8s_yaml(
