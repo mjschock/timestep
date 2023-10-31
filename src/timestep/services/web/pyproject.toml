@@ -23,7 +23,7 @@ description = "Timestep AI (web)"
 name = "web"
 packages = [{from = "src", include = "web"}]
 readme = "README.md"
-version = "3.0.26"
+version = "3.0.27"
 
 [tool.poetry.dependencies]
 langchain = "^0.0.326"
