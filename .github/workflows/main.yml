@@ -41,6 +41,7 @@ jobs:
         ./src/timestep/infra/cicd/build.sh
 
   build-cicd:
+    needs: build-base
     runs-on: ubuntu-latest
     # runs-on: self-hosted
     steps:
@@ -69,7 +70,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     # runs-on: self-hosted
-    needs: build
+    needs: [build-cicd, build]
     steps:
     - uses: actions/checkout@v3
     - name: Deploy
