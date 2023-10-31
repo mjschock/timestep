@@ -2,7 +2,11 @@ FROM registry.gitlab.com/timestep-ai/timestep:latest
 
 # WORKDIR /home/ubuntu/src/timestep/services/web
 
-COPY --chown=ubuntu:ubuntu . .
+COPY --chown=ubuntu:ubuntu ./pyproject.toml ./poetry.lock* ./
+RUN poetry install --no-root
+
+COPY --chown=ubuntu:ubuntu . ./
+RUN poetry install
 
 EXPOSE 5000
 
