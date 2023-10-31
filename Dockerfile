@@ -163,6 +163,8 @@ RUN python -m venv /home/ubuntu/.venv
 # RUN touch /home/ubuntu/timestep-ai-2.0.19.tgz
 # VOLUME [ "/home/ubuntu/timestep-ai-2.0.19.tgz" ]
 
+COPY --chown=ubuntu:ubuntu ./docker-entrypoint.sh /home/ubuntu/docker-entrypoint.sh
+
 VOLUME /home/ubuntu/secrets
 ENTRYPOINT ["/home/ubuntu/docker-entrypoint.sh"]
 CMD ["--help"]
