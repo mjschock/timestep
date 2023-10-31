@@ -8,6 +8,8 @@ WORKDIR /home/ubuntu/src/timestep/platform/services/frontend
 COPY --chown=ubuntu:ubuntu package.json package-lock.json ./
 RUN npm install
 
+ENV GRAPHQL_URI=http://localhost:8000/graphql
+
 COPY --chown=ubuntu:ubuntu . .
 RUN npm run build
 
