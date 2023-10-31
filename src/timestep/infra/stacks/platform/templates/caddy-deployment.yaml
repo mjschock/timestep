@@ -29,7 +29,7 @@ spec:
         #     - caddy
         #     - run
         #     - --config
-        #     - /home/ubuntu/src/timestep/platform/services/caddy/Caddyfile
+        #     - /home/ubuntu/src/timestep/services/caddy/Caddyfile
         #     - --adapter
         #     - caddyfile
         - args:
