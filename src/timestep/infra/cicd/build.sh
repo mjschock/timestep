@@ -31,6 +31,7 @@ elif [ ${IMAGE_NAME} = "cicd" ]; then
     --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
     --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
     --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
+    --file Dockerfile.cicd \
     --push \
     --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
     --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
