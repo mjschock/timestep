@@ -138,7 +138,8 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
         ignore=['./dist/', './src-capacitor/', './src-electron/'],
         live_update=[
             fall_back_on('./src/timestep/services/frontend/quasar.config.js'),
-            sync('./src/timestep/services/frontend/', '/home/ubuntu/src/timestep/services/frontend'),
+            # sync('./src/timestep/services/frontend/', '/home/ubuntu'),
+            sync('./src/timestep/services/frontend/src/', '/home/ubuntu/src/'),
             run(
                 'npm install',
                 trigger=['./src/timestep/services/frontend/package.json', './src/timestep/services/frontend/package-lock.json']
