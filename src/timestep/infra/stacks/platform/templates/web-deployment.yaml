@@ -28,7 +28,7 @@ spec:
             - poetry
             - run
             - uvicorn
-            - service.main:app
+            - src.main:app
             - --proxy-headers
             - --host
             - 0.0.0.0

@@ -1,7 +1,7 @@
 {
-  "name": "www",
+  "name": "frontend",
   "version": "0.0.1",
-  "description": "A Quasar Project",
+  "description": "Timestep AI (frontend)",
   "productName": "Timestep AI",
   "author": "Michael Schock <m@mjschock.com>",
   "private": true,

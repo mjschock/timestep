@@ -1,4 +1,4 @@
-# Timestep AI (www)
+# Timestep AI (frontend)
 
 A Quasar Project
 
