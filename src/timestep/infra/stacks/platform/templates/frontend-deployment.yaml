@@ -32,11 +32,11 @@ spec:
             - 0.0.0.0
             - -p
             - "9000"
-          env:
-          {{- with (first .Values.ingress.hosts) }}
-            - name: GRAPHQL_URI
-              value: https://www.{{ .host }}/graphql
-          {{- end }}
+          # env:
+          # {{- with (first .Values.ingress.hosts) }}
+          #   - name: GRAPHQL_URI
+          #     value: https://www.{{ .host }}/graphql
+          # {{- end }}
           image: registry.gitlab.com/timestep-ai/timestep/frontend:{{ .Chart.AppVersion }}
           imagePullPolicy: Always
           name: frontend

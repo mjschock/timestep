@@ -72,7 +72,8 @@ module.exports = configure(function (ctx) {
       // analyze: true,
       // passing down to UI code from the quasar.config file
       env: {
-        GRAPHQL_URI: process.env.GRAPHQL_URI,
+        // GRAPHQL_URI: process.env.GRAPHQL_URI,
+        PRIMARY_DOMAIN_NAME: process.env.PRIMARY_DOMAIN_NAME,
         // GRAPHQL_URI: ctx.dev
         //   ? 'https://www.timestep.local/graphql'
         //   : 'https://www.timestep.ai/graphql'

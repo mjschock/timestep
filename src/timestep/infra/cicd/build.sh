@@ -23,6 +23,7 @@ if [ -z ${IMAGE_NAME+x} ]; then
 else
   docker buildx build \
     --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \
+    --build-arg PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
     --cache-from ${CI_REGISTRY_IMAGE}:latest \
     --cache-from ${CI_REGISTRY_IMAGE}:${VERSION} \
     --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
