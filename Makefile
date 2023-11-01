@@ -15,13 +15,12 @@ imports:
 k3s-cluster:
 	k3sup install --context timestep.ai --ip 143.244.178.23 --local-path secrets/kubeconfig --merge --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
 
-kubeapps:
-	kubectl get --namespace default secret kubeapps-operator-token -o go-template='{{.data.token | base64decode}}' && echo "\n"
-	kubectl port-forward -n kubeapps svc/kubeapps 8080:80
+kubeapps-token:
+	kubectl get --namespace default secret kubeapps-operator-token -o go-template='{{.data.token | base64decode}}' && echo
 
-argo-cd:
-	(kubectl -n default get secret argocd-secret -o jsonpath="{.data.clearPassword}" | base64 -d) && echo "\n"
-	kubectl port-forward --namespace default svc/argo-cd-server 8080:80
+kubeapps-port-forward:
+	echo "Kubeapps URL: http://localhost:8484"
+	kubectl port-forward --namespace kubeapps service/kubeapps 8484:80
 
 pre-commit:
 	poetry run pre-commit run --all-files

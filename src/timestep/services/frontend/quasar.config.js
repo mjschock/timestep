@@ -73,10 +73,10 @@ module.exports = configure(function (ctx) {
       // passing down to UI code from the quasar.config file
       env: {
         // GRAPHQL_URI: process.env.GRAPHQL_URI,
-        PRIMARY_DOMAIN_NAME: process.env.PRIMARY_DOMAIN_NAME,
-        // GRAPHQL_URI: ctx.dev
-        //   ? 'https://www.timestep.local/graphql'
-        //   : 'https://www.timestep.ai/graphql'
+        // PRIMARY_DOMAIN_NAME: process.env.PRIMARY_DOMAIN_NAME,
+        GRAPHQL_URI: ctx.dev
+          ? 'https://www.timestep.local/graphql'
+          : 'https://www.timestep.ai/graphql'
       }
       // rawDefine: {}
       // ignorePublicFolder: true,
@@ -150,7 +150,7 @@ module.exports = configure(function (ctx) {
       // manualStoreHydration: true,
       // manualPostHydrationTrigger: true,
 
-      prodPort: 3000, // The default port that the production server should use
+      prodPort: 9000, // The default port that the production server should use
                       // (gets superseded if process.env.PORT is specified at runtime)
 
       middlewares: [
@@ -207,7 +207,7 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'www'
+        appId: 'frontend'
       }
     },
 
