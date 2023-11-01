@@ -169,8 +169,12 @@ class PlatformStack(TerraformStack):
                     },
                     "syncPolicy": {
                         "automated": {
-                            "prune": True,
-                            "selfHeal": True,
+                            "prune": False
+                            if ".local" in config.primary_domain_name
+                            else True,  # noqa: E501
+                            "selfHeal": False
+                            if ".local" in config.primary_domain_name
+                            else True,  # noqa: E501
                         },
                         "syncOptions": [
                             # "ApplyOutOfSyncOnly=true",
