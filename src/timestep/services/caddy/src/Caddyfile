@@ -1,20 +1,8 @@
-# replace :80 with your domain name to get automatic https via LetsEncrypt
-# :80 {
-# http://timestep.local:80 {
 http://{$PRIMARY_DOMAIN_NAME}:80 {
-	# @origin header Origin {http.request.header.Origin}
-	# header @origin Access-Control-Allow-Origin "https://www.timestep.local"
-	# header @origin Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
-	# redir http://www.timestep.local{uri}
 	redir http://www.{$PRIMARY_DOMAIN_NAME}{uri}
 }
 
-# http://www.timestep.local:80 {
 http://www.{$PRIMARY_DOMAIN_NAME}:80 {
-	# @origin header Origin {http.request.header.Origin}
-	# header @origin Access-Control-Allow-Origin "https://www.timestep.local"
-	# header @origin Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
-
 	encode gzip
 
 	handle /ap {
@@ -57,11 +45,27 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 	# 	reverse_proxy graphql-engine:8080
 	# }
 
+	# add_header X-Content-Type-Options "nosniff";
+
+	# header {
+	# 	# # disable FLoC tracking
+	# 	# Permissions-Policy interest-cohort=()
+
+	# 	# # enable HSTS
+	# 	# Strict-Transport-Security max-age=31536000;
+
+	# 	# # disable clients from sniffing the media type
+	# 	# X-Content-Type-Options nosniff
+
+	# 	# # clickjacking protection
+	# 	# X-Frame-Options DENY
+
+	# 	X-Frame-Options "SAMEORIGIN"
+	# 	X-XSS-Protection "1; mode=block"
+	# 	X-Content-Type-Options "nosniff"
+	# }
+
 	handle {
-		# root * /home/base/www/dist/spa
-		# root * /home/base/dist/spa
-		# try_files {path} /index.html
-		# file_server
 		reverse_proxy frontend:9000
 	}
 }

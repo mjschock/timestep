@@ -106,7 +106,8 @@ allow_k8s_contexts(
 )
 
 local_resource(
-    'Kubeapps',
+    'kubeapps',
+    labels=['deploy'],
     links=['http://localhost:8484'],
     serve_cmd='make kubeapps-port-forward',
 )
@@ -114,6 +115,49 @@ local_resource(
 watch_file('src/timestep/infra/stacks/platform')
 
 if os.path.exists('src/timestep/infra/stacks/platform'):
+    docker_build(
+        'registry.gitlab.com/timestep-ai/timestep/caddy',
+        context='src/timestep/services/caddy',
+        live_update=[
+            sync('src/timestep/services/caddy/src', '/home/ubuntu/app/src'),
+            run(
+                'caddy reload --config /home/ubuntu/app/src/Caddyfile --adapter caddyfile',
+                trigger=['src/timestep/services/caddy/src/Caddyfile']
+            )
+        ],
+    )
+
+    docker_build(
+        'registry.gitlab.com/timestep-ai/timestep/frontend',
+        context='src/timestep/services/frontend',
+        entrypoint=["/home/ubuntu/docker-entrypoint.sh", "quasar", "dev", "-m", "spa"],
+        # entrypoint=["/home/ubuntu/docker-entrypoint.sh", "npm", "run", "dev"],
+        # entrypoint="npm run dev",
+        # ignore=['dist', 'node_modules', 'src-capacitor', 'src-electron'],
+        live_update=[
+            fall_back_on('src/timestep/services/frontend/quasar.config.js'),
+            sync('src/timestep/services/frontend', '/home/ubuntu/app'),
+            run(
+                'npm install',
+                trigger=['src/timestep/services/frontend/package.json', 'src/timestep/services/frontend/package-lock.json']
+            )
+        ],
+        # only=['.'],
+        # extra_tag=str(local(command='echo $VERSION')).strip(),
+    )
+
+    docker_build(
+        'registry.gitlab.com/timestep-ai/timestep/web',
+        context='src/timestep/services/web',
+        # live_update=[
+        #     sync('src/timestep/services/caddy/src', '/home/ubuntu/app/src'),
+        #     run(
+        #         'caddy reload --config /home/ubuntu/app/src/Caddyfile --adapter caddyfile',
+        #         trigger=['src/timestep/services/caddy/src/Caddyfile']
+        #     )
+        # ],
+    )
+
     # custom_build(
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/caddy',
@@ -209,6 +253,16 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
     #     # match_in_env_vars=True,
     #     # skips_local_docker=True,
     #     # tag=str(local(command='echo $VERSION')).strip(),
+    # )
+
+    # k8s_kind(
+    #     'WorkflowTemplate',
+    #     api_version='argoproj.io/v1alpha1',
+    #     image_json_path=[
+    #         '{.spec.templates[?(@.container.image)].container.image}', 
+    #         '{.spec.templates[?(@.script.image)].script.image}'
+    #     ],
+    #     pod_readiness='ignore',
     # )
 
     k8s_yaml(
