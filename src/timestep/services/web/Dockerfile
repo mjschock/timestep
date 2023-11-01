@@ -1,6 +1,7 @@
 FROM registry.gitlab.com/timestep-ai/timestep:latest
 
-# WORKDIR /home/ubuntu/src/timestep/services/web
+RUN mkdir -p /home/ubuntu/app
+WORKDIR /home/ubuntu/app
 
 COPY --chown=ubuntu:ubuntu ./pyproject.toml ./poetry.lock* ./
 RUN poetry install --no-root

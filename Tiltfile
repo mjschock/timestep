@@ -105,48 +105,79 @@ allow_k8s_contexts(
     os.getenv('KUBECONTEXT'),
 )
 
+local_resource(
+    'Kubeapps',
+    links=['http://localhost:8484'],
+    serve_cmd='make kubeapps-port-forward',
+)
+
 watch_file('src/timestep/infra/stacks/platform')
 
 if os.path.exists('src/timestep/infra/stacks/platform'):
     # custom_build(
+    # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/caddy',
-    #     command='docker build -t $EXPECTED_REF src/timestep/services/caddy',
-    #     deps=['src/timestep/services/caddy'],
+    #     cache_from='registry.gitlab.com/timestep-ai/timestep/caddy:latest',
+    #     # command='docker build -t $EXPECTED_REF src/timestep/services/caddy',
+    #     context='src/timestep/services/caddy',
+    #     dockerfile='src/timestep/services/caddy/Dockerfile',
+    #     # deps=['src/timestep/services/caddy'],
     #     # disable_push=True,
     #     live_update=[
-    #         sync('./src/timestep/services/caddy/', '/etc/caddy/'),
+    #         sync('./src/timestep/services/caddy/src', '/home/ubuntu/src/'),
     #         run(
-    #             'caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile',
-    #             trigger=['./src/timestep/services/caddy/Caddyfile']
+    #             'caddy reload --config /home/ubuntu/src/Caddyfile --adapter caddyfile',
+    #             trigger=['./src/timestep/services/caddy/src/Caddyfile']
     #         )
     #     ],
     #     # skips_local_docker=True,
     #     # tag=str(local(command='echo $VERSION')).strip(),
     # )
 
-    docker_build(
-        'registry.gitlab.com/timestep-ai/timestep/frontend',
-        build_args={
-            'CDKTF_CLI_VERSION': os.getenv('CDKTF_CLI_VERSION'),
-            'NODENV_VERSION': os.getenv('NODENV_VERSION'),
-            'PRIMARY_DOMAIN_NAME': os.getenv('PRIMARY_DOMAIN_NAME'),
-        },
-        context='src/timestep/services/frontend',
-        dockerfile='src/timestep/services/frontend/Dockerfile',
-        entrypoint='quasar dev -m spa -p 9000',
-        only=['.'],
-        ignore=['./dist/', './src-capacitor/', './src-electron/'],
-        live_update=[
-            fall_back_on('./src/timestep/services/frontend/quasar.config.js'),
-            # sync('./src/timestep/services/frontend/', '/home/ubuntu'),
-            sync('./src/timestep/services/frontend/src/', '/home/ubuntu/src/'),
-            run(
-                'npm install',
-                trigger=['./src/timestep/services/frontend/package.json', './src/timestep/services/frontend/package-lock.json']
-            )
-        ],
-        pull=True,
-    )
+    # docker_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/frontend',
+    #     build_args={
+    #     #     # 'CDKTF_CLI_VERSION': os.getenv('CDKTF_CLI_VERSION'),
+    #     #     # 'NODENV_VERSION': os.getenv('NODENV_VERSION'),
+    #         'PRIMARY_DOMAIN_NAME': os.getenv('PRIMARY_DOMAIN_NAME'),
+    #     },
+    #     cache_from='registry.gitlab.com/timestep-ai/timestep/frontend:latest',
+    #     context='src/timestep/services/frontend',
+    #     dockerfile='src/timestep/services/frontend/Dockerfile',
+    #     # entrypoint='quasar dev -m spa -p 9000',
+    #     # entrypoint=["quasar", "dev", "-m", "spa", "-p", "9000"],
+    #     # entrypoint=["/home/ubuntu/docker-entrypoint.sh", "quasar", "dev", "-m", "spa", "-p", "9000"],
+    #     entrypoint=["/home/ubuntu/docker-entrypoint.sh", "quasar", "dev", "-m", "spa"],
+    #     # only=['.'],
+    #     # ignore=['./dist/', 'node_modules', './src-capacitor/', './src-electron/'],
+    #     # live_update=[
+    #     #     fall_back_on('./src/timestep/services/frontend/quasar.config.js'),
+    #     #     # sync('./src/timestep/services/frontend/', '/home/ubuntu'),
+    #     #     sync('./src/timestep/services/frontend/src/', '/home/ubuntu/src/'),
+    #     #     run(
+    #     #         'npm install',
+    #     #         trigger=['./src/timestep/services/frontend/package.json', './src/timestep/services/frontend/package-lock.json']
+    #     #     )
+    #     # ],
+    #     pull=True,
+    # )
+
+    # custom_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/frontend',
+    #     # command='docker build -t $EXPECTED_REF src/timestep/services/frontend',
+    #     command='docker buildx build --build-arg PRIMARY_DOMAIN_NAME=$PRIMARY_DOMAIN_NAME --cache-from registry.gitlab.com/timestep-ai/timestep/frontend:latest --push --tag $EXPECTED_REF src/timestep/services/frontend',
+    #     deps=['src/timestep/services/frontend'],
+    #     # disable_push=True,
+    #     # live_update=[
+    #     #     sync('./src/timestep/services/caddy/', '/etc/caddy/'),
+    #     #     run(
+    #     #         'caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile',
+    #     #         trigger=['./src/timestep/services/caddy/Caddyfile']
+    #     #     )
+    #     # ],
+    #     # skips_local_docker=True,
+    #     # tag=str(local(command='echo $VERSION')).strip(),
+    # )
 
     # docker_build(
     #     'registry.gitlab.com/timestep-ai/timestep/api',
