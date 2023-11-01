@@ -9,7 +9,7 @@ metadata:
   name: frontend
   namespace: default
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: frontend
