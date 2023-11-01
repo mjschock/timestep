@@ -9,7 +9,7 @@ metadata:
   name: caddy
   namespace: default
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: caddy
