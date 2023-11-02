@@ -26,8 +26,8 @@ readme = "README.md"
 version = "3.0.32"
 
 [tool.poetry.dependencies]
-langchain = "^0.0.326"
-marvin = "^1.5.4"
+langchain = "^0.0.327"
+marvin = "^1.5.5"
 prefect = "^2.14.2"
 prefect-aws = "^0.4.1"
 prefect-docker = "^0.4.0"
@@ -39,7 +39,7 @@ prefect-sqlalchemy = "^0.3.0"
 pydantic = "<2.0.0"
 python = ">=3.11,<3.12"
 python-dotenv = "^1.0.0"
-s3fs = "^2023.9.2"
+s3fs = "^2023.10.0"
 skypilot = {extras = ["kubernetes"], git = "https://github.com/mjschock/skypilot.git", rev = "master"}
 strawberry-graphql = {extras = ["fastapi"], version = "^0.209.6"}
 uvicorn = {extras = ["standard"], version = "^0.23.1"}
