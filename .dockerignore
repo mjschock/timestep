@@ -3,5 +3,6 @@
 docs
 Dockerfile
 Dockerfile.cicd
+src/timestep/workers/gazebosim/
 src/timestep/workers/ros2/
 Tiltfile
