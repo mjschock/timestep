@@ -27,5 +27,5 @@ actions-runner
 docs
 kubeconfig
 timestep-ai-*.tgz
-src/timestep/transducers
+src/timestep/workers/ros2/
 !dist/.gitkeep
