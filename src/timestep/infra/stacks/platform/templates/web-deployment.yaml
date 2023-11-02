@@ -24,7 +24,8 @@ spec:
         app: web
     spec:
       containers:
-        - args:
+        - command:
+            - /home/ubuntu/app/docker-entrypoint.sh
             - poetry
             - run
             - uvicorn

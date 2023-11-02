@@ -19,7 +19,7 @@
 
         <q-item>
           <q-item-section avatar>
-            <q-icon color="primary" name="person_add" />
+            <q-icon name="person_add" />
           </q-item-section>
           <q-item-section>Human</q-item-section>
           <!-- <q-item-section side>
@@ -29,7 +29,7 @@
 
         <q-item>
           <q-item-section avatar>
-            <q-icon color="primary" name="person" />
+            <q-icon name="person" />
           </q-item-section>
           <q-item-section>Player 0</q-item-section>
           <!-- <q-item-section side>
@@ -132,10 +132,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
-import { useRoute } from "vue-router";
-import { useQuery, useResult } from "@vue/apollo-composable";
-import gql from "graphql-tag";
+import { computed, defineComponent, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useQuery } from '@vue/apollo-composable';
+import gql from 'graphql-tag';
 
 export default defineComponent({
   name: 'EnvPage',
@@ -178,7 +178,12 @@ export default defineComponent({
     watch(
       () => route.params.envId,
       async (newId) => {
-        refetch({ envId: newId });
+        console.log('newId', newId)
+        if (newId) {
+          refetch({ envId: newId });
+        } else {
+          console.log('no newId')
+        }
       }
     );
 

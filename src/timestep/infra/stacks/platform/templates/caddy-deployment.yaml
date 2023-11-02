@@ -32,7 +32,8 @@ spec:
         #     - /home/ubuntu/src/timestep/services/caddy/Caddyfile
         #     - --adapter
         #     - caddyfile
-        - args:
+        - command:
+            - /home/ubuntu/docker-entrypoint.sh
             - caddy
             - run
             - --config

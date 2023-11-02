@@ -24,7 +24,8 @@ spec:
         app: frontend
     spec:
       containers:
-        - args:
+        - command:
+            - /home/ubuntu/docker-entrypoint.sh
             - quasar
             - serve
             - dist/spa
