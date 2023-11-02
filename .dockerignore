@@ -2,4 +2,6 @@
 .gitlab-ci.yml
 docs
 Dockerfile
+Dockerfile.cicd
+src/timestep/workers/ros2/
 Tiltfile
