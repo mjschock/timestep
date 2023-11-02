@@ -2,11 +2,12 @@ import typing
 
 import strawberry
 from fastapi import FastAPI
-from prefect import flow
-from prefect_shell import shell_run_command
+
+# from prefect import flow
+# from prefect_shell import shell_run_command
 from strawberry.fastapi import GraphQLRouter
 
-DEFAULT_DOCKER_IMAGE_REF = "registry.gitlab.com/timestep-ai/timestep/api:latest"
+# DEFAULT_DOCKER_IMAGE_REF = "registry.gitlab.com/timestep-ai/timestep/api:latest"
 
 # def custom_context_dependency() -> list[dict[str, str]]:
 #     return [
@@ -135,57 +136,63 @@ def get_ready():
     }
 
 
-@app.post("/ap/v1/agent/tasks")
-def create_agent_task():
-    return {"agent_task": "created"}
+# @app.get("/ready_2")
+# def get_ready_2():
+#     return {
+#         "ready": "ok",
+#     }
+
+# @app.post("/ap/v1/agent/tasks")
+# def create_agent_task():
+#     return {"agent_task": "created"}
 
 
-@app.post("/ap/v1/agent/tasks/{task_id}/steps")
-def create_agent_task_step(task_id: str):
-    return {"agent_task_step": "created"}
+# @app.post("/ap/v1/agent/tasks/{task_id}/steps")
+# def create_agent_task_step(task_id: str):
+#     return {"agent_task_step": "created"}
 
 
-@flow(log_prints=True)
-def flow_example_shell_run_command_flow():
-    print("=== flow_example_shell_run_command_flow (start) ===")
+# @flow(log_prints=True)
+# def flow_example_shell_run_command_flow():
+#     print("=== flow_example_shell_run_command_flow (start) ===")
 
-    output = shell_run_command(
-        command="poetry run python echo_app.py",
-        cwd="/home/ubuntu/src/timestep/services/api/app/app/flows",
-        return_all=True,  # noqa: E501
-    )
+#     output = shell_run_command(
+#         command="poetry run python echo_app.py",
+#         cwd="/home/ubuntu/src/timestep/services/api/app/app/flows",
+#         return_all=True,  # noqa: E501
+#     )
 
-    print("output: ", output)
+#     print("output: ", output)
 
-    print("=== flow_example_shell_run_command_flow (end) ===")
+#     print("=== flow_example_shell_run_command_flow (end) ===")
 
-    return output
-
-
-@flow
-def deploy_example_shell_run_command_flow(docker_image_ref: str):
-    return shell_run_command(
-        command="poetry run prefect deploy --all",
-        cwd="/app/app",
-        env={"DOCKER_IMAGE_REF": docker_image_ref},
-        return_all=True,
-    )
+#     return output
 
 
-@app.post("/flows")
-def create_flow(docker_image_ref: str = DEFAULT_DOCKER_IMAGE_REF):
-    resp = flow_example_shell_run_command_flow()
+# @flow
+# def deploy_example_shell_run_command_flow(docker_image_ref: str):
+#     return shell_run_command(
+#         command="poetry run prefect deploy --all",
+#         cwd="/app/app",
+#         env={"DOCKER_IMAGE_REF": docker_image_ref},
+#         return_all=True,
+#     )
 
-    print("resp: ", resp)
 
-    return resp
+# @app.post("/flows")
+# def create_flow(docker_image_ref: str = DEFAULT_DOCKER_IMAGE_REF):
+#     resp = flow_example_shell_run_command_flow()
 
-    #         region_name="us-east-1",
-    #     ),
+#     print("resp: ", resp)
 
-    # # minio_credentials_block.get_boto3_session().client(
+#     return resp
 
-    # registry: PrefectObjectRegistry = load_deployments_from_yaml(
+#         region_name="us-east-1",
+#     ),
+
+# # minio_credentials_block.get_boto3_session().client(
+
+# registry: PrefectObjectRegistry = load_deployments_from_yaml(
 
 
 # if __name__ == "__main__":

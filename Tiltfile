@@ -130,7 +130,13 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/frontend',
         context='src/timestep/services/frontend',
-        entrypoint=["/home/ubuntu/docker-entrypoint.sh", "quasar", "dev", "-m", "spa"],
+        entrypoint=[
+            "/home/ubuntu/docker-entrypoint.sh",
+            "quasar",
+            "dev",
+            "-m",
+            "spa"
+        ],
         # entrypoint=["/home/ubuntu/docker-entrypoint.sh", "npm", "run", "dev"],
         # entrypoint="npm run dev",
         # ignore=['dist', 'node_modules', 'src-capacitor', 'src-electron'],
@@ -149,13 +155,22 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/web',
         context='src/timestep/services/web',
-        # live_update=[
-        #     sync('src/timestep/services/caddy/src', '/home/ubuntu/app/src'),
-        #     run(
-        #         'caddy reload --config /home/ubuntu/app/src/Caddyfile --adapter caddyfile',
-        #         trigger=['src/timestep/services/caddy/src/Caddyfile']
-        #     )
-        # ],
+        entrypoint=[
+            "/home/ubuntu/app/docker-entrypoint.sh",
+            "poetry",
+            "run",
+            "uvicorn",
+            "src.main:app",
+            "--proxy-headers",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "5000",
+            "--reload"
+        ],
+        live_update=[
+            sync('src/timestep/services/web/src', '/home/ubuntu/app/src'),
+        ],
     )
 
     # custom_build(

@@ -105,11 +105,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 // import EssentialLink from 'components/EssentialLink.vue';
-import { useRouter } from "vue-router";
-import { useQuery, useResult } from "@vue/apollo-composable";
-import gql from "graphql-tag";
+import { useRouter } from 'vue-router';
+import { useQuery } from '@vue/apollo-composable';
+import gql from 'graphql-tag';
 
 // const linksList = [
   // {
@@ -191,7 +191,7 @@ export default defineComponent({
   
     const toolbarOnclick = () => {
       console.log('toolbarOnclick')
-      router.push(`/`)
+      router.push('/')
     }
   
     const envs = computed(() => result.value?.envs ?? [])
