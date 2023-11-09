@@ -37,6 +37,15 @@ elif [ ${IMAGE_NAME} = "cicd" ]; then
     --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
     .
 
+elif [ ${IMAGE_NAME} = 'postgresql-repmgr']; then
+  docker buildx build \
+    --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
+    --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
+    --file src/timestep/infra/stacks/kubernetes_config/postgresql_repmgr.Dockerfile \
+    --push \
+    --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
+    src/timestep/infra/stacks/kubernetes_config
+
 else
   docker buildx build \
     --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \

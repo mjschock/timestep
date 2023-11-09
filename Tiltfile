@@ -28,17 +28,17 @@ local_resource(
     ],
 )
 
-local_resource(
-    'poetry add cdktf',
-    cmd='poetry add cdktf@$CDKTF_LIB_VERSION',
-    env={
-        'PRIMARY_DOMAIN_NAME': os.getenv('CDKTF_LIB_VERSION'),
-    },
-    labels=['build'],
-    resource_deps=[
-        'poetry install',
-    ],
-)
+# local_resource(
+#     'poetry add cdktf',
+#     cmd='poetry add cdktf@$CDKTF_LIB_VERSION',
+#     env={
+#         'PRIMARY_DOMAIN_NAME': os.getenv('CDKTF_LIB_VERSION'),
+#     },
+#     labels=['build'],
+#     resource_deps=[
+#         'poetry install',
+#     ],
+# )
 
 local_resource(
     'poetry run cdktf get',
@@ -75,6 +75,8 @@ local_resource(
         'src/timestep/infra/stacks/platform',
     ],
     env={
+        # 'KUBERNETES_MASTER': 'https://kubernetes.default.svc',
+        # 'KUBECONFIG': 'secrets/kubeconfig',
         'PRIMARY_DOMAIN_NAME': os.getenv('PRIMARY_DOMAIN_NAME'),
     },
     ignore=[
@@ -82,8 +84,7 @@ local_resource(
         '*/**/__pycache__',
     ],
     labels=['deploy'],
-    resource_deps=[
-    ]
+    resource_deps=['poetry install'],
 )
 
 cmd_button('poetry run cdktf destroy',
@@ -280,8 +281,8 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
     #     pod_readiness='ignore',
     # )
 
-    k8s_yaml(
-        local(
-            'helm template --values src/timestep/infra/stacks/platform/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.yaml src/timestep/infra/stacks/platform'
-        )
-    )
+    # k8s_yaml(
+    #     local(
+    #         'helm template --values src/timestep/infra/stacks/platform/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.yaml src/timestep/infra/stacks/platform'
+    #     )
+    # )

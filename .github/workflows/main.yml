@@ -52,6 +52,18 @@ jobs:
       run: |
         ./src/timestep/infra/cicd/build.sh
 
+  build-postgresql-repmgr:
+    needs: build-base
+    runs-on: ubuntu-latest
+    # runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build postgresql-repmgr image
+      env:
+        IMAGE_NAME: postgresql-repmgr
+      run: |
+        ./src/timestep/infra/cicd/build.sh
+
   build:
     needs: build-base
     strategy:

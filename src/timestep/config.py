@@ -50,6 +50,14 @@ class Settings(BaseSettings):
     github_api_token: SecretStr = Field(
         default=f"{BASE_PATH}/secrets/github_api_token", env="GITHUB_API_TOKEN"
     )
+    hasura_graphql_admin_secret: SecretStr = Field(
+        default=f"{BASE_PATH}/secrets/hasura_graphql_admin_secret",
+        env="HASURA_GRAPHQL_ADMIN_SECRET",
+    )
+    hasura_graphql_jwt_secret_key: SecretStr = Field(
+        default=f"{BASE_PATH}/secrets/hasura_graphql_jwt_secret_key",
+        env="HASURA_GRAPHQL_JWT_SECRET_KEY",
+    )
     htpasswd: SecretStr = Field(env="HTPASSWD")
     ingress_controller_acme_ca: str = Field(
         default="https://acme-staging-v02.api.letsencrypt.org/directory",
@@ -81,9 +89,18 @@ class Settings(BaseSettings):
     namecheap_api_key: SecretStr = Field(default=None, env="NAMECHEAP_API_KEY")
     namecheap_api_user: str = Field(default=None, env="NAMECHEAP_API_USER")
     namecheap_user_name: str = Field(default=None, env="NAMECHEAP_USER_NAME")
+    pgpool_admin_password: SecretStr = Field(
+        default=f"{BASE_PATH}/secrets/pgpool_admin_password",
+        env="PGPOOL_ADMIN_PASSWORD",
+    )
     postgresql_password: SecretStr = Field(
         default=f"{BASE_PATH}/secrets/postgresql_password", env="POSTGRESQL_PASSWORD"
     )
+    postgresql_repmgr_password: SecretStr = Field(
+        default=f"{BASE_PATH}/secrets/postgresql_repmgr_password",
+        env="POSTGRESQL_REPMGR_PASSWORD",
+    )
+    prefect_server_version: str = Field(env="PREFECT_SERVER_VERSION")
     primary_domain_name: str = Field(env="PRIMARY_DOMAIN_NAME")
     ssh_private_key: SecretStr = Field(env="SSH_PRIVATE_KEY")
     ssh_private_key_path: str = Field(

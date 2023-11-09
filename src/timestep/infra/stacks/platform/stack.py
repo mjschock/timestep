@@ -3,6 +3,7 @@ from cdktf import (
     LocalBackend,
     TerraformStack,
 )
+from cdktf_cdktf_provider_helm.provider import HelmProvider, HelmProviderKubernetes
 from cdktf_cdktf_provider_kubernetes.cluster_role_binding_v1 import (
     ClusterRoleBindingV1,
     ClusterRoleBindingV1Metadata,
@@ -47,40 +48,116 @@ class PlatformStack(TerraformStack):
             scope=self,
         )
 
-        # self.release_resource = Release(
-        #     id_="timestep_ai_helm_release_resource",
+        self.helm_provider = HelmProvider(
+            id="helm_provider",
+            kubernetes=HelmProviderKubernetes(
+                config_context=self.kubernetes_provider.config_context,
+                config_path=self.kubernetes_provider.config_path,
+            ),
+            scope=self,
+        )
+
+        config.postgresql_password.get_secret_value()
+
+        # self.hasura_graphql_engine_helm_release_resource = Release(
+        #     id_="hasura_graphql_engine_helm_release_resource",
         #     atomic=True,
-        #     chart=f"{config.base_path}/dist/timestep-ai-{config.version}.tgz",
-        #     cleanup_on_fail=True,
+        #     chart="graphql-engine",
         #     create_namespace=True,
-        #     # force_update=True,
-        #     lint=True,
-        #     name="timestep-ai",
+        #     name="hasura",
         #     namespace="default",
-        #     provider=helm_provider,
-        #     # recreate_pods=True,
-        #     # replace=True,
+        #     repository="https://hasura.github.io/helm-charts",
+        #     provider=self.helm_provider,
         #     set=[
-        #         # ReleaseSet(
-        #         #     name="app.kubernetes.io\\/managed-by",
-        #         #     value="Helm",
-        #         # ),
         #         ReleaseSet(
-        #             name="ingress.hosts[0].host",
-        #             value=f"{config.primary_domain_name}",
+        #             name="postgres.enabled",
+        #             value="false",
         #         ),
-        #         # ReleaseSet(
-        #         #     name="meta.helm.sh\\/release-name",
-        #         #     value="timestep-ai",
-        #         # ),
-        #         # ReleaseSet(
-        #         #     name="meta.helm.sh\\/release-namespace",
-        #         #     value="default",
-        #         # ),
         #     ],
-        #     set_sensitive=[],
+        #     set_sensitive=[
+        #         ReleaseSetSensitive(
+        #             name="secret.adminSecret",
+        #             value=config.hasura_graphql_admin_secret.get_secret_value(),
+        #         ),
+        #         ReleaseSetSensitive(
+        #             name="secret.jwtSecret.key",
+        #             value=config.hasura_graphql_jwt_secret_key.get_secret_value(),
+        #         ),
+        #         ReleaseSetSensitive(
+        #             name="secret.jwtSecret.issuer",
+        #             value="hasura-auth",
+        #         ),
+        #         ReleaseSetSensitive(
+        #             name="secret.jwtSecret.type",
+        #             value="HS256",
+        #         ),
+        #         ReleaseSetSensitive(
+        #             name="secret.metadataDbUrl",
+        #             value=postgres_connection_string,
+        #         )
+        #     ],
         #     scope=self,
-        #     version=config.version,
+        # )
+
+        # self.nhost_hasura_auth_deployment_resource = DeploymentV1(
+        #     id_="nhost_hasura_auth_deployment_resource",
+        #     metadata=DeploymentV1Metadata(
+        #         labels={
+        #             "app": "nhost-hasura-auth",
+        #         },
+        #         name="nhost-hasura-auth",
+        #         namespace="default",
+        #     ),
+        #     spec=DeploymentV1Spec(
+        #         replicas="1",
+        #         selector=DeploymentV1SpecSelector(
+        #             match_labels={
+        #                 "app": "nhost-hasura-auth",
+        #             }
+        #         ),
+        #         template=DeploymentV1SpecTemplate(
+        #             metadata=DeploymentV1SpecTemplateMetadata(
+        #                 # name="nhost-hasura-auth",
+        #                 # namespace="default",
+        #                 labels={
+        #                     "app": "nhost-hasura-auth",
+        #                 },
+        #             ),
+        #             spec=DeploymentV1SpecTemplateSpec(
+        #                 container=[
+        #                     DeploymentV1SpecTemplateSpecContainer(
+        #                         env=[
+        #                             DeploymentV1SpecTemplateSpecContainerEnv(
+        #                                 name="HASURA_GRAPHQL_ADMIN_SECRET",
+        #                                 value=config.hasura_graphql_admin_secret.get_secret_value(),  # noqa: E501
+        #                             ),
+        #                             DeploymentV1SpecTemplateSpecContainerEnv(
+        #                                 name="HASURA_GRAPHQL_DATABASE_URL",
+        #                                 value=postgres_connection_string,
+        #                             ),
+        #                             DeploymentV1SpecTemplateSpecContainerEnv(
+        #                                 name="HASURA_GRAPHQL_GRAPHQL_URL",
+        #                                 value=f"http://hasura-graphql-engine.{self.hasura_graphql_engine_helm_release_resource.namespace}.svc.cluster.local:8080/v1/graphql"
+        #                             ),
+        #                             DeploymentV1SpecTemplateSpecContainerEnv(
+        #                                 name="HASURA_GRAPHQL_JWT_SECRET",
+        #                                 value=f"{{\"type\": \"HS256\", \"key\": \"{config.hasura_graphql_jwt_secret_key.get_secret_value()}\", \"issuer\": \"hasura-auth\"}}",  # noqa: E501
+        #                             ),
+        #                         ],
+        #                         image="nhost/hasura-auth:latest",
+        #                         name="nhost-hasura-auth",
+        #                         port=[
+        #                             DeploymentV1SpecTemplateSpecContainerPort(
+        #                                 container_port=4000,
+        #                                 name="http",
+        #                             )
+        #                         ]
+        #                     )
+        #                 ],
+        #             ),
+        #         ),
+        #     ),
+        #     scope=self,
         # )
 
         SecretV1(
@@ -183,8 +260,175 @@ class PlatformStack(TerraformStack):
                     },
                 },
             },
+            # provider=NullProvider(
+            #     alias="argocd",
+            #     id="argocd_provider",
+            #     scope=self,
+            # ),
+            # provisioners=[
+            #     LocalExecProvisioner(
+            #         command=f"argocd app sync platform",
+            #         type="local-exec",
+            #         when="create",
+            #     ),
+            #     LocalExecProvisioner(
+            #         command=f"argocd app delete platform",
+            #         type="local-exec",
+            #         when="destroy",
+            #     ),
+            # ],
             scope=self,
+            # wait=ManifestWait(
+            #     # condition=[
+            #     #     ManifestWaitCondition(
+            #     #         status="Healthy",
+            #     #         type="health",
+            #     #     ),
+            #     #     ManifestWaitCondition(
+            #     #         status="Synced",
+            #     #         type="sync",
+            #     #     ),
+            #     # ],
+            #     fields={
+            #         "status.phase
+            #     },
+            #     # rollout=True,
+            # ),
         )
+
+        # argocd_kubernetes_provider = ArgocdProviderKubernetes(
+        #     client_certificate=self.kubernetes_provider.client_certificate,
+        #     client_key=self.kubernetes_provider.client_key,
+        #     cluster_ca_certificate=self.kubernetes_provider.cluster_ca_certificate,
+        #     config_context=self.kubernetes_provider.config_context,
+        #     config_context_auth_info=self.kubernetes_provider.config_context_auth_info,  # noqa: E501
+        #     config_context_cluster=self.kubernetes_provider.config_context_cluster,
+        #     exec=self.kubernetes_provider.exec,
+        #     host=self.kubernetes_provider.host,
+        #     insecure=self.kubernetes_provider.insecure,
+        #     password=self.kubernetes_provider.password,
+        #     token=self.kubernetes_provider.token,
+        #     username=self.kubernetes_provider.username,
+        #     # exec=ArgocdProviderKubernetesExec(
+        #     #     api_version="client.authentication.k8s.io/v1beta1",
+        #     #     command="kubectl",
+        #     #     # command="kubectl -n default get secret argocd-secret -o jsonpath="{.data.clearPassword}" | base64 -d",  # noqa: E501
+        #     #     # command=[
+        #     #     #     "kubectl",
+        #     #     #     "-n",
+        #     #     #     "default",
+        #     #     #     "get",
+        #     #     #     "secret",
+        #     #     #     "argocd-secret",
+        #     #     #     "-o",
+        #     #     #     "jsonpath={.data.clearPassword}",
+        #     #     # ],
+        #     #     # command="kubectl -n default get secret argocd-secret -o jsonpath='{.data.clearPassword}' | base64 -d", # noqa: E501
+        #     #     env={
+        #     #         "name": "KUBECONFIG",
+        #     #         "value": self.kubernetes_provider.config_path,
+        #     #     },
+        #     # ),
+        # )
+
+        # argocd_provider = ArgocdProvider(
+        #     id="argocd_provider",
+        # #     # kubernetes=ArgocdProviderKubernetes(
+        # #     #     config_context=self.kubernetes_provider.config_context,
+        # #     #     # config_context="kind-argocd",
+        # #     #     config_context_cluster=self.kubernetes_provider.config_context_cluster,  # noqa: E501
+        # #     # #     # config_path=self.kubernetes_provider.config_path,
+        # #     # ),
+        #     # kubernetes=argocd_kubernetes_provider,
+        # #     scope=self,
+        # #     # use_local_config=True,
+        # #     # auth_token=config.argocd_api_token.get_secret_value(),
+        # #     # auth_token="kubeapps-operator-token",
+        # #     # auth_token="argocd-secret",
+        #     username="admin",
+        #     password="sqcYr7ymHm",
+        # #     # port_forward=True,
+        # #     port_forward_with_namespace="default",
+        # #     # server_addr="argo-cd-server.default.svc.cluster.local:443",
+        # #     # server_addr="argo-cd-server.default.svc.cluster.local:80",
+        # #     # core=True, # Error: failed to start local server
+        # #     # port_forward_with_namespace=True,
+        #     # core=True,
+        #     # context=self.kubernetes_provider.config_context,
+        #     # config_path=self.kubernetes_provider.config_path,
+        #     # kubernetes=ArgocdProviderKubernetes(
+        #     #     # config_context=self.kubernetes_provider.config_context,
+        #     #     # config_context_cluster=self.kubernetes_provider.config_context_cluster,  # noqa: E501
+        #     #     config_context=self.kubernetes_provider.config_context,
+        #     #     # config_path=self.kubernetes_provider.config_path,
+        #     # ),
+        #     port_forward=True,
+        #     # use_local_config=True,
+        #     scope=self,
+        # )
+
+        # Application(
+        #     # id_="timestep_ai_argocd_application",
+        #     id_="timestep_ai_manifest",
+        #     metadata=ApplicationMetadata(
+        #         name="platform",
+        #         namespace="default",
+        #     ),
+        #     provider=argocd_provider,
+        #     # provider=NullProvider(
+        #     #     alias="argocd",
+        #     #     id="argocd_provider",
+        #     #     scope=self,
+        #     # ),
+        #     spec=ApplicationSpec(
+        #         destination=ApplicationSpecDestination(
+        #             namespace="default",
+        #             server="https://kubernetes.default.svc",
+        #         ),
+        #         project="default",
+        #         source=[
+        #             ApplicationSpecSource(
+        #                 # chart= # TODO: add this?
+        #                 helm=ApplicationSpecSourceHelm(
+        #                     # pass_credentials=True, # TODO: ?
+        #                     value_files=[
+        #                         # "values.yaml",
+        #                         # "values-production.yaml",
+        #                         f"values.{config.primary_domain_name}.yaml",
+        #                     ],
+        #                     # values_object={
+        #                     #     "ingress": {
+        #                     #         "hosts": [
+        #                     #             {
+        #                     #                 "host": f"{config.primary_domain_name}",
+        #                     #             }
+        #                     #         ]
+        #                     #     },
+        #                     # },
+        #                 ),
+        #                 path="src/timestep/infra/stacks/platform",
+        #                 repo_url="https://github.com/mjschock/timestep.git",
+        #                 target_revision="HEAD",
+        #             ),
+        #         ],
+        #         sync_policy=ApplicationSpecSyncPolicy(
+        #             automated=ApplicationSpecSyncPolicyAutomated(
+        #                 prune=False
+        #                 if ".local" in config.primary_domain_name
+        #                 else True,  # noqa: E501
+        #                 self_heal=False
+        #                 if ".local" in config.primary_domain_name
+        #                 else True,  # noqa: E501
+        #             ),
+        #             sync_options=[
+        #                 # "ApplyOutOfSyncOnly=true",
+        #                 "CreateNamespace=true",
+        #             ],
+        #         ),
+        #     ),
+        #     scope=self,
+        #     # wait=False, # TODO: added
+        # )
 
         default_sa_role = RoleV1(
             id_="default_sa_role",

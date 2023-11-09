@@ -22,6 +22,9 @@ kubeapps-port-forward:
 	echo "Kubeapps URL: http://localhost:8484"
 	kubectl port-forward --namespace kubeapps service/kubeapps 8484:80
 
+kubernetes-dashboard-token:
+	kubectl get --namespace kubernetes-dashboard secret $(shell kubectl get --namespace kubernetes-dashboard secret | grep admin-user | awk '{print $$1}') -o go-template='{{.data.token | base64decode}}' && echo
+
 pre-commit:
 	poetry run pre-commit run --all-files
 

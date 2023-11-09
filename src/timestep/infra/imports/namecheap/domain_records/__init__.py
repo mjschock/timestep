@@ -773,13 +773,13 @@ class DomainRecordsRecordOutputReference(
     @jsii.member(jsii_name="internalValue")
     def internal_value(
         self,
-    ) -> typing.Optional[typing.Union[DomainRecordsRecord, _cdktf_9a9027ec.IResolvable]]:
-        return typing.cast(typing.Optional[typing.Union[DomainRecordsRecord, _cdktf_9a9027ec.IResolvable]], jsii.get(self, "internalValue"))
+    ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DomainRecordsRecord]]:
+        return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DomainRecordsRecord]], jsii.get(self, "internalValue"))
 
     @internal_value.setter
     def internal_value(
         self,
-        value: typing.Optional[typing.Union[DomainRecordsRecord, _cdktf_9a9027ec.IResolvable]],
+        value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DomainRecordsRecord]],
     ) -> None:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__04e3014aa80e6a75a923d177e3d41c02ed15a43aacc8dba064b6f4387ec1fa52)
@@ -962,7 +962,7 @@ def _typecheckingstub__8d04ca74190bfb976113df29b06ad404e6f5ef553a3d9272c13310f9c
     pass
 
 def _typecheckingstub__04e3014aa80e6a75a923d177e3d41c02ed15a43aacc8dba064b6f4387ec1fa52(
-    value: typing.Optional[typing.Union[DomainRecordsRecord, _cdktf_9a9027ec.IResolvable]],
+    value: typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, DomainRecordsRecord]],
 ) -> None:
     """Type checking stubs"""
     pass
