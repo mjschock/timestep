@@ -37,7 +37,7 @@ elif [ ${IMAGE_NAME} = "cicd" ]; then
     --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
     .
 
-elif [ ${IMAGE_NAME} = 'postgresql-repmgr']; then
+elif [ ${IMAGE_NAME} = "postgresql-repmgr" ]; then
   docker buildx build \
     --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
     --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
