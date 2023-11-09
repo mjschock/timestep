@@ -1,5 +1,19 @@
 from cdktf_cdktf_provider_helm.provider import HelmProvider
 from cdktf_cdktf_provider_helm.release import Release, ReleaseSet
+from cdktf_cdktf_provider_kubernetes.cluster_role_binding_v1 import (
+    ClusterRoleBindingV1,
+    ClusterRoleBindingV1Metadata,
+    ClusterRoleBindingV1RoleRef,
+    ClusterRoleBindingV1Subject,
+)
+from cdktf_cdktf_provider_kubernetes.secret_v1 import (
+    SecretV1,
+    SecretV1Metadata,
+)
+from cdktf_cdktf_provider_kubernetes.service_account_v1 import (
+    ServiceAccountV1,
+    ServiceAccountV1Metadata,
+)
 from constructs import Construct
 
 from timestep.config import Settings
@@ -38,6 +52,66 @@ class KubernetesDashboardConstruct(Construct):
                     value="false",
                 ),
             ],
+            scope=self,
+        )
+
+        # default_sa_cluster_role = ClusterRoleV1(
+        #     id_="default_sa_cluster_role",
+        #     metadata=ClusterRoleV1Metadata(
+        #         generate_name="default-sa-cluster-role-",
+        #     ),
+        #     rule=[
+        #         ClusterRoleV1Rule(
+        #             api_groups=[""],
+        #             resources=["nodes"],
+        #             verbs=["list"],
+        #         )
+        #     ],
+        #     scope=self,
+        # )
+
+        ServiceAccountV1(
+            id_="admin_user_sa",
+            metadata=ServiceAccountV1Metadata(
+                name="admin-user",
+                namespace="kubernetes-dashboard",
+            ),
+            scope=self,
+        )
+
+        ClusterRoleBindingV1(
+            id_="kubernetes_dashboard_cluster_role_binding",
+            metadata=ClusterRoleBindingV1Metadata(
+                # name="kubernetes-dashboard",
+                name="admin-user",
+                # namespace="kubernetes-dashboard",
+            ),
+            role_ref=ClusterRoleBindingV1RoleRef(
+                kind="ClusterRole",
+                name="cluster-admin",
+                api_group="rbac.authorization.k8s.io",
+            ),
+            subject=[
+                ClusterRoleBindingV1Subject(
+                    kind="ServiceAccount",
+                    name="admin-user",
+                    namespace="kubernetes-dashboard",
+                    # api_group="",
+                )
+            ],
+            scope=self,
+        )
+
+        SecretV1(
+            id_="kubernetes_dashboard_secret",
+            metadata=SecretV1Metadata(
+                annotations={
+                    "kubernetes.io/service-account.name": "admin-user",
+                },
+                name="admin-user",
+                namespace="kubernetes-dashboard",
+            ),
+            type="kubernetes.io/service-account-token",
             scope=self,
         )
 

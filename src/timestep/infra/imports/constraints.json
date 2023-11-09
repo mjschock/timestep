@@ -1,6 +1,7 @@
 {
   "cdktf": "0.17.3",
   "providers": {
+    "argocd": "~> 6.0",
     "multipass": "~> 1.4",
     "namecheap": "~> 2.1"
   }

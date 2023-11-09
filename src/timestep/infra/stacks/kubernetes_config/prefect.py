@@ -16,6 +16,7 @@ from cdktf_cdktf_provider_kubernetes.role_v1 import (
     RoleV1Metadata,
     RoleV1Rule,
 )
+from cdktf_cdktf_provider_kubernetes.secret_v1 import SecretV1, SecretV1Metadata
 from constructs import Construct
 
 from timestep.config import Settings
@@ -31,6 +32,29 @@ class PrefectConstruct(Construct):
     ) -> None:
         super().__init__(scope, id)
 
+        postgres_database = "postgres"
+        postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
+        postgres_password = config.postgresql_password.get_secret_value()
+        postgres_username = "postgres"
+        postgres_connection_string = f"postgresql+asyncpg://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}"
+
+        self.prefect_server_postgresql_connection_secret_resource = SecretV1(
+            id_="prefect_server_postgresql_connection_secret_resource",
+            data={
+                "connection-string": postgres_connection_string,
+                "password": postgres_password,
+            },
+            metadata=SecretV1Metadata(
+                name="prefect-server-postgresql-connection",
+                namespace="default",
+                # annotations={
+                #     "kubernetes.io/service-account.name": "kubeapps-operator",
+                # },
+            ),
+            scope=self,
+            # type="kubernetes.io/service-account-token",
+        )
+
         self.prefect_server_helm_release_resource = Release(
             id_="prefect_server_helm_release_resource",
             atomic=True,
@@ -43,30 +67,43 @@ class PrefectConstruct(Construct):
             provider=helm_provider,
             set=[
                 ReleaseSet(
+                    name="postgresql.auth.database",
+                    value=postgres_database,
+                ),
+                ReleaseSet(
+                    name="postgresql.auth.username",
+                    value=postgres_username,
+                ),
+                ReleaseSet(
                     name="postgresql.enabled",
                     value="true",
                 ),
                 ReleaseSet(
                     name="postgresql.useSubChart",
-                    value="true",
+                    value="false",
                 ),
                 ReleaseSet(
                     name="server.image.prefectTag",
-                    value="2.13.7-python3.11",
+                    # value="2.13.7-python3.11",
+                    value=f"{config.prefect_server_version}-python3.11",
                 ),
                 ReleaseSet(
                     name="server.image.repository",
                     value="prefecthq/prefect",
                 ),
-                ReleaseSet(
-                    name="server.publicApiUrl",
-                    value=f"https://prefect-server.{config.primary_domain_name}/api",
-                ),
+                # ReleaseSet(
+                #     name="server.publicApiUrl",
+                #     value=f"https://prefect-server.{config.primary_domain_name}/api",
+                # ),
             ],
             set_sensitive=[
                 ReleaseSetSensitive(
-                    name="postgresql.auth.password",
-                    value=config.postgresql_password.get_secret_value(),
+                    # name="postgresql.auth.password",
+                    name="postgresql.auth.existingSecret",
+                    # value=config.postgresql_password.get_secret_value(),
+                    # value="postgresql-postgresql-ha-postgresql",
+                    value=self.prefect_server_postgresql_connection_secret_resource.metadata.name,
+                    # value=postgres_connection_string,
                 )
             ],
             scope=self,

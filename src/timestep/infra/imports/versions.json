@@ -1,4 +1,5 @@
 {
   "registry.terraform.io/larstobi/multipass": "1.4.2",
-  "registry.terraform.io/namecheap/namecheap": "2.1.0"
+  "registry.terraform.io/namecheap/namecheap": "2.1.0",
+  "registry.terraform.io/oboukili/argocd": "6.0.3"
 }
