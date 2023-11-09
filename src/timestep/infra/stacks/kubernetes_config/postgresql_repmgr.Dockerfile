@@ -5,6 +5,7 @@ USER root
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     curl \
+    lsb-core \
     postgresql-common \
     && rm -rf /var/lib/apt/lists/*
 
