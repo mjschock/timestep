@@ -49,7 +49,8 @@ class PostgreSQLConstruct(Construct):
                 # # # Load PostgreSQL environment variables
                 # # . /opt/bitnami/scripts/postgresql-env.sh
                 # """,
-                "initdb.sql": """-- schemas
+                "initdb.sql": """
+-- schemas
 CREATE SCHEMA IF NOT EXISTS auth;
 CREATE SCHEMA IF NOT EXISTS storage;
 
@@ -61,7 +62,7 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
 CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA public;
 CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
--- CREATE EXTENSION vector;
+CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public;
 
 -- functions
 CREATE OR REPLACE FUNCTION public.set_current_timestamp_updated_at() RETURNS trigger LANGUAGE plpgsql AS $$

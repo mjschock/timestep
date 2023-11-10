@@ -3,24 +3,24 @@ FROM bitnami/postgresql-repmgr:16.0.0
 USER root
 
 RUN apt-get update && apt-get install -y \
-    apt-transport-https \
+    # apt-transport-https \
     build-essential \
-    ca-certificates \
-    curl \
+    # ca-certificates \
+    # curl \
     git \
-    gnupg \
-    lsb-release \
-    postgresql-common \
-    wget \
+    # gnupg \
+    # lsb-release \
+    # postgresql-common \
+    # wget \
     && rm -rf /var/lib/apt/lists/*
 
-RUN install -d /usr/share/postgresql-common/pgdg
-RUN curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
-RUN sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+# RUN install -d /usr/share/postgresql-common/pgdg
+# RUN curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
+# RUN sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 
-RUN apt-get update && apt-get install -y \
-    postgresql-16-pgvector \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y \
+#     postgresql-16-pgvector \
+#     && rm -rf /var/lib/apt/lists/*
 
 RUN cd /tmp && \
     git clone --branch v0.5.1 https://github.com/pgvector/pgvector.git && \
