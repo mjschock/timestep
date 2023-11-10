@@ -5,7 +5,9 @@ USER root
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     curl \
+    git \
     lsb-release \
+    make \
     postgresql-common \
     && rm -rf /var/lib/apt/lists/*
 

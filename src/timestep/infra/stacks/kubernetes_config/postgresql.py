@@ -3,6 +3,7 @@ from cdktf_cdktf_provider_helm.provider import HelmProvider  # noqa: I001
 from cdktf_cdktf_provider_helm.release import (
     Release,
     ReleaseSet,
+    ReleaseSetListStruct,
     ReleaseSetSensitive,
 )  # noqa: F401, E501
 from cdktf_cdktf_provider_kubernetes.config_map_v1 import (
@@ -54,10 +55,12 @@ CREATE SCHEMA IF NOT EXISTS storage;
 
 -- extensions
 CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
+CREATE EXTENSION IF NOT EXISTS cube WITH SCHEMA public;
 -- https://github.com/hasura/graphql-engine/issues/3657
 CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
 CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA public;
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
 -- CREATE EXTENSION vector;
 
 -- functions
@@ -85,26 +88,24 @@ $$;
             provider=helm_provider,
             set=[
                 ReleaseSet(
+                    name="postgresql.image.registry",
+                    value="registry.gitlab.com/timestep-ai/timestep",
+                ),
+                ReleaseSet(
+                    name="postgresql.image.repository", value="postgresql-repmgr"
+                ),
+                ReleaseSet(name="postgresql.image.tag", value="latest"),
+                ReleaseSet(
                     name="postgresql.initdbScriptsCM",
                     value=postgresql_initdb_scripts_config_map.metadata.name,
                 ),
-                # ReleaseSet(
-                #     name="postgresql.sharedPreloadLibraries",
-                #     type="string",
-                #     value="pgaudit",
-                # ),
-                # ReleaseSet(
-                #     name="postgresql.sharedPreloadLibraries",
-                #     type="string",
-                #     value="repmgr",
-                # )
             ],
-            # set_list=[
-            #     ReleaseSetListStruct(
-            #         name="postgresql.sharedPreloadLibraries",
-            #         value=["pgaudit", "repmgr"],
-            #     ),
-            # ],
+            set_list=[
+                ReleaseSetListStruct(
+                    name="postgresql.image.pullSecrets",
+                    value=["regcred"],
+                ),
+            ],
             set_sensitive=[
                 ReleaseSetSensitive(
                     name="pgpool.adminPassword",
@@ -119,9 +120,17 @@ $$;
                     value=config.postgresql_repmgr_password.get_secret_value(),
                 ),
             ],
-            #             values=[
-            #                 """postgresql:
-            #   sharedPreloadLibraries: "pgaudit, repmgr"
-            # """],
+            values=[
+                """postgresql:
+  extraVolumes:
+    - name: dshm
+      emptyDir:
+        medium: Memory
+        sizeLimit: 512Mi
+  extraVolumeMounts:
+    - name: dshm
+      mountPath: /dev/shm
+            """
+            ],
             scope=self,
         )

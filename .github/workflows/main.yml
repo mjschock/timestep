@@ -82,7 +82,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     # runs-on: self-hosted
-    needs: [build-cicd, build]
+    needs: [build-cicd, build-postgresql-repmgr, build]
     steps:
     - uses: actions/checkout@v3
     - name: Deploy
