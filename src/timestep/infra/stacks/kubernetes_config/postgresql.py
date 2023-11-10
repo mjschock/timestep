@@ -87,6 +87,7 @@ $$;
             repository="https://charts.bitnami.com/bitnami",
             provider=helm_provider,
             set=[
+                ReleaseSet(name="postgresql.image.pullPolicy", value="Always"),
                 ReleaseSet(
                     name="postgresql.image.registry",
                     value="registry.gitlab.com/timestep-ai/timestep",
