@@ -4,12 +4,12 @@ USER root
 
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
+    build-essential \
     ca-certificates \
     curl \
     git \
     gnupg \
     lsb-release \
-    make \
     postgresql-common \
     wget \
     && rm -rf /var/lib/apt/lists/*
