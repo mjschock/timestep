@@ -22,13 +22,13 @@ RUN apt-get update && apt-get install -y \
     postgresql-16-pgvector \
     && rm -rf /var/lib/apt/lists/*
 
-RUN sh -c 'echo "deb https://packagecloud.io/timescale/timescaledb/debian/ $(lsb_release -c -s) main" > /etc/apt/sources.list.d/timescaledb.list'
-RUN wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | apt-key add -
+# RUN sh -c 'echo "deb https://packagecloud.io/timescale/timescaledb/debian/ $(lsb_release -c -s) main" > /etc/apt/sources.list.d/timescaledb.list'
+# RUN wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | apt-key add -
 
-RUN apt-get update && apt-get install -y \
-    timescaledb-2-postgresql-16 \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y \
+#     timescaledb-2-postgresql-16 \
+#     && rm -rf /var/lib/apt/lists/*
 
-RUN timescaledb-tune --quiet --yes
+# RUN timescaledb-tune --quiet --yes
 
 USER 1001
