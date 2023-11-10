@@ -3,12 +3,15 @@ FROM bitnami/postgresql-repmgr:16.0.0
 USER root
 
 RUN apt-get update && apt-get install -y \
+    apt-transport-https \
     ca-certificates \
     curl \
     git \
+    gnupg \
     lsb-release \
     make \
     postgresql-common \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 RUN install -d /usr/share/postgresql-common/pgdg
@@ -18,5 +21,14 @@ RUN sh -c 'echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql
 RUN apt-get update && apt-get install -y \
     postgresql-16-pgvector \
     && rm -rf /var/lib/apt/lists/*
+
+RUN sh -c 'echo "deb https://packagecloud.io/timescale/timescaledb/debian/ $(lsb_release -c -s) main" > /etc/apt/sources.list.d/timescaledb.list'
+RUN wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | apt-key add -
+
+RUN apt-get update && apt-get install -y \
+    timescaledb-2-postgresql-16 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN timescaledb-tune --quiet --yes
 
 USER 1001
