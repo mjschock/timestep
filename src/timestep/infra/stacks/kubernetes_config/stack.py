@@ -22,6 +22,7 @@ from timestep.infra.stacks.kubernetes_config.kubernetes_dashboard import (
 )
 from timestep.infra.stacks.kubernetes_config.minio import MinioConstruct
 from timestep.infra.stacks.kubernetes_config.postgresql import PostgreSQLConstruct
+from timestep.infra.stacks.kubernetes_config.prefect import PrefectConstruct
 
 # from timestep.infra.stacks.kubernetes_config.prefect import PrefectConstruct
 from timestep.infra.stacks.kubernetes_config.sealed_secrets import (  # noqa: E501
@@ -100,12 +101,12 @@ class KubernetesConfigStack(TerraformStack):
             scope=self,
         )
 
-        # self.prefect_construct: PrefectConstruct = PrefectConstruct(
-        #     config=config,
-        #     id="prefect_construct",
-        #     helm_provider=self.helm_provider,
-        #     scope=self,
-        # )
+        self.prefect_construct: PrefectConstruct = PrefectConstruct(
+            config=config,
+            id="prefect_construct",
+            helm_provider=self.helm_provider,
+            scope=self,
+        )
 
         # self.registry_construct: RegistryConstruct = RegistryConstruct(
         #     config=config,
