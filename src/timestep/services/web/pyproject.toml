@@ -26,9 +26,10 @@ readme = "README.md"
 version = "3.0.37"
 
 [tool.poetry.dependencies]
-langchain = "^0.0.327"
+agent-protocol = "^1.0.1"
+langchain = "^0.0.334"
 marvin = "^1.5.5"
-prefect = "^2.14.2"
+prefect = "2.14.3"
 prefect-aws = "^0.4.1"
 prefect-docker = "^0.4.0"
 prefect-jupyter = "^0.3.0"

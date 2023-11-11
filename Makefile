@@ -15,15 +15,18 @@ imports:
 k3s-cluster:
 	k3sup install --context timestep.ai --ip 143.244.178.23 --local-path secrets/kubeconfig --merge --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
 
-kubeapps-token:
-	kubectl get --namespace default secret kubeapps-operator-token -o go-template='{{.data.token | base64decode}}' && echo
-
 kubeapps-port-forward:
 	echo "Kubeapps URL: http://localhost:8484"
 	kubectl port-forward --namespace kubeapps service/kubeapps 8484:80
 
+kubeapps-token:
+	kubectl get --namespace default secret kubeapps-operator-token -o go-template='{{.data.token | base64decode}}' && echo
+
+kubernetes-dashboard-port-forward:
+	src/timestep/infra/stacks/kubernetes_config/kubernetes_dashboard/kubernetes_dashboard_port_forward.sh
+
 kubernetes-dashboard-token:
-	kubectl get --namespace kubernetes-dashboard secret $(shell kubectl get --namespace kubernetes-dashboard secret | grep admin-user | awk '{print $$1}') -o go-template='{{.data.token | base64decode}}' && echo
+	src/timestep/infra/stacks/kubernetes_config/kubernetes_dashboard/kubernetes_dashboard_token.sh
 
 pre-commit:
 	poetry run pre-commit run --all-files

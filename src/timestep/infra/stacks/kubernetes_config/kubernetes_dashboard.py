@@ -70,8 +70,9 @@ class KubernetesDashboardConstruct(Construct):
         #     scope=self,
         # )
 
-        ServiceAccountV1(
-            id_="admin_user_sa",
+        self.kubernetes_dashboard_admin_user_service_account = ServiceAccountV1(
+            depends_on=[self.kubernetes_dashboard_helm_release_resource],
+            id_="kubernetes_dashboard_admin_user_service_account",
             metadata=ServiceAccountV1Metadata(
                 name="admin-user",
                 namespace="kubernetes-dashboard",
@@ -79,7 +80,8 @@ class KubernetesDashboardConstruct(Construct):
             scope=self,
         )
 
-        ClusterRoleBindingV1(
+        self.kubernetes_dashboard_cluster_role_binding = ClusterRoleBindingV1(
+            depends_on=[self.kubernetes_dashboard_admin_user_service_account],
             id_="kubernetes_dashboard_cluster_role_binding",
             metadata=ClusterRoleBindingV1Metadata(
                 # name="kubernetes-dashboard",
@@ -94,22 +96,25 @@ class KubernetesDashboardConstruct(Construct):
             subject=[
                 ClusterRoleBindingV1Subject(
                     kind="ServiceAccount",
-                    name="admin-user",
-                    namespace="kubernetes-dashboard",
+                    # name="admin-user",
+                    name=self.kubernetes_dashboard_admin_user_service_account.metadata.name,
+                    # namespace="kubernetes-dashboard",
+                    namespace=self.kubernetes_dashboard_admin_user_service_account.metadata.namespace,
                     # api_group="",
                 )
             ],
             scope=self,
         )
 
-        SecretV1(
-            id_="kubernetes_dashboard_secret",
+        self.kubernetes_dashboard_admin_user_secret = SecretV1(
+            depends_on=[self.kubernetes_dashboard_admin_user_service_account],
+            id_="kubernetes_dashboard_admin_user_secret",
             metadata=SecretV1Metadata(
                 annotations={
                     "kubernetes.io/service-account.name": "admin-user",
                 },
-                name="admin-user",
-                namespace="kubernetes-dashboard",
+                name=self.kubernetes_dashboard_admin_user_service_account.metadata.name,
+                namespace=self.kubernetes_dashboard_admin_user_service_account.metadata.namespace,
             ),
             type="kubernetes.io/service-account-token",
             scope=self,
