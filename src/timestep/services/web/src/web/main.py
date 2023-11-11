@@ -7,6 +7,8 @@ from fastapi import FastAPI
 # from prefect_shell import shell_run_command
 from strawberry.fastapi import GraphQLRouter
 
+from .api import agent
+
 # DEFAULT_DOCKER_IMAGE_REF = "registry.gitlab.com/timestep-ai/timestep/api:latest"
 
 # def custom_context_dependency() -> list[dict[str, str]]:
@@ -124,6 +126,7 @@ graphql_app = GraphQLRouter(
 
 app = FastAPI()
 app.include_router(graphql_app, prefix="/graphql")
+app.include_router(agent.router)
 
 # @app.get("/")
 # def read_root():
@@ -136,11 +139,10 @@ def get_ready():
     }
 
 
-# @app.get("/ready_2")
-# def get_ready_2():
-#     return {
-#         "ready": "ok",
-#     }
+# @app.get("/ap/v1/agent/tasks")
+# def get_agent_tasks():
+#     # return tasks
+#     return []
 
 # @app.post("/ap/v1/agent/tasks")
 # def create_agent_task():

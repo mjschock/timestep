@@ -161,7 +161,7 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
             "poetry",
             "run",
             "uvicorn",
-            "src.main:app",
+            "src.web.main:app",
             "--proxy-headers",
             "--host",
             "0.0.0.0",
@@ -281,8 +281,8 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
     #     pod_readiness='ignore',
     # )
 
-    # k8s_yaml(
-    #     local(
-    #         'helm template --values src/timestep/infra/stacks/platform/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.yaml src/timestep/infra/stacks/platform'
-    #     )
-    # )
+    k8s_yaml(
+        local(
+            'helm template --values src/timestep/infra/stacks/platform/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.yaml src/timestep/infra/stacks/platform'
+        )
+    )

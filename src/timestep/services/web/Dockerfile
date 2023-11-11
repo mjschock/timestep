@@ -15,4 +15,4 @@ RUN poetry install
 EXPOSE 5000
 
 ENTRYPOINT ["/home/ubuntu/app/docker-entrypoint.sh"]
-CMD ["poetry", "run", "uvicorn", "src.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["poetry", "run", "uvicorn", "src.web.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "5000"]

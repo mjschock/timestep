@@ -59,6 +59,116 @@ class PlatformStack(TerraformStack):
 
         config.postgresql_password.get_secret_value()
 
+        # kubectl -n default create secret generic demo-supabase-jwt \
+        #   --from-literal=anonKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjc1NDAwNDAwLAogICAgImV4cCI6IDE4MzMxNjY4MDAKfQ.ztuiBzjaVoFHmoljUXWmnuDN6QU2WgJICeqwyzyZO88' \  # noqa: E501
+        #   --from-literal=serviceKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAic2VydmljZV9yb2xlIiwKICAgICJpc3MiOiAic3VwYWJhc2UiLAogICAgImlhdCI6IDE2NzU0MDA0MDAsCiAgICAiZXhwIjogMTgzMzE2NjgwMAp9.qNsmXzz4tG7eqJPh1Y58DbtIlJBauwpqx39UF-MwM8k' \  # noqa: E501
+        #   --from-literal=secret='abcdefghijklmnopqrstuvwxyz123456'
+
+        # self.supabase_jwt_secret_resource = SecretV1(
+        #     id_="supabase_jwt_secret_resource",
+        #     data={
+        #         # "anon-key": config.supabase_jwt_anon_key.get_secret_value(),
+        #         # "secret": config.supabase_jwt_secret.get_secret_value(),
+        #         # "service-key": config.supabase_jwt_service_key.get_secret_value(),
+        #         "anon-key": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjc1NDAwNDAwLAogICAgImV4cCI6IDE4MzMxNjY4MDAKfQ.ztuiBzjaVoFHmoljUXWmnuDN6QU2WgJICeqwyzyZO88',  # noqa: E501
+        #         "secret": 'abcdefghijklmnopqrstuvwxyz123456',
+        #         "service-key": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAic2VydmljZV9yb2xlIiwKICAgICJpc3MiOiAic3VwYWJhc2UiLAogICAgImlhdCI6IDE2NzU0MDA0MDAsCiAgICAiZXhwIjogMTgzMzE2NjgwMAp9.qNsmXzz4tG7eqJPh1Y58DbtIlJBauwpqx39UF-MwM8k',  # noqa: E501
+        #     },
+        #     metadata=SecretV1Metadata(
+        #         name="supabase-jwt",
+        #         namespace="default",
+        #     ),
+        #     scope=self,
+        # )
+
+        # self.supabase_helm_release_resource = Release(
+        #     id_="supabase_helm_release_resource",
+        #     atomic=True,
+        #     chart="supabase",
+        #     create_namespace=True,
+        #     name="supabase",
+        #     namespace="default",
+        #     repository="https://charts.bitnami.com/bitnami",
+        #     provider=self.helm_provider,
+        #     set=[
+        #         ReleaseSet(
+        #             name="externalDatabase.host",
+        #             value=postgres_hostname,
+        #         ),
+        #         ReleaseSet(
+        #             name="externalDatabase.database",
+        #             value=postgres_database,
+        #         ),
+        #         ReleaseSet(
+        #             name="externalDatabase.port",
+        #             value="5432",
+        #         ),
+        #         ReleaseSet(
+        #             name="externalDatabase.user",
+        #             value=postgres_username,
+        #         ),
+        #         ReleaseSet(
+        #             name="global.jwt.existingSecret",
+        #             value=self.supabase_jwt_secret_resource.metadata.name,
+        #         ),
+        #         ReleaseSet(
+        #             name="postgresql.enabled",
+        #             value="false",
+        #         ),
+        #     ],
+        #     set_sensitive=[
+        #         ReleaseSetSensitive(
+        #             name="externalDatabase.password",
+        #             value=postgres_password,
+        #         )
+        #     ],
+        #     scope=self,
+        # )
+
+        # self.nhost_helm_release_resource = Release(
+        #     id_="nhost_helm_release_resource",
+        #     atomic=True,
+        #     chart="nhost",
+        #     create_namespace=True,
+        #     name="nhost",
+        #     namespace="default",
+        #     repository="https://fpoussin.github.io/nhost-helm",
+        #     provider=self.helm_provider,
+        #     set=[
+        #         ReleaseSet(
+        #             name="mailhog.ingress.enabled",
+        #             value="false",
+        #         ),
+        #         ReleaseSet(
+        #             name="minio.auth.rootUser",
+        #             value=config.minio_root_user,
+        #         ),
+        #         ReleaseSet(
+        #             name="minio.enabled",
+        #             value="false",
+        #         ),
+        #         ReleaseSet(
+        #             name="postgresql.enabled",
+        #             value="false",
+        #         ),
+        #     ],
+        #     set_sensitive=[
+        #         ReleaseSetSensitive(
+        #             name="minio.auth.rootPassword",
+        #             value=config.minio_root_password.get_secret_value(),
+        #         ),
+        #         ReleaseSetSensitive(
+        #             name="postgresql.auth.password",
+        #             value=config.postgresql_password.get_secret_value(),
+        #         ),
+        #         ReleaseSetSensitive(
+        #             name="postgresql.auth.postgresPassword",
+        #             value=config.postgresql_password.get_secret_value(),
+        #         ),
+        #     ],
+        #     scope=self,
+        # )
+
         # self.hasura_graphql_engine_helm_release_resource = Release(
         #     id_="hasura_graphql_engine_helm_release_resource",
         #     atomic=True,
@@ -69,12 +179,36 @@ class PlatformStack(TerraformStack):
         #     repository="https://hasura.github.io/helm-charts",
         #     provider=self.helm_provider,
         #     set=[
+        #         # ReleaseSet(
+        #         #     name="config.enabledApis",
+        #         #     value="metadata",
+        #         # ),
+        #         ReleaseSet(
+        #             name="config.metadataOnly",
+        #             value="false",
+        #         ),
+        #         ReleaseSet(
+        #             name="config.unauthorizedRole",
+        #             value="public",
+        #         ),
+        #         # ReleaseSet(
+        #         #     name="postgres.auth.username",
+        #         #     value=postgres_username,
+        #         # ),
+        #         # ReleaseSet(
+        #         #     name="postgres.auth.database",
+        #         #     value=postgres_database,
+        #         # ),
         #         ReleaseSet(
         #             name="postgres.enabled",
         #             value="false",
         #         ),
         #     ],
         #     set_sensitive=[
+        #         # ReleaseSetSensitive(
+        #         #     name="postgres.auth.password",
+        #         #     value=config.postgresql_password.get_secret_value(),
+        #         # ),
         #         ReleaseSetSensitive(
         #             name="secret.adminSecret",
         #             value=config.hasura_graphql_admin_secret.get_secret_value(),
@@ -99,6 +233,95 @@ class PlatformStack(TerraformStack):
         #     scope=self,
         # )
 
+        # self.hasura_graphql_engine_deployment_resource = DeploymentV1(
+        #     id_="hasura_graphql_engine_deployment_resource",
+        #     metadata=DeploymentV1Metadata(
+        #         labels={
+        #             "app": "hasura-graphql-engine",
+        #         },
+        #         name="hasura-graphql-engine",
+        #         namespace="default",
+        #     ),
+        #     spec=DeploymentV1Spec(
+        #         replicas="1",
+        #         selector=DeploymentV1SpecSelector(
+        #             match_labels={
+        #                 "app": "hasura-graphql-engine",
+        #             }
+        #         ),
+        #         template=DeploymentV1SpecTemplate(
+        #             metadata=DeploymentV1SpecTemplateMetadata(
+        #                 labels={
+        #                     "app": "hasura-graphql-engine",
+        #                 },
+        #             ),
+        #             spec=DeploymentV1SpecTemplateSpec(
+        #                 container=[
+        #                     DeploymentV1SpecTemplateSpecContainer(
+        #                         env=[
+        #                             DeploymentV1SpecTemplateSpecContainerEnv(
+        #                                 name="HASURA_GRAPHQL_ADMIN_SECRET",
+        #                                 value=config.hasura_graphql_admin_secret.get_secret_value(),  # noqa: E501
+        #                             ),
+        #                             DeploymentV1SpecTemplateSpecContainerEnv(
+        #                                 name="HASURA_GRAPHQL_DATABASE_URL",
+        #                                 value=postgres_connection_string,
+        #                             ),
+        #                             DeploymentV1SpecTemplateSpecContainerEnv(
+        #                                 name="HASURA_GRAPHQL_ENABLE_CONSOLE",
+        #                                 value="true",
+        #                             ),
+        #                             DeploymentV1SpecTemplateSpecContainerEnv(
+        #                                 name="HASURA_GRAPHQL_JWT_SECRET",
+        #                                 value=f"{{\"type\": \"HS256\", \"key\": \"{config.hasura_graphql_jwt_secret_key.get_secret_value()}\", \"issuer\": \"hasura-auth\"}}",  # noqa: E501
+        #                             ),
+        #                             DeploymentV1SpecTemplateSpecContainerEnv(
+        #                                 name="HASURA_GRAPHQL_LOG_LEVEL",
+        #                                 value="debug",
+        #                             ),
+        #                             DeploymentV1SpecTemplateSpecContainerEnv(
+        #                                 name="HASURA_GRAPHQL_UNAUTHORIZED_ROLE",
+        #                                 value="public",
+        #                             ),
+        #                         ],
+        #                         image="hasura/graphql-engine:latest",
+        #                         name="hasura-graphql-engineh",
+        #                         port=[
+        #                             DeploymentV1SpecTemplateSpecContainerPort(
+        #                                 container_port=8080,
+        #                                 name="http",
+        #                             )
+        #                         ]
+        #                     )
+        #                 ],
+        #             ),
+        #         ),
+        #     ),
+        #     scope=self,
+        # )
+
+        # self.hasura_graphql_engine_service_resource = ServiceV1(
+        #     id_="hasura_graphql_engine_service_resource",
+        #     metadata=ServiceV1Metadata(
+        #         name="hasura-graphql-engine",
+        #         namespace="default",
+        #     ),
+        #     spec=ServiceV1Spec(
+        #         port=[
+        #             ServiceV1SpecPort(
+        #                 port=8080,
+        #                 protocol="TCP",
+        #                 # target_port=8080,
+        #             )
+        #         ],
+        #         selector={
+        #             "app": "hasura-graphql-engine",
+        #         },
+        #         type="ClusterIP",
+        #     ),
+        #     scope=self,
+        # )
+
         # self.nhost_hasura_auth_deployment_resource = DeploymentV1(
         #     id_="nhost_hasura_auth_deployment_resource",
         #     metadata=DeploymentV1Metadata(
@@ -117,8 +340,6 @@ class PlatformStack(TerraformStack):
         #         ),
         #         template=DeploymentV1SpecTemplate(
         #             metadata=DeploymentV1SpecTemplateMetadata(
-        #                 # name="nhost-hasura-auth",
-        #                 # namespace="default",
         #                 labels={
         #                     "app": "nhost-hasura-auth",
         #                 },
@@ -137,7 +358,7 @@ class PlatformStack(TerraformStack):
         #                             ),
         #                             DeploymentV1SpecTemplateSpecContainerEnv(
         #                                 name="HASURA_GRAPHQL_GRAPHQL_URL",
-        #                                 value=f"http://hasura-graphql-engine.{self.hasura_graphql_engine_helm_release_resource.namespace}.svc.cluster.local:8080/v1/graphql"
+        #                                 value=f"http://hasura-graphql-engine.default.svc.cluster.local:8080/v1/graphql",  # noqa: E501
         #                             ),
         #                             DeploymentV1SpecTemplateSpecContainerEnv(
         #                                 name="HASURA_GRAPHQL_JWT_SECRET",
