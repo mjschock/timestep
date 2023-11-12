@@ -29,6 +29,7 @@ version = "3.0.38"
 agent-protocol = "^1.0.1"
 langchain = "^0.0.334"
 marvin = "^1.5.5"
+pettingzoo = {extras = ["all"], version = "^1.24.1"}
 prefect = "2.14.3"
 prefect-aws = "^0.4.1"
 prefect-docker = "^0.4.0"

@@ -2,14 +2,14 @@
   <q-layout view="hHh LpR fFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
+        <!-- <q-btn
           flat
           dense
           round
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
-        />
+        /> -->
 
         <q-toolbar-title
           class="my-box cursor-pointer q-hoverable"
@@ -39,7 +39,7 @@
 
     </q-header>
 
-    <q-drawer
+    <!-- <q-drawer
       behavior="desktop"
       v-model="leftDrawerOpen"
       overlay
@@ -53,23 +53,15 @@
           Environments
         </q-item-label>
 
-        <!-- <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        /> -->
-
         <q-item v-for="env of envs" :key="env.id">
           <q-item-section class="my-box cursor-pointer q-hoverable">
             <q-item-label @click="fetchEnv(env)">
-            <!-- <q-item-label @click="this.$router.push(`/envs/${env.id}`)"> -->
               {{ env.name }}
             </q-item-label>
-            <q-item-label caption>ID: {{ env.id }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
-    </q-drawer>
+    </q-drawer> -->
 
     <!-- <q-drawer
       behavior="desktop"
@@ -173,6 +165,7 @@ export default defineComponent({
         envs {
           id
           name
+          namespace
         }
       }
     `);

@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from strawberry.fastapi import GraphQLRouter
 
 from .api import agent
+from .db.env import envs_by_id
 
 # DEFAULT_DOCKER_IMAGE_REF = "registry.gitlab.com/timestep-ai/timestep/api:latest"
 
@@ -48,6 +49,7 @@ class Agent:
 class Environment:
     id: str
     name: str
+    namespace: str = ""
     description: str = ""
     agents: typing.List[Agent]
 
@@ -58,36 +60,45 @@ def get_agents(root) -> typing.List[Agent]:
     ]
 
 
-envs_by_id = {
-    "0": {
-        "name": "Cart Pole",
-        # "description": "This environment corresponds to the version of the cart-pole problem described by Barto, Sutton, and Anderson in “Neuronlike Adaptive Elements That Can Solve Difficult Learning Control Problem”. A pole is attached by an un-actuated joint to a cart, which moves along a frictionless track. The pendulum is placed upright on the cart and the goal is to balance the pole by applying forces in the left and right direction on the cart.",  # noqa: E501
-        "agents": [
-            {
-                "name": "foo",
-                "models": ["bar"],
-            },
-        ],
-    },
-    "1": {
-        "name": "Lunar Lander",
-        "agents": [
-            {
-                "name": "foo",
-                "models": ["bar"],
-            },
-        ],
-    },
-    "2": {
-        "name": "Mountain Car",
-        "agents": [
-            {
-                "name": "foo",
-                "models": ["bar"],
-            },
-        ],
-    },
-}
+# envs_by_id = {
+#     # "0": {
+#     #     "name": "Cart Pole",
+#     #     # "description": "This environment corresponds to the version of the cart-pole problem described by Barto, Sutton, and Anderson in “Neuronlike Adaptive Elements That Can Solve Difficult Learning Control Problem”. A pole is attached by an un-actuated joint to a cart, which moves along a frictionless track. The pendulum is placed upright on the cart and the goal is to balance the pole by applying forces in the left and right direction on the cart.",  # noqa: E501
+#     #     "agents": [
+#     #         {
+#     #             "name": "foo",
+#     #             "models": ["bar"],
+#     #         },
+#     #     ],
+#     # },
+#     # "1": {
+#     #     "name": "Lunar Lander",
+#     #     "agents": [
+#     #         {
+#     #             "name": "foo",
+#     #             "models": ["bar"],
+#     #         },
+#     #     ],
+#     # },
+#     # "2": {
+#     #     "name": "Mountain Car",
+#     #     "agents": [
+#     #         {
+#     #             "name": "foo",
+#     #             "models": ["bar"],
+#     #         },
+#     #     ],
+#     # },
+#     f"{env_id}": {
+#         "name": f"{env_id}",
+#         "agents": [
+#             {
+#                 "name": "foo",
+#                 "models": ["bar"],
+#             },
+#         ]
+#     } for env_id in all_environments.keys()
+# }
 
 
 def get_envs(root) -> typing.List[Environment]:

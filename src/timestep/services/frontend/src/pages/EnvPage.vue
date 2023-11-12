@@ -10,7 +10,7 @@
           </q-item-section>
 
           <q-item-section side top>
-            <q-item-label caption>v3.0.0</q-item-label>
+            <q-item-label caption>{{ env.namespace }}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -149,6 +149,7 @@ export default defineComponent({
           env(id: $envId) {
             id
             name
+            namespace
             description
           }
         }
