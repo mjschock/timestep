@@ -106,4 +106,4 @@ jobs:
           node-version: '18'
       - name: Validate agent protocol compliance
         run: |
-          URL=<https://timestep.ai bash -c "$(curl -fsSL https://agentprotocol.ai/test.sh)"
+          URL=https://timestep.ai bash -c "$(curl -fsSL https://agentprotocol.ai/test.sh)"
