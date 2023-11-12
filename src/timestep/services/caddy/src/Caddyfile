@@ -5,7 +5,7 @@ http://{$PRIMARY_DOMAIN_NAME}:80 {
 http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 	encode gzip
 
-	handle /ap/* {
+	handle /envs/* {
 		reverse_proxy web:5000
 	}
 
