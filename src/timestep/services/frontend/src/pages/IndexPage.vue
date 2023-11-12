@@ -14,9 +14,9 @@
       </template>
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td key="id" :props="props">
+          <!-- <q-td key="id" :props="props">
             {{ props.row.id }}
-          </q-td>
+          </q-td> -->
           <q-td key="name" :props="props" @click="onRowClick(props.row)" style="cursor: pointer">
             {{ props.row.name }}
           </q-td>
@@ -71,13 +71,13 @@ export default defineComponent({
 
     const tasks = computed(() => result.value?.envs ?? [])
     const columns = [
-      {
-        name: 'id',
-        label: 'ID',
-        field: 'id',
-        align: 'left',
-        sortable: false
-      },
+      // {
+      //   name: 'id',
+      //   label: 'ID',
+      //   field: 'id',
+      //   align: 'left',
+      //   sortable: false
+      // },
       {
         name: 'name',
         label: 'Name',
