@@ -100,8 +100,8 @@
 import { computed, defineComponent, ref } from 'vue';
 // import EssentialLink from 'components/EssentialLink.vue';
 import { useRouter } from 'vue-router';
-import { useQuery } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
+// import { useQuery } from '@vue/apollo-composable';
+// import gql from 'graphql-tag';
 
 // const linksList = [
   // {
@@ -160,15 +160,15 @@ export default defineComponent({
     // const rightDrawerOpen = ref(false)
     const router = useRouter();
 
-    const { result, loading, error } = useQuery(gql`
-      query getEnvs {
-        envs {
-          id
-          name
-          namespace
-        }
-      }
-    `);
+    // const { result, loading, error } = useQuery(gql`
+    //   query getEnvs {
+    //     envs {
+    //       id
+    //       name
+    //       namespace
+    //     }
+    //   }
+    // `);
 
     // watch(result, (newValue, oldValue) => {
     //   console.log(newValue)
@@ -178,28 +178,28 @@ export default defineComponent({
 
     // const environments = useResult(result, null, (data) => data.environment);
 
-    const fetchEnv = (env) => {
-      return router.push(`/envs/${env.id}`);
-    };
+    // const fetchEnv = (env) => {
+    //   return router.push(`/envs/${env.id}`);
+    // };
   
     const toolbarOnclick = () => {
       console.log('toolbarOnclick')
       router.push('/')
     }
   
-    const envs = computed(() => result.value?.envs ?? [])
+    // const envs = computed(() => result.value?.envs ?? [])
 
     return {
       // "environments": result.value?.data?.envs,
       // environments: result.value?.data?.envs,
       // environments: result.value?.data?.envs,
       // result,
-      envs,
-      loading,
-      error,
+      // envs,
+      // loading,
+      // error,
       // essentialLinks: linksList,
       leftDrawerOpen,
-      fetchEnv,
+      // fetchEnv,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
