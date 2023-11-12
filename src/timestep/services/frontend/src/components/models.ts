@@ -1,3 +1,9 @@
+export interface Task {
+  id: string;
+  name: string;
+  namespace: string;
+}
+
 export interface Todo {
   id: number;
   content: string;
