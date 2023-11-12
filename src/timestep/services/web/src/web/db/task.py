@@ -3,20 +3,22 @@ from typing import Any, Dict, List, Optional
 
 from agent_protocol import Artifact, Status, Step, Task, TaskDB
 from agent_protocol.db import NotFoundException
-from web.db.env import envs_by_id
+
+# from web.db.env import envs_by_id
 
 
 class TimestepAITaskDB(TaskDB):
-    _tasks: Dict[str, Task] = {
-        f"{env[0]}": Task(
-            task_id=f"{env[0]}",
-            input=None,
-            steps=[],
-            artifacts=[],
-            additional_input=None,
-        )
-        for env in envs_by_id.items()
-    }
+    # _tasks: Dict[str, Task] = {
+    #     f"{env[0]}": Task(
+    #         task_id=f"{env[0]}",
+    #         input=None,
+    #         steps=[],
+    #         artifacts=[],
+    #         additional_input=None,
+    #     )
+    #     for env in envs_by_id.items()
+    # }
+    _tasks: Dict[str, Task] = {}
 
     async def create_task(
         self,
@@ -25,22 +27,22 @@ class TimestepAITaskDB(TaskDB):
         artifacts: Optional[List[Artifact]] = None,
         steps: Optional[List[Step]] = None,
     ) -> Task:
-        # if not steps:
-        #     steps = []
-        # if not artifacts:
-        #     artifacts = []
-        # task_id = str(uuid.uuid4())
-        # task = Task(
-        #     task_id=task_id,
-        #     input=input,
-        #     steps=steps,
-        #     artifacts=artifacts,
-        #     additional_input=additional_input,
-        # )
-        # self._tasks[task_id] = task
-        # return task
+        if not steps:
+            steps = []
+        if not artifacts:
+            artifacts = []
+        task_id = str(uuid.uuid4())
+        task = Task(
+            task_id=task_id,
+            input=input,
+            steps=steps,
+            artifacts=artifacts,
+            additional_input=additional_input,
+        )
+        self._tasks[task_id] = task
+        return task
 
-        raise NotImplementedError
+        # raise NotImplementedError
 
     async def create_step(
         self,

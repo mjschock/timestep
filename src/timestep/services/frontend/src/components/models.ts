@@ -1,14 +1,10 @@
-export interface Task {
-  id: string;
-  name: string;
-  namespace: string;
-}
+import Agent, {
+  type Task
+} from 'agent-protocol'
 
-export interface Todo {
-  id: number;
-  content: string;
-}
-
-export interface Meta {
-  totalCount: number;
+export interface Env {
+  agents: Agent[];
+  metadata: {
+    [key: string]: any;
+  }
 }
