@@ -33,6 +33,10 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 		reverse_proxy web:5000
 	}
 
+	handle /sky {
+		reverse_proxy web:5000
+	}
+
 	# handle /console/* {
 	# 	reverse_proxy graphql-engine:8080
 	# }
