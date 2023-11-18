@@ -50,7 +50,15 @@ spec:
               path: /ready
               port: 5000
           # resources: {}
+          # volumeMounts:
+          #  - mountPath: /dev/shm
+          #    name: dshm
       imagePullSecrets:
         - name: regcred
       # restartPolicy: Always
 # status: {}
+      # volumes:
+      #  - name: dshm
+      #    emptyDir:
+      #       medium: Memory
+      #       # sizeLimit: 1.2Gi # TODO: set this to > 30% of available RAM, e.g. int(0.3 * MEMORY_SIZE_GB)GB

@@ -7,6 +7,8 @@ WORKDIR /home/ubuntu/app
 RUN python -m venv /home/ubuntu/app/.venv
 
 COPY --chown=ubuntu:ubuntu ./pyproject.toml ./poetry.lock* ./
+RUN mkdir -p /home/ubuntu/app/src/lib
+COPY --chown=ubuntu:ubuntu ./src/lib ./src/lib
 RUN poetry install --no-root
 
 COPY --chown=ubuntu:ubuntu . ./

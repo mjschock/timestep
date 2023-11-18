@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./src/timestep/services/web/src/lib/skypilot"
+    ]
+}

@@ -28,6 +28,9 @@ kubernetes-dashboard-port-forward:
 kubernetes-dashboard-token:
 	src/timestep/infra/stacks/kubernetes_config/kubernetes_dashboard/kubernetes_dashboard_token.sh
 
+# nvidia:
+# 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.61.136.131 'bash -s' < src/timestep/infra/cicd/nvidia.sh
+
 pre-commit:
 	poetry run pre-commit run --all-files
 
