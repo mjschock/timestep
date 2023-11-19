@@ -38,6 +38,11 @@ spec:
           env:
             - name: PREFECT_API_URL
               value: http://prefect-server.default.svc.cluster.local:4200/api
+          envFrom:
+            - configMapRef:
+                name: web-configmap
+            - secretRef:
+                name: web-secret
           image: registry.gitlab.com/timestep-ai/timestep/web:{{ .Chart.AppVersion }}
           imagePullPolicy: Always
           name: web

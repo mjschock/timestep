@@ -1,5 +1,9 @@
 FROM registry.gitlab.com/timestep-ai/timestep:latest
 
+# Install kubectl with arkade
+ENV KUBECTL_VERSION=1.27.4
+RUN ark get kubectl --version v${KUBECTL_VERSION}
+
 RUN mkdir -p /home/ubuntu/app
 WORKDIR /home/ubuntu/app
 

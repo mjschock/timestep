@@ -8,12 +8,15 @@ import strawberry
 import yaml
 from fastapi import FastAPI
 from minio import Minio
+from sky import clouds, skypilot_config
+from sky.adaptors.minio import MINIO_CREDENTIALS_PATH, MINIO_PROFILE_NAME
 from sky.check import check as sky_check
 from sky.check import get_cloud_credential_file_mounts  # noqa: F401
 from sky.cloud_stores import CloudStorage
 from sky.data import Storage, StorageMode, StoreType, data_utils, storage  # noqa: F401
 from sky.serve import service_spec  # noqa: F401
 from sky.serve.core import up as sky_serve_up  # noqa: F401
+from sky.skypilot_config import CONFIG_PATH, _try_load_config
 from strawberry.fastapi import GraphQLRouter
 
 from .api import agent
@@ -114,16 +117,16 @@ class MinioCloudStorage(CloudStorage):
 
 @app.get("/sky")
 def get_sky():
-    clouds = {}
+    cloud_info = {}
 
     for cloud_name, cloud in sky.clouds.CLOUD_REGISTRY.items():
-        clouds[cloud_name] = {
+        cloud_info[cloud_name] = {
             "enabled": False,
             "name": str(cloud),
         }
 
     data = {
-        "clouds": clouds,
+        "cloud_info": cloud_info,
         "commit": sky.__commit__,
         "version": sky.__version__,
         "root_dir": sky.__root_dir__,
@@ -140,12 +143,14 @@ def get_sky():
         enabled_clouds = sky.global_user_state.get_enabled_clouds()
 
         for cloud in enabled_clouds:
-            data["clouds"][str(cloud).lower()]["enabled"] = True
+            data["cloud_info"][str(cloud).lower()]["enabled"] = True
 
     except SystemExit:
         data["error"] = {
             "type": "SystemExit",
         }
+
+    # store = storage.Storage(
 
     # TEST_BUCKET_NAME = 'skypilot-workdir-ubuntu-b0670fb3'
     # LOCAL_SOURCE_PATH = '/home/ubuntu/app/src/web/examples/serve/ray_serve'
@@ -156,21 +161,36 @@ def get_sky():
     # storages = sky.core.storage_ls()
     # print('storages', storages)
 
-    # task = sky.Task(
-    #     run='serve run serve:app --host 0.0.0.0',
-    #     setup='pip install "ray[serve]"',
-    #     workdir=f'{os.getcwd()}/src/web/examples/serve/ray_serve',
-    # ).set_resources(
-    #     sky.Resources(
-    #         cpus='2+',
-    #         ports='8000',
-    #     )
-    # ).set_service(
-    #     service_spec.SkyServiceSpec(
-    #         initial_delay_seconds=5,
-    #         min_replicas=1,
-    #         readiness_path='/',
-    #     )
+    task = (
+        sky.Task(
+            run='echo "Hello, how are you?',
+            # run='serve run serve:app --host 0.0.0.0',
+            setup='echo "Running setup."',
+            # setup='pip install "ray[serve]"',
+            workdir=".",
+            # workdir=f'{os.getcwd()}/src/web/examples/serve/ray_serve',
+        )
+        .set_file_mounts(
+            {
+                "/dataset-demo": "minio://sky-demo-dataset",
+            }
+        )
+        .set_resources(
+            sky.Resources(
+                cloud=clouds.Kubernetes(),
+                cpus="1",
+                # cpus='2+',
+                memory="2",
+                # ports='8000',
+            )
+            # ).set_service(
+            #     service_spec.SkyServiceSpec(
+            #         initial_delay_seconds=5,
+            #         min_replicas=1,
+            #         readiness_path='/',
+            #     )
+        )
+    )
     # ).set_storage_mounts( #  Workdir '/home/ubuntu/app/src/web/examples/serve/ray_serve' will be synced to cloud storage 'skypilot-workdir-ubuntu-b0670fb3'.  # noqa: E501
     #     {
     #         f"{mount_path}": sky.Storage(
@@ -178,7 +198,6 @@ def get_sky():
     #             source="/home/ubuntu/app/src/web/examples/serve/ray_serve",
     #         )
     #     }
-    # )
 
     # # sky serve up examples/serve/ray_serve/ray_serve.yaml
     # sky_serve_up(
@@ -186,12 +205,23 @@ def get_sky():
     #     task=task,
     # )
 
+    job_id, handle = sky.launch(
+        cluster_name="sky-5cf0-ubuntu",
+        task=task,
+    )
+
     return {
+        "job_id": job_id,
         "sky": data,
     }
 
 
 def load_cloud_credentials():
+    load_kubeconfig()
+    load_minio_credentials()
+
+
+def load_kubeconfig():
     kubeconfig_path = os.path.expanduser(sky.clouds.kubernetes.CREDENTIAL_PATH)
 
     if not os.path.exists(kubeconfig_path):
@@ -275,6 +305,74 @@ def load_cloud_credentials():
             raise RuntimeError(f"{kubeconfig_path} file has not been generated.")
 
         print(f"{kubeconfig_path} file has been generated.")
+
+
+def load_minio_credentials(overwrite=True):
+    minio_credentials_path = os.path.expanduser(MINIO_CREDENTIALS_PATH)
+    minio_credentials = f"""[{MINIO_PROFILE_NAME}]
+aws_access_key_id={os.getenv("MINIO_ROOT_USER")}
+aws_secret_access_key={os.getenv("MINIO_ROOT_PASSWORD")}
+"""
+
+    if overwrite or not os.path.exists(minio_credentials_path):
+        minio_credentials_dir = os.path.dirname(minio_credentials_path)
+        os.makedirs(minio_credentials_dir, exist_ok=True)
+
+        with open(minio_credentials_path, "w") as outfile:
+            outfile.write(minio_credentials)
+        if not os.path.exists(minio_credentials_path):
+            raise RuntimeError(f"{minio_credentials_path} file has not been generated.")
+
+        with open(minio_credentials_path, "r") as file:
+            content = file.read()
+            print(f"{minio_credentials_path}:")
+            print(content)
+
+    aws_credentials_path = os.path.expanduser("~/.aws/credentials")
+    aws_credentials = f"""[default]
+aws_access_key_id={os.getenv("AWS_ACCESS_KEY_ID")}
+aws_secret_access_key={os.getenv("AWS_SECRET_ACCESS_KEY")}
+
+{minio_credentials}
+"""
+
+    if overwrite or not os.path.exists(aws_credentials_path):
+        aws_credentials_dir = os.path.dirname(aws_credentials_path)
+        os.makedirs(aws_credentials_dir, exist_ok=True)
+
+        with open(aws_credentials_path, "w") as outfile:
+            outfile.write(aws_credentials)
+        if not os.path.exists(aws_credentials_path):
+            raise RuntimeError(f"{aws_credentials_path} file has not been generated.")
+
+        with open(aws_credentials_path, "r") as file:
+            content = file.read()
+            print(f"{aws_credentials_path}:")
+            print(content)
+
+    config_path = os.path.expanduser(CONFIG_PATH)
+    config = f"""{MINIO_PROFILE_NAME}:
+    endpoint: "http://minio.default.svc.cluster.local:9000"
+"""
+
+    if overwrite or not os.path.exists(config_path):
+        config_dir = os.path.dirname(config_path)
+        os.makedirs(config_dir, exist_ok=True)
+
+        with open(config_path, "w") as outfile:
+            outfile.write(config)
+        if not os.path.exists(config_path):
+            raise RuntimeError(f"{config_path} file has not been generated.")
+
+        with open(config_path, "r") as file:
+            content = file.read()
+            print(f"{config_path}:")
+            print(content)
+
+    _try_load_config()
+
+    if not skypilot_config.get_nested(("minio", "endpoint"), None):
+        raise Exception(f"minio endpoint is not set in {config_path}")
 
 
 app.include_router(graphql_app, prefix="/graphql")

@@ -429,7 +429,20 @@ class PlatformStack(TerraformStack):
         #     scope=self,
         # )
 
+        web_secret = SecretV1(
+            id_="web_secret",
+            data={
+                "MINIO_ROOT_PASSWORD": config.minio_root_password.get_secret_value(),
+            },
+            metadata=SecretV1Metadata(
+                name="web-secret",
+                namespace="default",
+            ),
+            scope=self,
+        )
+
         Manifest(
+            depends_on=[web_secret],
             id="timestep_ai_manifest",
             manifest={
                 "apiVersion": "argoproj.io/v1alpha1",
