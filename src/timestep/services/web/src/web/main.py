@@ -5,6 +5,7 @@ import typing
 import kubernetes
 import sky
 import strawberry
+import uvicorn  # noqa: F401
 import yaml
 from fastapi import FastAPI
 from minio import Minio
@@ -78,7 +79,7 @@ app = FastAPI()
 @app.get("/ready")
 def get_ready():
     return {
-        "ready": "ok",
+        "ready": "okay",
     }
 
 
@@ -132,6 +133,7 @@ def get_sky():
         "root_dir": sky.__root_dir__,
     }
 
+    print("=== load_cloud_credentials? ===")
     load_cloud_credentials()
 
     try:
@@ -216,33 +218,74 @@ def get_sky():
     }
 
 
-def load_cloud_credentials():
-    load_kubeconfig()
-    load_minio_credentials()
+def load_cloud_credentials(overwrite=True):
+    load_kubeconfig(overwrite)
+    load_minio_credentials(overwrite)
 
 
-def load_kubeconfig():
+def load_kubeconfig(overwrite=True):
     kubeconfig_path = os.path.expanduser(sky.clouds.kubernetes.CREDENTIAL_PATH)
 
-    if not os.path.exists(kubeconfig_path):
-        kubecontext = os.getenv("KUBECONTEXT")
+    if overwrite or not os.path.exists(kubeconfig_path):
+        kubecontext = os.getenv("KUBECONTEXT", "timestep.local")
         kubernetes_service_host = os.getenv("KUBERNETES_SERVICE_HOST")
         kubernetes_service_port = os.getenv("KUBERNETES_SERVICE_PORT")
 
         ca_certificate_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+        namespace_path = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
         service_account_token_path = (
             "/var/run/secrets/kubernetes.io/serviceaccount/token"  # noqa: E501
         )
 
+        with open(namespace_path, "r") as file:
+            namespace = file.read()
+
+        print("before load_incluster_config")
         kubernetes.config.load_incluster_config()
         config = kubernetes.client.Configuration.get_default_copy()
 
-        host = config.host
+        # kube_config_loader = kubernetes.config.kube_config.KubeConfigLoader(
+        #     config_dict=config.to_dict()
+        # )
+
+        print("config", config)
+        # kube_config_contexts = kubernetes.config.list_kube_config_contexts()
+        # print('kube_config_contexts', kube_config_contexts)
+
+        # kube_config = kubernetes.config.load_kube_config(
+        #     client_configuration=config,
+        # )
+        # print('kube_config', kube_config)
+
+        api_key = config.api_key
+        print("api_key", api_key)
+
+        auth = config.auth_settings()
+        print("auth", auth)
+
+        api_key_prefix = config.api_key_prefix
+        print("api_key_prefix", api_key_prefix)
+
+        cert_file = config.cert_file
+        print("cert_file", cert_file)
+
+        key_file = config.key_file
+        print("key_file", key_file)
+
+        username = config.username
+        print("username", username)
+
+        password = config.password
+        print("password", password)
+
+        server = config.host
+        print("server", server)
         assert (
-            host == f"https://{kubernetes_service_host}:{kubernetes_service_port}"
-        ), f"{host} != https://{kubernetes_service_host}:{kubernetes_service_port}"
+            server == f"https://{kubernetes_service_host}:{kubernetes_service_port}"
+        ), f"{server} != https://{kubernetes_service_host}:{kubernetes_service_port}"
 
         ssl_ca_cert = config.ssl_ca_cert
+        print("ssl_ca_cert", ssl_ca_cert)
         assert (
             ssl_ca_cert == ca_certificate_path
         ), f"{ssl_ca_cert} != {ca_certificate_path}"
@@ -253,9 +296,12 @@ def load_kubeconfig():
                 ssl_ca_cert_file.read()
             ).decode("utf-8")
 
-        # Load service account token and encode it in base64
+        # Load service account token
         with open(service_account_token_path, "rb") as token_file:
-            service_account_token = base64.b64encode(token_file.read()).decode("utf-8")
+            service_account_token = token_file.read()
+
+        cluster_name = "timestep.local"
+        user_name = "ubuntu"
 
         # Create kubeconfig dictionary
         kubeconfig = {
@@ -265,16 +311,17 @@ def load_kubeconfig():
                 {
                     "cluster": {
                         "certificate-authority-data": certificate_authority_data,
-                        "server": host,
+                        "server": server,
                     },
-                    "name": kubecontext,
+                    "name": cluster_name,
                 }
             ],
             "contexts": [
                 {
                     "context": {
-                        "cluster": kubecontext,
-                        "user": kubecontext,
+                        "cluster": cluster_name,
+                        "namespace": namespace,
+                        "user": user_name,
                     },
                     "name": kubecontext,
                 }
@@ -283,11 +330,13 @@ def load_kubeconfig():
             "preferences": {},
             "users": [
                 {
-                    "name": kubecontext,
+                    "name": user_name,
                     "user": {
-                        # "client-certificate-data": "",
-                        # "client-key-data": "",
+                        # "client-certificate-data": client_certificate_data,
+                        # "client-key-data": client_key_data,
                         "token": service_account_token
+                        # "token-data": service_account_token,
+                        # "token": token_file,
                     },
                 }
             ],
@@ -305,6 +354,11 @@ def load_kubeconfig():
             raise RuntimeError(f"{kubeconfig_path} file has not been generated.")
 
         print(f"{kubeconfig_path} file has been generated.")
+
+        with open(kubeconfig_path, "r") as file:
+            content = file.read()
+            print(f"{kubeconfig_path}:")
+            print(content)
 
 
 def load_minio_credentials(overwrite=True):
@@ -384,3 +438,8 @@ for env_id in envs_by_id.keys():
         app.include_router(
             agent.router, prefix=f"/envs/{env.env_id}/agents/{agent_id}"
         )  # noqa: E501
+
+# if __name__ == "__main__":
+#     # CMD ["poetry", "run", "uvicorn", "src.web.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "5000"]  # noqa: E501
+#     # uvicorn.run(app, host="0.0.0.0", port=5000, proxy_headers=True, reload=True)
+#     uvicorn.run(app, host="0.0.0.0", port=5000, proxy_headers=True)
