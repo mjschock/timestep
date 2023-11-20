@@ -42,6 +42,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libstdc++-12-dev \
   libxml2-dev \
   libxmlsec1-dev \
+  netcat \
   net-tools \
   rsync \
   socat \

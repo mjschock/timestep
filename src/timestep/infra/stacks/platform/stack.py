@@ -381,7 +381,117 @@ class PlatformStack(TerraformStack):
         #     scope=self,
         # )
 
-        SecretV1(
+        default_sa_cluster_role = ClusterRoleV1(
+            id_="default_sa_cluster_role",
+            metadata=ClusterRoleV1Metadata(
+                generate_name="default-sa-cluster-role-",
+            ),
+            rule=[
+                ClusterRoleV1Rule(
+                    api_groups=[""],
+                    resources=["nodes"],
+                    verbs=["list"],
+                )
+            ],
+            scope=self,
+        )
+
+        default_sa_cluster_role_binding = ClusterRoleBindingV1(
+            id_="default_sa_cluster_role_binding",
+            metadata=ClusterRoleBindingV1Metadata(
+                generate_name="default-sa-cluster-role-binding-",
+            ),
+            subject=[
+                ClusterRoleBindingV1Subject(
+                    kind="ServiceAccount",
+                    name="default",
+                    api_group="",
+                )
+            ],
+            role_ref=ClusterRoleBindingV1RoleRef(
+                kind="ClusterRole",
+                name=default_sa_cluster_role.metadata.name,
+                api_group="rbac.authorization.k8s.io",
+            ),
+            scope=self,
+        )
+
+        default_sa_role = RoleV1(
+            id_="default_sa_role",
+            metadata=RoleV1Metadata(
+                generate_name="default-sa-role-",
+            ),
+            rule=[
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["pods"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["pods/exec"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["pods/status"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["rolebindings"],
+                    verbs=["create"],
+                ),
+                RoleV1Rule(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["roles"],
+                    verbs=["create", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["secrets"],
+                    verbs=["create"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["services"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["serviceaccounts"],
+                    verbs=["create", "list"],
+                ),
+                RoleV1Rule(  # TODO: Figure out why this is needed, it seems like a security risk!  # noqa: E501
+                    api_groups=["*"],
+                    resources=["*"],
+                    verbs=["*"],
+                ),
+            ],
+            scope=self,
+        )
+
+        default_sa_role_binding = RoleBindingV1(
+            id_="default_sa_role_binding",
+            metadata=RoleBindingV1Metadata(
+                generate_name="default-sa-role-binding-",
+            ),
+            subject=[
+                RoleBindingV1Subject(
+                    kind="ServiceAccount",
+                    name="default",
+                    api_group="",
+                )
+            ],
+            role_ref=RoleBindingV1RoleRef(
+                kind="Role",
+                name=default_sa_role.metadata.name,
+                api_group="rbac.authorization.k8s.io",
+            ),
+            scope=self,
+        )
+
+        private_repo_secret = SecretV1(
             id_="private_repo_secret",
             data={
                 "password": config.github_api_token.get_secret_value(),
@@ -442,7 +552,12 @@ class PlatformStack(TerraformStack):
         )
 
         Manifest(
-            depends_on=[web_secret],
+            depends_on=[
+                default_sa_cluster_role_binding,
+                default_sa_role_binding,
+                private_repo_secret,
+                web_secret,
+            ],
             id="timestep_ai_manifest",
             manifest={
                 "apiVersion": "argoproj.io/v1alpha1",
@@ -663,111 +778,6 @@ class PlatformStack(TerraformStack):
         #     scope=self,
         #     # wait=False, # TODO: added
         # )
-
-        default_sa_role = RoleV1(
-            id_="default_sa_role",
-            metadata=RoleV1Metadata(
-                generate_name="default-sa-role-",
-            ),
-            rule=[
-                RoleV1Rule(
-                    api_groups=[""],
-                    resources=["pods"],
-                    verbs=["create", "delete", "get", "list"],
-                ),
-                RoleV1Rule(
-                    api_groups=[""],
-                    resources=["pods/exec"],
-                    verbs=["create", "delete", "get", "list"],
-                ),
-                RoleV1Rule(
-                    api_groups=[""],
-                    resources=["pods/status"],
-                    verbs=["create", "delete", "get", "list"],
-                ),
-                RoleV1Rule(
-                    api_groups=["rbac.authorization.k8s.io"],
-                    resources=["rolebindings"],
-                    verbs=["create"],
-                ),
-                RoleV1Rule(
-                    api_groups=["rbac.authorization.k8s.io"],
-                    resources=["roles"],
-                    verbs=["create", "list"],
-                ),
-                RoleV1Rule(
-                    api_groups=[""],
-                    resources=["services"],
-                    verbs=["create", "delete", "get", "list"],
-                ),
-                RoleV1Rule(
-                    api_groups=[""],
-                    resources=["serviceaccounts"],
-                    verbs=["create", "list"],
-                ),
-                RoleV1Rule(  # TODO: Figure out why this is needed, it seems like a security risk!  # noqa: E501
-                    api_groups=["*"],
-                    resources=["*"],
-                    verbs=["*"],
-                ),
-            ],
-            scope=self,
-        )
-
-        RoleBindingV1(
-            id_="default_sa_role_binding",
-            metadata=RoleBindingV1Metadata(
-                generate_name="default-sa-role-binding-",
-            ),
-            subject=[
-                RoleBindingV1Subject(
-                    kind="ServiceAccount",
-                    name="default",
-                    api_group="",
-                )
-            ],
-            role_ref=RoleBindingV1RoleRef(
-                kind="Role",
-                name=default_sa_role.metadata.name,
-                api_group="rbac.authorization.k8s.io",
-            ),
-            scope=self,
-        )
-
-        default_sa_cluster_role = ClusterRoleV1(
-            id_="default_sa_cluster_role",
-            metadata=ClusterRoleV1Metadata(
-                generate_name="default-sa-cluster-role-",
-            ),
-            rule=[
-                ClusterRoleV1Rule(
-                    api_groups=[""],
-                    resources=["nodes"],
-                    verbs=["list"],
-                )
-            ],
-            scope=self,
-        )
-
-        ClusterRoleBindingV1(
-            id_="default_sa_cluster_role_binding",
-            metadata=ClusterRoleBindingV1Metadata(
-                generate_name="default-sa-cluster-role-binding-",
-            ),
-            subject=[
-                ClusterRoleBindingV1Subject(
-                    kind="ServiceAccount",
-                    name="default",
-                    api_group="",
-                )
-            ],
-            role_ref=ClusterRoleBindingV1RoleRef(
-                kind="ClusterRole",
-                name=default_sa_cluster_role.metadata.name,
-                api_group="rbac.authorization.k8s.io",
-            ),
-            scope=self,
-        )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             LocalBackend(
