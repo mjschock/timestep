@@ -29,7 +29,7 @@ version = "3.0.48"
 agent-protocol = "^1.0.1"
 awscli = {git = "https://github.com/aws/aws-cli.git", rev = "v2"}
 langchain = "^0.0.339"
-llama-index = "^0.9.5"
+llama-index = {extras = ["langchain", "local-models", "postgres"], version = "^0.9.5"}
 marvin = "^1.5.5"
 minio = "^7.2.0"
 pettingzoo = {extras = ["all"], version = "^1.24.1"}
