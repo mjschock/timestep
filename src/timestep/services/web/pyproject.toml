@@ -33,7 +33,7 @@ llama-index = {extras = ["langchain", "local-models", "postgres"], version = "^0
 marvin = "^1.5.5"
 minio = "^7.2.0"
 pettingzoo = {extras = ["all"], version = "^1.24.1"}
-prefect = "2.14.3"
+prefect = "2.14.6"
 prefect-aws = "^0.4.1"
 prefect-docker = "^0.4.0"
 prefect-jupyter = "^0.3.0"
