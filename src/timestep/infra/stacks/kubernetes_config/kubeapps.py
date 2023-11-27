@@ -39,6 +39,7 @@ class KubeappsConstruct(Construct):
         )
 
         self.kubeapps_operator_service_account_resource = ServiceAccountV1(
+            depends_on=[self.kubeapps_helm_release_resource],
             id_="kubeapps_operator_service_account_resource",
             metadata=ServiceAccountV1Metadata(
                 name="kubeapps-operator",
@@ -89,6 +90,7 @@ class KubeappsConstruct(Construct):
         )
 
         self.kubeapps_operator_token_secret_resource = SecretV1(
+            depends_on=[self.kubeapps_operator_service_account_resource],
             id_="kubeapps_operator_token_secret_resource",
             metadata=SecretV1Metadata(
                 name="kubeapps-operator-token",

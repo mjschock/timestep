@@ -85,7 +85,8 @@ class PrefectConstruct(Construct):
                 ReleaseSet(
                     name="server.image.prefectTag",
                     # value="2.13.7-python3.11",
-                    value=f"{config.prefect_server_version}-python3.11",
+                    # value=f"{config.prefect_server_version}-python3.11",
+                    value=f"{config.prefect_server_version}-python3.11-kubernetes",
                 ),
                 ReleaseSet(
                     name="server.image.repository",
@@ -147,31 +148,35 @@ class PrefectConstruct(Construct):
         #     ),
         # )
 
-        self.prefect_default_agent_helm_release_resource = Release(
-            depends_on=[self.prefect_server_helm_release_resource],
-            id_="prefect_default_agent_helm_release_resource",
-            atomic=True,
-            chart="prefect-agent",
-            name="prefect-agent",
-            namespace=self.prefect_server_helm_release_resource.namespace,
-            repository="https://prefecthq.github.io/prefect-helm",
-            provider=helm_provider,
-            set=[
-                ReleaseSet(
-                    name="agent.apiConfig",
-                    value="server",
-                ),
-                ReleaseSet(
-                    name="agent.config.workPool",
-                    value="default-agent-pool",
-                ),
-                ReleaseSet(
-                    name="agent.serverApiConfig.apiUrl",
-                    value=f"http://prefect-server.{self.prefect_server_helm_release_resource.namespace}.svc.cluster.local:4200/api",  # noqa: E501
-                ),
-            ],
-            scope=self,
-        )
+        # self.prefect_default_agent_helm_release_resource = Release(
+        #     depends_on=[self.prefect_server_helm_release_resource],
+        #     id_="prefect_default_agent_helm_release_resource",
+        #     atomic=True,
+        #     chart="prefect-agent",
+        #     name="prefect-agent",
+        #     namespace=self.prefect_server_helm_release_resource.namespace,
+        #     repository="https://prefecthq.github.io/prefect-helm",
+        #     provider=helm_provider,
+        #     set=[
+        #         ReleaseSet(
+        #             name="agent.apiConfig",
+        #             value="server",
+        #         ),
+        #         ReleaseSet(
+        #             name="agent.config.workPool",
+        #             value="default-agent-pool",
+        #         ),
+        #         ReleaseSet(
+        #             name="agent.image.prefectTag",
+        #             value=f"{config.prefect_server_version}-python3.11-kubernetes",
+        #         ),
+        #         ReleaseSet(
+        #             name="agent.serverApiConfig.apiUrl",
+        #             value=f"http://prefect-server.{self.prefect_server_helm_release_resource.namespace}.svc.cluster.local:4200/api",  # noqa: E501
+        #         ),
+        #     ],
+        #     scope=self,
+        # )
 
         self.prefect_default_worker_helm_release_resource = Release(
             depends_on=[self.prefect_server_helm_release_resource],
@@ -195,10 +200,11 @@ class PrefectConstruct(Construct):
                     name="worker.image.debug",
                     value="true",
                 ),
-                # ReleaseSet(
-                #     name="worker.image.prefectTag",
-                #     value="latest",
-                # ),
+                ReleaseSet(
+                    name="worker.image.prefectTag",
+                    # value="latest",
+                    value=f"{config.prefect_server_version}-python3.11-kubernetes",
+                ),
                 # ReleaseSet(
                 #     name="worker.image.repository",
                 #     value="registry.gitlab.com/timestep-ai/timestep/api",
