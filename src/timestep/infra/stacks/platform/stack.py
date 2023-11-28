@@ -551,13 +551,33 @@ class PlatformStack(TerraformStack):
             scope=self,
         )
 
+        timestep_ai_manifest_deps = [
+            default_sa_cluster_role_binding,
+            default_sa_role_binding,
+            private_repo_secret,
+            web_secret,
+        ]
+
+        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
+            timestep_local_tls_secret = SecretV1(
+                id_="timestep_local_tls_secret",
+                data={
+                    "tls.crt": config.local_tls_crt.get_secret_value(),
+                    "tls.key": config.local_tls_key.get_secret_value(),
+                },
+                metadata=SecretV1Metadata(
+                    name="timestep-local-tls",
+                    namespace="default",
+                ),
+                scope=self,
+                type="kubernetes.io/tls",
+            )
+            timestep_ai_manifest_deps.append(
+                timestep_local_tls_secret,
+            )
+
         Manifest(
-            depends_on=[
-                default_sa_cluster_role_binding,
-                default_sa_role_binding,
-                private_repo_secret,
-                web_secret,
-            ],
+            depends_on=timestep_ai_manifest_deps,
             id="timestep_ai_manifest",
             manifest={
                 "apiVersion": "argoproj.io/v1alpha1",
