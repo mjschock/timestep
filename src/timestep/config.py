@@ -70,6 +70,14 @@ class Settings(BaseSettings):
     )
     ingress_controller_email: str = Field(env="INGRESS_CONTROLLER_EMAIL")
     kubecontext: str = Field(env="KUBECONTEXT")
+    local_tls_crt: SecretStr = Field(
+        default=f"{BASE_PATH}/secrets/local_tls_crt",
+        env="LOCAL_TLS_CRT",
+    )
+    local_tls_key: SecretStr = Field(
+        default=f"{BASE_PATH}/secrets/local_tls_key",
+        env="LOCAL_TLS_KEY",
+    )
     minio_root_user: str = Field(env="MINIO_ROOT_USER")
     minio_root_password: SecretStr = Field(
         default=f"{BASE_PATH}/secrets/minio_root_password", env="MINIO_ROOT_PASSWORD"

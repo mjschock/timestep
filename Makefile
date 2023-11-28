@@ -28,6 +28,11 @@ kubernetes-dashboard-port-forward:
 kubernetes-dashboard-token:
 	src/timestep/infra/stacks/kubernetes_config/kubernetes_dashboard/kubernetes_dashboard_token.sh
 
+local-tls-cert:
+	ark get mkcert
+	mkcert -install
+	mkcert -cert-file secrets/local_tls_crt -key-file secrets/local_tls_key timestep.local www.timestep.local
+
 # nvidia:
 # 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.61.136.131 'bash -s' < src/timestep/infra/cicd/nvidia.sh
 
