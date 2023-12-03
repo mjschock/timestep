@@ -116,6 +116,7 @@ allow_k8s_contexts(
 
 local_resource(
     'make kubernetes-dashboard-port-forward',
+    auto_init=False,
     labels=['ops'],
     links=['https://localhost:8443'],
     serve_cmd='make kubernetes-dashboard-port-forward',
@@ -123,15 +124,17 @@ local_resource(
 
 local_resource(
     'kubectl port-forward postgresql-postgresql-ha-pgpool 5432:5432',
+    auto_init=False,
     labels=['ops'],
     serve_cmd='kubectl port-forward --namespace default svc/postgresql-postgresql-ha-pgpool 5432:5432'
 )
 
 local_resource(
-    'hasura-graphql-engine 8080:8080',
+    'hasura-graphql-engine 9000:8080',
+    auto_init=False,
     labels=['ops'],
-    links=['http://localhost:8080'],
-    serve_cmd='kubectl port-forward --namespace default svc/hasura-graphql-engine 8080:8080'
+    links=['http://localhost:9000'],
+    serve_cmd='kubectl port-forward --namespace default svc/hasura-graphql-engine 9000:8080'
 )
 
 watch_file('src/timestep/infra/stacks/platform')
@@ -309,4 +312,19 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
         local(
             'helm template --values src/timestep/infra/stacks/platform/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.yaml src/timestep/infra/stacks/platform'
         )
+    )
+
+    k8s_resource(
+        'caddy',
+        objects=[
+            'caddy:ingress',
+            'caddy-certs'
+        ]
+    )
+
+    k8s_resource(
+        'web',
+        objects=[
+            'web-configmap',
+        ]
     )
