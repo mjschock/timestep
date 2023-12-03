@@ -72,6 +72,30 @@ class GpgKey(
 
         jsii.create(self.__class__, self, [scope, id, config])
 
+    @jsii.member(jsii_name="generateConfigForImport")
+    @builtins.classmethod
+    def generate_config_for_import(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        import_to_id: builtins.str,
+        import_from_id: builtins.str,
+        provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
+    ) -> _cdktf_9a9027ec.ImportableResource:
+        '''Generates CDKTF code for importing a GpgKey resource upon running "cdktf plan ".
+
+        :param scope: The scope in which to define this construct.
+        :param import_to_id: The construct id used in the generated config for the GpgKey to import.
+        :param import_from_id: The id of the existing GpgKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs/resources/gpg_key#import import section} in the documentation of this resource for the id to use
+        :param provider: ? Optional instance of the provider where the GpgKey to import is found.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9a47fe7a1a2215b6a7868fcd5fa381249a4b09fbea18411bbd049ad0044c00ce)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument import_to_id", value=import_to_id, expected_type=type_hints["import_to_id"])
+            check_type(argname="argument import_from_id", value=import_from_id, expected_type=type_hints["import_from_id"])
+            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
+        return typing.cast(_cdktf_9a9027ec.ImportableResource, jsii.sinvoke(cls, "generateConfigForImport", [scope, import_to_id, import_from_id, provider]))
+
     @jsii.member(jsii_name="synthesizeAttributes")
     def _synthesize_attributes(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "synthesizeAttributes", []))
@@ -296,6 +320,15 @@ def _typecheckingstub__ec849cd24a1a78f6ae4600b323e3705b8eb6cda35954a3d18d8fd19a8
     lifecycle: typing.Optional[typing.Union[_cdktf_9a9027ec.TerraformResourceLifecycle, typing.Dict[builtins.str, typing.Any]]] = None,
     provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
     provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9a47fe7a1a2215b6a7868fcd5fa381249a4b09fbea18411bbd049ad0044c00ce(
+    scope: _constructs_77d1e7e8.Construct,
+    import_to_id: builtins.str,
+    import_from_id: builtins.str,
+    provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
 ) -> None:
     """Type checking stubs"""
     pass

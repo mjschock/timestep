@@ -69,6 +69,7 @@ class Settings(BaseSettings):
         env="INGRESS_CONTROLLER_DEBUG",
     )
     ingress_controller_email: str = Field(env="INGRESS_CONTROLLER_EMAIL")
+    kubeapps_is_enabled: bool = Field(default=False, env="KUBEAPPS_IS_ENABLED")
     kubecontext: str = Field(env="KUBECONTEXT")
     local_tls_crt: SecretStr = Field(
         default=f"{BASE_PATH}/secrets/local_tls_crt",
@@ -110,6 +111,14 @@ class Settings(BaseSettings):
     )
     prefect_server_version: str = Field(env="PREFECT_SERVER_VERSION")
     primary_domain_name: str = Field(env="PRIMARY_DOMAIN_NAME")
+    sealed_secrets_is_enabled: bool = Field(
+        default=False, env="SEALED_SECRETS_IS_ENABLED"
+    )
+    smtp_password: SecretStr = Field(
+        default=f"{BASE_PATH}/secrets/smtp_password",
+        env="SMTP_PASSWORD",
+    )
+    smtp_sender: str = Field(env="SMTP_SENDER")
     ssh_private_key: SecretStr = Field(env="SSH_PRIVATE_KEY")
     ssh_private_key_path: str = Field(
         default=f"{BASE_PATH}/secrets/ssh_private_key", env="SSH_PRIVATE_KEY_PATH"

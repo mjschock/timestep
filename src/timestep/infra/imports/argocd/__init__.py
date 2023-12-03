@@ -30,15 +30,3 @@ __all__ = [
 publication.publish()
 
 # Loading modules to ensure their types are registered with the jsii runtime library
-from . import account_token
-from . import application
-from . import application_set
-from . import cluster
-from . import data_argocd_application
-from . import gpg_key
-from . import project
-from . import project_token
-from . import provider
-from . import repository
-from . import repository_certificate
-from . import repository_credentials

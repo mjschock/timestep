@@ -91,13 +91,13 @@ class CloudInitConfigConstruct(Construct):
 --local \
 --user {config.cloud_instance_user}""",
                 ],
-                [
-                    "runuser",
-                    "-l",
-                    config.cloud_instance_user,
-                    "-c",
-                    f"sudo kubectl --kubeconfig /home/{config.cloud_instance_user}/kubeconfig create secret docker-registry regcred --docker-server={config.docker_registry_server} --docker-username={config.docker_registry_username} --docker-password={config.docker_registry_password.get_secret_value()} --docker-email={config.docker_registry_email}",  # noqa: E501
-                ],
+                # [
+                #     "runuser",
+                #     "-l",
+                #     config.cloud_instance_user,
+                #     "-c",
+                #     f"sudo kubectl --kubeconfig /home/{config.cloud_instance_user}/kubeconfig create secret docker-registry regcred --docker-server={config.docker_registry_server} --docker-username={config.docker_registry_username} --docker-password={config.docker_registry_password.get_secret_value()} --docker-email={config.docker_registry_email}",  # noqa: E501
+                # ],
             ],
             users=[
                 "default",

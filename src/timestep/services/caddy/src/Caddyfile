@@ -17,10 +17,6 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 		reverse_proxy web:5000
 	}
 
-	handle /graphql {
-		reverse_proxy web:5000
-	}
-
 	handle /openapi.json {
 		reverse_proxy web:5000
 	}
@@ -33,21 +29,40 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 		reverse_proxy web:5000
 	}
 
+	handle /rest/* {
+		reverse_proxy web:5000
+	}
+
 	handle /sky {
 		reverse_proxy web:5000
 	}
 
-	# handle /console/* {
-	# 	reverse_proxy graphql-engine:8080
+	# handle /console {
+	# 	reverse_proxy hasura-graphql-engine:8080
 	# }
 
-	# handle /v1/* {
-	# 	reverse_proxy graphql-engine:8080
+	handle /console* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	# handle /v1/graphql {
+	# 	# reverse_proxy web:5000
+	# 	reverse_proxy hasura-graphql-engine:8080/v1/graphql
 	# }
 
-	# handle /v2/* {
-	# 	reverse_proxy graphql-engine:8080
-	# }
+	handle /v1/auth* {
+		# uri replace /v1/auth /auth
+		uri strip_prefix /v1/auth
+		reverse_proxy nhost-hasura-auth:4000
+	}
+
+	handle /v1* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	handle /v2* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
 
 	# add_header X-Content-Type-Options "nosniff";
 

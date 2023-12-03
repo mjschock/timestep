@@ -21,6 +21,3 @@ __all__ = [
 publication.publish()
 
 # Loading modules to ensure their types are registered with the jsii runtime library
-from . import data_multipass_instance
-from . import instance
-from . import provider

@@ -20,5 +20,3 @@ __all__ = [
 publication.publish()
 
 # Loading modules to ensure their types are registered with the jsii runtime library
-from . import domain_records
-from . import provider

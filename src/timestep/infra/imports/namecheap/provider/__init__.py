@@ -66,6 +66,30 @@ class NamecheapProvider(
 
         jsii.create(self.__class__, self, [scope, id, config])
 
+    @jsii.member(jsii_name="generateConfigForImport")
+    @builtins.classmethod
+    def generate_config_for_import(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        import_to_id: builtins.str,
+        import_from_id: builtins.str,
+        provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
+    ) -> _cdktf_9a9027ec.ImportableResource:
+        '''Generates CDKTF code for importing a NamecheapProvider resource upon running "cdktf plan ".
+
+        :param scope: The scope in which to define this construct.
+        :param import_to_id: The construct id used in the generated config for the NamecheapProvider to import.
+        :param import_from_id: The id of the existing NamecheapProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#import import section} in the documentation of this resource for the id to use
+        :param provider: ? Optional instance of the provider where the NamecheapProvider to import is found.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9fa3bda4281148660778fe89fd10a29e7dc67efc06cacb926c6ef7b498133bbf)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument import_to_id", value=import_to_id, expected_type=type_hints["import_to_id"])
+            check_type(argname="argument import_from_id", value=import_from_id, expected_type=type_hints["import_from_id"])
+            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
+        return typing.cast(_cdktf_9a9027ec.ImportableResource, jsii.sinvoke(cls, "generateConfigForImport", [scope, import_to_id, import_from_id, provider]))
+
     @jsii.member(jsii_name="resetAlias")
     def reset_alias(self) -> None:
         return typing.cast(None, jsii.invoke(self, "resetAlias", []))
@@ -336,6 +360,15 @@ def _typecheckingstub__0e8296e4cd4ed43ef2fb357d86c488288a909c4655223c3ace96996d1
     alias: typing.Optional[builtins.str] = None,
     client_ip: typing.Optional[builtins.str] = None,
     use_sandbox: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9fa3bda4281148660778fe89fd10a29e7dc67efc06cacb926c6ef7b498133bbf(
+    scope: _constructs_77d1e7e8.Construct,
+    import_to_id: builtins.str,
+    import_from_id: builtins.str,
+    provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
 ) -> None:
     """Type checking stubs"""
     pass
