@@ -28,17 +28,17 @@ local_resource(
     ],
 )
 
-# local_resource(
-#     'poetry add cdktf',
-#     cmd='poetry add cdktf@$CDKTF_LIB_VERSION',
-#     env={
-#         'PRIMARY_DOMAIN_NAME': os.getenv('CDKTF_LIB_VERSION'),
-#     },
-#     labels=['build'],
-#     resource_deps=[
-#         'poetry install',
-#     ],
-# )
+local_resource(
+    'poetry add cdktf',
+    cmd='poetry add cdktf@$CDKTF_LIB_VERSION',
+    # env={
+    #     'PRIMARY_DOMAIN_NAME': os.getenv('CDKTF_LIB_VERSION'),
+    # },
+    labels=['build'],
+    resource_deps=[
+        'poetry install',
+    ],
+)
 
 local_resource(
     'poetry run cdktf get',
@@ -106,11 +106,32 @@ allow_k8s_contexts(
     os.getenv('KUBECONTEXT'),
 )
 
+# if os.getenv('KUBEAPPS_IS_ENABLED', False):
+#     local_resource(
+#         'kubeapps',
+#         labels=['deploy'],
+#         links=['http://localhost:8484'],
+#         serve_cmd='make kubeapps-port-forward',
+#     )
+
 local_resource(
-    'kubeapps',
-    labels=['deploy'],
-    links=['http://localhost:8484'],
-    serve_cmd='make kubeapps-port-forward',
+    'make kubernetes-dashboard-port-forward',
+    labels=['ops'],
+    links=['https://localhost:8443'],
+    serve_cmd='make kubernetes-dashboard-port-forward',
+)
+
+local_resource(
+    'kubectl port-forward postgresql-postgresql-ha-pgpool 5432:5432',
+    labels=['ops'],
+    serve_cmd='kubectl port-forward --namespace default svc/postgresql-postgresql-ha-pgpool 5432:5432'
+)
+
+local_resource(
+    'hasura-graphql-engine 8080:8080',
+    labels=['ops'],
+    links=['http://localhost:8080'],
+    serve_cmd='kubectl port-forward --namespace default svc/hasura-graphql-engine 8080:8080'
 )
 
 watch_file('src/timestep/infra/stacks/platform')

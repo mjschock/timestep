@@ -11,6 +11,7 @@
           <q-breadcrumbs-el label="agents" :to="`/envs/${envId}/agents`"/>
           <q-breadcrumbs-el :label="agentId" />
         </q-breadcrumbs> -->
+        <SignOutComponent v-if="isAuthenticated"/>
       </q-toolbar>
     </q-header>
 
@@ -32,14 +33,31 @@
 import { computed, defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
+// import SignInComponent from 'src/components/SignInComponent.vue';
+// import SignUpComponent from'src/components/SignUpComponent.vue';
+import SignOutComponent from 'src/components/SignOutComponent.vue';
+
+import { nhost } from 'src/boot/nhost';
+
 export default defineComponent({
   name: 'MainLayout',
+
+  components: {
+    SignOutComponent,
+  },
 
   setup() {
     const router = useRouter();
 
     const envId = computed(() => (router.currentRoute.value.params.envId || '').toString())
     const agentId = computed(() => (router.currentRoute.value.params.agentId || '').toString())
+    const { isAuthenticated, isLoading } = nhost.auth.getAuthenticationStatus()
+
+    nhost.auth.onAuthStateChanged((event, session) => {
+      console.log(
+        `The auth state has changed. State is now ${event} with session: ${session}`
+      )
+    })
 
     const toolbarOnclick = () => {
       router.push('/')
@@ -48,6 +66,7 @@ export default defineComponent({
     return {
       agentId,
       envId,
+      isAuthenticated,
       toolbarOnclick,
     }
   }

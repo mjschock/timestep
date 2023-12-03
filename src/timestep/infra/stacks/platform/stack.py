@@ -15,6 +15,18 @@ from cdktf_cdktf_provider_kubernetes.cluster_role_v1 import (
     ClusterRoleV1Metadata,
     ClusterRoleV1Rule,
 )
+from cdktf_cdktf_provider_kubernetes.deployment_v1 import (
+    DeploymentV1,
+    DeploymentV1Metadata,
+    DeploymentV1Spec,
+    DeploymentV1SpecSelector,
+    DeploymentV1SpecTemplate,
+    DeploymentV1SpecTemplateMetadata,
+    DeploymentV1SpecTemplateSpec,
+    DeploymentV1SpecTemplateSpecContainer,
+    DeploymentV1SpecTemplateSpecContainerEnv,
+    DeploymentV1SpecTemplateSpecContainerPort,
+)
 from cdktf_cdktf_provider_kubernetes.manifest import Manifest
 from cdktf_cdktf_provider_kubernetes.provider import KubernetesProvider
 from cdktf_cdktf_provider_kubernetes.role_binding_v1 import (
@@ -29,6 +41,12 @@ from cdktf_cdktf_provider_kubernetes.role_v1 import (
     RoleV1Rule,
 )
 from cdktf_cdktf_provider_kubernetes.secret_v1 import SecretV1, SecretV1Metadata
+from cdktf_cdktf_provider_kubernetes.service_v1 import (
+    ServiceV1,
+    ServiceV1Metadata,
+    ServiceV1Spec,
+    ServiceV1SpecPort,
+)
 from constructs import Construct
 
 from timestep.config import CloudInstanceProvider, Settings
@@ -57,329 +75,236 @@ class PlatformStack(TerraformStack):
             scope=self,
         )
 
-        config.postgresql_password.get_secret_value()
+        postgres_database = "postgres"
+        postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
+        postgres_password = config.postgresql_password.get_secret_value()
+        postgres_username = "postgres"
 
-        # kubectl -n default create secret generic demo-supabase-jwt \
-        #   --from-literal=anonKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjc1NDAwNDAwLAogICAgImV4cCI6IDE4MzMxNjY4MDAKfQ.ztuiBzjaVoFHmoljUXWmnuDN6QU2WgJICeqwyzyZO88' \  # noqa: E501
-        #   --from-literal=serviceKey='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAic2VydmljZV9yb2xlIiwKICAgICJpc3MiOiAic3VwYWJhc2UiLAogICAgImlhdCI6IDE2NzU0MDA0MDAsCiAgICAiZXhwIjogMTgzMzE2NjgwMAp9.qNsmXzz4tG7eqJPh1Y58DbtIlJBauwpqx39UF-MwM8k' \  # noqa: E501
-        #   --from-literal=secret='abcdefghijklmnopqrstuvwxyz123456'
+        self.hasura_graphql_engine_deployment_resource = DeploymentV1(
+            id_="hasura_graphql_engine_deployment_resource",
+            metadata=DeploymentV1Metadata(
+                labels={
+                    "app": "hasura-graphql-engine",
+                },
+                name="hasura-graphql-engine",
+                namespace="default",
+            ),
+            spec=DeploymentV1Spec(
+                replicas="1",
+                selector=DeploymentV1SpecSelector(
+                    match_labels={
+                        "app": "hasura-graphql-engine",
+                    }
+                ),
+                template=DeploymentV1SpecTemplate(
+                    metadata=DeploymentV1SpecTemplateMetadata(
+                        labels={
+                            "app": "hasura-graphql-engine",
+                        },
+                    ),
+                    spec=DeploymentV1SpecTemplateSpec(
+                        container=[
+                            DeploymentV1SpecTemplateSpecContainer(
+                                env=[
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_ADMIN_SECRET",
+                                        value=config.hasura_graphql_admin_secret.get_secret_value(),
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_DEV_MODE",
+                                        value="true",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_DATABASE_URL",
+                                        value=f"postgres://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_ENABLE_CONSOLE",
+                                        value="true",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_JWT_SECRET",
+                                        value=f'{{"type": "HS256", "key": "{config.hasura_graphql_jwt_secret_key.get_secret_value()}", "issuer": "hasura-auth"}}',  # noqa: E501
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_LOG_LEVEL",
+                                        value="debug",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_UNAUTHORIZED_ROLE",
+                                        value="public",
+                                    ),
+                                ],
+                                image="hasura/graphql-engine:latest",
+                                image_pull_policy="IfNotPresent",
+                                name="hasura-graphql-engine",
+                                port=[
+                                    DeploymentV1SpecTemplateSpecContainerPort(
+                                        container_port=8080,
+                                        name="http",
+                                        protocol="TCP",
+                                    )
+                                ],
+                            )
+                        ],
+                    ),
+                ),
+            ),
+            scope=self,
+        )
 
-        # self.supabase_jwt_secret_resource = SecretV1(
-        #     id_="supabase_jwt_secret_resource",
-        #     data={
-        #         # "anon-key": config.supabase_jwt_anon_key.get_secret_value(),
-        #         # "secret": config.supabase_jwt_secret.get_secret_value(),
-        #         # "service-key": config.supabase_jwt_service_key.get_secret_value(),
-        #         "anon-key": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAiYW5vbiIsCiAgICAiaXNzIjogInN1cGFiYXNlIiwKICAgICJpYXQiOiAxNjc1NDAwNDAwLAogICAgImV4cCI6IDE4MzMxNjY4MDAKfQ.ztuiBzjaVoFHmoljUXWmnuDN6QU2WgJICeqwyzyZO88',  # noqa: E501
-        #         "secret": 'abcdefghijklmnopqrstuvwxyz123456',
-        #         "service-key": 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICAgInJvbGUiOiAic2VydmljZV9yb2xlIiwKICAgICJpc3MiOiAic3VwYWJhc2UiLAogICAgImlhdCI6IDE2NzU0MDA0MDAsCiAgICAiZXhwIjogMTgzMzE2NjgwMAp9.qNsmXzz4tG7eqJPh1Y58DbtIlJBauwpqx39UF-MwM8k',  # noqa: E501
-        #     },
-        #     metadata=SecretV1Metadata(
-        #         name="supabase-jwt",
-        #         namespace="default",
-        #     ),
-        #     scope=self,
-        # )
+        self.hasura_graphql_engine_service_resource = ServiceV1(
+            depends_on=[self.hasura_graphql_engine_deployment_resource],
+            id_="hasura_graphql_engine_service_resource",
+            metadata=ServiceV1Metadata(
+                labels={
+                    "app": "hasura-graphql-engine",
+                },
+                name="hasura-graphql-engine",
+                namespace="default",
+            ),
+            spec=ServiceV1Spec(
+                port=[
+                    ServiceV1SpecPort(
+                        port=8080,
+                        protocol="TCP",
+                    )
+                ],
+                selector={
+                    "app": "hasura-graphql-engine",
+                },
+                type="ClusterIP",
+            ),
+            scope=self,
+        )
 
-        # self.supabase_helm_release_resource = Release(
-        #     id_="supabase_helm_release_resource",
-        #     atomic=True,
-        #     chart="supabase",
-        #     create_namespace=True,
-        #     name="supabase",
-        #     namespace="default",
-        #     repository="https://charts.bitnami.com/bitnami",
-        #     provider=self.helm_provider,
-        #     set=[
-        #         ReleaseSet(
-        #             name="externalDatabase.host",
-        #             value=postgres_hostname,
-        #         ),
-        #         ReleaseSet(
-        #             name="externalDatabase.database",
-        #             value=postgres_database,
-        #         ),
-        #         ReleaseSet(
-        #             name="externalDatabase.port",
-        #             value="5432",
-        #         ),
-        #         ReleaseSet(
-        #             name="externalDatabase.user",
-        #             value=postgres_username,
-        #         ),
-        #         ReleaseSet(
-        #             name="global.jwt.existingSecret",
-        #             value=self.supabase_jwt_secret_resource.metadata.name,
-        #         ),
-        #         ReleaseSet(
-        #             name="postgresql.enabled",
-        #             value="false",
-        #         ),
-        #     ],
-        #     set_sensitive=[
-        #         ReleaseSetSensitive(
-        #             name="externalDatabase.password",
-        #             value=postgres_password,
-        #         )
-        #     ],
-        #     scope=self,
-        # )
+        self.nhost_hasura_auth_deployment_resource = DeploymentV1(
+            id_="nhost_hasura_auth_deployment_resource",
+            metadata=DeploymentV1Metadata(
+                labels={
+                    "app": "nhost-hasura-auth",
+                },
+                name="nhost-hasura-auth",
+                namespace="default",
+            ),
+            spec=DeploymentV1Spec(
+                replicas="1",
+                selector=DeploymentV1SpecSelector(
+                    match_labels={
+                        "app": "nhost-hasura-auth",
+                    }
+                ),
+                template=DeploymentV1SpecTemplate(
+                    metadata=DeploymentV1SpecTemplateMetadata(
+                        labels={
+                            "app": "nhost-hasura-auth",
+                        },
+                    ),
+                    spec=DeploymentV1SpecTemplateSpec(
+                        container=[
+                            DeploymentV1SpecTemplateSpecContainer(
+                                env=[
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="AUTH_CLIENT_URL",
+                                        value=f"https://www.{config.primary_domain_name}",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="AUTH_MFA_ENABLED",
+                                        value="true",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="AUTH_PASSWORD_HIBP_ENABLED",
+                                        value="true",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="AUTH_PASSWORD_MIN_LENGTH",
+                                        value="14",  # https://bitwarden.com/blog/how-long-should-my-password-be/
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="AUTH_SERVER_URL",
+                                        value=f"https://www.{config.primary_domain_name}/v1/auth",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="AUTH_SMTP_HOST",
+                                        value="smtp.gmail.com",  # The sending limit is 2,000 messages per day.  # noqa: E501
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="AUTH_SMTP_PASS",
+                                        value=config.smtp_password.get_secret_value(),
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="AUTH_SMTP_PORT",
+                                        value="587",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="AUTH_SMTP_SENDER",
+                                        value=config.smtp_sender,
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="AUTH_SMTP_USER",
+                                        value="agent@timestep.ai",
+                                        # value="Timestep AI Agent"
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_ADMIN_SECRET",
+                                        value=config.hasura_graphql_admin_secret.get_secret_value(),
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_DATABASE_URL",
+                                        value=f"postgres://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_GRAPHQL_URL",
+                                        value="http://hasura-graphql-engine.default.svc.cluster.local:8080/v1/graphql",  # noqa: E501
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_JWT_SECRET",
+                                        value=f'{{"type": "HS256", "key": "{config.hasura_graphql_jwt_secret_key.get_secret_value()}", "issuer": "hasura-auth"}}',  # noqa: E501
+                                    ),
+                                ],
+                                image="nhost/hasura-auth:latest",
+                                name="nhost-hasura-auth",
+                                port=[
+                                    DeploymentV1SpecTemplateSpecContainerPort(
+                                        container_port=4000,
+                                        name="http",
+                                    )
+                                ],
+                            )
+                        ],
+                    ),
+                ),
+            ),
+            scope=self,
+        )
 
-        # self.nhost_helm_release_resource = Release(
-        #     id_="nhost_helm_release_resource",
-        #     atomic=True,
-        #     chart="nhost",
-        #     create_namespace=True,
-        #     name="nhost",
-        #     namespace="default",
-        #     repository="https://fpoussin.github.io/nhost-helm",
-        #     provider=self.helm_provider,
-        #     set=[
-        #         ReleaseSet(
-        #             name="mailhog.ingress.enabled",
-        #             value="false",
-        #         ),
-        #         ReleaseSet(
-        #             name="minio.auth.rootUser",
-        #             value=config.minio_root_user,
-        #         ),
-        #         ReleaseSet(
-        #             name="minio.enabled",
-        #             value="false",
-        #         ),
-        #         ReleaseSet(
-        #             name="postgresql.enabled",
-        #             value="false",
-        #         ),
-        #     ],
-        #     set_sensitive=[
-        #         ReleaseSetSensitive(
-        #             name="minio.auth.rootPassword",
-        #             value=config.minio_root_password.get_secret_value(),
-        #         ),
-        #         ReleaseSetSensitive(
-        #             name="postgresql.auth.password",
-        #             value=config.postgresql_password.get_secret_value(),
-        #         ),
-        #         ReleaseSetSensitive(
-        #             name="postgresql.auth.postgresPassword",
-        #             value=config.postgresql_password.get_secret_value(),
-        #         ),
-        #     ],
-        #     scope=self,
-        # )
-
-        # self.hasura_graphql_engine_helm_release_resource = Release(
-        #     id_="hasura_graphql_engine_helm_release_resource",
-        #     atomic=True,
-        #     chart="graphql-engine",
-        #     create_namespace=True,
-        #     name="hasura",
-        #     namespace="default",
-        #     repository="https://hasura.github.io/helm-charts",
-        #     provider=self.helm_provider,
-        #     set=[
-        #         # ReleaseSet(
-        #         #     name="config.enabledApis",
-        #         #     value="metadata",
-        #         # ),
-        #         ReleaseSet(
-        #             name="config.metadataOnly",
-        #             value="false",
-        #         ),
-        #         ReleaseSet(
-        #             name="config.unauthorizedRole",
-        #             value="public",
-        #         ),
-        #         # ReleaseSet(
-        #         #     name="postgres.auth.username",
-        #         #     value=postgres_username,
-        #         # ),
-        #         # ReleaseSet(
-        #         #     name="postgres.auth.database",
-        #         #     value=postgres_database,
-        #         # ),
-        #         ReleaseSet(
-        #             name="postgres.enabled",
-        #             value="false",
-        #         ),
-        #     ],
-        #     set_sensitive=[
-        #         # ReleaseSetSensitive(
-        #         #     name="postgres.auth.password",
-        #         #     value=config.postgresql_password.get_secret_value(),
-        #         # ),
-        #         ReleaseSetSensitive(
-        #             name="secret.adminSecret",
-        #             value=config.hasura_graphql_admin_secret.get_secret_value(),
-        #         ),
-        #         ReleaseSetSensitive(
-        #             name="secret.jwtSecret.key",
-        #             value=config.hasura_graphql_jwt_secret_key.get_secret_value(),
-        #         ),
-        #         ReleaseSetSensitive(
-        #             name="secret.jwtSecret.issuer",
-        #             value="hasura-auth",
-        #         ),
-        #         ReleaseSetSensitive(
-        #             name="secret.jwtSecret.type",
-        #             value="HS256",
-        #         ),
-        #         ReleaseSetSensitive(
-        #             name="secret.metadataDbUrl",
-        #             value=postgres_connection_string,
-        #         )
-        #     ],
-        #     scope=self,
-        # )
-
-        # self.hasura_graphql_engine_deployment_resource = DeploymentV1(
-        #     id_="hasura_graphql_engine_deployment_resource",
-        #     metadata=DeploymentV1Metadata(
-        #         labels={
-        #             "app": "hasura-graphql-engine",
-        #         },
-        #         name="hasura-graphql-engine",
-        #         namespace="default",
-        #     ),
-        #     spec=DeploymentV1Spec(
-        #         replicas="1",
-        #         selector=DeploymentV1SpecSelector(
-        #             match_labels={
-        #                 "app": "hasura-graphql-engine",
-        #             }
-        #         ),
-        #         template=DeploymentV1SpecTemplate(
-        #             metadata=DeploymentV1SpecTemplateMetadata(
-        #                 labels={
-        #                     "app": "hasura-graphql-engine",
-        #                 },
-        #             ),
-        #             spec=DeploymentV1SpecTemplateSpec(
-        #                 container=[
-        #                     DeploymentV1SpecTemplateSpecContainer(
-        #                         env=[
-        #                             DeploymentV1SpecTemplateSpecContainerEnv(
-        #                                 name="HASURA_GRAPHQL_ADMIN_SECRET",
-        #                                 value=config.hasura_graphql_admin_secret.get_secret_value(),  # noqa: E501
-        #                             ),
-        #                             DeploymentV1SpecTemplateSpecContainerEnv(
-        #                                 name="HASURA_GRAPHQL_DATABASE_URL",
-        #                                 value=postgres_connection_string,
-        #                             ),
-        #                             DeploymentV1SpecTemplateSpecContainerEnv(
-        #                                 name="HASURA_GRAPHQL_ENABLE_CONSOLE",
-        #                                 value="true",
-        #                             ),
-        #                             DeploymentV1SpecTemplateSpecContainerEnv(
-        #                                 name="HASURA_GRAPHQL_JWT_SECRET",
-        #                                 value=f"{{\"type\": \"HS256\", \"key\": \"{config.hasura_graphql_jwt_secret_key.get_secret_value()}\", \"issuer\": \"hasura-auth\"}}",  # noqa: E501
-        #                             ),
-        #                             DeploymentV1SpecTemplateSpecContainerEnv(
-        #                                 name="HASURA_GRAPHQL_LOG_LEVEL",
-        #                                 value="debug",
-        #                             ),
-        #                             DeploymentV1SpecTemplateSpecContainerEnv(
-        #                                 name="HASURA_GRAPHQL_UNAUTHORIZED_ROLE",
-        #                                 value="public",
-        #                             ),
-        #                         ],
-        #                         image="hasura/graphql-engine:latest",
-        #                         name="hasura-graphql-engineh",
-        #                         port=[
-        #                             DeploymentV1SpecTemplateSpecContainerPort(
-        #                                 container_port=8080,
-        #                                 name="http",
-        #                             )
-        #                         ]
-        #                     )
-        #                 ],
-        #             ),
-        #         ),
-        #     ),
-        #     scope=self,
-        # )
-
-        # self.hasura_graphql_engine_service_resource = ServiceV1(
-        #     id_="hasura_graphql_engine_service_resource",
-        #     metadata=ServiceV1Metadata(
-        #         name="hasura-graphql-engine",
-        #         namespace="default",
-        #     ),
-        #     spec=ServiceV1Spec(
-        #         port=[
-        #             ServiceV1SpecPort(
-        #                 port=8080,
-        #                 protocol="TCP",
-        #                 # target_port=8080,
-        #             )
-        #         ],
-        #         selector={
-        #             "app": "hasura-graphql-engine",
-        #         },
-        #         type="ClusterIP",
-        #     ),
-        #     scope=self,
-        # )
-
-        # self.nhost_hasura_auth_deployment_resource = DeploymentV1(
-        #     id_="nhost_hasura_auth_deployment_resource",
-        #     metadata=DeploymentV1Metadata(
-        #         labels={
-        #             "app": "nhost-hasura-auth",
-        #         },
-        #         name="nhost-hasura-auth",
-        #         namespace="default",
-        #     ),
-        #     spec=DeploymentV1Spec(
-        #         replicas="1",
-        #         selector=DeploymentV1SpecSelector(
-        #             match_labels={
-        #                 "app": "nhost-hasura-auth",
-        #             }
-        #         ),
-        #         template=DeploymentV1SpecTemplate(
-        #             metadata=DeploymentV1SpecTemplateMetadata(
-        #                 labels={
-        #                     "app": "nhost-hasura-auth",
-        #                 },
-        #             ),
-        #             spec=DeploymentV1SpecTemplateSpec(
-        #                 container=[
-        #                     DeploymentV1SpecTemplateSpecContainer(
-        #                         env=[
-        #                             DeploymentV1SpecTemplateSpecContainerEnv(
-        #                                 name="HASURA_GRAPHQL_ADMIN_SECRET",
-        #                                 value=config.hasura_graphql_admin_secret.get_secret_value(),  # noqa: E501
-        #                             ),
-        #                             DeploymentV1SpecTemplateSpecContainerEnv(
-        #                                 name="HASURA_GRAPHQL_DATABASE_URL",
-        #                                 value=postgres_connection_string,
-        #                             ),
-        #                             DeploymentV1SpecTemplateSpecContainerEnv(
-        #                                 name="HASURA_GRAPHQL_GRAPHQL_URL",
-        #                                 value=f"http://hasura-graphql-engine.default.svc.cluster.local:8080/v1/graphql",  # noqa: E501
-        #                             ),
-        #                             DeploymentV1SpecTemplateSpecContainerEnv(
-        #                                 name="HASURA_GRAPHQL_JWT_SECRET",
-        #                                 value=f"{{\"type\": \"HS256\", \"key\": \"{config.hasura_graphql_jwt_secret_key.get_secret_value()}\", \"issuer\": \"hasura-auth\"}}",  # noqa: E501
-        #                             ),
-        #                         ],
-        #                         image="nhost/hasura-auth:latest",
-        #                         name="nhost-hasura-auth",
-        #                         port=[
-        #                             DeploymentV1SpecTemplateSpecContainerPort(
-        #                                 container_port=4000,
-        #                                 name="http",
-        #                             )
-        #                         ]
-        #                     )
-        #                 ],
-        #             ),
-        #         ),
-        #     ),
-        #     scope=self,
-        # )
+        self.nhost_hasura_auth_service_resource = ServiceV1(
+            depends_on=[
+                self.hasura_graphql_engine_service_resource,
+                self.nhost_hasura_auth_deployment_resource,
+            ],
+            id_="nhost_hasura_auth_service_resource",
+            metadata=ServiceV1Metadata(
+                labels={
+                    "app": "nhost-hasura-auth",
+                },
+                name="nhost-hasura-auth",
+                namespace="default",
+            ),
+            spec=ServiceV1Spec(
+                port=[
+                    ServiceV1SpecPort(
+                        port=4000,
+                        protocol="TCP",
+                    )
+                ],
+                selector={
+                    "app": "nhost-hasura-auth",
+                },
+                type="ClusterIP",
+            ),
+            scope=self,
+        )
 
         default_sa_cluster_role = ClusterRoleV1(
             id_="default_sa_cluster_role",
@@ -539,10 +464,17 @@ class PlatformStack(TerraformStack):
         #     scope=self,
         # )
 
+        postgres_database = "postgres"
+        postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
+        postgres_password = config.postgresql_password.get_secret_value()
+        postgres_username = "postgres"
+
         web_secret = SecretV1(
             id_="web_secret",
             data={
                 "MINIO_ROOT_PASSWORD": config.minio_root_password.get_secret_value(),
+                "POSTGRES_CONNECTION_STRING": f"postgresql+asyncpg://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}",
+                "POSTGRES_PASSWORD": config.postgresql_password.get_secret_value(),
             },
             metadata=SecretV1Metadata(
                 name="web-secret",

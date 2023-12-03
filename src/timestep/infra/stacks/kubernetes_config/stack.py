@@ -11,6 +11,9 @@ from timestep.config import CloudInstanceProvider, Settings
 from timestep.infra.stacks.kubernetes_config.argo_cd import (
     ArgoCDConstruct,
 )
+from timestep.infra.stacks.kubernetes_config.container_registry import (
+    ContainerRegistryConstruct,
+)
 from timestep.infra.stacks.kubernetes_config.kubeapps import (
     KubeappsConstruct,
 )
@@ -62,12 +65,22 @@ class KubernetesConfigStack(TerraformStack):
             scope=self,
         )
 
-        self.kubeapps_contruct: KubeappsConstruct = KubeappsConstruct(
-            config=config,
-            id="kubeapps_contruct",
-            helm_provider=self.helm_provider,
-            scope=self,
+        self.container_registry_contruct: ContainerRegistryConstruct = (
+            ContainerRegistryConstruct(
+                config=config,
+                id="container_registry_contruct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
         )
+
+        if config.kubeapps_is_enabled:
+            self.kubeapps_contruct: KubeappsConstruct = KubeappsConstruct(
+                config=config,
+                id="kubeapps_contruct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
 
         self.kubernetes_cluster_ingress_construct: KubernetesClusterIngressConstruct = (
             KubernetesClusterIngressConstruct(
@@ -108,19 +121,15 @@ class KubernetesConfigStack(TerraformStack):
             scope=self,
         )
 
-        # self.registry_construct: RegistryConstruct = RegistryConstruct(
-        #     config=config,
-        #     id="registry_construct",
-        #     helm_provider=self.helm_provider,
-        #     scope=self,
-        # )
-
-        self.sealed_secrets_construct: SealedSecretsConstruct = SealedSecretsConstruct(
-            config=config,
-            id="sealed_secrets_construct",
-            helm_provider=self.helm_provider,
-            scope=self,
-        )
+        if config.sealed_secrets_is_enabled:
+            self.sealed_secrets_construct: SealedSecretsConstruct = (
+                SealedSecretsConstruct(
+                    config=config,
+                    id="sealed_secrets_construct",
+                    helm_provider=self.helm_provider,
+                    scope=self,
+                )
+            )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             LocalBackend(

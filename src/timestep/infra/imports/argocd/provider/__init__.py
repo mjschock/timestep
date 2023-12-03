@@ -66,7 +66,7 @@ class ArgocdProvider(
         :param client_cert_key: Client certificate key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#client_cert_key ArgocdProvider#client_cert_key}
         :param config_path: Override the default config path of ``$HOME/.config/argocd/config``. Only relevant when ``use_local_config``. Can be set through the ``ARGOCD_CONFIG_PATH`` environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#config_path ArgocdProvider#config_path}
         :param context: Context to choose when using a local ArgoCD config file. Only relevant when ``use_local_config``. Can be set through ``ARGOCD_CONTEXT`` environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#context ArgocdProvider#context}
-        :param core: Configure direct access using Kubernetes API server. *Warning**: this feature works by starting a local ArgoCD API server that talks directly to the Kubernetes API using the **current context in the default kubeconfig** (``~/.kube/config``). This behavior cannot be overridden using either environment variables or the ``kubernetes`` block in the provider configuration at present). If the server fails to start (e.g. your kubeconfig is misconfigured) then the provider will fail as a result of the ``argocd`` module forcing it to exit and no logs will be available to help you debug this. The error message will be similar to .. epigraph:: ``The plugin encountered an error, and failed to respond to the plugin.(*GRPCProvider).ReadResource call. The plugin logs may contain more details.`` To debug this, you will need to login via the ArgoCD CLI using ``argocd login --core`` and then running an operation. E.g. ``argocd app list``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#core ArgocdProvider#core}
+        :param core: Configure direct access using Kubernetes API server. **Warning**: this feature works by starting a local ArgoCD API server that talks directly to the Kubernetes API using the **current context in the default kubeconfig** (``~/.kube/config``). This behavior cannot be overridden using either environment variables or the ``kubernetes`` block in the provider configuration at present). If the server fails to start (e.g. your kubeconfig is misconfigured) then the provider will fail as a result of the ``argocd`` module forcing it to exit and no logs will be available to help you debug this. The error message will be similar to .. epigraph:: ``The plugin encountered an error, and failed to respond to the plugin.(*GRPCProvider).ReadResource call. The plugin logs may contain more details.`` To debug this, you will need to login via the ArgoCD CLI using ``argocd login --core`` and then running an operation. E.g. ``argocd app list``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#core ArgocdProvider#core}
         :param grpc_web: Whether to use gRPC web proxy client. Useful if Argo CD server is behind proxy which does not support HTTP2. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#grpc_web ArgocdProvider#grpc_web}
         :param grpc_web_root_path: Use the gRPC web proxy client and set the web root, e.g. ``argo-cd``. Useful if the Argo CD server is behind a proxy at a non-root path. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#grpc_web_root_path ArgocdProvider#grpc_web_root_path}
         :param headers: Additional headers to add to each request to the ArgoCD server. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#headers ArgocdProvider#headers}
@@ -110,6 +110,30 @@ class ArgocdProvider(
         )
 
         jsii.create(self.__class__, self, [scope, id, config])
+
+    @jsii.member(jsii_name="generateConfigForImport")
+    @builtins.classmethod
+    def generate_config_for_import(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        import_to_id: builtins.str,
+        import_from_id: builtins.str,
+        provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
+    ) -> _cdktf_9a9027ec.ImportableResource:
+        '''Generates CDKTF code for importing a ArgocdProvider resource upon running "cdktf plan ".
+
+        :param scope: The scope in which to define this construct.
+        :param import_to_id: The construct id used in the generated config for the ArgocdProvider to import.
+        :param import_from_id: The id of the existing ArgocdProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#import import section} in the documentation of this resource for the id to use
+        :param provider: ? Optional instance of the provider where the ArgocdProvider to import is found.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b37044febe27eff1c07a066aa2a746199ec8d133a57e81e340a4ef5277ec00b4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument import_to_id", value=import_to_id, expected_type=type_hints["import_to_id"])
+            check_type(argname="argument import_from_id", value=import_from_id, expected_type=type_hints["import_from_id"])
+            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
+        return typing.cast(_cdktf_9a9027ec.ImportableResource, jsii.sinvoke(cls, "generateConfigForImport", [scope, import_to_id, import_from_id, provider]))
 
     @jsii.member(jsii_name="resetAlias")
     def reset_alias(self) -> None:
@@ -665,7 +689,7 @@ class ArgocdProviderConfig:
         :param client_cert_key: Client certificate key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#client_cert_key ArgocdProvider#client_cert_key}
         :param config_path: Override the default config path of ``$HOME/.config/argocd/config``. Only relevant when ``use_local_config``. Can be set through the ``ARGOCD_CONFIG_PATH`` environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#config_path ArgocdProvider#config_path}
         :param context: Context to choose when using a local ArgoCD config file. Only relevant when ``use_local_config``. Can be set through ``ARGOCD_CONTEXT`` environment variable. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#context ArgocdProvider#context}
-        :param core: Configure direct access using Kubernetes API server. *Warning**: this feature works by starting a local ArgoCD API server that talks directly to the Kubernetes API using the **current context in the default kubeconfig** (``~/.kube/config``). This behavior cannot be overridden using either environment variables or the ``kubernetes`` block in the provider configuration at present). If the server fails to start (e.g. your kubeconfig is misconfigured) then the provider will fail as a result of the ``argocd`` module forcing it to exit and no logs will be available to help you debug this. The error message will be similar to .. epigraph:: ``The plugin encountered an error, and failed to respond to the plugin.(*GRPCProvider).ReadResource call. The plugin logs may contain more details.`` To debug this, you will need to login via the ArgoCD CLI using ``argocd login --core`` and then running an operation. E.g. ``argocd app list``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#core ArgocdProvider#core}
+        :param core: Configure direct access using Kubernetes API server. **Warning**: this feature works by starting a local ArgoCD API server that talks directly to the Kubernetes API using the **current context in the default kubeconfig** (``~/.kube/config``). This behavior cannot be overridden using either environment variables or the ``kubernetes`` block in the provider configuration at present). If the server fails to start (e.g. your kubeconfig is misconfigured) then the provider will fail as a result of the ``argocd`` module forcing it to exit and no logs will be available to help you debug this. The error message will be similar to .. epigraph:: ``The plugin encountered an error, and failed to respond to the plugin.(*GRPCProvider).ReadResource call. The plugin logs may contain more details.`` To debug this, you will need to login via the ArgoCD CLI using ``argocd login --core`` and then running an operation. E.g. ``argocd app list``. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#core ArgocdProvider#core}
         :param grpc_web: Whether to use gRPC web proxy client. Useful if Argo CD server is behind proxy which does not support HTTP2. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#grpc_web ArgocdProvider#grpc_web}
         :param grpc_web_root_path: Use the gRPC web proxy client and set the web root, e.g. ``argo-cd``. Useful if the Argo CD server is behind a proxy at a non-root path. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#grpc_web_root_path ArgocdProvider#grpc_web_root_path}
         :param headers: Additional headers to add to each request to the ArgoCD server. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/oboukili/argocd/6.0.3/docs#headers ArgocdProvider#headers}
@@ -820,7 +844,7 @@ class ArgocdProviderConfig:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Configure direct access using Kubernetes API server.
 
-        *Warning**: this feature works by starting a local ArgoCD API server that talks directly to the Kubernetes API using the **current context in the default kubeconfig** (``~/.kube/config``). This behavior cannot be overridden using either environment variables or the ``kubernetes`` block in the provider configuration at present).
+        **Warning**: this feature works by starting a local ArgoCD API server that talks directly to the Kubernetes API using the **current context in the default kubeconfig** (``~/.kube/config``). This behavior cannot be overridden using either environment variables or the ``kubernetes`` block in the provider configuration at present).
 
         If the server fails to start (e.g. your kubeconfig is misconfigured) then the provider will fail as a result of the ``argocd`` module forcing it to exit and no logs will be available to help you debug this. The error message will be similar to
         .. epigraph::
@@ -1308,6 +1332,15 @@ def _typecheckingstub__c57d8a28e881a142bb69356638ceb10d3b1607e24458dcd505f7289c5
     use_local_config: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     user_agent: typing.Optional[builtins.str] = None,
     username: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b37044febe27eff1c07a066aa2a746199ec8d133a57e81e340a4ef5277ec00b4(
+    scope: _constructs_77d1e7e8.Construct,
+    import_to_id: builtins.str,
+    import_from_id: builtins.str,
+    provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
 ) -> None:
     """Type checking stubs"""
     pass

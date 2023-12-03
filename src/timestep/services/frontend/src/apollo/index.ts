@@ -10,11 +10,11 @@ export /* async */ function getClientOptions(
     <ApolloClientOptions<unknown>>{
       link: createHttpLink({
         uri:
-          process.env.GRAPHQL_URI,
+          process.env.GRAPHQL_URI ||
           // Change to your graphql endpoint.
-          // 'https://www.timestep.ai/graphql',
-          // `https://www.${process.env.PRIMARY_DOMAIN_NAME}/graphql`,
+          'https://example.com/graphql',
       }),
+
       cache: new InMemoryCache(),
     },
 
