@@ -38,7 +38,6 @@ langchain = "^0.0.339"
 llama-index = {extras = ["langchain", "local-models", "postgres"], version = "^0.9.5"}
 marvin = "^1.5.5"
 minio = "^7.2.0"
-passlib = "^1.7.4"
 pettingzoo = {extras = ["all"], version = "^1.24.1"}
 prefect = "2.14.6"
 prefect-aws = "^0.4.1"
@@ -49,7 +48,7 @@ prefect-kubernetes = "^0.3.1"
 prefect-ray = "^0.3.0"
 prefect-shell = "^0.2.0"
 prefect-sqlalchemy = "^0.3.0"
-pydantic = "<2.0.0"
+pydantic = ">=1.10.8,<2.0"
 pyjwt = "^2.8.0"
 python = ">=3.11,<3.12"
 python-dotenv = "^1.0.0"
@@ -58,7 +57,8 @@ s3fs = "^2023.10.0"
 skypilot = {develop = true, extras = ["all"], path = "src/lib/skypilot"}
 sqlalchemy = ">=1.4.31,<2"
 strawberry-graphql = {extras = ["fastapi"], version = "^0.209.6"}
-transformers = "^4.35.2"
+torch = {source = "pytorch-cpu", version = "^2.1.1+cpu"}
+transformers = {extras = ["torch"], version = "^4.35.2"}
 uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}
 
 [tool.poetry.group.dev.dependencies]
@@ -74,6 +74,11 @@ pytest = "^7.3.1"
 [[tool.poetry.source]]
 name = "PyPI"
 priority = "primary"
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+priority = "explicit"
+url = "https://download.pytorch.org/whl/cpu"
 
 [tool.ruff]
 # Allow unused variables when underscore-prefixed.

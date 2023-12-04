@@ -1,7 +1,8 @@
 import os
 
 import databases
-from passlib.hash import bcrypt
+
+# from passlib.hash import bcrypt
 from sqlalchemy import TIMESTAMP, Column, MetaData, String, Table, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -62,7 +63,8 @@ class UserService:
         self.database = database
 
     async def create_user(self, email: str, password: str):
-        hashed_password = bcrypt.hash(password)
+        # hashed_password = bcrypt.hash(password)
+        hashed_password = password
         query = users.insert().values(email=email, hashed_password=hashed_password)
         await database.execute(query)
 

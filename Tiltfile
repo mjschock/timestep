@@ -114,6 +114,14 @@ local_resource(
 )
 
 local_resource(
+    'port-forward argo-cd-server 8080:80',
+    auto_init=False,
+    labels=['ops'],
+    links=['https://localhost:8080'],
+    serve_cmd='src/timestep/infra/stacks/kubernetes_config/argo_cd/port_forward.sh',
+)
+
+local_resource(
     'port-forward postgresql-postgresql-ha-pgpool 5432:5432',
     auto_init=False,
     labels=['ops'],
