@@ -1,6 +1,12 @@
 <template>
   <div>
-    <q-btn label="Sign out" type="button" color="primary" @click="signOutHandler" />
+    <q-btn
+      color="primary"
+      label="Sign out"
+      no-caps
+      type="button"
+      @click="signOutHandler"
+    />
   </div>
 </template>
 
