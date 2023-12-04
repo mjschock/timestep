@@ -1,0 +1,10 @@
+ingress:
+  hosts:
+    - host: timestep.local
+  tls:
+    - hosts:
+      - timestep.local
+      - www.timestep.local
+      secretName: timestep-local-tls
+
+replicaCount: 1

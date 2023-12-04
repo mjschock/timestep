@@ -71,6 +71,9 @@ class Settings(BaseSettings):
     ingress_controller_email: str = Field(env="INGRESS_CONTROLLER_EMAIL")
     kubeapps_is_enabled: bool = Field(default=False, env="KUBEAPPS_IS_ENABLED")
     kubecontext: str = Field(env="KUBECONTEXT")
+    local_tls_cert_is_enabled: bool = Field(
+        default=False, env="LOCAL_TLS_CERT_IS_ENABLED"
+    )
     local_tls_crt: SecretStr = Field(
         default=f"{BASE_PATH}/secrets/local_tls_crt",
         env="LOCAL_TLS_CRT",

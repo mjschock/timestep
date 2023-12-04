@@ -490,7 +490,7 @@ class PlatformStack(TerraformStack):
             web_secret,
         ]
 
-        if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
+        if config.local_tls_cert_is_enabled:
             timestep_local_tls_secret = SecretV1(
                 id_="timestep_local_tls_secret",
                 data={
@@ -529,17 +529,21 @@ class PlatformStack(TerraformStack):
                             "valueFiles": [
                                 # "values.yaml",
                                 # "values-production.yaml",
-                                f"values.{config.primary_domain_name}.yaml",
+                                f"values.{config.primary_domain_name}.tls.yaml"
+                                if config.local_tls_cert_is_enabled
+                                else f"values.{config.primary_domain_name}",  # noqa: E501
                             ],
-                            # "valuesObject": {
-                            #     "ingress": {
-                            #         "hosts": [
-                            #             {
-                            #                 "host": f"{config.primary_domain_name}",
-                            #             }
-                            #         ]
-                            #     },
-                            # },
+                            #                             "values": f"""
+                            # ingress:
+                            #   hosts:
+                            #     - host: {config.primary_domain_name}
+                            #   tls:
+                            #     - hosts:
+                            #       - timestep.local
+                            #       - www.timestep.local
+                            #       secretName: timestep-local-tls
+                            # replicaCount: {1 if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS else 3}  # noqa: E501
+                            # """,  # noqa: E501
                         },
                         "path": "src/timestep/infra/stacks/platform",
                         "repoURL": "https://github.com/mjschock/timestep.git",

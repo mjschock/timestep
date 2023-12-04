@@ -86,9 +86,20 @@
                 />
                 <q-btn
                   color="primary"
-                  label="Submit"
+                  label="Sign in"
+                  no-caps
                   type="submit"
                 />
+                <!-- <q-btn-toggle
+                  color="primary"
+                  no-caps
+                  :options="[
+                    {label: 'Sign in', value: 'sign-in'},
+                    {label: 'Sign up', value: 'sign-up'}
+                  ]"
+                  type="submit"
+                  v-model="submit"
+                /> -->
               </q-card-actions>
             </q-form>
           </q-card-actions>
@@ -112,7 +123,8 @@
                 />
                 <q-btn
                   color="primary"
-                  label="Submit"
+                  label="Sign up"
+                  no-caps
                   type="submit"
                 />
               </q-card-actions>
@@ -160,6 +172,7 @@ export default defineComponent({
     const password = ref('')
     const resendVerificationEmail = ref(false)
     const resetPassword = ref(false)
+    const submit = ref('sign-in')
 
     const toggleResendVerificationEmail = (val: boolean) => {
       resendVerificationEmail.value = val
@@ -329,6 +342,7 @@ export default defineComponent({
       resetPassword,
       signIn,
       signUp,
+      submit,
       tab: ref('sign-in'),
       toggleResendVerificationEmail,
       toggleResetPassword,

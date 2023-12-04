@@ -4,6 +4,7 @@
       color="primary"
       icon="mdi-github"
       label="Continue with GitHub"
+      no-caps
       type="button"
       :disable="true"
     />
@@ -11,6 +12,7 @@
       color="primary"
       icon="mdi-google"
       label="Continue with Google"
+      no-caps
       type="button"
       :disable="true"
     />
@@ -18,6 +20,7 @@
       color="primary"
       icon="mdi-facebook"
       label="Continue with Facebook"
+      no-caps
       type="button"
       :disable="true"
     />
