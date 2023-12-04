@@ -12,8 +12,8 @@ import strawberry
 
 # import uvicorn  # noqa: F401
 # import yaml
-from email_validator import EmailNotValidError, validate_email
-from fastapi import FastAPI, Request
+# from email_validator import EmailNotValidError, validate_email
+from fastapi import FastAPI
 from gql import Client, gql
 from gql.transport.aiohttp import AIOHTTPTransport
 from pydantic import BaseModel
@@ -32,7 +32,7 @@ from strawberry.fastapi import GraphQLRouter
 
 # from .api import agent
 # from .db.env import envs_by_id
-from .services.users import UserService, init
+from .services.users import init
 
 # agents_by_id = {
 #     "default": {
@@ -248,28 +248,28 @@ class CreateUserRequestBody(BaseModel):
     password: str
 
 
-@app.post("/rest/users")
-async def create_user(
-    create_user_request_body: CreateUserRequestBody,
-    request: Request,
-):
-    user_service: UserService = request.app.state.user_service
-    # data = await request.json()
-    # email = data.get("email")
-    # password = data.get("password")
+# @app.post("/rest/users")
+# async def create_user(
+#     create_user_request_body: CreateUserRequestBody,
+#     request: Request,
+# ):
+#     user_service: UserService = request.app.state.user_service
+#     # data = await request.json()
+#     # email = data.get("email")
+#     # password = data.get("password")
 
-    email = create_user_request_body.email
-    password = create_user_request_body.password
+#     email = create_user_request_body.email
+#     password = create_user_request_body.password
 
-    try:
-        email_info = validate_email(email, check_deliverability=False)
-        email = email_info.normalized
+#     try:
+#         email_info = validate_email(email, check_deliverability=False)
+#         email = email_info.normalized
 
-    except EmailNotValidError as e:
-        return {"message": str(e)}
+#     except EmailNotValidError as e:
+#         return {"message": str(e)}
 
-    await user_service.create_user(email, password)
-    return {"message": "User created successfully!"}
+#     await user_service.create_user(email, password)
+#     return {"message": "User created successfully!"}
 
 
 # class MinioCloudStorage(CloudStorage):
