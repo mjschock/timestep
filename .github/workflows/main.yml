@@ -37,19 +37,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Create secrets folder
-        run: mkdir secrets
-
-      - name: Save Secrets to Files
-        run: |
-          for key in ${{ toJson(secrets) }}; do
-            lowercase_key=$(echo "$key" | tr '[:upper:]' '[:lower:]')
-            echo "${{ secrets[key] }}" > "secrets/$lowercase_key"
-          done
-
-      - name: Display saved secrets
-        run: ls -R secrets
-
   # build-base:
   #   runs-on: ubuntu-latest
   #   # runs-on: self-hosted
