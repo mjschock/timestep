@@ -14,7 +14,7 @@ fi
 
 # Extract keys and values
 keys=($(echo "$secrets_json" | jq -r 'keys_unsorted[]'))
-values=($(echo "$secrets_json" | jq -r 'to_entries[] | .value'))
+values=($(echo "$secrets_json" | jq -r 'to_entries[] | .value@sh'))
 
 # Loop through keys and save each secret to a file
 for ((i=0; i<${#keys[@]}; i++)); do
