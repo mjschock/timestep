@@ -37,11 +37,17 @@ jobs:
     - uses: actions/checkout@v3
     - name: Check environment variables
       run: |
-        # Save json secrets string to json file
-        echo "${{ toJson(secrets) }}" > secrets.json
+        # # Save json secrets string to json file
+        # echo "${{ toJson(secrets) }}" > secrets.json
 
-        # Save json vars string to json file
-        echo "${{ toJson(vars) }}" > vars.json
+        # # Save json vars string to json file
+        # echo "${{ toJson(vars) }}" > vars.json
+
+        # Save all secrets to secrets directory
+        mkdir -p secrets
+        for secret in $(jq -r 'keys[]' secrets.json); do
+          echo "${{ secrets[secret] }}" > "secrets/${{ secret }}"
+        done
 
         ./src/timestep/infra/cicd/build.sh
 
