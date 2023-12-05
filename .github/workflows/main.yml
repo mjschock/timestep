@@ -38,11 +38,15 @@ jobs:
     - name: Check environment variables
       run: |
         echo "env: ${{ toJson(env) }}"
-        echo "secrets: ${{ toJson(secrets) }}"
         echo "vars: ${{ toJson(vars) }}"
-        echo "github: ${{ toJson(github) }}"
-        echo "job: ${{ toJson(job) }}"
-        echo "needs: ${{ toJson(needs) }}"
+
+        echo "secrets: ${{ toJson(secrets) }}"
+        # mkdir -p secrets
+
+        ./src/timestep/infra/cicd/build.sh ${{ toJson(secrets) }}
+  #       echo "$ARGO_CD_GITHUB_API_TOKEN" > secrets/github_api_token
+  #       echo "$POSTGRESQL_PASSWORD" > secrets/postgresql_password
+  #       echo "$SSH_PRIVATE_KEY" > secrets/ssh_private_key
 
   # build-base:
   #   runs-on: ubuntu-latest
