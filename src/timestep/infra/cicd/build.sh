@@ -5,6 +5,13 @@ set -x # echo on
 # Load secrets from JSON file
 secrets_json=$(cat secrets.json)
 
+# Check that jq is installed
+if ! command -v jq &> /dev/null
+then
+    echo "jq could not be found"
+    exit
+fi
+
 # Extract keys and values
 keys=($(echo "$secrets_json" | jq -r 'keys_unsorted[]'))
 values=($(echo "$secrets_json" | jq -r 'to_entries[] | .value'))
