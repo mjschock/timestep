@@ -16,6 +16,10 @@ set -x # echo on
 json_secrets=$(cat secrets.json)
 echo "json_secrets: ${json_secrets}"
 
+# Read vars.json to json_vars
+json_vars=$(cat vars.json)
+echo "json_vars: ${json_vars}"
+
 # mkdir -p secrets
 # Use jq to parse the json_secrets and write to secrets
 # jq -r '.[] | .key + "=" + .value' ${json_secrets} > secrets/.env
