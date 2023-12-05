@@ -38,9 +38,10 @@ jobs:
 
       - name: Display Secret Keys
         run: |
-          echo "secrets json: ${{ toJson(secrets) }}"
-          secrets_json=$(echo "${{ toJson(secrets) }}" | jq -r '. | to_entries[] | .key + "=" + .value')
-          echo "secrets json: $secrets_json"
+          secrets_json="${{ toJson(secrets) }}"
+          echo $secrets_json
+          secret_keys=$(echo $secrets_json | jq -r 'keys[]')
+          echo $secret_keys
         shell: bash
 
   # build-base:
