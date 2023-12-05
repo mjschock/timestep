@@ -37,19 +37,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Save Secrets to Files
+      - name: Display Secret Keys
         run: |
           SECRETS_JSON="${{ toJson(secrets) }}"
           KEYS=($(echo "$SECRETS_JSON" | jq -r 'keys_unsorted[]'))
 
           for KEY in "${KEYS[@]}"; do
-            lowercase_key="${KEY,,}"
-            secret_value=$(echo "$SECRETS_JSON" | jq -r ".$KEY")
-            echo "$secret_value" > "secrets/$lowercase_key"
+            echo "$KEY"
           done
-
-      - name: Display saved secrets
-        run: ls -R secrets
 
   # build-base:
   #   runs-on: ubuntu-latest
