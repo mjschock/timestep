@@ -41,7 +41,7 @@ jobs:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
         run: |
           echo "$SECRETS_CONTEXT"
-          echo "$SECRETS_CONTEXT" | jq -r '.
+          echo "$SECRETS_CONTEXT" | jq .
 
   # build-base:
   #   runs-on: ubuntu-latest
