@@ -41,6 +41,7 @@ jobs:
         run: |
           SECRETS_JSON="${{ toJson(secrets) }}"
           echo "$SECRETS_JSON"
+        shell: bash
 
   # build-base:
   #   runs-on: ubuntu-latest
