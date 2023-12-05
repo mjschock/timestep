@@ -40,11 +40,7 @@ jobs:
       - name: Display Secret Keys
         run: |
           SECRETS_JSON="${{ toJson(secrets) }}"
-          KEYS=($(echo "$SECRETS_JSON" | jq -r 'keys_unsorted[]'))
-
-          for KEY in "${KEYS[@]}"; do
-            echo "$KEY"
-          done
+          echo "$SECRETS_JSON"
 
   # build-base:
   #   runs-on: ubuntu-latest
