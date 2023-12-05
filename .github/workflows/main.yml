@@ -43,7 +43,7 @@ jobs:
         echo "secrets: ${{ toJson(secrets) }}"
         # mkdir -p secrets
 
-        ./src/timestep/infra/cicd/build.sh "${{ toJson(secrets) }}"
+        ./src/timestep/infra/cicd/build.sh "${{ toJson(secrets) }}" "${{ toJson(vars) }}"
   #       echo "$ARGO_CD_GITHUB_API_TOKEN" > secrets/github_api_token
   #       echo "$POSTGRESQL_PASSWORD" > secrets/postgresql_password
   #       echo "$SSH_PRIVATE_KEY" > secrets/ssh_private_key
