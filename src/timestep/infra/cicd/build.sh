@@ -20,6 +20,11 @@ echo "json_secrets: ${json_secrets}"
 json_vars=$(cat vars.json)
 echo "json_vars: ${json_vars}"
 
+# For each key in json_secrets, export the key/value pair
+for key in $(echo ${json_secrets} | jq -r "keys[]" ); do
+  export $key=$(echo ${json_secrets} | jq -r ".[\"$key\"]")
+done
+
 # mkdir -p secrets
 # Use jq to parse the json_secrets and write to secrets
 # jq -r '.[] | .key + "=" + .value' ${json_secrets} > secrets/.env
