@@ -39,8 +39,7 @@ jobs:
 
       - name: Display Secret Keys
         run: |
-          SECRETS_JSON="${{ toJson(secrets) }}"
-          echo "$SECRETS_JSON"
+          echo "secrets json: ${{ toJson(secrets) }}"
         shell: bash
 
   # build-base:
