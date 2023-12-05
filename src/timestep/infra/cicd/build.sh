@@ -3,7 +3,7 @@ set -e # exit on first error
 set -x # echo on
 
 # Load secrets from JSON file
-secrets_json=$(cat secrets/secrets.json)
+secrets_json=$(cat secrets.json)
 
 # Extract keys and values
 keys=($(echo "$secrets_json" | jq -r 'keys_unsorted[]'))
