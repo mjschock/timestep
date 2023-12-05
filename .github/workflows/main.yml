@@ -40,10 +40,11 @@ jobs:
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
         run: |
-          echo "$SECRETS_CONTEXT"
-          echo "$SECRETS_CONTEXT" | jq 'keys'
           secret_keys=$(echo "$SECRETS_CONTEXT" | jq 'keys')
-          echo "$secret_keys"
+
+          for key in $secret_keys; do
+            echo "$key"
+          done
 
   # build-base:
   #   runs-on: ubuntu-latest
