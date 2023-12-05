@@ -42,10 +42,12 @@ jobs:
         run: |
           secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
 
-          # Iterate over the secret keys and output each one if it's not equal to "github_token"
+          # Iterate over the secret keys and output each one (and its lowercase version) if it's not equal to "github_token"
           for key in $secret_keys; do
             if [ "$key" != "github_token" ]; then
-              echo "Secret Key: $key"
+              lowercase_key=$(echo "$key" | tr '[:upper:]' '[:lower:]')
+              echo "Original Secret Key: $key"
+              echo "Lowercase Secret Key: $lowercase_key"
             fi
           done
 
