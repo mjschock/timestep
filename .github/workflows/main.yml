@@ -42,6 +42,8 @@ jobs:
         run: |
           echo "$SECRETS_CONTEXT"
           echo "$SECRETS_CONTEXT" | jq 'keys'
+          secret_keys=$(echo "$SECRETS_CONTEXT" | jq 'keys')
+          echo "$secret_keys"
 
   # build-base:
   #   runs-on: ubuntu-latest
