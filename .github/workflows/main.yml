@@ -34,26 +34,21 @@ jobs:
   env-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Check environment variables
-      run: |
-        # # Save json secrets string to json file
-        # echo "${{ toJson(secrets) }}" > secrets.json
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-        # # Save json vars string to json file
-        # echo "${{ toJson(vars) }}" > vars.json
+      - name: Create secrets folder
+        run: mkdir secrets
 
-        # Save all secrets to secrets directory
-        mkdir -p secrets
-        for secret in $(jq -r 'keys[]' secrets.json); do
-          echo "${{ secrets[secret] }}" > "secrets/${{ secret }}"
-        done
+      - name: Save Secrets to Files
+        run: |
+          for key in ${{ toJson(secrets) }}; do
+            lowercase_key=$(echo "$key" | tr '[:upper:]' '[:lower:]')
+            echo "${{ secrets[key] }}" > "secrets/$lowercase_key"
+          done
 
-        ./src/timestep/infra/cicd/build.sh
-
-  #       echo "$ARGO_CD_GITHUB_API_TOKEN" > secrets/github_api_token
-  #       echo "$POSTGRESQL_PASSWORD" > secrets/postgresql_password
-  #       echo "$SSH_PRIVATE_KEY" > secrets/ssh_private_key
+      - name: Display saved secrets
+        run: ls -R secrets
 
   # build-base:
   #   runs-on: ubuntu-latest
