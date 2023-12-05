@@ -44,8 +44,8 @@ jobs:
 
           echo "Secret keys:"
 
-          for key in $secret_keys; do
-            echo "$key"
+          for secret_key in "${secret_keys[@]}"; do
+            echo "$secret_key"
           done
 
   # build-base:
