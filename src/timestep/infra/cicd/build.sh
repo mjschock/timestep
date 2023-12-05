@@ -13,12 +13,11 @@ set -x # echo on
 # echo "args[3]: ${args[3]}"
 
 # Read secrets.json to json_secrets
-json_secrets=$(cat secrets.json)
+# json_secrets=$(cat secrets.json)
 cat secrets.json
 
-json_secrets2=$(cat secrets2.json)
-# echo "json_secrets2: ${json_secrets2}"
-cat secrets2.json
+# json_vars=$(cat vars.json)
+cat vars.json
 
 # print each key/value pair
 # for key in $(echo ${json_secrets} | jq -r "keys[]" ); do
