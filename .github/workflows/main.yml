@@ -52,9 +52,26 @@ jobs:
 
       - name: Display Saved Secrets
         run: |
-          ls -R secrets
-          cat secrets/*
+          ls -al secrets
 
+      - name: Save Variables to Files
+        env:
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: |
+          var_keys=$(echo "$VARS_CONTEXT" | jq -r 'keys[]')
+
+          for key in $var_keys; do
+            var_value=$(echo "$VARS_CONTEXT" | jq -r ".$key")
+            echo "$key=$var_value" >> .env
+          done
+
+      - name: Display Saved Variables
+        run: |
+          cat .env
+
+      - name: Build base image
+        run: |
+          ./src/timestep/infra/cicd/build.sh
 
   # build-base:
   #   runs-on: ubuntu-latest

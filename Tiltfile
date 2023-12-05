@@ -4,6 +4,7 @@ load('ext://helm_resource', 'helm_resource', 'helm_repo')
 load('ext://kubectl_build', 'kubectl_build')
 load('ext://uibutton', 'cmd_button', 'bool_input', 'location', 'text_input')
 
+dotenv('.dot.env')
 dotenv('.env')
 
 local_resource(
