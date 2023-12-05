@@ -5,8 +5,11 @@ set -x # echo on
 # Load secrets from JSON file
 secrets_json=$(cat secrets.json)
 
+# Print the content of the JSON file for debugging
+echo "$secrets_json"
+
 # Extract keys and values
-keys=($(echo "$secrets_json" | jq -r 'keys[]'))
+keys=($(echo "$secrets_json" | jq -r 'keys_unsorted[]'))
 values=($(echo "$secrets_json" | jq -r 'to_entries[] | .value'))
 
 # Loop through keys and save each secret to a file
@@ -14,6 +17,7 @@ for ((i=0; i<${#keys[@]}; i++)); do
     lowercase_key=$(echo "${keys[i]}" | tr '[:upper:]' '[:lower:]')
     echo "${values[i]}" > "secrets/$lowercase_key"
 done
+
 
 # json_secrets=$1
 # echo "json_secrets: ${json_secrets}"
