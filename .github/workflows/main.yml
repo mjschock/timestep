@@ -39,7 +39,9 @@ jobs:
       - name: Display Secret Keys
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
-        run: echo "$SECRETS_CONTEXT"
+        run: |
+          echo "$SECRETS_CONTEXT"
+          echo "$SECRETS_CONTEXT" | jq -r '.
 
   # build-base:
   #   runs-on: ubuntu-latest
