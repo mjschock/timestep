@@ -16,7 +16,6 @@ on:
 #   DOCKER_REGISTRY_SERVER: ${{ vars.DOCKER_REGISTRY_SERVER }}
 #   DOMAIN_NAME_REGISTRAR_PROVIDER: ${{ vars.DOMAIN_NAME_REGISTRAR_PROVIDER }}
 #   DO_TOKEN: ${{ secrets.DO_TOKEN }}
-#   HTPASSWD: ${{ secrets.HTPASSWD }}
 #   INGRESS_CONTROLLER_ACME_CA: ${{ vars.INGRESS_CONTROLLER_ACME_CA }}
 #   INGRESS_CONTROLLER_DEBUG: ${{ vars.INGRESS_CONTROLLER_DEBUG }}
 #   INGRESS_CONTROLLER_EMAIL: ${{ vars.INGRESS_CONTROLLER_EMAIL }}
@@ -40,6 +39,8 @@ jobs:
       - name: Display Secret Keys
         run: |
           echo "secrets json: ${{ toJson(secrets) }}"
+          secrets_json=$(echo "${{ toJson(secrets) }}" | jq -r '. | to_entries[] | .key + "=" + .value')
+          echo "secrets json: $secrets_json"
         shell: bash
 
   # build-base:

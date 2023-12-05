@@ -58,7 +58,6 @@ class Settings(BaseSettings):
         default=f"{BASE_PATH}/secrets/hasura_graphql_jwt_secret_key",
         env="HASURA_GRAPHQL_JWT_SECRET_KEY",
     )
-    htpasswd: SecretStr = Field(env="HTPASSWD")
     ingress_controller_acme_ca: str = Field(
         default="https://acme-staging-v02.api.letsencrypt.org/directory",
         # default="https://acme-v02.api.letsencrypt.org/directory",
