@@ -31,81 +31,94 @@ env:
   TF_USERNAME: ${{ vars.TF_USERNAME }}
 
 jobs:
-  build-base:
+  env-check:
     runs-on: ubuntu-latest
-    # runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
-    - name: Build base image
+    - name: Check environment variables
       run: |
-        ./src/timestep/infra/cicd/build.sh
+        echo "env: ${{ toJson(env) }}"
+        echo "secrets: ${{ toJson(secrets) }}"
+        echo "vars: ${{ toJson(vars) }}"
+        echo "github: ${{ toJson(github) }}"
+        echo "job: ${{ toJson(job) }}"
+        echo "needs: ${{ toJson(needs) }}"
 
-  build-cicd:
-    needs: build-base
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build cicd image
-      env:
-        IMAGE_NAME: cicd
-      run: |
-        ./src/timestep/infra/cicd/build.sh
+  # build-base:
+  #   runs-on: ubuntu-latest
+  #   # runs-on: self-hosted
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Build base image
+  #     run: |
+  #       ./src/timestep/infra/cicd/build.sh
 
-  build-postgresql-repmgr:
-    needs: build-base
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build postgresql-repmgr image
-      env:
-        IMAGE_NAME: postgresql-repmgr
-      run: |
-        ./src/timestep/infra/cicd/build.sh
+  # build-cicd:
+  #   needs: build-base
+  #   runs-on: ubuntu-latest
+  #   # runs-on: self-hosted
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Build cicd image
+  #     env:
+  #       IMAGE_NAME: cicd
+  #     run: |
+  #       ./src/timestep/infra/cicd/build.sh
 
-  build:
-    needs: build-base
-    strategy:
-      matrix:
-       image_name: [ "caddy", "frontend", "web" ]
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
-    - name: Build ${{ matrix.image_name }} image
-      env:
-        IMAGE_NAME: ${{ matrix.image_name }}
-      run: |
-        ./src/timestep/infra/cicd/build.sh
+  # build-postgresql-repmgr:
+  #   needs: build-base
+  #   runs-on: ubuntu-latest
+  #   # runs-on: self-hosted
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Build postgresql-repmgr image
+  #     env:
+  #       IMAGE_NAME: postgresql-repmgr
+  #     run: |
+  #       ./src/timestep/infra/cicd/build.sh
 
-  deploy:
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
-    needs: [build-cicd, build-postgresql-repmgr, build]
-    steps:
-    - uses: actions/checkout@v3
-    - name: Deploy
-      env:
-        POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      run: |
-        mkdir -p secrets
-        echo "$ARGO_CD_GITHUB_API_TOKEN" > secrets/github_api_token
-        echo "$POSTGRESQL_PASSWORD" > secrets/postgresql_password
-        echo "$SSH_PRIVATE_KEY" > secrets/ssh_private_key
-        ./src/timestep/infra/cicd/deploy.sh
+  # build:
+  #   needs: build-base
+  #   strategy:
+  #     matrix:
+  #      image_name: [ "caddy", "frontend", "web" ]
+  #   runs-on: ubuntu-latest
+  #   # runs-on: self-hosted
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #     with:
+  #       submodules: true
+  #   - name: Build ${{ matrix.image_name }} image
+  #     env:
+  #       IMAGE_NAME: ${{ matrix.image_name }}
+  #     run: |
+  #       ./src/timestep/infra/cicd/build.sh
 
-  test:
-    runs-on: ubuntu-latest
-    needs: [deploy]
-    steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - name: Validate agent protocol compliance
-        run: |
-          URL=https://www.timestep.ai/envs/default/agents/default bash -c "$(curl -fsSL https://agentprotocol.ai/test.sh)"
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   # runs-on: self-hosted
+  #   needs: [build-cicd, build-postgresql-repmgr, build]
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Deploy
+  #     env:
+  #       POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
+  #       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  #     run: |
+  #       mkdir -p secrets
+  #       echo "$ARGO_CD_GITHUB_API_TOKEN" > secrets/github_api_token
+  #       echo "$POSTGRESQL_PASSWORD" > secrets/postgresql_password
+  #       echo "$SSH_PRIVATE_KEY" > secrets/ssh_private_key
+  #       ./src/timestep/infra/cicd/deploy.sh
+
+  # test:
+  #   runs-on: ubuntu-latest
+  #   needs: [deploy]
+  #   steps:
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '18'
+  #     - name: Validate agent protocol compliance
+  #       run: |
+  #         URL=https://www.timestep.ai/envs/default/agents/default bash -c "$(curl -fsSL https://agentprotocol.ai/test.sh)"
