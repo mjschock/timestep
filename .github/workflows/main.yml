@@ -43,13 +43,14 @@ jobs:
           KEYS=($(echo "$SECRETS_JSON" | jq -r 'keys_unsorted[]'))
 
           for KEY in "${KEYS[@]}"; do
-            LOWERCASE_KEY=$(echo "$KEY" | tr '[:upper:]' '[:lower:]')
+            LOWERCASE_KEY=$(echo "$KEY" | tr '[:upper:]' '[:lower:]' 2>/dev/null || echo "$KEY" | tr '[:upper:]' '[:lower:]')
             VALUE=$(echo "$SECRETS_JSON" | jq -r ".$KEY")
             echo "$VALUE" > "secrets/$LOWERCASE_KEY"
           done
 
       - name: Display saved secrets
         run: ls -R secrets
+
   
   # build-base:
   #   runs-on: ubuntu-latest
