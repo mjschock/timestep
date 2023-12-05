@@ -38,7 +38,7 @@ jobs:
 
       - name: Display Secret Keys
         run: |
-          ${{ secrets }} | jq -r 'keys[]'
+          echo ${{ secrets }}
         shell: bash
 
   # build-base:
