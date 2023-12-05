@@ -38,7 +38,7 @@ jobs:
 
       - name: Display Secret Keys
         run: |
-          ${{ toJson(secrets) }} | jq -r 'keys[]'
+          ${{ secrets }} | jq -r 'keys[]'
         shell: bash
 
   # build-base:
