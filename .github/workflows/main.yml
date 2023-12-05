@@ -42,9 +42,11 @@ jobs:
         run: |
           secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
 
-          # Iterate over the secret keys and output each one
+          # Iterate over the secret keys and output each one if it's not equal to "github_token"
           for key in $secret_keys; do
-            echo "Secret Key: $key"
+            if [ "$key" != "github_token" ]; then
+              echo "Secret Key: $key"
+            fi
           done
 
   # build-base:
