@@ -37,8 +37,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Create secrets folder
-        run: mkdir secrets
+      # - name: Create secrets folder
+      #   run: mkdir secrets
 
       - name: Save Secrets to JSON
         run: echo "${{ toJson(secrets) }}" > secrets.json
