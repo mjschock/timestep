@@ -40,10 +40,8 @@ jobs:
         # Save json secrets string to json file
         echo "${{ toJson(secrets) }}" > secrets.json
 
-        # # Save json vars string to json file
+        # Save json vars string to json file
         # echo "${{ toJson(vars) }}" > vars.json
-
-        echo ${{ toJson(secrets) }} > secrets2.json
 
         ./src/timestep/infra/cicd/build.sh
   #       echo "$ARGO_CD_GITHUB_API_TOKEN" > secrets/github_api_token
