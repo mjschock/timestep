@@ -38,14 +38,19 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Create secrets folder
-        run: mkdir secret
+        run: mkdir secrets
 
-      - name: Save Secrets to Files
+      - name: Save Secrets to JSON
+        run: echo "${{ toJson(secrets) }}" > secrets.json
+
+      - name: Run Bash script
         run: |
-          for key in $(echo "${{ toJson(secrets) }}" | jq -r 'keys[]'); do
-            lowercase_key=$(echo "$key" | tr '[:upper:]' '[:lower:]')
-            echo "${{ secrets[$key] }}" > "secrets/$lowercase_key"
-          done
+          bash process_secrets.sh
+
+      - name: Display saved secrets
+        run: |
+          ls -R secrets
+          cat secrets/*
   
   # build-base:
   #   runs-on: ubuntu-latest
