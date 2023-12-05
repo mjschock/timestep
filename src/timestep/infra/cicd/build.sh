@@ -2,60 +2,17 @@
 set -e # exit on first error
 set -x # echo on
 
-# # Load secrets from JSON file
-# secrets_json=$(cat secrets.json)
+echo "CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION}"
+echo "CI_REGISTRY_IMAGE=${CI_REGISTRY_IMAGE}"
+echo "DOCKER_REGISTRY_USERNAME=${DOCKER_REGISTRY_USERNAME}"
+echo "DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}"
+echo "DOCKER_REGISTRY_SERVER=${DOCKER_REGISTRY_SERVER}"
+echo "IMAGE_NAME=${IMAGE_NAME}"
+echo "PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME}"
+echo "SHELL=${SHELL}"
+echo "VERSION=${VERSION}"
 
-# # Print the content of the JSON file for debugging
-# echo "$secrets_json"
-
-# # Extract keys and values
-# keys=($(echo "$secrets_json" | jq -r 'keys_unsorted[]'))
-# values=($(echo "$secrets_json" | jq -r 'to_entries[] | .value'))
-
-# # Loop through keys and save each secret to a file
-# for ((i=0; i<${#keys[@]}; i++)); do
-#     lowercase_key=$(echo "${keys[i]}" | tr '[:upper:]' '[:lower:]')
-#     echo "${values[i]}" > "secrets/$lowercase_key"
-# done
-
-
-# json_secrets=$1
-# echo "json_secrets: ${json_secrets}"
-
-# args=("$@")
-# echo "args: ${args[@]}"
-# echo "args[0]: ${args[0]}"
-# echo "args[1]: ${args[1]}"
-# echo "args[2]: ${args[2]}"
-# echo "args[3]: ${args[3]}"
-
-# Read secrets.json to json_secrets
-# json_secrets=$(cat secrets.json)
-# cat secrets.json
-
-# json_vars=$(cat vars.json)
-# cat vars.json
-
-# print each key/value pair
-# for key in $(echo ${json_secrets} | jq -r "keys[]" ); do
-#   echo "key: ${key}"
-#   echo "value: $(echo ${json_secrets} | jq -r ".[\"$key\"]")"
-# done
-
-# Read vars.json to json_vars
-# json_vars=$(cat vars.json)
-# echo "json_vars: ${json_vars}"
-
-# # For each key in json_secrets, export the key/value pair
-# for key in $(echo ${json_secrets} | jq -r "keys[]" ); do
-#   export $key=$(echo ${json_secrets} | jq -r ".[\"$key\"]")
-# done
-
-
-
-# mkdir -p secrets
-# Use jq to parse the json_secrets and write to secrets
-# jq -r '.[] | .key + "=" + .value' ${json_secrets} > secrets/.env
+echo "ls -al ./secrets"
 
 # TODO: Load these using direnv w/ dotenv
 # CDKTF_CLI_VERSION=$(cat .env | grep ^CDKTF_CLI_VERSION | cut -d '=' -f2)

@@ -132,6 +132,7 @@ class Settings(BaseSettings):
     version: str = Field(env="VERSION")
 
     class Config:
-        env_file = ".env"
+        # env_file = ".env"
+        env_file = (".dot.env", ".env")
         env_file_encoding = "utf-8"
         secrets_dir = "./secrets"
