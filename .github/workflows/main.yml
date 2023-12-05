@@ -36,20 +36,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Display Secret Keys
+      - name: Save Secrets to Files
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
         run: |
           secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
 
-          # Iterate over the secret keys and output each one (and its lowercase version) if it's not equal to "github_token"
           for key in $secret_keys; do
             if [ "$key" != "github_token" ]; then
               lowercase_key=$(echo "$key" | tr '[:upper:]' '[:lower:]')
-              echo "Original Secret Key: $key"
-              echo "Lowercase Secret Key: $lowercase_key"
+              secret_value=$(echo "$SECRETS_CONTEXT" | jq -r ".$key")
+              echo "$secret_value" > "secrets/$lowercase_key"
             fi
           done
+
+      - name: Display Saved Secrets
+        run: |
+          ls -R secrets
+          cat secrets/*
+
 
   # build-base:
   #   runs-on: ubuntu-latest
