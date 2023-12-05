@@ -45,6 +45,7 @@ jobs:
           echo "Secret keys:"
 
           for secret_key in "${secret_keys[@]}"; do
+            echo "outputing secret key:"
             echo "$secret_key"
           done
 
