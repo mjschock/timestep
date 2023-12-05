@@ -45,7 +45,7 @@ jobs:
 
       - name: Run Bash script
         run: |
-          bash process_secrets.sh
+          bash src/timestep/infra/cicd/build.sh
 
       - name: Display saved secrets
         run: |
