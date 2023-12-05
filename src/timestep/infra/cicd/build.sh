@@ -2,25 +2,29 @@
 set -e # exit on first error
 set -x # echo on
 
-json_secrets=$1
-echo "json_secrets: ${json_secrets}"
+# json_secrets=$1
+# echo "json_secrets: ${json_secrets}"
 
-args=("$@")
-echo "args: ${args[@]}"
-echo "args[0]: ${args[0]}"
-echo "args[1]: ${args[1]}"
-echo "args[2]: ${args[2]}"
-echo "args[3]: ${args[3]}"
+# args=("$@")
+# echo "args: ${args[@]}"
+# echo "args[0]: ${args[0]}"
+# echo "args[1]: ${args[1]}"
+# echo "args[2]: ${args[2]}"
+# echo "args[3]: ${args[3]}"
+
+# Read secrets.json to json_secrets
+json_secrets=$(cat secrets.json)
+echo "json_secrets: ${json_secrets}"
 
 # mkdir -p secrets
 # Use jq to parse the json_secrets and write to secrets
 # jq -r '.[] | .key + "=" + .value' ${json_secrets} > secrets/.env
 
 # TODO: Load these using direnv w/ dotenv
-CDKTF_CLI_VERSION=$(cat .env | grep ^CDKTF_CLI_VERSION | cut -d '=' -f2)
-VERSION=$(cat .env | grep ^VERSION | cut -d '=' -f2)
+# CDKTF_CLI_VERSION=$(cat .env | grep ^CDKTF_CLI_VERSION | cut -d '=' -f2)
+# VERSION=$(cat .env | grep ^VERSION | cut -d '=' -f2)
 
-docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY_SERVER}
+# docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY_SERVER}
 
 # if [ -z ${IMAGE_NAME+x} ]; then
 #   docker buildx build \
