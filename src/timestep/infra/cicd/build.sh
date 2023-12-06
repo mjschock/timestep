@@ -19,8 +19,11 @@ then
   # Source this script to apply changes to the current shell session
   source "$0" "$@"
   exit  # Ensure the script exits after sourcing
+else
+  echo "direnv is installed"
 fi
 
+cat .dot.env | grep ^CDKTF_CLI_VERSION | cut -d '=' -f2
 echo "CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION}"
 
 # echo "CI_REGISTRY_IMAGE=${CI_REGISTRY_IMAGE}"

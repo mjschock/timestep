@@ -30,3 +30,4 @@ timestep-ai-*.tgz
 src/timestep/workers/gazebosim/
 src/timestep/workers/ros2/
 !dist/.gitkeep
+timestep-ai
