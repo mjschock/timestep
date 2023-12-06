@@ -2,26 +2,37 @@
 set -e # exit on first error
 set -x # echo on
 
-ls -al .
+# ls -al .
 
-cat .dot.env
-cat .env
+# cat .dot.env
+# cat .env
 
-curl -sfL https://direnv.net/install.sh | bash
-eval "$(direnv hook bash)"
-direnv allow .
+# If direnv is not installed,
+# then install it
+# and add the hook to the shell
+# and allow the current directory
+# and rerun this script
+if ! command -v direnv &> /dev/null
+then
+  echo "direnv could not be found"
+  echo "Installing direnv"
+  curl -sfL https://direnv.net/install.sh | bash
+  eval "$(direnv hook bash)"
+  direnv allow .
+  exec "$0" "$@"
+fi
 
 echo "CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION}"
-echo "CI_REGISTRY_IMAGE=${CI_REGISTRY_IMAGE}"
-echo "DOCKER_REGISTRY_USERNAME=${DOCKER_REGISTRY_USERNAME}"
-echo "DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}"
-echo "DOCKER_REGISTRY_SERVER=${DOCKER_REGISTRY_SERVER}"
-echo "IMAGE_NAME=${IMAGE_NAME}"
-echo "PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME}"
-echo "SHELL=${SHELL}"
-echo "VERSION=${VERSION}"
+# echo "CI_REGISTRY_IMAGE=${CI_REGISTRY_IMAGE}"
+# echo "DOCKER_REGISTRY_USERNAME=${DOCKER_REGISTRY_USERNAME}"
+# echo "DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}"
+# echo "DOCKER_REGISTRY_SERVER=${DOCKER_REGISTRY_SERVER}"
+# echo "IMAGE_NAME=${IMAGE_NAME}"
+# echo "PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME}"
+# echo "SHELL=${SHELL}"
+# echo "VERSION=${VERSION}"
 
-ls -al secrets
+# ls -al secrets
 
 # TODO: Load these using direnv w/ dotenv
 # CDKTF_CLI_VERSION=$(cat .env | grep ^CDKTF_CLI_VERSION | cut -d '=' -f2)
