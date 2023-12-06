@@ -2,11 +2,6 @@
 set -e # exit on first error
 set -x # echo on
 
-# ls -al .
-
-# cat .dot.env
-# cat .env
-
 # If direnv is not installed,
 # then install it
 # and add the hook to the shell
@@ -19,10 +14,15 @@ then
   curl -sfL https://direnv.net/install.sh | bash
   eval "$(direnv hook bash)"
   direnv allow .
-  exec "$0" "$@"
+  # Sleep for a short time to allow the shell to settle
+  sleep 1
+  # Source this script to apply changes to the current shell session
+  source "$0" "$@"
+  exit  # Ensure the script exits after sourcing
 fi
 
 echo "CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION}"
+
 # echo "CI_REGISTRY_IMAGE=${CI_REGISTRY_IMAGE}"
 # echo "DOCKER_REGISTRY_USERNAME=${DOCKER_REGISTRY_USERNAME}"
 # echo "DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}"
