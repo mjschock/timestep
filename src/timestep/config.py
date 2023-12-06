@@ -26,6 +26,8 @@ class DomainNameRegistrarProvider(StrEnum):
 
 
 class Settings(BaseSettings):
+    argo_cd_private_repo_access_token: SecretStr = Field()
+    argo_cd_private_repo_username: str = Field()
     base_path: pathlib.Path = Field(default=BASE_PATH)
     cdktf_outdir: str = Field()
     cloud_instance_name: str = Field()
@@ -43,7 +45,6 @@ class Settings(BaseSettings):
     domain_name_registrar_provider: DomainNameRegistrarProvider = Field(
         default=DomainNameRegistrarProvider.NONE,
     )
-    github_api_token: SecretStr = Field()
     hasura_graphql_admin_secret: SecretStr = Field()
     hasura_graphql_jwt_secret_key: SecretStr = Field()
     ingress_controller_acme_ca: str = Field()
