@@ -42,7 +42,7 @@ description = ""
 name = "timestep"
 packages = [{from = "src", include = "timestep"}]
 readme = "README.md"
-version = "3.0.65"
+version = "3.0.66"
 
 [tool.poetry.dependencies]
 cdktf = "^0.19.2"
