@@ -24,8 +24,8 @@ set -e # exit on first error
 # fi
 
 curl -sfL https://direnv.net/install.sh | bash
-eval "$(direnv hook bash)"
-direnv allow .
+# eval "$(direnv hook bash)"
+# direnv allow .
 
 eval "$(direnv dotenv bash .dot.env)"
 eval "$(direnv dotenv bash .env)"
