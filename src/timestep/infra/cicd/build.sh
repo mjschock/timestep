@@ -1,45 +1,49 @@
 #!/usr/bin/env bash
 set -e # exit on first error
-set -x # echo on
+# set -x # echo on
 
 # If direnv is not installed,
 # then install it
 # and add the hook to the shell
 # and allow the current directory
 # and rerun this script
-if ! command -v direnv &> /dev/null
-then
-  echo "direnv could not be found"
-  echo "Installing direnv"
-  curl -sfL https://direnv.net/install.sh | bash
-  eval "$(direnv hook bash)"
-  direnv allow .
-  # Sleep for a short time to allow the shell to settle
-  sleep 1
-  # Source this script to apply changes to the current shell session
-  source "$0" "$@"
-  exit  # Ensure the script exits after sourcing
-else
-  echo "direnv is installed"
-fi
+# if ! command -v direnv &> /dev/null
+# then
+#   echo "direnv could not be found"
+#   echo "Installing direnv"
+#   curl -sfL https://direnv.net/install.sh | bash
+#   eval "$(direnv hook bash)"
+#   direnv allow .
+#   # Sleep for a short time to allow the shell to settle
+#   sleep 1
+#   # Source this script to apply changes to the current shell session
+#   source "$0" "$@"
+#   exit  # Ensure the script exits after sourcing
+# else
+#   echo "direnv is installed"
+# fi
+
+curl -sfL https://direnv.net/install.sh | bash
+eval "$(direnv hook bash)"
+direnv allow .
 
 eval "$(direnv dotenv bash .dot.env)"
 eval "$(direnv dotenv bash .env)"
 
-cat .dot.env | grep ^CDKTF_CLI_VERSION | cut -d '=' -f2
-echo "CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION}"
+# cat .dot.env | grep ^CDKTF_CLI_VERSION | cut -d '=' -f2
+# echo "CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION}"
 
-cat .env | grep ^CLOUD_INSTANCE_PROVIDER | cut -d '=' -f2
-echo "CLOUD_INSTANCE_PROVIDER=${CLOUD_INSTANCE_PROVIDER}"
+# cat .env | grep ^CLOUD_INSTANCE_PROVIDER | cut -d '=' -f2
+# echo "CLOUD_INSTANCE_PROVIDER=${CLOUD_INSTANCE_PROVIDER}"
 
-# echo "CI_REGISTRY_IMAGE=${CI_REGISTRY_IMAGE}"
-# echo "DOCKER_REGISTRY_USERNAME=${DOCKER_REGISTRY_USERNAME}"
-# echo "DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}"
-# echo "DOCKER_REGISTRY_SERVER=${DOCKER_REGISTRY_SERVER}"
-# echo "IMAGE_NAME=${IMAGE_NAME}"
-# echo "PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME}"
-# echo "SHELL=${SHELL}"
-# echo "VERSION=${VERSION}"
+echo "CI_REGISTRY_IMAGE=${CI_REGISTRY_IMAGE}"
+echo "DOCKER_REGISTRY_USERNAME=${DOCKER_REGISTRY_USERNAME}"
+echo "DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}"
+echo "DOCKER_REGISTRY_SERVER=${DOCKER_REGISTRY_SERVER}"
+echo "IMAGE_NAME=${IMAGE_NAME}"
+echo "PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME}"
+echo "SHELL=${SHELL}"
+echo "VERSION=${VERSION}"
 
 # ls -al secrets
 
