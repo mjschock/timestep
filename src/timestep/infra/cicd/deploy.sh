@@ -1,8 +1,12 @@
 #!/usr/bin/env sh
 set -e # exit on first error
-set -x # echo on
 
-docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY_SERVER}
+curl -sfL https://direnv.net/install.sh | bash
+
+eval "$(direnv dotenv bash .dot.env)"
+eval "$(direnv dotenv bash .env)"
+
+docker login -u ${DOCKER_REGISTRY_USERNAME} -p $(cat ./secrets/docker_registry_password) ${DOCKER_REGISTRY_SERVER}
 
 docker run \
  --env-file .env \

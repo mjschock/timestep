@@ -4,17 +4,20 @@ on:
   push:
 
 jobs:
-  env-check:
+  build-base:
     runs-on: ubuntu-latest
+    # runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Save Secrets to Files
+      - name: Prepare environment 
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
         run: |
           secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
+          var_keys=$(echo "$VARS_CONTEXT" | jq -r 'keys[]')
 
           for key in $secret_keys; do
             if [ "$key" != "github_token" ]; then
@@ -24,37 +27,14 @@ jobs:
             fi
           done
 
-      - name: Display Saved Secrets
-        run: |
-          ls -al secrets
-
-      - name: Save Variables to Files
-        env:
-          VARS_CONTEXT: ${{ toJson(vars) }}
-        run: |
-          var_keys=$(echo "$VARS_CONTEXT" | jq -r 'keys[]')
-
           for key in $var_keys; do
             var_value=$(echo "$VARS_CONTEXT" | jq -r ".$key")
             echo "$key=$var_value" >> .env
           done
 
-      - name: Display Saved Variables
-        run: |
-          cat .env
-
       - name: Build base image
         run: |
           ./src/timestep/infra/cicd/build.sh
-
-  # build-base:
-  #   runs-on: ubuntu-latest
-  #   # runs-on: self-hosted
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: Build base image
-  #     run: |
-  #       ./src/timestep/infra/cicd/build.sh
 
   # build-cicd:
   #   needs: build-base
