@@ -4,9 +4,12 @@ set -x # echo on
 
 ls -al .
 
+cat .dot.env
+cat .env
+
 curl -sfL https://direnv.net/install.sh | bash
 eval "$(direnv hook bash)"
-direnv allow
+direnv allow .
 
 echo "CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION}"
 echo "CI_REGISTRY_IMAGE=${CI_REGISTRY_IMAGE}"
@@ -18,7 +21,7 @@ echo "PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME}"
 echo "SHELL=${SHELL}"
 echo "VERSION=${VERSION}"
 
-echo "ls -al ./secrets"
+ls -al secrets
 
 # TODO: Load these using direnv w/ dotenv
 # CDKTF_CLI_VERSION=$(cat .env | grep ^CDKTF_CLI_VERSION | cut -d '=' -f2)
