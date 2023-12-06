@@ -11,7 +11,11 @@ docker login -u ${DOCKER_REGISTRY_USERNAME} -p $(cat ./secrets/docker_registry_p
 if [ -z ${IMAGE_NAME+x} ]; then
   docker buildx build \
     --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \
+    --build-arg GOENV_VERSION=${GOENV_VERSION} \
+    --build-arg NODENV_VERSION=${NODENV_VERSION} \
     --build-arg PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
+    --build-arg PYENV_VERSION=${PYENV_VERSION} \
+    --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} \
     --cache-from ${CI_REGISTRY_IMAGE}:latest \
     --cache-from ${CI_REGISTRY_IMAGE}:${VERSION} \
     --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}:latest \
@@ -24,7 +28,11 @@ if [ -z ${IMAGE_NAME+x} ]; then
 elif [ ${IMAGE_NAME} = "cicd" ]; then
   docker buildx build \
     --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \
+    --build-arg GOENV_VERSION=${GOENV_VERSION} \
+    --build-arg NODENV_VERSION=${NODENV_VERSION} \
     --build-arg PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
+    --build-arg PYENV_VERSION=${PYENV_VERSION} \
+    --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} \
     --cache-from ${CI_REGISTRY_IMAGE}:latest \
     --cache-from ${CI_REGISTRY_IMAGE}:${VERSION} \
     --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
@@ -41,15 +49,19 @@ elif [ ${IMAGE_NAME} = "postgresql-repmgr" ]; then
   docker buildx build \
     --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
     --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
-    --file src/timestep/infra/stacks/kubernetes_config/postgresql_repmgr.Dockerfile \
+    --file src/timestep/infra/stacks/kubernetes_config/postgresql/Dockerfile \
     --push \
     --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
-    src/timestep/infra/stacks/kubernetes_config
+    src/timestep/infra/stacks/kubernetes_config/postgresql
 
 else
   docker buildx build \
     --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \
+    --build-arg GOENV_VERSION=${GOENV_VERSION} \
+    --build-arg NODENV_VERSION=${NODENV_VERSION} \
     --build-arg PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
+    --build-arg PYENV_VERSION=${PYENV_VERSION} \
+    --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} \
     --cache-from ${CI_REGISTRY_IMAGE}:latest \
     --cache-from ${CI_REGISTRY_IMAGE}:${VERSION} \
     --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
