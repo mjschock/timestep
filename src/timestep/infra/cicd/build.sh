@@ -4,6 +4,8 @@ set -x # echo on
 
 ls -al .
 
+curl -sfL https://direnv.net/install.sh | bash
+
 direnv allow
 
 echo "CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION}"
