@@ -24,16 +24,14 @@ class KubeConfigConstruct(Construct):
         super().__init__(scope, id)
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
-            ipv4 = (
-                cloud_instance_construct.data_source.ipv4
-            )  # TODO: can I use the output  # noqa: E501
+            ipv4 = cloud_instance_construct.data_source.ipv4
         else:
             ipv4 = cloud_instance_construct.data_source.ipv4_address
 
         kubecontext = config.kubecontext
         local_kube_config_path = f"{config.base_path}/secrets/kubeconfig"
         username = config.cloud_instance_user
-        ssh_private_key_path = config.ssh_private_key_path
+        ssh_private_key_path = f"{config.base_path}/secrets/ssh_private_key"
 
         kube_config_provider = NullProvider(
             alias="kube_config_provider",
@@ -41,8 +39,8 @@ class KubeConfigConstruct(Construct):
             scope=scope,
         )
 
-        kube_config_resource = Resource(  # noqa: F841
-            depends_on=[cloud_instance_construct.data_source],  # noqa: F841
+        kube_config_resource = Resource(
+            depends_on=[cloud_instance_construct.data_source],
             id="kube_config_resource",
             provider=kube_config_provider,
             provisioners=[
