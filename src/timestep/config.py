@@ -75,7 +75,7 @@ class Settings(BaseSettings):
     smtp_password: SecretStr = Field()
     smtp_sender: str = Field()
     ssh_private_key: SecretStr = Field()
-    ssh_public_key: str = Field()
+    ssh_public_key: SecretStr = Field()
     tf_api_token: SecretStr = Field()
     tf_http_address: str = Field()
     tf_username: str = Field()
