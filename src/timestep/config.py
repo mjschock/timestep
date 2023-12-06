@@ -126,13 +126,14 @@ class Settings(BaseSettings):
         default=f"{BASE_PATH}/secrets/ssh_private_key", env="SSH_PRIVATE_KEY_PATH"
     )
     ssh_public_key: str = Field(env="SSH_PUBLIC_KEY")
+    test_env_var: str = Field(env="TEST_ENV_VAR")
+    test_env_secret: SecretStr = Field(env="TEST_ENV_SECRET")
     tf_api_token: SecretStr = Field(default=None, env="TF_API_TOKEN")
     tf_http_address: str = Field(default=None, env="TF_HTTP_ADDRESS")
     tf_username: str = Field(default=None, env="TF_USERNAME")
     version: str = Field(env="VERSION")
 
     class Config:
-        # env_file = ".env"
         env_file = (".dot.env", ".env")
         env_file_encoding = "utf-8"
         secrets_dir = "./secrets"
