@@ -80,7 +80,7 @@ class CloudInstanceConstruct(Construct):
                 id_="cloud_instance_ssh_key_resource",
                 name=f"{config.cloud_instance_name}_ssh_key",
                 provider=cloud_instance_provider,
-                public_key=config.ssh_public_key,
+                public_key=config.ssh_public_key.get_secret_value(),
                 scope=scope,
             )
             cloud_init_config_construct_data_source: DataCloudinitConfig = (

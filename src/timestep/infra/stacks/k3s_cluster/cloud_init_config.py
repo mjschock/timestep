@@ -106,7 +106,8 @@ class CloudInitConfigConstruct(Construct):
                     "name": config.cloud_instance_user,
                     "shell": "/bin/bash",
                     "ssh_authorized_keys": [
-                        config.ssh_public_key.strip(),
+                        # config.ssh_public_key.strip(),
+                        config.ssh_public_key.get_secret_value(),
                     ],
                     "sudo": "ALL=(ALL) NOPASSWD:ALL",
                 },
