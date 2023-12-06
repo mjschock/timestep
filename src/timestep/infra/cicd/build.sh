@@ -23,6 +23,9 @@ else
   echo "direnv is installed"
 fi
 
+eval "$(direnv dotenv bash .dot.env)"
+eval "$(direnv dotenv bash .env)"
+
 cat .dot.env | grep ^CDKTF_CLI_VERSION | cut -d '=' -f2
 echo "CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION}"
 
