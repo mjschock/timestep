@@ -2,6 +2,10 @@
 set -e # exit on first error
 set -x # echo on
 
+ls -al .
+
+direnv allow
+
 echo "CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION}"
 echo "CI_REGISTRY_IMAGE=${CI_REGISTRY_IMAGE}"
 echo "DOCKER_REGISTRY_USERNAME=${DOCKER_REGISTRY_USERNAME}"
