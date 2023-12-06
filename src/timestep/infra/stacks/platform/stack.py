@@ -417,12 +417,14 @@ class PlatformStack(TerraformStack):
         )
 
         private_repo_secret = SecretV1(
+            # TODO: Use a GitHub App Credential instead?
+            # See https://github.com/argoproj/argo-cd/blob/master/docs/user-guide/private-repositories.md#github-app-credential
             id_="private_repo_secret",
             data={
-                "password": config.github_api_token.get_secret_value(),
+                "password": config.argo_cd_private_repo_access_token.get_secret_value(),
                 "project": "default",
                 "url": "https://github.com/mjschock/timestep.git",
-                "username": "mjschock",
+                "username": config.argo_cd_private_repo_username,
                 "type": "git",
             },
             metadata=SecretV1Metadata(

@@ -83,22 +83,6 @@ RUN mv arkade /home/ubuntu/.local/bin/arkade
 RUN ln -sf /home/ubuntu/.local/bin/arkade /home/ubuntu/.local/bin/ark
 ENV PATH="/home/ubuntu/.arkade/bin:/home/ubuntu/.local/bin:${PATH}"
 
-# Install helm with arkade
-# ENV HELM_VERSION=3.12.1
-# RUN ark get helm --version v${HELM_VERSION}
-
-# Install k3sup with arkade
-# ENV K3SUP_VERSION=0.12.14
-# RUN ark get k3sup --version ${K3SUP_VERSION}
-
-# Install kubectl with arkade
-# ENV KUBECTL_VERSION=1.27.4
-# RUN ark get kubectl --version v${KUBECTL_VERSION}
-
-# Install terraform with arkade
-# ENV TERRAFORM_VERSION=1.5.5
-# RUN ark get terraform --version ${TERRAFORM_VERSION}
-
 # Install anyenv
 RUN git clone https://github.com/anyenv/anyenv ~/.anyenv
 ENV PATH="/home/ubuntu/.anyenv/bin:${PATH}"
@@ -122,10 +106,6 @@ RUN eval "$(anyenv init -)" && nodenv install ${NODENV_VERSION}
 ENV NPM_VERSION=9.8.1
 RUN npm install --global npm@${NPM_VERSION}
 
-# Install cdktf-cli with npm
-# ENV CDKTF_CLI_VERSION=latest
-# RUN npm install --global cdktf-cli@${CDKTF_CLI_VERSION}
-
 # Install pyenv with anyenv
 RUN anyenv install pyenv
 ENV PATH="/home/ubuntu/.anyenv/envs/pyenv/shims:/home/ubuntu/.anyenv/envs/pyenv/bin:${PATH}"
@@ -141,28 +121,6 @@ RUN pipx install poetry
 
 # Create virtual env
 RUN python -m venv /home/ubuntu/.venv
-
-# Install CMake with pip
-# ENV CMAKE_VERSION=3.27.1
-# RUN pip install --user CMake==${CMAKE_VERSION}
-
-# Install pyproject dependencies with poetry
-# COPY --chown=ubuntu:ubuntu ./pyproject.toml ./poetry.lock* ./
-# # COPY --chown=ubuntu:ubunt src/skypilot /home/ubuntu/src/skypilot
-# RUN poetry install --no-root
-
-# # Generate cdktf imports with cdktf (requires cdktf-cli from npm, cdktf-lib from poetry, and terraform from arkade)
-# # RUN mkdir -p src/timestep/infra/imports
-# # COPY --chown=ubuntu:ubuntu ./src/timestep/infra/imports/ ./src/timestep/infra/imports/
-# # COPY --chown=ubuntu:ubuntu ./cdktf.json ./
-# # RUN poetry run cdktf get --language python --log-level WARNING --output src/timestep/infra/imports
-
-# # Copy the rest of the project and install it with poetry
-# COPY --chown=ubuntu:ubuntu . ./
-# RUN poetry install
-
-# RUN touch /home/ubuntu/timestep-ai-2.0.19.tgz
-# VOLUME [ "/home/ubuntu/timestep-ai-2.0.19.tgz" ]
 
 COPY --chown=ubuntu:ubuntu docker-entrypoint.sh .dot.env .env .envrc ./
 
