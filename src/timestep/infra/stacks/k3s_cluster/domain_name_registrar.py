@@ -40,12 +40,12 @@ class DomainNameRegistrarConstruct(Construct):
             )
 
             domain_name_registrar_provider = NamecheapProvider(
-                api_key=config.secrets.get_secret_value().get("namecheap_api_key"),
-                api_user=config.secrets.get_secret_value().get("namecheap_api_user"),
+                api_key=config.namecheap_api_key.get_secret_value(),
+                api_user=config.namecheap_api_user,
                 client_ip=http_outputs_ip.value,
                 id="domain_name_registrar_provider",
                 scope=scope,
-                user_name=config.secrets.get_secret_value().get("namecheap_user_name"),
+                user_name=config.namecheap_user_name,
             )
 
             DomainRecords(
