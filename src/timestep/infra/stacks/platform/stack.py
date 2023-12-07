@@ -533,7 +533,7 @@ class PlatformStack(TerraformStack):
                                 # "values-production.yaml",
                                 f"values.{config.primary_domain_name}.tls.yaml"
                                 if config.local_tls_cert_is_enabled
-                                else f"values.{config.primary_domain_name}",  # noqa: E501
+                                else f"values.{config.primary_domain_name}.yaml",  # noqa: E501
                             ],
                             #                             "values": f"""
                             # ingress:
