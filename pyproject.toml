@@ -24,8 +24,8 @@ update_changelog_on_bump = true
 version_files = [
   ".dot.env:VERSION",
   "pyproject.toml:version",
-  "src/timestep/infra/stacks/platform/Chart.yaml:appVersion",
-  "src/timestep/infra/stacks/platform/Chart.yaml:version",
+  "src/timestep/infra/stacks/platform/timestep_ai/Chart.yaml:appVersion",
+  "src/timestep/infra/stacks/platform/timestep_ai/Chart.yaml:version",
   "src/timestep/services/frontend/package.json:version",
   "src/timestep/services/frontend/package-lock.json:version",
   "src/timestep/services/web/pyproject.toml:version",

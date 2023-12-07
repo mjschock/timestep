@@ -11,24 +11,24 @@ from timestep.config import CloudInstanceProvider, Settings
 from timestep.infra.stacks.kubernetes_config.argo_cd.construct import (
     ArgoCDConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.container_registry import (
+from timestep.infra.stacks.kubernetes_config.container_registry.construct import (
     ContainerRegistryConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.kubeapps import (
+from timestep.infra.stacks.kubernetes_config.kubeapps.construct import (
     KubeappsConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.kubernetes_cluster_ingress import (  # noqa: E501
+from timestep.infra.stacks.kubernetes_config.kubernetes_cluster_ingress.construct import (  # noqa: E501
     KubernetesClusterIngressConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.kubernetes_dashboard import (
+from timestep.infra.stacks.kubernetes_config.kubernetes_dashboard.construct import (
     KubernetesDashboardConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.minio import MinioConstruct
-from timestep.infra.stacks.kubernetes_config.postgresql import PostgreSQLConstruct
-from timestep.infra.stacks.kubernetes_config.prefect import PrefectConstruct
-
-# from timestep.infra.stacks.kubernetes_config.prefect import PrefectConstruct
-from timestep.infra.stacks.kubernetes_config.sealed_secrets import (  # noqa: E501
+from timestep.infra.stacks.kubernetes_config.minio.construct import MinioConstruct
+from timestep.infra.stacks.kubernetes_config.postgresql.construct import (
+    PostgreSQLConstruct,
+)
+from timestep.infra.stacks.kubernetes_config.prefect.construct import PrefectConstruct
+from timestep.infra.stacks.kubernetes_config.sealed_secrets.construct import (
     SealedSecretsConstruct,
 )
 
