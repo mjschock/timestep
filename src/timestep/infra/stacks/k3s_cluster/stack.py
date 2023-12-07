@@ -5,7 +5,7 @@ from cdktf import (
 )
 from constructs import Construct
 
-from timestep.config import CloudInstanceProvider
+from timestep.config import CloudInstanceProvider, Settings
 from timestep.infra.stacks.k3s_cluster.cloud_init_config import (
     CloudInitConfigConstruct,
 )
@@ -26,7 +26,7 @@ from timestep.infra.stacks.k3s_cluster.kube_config import (
 class K3sClusterStack(TerraformStack):
     id: str = None
 
-    def __init__(self, scope: Construct, id: str, config: dict[str, str]):
+    def __init__(self, scope: Construct, id: str, config: Settings):
         super().__init__(scope, id)
         self.id = id
 
