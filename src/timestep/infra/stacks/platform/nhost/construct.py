@@ -139,7 +139,7 @@ class NhostConstruct(Construct):
 
         self.nhost_hasura_auth_service_resource = ServiceV1(
             depends_on=[
-                self.hasura_graphql_engine_service_resource,
+                # self.hasura_graphql_engine_service_resource,
                 self.nhost_hasura_auth_deployment_resource,
             ],
             id_="nhost_hasura_auth_service_resource",
