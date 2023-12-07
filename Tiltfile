@@ -137,9 +137,9 @@ local_resource(
     serve_cmd='kubectl port-forward --namespace default svc/hasura-graphql-engine 9000:8080'
 )
 
-watch_file('src/timestep/infra/stacks/platform')
+watch_file('src/timestep/infra/stacks/platform/timestep_ai')
 
-if os.path.exists('src/timestep/infra/stacks/platform'):
+if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/caddy',
         context='src/timestep/services/caddy',
@@ -204,15 +204,14 @@ if os.path.exists('src/timestep/infra/stacks/platform'):
     if os.getenv('LOCAL_TLS_CERT_IS_ENABLED', False):
         k8s_yaml(
             local(
-                'helm template --values src/timestep/infra/stacks/platform/values.timestep.local.tls.yaml src/timestep/infra/stacks/platform'
+                'helm template --values src/timestep/infra/stacks/platform/timestep_ai/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.tls.yaml src/timestep/infra/stacks/platform/timestep_ai'
             )
         )
 
     else:
         k8s_yaml(
             local(
-                # 'helm template --values src/timestep/infra/stacks/platform/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.yaml src/timestep/infra/stacks/platform'
-                'helm template --values src/timestep/infra/stacks/platform/values.timestep.local.yaml src/timestep/infra/stacks/platform'
+                'helm template --values src/timestep/infra/stacks/platform/timestep_ai/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.yaml src/timestep/infra/stacks/platform/timestep_ai'
             )
         )
 
