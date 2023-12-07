@@ -8,7 +8,7 @@ from cdktf_cdktf_provider_kubernetes.provider import KubernetesProvider
 from constructs import Construct
 
 from timestep.config import CloudInstanceProvider, Settings
-from timestep.infra.stacks.kubernetes_config.argo_cd import (
+from timestep.infra.stacks.kubernetes_config.argo_cd.construct import (
     ArgoCDConstruct,
 )
 from timestep.infra.stacks.kubernetes_config.container_registry import (
