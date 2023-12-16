@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 
+import AccountsPage from 'pages/AccountsPage.vue'
 import AboutPage from 'pages/AboutPage.vue'
 import ApolloPage from 'pages/ApolloPage.vue'
 import Index from 'pages/IndexPage.vue'
@@ -41,8 +42,16 @@ const routes: RouteRecordRaw[] = [
       //   path: '/settings',
       //   component: () => import('pages/SettingsPage.vue'),
       // },
-      { path: '/profile', component: Profile, meta: { auth: true } },
-      { path: '/about', component: AboutPage },
+      // { path: '/profile', component: Profile, meta: { auth: true } },
+      { path: '/accounts', component: AccountsPage, meta: { auth: true } },
+      { path: '/agents', component: () => import('pages/AgentsPage.vue'), meta: { auth: true } },
+      { path: '/calendars', component: () => import('pages/CalendarsPage.vue'), meta: { auth: true } },
+      { path: '/contacts', component: () => import('pages/ContactsPage.vue'), meta: { auth: true } },
+      { path: '/documents', component: () => import('pages/DocumentsPage.vue'), meta: { auth: true } },
+      { path: '/tasks', component: () => import('pages/TasksPage.vue'), meta: { auth: true } },
+      { path: '/tools', component: () => import('pages/ToolsPage.vue'), meta: { auth: true } },
+      { path: '/threads', component: () => import('pages/ThreadsPage.vue'), meta: { auth: true } },
+      { path: '/threads/:threadId', component: () => import('pages/ThreadPage.vue'), meta: { auth: true } },
       // { path: '/signout', component: Signout },
       // {
       //   path: '/signin',
@@ -76,8 +85,8 @@ const routes: RouteRecordRaw[] = [
       //   ],
       //   meta: { auth: false },
       // },
-      { path: '/apollo', component: ApolloPage, meta: { auth: true } },
-      { path: '/storage', component: StoragePage, meta: { auth: true } },
+      // { path: '/apollo', component: ApolloPage, meta: { auth: true } },
+      // { path: '/storage', component: StoragePage, meta: { auth: true } },
       // {
       //   path: '',
       //   redirect: '/envs/default/agents/default'

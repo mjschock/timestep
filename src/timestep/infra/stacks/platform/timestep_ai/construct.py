@@ -10,6 +10,10 @@ from cdktf_cdktf_provider_kubernetes.cluster_role_v1 import (
     ClusterRoleV1Metadata,
     ClusterRoleV1Rule,
 )
+from cdktf_cdktf_provider_kubernetes.config_map_v1 import (
+    ConfigMapV1,
+    ConfigMapV1Metadata,
+)
 from cdktf_cdktf_provider_kubernetes.manifest import Manifest
 from cdktf_cdktf_provider_kubernetes.role_binding_v1 import (
     RoleBindingV1,
@@ -203,10 +207,25 @@ class TimestepAIConstruct(Construct):
         postgres_password = config.postgresql_password.get_secret_value()
         postgres_username = "postgres"
 
+        web_config_map = ConfigMapV1(
+            id_="web_config_map",
+            data={
+                "MINIO_ENDPOINT": "minio.default.svc.cluster.local:9000",
+                "MINIO_ROOT_USER": config.minio_root_user,
+                "PREFECT_API_URL": "http://prefect-server.default.svc.cluster.local:4200/api",
+            },
+            metadata=ConfigMapV1Metadata(
+                name="web-config-map",
+                namespace="default",
+            ),
+            scope=self,
+        )
+
         web_secret = SecretV1(
             id_="web_secret",
             data={
                 "MINIO_ROOT_PASSWORD": config.minio_root_password.get_secret_value(),
+                "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
                 "POSTGRES_CONNECTION_STRING": f"postgresql+asyncpg://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}",
                 "POSTGRES_PASSWORD": config.postgresql_password.get_secret_value(),
             },
@@ -221,6 +240,7 @@ class TimestepAIConstruct(Construct):
             default_sa_cluster_role_binding,
             default_sa_role_binding,
             private_repo_secret,
+            web_config_map,
             web_secret,
         ]
 

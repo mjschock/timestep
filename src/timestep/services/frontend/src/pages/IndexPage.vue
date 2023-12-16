@@ -1,14 +1,24 @@
 <template>
   <div class="q-pa-md">
-    <q-card class="my-card" flat bordered v-if="isAuthenticated">
+    <!-- <q-card class="my-card" flat bordered v-if="isAuthenticated"> -->
       <!-- <q-card-section>
-        <div class="text-h6">Welcome to Timestep</div>
-        <div class="text-subtitle2">by John Doe</div>
-      </q-card-section>
+        <div class="text-h6">Accounts</div>
+        <div class="text-subtitle2">Primary</div>
+      </q-card-section> -->
 
-      <q-separator /> -->
+      <!-- <q-table
+        title="Accounts"
+        :rows="accounts"
+        :columns="columns"
+        row-key="id"
+        :selected-rows-label="getSelectedString"
+        selection="multiple"
+        v-model:selected="selected"
+      /> -->
 
-      <q-card-actions vertical>
+      <!-- <q-separator /> -->
+
+      <!-- <q-card-actions vertical v-if="selectedAccountTypeIsPrimary">
         <q-form @submit="changePassword">
           <q-card-actions vertical>
             <q-input
@@ -33,105 +43,44 @@
             />
           </q-card-actions>
         </q-form>
-      </q-card-actions>
-    </q-card>
-    <q-card class="my-card" flat bordered v-if="!isAuthenticated">
+      </q-card-actions> -->
+
+      <!-- <q-separator /> -->
+
+      <!-- <agents-page v-if="isAuthenticated" /> -->
+      <!-- <calendars-page v-if="isAuthenticated" /> -->
+      <!-- <contacts-page v-if="isAuthenticated" /> -->
+      <!-- <storage-page v-if="isAuthenticated" /> -->
+    <!-- </q-card> -->
+    <q-card class="my-card" flat bordered v-if="!isSignedIn">
       <!-- <q-card-section>
         <div class="text-h6">Our Changing Planet</div>
         <div class="text-subtitle2">by John Doe</div>
       </q-card-section> -->
 
       <q-tabs v-model="tab">
+        <!-- <q-tab label="Accounts" name="accounts" />
+        <q-tab label="Agents" name="agents" />
+        <q-tab label="Calendars" name="calendars" />
+        <q-tab label="Contacts" name="contacts" />
+        <q-tab label="Documents" name="documents" /> -->
         <q-tab label="Sign in" name="sign-in" />
         <q-tab label="Sign up" name="sign-up" />
       </q-tabs>
 
       <q-separator />
 
-      <q-tab-panels v-model="tab" animated>
+      <q-tab-panels v-model="tab">
+        <!-- <q-tab-panel name="accounts">
+          <accounts-page />
+        </q-tab-panel> -->
+
         <q-tab-panel name="sign-in">
-          <q-card-actions vertical>
-            <q-form @submit="signIn">
-              <q-card-actions vertical>
-                <q-input
-                  label="Email"
-                  lazy-rules
-                  type="email"
-                  v-model="email"
-                />
-                <q-input
-                  :type="isPwd ? 'password' : 'text'"
-                  label="Password"
-                  v-if="!resetPassword && !resendVerificationEmail"
-                  v-model="password"
-                  lazy-rules
-                >
-                  <template v-slot:append>
-                    <q-icon
-                      :name="isPwd ? 'visibility_off' : 'visibility'"
-                      class="cursor-pointer"
-                      @click="isPwd = !isPwd"
-                    />
-                  </template>
-                </q-input>
-                <q-toggle
-                  v-model="resendVerificationEmail"
-                  @update:model-value="toggleResendVerificationEmail"
-                  label="Resend verification email?"
-                />
-                <q-toggle
-                  v-model="resetPassword"
-                  @update:model-value="toggleResetPassword"
-                  label="Reset password?"
-                />
-                <q-btn
-                  color="primary"
-                  label="Sign in"
-                  no-caps
-                  type="submit"
-                />
-                <!-- <q-btn-toggle
-                  color="primary"
-                  no-caps
-                  :options="[
-                    {label: 'Sign in', value: 'sign-in'},
-                    {label: 'Sign up', value: 'sign-up'}
-                  ]"
-                  type="submit"
-                  v-model="submit"
-                /> -->
-              </q-card-actions>
-            </q-form>
-          </q-card-actions>
-          <q-separator />
-          <oauth-links />
+          <sign-in-page />
         </q-tab-panel>
 
         <q-tab-panel name="sign-up">
-          <q-card-actions vertical>
-            <q-form @submit="signUp">
-              <q-card-actions vertical>
-                <q-input
-                  v-model="email"
-                  label="Email"
-                  type="email"
-                />
-                <q-input
-                  v-model="password"
-                  label="Password"
-                  type="password"
-                />
-                <q-btn
-                  color="primary"
-                  label="Sign up"
-                  no-caps
-                  type="submit"
-                />
-              </q-card-actions>
-            </q-form>
-          </q-card-actions>
-          <q-separator />
-          <oauth-links/>
+          <sign-up-page />
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
@@ -150,202 +99,211 @@ import { useQuasar } from 'quasar'
 //   type Task
 // } from 'agent-protocol'
 
+import AgentsPage from 'src/pages/AgentsPage.vue';
+import CalendarsPage from 'src/pages/CalendarsPage.vue';
+import ContactsPage from 'src/pages/ContactsPage.vue';
 import EssentialLink from 'components/EssentialLink.vue';
 import LoginComponent from 'components/LoginComponent.vue';
 import OauthLinks from 'src/components/OAuthLinks.vue'
+import SignInPage from 'src/pages/SignInPage.vue'
+import SignUpPage from'src/pages/SignUpPage.vue'
+import StoragePage from 'src/pages/StoragePage.vue'
 
 import { AuthChangeEvent, AuthChangedFunction, AuthErrorPayload, ChangePasswordParams, ChangePasswordResponse, Mfa, NhostClient, NhostSession, NhostSessionResponse, RedirectOption, ResetPasswordParams, ResetPasswordResponse, SendVerificationEmailParams, SendVerificationEmailResponse, SignInParams, SignInResponse, SignUpParams } from '@nhost/nhost-js'
 
 import { nhost } from 'src/boot/nhost';
+import gql from 'graphql-tag'
 
 export default defineComponent({
   name: 'IndexPage',
   components: {
-    OauthLinks,
+    // AgentsPage,
+    // CalendarsPage,
+    // ContactsPage,
+    // OauthLinks,
+    SignInPage,
+    SignUpPage,
+    // StoragePage,
   },
   setup () {
     const $q = useQuasar()
-    const email = ref('')
-    const isAuthenticated = ref(false)
-    const isLoading = ref(false)
-    const isPwd = ref(true)
-    const password = ref('')
-    const resendVerificationEmail = ref(false)
-    const resetPassword = ref(false)
-    const submit = ref('sign-in')
+    // const columns = [
+    //   {
+    //     align: 'left',
+    //     field: doc => doc.name,
+    //     label: 'Name',
+    //     name: 'name',
+    //     sortable: true
+    //   },
+    //   {
+    //     align: 'left',
+    //     field: doc => doc.type,
+    //     label: 'Type',
+    //     name: 'type',
+    //     sortable: true
+    //   },
+    //   // {
+    //   //   align: 'left',
+    //   //   field: doc => doc.id,
+    //   //   label: 'ID',
+    //   //   name: 'id',
+    //   //   sortable: true
+    //   // },
+    // ]
+    // const accounts = ref([])
+    // const email = ref('')
+    // const isAuthenticated = ref(false)
+    const isSignedIn = ref(false)
+    // const isLoading = ref(false)
+    // const isPwd = ref(true)
+    // const password = ref('')
+    // const resendVerificationEmail = ref(false)
+    // const resetPassword = ref(false)
+    // const selected = ref([])
+    // const submit = ref('sign-in')
 
-    const toggleResendVerificationEmail = (val: boolean) => {
-      resendVerificationEmail.value = val
-      resetPassword.value = false
-    }
+    // async function getAccounts () {
+    //   // const FILES = gql`
+    //   //   query {
+    //   //     files {
+    //   //       id
+    //   //       bucketId,
+    //   //       name
+    //   //     }
+    //   //   }
+    //   // `
+    //   // const { data, error } = await nhost.graphql.request(FILES)
 
-    const toggleResetPassword = (val: boolean) => {
-      resetPassword.value = val
-      resendVerificationEmail.value = false
-    }
+    //   // if (error) {
+    //   //   console.error(error)
+    //   //   return
+    //   // }
 
-    // const { isAuthenticated, isLoading } = nhost.auth.getAuthenticationStatus()
+    //   // accounts.value = data.files
+
+    //   // const hasuraClaims = nhost.auth.getHasuraClaims()
+
+    //   // if (hasuraClaims) {
+    //   //   console.log('hasuraClaims', hasuraClaims)
+    //   // }
+
+    //   const user = nhost.auth.getUser()
+
+    //   // if (user) {
+    //   //   console.log('user', user)
+    //   // }
+
+    //   accounts.value = [{
+    //     "name": user?.displayName,
+    //     "id": user?.id,
+    //     "type": "Primary"
+    //   }]
+    // }
+
+    // getAccounts()
+
+    // const toggleResendVerificationEmail = (val: boolean) => {
+    //   resendVerificationEmail.value = val
+    //   resetPassword.value = false
+    // }
+
+    // const toggleResetPassword = (val: boolean) => {
+    //   resetPassword.value = val
+    //   resendVerificationEmail.value = false
+    // }
+
+    const { isAuthenticated, isLoading } = nhost.auth.getAuthenticationStatus()
+
+    isSignedIn.value = isAuthenticated
 
     nhost.auth.onAuthStateChanged((event: AuthChangeEvent, session: NhostSession | null) => {
-      console.log(
-        `The auth state has changed. State is now ${event} with session: ${session}`
-      )
+      // console.log(
+      //   `The auth state has changed. State is now ${event} with session: ${session}`
+      // )
 
       if (event === 'SIGNED_IN') {
-        isAuthenticated.value = true
+        isSignedIn.value = true
       } else {
-        isAuthenticated.value = false
+        isSignedIn.value = false
       }
     })
 
-    const changePassword = async (e: Event) => {
-      e.preventDefault()
+    // const changePassword = async (e: Event) => {
+    //   e.preventDefault()
 
-      const params: ChangePasswordParams = {
-        newPassword: password.value,
-      }
-      const resp: ChangePasswordResponse = await nhost.auth.changePassword(params)
-      const error: AuthErrorPayload | null = resp.error
+    //   const params: ChangePasswordParams = {
+    //     newPassword: password.value,
+    //   }
+    //   const resp: ChangePasswordResponse = await nhost.auth.changePassword(params)
+    //   const error: AuthErrorPayload | null = resp.error
 
-      if (error) {
-        console.log('error', error)
-        $q.notify({
-          color: 'negative',
-          message: error.message,
-          position: 'bottom',
-          icon: 'report_problem',
-        })
-      }
-    }
+    //   if (error) {
+    //     console.log('error', error)
+    //     $q.notify({
+    //       color: 'negative',
+    //       message: error.message,
+    //       position: 'bottom',
+    //       icon: 'report_problem',
+    //     })
+    //   }
+    // }
 
-    const signIn = async (e: Event) => {
-      e.preventDefault()
+    // const signUp = async (e: Event) => {
+    //   e.preventDefault()
 
-     if (resendVerificationEmail.value) {
-        const hostname: string = window.location.hostname
-        const redirectOptions: RedirectOption = {
-          redirectTo: `https://${hostname}`,
-        }
-        const params: SendVerificationEmailParams = {
-          email: email.value,
-          options: redirectOptions,
-        }
-        const resp: SendVerificationEmailResponse = await nhost.auth.sendVerificationEmail(params)
-        const error: AuthErrorPayload | null = resp.error
+    //   const params: SignUpParams = {
+    //     email: email.value,
+    //     password: password.value,
+    //   }
+    //   const resp: NhostSessionResponse = await nhost.auth.signUp(params)
+    //   const error: AuthErrorPayload | null = resp.error
+    //   const session: NhostSession | null = resp.session
 
-        if (error) {
-          console.log('error', error)
-          $q.notify({
-            color: 'negative',
-            message: error.message,
-            position: 'bottom',
-            icon: 'report_problem',
-          })
-        }
+    //   if (error) {
+    //     console.log('error', error)
+    //     // submitResult.value.error = error.error
+    //     // submitResult.value.message = error.message
+    //     // submitResult.value.status = error.status
+    //     $q.notify({
+    //       color: 'negative',
+    //       message: error.error,
+    //       position: 'top',
+    //       icon: 'report_problem',
+    //     })
+    //   }
 
-        return
+    //   if (session) {
+    //     console.log('session', session)
+    //   }
+    // }
 
-      } else if (resetPassword.value) {
-        const hostname: string = window.location.hostname
-        const redirectOptions: RedirectOption = {
-          redirectTo: `https://${hostname}`,
-        }
-        const params: ResetPasswordParams = {
-          email: email.value,
-          options: redirectOptions,
-        }
-        const resp: ResetPasswordResponse = await nhost.auth.resetPassword(params)
-        const error: AuthErrorPayload | null = resp.error
-
-        if (error) {
-          console.log('error', error)
-          $q.notify({
-            color: 'negative',
-            message: error.message,
-            position: 'bottom',
-            icon: 'report_problem',
-          })
-        }
-
-        return
-
-      } else {
-        const params: SignInParams = {
-          email: email.value,
-          password: password.value,
-        }
-        const resp: SignInResponse = await nhost.auth.signIn(params)
-        const error: AuthErrorPayload | null = resp.error
-        const mfa: Mfa | null = resp.mfa
-        const session: NhostSession | null = resp.session
-
-        if (error) {
-          console.log('error', error)
-          // submitResult.value.error = error.error
-          // submitResult.value.message = error.message
-          // submitResult.value.status = error.status
-          $q.notify({
-            color: 'negative',
-            message: error.message,
-            position: 'bottom',
-            icon: 'report_problem',
-          })
-        }
-
-        if (mfa) {
-          console.log('mfa', mfa)
-        }
-
-        if (session) {
-          console.log('session', session)
-        }
-      }
-    }
-
-    const signUp = async (e: Event) => {
-      e.preventDefault()
-
-      const params: SignUpParams = {
-        email: email.value,
-        password: password.value,
-      }
-      const resp: NhostSessionResponse = await nhost.auth.signUp(params)
-      const error: AuthErrorPayload | null = resp.error
-      const session: NhostSession | null = resp.session
-
-      if (error) {
-        console.log('error', error)
-        // submitResult.value.error = error.error
-        // submitResult.value.message = error.message
-        // submitResult.value.status = error.status
-        $q.notify({
-          color: 'negative',
-          message: error.error,
-          position: 'top',
-          icon: 'report_problem',
-        })
-      }
-
-      if (session) {
-        console.log('session', session)
-      }
-    }
+    // const selectedAccountTypeIsPrimary = computed(() => {
+    //   return selected.value.length === 1 && selected.value[0].type === 'Primary'
+    // })
 
     return {
-      changePassword,
-      email,
-      isAuthenticated,
-      isLoading,
-      isPwd,
-      password,
-      resendVerificationEmail,
-      resetPassword,
-      signIn,
-      signUp,
-      submit,
+      // accounts,
+      // columns,
+      // changePassword,
+      // email,
+      // getSelectedString () {
+      //   // return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${documents.length}`
+      //   return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${accounts.value.length}`
+      // },
+      isSignedIn,
+      // isLoading,
+      // isPwd,
+      // password,
+      // resendVerificationEmail,
+      // resetPassword,
+      // selected,
+      // selectedAccountTypeIsPrimary,
+      // signIn,
+      // signUp,
+      // submit,
       tab: ref('sign-in'),
-      toggleResendVerificationEmail,
-      toggleResetPassword,
+      // toggleResendVerificationEmail,
+      // toggleResetPassword,
     };
   }
 });
@@ -354,5 +312,4 @@ export default defineComponent({
 <style lang="sass" scoped>
 .my-card
   width: 100%
-  max-width: 480px
 </style>

@@ -64,13 +64,17 @@ class UserService:
 
     async def create_user(self, email: str, password: str):
         # hashed_password = bcrypt.hash(password)
-        hashed_password = password
-        query = users.insert().values(email=email, hashed_password=hashed_password)
-        await database.execute(query)
+        # hashed_password = password
+        # query = users.insert().values(email=email, hashed_password=hashed_password)
+        # await database.execute(query)
+
+        raise NotImplementedError
 
     async def get_user_by_email(self, email: str):
-        query = users.select().where(users.c.email == email)
-        return await database.fetch_one(query)
+        # query = users.select().where(users.c.email == email)
+        # return await database.fetch_one(query)
+
+        raise NotImplementedError
 
 
 async def init():
@@ -80,6 +84,7 @@ async def init():
     )
 
     async with engine.begin() as conn:
-        await conn.run_sync(metadata.create_all)
+        # await conn.run_sync(metadata.create_all)
+        await conn.run_sync(metadata.drop_all)
 
     return UserService(database)

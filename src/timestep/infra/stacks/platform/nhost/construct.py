@@ -164,3 +164,125 @@ class NhostConstruct(Construct):
             ),
             scope=self,
         )
+
+        self.nhost_hasura_storage_deployment_resource = DeploymentV1(
+            id_="nhost_hasura_storage_deployment_resource",
+            metadata=DeploymentV1Metadata(
+                labels={
+                    "app": "nhost-hasura-storage",
+                },
+                name="nhost-hasura-storage",
+                namespace="default",
+            ),
+            spec=DeploymentV1Spec(
+                replicas="1",
+                selector=DeploymentV1SpecSelector(
+                    match_labels={
+                        "app": "nhost-hasura-storage",
+                    }
+                ),
+                template=DeploymentV1SpecTemplate(
+                    metadata=DeploymentV1SpecTemplateMetadata(
+                        labels={
+                            "app": "nhost-hasura-storage",
+                        },
+                    ),
+                    spec=DeploymentV1SpecTemplateSpec(
+                        container=[
+                            DeploymentV1SpecTemplateSpecContainer(
+                                args=[
+                                    "serve",
+                                ],
+                                env=[
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="DEBUG",
+                                        value="true",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_ENDPOINT",
+                                        value="http://hasura-graphql-engine.default.svc.cluster.local:8080/v1",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_GRAPHQL_ADMIN_SECRET",
+                                        value=config.hasura_graphql_admin_secret.get_secret_value(),
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="HASURA_METADATA",
+                                        value="1",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="POSTGRES_MIGRATIONS",
+                                        value="1",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="POSTGRES_MIGRATIONS_SOURCE",
+                                        value=f"postgres://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}?sslmode=disable",
+                                    ),
+                                    # DeploymentV1SpecTemplateSpecContainerEnv(
+                                    #     name="PUBLIC_URL",
+                                    #     value="http://localhost:${PROXY_PORT:-1337}",
+                                    # ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="S3_ACCESS_KEY",
+                                        value=config.minio_root_user,
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="S3_BUCKET",
+                                        value="default",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="S3_ENDPOINT",
+                                        value="http://minio.default.svc.cluster.local:9000",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="S3_ROOT_FOLDER",
+                                        value="f215cf48-7458-4596-9aa5-2159fc6a3caf",
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnv(
+                                        name="S3_SECRET_KEY",
+                                        value=config.minio_root_password.get_secret_value(),
+                                    ),
+                                ],
+                                image="nhost/hasura-storage:0.5.0",
+                                name="nhost-hasura-storage",
+                                port=[
+                                    DeploymentV1SpecTemplateSpecContainerPort(
+                                        container_port=8000,
+                                        name="http",
+                                    )
+                                ],
+                            )
+                        ],
+                    ),
+                ),
+            ),
+            scope=self,
+        )
+
+        self.nhost_hasura_storage_service_resource = ServiceV1(
+            depends_on=[
+                # self.hasura_graphql_engine_service_resource,
+                self.nhost_hasura_storage_deployment_resource,
+            ],
+            id_="nhost_hasura_storage_service_resource",
+            metadata=ServiceV1Metadata(
+                labels={
+                    "app": "nhost-hasura-storage",
+                },
+                name="nhost-hasura-storage",
+                namespace="default",
+            ),
+            spec=ServiceV1Spec(
+                port=[
+                    ServiceV1SpecPort(
+                        port=8000,
+                        protocol="TCP",
+                    )
+                ],
+                selector={
+                    "app": "nhost-hasura-storage",
+                },
+                type="ClusterIP",
+            ),
+            scope=self,
+        )

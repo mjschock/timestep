@@ -22,7 +22,7 @@ export default boot(async ({ app, router, urlPath, publicPath, redirect }) => {
   router.beforeEach(async (to) => {
     const authenticated = await nhost.auth.isAuthenticatedAsync()
     if (!authenticated && to.meta.auth) {
-      return '/signin'
+      return '/'
     }
     return true
   })

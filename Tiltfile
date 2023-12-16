@@ -107,14 +107,6 @@ allow_k8s_contexts(
 #     )
 
 local_resource(
-    'port-forward kubernetes-dashboard 8443:8443',
-    auto_init=False,
-    labels=['ops'],
-    links=['https://localhost:8443'],
-    serve_cmd='make kubernetes-dashboard-port-forward',
-)
-
-local_resource(
     'port-forward argo-cd-server 8080:80',
     auto_init=False,
     labels=['ops'],
@@ -123,10 +115,11 @@ local_resource(
 )
 
 local_resource(
-    'port-forward postgresql-postgresql-ha-pgpool 5432:5432',
+    'port-forward kubernetes-dashboard 8443:8443',
     auto_init=False,
     labels=['ops'],
-    serve_cmd='kubectl port-forward --namespace default svc/postgresql-postgresql-ha-pgpool 5432:5432'
+    links=['https://localhost:8443'],
+    serve_cmd='make kubernetes-dashboard-port-forward',
 )
 
 local_resource(
@@ -134,7 +127,30 @@ local_resource(
     auto_init=False,
     labels=['ops'],
     links=['http://localhost:9000'],
-    serve_cmd='kubectl port-forward --namespace default svc/hasura-graphql-engine 9000:8080'
+    serve_cmd='kubectl port-forward --namespace default svc/hasura-graphql-engine 9000:8080',
+)
+
+local_resource(
+    'port-forward minio 9001:9001',
+    auto_init=False,
+    labels=['ops'],
+    links=['http://127.0.0.1:9001'],
+    serve_cmd='src/timestep/infra/stacks/kubernetes_config/minio/scripts/port_forward.sh',
+)
+
+local_resource(
+    'port-forward postgresql-postgresql-ha-pgpool 5432:5432',
+    auto_init=False,
+    labels=['ops'],
+    serve_cmd='kubectl port-forward --namespace default svc/postgresql-postgresql-ha-pgpool 5432:5432',
+)
+
+local_resource(
+    'port-forward prefect-server 4200:4200',
+    auto_init=False,
+    labels=['ops'],
+    links=['http://localhost:4200'],
+    serve_cmd='kubectl port-forward --namespace default svc/prefect-server 4200:4200',
 )
 
 watch_file('src/timestep/infra/stacks/platform/timestep_ai')
@@ -201,7 +217,10 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         ],
     )
 
-    if os.getenv('LOCAL_TLS_CERT_IS_ENABLED', False):
+    print('os.getenv("LOCAL_TLS_CERT_IS_ENABLED", False): ' + str(os.getenv('LOCAL_TLS_CERT_IS_ENABLED', False)))
+    if os.getenv('LOCAL_TLS_CERT_IS_ENABLED', False) == 'true':
+        print('local tls cert is enabled')
+
         k8s_yaml(
             local(
                 'helm template --values src/timestep/infra/stacks/platform/timestep_ai/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.tls.yaml src/timestep/infra/stacks/platform/timestep_ai'
@@ -209,6 +228,8 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         )
 
     else:
+        print('local tls cert is disabled')
+
         k8s_yaml(
             local(
                 'helm template --values src/timestep/infra/stacks/platform/timestep_ai/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.yaml src/timestep/infra/stacks/platform/timestep_ai'
@@ -221,12 +242,5 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         objects=[
             'caddy:ingress',
             'caddy-certs'
-        ]
-    )
-
-    k8s_resource(
-        'web',
-        objects=[
-            'web-configmap',
         ]
     )

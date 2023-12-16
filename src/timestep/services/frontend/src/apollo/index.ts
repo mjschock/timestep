@@ -9,10 +9,10 @@ export /* async */ function getClientOptions(
     // General options.
     <ApolloClientOptions<unknown>>{
       link: createHttpLink({
-        uri:
-          process.env.GRAPHQL_URI ||
-          // Change to your graphql endpoint.
-          'https://example.com/graphql',
+        // uri:
+        //   process.env.GRAPHQL_URI ||
+        //   // Change to your graphql endpoint.
+        //   'https://example.com/graphql',
       }),
 
       cache: new InMemoryCache(),

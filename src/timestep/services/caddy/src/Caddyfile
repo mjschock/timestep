@@ -5,21 +5,45 @@ http://{$PRIMARY_DOMAIN_NAME}:80 {
 http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 	encode gzip
 
-	handle /envs/* {
+	# handle /api/chat {
+	# 	reverse_proxy web:5000
+	# }
+
+	handle /api/rest* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	handle /api* {
 		reverse_proxy web:5000
 	}
+
+	handle /console* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	# handle /envs/* {
+	# 	reverse_proxy web:5000
+	# }
 
 	handle /docs {
 		reverse_proxy web:5000
 	}
 
-	handle /flows {
-		reverse_proxy web:5000
-	}
+	# handle /flows {
+	# 	reverse_proxy web:5000
+	# }
+
+	# handle /graphql {
+	# 	reverse_proxy web:5000
+	# }
 
 	handle /openapi.json {
 		reverse_proxy web:5000
 	}
+
+	# handle /query {
+	# 	reverse_proxy web:5000
+	# }
 
 	handle /ready {
 		reverse_proxy web:5000
@@ -29,21 +53,17 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 		reverse_proxy web:5000
 	}
 
-	handle /rest/* {
-		reverse_proxy web:5000
-	}
-
-	handle /sky {
-		reverse_proxy web:5000
-	}
-
-	# handle /console {
-	# 	reverse_proxy hasura-graphql-engine:8080
+	# handle /rest/* {
+	# 	reverse_proxy web:5000
 	# }
 
-	handle /console* {
-		reverse_proxy hasura-graphql-engine:8080
-	}
+	# handle /sky {
+	# 	reverse_proxy web:5000
+	# }
+
+	# handle /test {
+	# 	reverse_proxy web:5000
+	# }
 
 	# handle /v1/graphql {
 	# 	# reverse_proxy web:5000
@@ -54,6 +74,19 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 		# uri replace /v1/auth /auth
 		uri strip_prefix /v1/auth
 		reverse_proxy nhost-hasura-auth:4000
+	}
+
+	handle /v1/functions* {
+		# uri replace /v1/functions /api/rest
+		# reverse_proxy hasura-graphql-engine:8080
+
+		uri replace /v1/functions /api
+		reverse_proxy web:5000
+	}
+
+	handle /v1/storage* {
+		uri replace /v1/storage /v1
+		reverse_proxy nhost-hasura-storage:8000
 	}
 
 	handle /v1* {
