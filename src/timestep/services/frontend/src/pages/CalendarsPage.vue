@@ -1,7 +1,7 @@
 <template>
   <q-table
-    title="Agents"
-    :rows="agents"
+    title="Calendars"
+    :rows="calendars"
     :columns="columns"
     row-key="id"
     :selected-rows-label="getSelectedString"
@@ -14,27 +14,27 @@
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  name: 'AgentsPage',
+  name: 'CalendarsPage',
   setup () {
     const columns = [
       {
         align: 'left',
-        field: agent => agent.name,
+        field: calendar => calendar.name,
         label: 'Name',
         name: 'name',
         sortable: true
       },
     ]
-    const agents = ref([])
+    const calendars = ref([])
     const selected = ref([])
 
     return {
       columns,
-      agents,
+      calendars,
       selected,
       getSelectedString () {
         // return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${documents.length}`
-        return selected.value.length === 0 ? '' : `${selected.value.length} agent${selected.value.length > 1 ? 's' : ''} selected of ${accounts.value.length}`
+        return selected.value.length === 0 ? '' : `${selected.value.length} calendar${selected.value.length > 1 ? 's' : ''} selected of ${accounts.value.length}`
       },
     }
   }

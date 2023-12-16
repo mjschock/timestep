@@ -1,9 +1,9 @@
-import asyncio
+import logging
+import typing
+from threading import Thread
+from typing import Annotated
 
-# import base64
-# import os
-# import typing
-from typing import Annotated, Union
+import requests
 
 # import kubernetes
 # from web.services.users import UserService
@@ -13,10 +13,17 @@ import strawberry
 # import uvicorn  # noqa: F401
 # import yaml
 # from email_validator import EmailNotValidError, validate_email
-from fastapi import FastAPI
-from gql import Client, gql
-from gql.transport.aiohttp import AIOHTTPTransport
-from pydantic import BaseModel
+from fastapi import Depends, FastAPI, Response
+from fastapi.security import (
+    HTTPAuthorizationCredentials,
+    HTTPBearer,
+)
+from llama_index.llms.base import MessageRole
+
+# import base64
+# import os
+# import typing
+from pydantic import BaseModel, Field
 
 # from minio import Minio
 # from sky import clouds, skypilot_config
@@ -32,7 +39,12 @@ from strawberry.fastapi import GraphQLRouter
 
 # from .api import agent
 # from .db.env import envs_by_id
-from .services.users import init
+
+# logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+# logging.getLogger().addHandler(logging.StreamHandler(stream=sys.stdout))
+# logger = logging.getLogger("uvicorn")
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 # agents_by_id = {
 #     "default": {
@@ -52,20 +64,20 @@ from .services.users import init
 #     agent_ids: typing.List[str]
 
 
-@strawberry.type
-class SignUpSuccess:
-    # user_id: int
-    user_id: str
+# @strawberry.type
+# class SignUpSuccess:
+#     # user_id: int
+#     user_id: str
 
 
-@strawberry.type
-class SignUpError:
-    message: str
+# @strawberry.type
+# class SignUpError:
+#     message: str
 
 
-SignUpResult = Annotated[
-    Union[SignUpSuccess, SignUpError], strawberry.union("SignUpResult")
-]
+# SignUpResult = Annotated[
+#     Union[SignUpSuccess, SignUpError], strawberry.union("SignUpResult")
+# ]
 
 
 # def get_agent(root, agent_id: strawberry.ID) -> Agent:
@@ -99,6 +111,64 @@ SignUpResult = Annotated[
 # async def get_context() -> Context:
 #     return Context()
 
+# @strawberry.type
+# class Message:
+#     id: str
+#     text: str
+#     timestamp: str
+#     thread_id: str
+#     avatar_url: str
+#     user_id: str
+
+# async def get_message(root, id: strawberry.ID) -> Message:
+#     return Message(
+#         id=id,
+#         text="Hello, world!",
+#         thread_id="1",
+#     )
+
+# async def get_messages(root, thread_id: strawberry.ID) -> typing.List[Message]:
+#     return [
+#         Message(
+#             id="1",
+#             text="Hello, there!",
+#             timestamp="2022-01-01T00:00:00Z",
+#             thread_id="1",
+#             avatar_url="https://www.askmarvin.ai/img/logos/askmarvin_mascot.jpeg",
+#             user_id="1",
+#         ),
+#         Message(
+#             id="2",
+#             text="How can I help you?",
+#             timestamp="2022-01-01T00:00:00Z",
+#             thread_id="1",
+#             avatar_url="https://www.askmarvin.ai/img/logos/askmarvin_mascot.jpeg",
+#             user_id="1",
+#         ),
+#     ]
+
+
+@strawberry.type
+class MessageThread:
+    id: str
+    message_ids: typing.List[str]
+
+
+async def get_thread(root, id: strawberry.ID) -> Thread:
+    return MessageThread(
+        id=id,
+        message_ids=["1", "2", "3"],
+    )
+
+
+async def get_threads(root) -> typing.List[Thread]:
+    return [
+        MessageThread(
+            id="1",
+            message_ids=["1", "2", "3"],
+        )
+    ]
+
 
 @strawberry.type
 class Query:
@@ -106,114 +176,279 @@ class Query:
     # agents: typing.List[Agent] = strawberry.field(resolver=get_agents)
     # env: Environment = strawberry.field(resolver=get_env)
     # envs: typing.List[Environment] = strawberry.field(resolver=get_envs)
-    @strawberry.field
-    async def hello(self) -> str:
-        await asyncio.sleep(1)
+    # @strawberry.field
+    # message: Message = strawberry.field(resolver=get_message)
+    # messages: typing.List[Message] = strawberry.field(resolver=get_messages)
+    thread: MessageThread = strawberry.field(resolver=get_thread)
+    threads: typing.List[MessageThread] = strawberry.field(resolver=get_threads)
+    # async def threads(self) -> typing.Dict[str, typing.Any]:
+    #     await asyncio.sleep(1)
 
-        return "Hello, world!"
+    #     return {
+    #         "list": [{
+    #             "id": "1",
+    #             "messageIds": ["1", "2", "3"],
+    #         }]
+    #     }
+
+
+# @strawberry.type
+# class SendMessageInput:
+#     text: str
+
+
+@strawberry.type
+class SendMessageOutput:
+    id: str
+
+
+# @strawberry.type
+# class ChatData:
+#     messages: typing.List[Message]
+
+# @strawberry.type
+# class _Message:
+#     role: str
+#     content: str
+
+# @strawberry.enum
+# class MessageRole(MessageRoleEnum):
+#     pass
+
+# class MessageRole(str, Enum):
+#     ASSISTANT = "assistant"
+#     FUNCTION = "function"
+#     SYSTEM = "system"
+#     TOOL = "tool"
+#     USER = "user"
+
+
+@strawberry.input
+class Message:
+    content: str
+    # role: MessageRole
+    role: strawberry.enum(MessageRole)
+
+
+@strawberry.input
+class SendMessageInput:
+    # title: str
+    # author: str
+    # messages: typing.List[Message]
+    # things: typing.List[str]
+    messages: typing.List[Message]
+
+
+# @strawberry.type
+# class Book:
+#     title: str
+
+# @strawberry.input
+# class SendMessageInput:
+#     messages: typing.List[Message]
 
 
 @strawberry.type
 class Mutation:
+    # @strawberry.mutation(extensions=[InputMutationExtension()])
+    # @strawberry.mutation()
+    # def send_message(self, text: str) -> SendMessageOutput:
+    # @strawberry.field
+    # def send_message(self, message: SendMessageInput) -> SendMessageOutput:
+    #     return SendMessageOutput(id="1")
+
     @strawberry.field
-    async def sign_up(self, email: str, password: str) -> SignUpResult:
-        # Your domain-specific authentication logic would go here
-        # db_url = 'sqlite:///example.db'
-        # db_url = os.getenv("POSTGRES_CONNECTION_STRING")
-        # if db_url is None:
-        # return SignUpError(message="POSTGRES_CONNECTION_STRING not set")
+    async def send_message(self, input: SendMessageInput) -> SendMessageOutput:
+        return SendMessageOutput(id="1")
 
-        # user_service = UserService(db_url)
-        # user_service: UserService = self.request.app.state.user_service
-        # data = await self.request.json()
-        # email = data.get("email")
-        # password = data.get("password")
+    #     logger = logging.getLogger("uvicorn")
+    #     # check preconditions and get last message
+    #     if len(input.messages) == 0:
+    #         raise HTTPException(
+    #             status_code=status.HTTP_400_BAD_REQUEST,
+    #             detail="No messages provided",
+    #         )
 
-        # user_id = await user_service.create_user(email, password)
-        # return {"message": "User created successfully!"}
+    #     last_message = input.messages.pop()
+    #     if last_message.role != MessageRole.USER:
+    #         raise HTTPException(
+    #             status_code=status.HTTP_400_BAD_REQUEST,
+    #             detail="Last message must be from user",
+    #         )
 
-        # remote_schema = strawberry.Schema(
-        #     query=Query,
-        #     mutation=Mutation,
-        # )
+    #     # convert messages coming from the request to type ChatMessage
+    #     messages = [
+    #         ChatMessage(
+    #             role=m.role,
+    #             content=m.content,
+    #         )
+    #         for m in input.messages
+    #     ]
 
-        transport = AIOHTTPTransport(url="https://countries.trevorblades.com/graphql")
+    #     # agent: OpenAIAgent = get_agent()
+    #     # if not agent:
+    #     #     raise HTTPException(
+    #     #         status_code=status.HTTP_404_NOT_FOUND,
+    #     #         detail="Agent not found",
+    #     #     )
 
-        # Using `async with` on the client will start a connection on the transport
-        # and provide a `session` variable to execute queries on this connection
-        async with Client(
-            transport=transport,
-            fetch_schema_from_transport=True,
-        ) as session:
-            # Execute single query
-            query = gql(
-                """
-                query getContinents {
-                continents {
-                    code
-                    name
-                }
-                }
-            """
-            )
+    #     from transformers import AutoModelForCausalLM, AutoTokenizer
+    #     import torch
 
-            result = await session.execute(query)
-            print(result)
+    #     print('=== info ===')
+    #     print('\ttorch.__version__', torch.__version__)
+    #     print('\ttorch.cuda.is_available()', torch.cuda.is_available())
 
-        # transport = AIOHTTPTransport(url="http://hasura-graphql-engine:8080/v1/graphql")
+    #     # model_id = "EleutherAI/gpt-j-6B"
+    #     model_id = "susnato/phi-1_5_dev"
+    #     # revision = "float16"  # use float16 weights to fit in 16GB GPUs
 
-        # async with Client(
-        #     transport=transport,
-        #     fetch_schema_from_transport=True,
-        # ) as session:
-        #     query = gql(
-        #         """
-        #         fragment userFields on users {
-        #         id
-        #         createdAt
-        #         disabled
-        #         displayName
-        #         avatarUrl
-        #         email
-        #         passwordHash
-        #         emailVerified
-        #         phoneNumber
-        #         phoneNumberVerified
-        #         defaultRole
-        #         isAnonymous
-        #         ticket
-        #         otpHash
-        #         totpSecret
-        #         activeMfaType
-        #         newEmail
-        #         locale
-        #         metadata
-        #         roles {
-        #             role
-        #         }
-        #         }
+    #     # model = AutoModelForCausalLM.from_pretrained(
+    #     #     model_id,
+    #     #     # revision=revision,
+    #     #     torch_dtype=torch.float16,
+    #     #     low_cpu_mem_usage=True,
+    #     #     device_map="auto",  # automatically makes use of all GPUs available to the Actor  # noqa: E501
+    #     # )
 
-        #         mutation insertUser($user: users_insert_input!) {
-        #         insertUser(object: $user) {
-        #             ...userFields
-        #         }
+    #     print('=== loaded model ===')
 
-        #         {
-        #             "user": ...
-        #         }
-        #         }
-        #     """
-        #     )
+    #     # # start a new thread here to query chat engine
+    #     # thread = Thread(target=agent.stream_chat, args=(last_message.content, messages))  # noqa: E501
+    #     # thread.start()
+    #     # logger.info("Querying chat engine")
+    #     # # response = agent.stream_chat(last_message.content, messages)
 
-        #     result = await session.execute(query)
-        #     print(result)
+    #     # # logger.info("Querying chat engine done")
+    #     # # logger.info("response", response)
 
-        user_id = result
+    #     # # stream response
+    #     # # NOTE: changed to sync due to issues with blocking the event loop
+    #     # # see https://stackoverflow.com/a/75760884
+    #     # def event_generator():
+    #     #     queue = agent.callback_manager.handlers[0].queue
 
-        if user_id is None:
-            return SignUpError(message="Something went wrong")
+    #     #     # stream response
+    #     #     while True:
+    #     #         next_item = queue.get(True, 60.0)  # set a generous timeout of 60 seconds  # noqa: E501
+    #     #         # check type of next_item, if string or not
+    #     #         if isinstance(next_item, EventObject):
+    #     #             logger.info('got EventObject')
+    #     #             sse = convert_sse(dict(next_item))
+    #     #             logger.info("sse", sse)
+    #     #             yield sse
+    #     #         elif isinstance(next_item, StreamingAgentChatResponse):
+    #     #             logger.info('got StreamingAgentChatResponse')
+    #     #             response = cast(StreamingAgentChatResponse, next_item)
+    #     #             for token in response.response_gen:
+    #     #                 sse = convert_sse(token)
+    #     #                 logger.info("sse", sse)
+    #     #                 yield sse
+    #     #             break
 
-        return SignUpSuccess(user_id=user_id)
+    #     # return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+    #     return SendMessageOutput(id="1")
+
+    # @strawberry.field
+    # async def sign_up(self, email: str, password: str) -> SignUpResult:
+    #     # Your domain-specific authentication logic would go here
+    #     # db_url = 'sqlite:///example.db'
+    #     # db_url = os.getenv("POSTGRES_CONNECTION_STRING")
+    #     # if db_url is None:
+    #     # return SignUpError(message="POSTGRES_CONNECTION_STRING not set")
+
+    #     # user_service = UserService(db_url)
+    #     # user_service: UserService = self.request.app.state.user_service
+    #     # data = await self.request.json()
+    #     # email = data.get("email")
+    #     # password = data.get("password")
+
+    #     # user_id = await user_service.create_user(email, password)
+    #     # return {"message": "User created successfully!"}
+
+    #     # remote_schema = strawberry.Schema(
+    #     #     query=Query,
+    #     #     mutation=Mutation,
+    #     # )
+
+    #     transport = AIOHTTPTransport(url="https://countries.trevorblades.com/graphql")
+
+    #     # Using `async with` on the client will start a connection on the transport
+    #     # and provide a `session` variable to execute queries on this connection
+    #     async with Client(
+    #         transport=transport,
+    #         fetch_schema_from_transport=True,
+    #     ) as session:
+    #         # Execute single query
+    #         query = gql(
+    #             """
+    #             query getContinents {
+    #             continents {
+    #                 code
+    #                 name
+    #             }
+    #             }
+    #         """
+    #         )
+
+    #         result = await session.execute(query)
+    #         print(result)
+
+    #     # transport = AIOHTTPTransport(url="http://hasura-graphql-engine:8080/v1/graphql")
+
+    #     # async with Client(
+    #     #     transport=transport,
+    #     #     fetch_schema_from_transport=True,
+    #     # ) as session:
+    #     #     query = gql(
+    #     #         """
+    #     #         fragment userFields on users {
+    #     #         id
+    #     #         createdAt
+    #     #         disabled
+    #     #         displayName
+    #     #         avatarUrl
+    #     #         email
+    #     #         passwordHash
+    #     #         emailVerified
+    #     #         phoneNumber
+    #     #         phoneNumberVerified
+    #     #         defaultRole
+    #     #         isAnonymous
+    #     #         ticket
+    #     #         otpHash
+    #     #         totpSecret
+    #     #         activeMfaType
+    #     #         newEmail
+    #     #         locale
+    #     #         metadata
+    #     #         roles {
+    #     #             role
+    #     #         }
+    #     #         }
+
+    #     #         mutation insertUser($user: users_insert_input!) {
+    #     #         insertUser(object: $user) {
+    #     #             ...userFields
+    #     #         }
+
+    #     #         {
+    #     #             "user": ...
+    #     #         }
+    #     #         }
+    #     #     """
+    #     #     )
+
+    #     #     result = await session.execute(query)
+    #     #     print(result)
+
+    #     user_id = result
+
+    #     if user_id is None:
+    #         return SignUpError(message="Something went wrong")
+
+    #     return SignUpSuccess(user_id=user_id)
 
 
 schema = strawberry.Schema(
@@ -233,19 +468,234 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def startup_event():
-    app.state.user_service = await init()
+    logger.debug("=== startup_event (BEGIN) ===")
+    # app.state.user_service = await init()
+    # app.state.storage_service = await init_storage_service()
+    # app.state.user_index_service = await init_user_index_service()
+
+    # @flow(log_prints=True)
+    # def get_repo_info(repo_name: str = "PrefectHQ/prefect"):
+    #     url = f"https://api.github.com/repos/{repo_name}"
+    #     response = httpx.get(url)
+    #     response.raise_for_status()
+    #     repo = response.json()
+    #     print(f"{repo_name} repository statistics 🤓:")
+    #     print(f"Stars 🌠 : {repo['stargazers_count']}")
+    #     print(f"Forks 🍴 : {repo['forks_count']}")
+
+    # # await get_repo_info.deploy(
+    # #     name="my-first-deployment",
+    # #     work_pool_name="default-worker-pool",
+    # #     # image="my-first-deployment-image:tutorial",
+    # #     image="registry.gitlab.com/timestep-ai/timestep/web:latest",
+    # #     push=False
+    # # )
+
+    # await deploy(
+    #     get_repo_info.to_deployment(name="my-first-deployment"),
+    #     build=False,
+    #     image="registry.gitlab.com/timestep-ai/timestep/web:latest",
+    #     push=False,
+    #     work_pool_name="default-worker-pool",
+    # )
+
+    # print("=== startup complete ===")
+    logger.debug("=== startup_event (END) ===")
 
 
-@app.get("/ready")
-async def get_ready():
+# async def get_ready_flow_on_cancellation(flow, flow_run, state):
+#     print("=== get_ready_flow_on_cancellation ===")
+
+# async def get_ready_flow_on_crashed(flow, flow_run, exc):
+#     print("=== get_ready_flow_on_crashed ===")
+
+# async def get_ready_flow_on_failure(flow, flow_run, exc):
+#     print("=== get_ready_flow_on_failure ===")
+
+
+# @flow(
+#     log_prints=True,
+#     on_cancellation=[get_ready_flow_on_cancellation],
+#     on_crashed=[get_ready_flow_on_crashed],
+#     on_failure=[get_ready_flow_on_failure],
+#     retries=3,
+# )
+def get_ready_flow():
     return {
         "ready": "okay",
     }
 
 
-class CreateUserRequestBody(BaseModel):
-    email: str
-    password: str
+@app.get("/ready")
+async def get_ready():
+    return get_ready_flow()
+
+
+security = HTTPBearer()
+
+
+@app.post("/api/accounts")
+async def create_account(
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]
+):
+    logger.debug("=== create_account ===")
+
+    # return {"scheme": credentials.scheme, "credentials": credentials.credentials}
+
+    response = requests.get(
+        "http://nhost-hasura-auth:4000/mfa/totp/generate",
+        headers={
+            "Authorization": f"Bearer {credentials.credentials}",
+        },
+    )
+
+    return response.json()
+
+
+class Mfa(BaseModel):
+    ticket: str = Field("")
+
+
+class User(BaseModel):
+    activate_mfa_type: str = Field("", alias="activateMfaType")
+    mfa: Mfa = Field(None, alias="mfa")
+    totp_code: str = Field("", alias="totpCode")
+
+
+@app.put("/api/users/{user_id}")
+async def update_user(
+    user_id: str,
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
+    user: User,
+):
+    logger.debug("=== update_user ===")
+    logger.debug(f"user: {user}")
+
+    if user.totp_code:
+        if user.activate_mfa_type == "totp":
+            response = requests.post(
+                "http://nhost-hasura-auth:4000/user/mfa",
+                # auth=Auth,
+                json={
+                    "code": user.totp_code,
+                    "activeMfaType": user.activate_mfa_type,
+                },
+                headers={
+                    "Authorization": f"Bearer {credentials.credentials}",
+                },
+            )
+
+        else:
+            response = requests.post(
+                "http://nhost-hasura-auth:4000/signin/mfa/totp",
+                json={
+                    # "code": user.totp_code,
+                    "otp": user.totp_code,
+                    "ticket": user.mfa.ticket,
+                },
+                headers={
+                    "Authorization": f"Bearer {credentials.credentials}",
+                },
+            )
+
+    # return response.json()
+    return Response(
+        content=response.content,
+        status_code=response.status_code,
+    )
+
+
+@app.delete("/api/accounts/{account_id}")
+async def delete_account(account_id: str):
+    logger.debug("=== delete_account ===")
+    logger.debug(f"account_id: {account_id}")
+
+    return {
+        "account_id": account_id,
+    }
+
+
+# @flow(log_prints=True, name='test-flow')
+# def get_repo_info(repo_name: str = "PrefectHQ/prefect"):
+#     url = f"https://api.github.com/repos/{repo_name}"
+#     response = httpx.get(url)
+#     response.raise_for_status()
+#     repo = response.json()
+#     print(f"{repo_name} repository statistics 🤓:")
+#     print(f"Stars 🌠 : {repo['stargazers_count']}")
+#     print(f"Forks 🍴 : {repo['forks_count']}")
+
+# @flow(log_prints=True)
+# def buy():
+#     print("Buying securities")
+
+# @app.get("/test")
+# def test(background_tasks: BackgroundTasks):
+#     # from transformers import AutoModelForCausalLM, AutoTokenizer
+#     # import torch
+
+#     # print('=== test ===', flush=True)
+#     logger.debug('=== test ===')
+#     logger.debug(f'torch.__version__ {torch.__version__}')
+#     logger.debug(f'torch.cuda.is_available() {torch.cuda.is_available()}')
+
+#     # id = deploy_flow()
+#     id = background_tasks.add_task(deploy_flow)
+
+#     # model_id = "EleutherAI/gpt-j-6B"
+#     # model_id = "susnato/phi-1_5_dev"
+#     # revision = "float16"  # use float16 weights to fit in 16GB GPUs
+
+#     # model = AutoModelForCausalLM.from_pretrained(
+#     #     model_id,
+#     #     # revision=revision,
+#     #     torch_dtype=torch.float16,
+#     #     low_cpu_mem_usage=True,
+#     #     device_map="auto",  # automatically makes use of all GPUs available to the Actor  # noqa: E501
+#     # )
+
+#     # get_repo_info.deploy(
+#     #     "test-flow-deployment",
+#     #     build=False,
+#     #     # image="my-first-deployment-image:tutorial",
+#     #     # image="registry.gitlab.com/timestep-ai/timestep/web:latest",
+#     #     image="prefecthq/prefect:2.14.6-python3.11-kubernetes",
+#     #     push=False,
+#     #     work_pool_name="default-worker-pool",
+#     # )
+
+#     # buy.deploy(
+#     #     name="my-code-baked-into-an-image-deployment",
+#     #     work_pool_name="my-docker-pool",
+#     #     image="my_registry/my_image:my_image_tag"
+#     # )
+
+#     # await deploy(
+#     #     get_repo_info.to_deployment(name="my-first-deployment"),
+#     #     build=False,
+#     #     # image="registry.gitlab.com/timestep-ai/timestep/web:latest",
+#     #     image="prefecthq/prefect:2.14.6-python3.11-kubernetes",
+#     #     push=False,
+#     #     work_pool_name="default-worker-pool",
+#     # )
+
+#     return {
+#         "test": id,
+#     }
+
+# @app.post("/query")
+# async def query_index(query: str):
+#     return {
+#         "query": query,
+#     }
+
+# @app.get("/query")
+# async def query_index(query: str):
+#     return await app.state.user_index_service.query_index(query)
+
+# class CreateUserRequestBody(BaseModel):
+#     email: str
+#     password: str
 
 
 # @app.post("/rest/users")
@@ -618,7 +1068,8 @@ class CreateUserRequestBody(BaseModel):
 #         raise Exception(f"minio endpoint is not set in {config_path}")
 
 
-app.include_router(graphql_app, prefix="/graphql")
+# app.include_router(chat_router, prefix="/api/chat")
+# app.include_router(graphql_app, prefix="/graphql")
 
 # for env_id in envs_by_id.keys():
 #     env = get_env(None, env_id)

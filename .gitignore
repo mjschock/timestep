@@ -22,6 +22,11 @@ dist/
 .DS_Store
 .idea/
 
+# Pants workspace files
+/.pants.*
+/dist/
+/.pids
+
 ## MISC ##
 actions-runner
 docs

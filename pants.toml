@@ -1,0 +1,10 @@
+[GLOBAL]
+pants_version = "$PANTS_VERSION"
+
+backend_packages = [
+    "pants.backend.experimental.python.packaging.pyoxidizer",
+    "pants.backend.python",
+]
+
+[python]
+interpreter_constraints = ["CPython==3.11.*"]

@@ -1,7 +1,7 @@
 <template>
   <q-table
-    title="Agents"
-    :rows="agents"
+    :title="title"
+    :rows="rows"
     :columns="columns"
     row-key="id"
     :selected-rows-label="getSelectedString"
@@ -13,28 +13,31 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
+const pageType = 'Tool'
+
 export default defineComponent({
-  name: 'AgentsPage',
+  name: `${pageType}sPage`,
   setup () {
     const columns = [
       {
         align: 'left',
-        field: agent => agent.name,
+        field: row => row.name,
         label: 'Name',
         name: 'name',
         sortable: true
       },
     ]
-    const agents = ref([])
+    const rows = ref([])
     const selected = ref([])
+    const title = `${pageType}s`
 
     return {
       columns,
-      agents,
+      rows,
       selected,
+      title,
       getSelectedString () {
-        // return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${documents.length}`
-        return selected.value.length === 0 ? '' : `${selected.value.length} agent${selected.value.length > 1 ? 's' : ''} selected of ${accounts.value.length}`
+        return selected.value.length === 0 ? '' : `${selected.value.length} ${pageType.toLowerCase()}${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`
       },
     }
   }
