@@ -210,7 +210,7 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
             "--reload"
         ],
         ignore=[
-            'src/lib/skypilot/.git',
+            'src/lib/prefect-skypilot/.git',
         ],
         live_update=[
             sync('src/timestep/services/web/src', '/home/ubuntu/app/src'),
