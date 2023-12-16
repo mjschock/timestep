@@ -6751,6 +6751,25 @@ prefect = ">=2.13.5"
 dev = ["black", "coverage", "flake8", "interrogate", "isort", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings[python]", "mock", "mypy", "pillow", "pre-commit", "pytest", "pytest-asyncio"]
 
 [[package]]
+name = "prefect-skypilot"
+version = "0+untagged.1.g71cd977"
+description = "Prefect Collection Template contains all the boilerplate that you need to create a Prefect collection."
+optional = false
+python-versions = ">=3.8"
+files = []
+develop = true
+
+[package.dependencies]
+prefect = ">=2.0.0"
+
+[package.extras]
+dev = ["black", "coverage", "flake8", "interrogate", "isort", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings[python]", "mock", "mypy", "pillow", "pre-commit", "pytest", "pytest-asyncio"]
+
+[package.source]
+type = "directory"
+url = "src/lib/prefect-skypilot"
+
+[[package]]
 name = "prefect-sqlalchemy"
 version = "0.3.2"
 description = "Prefect integrations for interacting with SQLAlchemy."
@@ -10325,4 +10344,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11,<3.12"
-content-hash = "729def9167aa292dbc3791555073b90cef6c34d4d219976e5ca0c4d2e6823f77"
+content-hash = "d9b69ad60a4b211386ac4abaac5cd3e50ea931a55003e08d55c396b0ac57a170"

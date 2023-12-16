@@ -41,6 +41,7 @@
           label="Enable MFA TOTP"
           no-caps
           type="submit"
+          disabled
         />
       </q-card-actions>
     </q-form>
@@ -72,6 +73,7 @@
           label="Delete account"
           no-caps
           type="submit"
+          disabled
         />
       </q-card-actions>
     </q-form>
@@ -190,24 +192,24 @@ export default defineComponent({
       // const resp: EnableMfaResponse = await nhost.auth.enableMfa(params)
       // const error: AuthErrorPayload | null = resp.error
 
-      type Data = {
-        message: string
-      }
+      // type Data = {
+      //   message: string
+      // }
 
-      type Body = {
-        email: string
-        name: string
-      }
+      // type Body = {
+      //   email: string
+      //   name: string
+      // }
 
-      type ErrorMessage = {
-        message: string
-      }
+      // type ErrorMessage = {
+      //   message: string
+      // }
 
-      // The function will only accept a body of type `Body`
-      const { res, error } = await nhost.functions.call<Data, Body, ErrorMessage>(
-        'accounts',
-        { id: selected.value[0].id },
-      )
+      // // The function will only accept a body of type `Body`
+      // const { res, error } = await nhost.functions.call<Data, Body, ErrorMessage>(
+      //   'accounts',
+      //   { id: selected.value[0].id },
+      // )
 
       // const params: DeleteAccountParams = {
       //   id: selected.value[0].id,
@@ -215,42 +217,92 @@ export default defineComponent({
       // const resp: DeleteAccountResponse = await nhost.functions.call('delete-account', params)
       // const error: AuthErrorPayload | null = resp.error
 
-      console.log('res', res)
-      console.log('error', error)
 
-      if (error) {
-      //   notif({
-      //     color: 'negative',
-      //     message: error.message,
-      //     position: 'top',
-      //     icon: 'report_problem',
-      //     spinner: false,
-      //     timeout: 5000,
-      //   })
-        console.log('error', error)
-      } else {
-      //   notif({
-      //     color: 'positive',
-      //     message: 'MFA enabled',
-      //     position: 'top',
-      //     icon: 'check_circle',
-      //     spinner: false,
-      //     timeout: 5000,
-      //   })
-      // }
-        console.log('res', res)
-        const imageUrl = res?.data.imageUrl
-        const totpSecret = res?.data.totpSecret
-
-        if (imageUrl && totpSecret) {
-          totp.value = {
-            imageUrl,
-            totpSecret,
-            totpCode: '',
+      api.put(
+        `/accounts/${selected.value[0].id}`,
+        {
+          mfa: {
+            enabled: true,
+            type: 'totp',
           }
-          prompt.value = true
-        }
-      }
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${nhost.auth.getAccessToken()}`,
+          },
+        },
+      )
+        .then((response) => {
+          // console.log('response', response)
+          // prompt.value = false
+          // notif({
+          //   color: 'positive',
+          //   message: 'MFA enabled',
+          //   position: 'top',
+          //   icon: 'check_circle',
+          //   spinner: false,
+          //   timeout: 5000,
+          // })
+          const imageUrl = res?.data.imageUrl
+          const totpSecret = res?.data.totpSecret
+
+          if (imageUrl && totpSecret) {
+            totp.value = {
+              imageUrl,
+              totpSecret,
+              totpCode: '',
+            }
+            prompt.value = true
+          }
+        })
+        .catch((error) => {
+          console.log('error', error)
+          // notif({
+          //   color: 'negative',
+          //   message: error.message,
+          //   position: 'top',
+          //   icon: 'report_problem',
+          //   spinner: false,
+          //   timeout: 5000,
+          // })
+        })
+
+      // console.log('res', res)
+      // console.log('error', error)
+
+      // if (error) {
+      // //   notif({
+      // //     color: 'negative',
+      // //     message: error.message,
+      // //     position: 'top',
+      // //     icon: 'report_problem',
+      // //     spinner: false,
+      // //     timeout: 5000,
+      // //   })
+      //   console.log('error', error)
+      // } else {
+      // //   notif({
+      // //     color: 'positive',
+      // //     message: 'MFA enabled',
+      // //     position: 'top',
+      // //     icon: 'check_circle',
+      // //     spinner: false,
+      // //     timeout: 5000,
+      // //   })
+      // // }
+      //   console.log('res', res)
+      //   const imageUrl = res?.data.imageUrl
+      //   const totpSecret = res?.data.totpSecret
+
+      //   if (imageUrl && totpSecret) {
+      //     totp.value = {
+      //       imageUrl,
+      //       totpSecret,
+      //       totpCode: '',
+      //     }
+      //     prompt.value = true
+      //   }
+      // }
     }
 
     const verifyMfa = async (e: Event) => {

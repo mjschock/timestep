@@ -114,6 +114,7 @@
           label="Upload document"
           no-caps
           type="submit"
+          disable
         />
       </q-card-actions>
     </q-form>
@@ -205,7 +206,7 @@ export default defineComponent({
       const { data, error } = await nhost.graphql.request(FILES)
 
       if (error) {
-        console.error(error)
+        // console.error(error)
         return
       }
 

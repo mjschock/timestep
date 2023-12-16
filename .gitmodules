@@ -1,3 +1,6 @@
+[submodule "src/timestep/services/web/src/lib/prefect-skypilot"]
+	path = src/timestep/services/web/src/lib/prefect-skypilot
+	url = https://github.com/mjschock/prefect-skypilot.git
 [submodule "src/timestep/services/web/src/lib/skypilot"]
 	path = src/timestep/services/web/src/lib/skypilot
 	url = https://github.com/mjschock/skypilot.git

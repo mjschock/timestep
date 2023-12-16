@@ -99,14 +99,14 @@ export default defineComponent({
     const miniState = ref(false)
     const pages = ref([
       // { name: 'Home', path: '/' },
-      { name: 'Accounts', path: '/accounts', metadata: { icon: 'manage_accounts' } },
-      { name: 'Agents', path: '/agents', metadata: { icon: 'support_agent' } },
-      { name: 'Calendars', path: '/calendars', metadata: { icon: 'event_repeat' } },
-      { name: 'Contacts', path: '/contacts', metadata: { icon: 'contacts' } },
-      { name: 'Documents', path: '/documents', metadata: { icon: 'document_scanner' } },
-      { name: 'Tasks', path: '/tasks', metadata: { icon: 'task' } },
-      { name: 'Tools', path: '/tools', metadata: { icon: 'build' } },
-      { name: 'Threads', path: '/threads', metadata: { icon: 'forum' } },
+      { name: 'Accounts', path: '/accounts', metadata: { enabled: true, icon: 'manage_accounts' } },
+      { name: 'Agents', path: '/agents', metadata: { enabled: true, icon: 'support_agent' } },
+      { name: 'Calendars', path: '/calendars', metadata: { enabled: true, icon: 'event_repeat' } },
+      { name: 'Contacts', path: '/contacts', metadata: { enabled: true, icon: 'contacts' } },
+      { name: 'Documents', path: '/documents', metadata: { enabled: false, icon: 'document_scanner' } },
+      { name: 'Tasks', path: '/tasks', metadata: { enabled: true, icon: 'task' } },
+      { name: 'Tools', path: '/tools', metadata: { enabled: true, icon: 'build' } },
+      { name: 'Threads', path: '/threads', metadata: { enabled: true, icon: 'forum' } },
     ])
     const router = useRouter();
 
@@ -115,9 +115,9 @@ export default defineComponent({
     isSignedIn.value = isAuthenticated
 
     nhost.auth.onAuthStateChanged((event: AuthChangeEvent, session: NhostSession | null) => {
-      console.log(
-        `The auth state has changed. State is now ${event} with session: ${session}`
-      )
+      // console.log(
+      //   `The auth state has changed. State is now ${event} with session: ${session}`
+      // )
 
       if (event === 'SIGNED_IN') {
         isSignedIn.value = true

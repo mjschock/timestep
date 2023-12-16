@@ -50,6 +50,7 @@ prefect-jupyter = "^0.3.0"
 prefect-kubernetes = "^0.3.1"
 prefect-ray = "^0.3.0"
 prefect-shell = "^0.2.0"
+prefect-skypilot = {develop = true, path = "src/lib/prefect-skypilot"}
 prefect-sqlalchemy = "^0.3.0"
 psycopg2-binary = "^2.9.9"
 pydantic = ">=1.10.8,<2.0"
