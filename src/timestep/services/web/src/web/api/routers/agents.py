@@ -25,6 +25,7 @@ async def create_agent(
 ):
     logger.debug("Creating agent")
     logger.debug(f"credentials: {credentials}")
+    logger.info(f"credentials: {credentials}")
 
     # agent = await agents_router.state.agents_service.create_agent()
     # agent = {"message": "Agent created"}
