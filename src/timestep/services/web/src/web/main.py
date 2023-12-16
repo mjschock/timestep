@@ -1,9 +1,6 @@
 import logging
 import typing
 from threading import Thread
-from typing import Annotated
-
-import requests
 
 # import kubernetes
 # from web.services.users import UserService
@@ -13,18 +10,12 @@ import strawberry
 # import uvicorn  # noqa: F401
 # import yaml
 # from email_validator import EmailNotValidError, validate_email
-from fastapi import Depends, FastAPI, Response
-from fastapi.security import (
-    HTTPAuthorizationCredentials,
-    HTTPBearer,
-)
+from fastapi import FastAPI
 from llama_index.llms.base import MessageRole
 
 # import base64
 # import os
 # import typing
-from pydantic import BaseModel, Field
-
 # from minio import Minio
 # from sky import clouds, skypilot_config
 # from sky.adaptors.minio import MINIO_CREDENTIALS_PATH, MINIO_PROFILE_NAME
@@ -36,6 +27,7 @@ from pydantic import BaseModel, Field
 # from sky.serve.core import up as sky_serve_up  # noqa: F401
 # from sky.skypilot_config import CONFIG_PATH, _try_load_config
 from strawberry.fastapi import GraphQLRouter
+from web.api.routers.agents import agents_router
 
 # from .api import agent
 # from .db.env import envs_by_id
@@ -531,90 +523,6 @@ async def get_ready():
     return get_ready_flow()
 
 
-security = HTTPBearer()
-
-
-@app.post("/api/accounts")
-async def create_account(
-    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]
-):
-    logger.debug("=== create_account ===")
-
-    # return {"scheme": credentials.scheme, "credentials": credentials.credentials}
-
-    response = requests.get(
-        "http://nhost-hasura-auth:4000/mfa/totp/generate",
-        headers={
-            "Authorization": f"Bearer {credentials.credentials}",
-        },
-    )
-
-    return response.json()
-
-
-class Mfa(BaseModel):
-    ticket: str = Field("")
-
-
-class User(BaseModel):
-    activate_mfa_type: str = Field("", alias="activateMfaType")
-    mfa: Mfa = Field(None, alias="mfa")
-    totp_code: str = Field("", alias="totpCode")
-
-
-@app.put("/api/users/{user_id}")
-async def update_user(
-    user_id: str,
-    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
-    user: User,
-):
-    logger.debug("=== update_user ===")
-    logger.debug(f"user: {user}")
-
-    if user.totp_code:
-        if user.activate_mfa_type == "totp":
-            response = requests.post(
-                "http://nhost-hasura-auth:4000/user/mfa",
-                # auth=Auth,
-                json={
-                    "code": user.totp_code,
-                    "activeMfaType": user.activate_mfa_type,
-                },
-                headers={
-                    "Authorization": f"Bearer {credentials.credentials}",
-                },
-            )
-
-        else:
-            response = requests.post(
-                "http://nhost-hasura-auth:4000/signin/mfa/totp",
-                json={
-                    # "code": user.totp_code,
-                    "otp": user.totp_code,
-                    "ticket": user.mfa.ticket,
-                },
-                headers={
-                    "Authorization": f"Bearer {credentials.credentials}",
-                },
-            )
-
-    # return response.json()
-    return Response(
-        content=response.content,
-        status_code=response.status_code,
-    )
-
-
-@app.delete("/api/accounts/{account_id}")
-async def delete_account(account_id: str):
-    logger.debug("=== delete_account ===")
-    logger.debug(f"account_id: {account_id}")
-
-    return {
-        "account_id": account_id,
-    }
-
-
 # @flow(log_prints=True, name='test-flow')
 # def get_repo_info(repo_name: str = "PrefectHQ/prefect"):
 #     url = f"https://api.github.com/repos/{repo_name}"
@@ -1067,7 +975,8 @@ async def delete_account(account_id: str):
 #     if not skypilot_config.get_nested(("minio", "endpoint"), None):
 #         raise Exception(f"minio endpoint is not set in {config_path}")
 
-
+# app.include_router(accounts_router, prefix="/api/accounts")
+app.include_router(agents_router, prefix="/api/agents")
 # app.include_router(chat_router, prefix="/api/chat")
 # app.include_router(graphql_app, prefix="/graphql")
 

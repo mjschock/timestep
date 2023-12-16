@@ -204,13 +204,13 @@ class PrefectConstruct(Construct):
                 ),
                 ReleaseSet(
                     name="worker.image.prefectTag",
-                    value="latest",
-                    # value=f"{config.prefect_server_version}-python3.11-kubernetes",
+                    # value="latest",
+                    value=f"{config.prefect_server_version}-python3.11-kubernetes",
                 ),
-                ReleaseSet(
-                    name="worker.image.repository",
-                    value="registry.gitlab.com/timestep-ai/timestep/web",
-                ),
+                # ReleaseSet(
+                #     name="worker.image.repository",
+                #     value="registry.gitlab.com/timestep-ai/timestep/web",
+                # ),
                 ReleaseSet(
                     name="worker.serverApiConfig.apiUrl",
                     value=f"http://prefect-server.{self.prefect_server_helm_release_resource.namespace}.svc.cluster.local:4200/api",  # noqa: E501
