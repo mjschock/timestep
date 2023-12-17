@@ -1,4 +1,7 @@
+# import argparse
 import logging
+
+# import os
 import typing
 from threading import Thread
 
@@ -7,6 +10,7 @@ from threading import Thread
 # import sky
 import strawberry
 
+# import uvicorn
 # import uvicorn  # noqa: F401
 # import yaml
 # from email_validator import EmailNotValidError, validate_email
@@ -992,3 +996,53 @@ app.include_router(agents_router, prefix="/api/agents")
 # #     # CMD ["poetry", "run", "uvicorn", "src.web.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "5000"]  # noqa: E501
 # #     # uvicorn.run(app, host="0.0.0.0", port=5000, proxy_headers=True, reload=True)
 # #     uvicorn.run(app, host="0.0.0.0", port=5000, proxy_headers=True)
+
+@app.get("/")
+def root():
+    a = "a"
+    b = "b" + a
+    return {"hello world": b + "ms"}
+
+# def main(args):
+#     print("=== main ===")
+#     # print('os.getenv("UVICORN_RELOAD")', os.getenv("UVICORN_RELOAD"))
+#     # print('os.getenv("UVICORN_HOST")', os.getenv("UVICORN_HOST"))
+#     # print('os.getenv("UVICORN_PORT")', os.getenv("UVICORN_PORT"))
+#     # print('os.getenv("UVICORN_PROXY_HEADERS")', os.getenv("UVICORN_PROXY_HEADERS"))
+
+#     # uvicorn_reload = True
+
+#     # print(f"uvicorn_reload {uvicorn_reload}")
+
+#     uvicorn_config = uvicorn.Config(
+#         # app,
+#         "main:app",
+#         host="0.0.0.0",
+#         port=5000,
+#         proxy_headers=True,
+#         reload=args.reload,
+#         # reload=uvicorn_reload,
+#     )
+#     server = uvicorn.Server(uvicorn_config)
+#     server.run()
+
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument("--reload", action="store_true")
+#     args = parser.parse_args()
+
+#     print("=== __main__ ===")
+#     print("args", args)
+
+#     print('args.reload', args.reload)
+
+#     # main(app, args)
+#     main(args)
+
+#     # uvicorn.run(
+#     #     app,
+#     #     host="0.0.0.0",
+#     #     port=5000,
+#     #     proxy_headers=True,
+#     #     # reload=True,
+#     # )
