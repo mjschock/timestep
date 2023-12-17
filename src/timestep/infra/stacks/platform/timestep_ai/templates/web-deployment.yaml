@@ -24,18 +24,18 @@ spec:
         app: web
     spec:
       containers:
-        - command:
-            - /home/ubuntu/app/docker-entrypoint.sh
-            - poetry
-            - run
-            - uvicorn
-            - src.web.main:app
-            - --proxy-headers
-            - --host
-            - 0.0.0.0
-            - --port
-            - "5000"
-          envFrom:
+        # - command:
+        #     - /home/ubuntu/app/docker-entrypoint.sh
+        #     - poetry
+        #     - run
+        #     - uvicorn
+        #     - src.web.main:app
+        #     - --proxy-headers
+        #     - --host
+        #     - 0.0.0.0
+        #     - --port
+        #     - "5000"
+        - envFrom:
             - configMapRef:
                 name: web-config-map
             - secretRef:
@@ -46,6 +46,9 @@ spec:
           ports:
             - containerPort: 5000
               # hostPort: 5000
+              # protocol: TCP
+            # - containerPort: 5678 # TODO: only expose this if debug is enabled in the environment
+              # hostPort: 5678
               # protocol: TCP
           readinessProbe:
             httpGet:

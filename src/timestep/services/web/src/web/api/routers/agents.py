@@ -23,9 +23,13 @@ async def startup():
 async def create_agent(
     credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
 ):
-    logger.debug("Creating agent")
-    logger.debug(f"credentials: {credentials}")
-    logger.info(f"credentials: {credentials}")
+    # logger.debug("Creating agent")
+    # logger.debug(f"credentials: {credentials}")
+    # logger.info(f"credentials: {credentials}")
+
+    # print('credentials', credentials)
+
+    # print('message', "Creating agent")
 
     # agent = await agents_router.state.agents_service.create_agent()
     # agent = {"message": "Agent created"}

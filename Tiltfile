@@ -196,21 +196,53 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/web',
         context='src/timestep/services/web',
+        # entrypoint=[
+        #     "/home/ubuntu/app/docker-entrypoint.sh",
+        #     "poetry",
+        #     "run",
+        #     "uvicorn",
+        #     "src.web.main:app",
+        #     "--proxy-headers",
+        #     "--host",
+        #     "0.0.0.0",
+        #     "--port",
+        #     "5000",
+        #     "--reload"
+        # ],
+        # entrypoint=[
+        #     "/home/ubuntu/app/docker-entrypoint.sh",
+        #     "poetry",
+        #     "run",
+        #     "python",
+        #     "-Xfrozen_modules=off",
+        #     "-m",
+        #     "debugpy",
+        #     "--listen",
+        #     "0.0.0.0:5678",
+        #     "-m",
+        #     "src.web.server",
+        #     "--reload"
+        # ],
+        # entrypoint=[
+        #     "/home/ubuntu/app/docker-entrypoint.sh",
+        #     "poetry",
+        #     "run",
+        #     "python",
+        #     "-m",
+        #     "src.web.server",
+        #     "--reload"
+        # ],
         entrypoint=[
             "/home/ubuntu/app/docker-entrypoint.sh",
             "poetry",
             "run",
-            "uvicorn",
-            "src.web.main:app",
-            "--proxy-headers",
-            "--host",
-            "0.0.0.0",
-            "--port",
-            "5000",
+            "python",
+            "src/web/server.py",
             "--reload"
         ],
         ignore=[
             'src/lib/prefect-skypilot/.git',
+            'src/lib/skypilot/.git',
         ],
         live_update=[
             sync('src/timestep/services/web/src', '/home/ubuntu/app/src'),
