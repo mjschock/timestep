@@ -9,6 +9,9 @@ clean:
 hosts:
 	cat cdktf.out/stacks/timestep.local.k3s_cluster/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
 
+info:
+	watch multipass info timestep-ai
+
 imports:
 	poetry run cdktf get --force --language python --log-level ${CDKTF_LOG_LEVEL} --output src/timestep/infra/imports
 
