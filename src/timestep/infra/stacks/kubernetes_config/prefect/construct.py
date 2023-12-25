@@ -5,6 +5,17 @@ from cdktf_cdktf_provider_helm.release import (
     ReleaseSetListStruct,
     ReleaseSetSensitive,
 )
+from cdktf_cdktf_provider_kubernetes.cluster_role_binding_v1 import (
+    ClusterRoleBindingV1,
+    ClusterRoleBindingV1Metadata,
+    ClusterRoleBindingV1RoleRef,
+    ClusterRoleBindingV1Subject,
+)
+from cdktf_cdktf_provider_kubernetes.cluster_role_v1 import (
+    ClusterRoleV1,
+    ClusterRoleV1Metadata,
+    ClusterRoleV1Rule,
+)
 from cdktf_cdktf_provider_kubernetes.role_binding_v1 import (
     RoleBindingV1,
     RoleBindingV1Metadata,
@@ -17,6 +28,11 @@ from cdktf_cdktf_provider_kubernetes.role_v1 import (
     RoleV1Rule,
 )
 from cdktf_cdktf_provider_kubernetes.secret_v1 import SecretV1, SecretV1Metadata
+from cdktf_cdktf_provider_kubernetes.service_account_v1 import (
+    ServiceAccountV1,
+    ServiceAccountV1ImagePullSecret,
+    ServiceAccountV1Metadata,
+)
 from constructs import Construct
 
 from timestep.config import Settings
@@ -178,6 +194,15 @@ class PrefectConstruct(Construct):
         #     scope=self,
         # )
 
+        # base_job_template_asset = TerraformAsset(
+        #     id="base_job_template_asset",
+        #     path=os.path.join(
+        #         os.path.dirname(__file__), "base-job-template.json"
+        #     ),
+        #     scope=self,
+        #     type=AssetType.FILE,
+        # )
+
         self.prefect_default_worker_helm_release_resource = Release(
             depends_on=[self.prefect_server_helm_release_resource],
             id_="prefect_default_worker_helm_release_resource",
@@ -194,6 +219,11 @@ class PrefectConstruct(Construct):
                     name="worker.apiConfig",
                     value="server",
                 ),
+                # ReleaseSet(
+                #     name="worker.config.baseJobTemplate",
+                #     type="string",
+                #     value=f"{Fn.file(base_job_template_asset.path)}",
+                # ),
                 ReleaseSet(
                     name="worker.config.workPool",
                     value="default-worker-pool",
@@ -215,6 +245,10 @@ class PrefectConstruct(Construct):
                     name="worker.serverApiConfig.apiUrl",
                     value=f"http://prefect-server.{self.prefect_server_helm_release_resource.namespace}.svc.cluster.local:4200/api",  # noqa: E501
                 ),
+                # ReleaseSet(
+                #     name="worker.serviceAccount.annotations",
+                #     value='{"imagePullSecrets": [{"name": "myregistrykey"}]}'
+                # )
             ],
             set_list=[
                 ReleaseSetListStruct(
@@ -222,6 +256,156 @@ class PrefectConstruct(Construct):
                     value=["regcred"],
                 ),
             ],
+            scope=self,
+            #             values=[
+            #                 f"""worker:
+            #   config:
+            #     baseJobTemplate: "{Fn.file(base_job_template_asset.path)}"
+            #             """
+            #             ],
+        )
+
+        # Create prefect-worker-job service account, role, and role binding
+        self.prefect_worker_job_service_account = ServiceAccountV1(
+            depends_on=[
+                self.prefect_default_worker_helm_release_resource,
+            ],
+            id_="prefect_worker_job_service_account",
+            image_pull_secret=[
+                ServiceAccountV1ImagePullSecret(
+                    name="regcred",
+                ),
+            ],
+            metadata=ServiceAccountV1Metadata(
+                name="prefect-worker-job-service-account",
+                namespace=self.prefect_default_worker_helm_release_resource.namespace,
+            ),
+            scope=self,
+        )
+
+        self.prefect_worker_job_cluster_role = ClusterRoleV1(
+            depends_on=[
+                self.prefect_worker_job_service_account,
+            ],
+            id_="prefect_worker_job_cluster_role",
+            metadata=ClusterRoleV1Metadata(
+                name="prefect-worker-job-cluster-role",
+            ),
+            rule=[
+                ClusterRoleV1Rule(
+                    api_groups=[""],
+                    resources=["nodes"],
+                    verbs=["list"],
+                )
+            ],
+            scope=self,
+        )
+
+        self.prefect_worker_job_role = RoleV1(
+            depends_on=[
+                self.prefect_worker_job_service_account,
+            ],
+            id_="prefect_worker_job_role",
+            metadata=RoleV1Metadata(
+                name="prefect-worker-job-role",
+                namespace=self.prefect_worker_job_service_account.metadata.namespace,
+            ),
+            rule=[
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["pods"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["pods/exec"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["pods/status"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["rolebindings"],
+                    verbs=["create", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["roles"],
+                    verbs=["create", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["secrets"],
+                    verbs=["create"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["services"],
+                    verbs=["create", "delete", "get", "list", "patch"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["serviceaccounts"],
+                    verbs=["create", "list"],
+                ),
+                RoleV1Rule(  # TODO: Figure out why this is needed, it seems like a security risk!  # noqa: E501
+                    api_groups=["*"],
+                    resources=["*"],
+                    verbs=["*"],
+                ),
+            ],
+            scope=self,
+        )
+
+        self.prefect_worker_job_cluster_role_binding = ClusterRoleBindingV1(
+            depends_on=[
+                self.prefect_worker_job_service_account,
+                self.prefect_worker_job_cluster_role,
+            ],
+            id_="prefect_worker_job_cluster_role_binding",
+            metadata=ClusterRoleBindingV1Metadata(
+                name="prefect-worker-job-cluster-role-binding",
+            ),
+            subject=[
+                ClusterRoleBindingV1Subject(
+                    kind="ServiceAccount",
+                    name=self.prefect_worker_job_service_account.metadata.name,
+                    api_group="",
+                )
+            ],
+            role_ref=ClusterRoleBindingV1RoleRef(
+                kind="ClusterRole",
+                name=f"{self.prefect_worker_job_cluster_role.metadata.name}",
+                api_group="rbac.authorization.k8s.io",
+            ),
+            scope=self,
+        )
+
+        self.prefect_worker_job_role_binding = RoleBindingV1(
+            depends_on=[
+                self.prefect_worker_job_service_account,
+                self.prefect_worker_job_role,
+            ],
+            id_="prefect_worker_job_role_binding",
+            metadata=RoleBindingV1Metadata(
+                name="prefect-worker-job-role-binding",
+                namespace=self.prefect_worker_job_service_account.metadata.namespace,
+            ),
+            subject=[
+                RoleBindingV1Subject(
+                    kind="ServiceAccount",
+                    name=self.prefect_worker_job_service_account.metadata.name,
+                    api_group="",
+                )
+            ],
+            role_ref=RoleBindingV1RoleRef(
+                kind="Role",
+                name=f"{self.prefect_worker_job_role.metadata.name}",
+                api_group="rbac.authorization.k8s.io",
+            ),
             scope=self,
         )
 

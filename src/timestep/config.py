@@ -4,10 +4,10 @@ from enum import StrEnum, auto
 from pydantic import BaseSettings, Field, SecretStr
 
 BASE_PATH = pathlib.Path.cwd()
-CPUS: int = 2
-DISK_SIZE_GB: int = 80
+CPUS: int = 4
+DISK_SIZE_GB: int = 160
 DIST_PATH: str = f"{BASE_PATH}/cdktf.out"
-MEMORY_SIZE_GB: int = 4
+MEMORY_SIZE_GB: int = 8
 DO_DROPLET_SIZE: str = f"s-{CPUS}vcpu-{MEMORY_SIZE_GB}gb"
 MULTIPASS_INSTANCE_CPUS: int = CPUS
 MULTIPASS_INSTANCE_DISK: str = f"{DISK_SIZE_GB}G"
@@ -50,6 +50,8 @@ class Settings(BaseSettings):
     ingress_controller_acme_ca: str = Field()
     ingress_controller_debug: str = Field()
     ingress_controller_email: str = Field()
+    kube_prometheus_stack_is_enabled: bool = Field()
+    kube_ray_is_enabled: bool = Field()
     kubeapps_is_enabled: bool = Field()
     kubeconfig: SecretStr = Field(default=None)
     kubecontext: str = Field()
@@ -71,6 +73,8 @@ class Settings(BaseSettings):
     postgresql_repmgr_password: SecretStr = Field()
     prefect_server_version: str = Field()
     primary_domain_name: str = Field()
+    python_target_version: str = Field()
+    ray_version: str = Field()
     sealed_secrets_is_enabled: bool = Field()
     smtp_password: SecretStr = Field()
     smtp_sender: str = Field()

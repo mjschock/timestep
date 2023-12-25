@@ -37,6 +37,14 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 	# 	reverse_proxy web:5000
 	# }
 
+	handle /hello {
+		reverse_proxy web:5000
+	}
+
+	handle /hello2 {
+		reverse_proxy web:5000
+	}
+
 	handle /openapi.json {
 		reverse_proxy web:5000
 	}

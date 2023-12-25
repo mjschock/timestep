@@ -14,6 +14,10 @@ from timestep.infra.stacks.kubernetes_config.argo_cd.construct import (
 from timestep.infra.stacks.kubernetes_config.container_registry.construct import (
     ContainerRegistryConstruct,
 )
+from timestep.infra.stacks.kubernetes_config.kube_prometheus_stack.construct import (
+    KubePrometheusStackConstruct,
+)
+from timestep.infra.stacks.kubernetes_config.kube_ray.construct import KubeRayConstruct
 from timestep.infra.stacks.kubernetes_config.kubeapps.construct import (
     KubeappsConstruct,
 )
@@ -74,10 +78,28 @@ class KubernetesConfigStack(TerraformStack):
             )
         )
 
+        if config.kube_prometheus_stack_is_enabled:
+            self.kube_prometheus_stack_contruct: KubePrometheusStackConstruct = (
+                KubePrometheusStackConstruct(
+                    config=config,
+                    id="kube_prometheus_stack_contruct",
+                    helm_provider=self.helm_provider,
+                    scope=self,
+                )
+            )
+
         if config.kubeapps_is_enabled:
             self.kubeapps_contruct: KubeappsConstruct = KubeappsConstruct(
                 config=config,
                 id="kubeapps_contruct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
+
+        if config.kube_ray_is_enabled:
+            self.kube_ray_contruct: KubeRayConstruct = KubeRayConstruct(
+                config=config,
+                id="kube_ray_contruct",
                 helm_provider=self.helm_provider,
                 scope=self,
             )
