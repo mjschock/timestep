@@ -1,3 +1,9 @@
+## 3.0.87 (2023-12-27)
+
+### Fix
+
+- try src-capacitor as root for appflow config json
+
 ## 3.0.86 (2023-12-27)
 
 ### Fix
