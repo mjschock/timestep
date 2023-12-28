@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <!-- <q-layout view="hHh LpR fFf"> -->
-    <q-layout view="hHh Lpr lff" container style="height: 768px" class="shadow-2 rounded-borders">
+    <q-layout view="hHh Lpr lff" container style="height: 768px; width: 480px;" class="shadow-2 rounded-borders">
       <q-header elevated :class="$q.dark.isActive ? 'bg-secondary' : 'bg-black'">
         <q-toolbar>
           <!-- <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" /> -->
@@ -101,11 +101,11 @@ export default defineComponent({
       // { name: 'Home', path: '/' },
       { name: 'Accounts', path: '/accounts', metadata: { enabled: true, icon: 'manage_accounts' } },
       { name: 'Agents', path: '/agents', metadata: { enabled: true, icon: 'support_agent' } },
-      { name: 'Calendars', path: '/calendars', metadata: { enabled: true, icon: 'event_repeat' } },
-      { name: 'Contacts', path: '/contacts', metadata: { enabled: true, icon: 'contacts' } },
-      { name: 'Documents', path: '/documents', metadata: { enabled: false, icon: 'document_scanner' } },
-      { name: 'Tasks', path: '/tasks', metadata: { enabled: true, icon: 'task' } },
-      { name: 'Tools', path: '/tools', metadata: { enabled: true, icon: 'build' } },
+      // { name: 'Calendars', path: '/calendars', metadata: { enabled: true, icon: 'event_repeat' } },
+      // { name: 'Contacts', path: '/contacts', metadata: { enabled: true, icon: 'contacts' } },
+      // { name: 'Documents', path: '/documents', metadata: { enabled: false, icon: 'document_scanner' } },
+      // { name: 'Tasks', path: '/tasks', metadata: { enabled: true, icon: 'task' } },
+      // { name: 'Tools', path: '/tools', metadata: { enabled: true, icon: 'build' } },
       { name: 'Threads', path: '/threads', metadata: { enabled: true, icon: 'forum' } },
     ])
     const router = useRouter();

@@ -1,85 +1,101 @@
-from typing import Annotated
+import logging
+import os
 
-from fastapi import APIRouter, Depends, Response
-from pydantic import BaseModel
-from starlette.background import BackgroundTask
+import requests
+from fastapi import APIRouter, logger
 
-from ..services.agents import AgentsService, get_agent_service
+# from web.app.local_dev import app as local_dev
+# from ..services.agent import app as agent_deployment
+# from ..workflows.agent import deploy_flow
+# from ..services import agent_deployment
+# from ..services.agent import deploy_create_agent_flow
+from ..services import agents as agent_service
 
 router = APIRouter(
     prefix="/api/agents",
     tags=["agents"],
     # dependencies=[Depends(get_current_user)],
-    responses={404: {"description": "Not found"}},
+    # responses={404: {"description": "Not found"}},
 )
 
 
-class AgentConfig(BaseModel):
-    agent_type: str = "dqn"
-    agent_name: str = "dqn_agent"
+@router.on_event("startup")
+async def startup():
+    # logger.info("Starting up agents router")
+    print("=== (print) Starting up agents router ===")
+    logger.logger.info("=== (fastapi logger) Starting up agents router ===")
+    logging.getLogger("uvicorn").info(
+        "=== (uvicorn logger) Starting up agents router ==="
+    )  # noqa: E501
+
+    await agent_service.init_agent_service()
 
 
-async def create_agent_flow(agent_config: AgentConfig, agent_service: AgentsService):
-    print("create_agent_flow")
-    print("agent_config: ", agent_config)
-    agent_id = await agent_service.create_agent()
+@router.get("")
+async def get_agents():
+    response = requests.get(
+        "http://ollama.default.svc.cluster.local:80/api/tags",
+        # params={"name": name},  # noqa: E501
+    ).json()
 
-    return agent_id
+    print("response: ", response)
 
+    models = response["models"]
 
-@router.post(
-    "",
-    responses={
-        202: {"description": "Agent created"},
-        403: {"description": "Operation forbidden"},
-    },
-)
-async def create_agent(
-    agent_config: AgentConfig,
-    agent_service: Annotated[AgentsService, Depends(get_agent_service)],
-):
-    background_task: BackgroundTask = BackgroundTask(
-        func=create_agent_flow,
-        agent_config=agent_config,
-        agent_service=agent_service,
-    )
+    print("models: ", models)
 
-    return Response(
-        background=background_task,
-        status_code=202,
-    )
+    model_ids = [model["name"] for model in models]
 
+    agents = [
+        {
+            "id": "47",
+            # "name": "Timestep AI Agent",
+            "name": "agent@timestep.ai",
+            "model_ids": model_ids,
+            "version": os.getenv("VERSION"),
+        }
+    ]
 
-@router.delete(
-    "",
-    responses={
-        204: {"description": "Agent deleted"},
-        403: {"description": "Operation forbidden"},
-    },
-)
-async def delete_agent(
-    agent_service: Annotated[AgentsService, Depends(get_agent_service)],
-    agent_id: str = "default",
-):
-    print("delete_agent")
-    await agent_service.delete_agent(agent_id=agent_id)
-
-    return Response(status_code=204)
+    return {
+        "agents": agents,
+    }
 
 
-@router.get(
-    "",
-    responses={
-        200: {"description": "Agent query successful"},
-        403: {"description": "Operation forbidden"},
-    },
-)
-async def query_agent(
-    agent_service: Annotated[AgentsService, Depends(get_agent_service)], query: str
-):
-    print("query_agent")
-    resp = await agent_service.query_agent(query=query)
+@router.post("/{agent_id}/models")
+async def create_agent_model(agent_id: str, model_id: str):
+    response = requests.delete(
+        "http://ollama.default.svc.cluster.local:80/api/delete",
+        json={"name": model_id},  # noqa: E501
+    ).json()
 
-    print("resp", resp)
+    print("response: ", response)
 
-    return resp
+    return {
+        "message": response,
+    }
+
+
+@router.delete("/{agent_id}/models/{model_id}")
+async def delete_agent_model(agent_id: str, model_id: str):
+    response = requests.delete(
+        "http://ollama.default.svc.cluster.local:80/api/delete",
+        json={"name": model_id},  # noqa: E501
+    ).json()
+
+    print("response: ", response)
+
+    return {
+        "message": response,
+    }
+
+
+# @router.get("/hello2")
+# async def hello2(name: str = "Ray"):
+#     response = requests.get(
+#         "http://ray-cluster-kuberay-head-svc.default.svc.cluster.local:8000/",
+#         params={"name": name},  # noqa: E501
+#     ).json()
+
+#     return {
+#         "message": response,
+#     }

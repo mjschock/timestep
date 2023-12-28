@@ -8,7 +8,7 @@
 
 [![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=2184d1107783&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
-```mermaid
+<!-- ```mermaid
 classDiagram
     class Agent {
         + models: List[str]
@@ -28,4 +28,22 @@ classDiagram
 
 ## TODO:
 
-from shimmy import GymnasiumMultiAgentCompatibilityV0
+from shimmy import GymnasiumMultiAgentCompatibilityV0 -->
+
+## Requirements
+
+- [arkade](https://github.com/alexellis/arkade#getting-arkade)
+- [Multipass](https://multipass.run/install)
+
+## Installation
+
+```bash
+make # Will need to be run twice on the first run (after installing k3s inside the multipass VM)
+make hosts # In a separate terminal
+```
+
+## Usage
+
+```bash
+open https://timestep.local
+```

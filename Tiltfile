@@ -149,6 +149,14 @@ local_resource(
 )
 
 local_resource(
+    'port-forward ollama 11434:80',
+    auto_init=False,
+    labels=['ops'],
+    links=['http://localhost:11434', 'http://localhost:11434/api/tags'],
+    serve_cmd='kubectl port-forward --namespace default svc/ollama 11434:80',
+)
+
+local_resource(
     'port-forward postgresql-postgresql-ha-pgpool 5432:5432',
     auto_init=False,
     labels=['ops'],
@@ -227,10 +235,6 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
             "0.0.0.0:5678",
             "src/web/server.py",
             "--reload"
-        ],
-        ignore=[
-            'src/lib/prefect-skypilot/.git',
-            'src/lib/skypilot/.git',
         ],
         live_update=[
             sync('src/timestep/services/web/src', '/home/ubuntu/app/src'),
