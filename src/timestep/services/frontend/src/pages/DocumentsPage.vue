@@ -121,7 +121,7 @@
   </q-card-actions>
 
   <q-card-actions vertical v-if="selected.length">
-    <q-form @submit="deleteDocument">
+    <!-- <q-form @submit="deleteDocument"> -->
       <q-card-actions vertical>
         <q-input
           type="text"
@@ -130,11 +130,11 @@
           lazy-rules
         >
           <template v-slot:append>
-            <q-icon
+            <!-- <q-icon
               name="cloud_download"
               class="cursor-pointer"
               @click="() => downloadDocument(selected[0].id)"
-            />
+            /> -->
             <!-- <q-icon
               name="delete"
               class="cursor-pointer"
@@ -149,7 +149,7 @@
           type="submit"
         />
       </q-card-actions>
-    </q-form>
+    <!-- </q-form> -->
   </q-card-actions>
 
 </template>
@@ -213,41 +213,41 @@ export default defineComponent({
       documents.value = data.files
     }
 
-    getDocuments()
+    // getDocuments()
 
     function cleanUp () {
       clearTimeout(timeoutID.value)
     }
 
-    function updateUploadProgress () {
-      let done = true
+    // function updateUploadProgress () {
+    //   let done = true
 
-      uploadProgress.value = uploadProgress.value.map(progress => {
-        if (progress.percent === 1 || progress.error === true) {
-          return progress
-        }
+    //   uploadProgress.value = uploadProgress.value.map(progress => {
+    //     if (progress.percent === 1 || progress.error === true) {
+    //       return progress
+    //     }
 
-        const percent = Math.min(1, progress.percent + Math.random() / 10)
-        const error = percent < 1 && Math.random() > 0.95
+    //     const percent = Math.min(1, progress.percent + Math.random() / 10)
+    //     const error = percent < 1 && Math.random() > 0.95
 
-        if (error === false && percent < 1 && done === true) {
-          done = false
-        }
+    //     if (error === false && percent < 1 && done === true) {
+    //       done = false
+    //     }
 
-        return {
-          ...progress,
-          error,
-          color: error === true ? 'red-2' : 'green-2',
-          percent
-        }
-      })
+    //     return {
+    //       ...progress,
+    //       error,
+    //       color: error === true ? 'red-2' : 'green-2',
+    //       percent
+    //     }
+    //   })
 
-      timeoutID.value = done === true
-        ? undefined
-        : setTimeout(updateUploadProgress, 300)
-    }
+    //   timeoutID.value = done === true
+    //     ? undefined
+    //     : setTimeout(updateUploadProgress, 300)
+    // }
 
-    onBeforeUnmount(cleanUp)
+    // onBeforeUnmount(cleanUp)
 
     return {
       columns,
@@ -264,39 +264,39 @@ export default defineComponent({
       isUploading: computed(() => timeoutID.value !== undefined),
       canUpload: computed(() => files.value !== null),
 
-      cancelFile (index) {
-        this.uploadProgress[ index ] = {
-          ...this.uploadProgress[ index ],
-          error: true,
-          color: 'orange-2'
-        }
-      },
+      // cancelFile (index) {
+      //   this.uploadProgress[ index ] = {
+      //     ...this.uploadProgress[ index ],
+      //     error: true,
+      //     color: 'orange-2'
+      //   }
+      // },
 
-      async deleteDocument () {
-        console.log('selected.value', selected.value)
-        console.log('selected.value[0].id', selected.value[0].id)
-        const user = nhost.auth.getUser()
-        const storageDeleteFileParams: StorageDeleteFileParams = {
-          // bucketId: user?.id,
-          fileId: selected.value[0].id,
-          // id: bucketId,
-          // name: files.value[0].name,
-          // name: 'test'
-        }
-        await nhost.storage.delete(storageDeleteFileParams)
-      },
+      // async deleteDocument () {
+      //   console.log('selected.value', selected.value)
+      //   console.log('selected.value[0].id', selected.value[0].id)
+      //   const user = nhost.auth.getUser()
+      //   const storageDeleteFileParams: StorageDeleteFileParams = {
+      //     // bucketId: user?.id,
+      //     fileId: selected.value[0].id,
+      //     // id: bucketId,
+      //     // name: files.value[0].name,
+      //     // name: 'test'
+      //   }
+      //   await nhost.storage.delete(storageDeleteFileParams)
+      // },
 
-      async downloadDocument () {
-        const user = nhost.auth.getUser()
-        const storageDownloadFileParams: StorageDownloadFileParams = {
-          bucketId: user?.id,
-          fileId: selected.value[0].id,
-          // id: bucketId,
-          // name: files.value[0].name,
-          // name: 'test'
-        }
-        await nhost.storage.download(storageDownloadFileParams)
-      },
+      // async downloadDocument () {
+      //   const user = nhost.auth.getUser()
+      //   const storageDownloadFileParams: StorageDownloadFileParams = {
+      //     bucketId: user?.id,
+      //     fileId: selected.value[0].id,
+      //     // id: bucketId,
+      //     // name: files.value[0].name,
+      //     // name: 'test'
+      //   }
+      //   await nhost.storage.download(storageDownloadFileParams)
+      // },
 
       updateFiles (newFiles) {
         console.log('newFiles', newFiles)

@@ -213,6 +213,7 @@ class TimestepAIConstruct(Construct):
                 "MINIO_ENDPOINT": "minio.default.svc.cluster.local:9000",
                 "MINIO_ROOT_USER": config.minio_root_user,
                 "PREFECT_API_URL": "http://prefect-server.default.svc.cluster.local:4200/api",
+                "VERSION": config.version,
             },
             metadata=ConfigMapV1Metadata(
                 name="web-config-map",

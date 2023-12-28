@@ -14,6 +14,7 @@
       <q-card-actions vertical>
         <q-btn
           color="primary"
+          disable
           label="Create agent"
           no-caps
           type="submit"
@@ -24,10 +25,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { api } from 'boot/axios'
 import { nhost } from 'src/boot/nhost';
 import { useQuasar } from 'quasar'
+import { on } from 'events';
 
 export default defineComponent({
   name: 'AgentsPage',
@@ -87,6 +89,38 @@ export default defineComponent({
           })
         })
     }
+  
+    const getAgents = async () => {
+      api.get(
+        `/agents`,
+        {
+          headers: {
+            'Authorization': `Bearer ${nhost.auth.getAccessToken()}`,
+          },
+        },
+      )
+        .then((response) => {
+          // agents.value = response.data
+          console.log(response.data)
+          agents.value = response.data.agents
+
+        })
+        .catch((error) => {
+          console.log(error)
+          // notif({
+          //   color: 'negative',
+          //   message: error.message,
+          //   position: 'top',
+          //   icon: 'report_problem',
+          //   spinner: false,
+          //   timeout: 5000,
+          // })
+        })
+    }
+
+    onMounted(() => {
+      getAgents()
+    })
 
     return {
       columns,

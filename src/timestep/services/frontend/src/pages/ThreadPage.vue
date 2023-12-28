@@ -2,14 +2,23 @@
   <q-card-actions vertical>
     <div class="q-pa-md row justify-center">
       <div style="width: 100%; max-width: 400px">
-        <!-- <q-chat-message
+        <q-chat-message
           v-for="message in messages"
+          :bg-color="message.role === 'user' ? 'primary' : 'amber'"
           :key="message.id"
-          :name="message.id"
-          :avatar="message.avatarUrl"
+          :avatar="message.role === 'user' ? message.avatarUrl : 'https://robohash.org/4975920e-a4e3-11ee-a55c-17ba192d0095'"
+          :sent="message.role === 'user'"
           :stamp="message.timestamp"
-          :text="[message.text]"
-        /> -->
+          :text="[message.content]"
+          :text-color="message.role === 'user' ? 'white' : 'black'"
+        />
+
+        <q-chat-message v-if="loading"
+          avatar="https://robohash.org/4975920e-a4e3-11ee-a55c-17ba192d0095"
+          bg-color="amber"
+        >
+          <q-spinner-dots size="2rem" />
+        </q-chat-message>
       </div>
     </div>
     <q-form>
@@ -17,6 +26,8 @@
         <q-input
           label="Message"
           v-model="text"
+          :disable="loading"
+          @keyup.enter="sendMessage()"
         />
         <q-btn
           color="primary"
@@ -24,6 +35,7 @@
           no-caps
           type="button"
           @click="sendMessage()"
+          :disable="loading || text.length === 0"
         />
       </q-card-actions>
     </q-form>
@@ -31,18 +43,22 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { api } from 'boot/axios'
+import { nhost } from 'src/boot/nhost';
 import { useRoute } from 'vue-router';
 import { useQuery, useQueryLoading, useMutation, useMutationLoading, useSubscription, useSubscriptionLoading } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
+import { Console } from 'console';
 
 const pageType = 'Thread'
 
 export default defineComponent({
   name: `${pageType}Page`,
   setup () {
-    // const route = useRoute();
+    const route = useRoute();
     const text = ref('')
+    const loading = ref(false)
 
     // const columns = [
     //   {
@@ -93,6 +109,7 @@ export default defineComponent({
 
     // const message = ref('')
     // const messages = computed(() => result.value?.messages ?? [])
+    const messages = ref([])
     // const messagesLoading = computed(() => loading.value)
     // const messagesError = computed(() => error.value)
 
@@ -122,38 +139,144 @@ export default defineComponent({
     //   );
     // }
 
-    const { mutate: sendMessage } = useMutation(gql`
-      mutation sendMessage ($input: SendMessageInput!) {
-        sendMessage (input: $input) {
-          id
-        }
-      }
-    `, () => ({
-      variables: {
-        input: {
-          messages: [
-            {
-              "content": text.value,
-              "role": "USER",
-            }
-          ],
-        },
-      },
-    }))
+    // const { mutate: sendMessage } = useMutation(gql`
+    //   mutation sendMessage ($input: SendMessageInput!) {
+    //     sendMessage (input: $input) {
+    //       id
+    //     }
+    //   }
+    // `, () => ({
+    //   variables: {
+    //     input: {
+    //       messages: [
+    //         {
+    //           "content": text.value,
+    //           "role": "USER",
+    //         }
+    //       ],
+    //     },
+    //   },
+    // }))
 
-    sendMessage({
-      messages: [
+    // sendMessage({
+    //   messages: [
+    //     {
+    //       "content": text.value,
+    //       "role": "USER",
+    //     }
+    //   ],
+    // })
+
+    const getMessages = async () => {
+      loading.value = true
+
+      api.get(
+        `/threads/${route.params.threadId}/messages`,
         {
-          "content": text.value,
-          "role": "USER",
+          headers: {
+            'Authorization': `Bearer ${nhost.auth.getAccessToken()}`,
+          },
+        },
+      )
+        .then((response) => {
+      //     // agents.value = response.data
+          console.log(response.data)
+          messages.value = response.data.messages
+          loading.value = false
+        })
+        .catch((error) => {
+      //     // notif({
+      //     //   color: 'negative',
+      //     //   message: error.message,
+      //     //   position: 'top',
+      //     //   icon: 'report_problem',
+      //     //   spinner: false,
+      //     //   timeout: 5000,
+      //     // })
+          console.log(error)
+          loading.value = false
+        })
+    }
+
+    const sendMessage = async () => {
+      loading.value = true
+      const content = text.value
+      text.value = ''
+
+      messages.value.push(
+        {
+          // id: '1',
+          content: content,
+          role: 'user',
+          // timestamp: new Date().toISOString(),
+          // timestamp: new Date().toDateString(),
+          // timestamp: new Date().toISOString().slice(0, 19).replace("T", " "),
+          // avatarUrl: '
         }
-      ],
+      )
+
+      api.post(
+        `/threads/${route.params.threadId}/messages`,
+        {
+          content: content
+          // messages: 
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${nhost.auth.getAccessToken()}`,
+          },
+          responseType: 'stream',
+        },
+      )
+        .then((response) => {
+          // console.log('response', response)
+          console.log(response.data)
+          // console.log(response.data.data)
+          const data = JSON.parse(response.data)
+          console.log(data.data.message)
+          const message = data.data.message
+          messages.value.push(data.data.message)
+          // messages.value = response.data
+          // console.log('json', response.json())
+      //     // agents.value = response.data
+          // console.log(response.data)
+          // console.log('response.data', response.data)
+          // messages.value = response.data.messages
+          // messages.value.push(response.data.message)
+          // response.data.on('data', (chunk) => {
+          //   console.log('chunk', chunk)
+          //   // messages.value.push(chunk)
+          // })
+
+          // response.data.on('end', () => {
+          //   console.log('end')
+          //   // getMessages()
+          // })
+          loading.value = false
+        })
+        .catch((error) => {
+      //     // notif({
+      //     //   color: 'negative',
+      //     //   message: error.message,
+      //     //   position: 'top',
+      //     //   icon: 'report_problem',
+      //     //   spinner: false,
+      //     //   timeout: 5000,
+      //     // })
+          console.log(error)
+          loading.value = false
+        })
+    }
+
+    onMounted(() => {
+      getMessages()
     })
 
     return {
       // columns,
+      loading,
       // message,
-      // messages,
+      messages,
       // messagesLoading,
       // messagesError,
       sendMessage,

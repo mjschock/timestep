@@ -94,7 +94,7 @@ export default defineComponent({
       {
         align: 'left',
         field: account => account.displayName,
-        label: 'Name',
+        label: 'Display Name',
         name: 'name',
         sortable: true
       },

@@ -1,449 +1,346 @@
-import typing
-from typing import List
+import asyncio
+import base64
+import os
+from logging import Logger
 
-import cloudpickle
-import prefect_ray
-import starlette
-from prefect import flow, task
-from prefect_ray.context import remote_options
-from prefect_ray.task_runners import RayTaskRunner
-from ray import serve
-from ray.runtime_env import RuntimeEnv
-from ray.serve.handle import DeploymentHandle, DeploymentResponse
-
-runtime_env = RuntimeEnv(
-    pip=[
-        "accelerate>=0.16.0",
-        f"cloudpickle=={cloudpickle.__version__}",
-        "einops",
-        "numpy<1.24",  # remove when mlflow updates beyond 2.2
-        f"prefect_ray=={prefect_ray.__version__}",
-        "torch",
-        "transformers>=4.26.0",
-    ],
-    env_vars={"ONEDNN_MAX_CPU_ISA": "AVX512_CORE_AMX"},
-)
+import httpx
+import kubernetes
+import sky
+import yaml
+from prefect import Flow, State, Task, flow, task
+from prefect.flows import FlowRun
+from prefect.logging import get_run_logger
+from prefect.tasks import TaskRun
+from prefect_shell import ShellOperation
 
 
-# @serve.deployment(ray_actor_options={"num_gpus": 0})
-# @serve.deployment(num_replicas=2, ray_actor_options={"num_cpus": 0.2, "num_gpus": 0})
-@serve.deployment(
-    num_replicas=1,
-    ray_actor_options={
-        # "memory": 0.25 * 1024 * 1024 * 1024,  # 0.25 GB
-        # "num_cpus": 0.1,
-        "num_gpus": 0,
-    },
-)
-class AgentDeployment:
-    def __init__(self, model_id: str, revision: str = None, msg: str = None):
-        import torch
-        from transformers import AutoModelForCausalLM, AutoTokenizer
+def load_kubeconfig(overwrite=True):
+    kubeconfig_path = os.path.expanduser(sky.clouds.kubernetes.CREDENTIAL_PATH)
 
-        self._msg = msg
-        # self.model = pipeline("translation_en_to_fr", model="t5-small")
-        # self.model = AutoModelForCausalLM.from_pretrained(
-        #     model_id,
-        #     # revision=revision,
-        #     # torch_dtype=torch.float16,
-        #     # low_cpu_mem_usage=True,
-        #     # device_map="auto",  # automatically makes use of all GPUs available to the Actor  # noqa: E501
-        #     trust_remote_code=True,
+    if overwrite or not os.path.exists(kubeconfig_path):
+        kubecontext = os.getenv("KUBECONTEXT", "timestep.local")
+        kubernetes_service_host = os.getenv("KUBERNETES_SERVICE_HOST")
+        kubernetes_service_port = os.getenv("KUBERNETES_SERVICE_PORT")
+
+        ca_certificate_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+        namespace_path = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
+        service_account_token_path = (
+            "/var/run/secrets/kubernetes.io/serviceaccount/token"  # noqa: E501
+        )
+
+        with open(namespace_path, "r") as file:
+            namespace = file.read()
+
+        # print("before load_incluster_config")
+        kubernetes.config.load_incluster_config()
+        config = kubernetes.client.Configuration.get_default_copy()
+
+        # kube_config_loader = kubernetes.config.kube_config.KubeConfigLoader(
+        #     config_dict=config.to_dict()
         # )
-        # self.tokenizer = AutoTokenizer.from_pretrained(model_id)
-        # self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        import torch  # noqa: F811
-        from transformers import AutoModelForCausalLM, AutoTokenizer  # noqa: F811
+        # print("config", config)
+        # kube_config_contexts = kubernetes.config.list_kube_config_contexts()
+        # print('kube_config_contexts', kube_config_contexts)
 
-        # torch.set_default_device("cuda")
+        # kube_config = kubernetes.config.load_kube_config(
+        #     client_configuration=config,
+        # )
+        # print('kube_config', kube_config)
 
-        # model = AutoModelForCausalLM.from_pretrained("microsoft/phi-2", torch_dtype="auto", trust_remote_code=True)  # noqa: E501
-        print("Loading model...")
-        self.model = AutoModelForCausalLM.from_pretrained(
-            "microsoft/phi-2",
-            torch_dtype=torch.float32,
-            device_map="cpu",
-            trust_remote_code=True,
-        )  # noqa: E501
-        print("Loading tokenizer...")
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            "microsoft/phi-2", trust_remote_code=True
-        )  # noqa: E501
-        print("Done loading model and tokenizer.")
+        # api_key = config.api_key
+        # print("api_key", api_key)
 
-        # inputs = tokenizer('''def print_prime(n):
-        # """
-        # Print all primes between 1 and n
-        # """''', return_tensors="pt", return_attention_mask=False)
+        # auth = config.auth_settings()
+        # print("auth", auth)
 
-        # outputs = model.generate(**inputs, max_length=200)
-        # text = tokenizer.batch_decode(outputs)[0]
-        # print(text)
+        # api_key_prefix = config.api_key_prefix
+        # print("api_key_prefix", api_key_prefix)
 
-    # def translate(self, text: str) -> str:
-    #     # Run inference
-    #     model_output = self.model(text)
+        # cert_file = config.cert_file
+        # print("cert_file", cert_file)
 
-    #     # Post-process output to return only the translation text
-    #     translation = model_output[0]["translation_text"]
+        # key_file = config.key_file
+        # print("key_file", key_file)
 
-    #     return translation
+        # username = config.username
+        # print("username", username)
 
-    # async def __call__(self, http_request: starlette.requests.Request) -> str:
-    #     english_text: str = await http_request.json()
-    #     return self.translate(english_text)
+        # password = config.password
+        # print("password", password)
 
-    def __call__(self, request: starlette.requests.Request) -> typing.Dict:
-        del request  # unused
-        return {"result": self._msg}
+        server = config.host
+        # print("server", server)
+        assert (
+            server == f"https://{kubernetes_service_host}:{kubernetes_service_port}"
+        ), f"{server} != https://{kubernetes_service_host}:{kubernetes_service_port}"
 
-    # def generate(self, text: str) -> pd.DataFrame:
-    #     input_ids = self.tokenizer(text, return_tensors="pt").input_ids.to(
-    #         self.model.device
-    #     )
+        ssl_ca_cert = config.ssl_ca_cert
+        # print("ssl_ca_cert", ssl_ca_cert)
+        assert (
+            ssl_ca_cert == ca_certificate_path
+        ), f"{ssl_ca_cert} != {ca_certificate_path}"
 
-    #     gen_tokens = self.model.generate(
-    #         input_ids,
-    #         do_sample=True,
-    #         temperature=0.9,
-    #         max_length=100,
-    #     )
-    #     return pd.DataFrame(
-    #         self.tokenizer.batch_decode(gen_tokens), columns=["responses"]
-    #     )
+        # Load CA certificate and encode it in base64
+        with open(ssl_ca_cert, "rb") as ssl_ca_cert_file:
+            certificate_authority_data = base64.b64encode(
+                ssl_ca_cert_file.read()
+            ).decode("utf-8")
 
-    # async def __call__(self, http_request: starlette.requests.Request) -> str:
-    #     json_request: str = await http_request.json()
-    #     prompts = []
-    #     for prompt in json_request:
-    #         text = prompt["text"]
-    #         if isinstance(text, list):
-    #             prompts.extend(text)
-    #         else:
-    #             prompts.append(text)
-    #     return self.generate(prompts)
+        # Load service account token
+        with open(service_account_token_path, "rb") as token_file:
+            service_account_token = token_file.read()
 
+        cluster_name = "timestep.local"
+        user_name = "ubuntu"
 
-# model_id = "tiiuae/falcon-7b"
-# revision = None
+        # Create kubeconfig dictionary
+        kubeconfig = {
+            "apiVersion": "v1",
+            "kind": "Config",
+            "clusters": [
+                {
+                    "cluster": {
+                        "certificate-authority-data": certificate_authority_data,
+                        "server": server,
+                    },
+                    "name": cluster_name,
+                }
+            ],
+            "contexts": [
+                {
+                    "context": {
+                        "cluster": cluster_name,
+                        "namespace": namespace,
+                        "user": user_name,
+                    },
+                    "name": kubecontext,
+                }
+            ],
+            "current-context": kubecontext,
+            "preferences": {},
+            "users": [
+                {
+                    "name": user_name,
+                    "user": {
+                        # "client-certificate-data": client_certificate_data,
+                        # "client-key-data": client_key_data,
+                        "token": service_account_token
+                        # "token-data": service_account_token,
+                        # "token": token_file,
+                    },
+                }
+            ],
+        }
 
-# print('model_id', model_id)
-# print('Binding deployment...')
+        # Create ~/.kube directory if it doesn't exist
+        kube_dir = os.path.dirname(kubeconfig_path)
+        os.makedirs(kube_dir, exist_ok=True)
 
-# deployment = PredictDeployment.bind(
-#     model_id=model_id,
-#     revision=revision,
-#     msg="Hello Ray Serve!")
+        # Save the kubeconfig dictionary to ~/.kube/config
+        with open(kubeconfig_path, "w") as outfile:
+            yaml.dump(kubeconfig, outfile, default_flow_style=False)
+
+        if not os.path.exists(kubeconfig_path):
+            raise RuntimeError(f"{kubeconfig_path} file has not been generated.")
+
+        print(f"{kubeconfig_path} file has been generated.")
+
+        # with open(kubeconfig_path, "r") as file:
+        # content = file.read()
+        # print(f"{kubeconfig_path}:")
+        # print(content)
 
 
 @task
-async def serve_agent_task(model_id: str, revision: str = None):
-    print("Starting Ray Serve...")
-    # import typing
-
-    # import starlette
-
-    # # @serve.deployment(ray_actor_options={"num_gpus": 0})
-    # # @serve.deployment(num_replicas=2, ray_actor_options={"num_cpus": 0.2, "num_gpus": 0})  # noqa: E501
-    # @serve.deployment(num_replicas=1, ray_actor_options={
-    #     "memory": 0.5 * 1024 * 1024 * 1024,  # 0.5 GB
-    #     "num_cpus": 0.2,
-    #     "num_gpus": 0,
-    # })
-    # class PredictDeployment:
-    #     def __init__(self, model_id: str, revision: str = None, msg: str = None):
-    #         from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-    #         import torch
-
-    #         self._msg = msg
-    #         # self.model = pipeline("translation_en_to_fr", model="t5-small")
-    #         # self.model = AutoModelForCausalLM.from_pretrained(
-    #         #     model_id,
-    #         #     # revision=revision,
-    #         #     # torch_dtype=torch.float16,
-    #         #     # low_cpu_mem_usage=True,
-    #         #     # device_map="auto",  # automatically makes use of all GPUs available to the Actor  # noqa: E501
-    #         #     trust_remote_code=True,
-    #         # )
-    #         # self.tokenizer = AutoTokenizer.from_pretrained(model_id)
-    #         # self.tokenizer.pad_token = self.tokenizer.eos_token
-
-    #     # def translate(self, text: str) -> str:
-    #     #     # Run inference
-    #     #     model_output = self.model(text)
-
-    #     #     # Post-process output to return only the translation text
-    #     #     translation = model_output[0]["translation_text"]
-
-    #     #     return translation
-
-    #     # async def __call__(self, http_request: starlette.requests.Request) -> str:
-    #     #     english_text: str = await http_request.json()
-    #     #     return self.translate(english_text)
-
-    #     def __call__(self, request: starlette.requests.Request) -> typing.Dict:
-    #         del request  # unused
-    #         return {'result': self._msg}
-
-    #     # def generate(self, text: str) -> pd.DataFrame:
-    #     #     input_ids = self.tokenizer(text, return_tensors="pt").input_ids.to(
-    #     #         self.model.device
-    #     #     )
-
-    #     #     gen_tokens = self.model.generate(
-    #     #         input_ids,
-    #     #         do_sample=True,
-    #     #         temperature=0.9,
-    #     #         max_length=100,
-    #     #     )
-    #     #     return pd.DataFrame(
-    #     #         self.tokenizer.batch_decode(gen_tokens), columns=["responses"]
-    #     #     )
-
-    #     # async def __call__(self, http_request: starlette.requests.Request) -> str:
-    #     #     json_request: str = await http_request.json()
-    #     #     prompts = []
-    #     #     for prompt in json_request:
-    #     #         text = prompt["text"]
-    #     #         if isinstance(text, list):
-    #     #             prompts.extend(text)
-    #     #         else:
-    #     #             prompts.append(text)
-    #     #     return self.generate(prompts)
-
-    # print('model_id', model_id)
-    # print('Binding deployment...')
-
-    # deployment = PredictDeployment.bind(
-    #     model_id=model_id,
-    #     revision=revision,
-    #     msg="Hello Ray Serve!")
-
-    model_id = "tiiuae/falcon-7b"
-    revision = None
-
-    print("model_id", model_id)
-    print("Binding deployment...")
-
-    deployment = AgentDeployment.bind(
-        model_id=model_id, revision=revision, msg="Hello Ray Serve v3!"
-    )
-
-    print("Starting deployment...")
-    serve.run(deployment)
-    # ray.get(handle.remote())
+async def load_cloud_credentials():
+    load_kubeconfig()
 
 
-# @serve.deployment(
-#     ray_actor_options={"num_gpus": 0},
-# )
-# # @serve.ingress(router)
-# class AgentsDeployment:
-#     def __init__(self) -> None:
-#         print("AgentsDeployment init")
+@task
+async def sky_check_task():
+    get_run_logger()
 
-#     @router.get(
-#         "/{agent_id}",
-#         responses={
-#             200: {"description": "Agent query successful"},
-#             403: {"description": "Operation forbidden"},
-#         },
-#     )
-#     async def query_agent(
-#         self,
-#         agent_service: Annotated[AgentsService, Depends(get_agent_service)],
-#         agent_id: str,
-#     ):
-#         print("query_agent")
-#         resp = await agent_service.query_agent(agent_id=agent_id)
+    async with ShellOperation(
+        commands=[
+            "sky check",
+        ],
+        # working_dir=f"data/{today}",
+    ) as sky_check_operation:
+        # trigger runs the process in the background
+        sky_check_operation_process = await sky_check_operation.trigger()
 
-#         print('resp', resp)
+        # then do other things here in the meantime, like download another file
+        # logger.info("=== sky_check_operation_process ===")
 
-#         return resp
+        # when you're ready, wait for the process to finish
+        await sky_check_operation_process.wait_for_completion()
 
-# app = AgentsDeployment.bind()
+        # if you'd like to get the output lines, you can use the `fetch_result` method
+        # output_lines = await sky_check_operation_process.fetch_result()
+
+        # logger.info("output_lines: %s", output_lines)
+
+        # return await sky_check_operation.close()
 
 
-@flow(
-    log_prints=True,
-    task_runner=RayTaskRunner(
-        # address="ray://<instance_public_ip_address>:10001",
-        address="ray://ray-cluster-kuberay-head-svc.default.svc.cluster.local:10001",
-        init_kwargs={
-            "runtime_env": runtime_env,
-        },
-    ),
-    # Using an S3 block that has already been created via the Prefect UI
-    # result_storage="s3/my-result-storage",
-)
-async def serve_agent_flow(names: List[str]) -> None:
-    # print('names', names)
-    # print('Greetings!')
+@task
+async def ollama_list_local_models_task():
+    logger = get_run_logger()
+    logger.debug("ollama_list_local_models_task")
 
-    # for name in names:
-    #     # say_hello.submit(name)
-    #     with remote_options(num_cpus=0.1, num_gpus=0):
-    #         await process.submit(42)
+    url = "http://ollama.default.svc.cluster.local:80/api/tags"
+    # response = httpx.post(
+    #     url,
+    #     json={
+    #         "name": model_id,
+    #     },
 
-    model_id = "tiiuae/falcon-7b"
-    revision = None
+    # repo = response.json()
 
-    with remote_options(num_cpus=0.1, num_gpus=0):
-        await serve_agent_task.submit(model_id, revision)
+    local_model_ids = []
+
+    response = httpx.get(url)
+
+    # logger.debug(response)
+    # logger.debug(response.json())
+
+    # client = httpx.AsyncClient()
+
+    local_models = response.json().get("models", [])
+
+    logger.debug(local_models)
+
+    local_model_ids = [local_model["name"] for local_model in local_models]
+
+    # async with client.stream('GET', url) as response:
+    #     logger.debug(response.status_code)
+    #     logger.debug(response.headers['content-type'])
+
+    #     async for chunk in response.aiter_bytes():
+    #         logger.debug(chunk)
+
+    # async with client.get(url) as response:
+    #     logger.debug(response)
+
+    # await client.aclose()
+
+    return local_model_ids
+
+
+@task
+async def ollama_pull_model_task(model_id: str):
+    logger = get_run_logger()
+
+    url = "http://ollama.default.svc.cluster.local:80/api/pull"
+    # response = httpx.post(
+    #     url,
+    #     json={
+    #         "name": model_id,
+    #     },
+
+    # repo = response.json()
+
+    client = httpx.AsyncClient()
+
+    async with client.stream("POST", url, json={"name": model_id}) as response:
+        logger.debug(response.status_code)
+        logger.debug(response.headers["content-type"])
+
+        async for chunk in response.aiter_bytes():
+            logger.debug(chunk)
+
+    await client.aclose()
+
+
+def sky_launch_task_on_failure_hook(task: Task, task_run: TaskRun, state: State):
+    get_run_logger()
 
 
 @task(
     log_prints=True,
+    on_failure=[
+        sky_launch_task_on_failure_hook,
+    ],
 )
-async def delete_agent_task(agent_id: str = "default"):
-    print("delete_agent_task")
-    print("agent_id: ", agent_id)
+async def sky_launch_task():
+    get_run_logger()
 
-    # handle: DeploymentHandle = serve.get_deployment_handle("AgentDeployment", app_name=agent_id)  # noqa: E501
-    # response: DeploymentResponse = handle.remote("world")
-    # handle.delete.remote()
-    serve.delete(name=agent_id)
+    async with ShellOperation(
+        commands=[
+            "sky launch --cluster min --yes examples/minimal.yaml",
+        ],
+        working_dir="workflows",
+    ) as sky_launch_operation:
+        sky_launch_operation_process = await sky_launch_operation.trigger()
+        await sky_launch_operation_process.wait_for_completion()
 
-    # return agent_id
+
+def sky_serve_up_task_on_failure_hook(task: Task, task_run: TaskRun, state: State):
+    get_run_logger()
+
+
+@task(
+    log_prints=True,
+    on_failure=[
+        sky_serve_up_task_on_failure_hook,
+    ],
+)
+async def sky_serve_up_task():
+    get_run_logger()
+
+    async with ShellOperation(
+        commands=[
+            "sky serve up --yes examples/serve/ray_serve/ray_serve.yaml",
+        ],
+        working_dir="workflows",
+    ) as sky_serve_up_operation:
+        sky_serve_up_operation_process = await sky_serve_up_operation.trigger()
+        await sky_serve_up_operation_process.wait_for_completion()
+
+
+def deploy_agent_flow_on_crashed_hook(flow: Flow, flow_run: FlowRun, state: State):
+    get_run_logger()
 
 
 @flow(
     log_prints=True,
-    task_runner=RayTaskRunner(
-        # address="ray://<instance_public_ip_address>:10001",
-        address="ray://ray-cluster-kuberay-head-svc.default.svc.cluster.local:10001",
-        init_kwargs={
-            "runtime_env": runtime_env,
-        },
-    ),
+    on_crashed=[
+        deploy_agent_flow_on_crashed_hook,
+    ],
 )
-async def delete_agent_flow(agent_id: str) -> None:
-    print("delete_agent_flow")
-    print("agent_id: ", agent_id)
-
-    await delete_agent_task.submit(agent_id)
-
-
-# @flow(
-#     log_prints=True,
-# )
-# async def query_agent_flow(query: str) -> None:
-#     print('query', query)
-
-#     return query
-
-# response = requests.get("http://127.0.0.1:8000/", json=query)
-# response_text = response.text
-
-# print('response_text', response_text)
-# print(requests.get("http://localhost:8000/", params={"text": query}).json())
-# handle = serve.get_handle("PredictDeployment")
-
-# model_id = "tiiuae/falcon-7b"
-# revision = None
-
-# print('model_id', model_id)
-# print('Binding deployment...')
-
-# deployment = PredictDeployment.bind(
-#     model_id=model_id,
-#     revision=revision,
-#     msg="Hello Ray Serve!")
-
-# handle = deployment.get_handle()
-# print('handle', handle)
-
-
-@task(log_prints=True)
-async def query_agent_task(query: str):
-    model_id = "tiiuae/falcon-7b"
-    revision = None
-
-    # deployment = PredictDeployment.bind(
-    #     model_id=model_id,
-    #     revision=revision,
-    #     msg="Hello Ray Serve!")
-
-    # print('Starting deployment...')
-    # handle = serve.run(deployment)
-    # ray.get(handle.remote())
-
-    response_text = None
+async def deploy_agent_flow(model_ids: list = None):
+    logger: Logger = get_run_logger()
+    in_cluster = True
 
     try:
-        # response = requests.post("http://127.0.0.1:8000/", json=query)
+        kubernetes.config.load_incluster_config()
 
-        # print('response', response)
-        # print('response.text', response.text)
-        # response_text = response.text
+    except kubernetes.config.config_exception.ConfigException as e:
+        logger.debug(e)
+        in_cluster = False
 
-        handle: DeploymentHandle = serve.get_deployment_handle(
-            "AgentDeployment", app_name="default"
-        )  # noqa: E501
-        response: DeploymentResponse = handle.remote("world")
-        response_text = await response
+    if in_cluster:
+        await load_cloud_credentials()
 
-    except Exception as e:
-        print("e", e)
-        response_text = str(e)
+    await sky_check_task()
 
-    return {
-        "model_id": model_id,
-        "revision": revision,
-        "msg": "Hello Ray Serve!",
-        "query": query,
-        "response_text": response_text,
-    }
+    local_model_ids = await ollama_list_local_models_task()
 
+    logger.debug("local_model_ids: %s", local_model_ids)
+    logger.debug("model_ids: %s", model_ids)
 
-query_agent_runtime_env = RuntimeEnv(
-    pip=[
-        # "accelerate>=0.16.0",
-        f"cloudpickle=={cloudpickle.__version__}",
-        # "numpy<1.24",  # remove when mlflow updates beyond 2.2
-        f"prefect_ray=={prefect_ray.__version__}",
-        # "torch",
-        # "transformers>=4.26.0",
-    ],
-    # env_vars={"ONEDNN_MAX_CPU_ISA": "AVX512_CORE_AMX"}
-)
+    for model_id in model_ids:
+        if model_id not in local_model_ids:
+            await ollama_pull_model_task(model_id=model_id)
+
+    # await sky_launch_task()  # TODO: sky launch -c min minimal.yaml
+    # await sky_serve_up_task()
 
 
-@flow(
-    log_prints=True,
-    task_runner=RayTaskRunner(
-        #     # address="ray://<instance_public_ip_address>:10001",
-        address="ray://ray-cluster-kuberay-head-svc.default.svc.cluster.local:10001",
-        init_kwargs={
-            "runtime_env": query_agent_runtime_env,
-        },
-    ),
-    # Using an S3 block that has already been created via the Prefect UI
-    # result_storage="s3/my-result-storage",
-)
-async def query_agent_flow(query: str) -> None:
-    # print('names', names)
-    # print('Greetings!')
-
-    # for name in names:
-    #     # say_hello.submit(name)
-    #     with remote_options(num_cpus=0.1, num_gpus=0):
-    #         await process.submit(42)
-
-    # model_id = "tiiuae/falcon-7b"
-    # revision = None
-
-    # with remote_options(num_cpus=0.1, num_gpus=0):
-    #     await query_agent_task.submit(query)
-
-    resp = await query_agent_task.submit(query)
-
-    # print('resp', resp)
-    # print('resp.result()', resp.result())
-
-    result = await resp.result()
-
-    print("result", result)
-
-    return result
+if __name__ == "__main__":
+    asyncio.run(
+        deploy_agent_flow(
+            model_ids=[47],
+        )
+    )
