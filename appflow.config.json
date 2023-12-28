@@ -2,7 +2,8 @@
     "apps": [
         {
             "appId": "24e63ce3",
-            "root": "src/timestep/services/frontend"
+            "root": "src/timestep/services/frontend",
+            "androidPath": "src-capacitor/android"
         }
     ]
 }
