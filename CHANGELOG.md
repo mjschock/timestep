@@ -1,3 +1,9 @@
+## 3.0.86 (2023-12-27)
+
+### Fix
+
+- add androiPath to appflow config json
+
 ## 3.0.85 (2023-12-27)
 
 ### Fix
