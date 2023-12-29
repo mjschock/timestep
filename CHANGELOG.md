@@ -1,3 +1,10 @@
+## 3.1.1 (2023-12-28)
+
+### Fix
+
+- update capacitor w/ ios
+- update appflow config
+
 ## 3.1.0 (2023-12-28)
 
 ### Feat
