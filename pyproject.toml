@@ -28,6 +28,8 @@ version_files = [
   "src/timestep/infra/stacks/platform/timestep_ai/Chart.yaml:version",
   "src/timestep/services/frontend/package.json:version",
   "src/timestep/services/frontend/package-lock.json:version",
+  "src/timestep/services/frontend/src-capacitor/package.json:version",
+  "src/timestep/services/frontend/src-capacitor/package-lock.json:version",
   "src/timestep/services/web/pyproject.toml:version",
 ]
 version_provider = "poetry"

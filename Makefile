@@ -51,5 +51,8 @@ quasar-dev-android:
 quasar-dev-electron:
 	cd src/timestep/services/frontend && npx quasar dev -m electron
 
+quasar-dev-ios:
+	cd src/timestep/services/frontend && npx quasar dev -m capacitor -T ios
+
 ssh:
 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@146.190.45.80
