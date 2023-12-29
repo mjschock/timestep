@@ -102,6 +102,7 @@ module.exports = configure(function (ctx) {
         clientPort: 443,
       },
       open: false, // opens browser window automatically
+      public: 'timestep.local', // Helped prevent constant reload in electron app, but that still needs handling hostname
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework

@@ -16,7 +16,7 @@
       </div> -->
       <q-btn
           color="primary"
-          label="View thread"
+          label="View environment"
           no-caps
           type="button"
           @click="viewThread"
@@ -33,7 +33,7 @@ import { useRouter } from 'vue-router';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
-const pageType = 'Thread'
+const pageType = 'Environment'
 
 export default defineComponent({
   name: `${pageType}sPage`,

@@ -49,7 +49,7 @@ quasar-dev-android:
 	cd src/timestep/services/frontend && npx quasar dev -m capacitor -T android
 
 quasar-dev-electron:
-	cd src/timestep/services/frontend && npx quasar dev -m electron
+	cd src/timestep/services/frontend && npx quasar dev -m electron --devtools
 
 quasar-dev-ios:
 	cd src/timestep/services/frontend && npx quasar dev -m capacitor -T ios

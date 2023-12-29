@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <!-- <q-layout view="hHh LpR fFf"> -->
-    <q-layout view="hHh Lpr lff" container style="height: 768px; width: 480px;" class="shadow-2 rounded-borders">
+    <q-layout view="hHh Lpr lff">
       <q-header elevated :class="$q.dark.isActive ? 'bg-secondary' : 'bg-black'">
         <q-toolbar>
           <!-- <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" /> -->
@@ -68,12 +68,12 @@
         </q-page>
       </q-page-container>
 
-      <q-footer>
+      <!-- <q-footer>
         <q-toolbar>
           <q-toolbar-title>
           </q-toolbar-title>
         </q-toolbar>
-      </q-footer>
+      </q-footer> -->
 
     </q-layout>
   </div>
@@ -106,7 +106,7 @@ export default defineComponent({
       // { name: 'Documents', path: '/documents', metadata: { enabled: false, icon: 'document_scanner' } },
       // { name: 'Tasks', path: '/tasks', metadata: { enabled: true, icon: 'task' } },
       // { name: 'Tools', path: '/tools', metadata: { enabled: true, icon: 'build' } },
-      { name: 'Threads', path: '/threads', metadata: { enabled: true, icon: 'forum' } },
+      { name: 'Environments', path: '/threads', metadata: { enabled: true, icon: 'workspaces' } },
     ])
     const router = useRouter();
 
