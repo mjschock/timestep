@@ -12,7 +12,7 @@
 const { configure } = require('quasar/wrappers');
 
 // Accessing terminal variables
-console.log(process.env)
+// console.log(process.env)
 
 module.exports = configure(function (ctx) {
   return {
