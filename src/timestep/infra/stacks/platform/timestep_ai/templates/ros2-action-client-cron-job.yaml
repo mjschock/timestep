@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ros2-action-client
+  namespace: default
+spec:
+  jobTemplate:
+    metadata:
+      labels:
+        name: ros2-action-client
+    spec:
+      template:
+        spec:
+          containers:
+            # - command:
+            #     - tail
+            #     - -f
+            #     - /dev/null
+            - command:
+                - /ros_entrypoint.sh
+                - ros2
+                - run
+                - action_tutorials_py
+                - fibonacci_action_client
+              image: osrf/ros:foxy-desktop
+              name: ros2-action-client
+          restartPolicy: Never
+  schedule: "* * * * *" # every minute
+  selector:
+    matchLabels:
+      name: ros2-action-client
+  ttlSecondsAfterFinished: 100
