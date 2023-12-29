@@ -96,8 +96,12 @@ cmd_button('poetry run cdktf destroy',
 )
 
 allow_k8s_contexts(
-    os.getenv('KUBECONTEXT'),
+    os.getenv('KUBECONTEXT'), # TODO: hardcode this to timestep.local instead?
 )
+
+if k8s_context() != 'timestep.local':
+    print('k8s context is not timestep.local, skipping k8s resources')
+    exit()
 
 local_resource(
     'port-forward argo-cd-server 8080:80',
@@ -242,7 +246,6 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         match_in_env_vars=True # https://docs.tilt.dev/custom_resource#env-variable-injection
     )
 
-    print('os.getenv("LOCAL_TLS_CERT_IS_ENABLED", False): ' + str(os.getenv('LOCAL_TLS_CERT_IS_ENABLED', False)))
     if os.getenv('LOCAL_TLS_CERT_IS_ENABLED', False) == 'true':
         print('local tls cert is enabled')
 
