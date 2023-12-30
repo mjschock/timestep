@@ -301,7 +301,7 @@ class TimestepAIConstruct(Construct):
                             # """,  # noqa: E501
                         },
                         "path": "src/timestep/infra/stacks/platform/timestep_ai",
-                        "repoURL": "https://github.com/mjschock/timestep.git",
+                        "repoURL": "https://github.com/mjschock/timestep.git",  # TODO: use env var  # noqa: E501
                         "targetRevision": "HEAD",
                     },
                     "syncPolicy": {

@@ -195,7 +195,7 @@ import { AuthErrorPayload, Mfa, NhostClient, NhostSession, NhostSessionResponse,
 import { type } from 'os'
 
 const nhost = new NhostClient({
-  authUrl: 'https://www.timestep.local/v1/auth',
+  authUrl: 'https://www.timestep.local/v1/auth', // TODO: use env vars
   functionsUrl: 'https://www.timestep.local/v1/functions',
   graphqlUrl: 'https://www.timestep.local/v1/graphql',
   storageUrl: 'https://www.timestep.local/v1/storage',

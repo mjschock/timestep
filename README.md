@@ -49,5 +49,5 @@ make hosts # In a separate terminal
 ## Usage
 
 ```bash
-open https://timestep.local
+open https://${PRIMARY_DOMAIN_NAME}
 ```

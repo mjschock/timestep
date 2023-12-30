@@ -18,7 +18,9 @@ def load_kubeconfig(overwrite=True):
     kubeconfig_path = os.path.expanduser(sky.clouds.kubernetes.CREDENTIAL_PATH)
 
     if overwrite or not os.path.exists(kubeconfig_path):
-        kubecontext = os.getenv("KUBECONTEXT", "timestep.local")
+        kubecontext = os.getenv(
+            "KUBECONTEXT", "timestep.local"
+        )  # TODO: remove default, throw error instead  # noqa: E501
         kubernetes_service_host = os.getenv("KUBERNETES_SERVICE_HOST")
         kubernetes_service_port = os.getenv("KUBERNETES_SERVICE_PORT")
 
@@ -91,8 +93,8 @@ def load_kubeconfig(overwrite=True):
         with open(service_account_token_path, "rb") as token_file:
             service_account_token = token_file.read()
 
-        cluster_name = "timestep.local"
-        user_name = "ubuntu"
+        cluster_name = "timestep.local"  # TODO: use config var
+        user_name = "ubuntu"  # TODO: pull from env
 
         # Create kubeconfig dictionary
         kubeconfig = {

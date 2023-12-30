@@ -99,7 +99,7 @@ allow_k8s_contexts(
     os.getenv('KUBECONTEXT'), # TODO: hardcode this to timestep.local instead?
 )
 
-if k8s_context() != 'timestep.local':
+if k8s_context() != 'timestep.local': # TODO: remove this?
     print('k8s context is not timestep.local, skipping k8s resources')
     exit()
 
