@@ -93,18 +93,25 @@ export default defineComponent({
     const columns = [
       {
         align: 'left',
-        field: account => account.displayName,
-        label: 'Display Name',
-        name: 'name',
+        field: account => account.id,
+        label: 'ID',
+        name: 'id',
         sortable: true
       },
-      {
-        align: 'left',
-        field: account => account.type,
-        label: 'Type',
-        name: 'type',
-        sortable: true
-      }
+      // {
+      //   align: 'left',
+      //   field: account => account.displayName,
+      //   label: 'Display Name',
+      //   name: 'name',
+      //   sortable: true
+      // },
+      // {
+      //   align: 'left',
+      //   field: account => account.type,
+      //   label: 'Type',
+      //   name: 'type',
+      //   sortable: true
+      // }
     ]
     const isPwd = ref(true)
     const password = ref('')
@@ -471,9 +478,9 @@ export default defineComponent({
 
       const user = nhost.auth.getUser()
 
-      if (user) {
-        console.log('user', user)
-      }
+      // if (user) {
+      //   console.log('user', user)
+      // }
 
       accounts.value = [{
         "activeMfaType": user?.activeMfaType,
