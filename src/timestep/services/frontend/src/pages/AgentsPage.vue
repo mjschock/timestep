@@ -37,9 +37,12 @@ export default defineComponent({
     const columns = [
       {
         align: 'left',
-        field: agent => agent.name,
-        label: 'Name',
-        name: 'name',
+        // field: agent => agent.name,
+        field: agent => agent.id,
+        // label: 'Name',
+        label: 'ID',
+        // name: 'name',
+        name: 'id',
         sortable: true
       },
     ]
@@ -101,7 +104,7 @@ export default defineComponent({
       )
         .then((response) => {
           // agents.value = response.data
-          console.log(response.data)
+          // console.log(response.data)
           agents.value = response.data.agents
 
         })

@@ -78,7 +78,7 @@ export default defineComponent({
       )
         .then((response) => {
           // agents.value = response.data
-          console.log(response.data)
+          // console.log(response.data)
           rows.value = response.data.threads
 
         })

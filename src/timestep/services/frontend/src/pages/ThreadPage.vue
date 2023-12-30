@@ -180,7 +180,7 @@ export default defineComponent({
       )
         .then((response) => {
       //     // agents.value = response.data
-          console.log(response.data)
+          // console.log(response.data)
           messages.value = response.data.messages
           loading.value = false
         })
@@ -230,10 +230,10 @@ export default defineComponent({
       )
         .then((response) => {
           // console.log('response', response)
-          console.log(response.data)
+          // console.log(response.data)
           // console.log(response.data.data)
           const data = JSON.parse(response.data)
-          console.log(data.data.message)
+          // console.log(data.data.message)
           const message = data.data.message
           messages.value.push(data.data.message)
           // messages.value = response.data

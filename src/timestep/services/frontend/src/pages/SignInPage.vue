@@ -134,16 +134,25 @@ export default defineComponent({
     const signIn = async (e: Event) => {
       e.preventDefault()
 
-      const notif = $q.notify({
-        group: false, // required to be updatable
-        position: 'top',
-        timeout: 0, // we want to be in control when it gets dismissed
-        spinner: true,
-        message: 'Signing in...',
-        // caption: '0%'
-      })
+      // const notif = $q.notify({
+      //   group: false, // required to be updatable
+      //   position: 'top',
+      //   timeout: 0, // we want to be in control when it gets dismissed
+      //   spinner: true,
+      //   message: 'Signing in...',
+      //   // caption: '0%'
+      // })
 
       if (resendVerificationEmail.value) {
+        const notif = $q.notify({
+          group: false, // required to be updatable
+          position: 'top',
+          timeout: 0, // we want to be in control when it gets dismissed
+          spinner: true,
+          message: 'Sending verification email...',
+          // caption: '0%'
+        })
+
         const hostname: string = window.location.hostname
         const redirectOptions: RedirectOption = {
           redirectTo: `https://${hostname}`,
@@ -193,6 +202,15 @@ export default defineComponent({
         return
 
       } else if (resetPassword.value) {
+        const notif = $q.notify({
+          group: false, // required to be updatable
+          position: 'top',
+          timeout: 0, // we want to be in control when it gets dismissed
+          spinner: true,
+          message: 'Sending password reset email...',
+          // caption: '0%'
+        })
+
         const hostname: string = window.location.hostname
         const redirectOptions: RedirectOption = {
           redirectTo: `https://${hostname}`,
@@ -228,6 +246,15 @@ export default defineComponent({
         return
 
       } else {
+        const notif = $q.notify({
+          group: false, // required to be updatable
+          position: 'top',
+          timeout: 0, // we want to be in control when it gets dismissed
+          spinner: true,
+          message: 'Signing in...',
+          // caption: '0%'
+        })
+
         const params: SignInParams = {
           email: email.value,
           password: password.value,

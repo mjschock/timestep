@@ -22,7 +22,7 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const signOutHandler = async () => {
-      console.log('signOutHandler')
+      // console.log('signOutHandler')
       // await nhost.auth.signOut({all: true})
       await nhost.auth.signOut()
       router.replace('/')
