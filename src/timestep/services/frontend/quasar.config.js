@@ -78,7 +78,7 @@ module.exports = configure(function (ctx) {
         // GRAPHQL_URI: process.env.GRAPHQL_URI,
         // PRIMARY_DOMAIN_NAME: process.env.PRIMARY_DOMAIN_NAME,
         GRAPHQL_URI: ctx.dev
-          ? 'https://www.timestep.local/graphql'
+          ? 'https://www.timestep.local/graphql' // TODO; use process.env.PRIMARY_DOMAIN_NAME
           : 'https://www.timestep.ai/graphql'
       }
       // rawDefine: {}
@@ -102,7 +102,7 @@ module.exports = configure(function (ctx) {
         clientPort: 443,
       },
       open: false, // opens browser window automatically
-      public: 'timestep.local', // Helped prevent constant reload in electron app, but that still needs handling hostname
+      public: 'timestep.local', // Helped prevent constant reload in electron app, but that still needs handling hostname; TODO: use env var
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework

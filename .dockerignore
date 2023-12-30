@@ -1,8 +1,6 @@
-.github/workflows/main.yml
+.github/workflows/*.yml
 .gitlab-ci.yml
 docs
 Dockerfile
 Dockerfile.cicd
-src/timestep/workers/gazebosim/
-src/timestep/workers/ros2/
 Tiltfile

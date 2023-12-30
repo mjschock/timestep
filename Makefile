@@ -3,8 +3,8 @@ default:
 	tilt up
 
 clean:
+	multipass delete timestep-ai --purge || true
 	rm -rf cdktf.out
-	rm -rf */**/__pycache__
 
 hosts:
 	cat cdktf.out/stacks/timestep.local.k3s_cluster/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
@@ -53,6 +53,9 @@ quasar-dev-electron:
 
 quasar-dev-ios:
 	cd src/timestep/services/frontend && npx quasar dev -m capacitor -T ios
+
+runner:
+	cd actions-runner && ./run.sh
 
 ssh:
 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@146.190.45.80
