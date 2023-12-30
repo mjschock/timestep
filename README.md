@@ -33,11 +33,15 @@ from shimmy import GymnasiumMultiAgentCompatibilityV0 -->
 ## Requirements
 
 - [arkade](https://github.com/alexellis/arkade#getting-arkade)
+- [direnv](https://direnv.net/)
 - [Multipass](https://multipass.run/install)
 
 ## Installation
 
+Copy `.env.example` to `.env` and ajust the values as needed.
+
 ```bash
+direnv allow
 make # Will need to be run twice on the first run (after installing k3s inside the multipass VM)
 make hosts # In a separate terminal
 ```
