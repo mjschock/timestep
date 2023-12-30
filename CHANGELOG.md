@@ -1,3 +1,9 @@
+## 3.1.2 (2023-12-30)
+
+### Refactor
+
+- some temporary cleanup
+
 ## 3.1.1 (2023-12-28)
 
 ### Fix
