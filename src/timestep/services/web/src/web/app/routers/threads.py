@@ -1,9 +1,14 @@
 # import requests
+from typing import Annotated
+
 import httpx
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 
 # client = httpx.AsyncClient()
+
+security = HTTPBearer()
 
 router = APIRouter(
     prefix="/api/threads",
@@ -37,12 +42,14 @@ messages = [
 @router.get(
     "",
 )
-async def get_threads():
+async def get_threads(
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
+):
     return {
         "threads": [
             {
                 "id": "0d3f0dc0-a4e2-11ee-b859-e7ab6ec7d7f6",
-                "title": "Thread 1",
+                # "title": "Thread 1",
                 "messages": [{"id": message["id"] for message in messages}],
             },
         ]
@@ -52,7 +59,10 @@ async def get_threads():
 @router.get(
     "/{thread_id}/messages",
 )
-async def get_messages(thread_id: str):
+async def get_messages(
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
+    thread_id: str,
+):
     return {
         "messages": messages,
     }
@@ -71,6 +81,7 @@ class Message(BaseModel):
     # },
 )
 async def create_message(
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
     thread_id: str,
     # content: str,
     message: Message,
