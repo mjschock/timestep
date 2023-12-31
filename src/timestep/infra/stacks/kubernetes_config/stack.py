@@ -40,9 +40,7 @@ from timestep.infra.stacks.kubernetes_config.sealed_secrets.construct import (
 class KubernetesConfigStack(TerraformStack):
     id: str
 
-    def __init__(
-        self, scope: Construct, id: str, config: Settings, kube_config=None
-    ):  # noqa: E501
+    def __init__(self, scope: Construct, id: str, config: Settings, kube_config=None):
         super().__init__(scope, id)
         self.id = id
 

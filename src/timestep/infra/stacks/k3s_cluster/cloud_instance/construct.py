@@ -56,13 +56,13 @@ class CloudInstanceConstruct(Construct):
 
         else:
             raise ValueError(
-                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
+                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"
             )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             cloud_init_config_construct_data_source: DataLocalFile = (
                 cloud_init_config_construct.data_source
-            )  # noqa: E501
+            )
             cloud_instance_resource = MultipassInstanceTerraformResource(
                 cloudinit_file=cloud_init_config_construct_data_source.filename,
                 cpus=config.multipass_instance_cpus,
@@ -85,7 +85,7 @@ class CloudInstanceConstruct(Construct):
             )
             cloud_init_config_construct_data_source: DataCloudinitConfig = (
                 cloud_init_config_construct.data_source
-            )  # noqa: E501
+            )
             cloud_instance_resource = DigitaloceanDropletTerraformResource(
                 id_="cloud_instance_resource",
                 image=config.do_droplet_image,
@@ -100,7 +100,7 @@ class CloudInstanceConstruct(Construct):
 
         else:
             raise ValueError(
-                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
+                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"
             )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
@@ -121,13 +121,13 @@ class CloudInstanceConstruct(Construct):
 
         else:
             raise ValueError(
-                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"  # noqa: E501
+                f"Unknown cloud_instance_provider: {config.cloud_instance_provider}"
             )
 
         self.data_source: TerraformDataSource[
             MultipassInstanceTerraformDataSource
             | DigitaloceanDropletTerraformDataSource
-        ] = cloud_instance_data_source  # noqa: E501
+        ] = cloud_instance_data_source
         self.provider: TerraformProvider[
             MultipassTerraformProvider | DigitaloceanTerraformProvider
-        ] = cloud_instance_provider  # noqa: E501
+        ] = cloud_instance_provider

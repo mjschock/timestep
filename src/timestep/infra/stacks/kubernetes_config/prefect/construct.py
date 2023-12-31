@@ -63,12 +63,8 @@ class PrefectConstruct(Construct):
             metadata=SecretV1Metadata(
                 name="prefect-server-postgresql-connection",
                 namespace="default",
-                # annotations={
-                #     "kubernetes.io/service-account.name": "kubeapps-operator",
-                # },
             ),
             scope=self,
-            # type="kubernetes.io/service-account-token",
         )
 
         self.prefect_server_helm_release_resource = Release(
@@ -77,7 +73,6 @@ class PrefectConstruct(Construct):
             chart="prefect-server",
             create_namespace=True,
             name="prefect-server",
-            # namespace="prefect-system",
             namespace="default",
             repository="https://prefecthq.github.io/prefect-helm",
             provider=helm_provider,
@@ -100,108 +95,21 @@ class PrefectConstruct(Construct):
                 ),
                 ReleaseSet(
                     name="server.image.prefectTag",
-                    # value="2.13.7-python3.11",
-                    # value=f"{config.prefect_server_version}-python3.11",
                     value=f"{config.prefect_server_version}-python3.11-kubernetes",
                 ),
                 ReleaseSet(
                     name="server.image.repository",
                     value="prefecthq/prefect",
                 ),
-                # ReleaseSet(
-                #     name="server.publicApiUrl",
-                #     value=f"https://prefect-server.{config.primary_domain_name}/api",
-                # ),
             ],
             set_sensitive=[
                 ReleaseSetSensitive(
-                    # name="postgresql.auth.password",
                     name="postgresql.auth.existingSecret",
-                    # value=config.postgresql_password.get_secret_value(),
-                    # value="postgresql-postgresql-ha-postgresql",
                     value=self.prefect_server_postgresql_connection_secret_resource.metadata.name,
-                    # value=postgres_connection_string,
                 )
             ],
             scope=self,
         )
-
-        # IngressV1(
-        #     depends_on=[
-        #         self.prefect_server_helm_release_resource,
-        #     ],
-        #     id_="prefect_server_ingress",
-        #     metadata=IngressV1Metadata(
-        #         annotations={
-        #             "kubernetes.io/ingress.class": "caddy",
-        #         },
-        #         name="prefect-server",
-        #         namespace=self.prefect_server_helm_release_resource.namespace,
-        #     ),
-        #     scope=self,
-        #     spec=IngressV1Spec(
-        #         rule=[
-        #             IngressV1SpecRule(
-        #                 host=f"prefect-server.{config.primary_domain_name}",
-        #                 http=IngressV1SpecRuleHttp(
-        #                     path=[
-        #                         IngressV1SpecRuleHttpPath(
-        #                             backend=IngressV1SpecRuleHttpPathBackend(
-        #                                 service=IngressV1SpecRuleHttpPathBackendService(  # noqa: E501
-        #                                     name="prefect-server",
-        #                                     port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
-        #                                         number=4200,
-        #                                     ),
-        #                                 ),
-        #                             ),
-        #                             path="/",
-        #                             path_type="Prefix",
-        #                         ),
-        #                     ]
-        #                 ),
-        #             ),
-        #         ],
-        #     ),
-        # )
-
-        # self.prefect_default_agent_helm_release_resource = Release(
-        #     depends_on=[self.prefect_server_helm_release_resource],
-        #     id_="prefect_default_agent_helm_release_resource",
-        #     atomic=True,
-        #     chart="prefect-agent",
-        #     name="prefect-agent",
-        #     namespace=self.prefect_server_helm_release_resource.namespace,
-        #     repository="https://prefecthq.github.io/prefect-helm",
-        #     provider=helm_provider,
-        #     set=[
-        #         ReleaseSet(
-        #             name="agent.apiConfig",
-        #             value="server",
-        #         ),
-        #         ReleaseSet(
-        #             name="agent.config.workPool",
-        #             value="default-agent-pool",
-        #         ),
-        #         ReleaseSet(
-        #             name="agent.image.prefectTag",
-        #             value=f"{config.prefect_server_version}-python3.11-kubernetes",
-        #         ),
-        #         ReleaseSet(
-        #             name="agent.serverApiConfig.apiUrl",
-        #             value=f"http://prefect-server.{self.prefect_server_helm_release_resource.namespace}.svc.cluster.local:4200/api",  # noqa: E501
-        #         ),
-        #     ],
-        #     scope=self,
-        # )
-
-        # base_job_template_asset = TerraformAsset(
-        #     id="base_job_template_asset",
-        #     path=os.path.join(
-        #         os.path.dirname(__file__), "base-job-template.json"
-        #     ),
-        #     scope=self,
-        #     type=AssetType.FILE,
-        # )
 
         self.prefect_default_worker_helm_release_resource = Release(
             depends_on=[self.prefect_server_helm_release_resource],
@@ -213,17 +121,10 @@ class PrefectConstruct(Construct):
             repository="https://prefecthq.github.io/prefect-helm",
             provider=helm_provider,
             set=[
-                ## connection settings
-                # -- one of 'cloud', 'selfHosted', or 'server'
                 ReleaseSet(
                     name="worker.apiConfig",
                     value="server",
                 ),
-                # ReleaseSet(
-                #     name="worker.config.baseJobTemplate",
-                #     type="string",
-                #     value=f"{Fn.file(base_job_template_asset.path)}",
-                # ),
                 ReleaseSet(
                     name="worker.config.workPool",
                     value="default-worker-pool",
@@ -234,21 +135,12 @@ class PrefectConstruct(Construct):
                 ),
                 ReleaseSet(
                     name="worker.image.prefectTag",
-                    # value="latest",
                     value=f"{config.prefect_server_version}-python3.11-kubernetes",
                 ),
-                # ReleaseSet(
-                #     name="worker.image.repository",
-                #     value="registry.gitlab.com/timestep-ai/timestep/web",
-                # ),
                 ReleaseSet(
                     name="worker.serverApiConfig.apiUrl",
                     value=f"http://prefect-server.{self.prefect_server_helm_release_resource.namespace}.svc.cluster.local:4200/api",  # noqa: E501
                 ),
-                # ReleaseSet(
-                #     name="worker.serviceAccount.annotations",
-                #     value='{"imagePullSecrets": [{"name": "myregistrykey"}]}'
-                # )
             ],
             set_list=[
                 ReleaseSetListStruct(
@@ -257,12 +149,6 @@ class PrefectConstruct(Construct):
                 ),
             ],
             scope=self,
-            #             values=[
-            #                 f"""worker:
-            #   config:
-            #     baseJobTemplate: "{Fn.file(base_job_template_asset.path)}"
-            #             """
-            #             ],
         )
 
         # Create prefect-worker-job service account, role, and role binding

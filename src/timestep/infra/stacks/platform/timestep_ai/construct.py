@@ -173,35 +173,6 @@ class TimestepAIConstruct(Construct):
             scope=self,
         )
 
-        # Manifest(
-        #     id="private_repo_manifest",
-        #     manifest={
-        #         "apiVersion": "bitnami.com/v1alpha1",
-        #         "kind": "SealedSecret",
-        #         "metadata": {
-        #             "name": "private-repo",
-        #             "namespace": "default",
-        #         },
-        #         "spec": {
-        #             "encryptedData": {
-        #                 "password": config.github_api_token.get_secret_value(),
-        #                 "project": "default",
-        #                 "url": "https://github.com/mjschock/timestep.git",
-        #                 "username": "mjschock",
-        #                 "type": "git",
-        #             },
-        #             "template": {
-        #                 "metadata": {
-        #                     "labels": {
-        #                         "argocd.argoproj.io/secret-type": "repository",
-        #                     }
-        #                 }
-        #             },
-        #         },
-        #     },
-        #     scope=self,
-        # )
-
         postgres_database = "postgres"
         postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
         postgres_password = config.postgresql_password.get_secret_value()
@@ -282,23 +253,10 @@ class TimestepAIConstruct(Construct):
                     "source": {
                         "helm": {
                             "valueFiles": [
-                                # "values.yaml",
-                                # "values-production.yaml",
                                 f"values.{config.primary_domain_name}.tls.yaml"
                                 if config.local_tls_cert_is_enabled
-                                else f"values.{config.primary_domain_name}.yaml",  # noqa: E501
+                                else f"values.{config.primary_domain_name}.yaml",
                             ],
-                            #                             "values": f"""
-                            # ingress:
-                            #   hosts:
-                            #     - host: {config.primary_domain_name}
-                            #   tls:
-                            #     - hosts:
-                            #       - timestep.local
-                            #       - www.timestep.local
-                            #       secretName: timestep-local-tls
-                            # replicaCount: {1 if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS else 3}  # noqa: E501
-                            # """,  # noqa: E501
                         },
                         "path": "src/timestep/infra/stacks/platform/timestep_ai",
                         "repoURL": "https://github.com/mjschock/timestep.git",  # TODO: use env var  # noqa: E501
@@ -314,178 +272,10 @@ class TimestepAIConstruct(Construct):
                             else True,  # noqa: E501
                         },
                         "syncOptions": [
-                            # "ApplyOutOfSyncOnly=true",
                             "CreateNamespace=true",
                         ],
                     },
                 },
             },
-            # provider=NullProvider(
-            #     alias="argocd",
-            #     id="argocd_provider",
-            #     scope=self,
-            # ),
-            # provisioners=[
-            #     LocalExecProvisioner(
-            #         command=f"argocd app sync platform",
-            #         type="local-exec",
-            #         when="create",
-            #     ),
-            #     LocalExecProvisioner(
-            #         command=f"argocd app delete platform",
-            #         type="local-exec",
-            #         when="destroy",
-            #     ),
-            # ],
             scope=self,
-            # wait=ManifestWait(
-            #     # condition=[
-            #     #     ManifestWaitCondition(
-            #     #         status="Healthy",
-            #     #         type="health",
-            #     #     ),
-            #     #     ManifestWaitCondition(
-            #     #         status="Synced",
-            #     #         type="sync",
-            #     #     ),
-            #     # ],
-            #     fields={
-            #         "status.phase
-            #     },
-            #     # rollout=True,
-            # ),
         )
-
-        # argocd_kubernetes_provider = ArgocdProviderKubernetes(
-        #     client_certificate=self.kubernetes_provider.client_certificate,
-        #     client_key=self.kubernetes_provider.client_key,
-        #     cluster_ca_certificate=self.kubernetes_provider.cluster_ca_certificate,
-        #     config_context=self.kubernetes_provider.config_context,
-        #     config_context_auth_info=self.kubernetes_provider.config_context_auth_info,  # noqa: E501
-        #     config_context_cluster=self.kubernetes_provider.config_context_cluster,
-        #     exec=self.kubernetes_provider.exec,
-        #     host=self.kubernetes_provider.host,
-        #     insecure=self.kubernetes_provider.insecure,
-        #     password=self.kubernetes_provider.password,
-        #     token=self.kubernetes_provider.token,
-        #     username=self.kubernetes_provider.username,
-        #     # exec=ArgocdProviderKubernetesExec(
-        #     #     api_version="client.authentication.k8s.io/v1beta1",
-        #     #     command="kubectl",
-        #     #     # command="kubectl -n default get secret argocd-secret -o jsonpath="{.data.clearPassword}" | base64 -d",  # noqa: E501
-        #     #     # command=[
-        #     #     #     "kubectl",
-        #     #     #     "-n",
-        #     #     #     "default",
-        #     #     #     "get",
-        #     #     #     "secret",
-        #     #     #     "argocd-secret",
-        #     #     #     "-o",
-        #     #     #     "jsonpath={.data.clearPassword}",
-        #     #     # ],
-        #     #     # command="kubectl -n default get secret argocd-secret -o jsonpath='{.data.clearPassword}' | base64 -d", # noqa: E501
-        #     #     env={
-        #     #         "name": "KUBECONFIG",
-        #     #         "value": self.kubernetes_provider.config_path,
-        #     #     },
-        #     # ),
-        # )
-
-        # argocd_provider = ArgocdProvider(
-        #     id="argocd_provider",
-        # #     # kubernetes=ArgocdProviderKubernetes(
-        # #     #     config_context=self.kubernetes_provider.config_context,
-        # #     #     # config_context="kind-argocd",
-        # #     #     config_context_cluster=self.kubernetes_provider.config_context_cluster,  # noqa: E501
-        # #     # #     # config_path=self.kubernetes_provider.config_path,
-        # #     # ),
-        #     # kubernetes=argocd_kubernetes_provider,
-        # #     scope=self,
-        # #     # use_local_config=True,
-        # #     # auth_token=config.argocd_api_token.get_secret_value(),
-        # #     # auth_token="kubeapps-operator-token",
-        # #     # auth_token="argocd-secret",
-        #     username="admin",
-        #     password="sqcYr7ymHm",
-        # #     # port_forward=True,
-        # #     port_forward_with_namespace="default",
-        # #     # server_addr="argo-cd-server.default.svc.cluster.local:443",
-        # #     # server_addr="argo-cd-server.default.svc.cluster.local:80",
-        # #     # core=True, # Error: failed to start local server
-        # #     # port_forward_with_namespace=True,
-        #     # core=True,
-        #     # context=self.kubernetes_provider.config_context,
-        #     # config_path=self.kubernetes_provider.config_path,
-        #     # kubernetes=ArgocdProviderKubernetes(
-        #     #     # config_context=self.kubernetes_provider.config_context,
-        #     #     # config_context_cluster=self.kubernetes_provider.config_context_cluster,  # noqa: E501
-        #     #     config_context=self.kubernetes_provider.config_context,
-        #     #     # config_path=self.kubernetes_provider.config_path,
-        #     # ),
-        #     port_forward=True,
-        #     # use_local_config=True,
-        #     scope=self,
-        # )
-
-        # Application(
-        #     # id_="timestep_ai_argocd_application",
-        #     id_="timestep_ai_manifest",
-        #     metadata=ApplicationMetadata(
-        #         name="platform",
-        #         namespace="default",
-        #     ),
-        #     provider=argocd_provider,
-        #     # provider=NullProvider(
-        #     #     alias="argocd",
-        #     #     id="argocd_provider",
-        #     #     scope=self,
-        #     # ),
-        #     spec=ApplicationSpec(
-        #         destination=ApplicationSpecDestination(
-        #             namespace="default",
-        #             server="https://kubernetes.default.svc",
-        #         ),
-        #         project="default",
-        #         source=[
-        #             ApplicationSpecSource(
-        #                 # chart= # TODO: add this?
-        #                 helm=ApplicationSpecSourceHelm(
-        #                     # pass_credentials=True, # TODO: ?
-        #                     value_files=[
-        #                         # "values.yaml",
-        #                         # "values-production.yaml",
-        #                         f"values.{config.primary_domain_name}.yaml",
-        #                     ],
-        #                     # values_object={
-        #                     #     "ingress": {
-        #                     #         "hosts": [
-        #                     #             {
-        #                     #                 "host": f"{config.primary_domain_name}",
-        #                     #             }
-        #                     #         ]
-        #                     #     },
-        #                     # },
-        #                 ),
-        #                 path="src/timestep/infra/stacks/platform",
-        #                 repo_url="https://github.com/mjschock/timestep.git",
-        #                 target_revision="HEAD",
-        #             ),
-        #         ],
-        #         sync_policy=ApplicationSpecSyncPolicy(
-        #             automated=ApplicationSpecSyncPolicyAutomated(
-        #                 prune=False
-        #                 if ".local" in config.primary_domain_name
-        #                 else True,  # noqa: E501
-        #                 self_heal=False
-        #                 if ".local" in config.primary_domain_name
-        #                 else True,  # noqa: E501
-        #             ),
-        #             sync_options=[
-        #                 # "ApplyOutOfSyncOnly=true",
-        #                 "CreateNamespace=true",
-        #             ],
-        #         ),
-        #     ),
-        #     scope=self,
-        #     # wait=False, # TODO: added
-        # )

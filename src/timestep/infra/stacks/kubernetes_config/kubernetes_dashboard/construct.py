@@ -55,21 +55,6 @@ class KubernetesDashboardConstruct(Construct):
             scope=self,
         )
 
-        # default_sa_cluster_role = ClusterRoleV1(
-        #     id_="default_sa_cluster_role",
-        #     metadata=ClusterRoleV1Metadata(
-        #         generate_name="default-sa-cluster-role-",
-        #     ),
-        #     rule=[
-        #         ClusterRoleV1Rule(
-        #             api_groups=[""],
-        #             resources=["nodes"],
-        #             verbs=["list"],
-        #         )
-        #     ],
-        #     scope=self,
-        # )
-
         self.kubernetes_dashboard_admin_user_service_account = ServiceAccountV1(
             depends_on=[self.kubernetes_dashboard_helm_release_resource],
             id_="kubernetes_dashboard_admin_user_service_account",
@@ -84,9 +69,7 @@ class KubernetesDashboardConstruct(Construct):
             depends_on=[self.kubernetes_dashboard_admin_user_service_account],
             id_="kubernetes_dashboard_cluster_role_binding",
             metadata=ClusterRoleBindingV1Metadata(
-                # name="kubernetes-dashboard",
                 name="admin-user",
-                # namespace="kubernetes-dashboard",
             ),
             role_ref=ClusterRoleBindingV1RoleRef(
                 kind="ClusterRole",
@@ -96,11 +79,8 @@ class KubernetesDashboardConstruct(Construct):
             subject=[
                 ClusterRoleBindingV1Subject(
                     kind="ServiceAccount",
-                    # name="admin-user",
                     name=self.kubernetes_dashboard_admin_user_service_account.metadata.name,
-                    # namespace="kubernetes-dashboard",
                     namespace=self.kubernetes_dashboard_admin_user_service_account.metadata.namespace,
-                    # api_group="",
                 )
             ],
             scope=self,
@@ -119,41 +99,3 @@ class KubernetesDashboardConstruct(Construct):
             type="kubernetes.io/service-account-token",
             scope=self,
         )
-
-        # IngressV1(
-        #     depends_on=[
-        #         self.kubernetes_dashboard_helm_release_resource,
-        #     ],
-        #     id_="kubernetes_dashboard_ingress",
-        #     metadata=IngressV1Metadata(
-        #         annotations={
-        #             "kubernetes.io/ingress.class": "caddy",
-        #         },
-        #         name="kubernetes-dashboard",
-        #         namespace="kubernetes-dashboard",
-        #     ),
-        #     scope=self,
-        #     spec=IngressV1Spec(
-        #         rule=[
-        #             IngressV1SpecRule(
-        #                 host=f"kubernetes-dashboard.{config.primary_domain_name}",
-        #                 http=IngressV1SpecRuleHttp(
-        #                     path=[
-        #                         IngressV1SpecRuleHttpPath(
-        #                             backend=IngressV1SpecRuleHttpPathBackend(
-        #                                 service=IngressV1SpecRuleHttpPathBackendService(  # noqa: E501
-        #                                     name="kubernetes-dashboard",
-        #                                     port=IngressV1SpecRuleHttpPathBackendServicePort(  # noqa: E501
-        #                                         number=443,  # https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard#networkpolicy
-        #                                     ),
-        #                                 ),
-        #                             ),
-        #                             path="/",
-        #                             path_type="Prefix",
-        #                         ),
-        #                     ]
-        #                 ),
-        #             ),
-        #         ],
-        #     ),
-        # )

@@ -15,7 +15,7 @@ class KubernetesClusterIngressConstruct(Construct):
     ) -> None:
         super().__init__(scope, id)
 
-        self.caddy_ingress_controller_helm_release_resource = Release(  # noqa: F841
+        self.caddy_ingress_controller_helm_release_resource = Release(
             id_="caddy_ingress_controller_helm_release_resource",
             atomic=True,
             chart="caddy-ingress-controller",
