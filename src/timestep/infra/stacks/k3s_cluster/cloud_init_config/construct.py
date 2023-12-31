@@ -71,7 +71,7 @@ class CloudInitConfigConstruct(Construct):
                     "-l",
                     config.cloud_instance_user,
                     "-c",
-                    'echo "\nexport PATH=\\$HOME/.arkade/bin:\\$PATH" >> $HOME/.bashrc',  # noqa: E501
+                    'echo "\nexport PATH=\\$HOME/.arkade/bin:\\$PATH" >> $HOME/.bashrc',
                 ],
                 [
                     "runuser",
@@ -79,7 +79,7 @@ class CloudInitConfigConstruct(Construct):
                     config.cloud_instance_user,
                     "-c",
                     "arkade get k3sup",
-                ],  # noqa: E501
+                ],
                 [
                     "runuser",
                     "-l",
@@ -91,13 +91,6 @@ class CloudInitConfigConstruct(Construct):
 --local \
 --user {config.cloud_instance_user}""",
                 ],
-                # [
-                #     "runuser",
-                #     "-l",
-                #     config.cloud_instance_user,
-                #     "-c",
-                #     f"sudo kubectl --kubeconfig /home/{config.cloud_instance_user}/kubeconfig create secret docker-registry regcred --docker-server={config.docker_registry_server} --docker-username={config.docker_registry_username} --docker-password={config.docker_registry_password.get_secret_value()} --docker-email={config.docker_registry_email}",  # noqa: E501
-                # ],
             ],
             users=[
                 "default",
@@ -106,7 +99,6 @@ class CloudInitConfigConstruct(Construct):
                     "name": config.cloud_instance_user,
                     "shell": "/bin/bash",
                     "ssh_authorized_keys": [
-                        # config.ssh_public_key.strip(),
                         config.ssh_public_key.get_secret_value(),
                     ],
                     "sudo": "ALL=(ALL) NOPASSWD:ALL",

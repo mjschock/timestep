@@ -1,14 +1,13 @@
-# from cdk8s_plus_22 import ConfigMap
-from cdktf_cdktf_provider_helm.provider import HelmProvider  # noqa: I001
+from cdktf_cdktf_provider_helm.provider import HelmProvider
 from cdktf_cdktf_provider_helm.release import (
     Release,
     ReleaseSet,
     ReleaseSetListStruct,
     ReleaseSetSensitive,
-)  # noqa: F401, E501
+)
 from cdktf_cdktf_provider_kubernetes.config_map_v1 import (
-    ConfigMapV1,  # noqa: F401
-    ConfigMapV1Metadata,  # noqa: F401
+    ConfigMapV1,
+    ConfigMapV1Metadata,
 )
 from constructs import Construct
 
@@ -32,23 +31,6 @@ class PostgreSQLConstruct(Construct):
                 namespace="default",
             ),
             data={
-                #                 "initdb.sh": """#!/bin/bash
-                # # Copyright VMware, Inc.
-                # # SPDX-License-Identifier: APACHE-2.0
-                # # shellcheck disable=SC1091
-                # set -o errexit
-                # set -o nounset
-                # set -o pipefail
-                # #set -o xtrace
-                # echo "Running initdb.sh"
-                # # Load libraries
-                # ls -al /opt/bitnami/scripts || true
-                # # . /opt/bitnami/scripts/libbitnami.sh
-                # # . /opt/bitnami/scripts/libpostgresql.sh
-                # # . /opt/bitnami/scripts/librepmgr.sh
-                # # # Load PostgreSQL environment variables
-                # # . /opt/bitnami/scripts/postgresql-env.sh
-                # """,
                 "initdb.sql": """
 -- schemas
 CREATE SCHEMA IF NOT EXISTS auth;
@@ -82,7 +64,6 @@ $$;
             atomic=True,
             chart="postgresql-ha",
             create_namespace=True,
-            # extraEnvVars=[
             name="postgresql",
             namespace="default",
             repository="https://charts.bitnami.com/bitnami",

@@ -33,9 +33,6 @@ class CloudInstanceDomainConstruct(Construct):
         super().__init__(scope, id)
 
         subdomains = [
-            # "kubernetes-dashboard",
-            # "minio",
-            # "prefect-server",
             "www",
         ]
 
@@ -91,7 +88,7 @@ class CloudInstanceDomainConstruct(Construct):
                 scope=scope,
             )
 
-            mx_records = [
+            mx_records = [  # TODO: Get these dynamically
                 ("aspmx.l.google.com.", 1),
                 ("alt1.aspmx.l.google.com.", 5),
                 ("alt2.aspmx.l.google.com.", 5),

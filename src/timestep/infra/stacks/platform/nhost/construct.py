@@ -85,7 +85,7 @@ class NhostConstruct(Construct):
                                     ),
                                     DeploymentV1SpecTemplateSpecContainerEnv(
                                         name="AUTH_SMTP_HOST",
-                                        value="smtp.gmail.com",  # The sending limit is 2,000 messages per day.  # noqa: E501
+                                        value="smtp.gmail.com",  # TODO: The sending limit is 2,000 messages per day.  # noqa: E501
                                     ),
                                     DeploymentV1SpecTemplateSpecContainerEnv(
                                         name="AUTH_SMTP_PASS",
@@ -102,8 +102,6 @@ class NhostConstruct(Construct):
                                     DeploymentV1SpecTemplateSpecContainerEnv(
                                         name="AUTH_SMTP_USER",
                                         value=config.smtp_user,
-                                        # value="agent@timestep.ai",
-                                        # value="Timestep AI Agent"
                                     ),
                                     DeploymentV1SpecTemplateSpecContainerEnv(
                                         name="HASURA_GRAPHQL_ADMIN_SECRET",
@@ -115,7 +113,7 @@ class NhostConstruct(Construct):
                                     ),
                                     DeploymentV1SpecTemplateSpecContainerEnv(
                                         name="HASURA_GRAPHQL_GRAPHQL_URL",
-                                        value="http://hasura-graphql-engine.default.svc.cluster.local:8080/v1/graphql",  # noqa: E501
+                                        value="http://hasura-graphql-engine.default.svc.cluster.local:8080/v1/graphql",
                                     ),
                                     DeploymentV1SpecTemplateSpecContainerEnv(
                                         name="HASURA_GRAPHQL_JWT_SECRET",
@@ -140,7 +138,6 @@ class NhostConstruct(Construct):
 
         self.nhost_hasura_auth_service_resource = ServiceV1(
             depends_on=[
-                # self.hasura_graphql_engine_service_resource,
                 self.nhost_hasura_auth_deployment_resource,
             ],
             id_="nhost_hasura_auth_service_resource",
@@ -219,10 +216,6 @@ class NhostConstruct(Construct):
                                         name="POSTGRES_MIGRATIONS_SOURCE",
                                         value=f"postgres://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}?sslmode=disable",
                                     ),
-                                    # DeploymentV1SpecTemplateSpecContainerEnv(
-                                    #     name="PUBLIC_URL",
-                                    #     value="http://localhost:${PROXY_PORT:-1337}",
-                                    # ),
                                     DeploymentV1SpecTemplateSpecContainerEnv(
                                         name="S3_ACCESS_KEY",
                                         value=config.minio_root_user,
@@ -262,7 +255,6 @@ class NhostConstruct(Construct):
 
         self.nhost_hasura_storage_service_resource = ServiceV1(
             depends_on=[
-                # self.hasura_graphql_engine_service_resource,
                 self.nhost_hasura_storage_deployment_resource,
             ],
             id_="nhost_hasura_storage_service_resource",
