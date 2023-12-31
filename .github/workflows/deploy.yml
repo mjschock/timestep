@@ -1,7 +1,9 @@
 name: Deploy
 
 on:
-  push:
+  push: # TODO: trigger apply only on tags (just plan on other branches)
+    branches:
+      - main
 
 jobs:
   build-base:
@@ -146,9 +148,45 @@ jobs:
         run: |
           ./src/timestep/infra/cicd/build.sh
 
+  # deploy-diff-k3s_cluster-stack:
+  #   runs-on: ubuntu-latest
+  #   # runs-on: self-hosted
+  #   needs: [build-cicd, build-postgresql-repmgr, build]
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+
+  #     - name: Prepare environment 
+  #       env:
+  #         SECRETS_CONTEXT: ${{ toJson(secrets) }}
+  #         VARS_CONTEXT: ${{ toJson(vars) }}
+  #       run: |
+  #         secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
+  #         var_keys=$(echo "$VARS_CONTEXT" | jq -r 'keys[]')
+
+  #         for key in $secret_keys; do
+  #           if [ "$key" != "github_token" ]; then
+  #             lowercase_key=$(echo "$key" | tr '[:upper:]' '[:lower:]')
+  #             secret_value=$(echo "$SECRETS_CONTEXT" | jq -r ".$key")
+  #             echo "$secret_value" > "secrets/$lowercase_key"
+  #           fi
+  #         done
+
+  #         for key in $var_keys; do
+  #           var_value=$(echo "$VARS_CONTEXT" | jq -r ".$key")
+  #           echo "$key=$var_value" >> .env
+  #         done
+
+  #     - name: Deploy Diff (Plan) k3s_cluster stack
+  #       env:
+  #         STACK_NAME: k3s_cluster
+  #       run: |
+  #         ./src/timestep/infra/cicd/deploy-diff.sh
+
   deploy:
     runs-on: ubuntu-latest
     # runs-on: self-hosted
+    # needs: [deploy-diff]
     needs: [build-cicd, build-postgresql-repmgr, build]
     steps:
       - name: Checkout repository
