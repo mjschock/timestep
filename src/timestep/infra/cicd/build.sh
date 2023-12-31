@@ -13,7 +13,6 @@ if [ -z ${IMAGE_NAME+x} ]; then
     --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \
     --build-arg GOENV_VERSION=${GOENV_VERSION} \
     --build-arg NODENV_VERSION=${NODENV_VERSION} \
-    # --build-arg PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
     --build-arg PYENV_VERSION=${PYENV_VERSION} \
     --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} \
     --cache-from ${CI_REGISTRY_IMAGE}:latest \
@@ -30,7 +29,6 @@ elif [ ${IMAGE_NAME} = "cicd" ]; then
     --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \
     --build-arg GOENV_VERSION=${GOENV_VERSION} \
     --build-arg NODENV_VERSION=${NODENV_VERSION} \
-    # --build-arg PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
     --build-arg PYENV_VERSION=${PYENV_VERSION} \
     --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} \
     --cache-from ${CI_REGISTRY_IMAGE}:latest \
@@ -59,7 +57,6 @@ else
     --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \
     --build-arg GOENV_VERSION=${GOENV_VERSION} \
     --build-arg NODENV_VERSION=${NODENV_VERSION} \
-    # --build-arg PRIMARY_DOMAIN_NAME=${PRIMARY_DOMAIN_NAME} \
     --build-arg PYENV_VERSION=${PYENV_VERSION} \
     --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} \
     --cache-from ${CI_REGISTRY_IMAGE}:latest \
