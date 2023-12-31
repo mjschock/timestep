@@ -23,7 +23,7 @@ description = "Timestep AI (web)"
 name = "web"
 packages = [{from = "src", include = "web"}]
 readme = "README.md"
-version = "4.0.0"
+version = "4.0.1"
 
 [tool.poetry.dependencies]
 agent-protocol = "^1.0.1"
