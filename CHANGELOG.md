@@ -1,3 +1,9 @@
+## 4.0.3 (2023-12-31)
+
+### Fix
+
+- adding a comment about Namecheap client_ip; will bump version; removed domain_name_registrary_provider var from github action variables
+
 ## 4.0.2 (2023-12-30)
 
 ### Fix
