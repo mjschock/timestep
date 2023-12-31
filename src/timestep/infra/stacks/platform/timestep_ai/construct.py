@@ -226,7 +226,7 @@ class TimestepAIConstruct(Construct):
             id_="web_secret",
             data={
                 "MINIO_ROOT_PASSWORD": config.minio_root_password.get_secret_value(),
-                "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
+                # "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
                 "POSTGRES_CONNECTION_STRING": f"postgresql+asyncpg://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}",
                 "POSTGRES_PASSWORD": config.postgresql_password.get_secret_value(),
             },

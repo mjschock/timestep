@@ -101,7 +101,8 @@ class NhostConstruct(Construct):
                                     ),
                                     DeploymentV1SpecTemplateSpecContainerEnv(
                                         name="AUTH_SMTP_USER",
-                                        value="agent@timestep.ai",
+                                        value=config.smtp_user,
+                                        # value="agent@timestep.ai",
                                         # value="Timestep AI Agent"
                                     ),
                                     DeploymentV1SpecTemplateSpecContainerEnv(

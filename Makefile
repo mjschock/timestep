@@ -59,3 +59,6 @@ runner:
 
 ssh:
 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@146.190.45.80
+
+ssh-keygen:
+	ssh-keygen -t ed25519 -C "timestep.ai" -f .ssh/id_ed25519 -N ""
