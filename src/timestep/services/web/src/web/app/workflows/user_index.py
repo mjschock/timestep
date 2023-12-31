@@ -334,7 +334,7 @@ async def init_user_index_service():
 
     # await user_index_service.initialize_index()
 
-    print("OPENAI_API_KEY", os.environ.get("OPENAI_API_KEY"))
+    # print("OPENAI_API_KEY", os.environ.get("OPENAI_API_KEY"))
 
     # DATABASE_URL = os.getenv("POSTGRES_CONNECTION_STRING")
 
