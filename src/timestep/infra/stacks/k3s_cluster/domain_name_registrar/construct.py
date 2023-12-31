@@ -42,6 +42,9 @@ class DomainNameRegistrarConstruct(Construct):
             domain_name_registrar_provider = NamecheapProvider(
                 api_key=config.namecheap_api_key.get_secret_value(),
                 api_user=config.namecheap_api_user,
+                # TODO: The client_ip needs to be set up in Namecheap and GitHub Runner
+                # has a dynamic IP, so this can fail. Need another way to do this
+                # without relying on a self-hosted runner with known IP.
                 client_ip=http_outputs_ip.value,
                 id="domain_name_registrar_provider",
                 scope=scope,
