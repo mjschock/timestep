@@ -374,5 +374,18 @@ def create_agent():
     # deploy_flow()
 
 
+async def query_agent(query):
+    print("query agent; query: ", query)
+
+    await asyncio.sleep(1)
+
+    await run_deployment(
+        "agent-flow/agent-flow-deployment",
+        timeout=None,
+    )
+
+    return query
+
+
 async def init_agent_service():
     await create_agent_flow()

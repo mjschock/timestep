@@ -16,7 +16,7 @@ imports:
 	poetry run cdktf get --force --language python --log-level ${CDKTF_LOG_LEVEL} --output src/timestep/infra/imports
 
 k3s-cluster:
-	k3sup install --context timestep.ai --ip 146.190.45.80 --local-path secrets/kubeconfig --merge --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
+	k3sup install --context timestep.ai --ip 137.184.180.182 --local-path secrets/kubeconfig --merge --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
 
 kubeapps-port-forward:
 	echo "Kubeapps URL: http://localhost:8484"
@@ -58,7 +58,7 @@ runner:
 	cd actions-runner && ./run.sh
 
 ssh:
-	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@146.190.45.80
+	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@137.184.180.182
 
 ssh-keygen:
 	ssh-keygen -t ed25519 -C "timestep.ai" -f .ssh/id_ed25519 -N ""

@@ -7,11 +7,15 @@ import httpx
 import kubernetes
 import sky
 import yaml
+from llama_index import ServiceContext
 from prefect import Flow, State, Task, flow, task
 from prefect.flows import FlowRun
 from prefect.logging import get_run_logger
 from prefect.tasks import TaskRun
+from prefect.utilities.annotations import quote
 from prefect_shell import ShellOperation
+
+from .utils.index import get_index, get_service_context
 
 
 def load_kubeconfig(overwrite=True):
@@ -255,6 +259,32 @@ async def ollama_pull_model_task(model_id: str):
     await client.aclose()
 
 
+@task
+async def create_service_context_task(model_id: str) -> ServiceContext:
+    logger = get_run_logger()
+
+    logger.debug("Creating service context for model_id: %s", model_id)
+
+    service_context = await get_service_context()
+
+    logger.debug("service_context: %s", service_context)
+
+    return service_context
+
+
+@task
+async def create_index_task(service_context: ServiceContext):
+    logger = get_run_logger()
+
+    logger.debug("Creating index for service_context: %s", service_context)
+
+    index = await get_index(service_context)
+
+    logger.debug("index: %s", index)
+
+    return index
+
+
 def sky_launch_task_on_failure_hook(task: Task, task_run: TaskRun, state: State):
     get_run_logger()
 
@@ -335,6 +365,10 @@ async def deploy_agent_flow(model_ids: list = None):
     for model_id in model_ids:
         if model_id not in local_model_ids:
             await ollama_pull_model_task(model_id=model_id)
+
+    for model_id in model_ids:
+        service_context = await create_service_context_task(model_id=model_id)
+        await create_index_task(service_context=quote(service_context))
 
     # await sky_launch_task()  # TODO: sky launch -c min minimal.yaml
     # await sky_serve_up_task()

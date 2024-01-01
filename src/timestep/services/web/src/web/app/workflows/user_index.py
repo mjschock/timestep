@@ -2,20 +2,15 @@ import datetime
 import logging
 import mimetypes
 import os
-import tempfile
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Dict
 
 from llama_index import (
-    SimpleDirectoryReader,
     StorageContext,
     VectorStoreIndex,
     load_index_from_storage,
 )
-from llama_index.readers.base import BaseReader
-from llama_index.readers.schema.base import Document
 from llama_index.vector_stores import PGVectorStore
-from minio import Minio
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 
@@ -36,104 +31,104 @@ from sqlalchemy_utils import create_database, database_exists
 # MinioReader = download_loader("MinioReader")
 
 
-class MinioReader(BaseReader):
-    """General reader for any Minio file or directory."""
+# class MinioReader(BaseReader):
+#     """General reader for any Minio file or directory."""
 
-    def __init__(
-        self,
-        *args: Any,
-        bucket: str,
-        key: Optional[str] = None,
-        prefix: Optional[str] = "",
-        file_extractor: Optional[Dict[str, Union[str, BaseReader]]] = None,
-        required_exts: Optional[List[str]] = None,
-        filename_as_id: bool = False,
-        num_files_limit: Optional[int] = None,
-        file_metadata: Optional[Callable[[str], Dict]] = None,
-        minio_endpoint: Optional[str] = None,
-        minio_secure: bool = False,
-        minio_access_key: Optional[str] = None,
-        minio_secret_key: Optional[str] = None,
-        minio_session_token: Optional[str] = None,
-        **kwargs: Any,
-    ) -> None:
-        """Initialize Minio bucket and key, along with credentials if needed.
+#     def __init__(
+#         self,
+#         *args: Any,
+#         bucket: str,
+#         key: Optional[str] = None,
+#         prefix: Optional[str] = "",
+#         file_extractor: Optional[Dict[str, Union[str, BaseReader]]] = None,
+#         required_exts: Optional[List[str]] = None,
+#         filename_as_id: bool = False,
+#         num_files_limit: Optional[int] = None,
+#         file_metadata: Optional[Callable[[str], Dict]] = None,
+#         minio_endpoint: Optional[str] = None,
+#         minio_secure: bool = False,
+#         minio_access_key: Optional[str] = None,
+#         minio_secret_key: Optional[str] = None,
+#         minio_session_token: Optional[str] = None,
+#         **kwargs: Any,
+#     ) -> None:
+#         """Initialize Minio bucket and key, along with credentials if needed.
 
-        If key is not set, the entire bucket (filtered by prefix) is parsed.
+#         If key is not set, the entire bucket (filtered by prefix) is parsed.
 
-        Args:
-        bucket (str): the name of your Minio bucket
-        key (Optional[str]): the name of the specific file. If none is provided,
-            this loader will iterate through the entire bucket.
-        prefix (Optional[str]): the prefix to filter by in the case that the loader
-            iterates through the entire bucket. Defaults to empty string.
-        file_extractor (Optional[Dict[str, BaseReader]]): A mapping of file
-            extension to a BaseReader class that specifies how to convert that file
-            to text. See `SimpleDirectoryReader` for more details.
-        required_exts (Optional[List[str]]): List of required extensions.
-            Default is None.
-        num_files_limit (Optional[int]): Maximum number of files to read.
-            Default is None.
-        file_metadata (Optional[Callable[str, Dict]]): A function that takes
-            in a filename and returns a Dict of metadata for the Document.
-            Default is None.
-        minio_endpoint (Optional[str]): The Minio endpoint. Default is None.
-        minio_port (Optional[int]): The Minio port. Default is None.
-        minio_access_key (Optional[str]): The Minio access key. Default is None.
-        minio_secret_key (Optional[str]): The Minio secret key. Default is None.
-        minio_session_token (Optional[str]): The Minio session token.
-        """
-        super().__init__(*args, **kwargs)
+#         Args:
+#         bucket (str): the name of your Minio bucket
+#         key (Optional[str]): the name of the specific file. If none is provided,
+#             this loader will iterate through the entire bucket.
+#         prefix (Optional[str]): the prefix to filter by in the case that the loader
+#             iterates through the entire bucket. Defaults to empty string.
+#         file_extractor (Optional[Dict[str, BaseReader]]): A mapping of file
+#             extension to a BaseReader class that specifies how to convert that file
+#             to text. See `SimpleDirectoryReader` for more details.
+#         required_exts (Optional[List[str]]): List of required extensions.
+#             Default is None.
+#         num_files_limit (Optional[int]): Maximum number of files to read.
+#             Default is None.
+#         file_metadata (Optional[Callable[str, Dict]]): A function that takes
+#             in a filename and returns a Dict of metadata for the Document.
+#             Default is None.
+#         minio_endpoint (Optional[str]): The Minio endpoint. Default is None.
+#         minio_port (Optional[int]): The Minio port. Default is None.
+#         minio_access_key (Optional[str]): The Minio access key. Default is None.
+#         minio_secret_key (Optional[str]): The Minio secret key. Default is None.
+#         minio_session_token (Optional[str]): The Minio session token.
+#         """
+#         super().__init__(*args, **kwargs)
 
-        self.bucket = bucket
-        self.key = key
-        self.prefix = prefix
+#         self.bucket = bucket
+#         self.key = key
+#         self.prefix = prefix
 
-        self.file_extractor = file_extractor
-        self.required_exts = required_exts
-        self.filename_as_id = filename_as_id
-        self.num_files_limit = num_files_limit
-        self.file_metadata = file_metadata
+#         self.file_extractor = file_extractor
+#         self.required_exts = required_exts
+#         self.filename_as_id = filename_as_id
+#         self.num_files_limit = num_files_limit
+#         self.file_metadata = file_metadata
 
-        self.minio_endpoint = minio_endpoint
-        self.minio_secure = minio_secure
-        self.minio_access_key = minio_access_key
-        self.minio_secret_key = minio_secret_key
-        self.minio_session_token = minio_session_token
+#         self.minio_endpoint = minio_endpoint
+#         self.minio_secure = minio_secure
+#         self.minio_access_key = minio_access_key
+#         self.minio_secret_key = minio_secret_key
+#         self.minio_session_token = minio_session_token
 
-    def load_data(self) -> List[Document]:
-        """Load file(s) from Minio."""
-        minio_client = Minio(
-            self.minio_endpoint,
-            secure=self.minio_secure,
-            access_key=self.minio_access_key,
-            secret_key=self.minio_secret_key,
-            session_token=self.minio_session_token,
-        )
+#     def load_data(self) -> List[Document]:
+#         """Load file(s) from Minio."""
+#         minio_client = Minio(
+#             self.minio_endpoint,
+#             secure=self.minio_secure,
+#             access_key=self.minio_access_key,
+#             secret_key=self.minio_secret_key,
+#             session_token=self.minio_session_token,
+#         )
 
-        with tempfile.TemporaryDirectory() as temp_dir:
-            # suffix = Path(self.key).suffix
-            suffix = self.file_metadata(self.key)["file_type"]
-            filepath = f"{temp_dir}/{next(tempfile._get_candidate_names())}{suffix}"
-            minio_client.fget_object(
-                bucket_name=self.bucket, object_name=self.key, file_path=filepath
-            )
+#         with tempfile.TemporaryDirectory() as temp_dir:
+#             # suffix = Path(self.key).suffix
+#             suffix = self.file_metadata(self.key)["file_type"]
+#             filepath = f"{temp_dir}/{next(tempfile._get_candidate_names())}{suffix}"
+#             minio_client.fget_object(
+#                 bucket_name=self.bucket, object_name=self.key, file_path=filepath
+#             )
 
-            # try:
-            #     from llama_index import SimpleDirectoryReader
-            # except ImportError:
-            #     SimpleDirectoryReader = download_loader("SimpleDirectoryReader")
+#             # try:
+#             #     from llama_index import SimpleDirectoryReader
+#             # except ImportError:
+#             #     SimpleDirectoryReader = download_loader("SimpleDirectoryReader")
 
-            loader = SimpleDirectoryReader(
-                temp_dir,
-                file_extractor=self.file_extractor,
-                required_exts=self.required_exts,
-                filename_as_id=self.filename_as_id,
-                num_files_limit=self.num_files_limit,
-                file_metadata=self.file_metadata,
-            )
+#             loader = SimpleDirectoryReader(
+#                 temp_dir,
+#                 file_extractor=self.file_extractor,
+#                 required_exts=self.required_exts,
+#                 filename_as_id=self.filename_as_id,
+#                 num_files_limit=self.num_files_limit,
+#                 file_metadata=self.file_metadata,
+#             )
 
-            return loader.load_data()
+#             return loader.load_data()
 
 
 def default_file_metadata_func(file_path: str) -> Dict:
@@ -222,8 +217,8 @@ class UserIndexService:
         # load the documents and create the index
         # loader = SimpleDirectoryReader(DATA_DIR)
 
-        minio_endpoint = os.getenv("MINIO_ENDPOINT")
-        s3_root_folder = os.getenv(
+        os.getenv("MINIO_ENDPOINT")
+        os.getenv(
             "S3_ROOT_FOLDER", "f215cf48-7458-4596-9aa5-2159fc6a3caf"
         )  # noqa: E501
 
@@ -239,7 +234,7 @@ class UserIndexService:
             }
         ]
 
-        user_file_id = user_files[0]["id"]
+        user_files[0]["id"]
 
         def get_file_metadata(file_path: str) -> Dict:
             # assert os.path.getsize(file_path) == user_files[0]['size'], f"{os.path.getsize(file_path)} != {user_files[0]['size']}"  # noqa: E501
@@ -277,23 +272,23 @@ class UserIndexService:
 
             return file_metadata
 
-        loader = MinioReader(
-            # bucket="documents",
-            bucket="default",
-            # file_extractor,
-            # file_metadata=default_file_metadata_func,
-            file_metadata=get_file_metadata,
-            filename_as_id=True,
-            key=f"{s3_root_folder}/{user_file_id}",
-            minio_endpoint=minio_endpoint,
-            minio_access_key=os.getenv("MINIO_ROOT_USER"),
-            minio_secret_key=os.getenv("MINIO_ROOT_PASSWORD"),
-            minio_secure=False,
-        )
+        # loader = MinioReader(
+        #     # bucket="documents",
+        #     bucket="default",
+        #     # file_extractor,
+        #     # file_metadata=default_file_metadata_func,
+        #     file_metadata=get_file_metadata,
+        #     filename_as_id=True,
+        #     key=f"{s3_root_folder}/{user_file_id}",
+        #     minio_endpoint=minio_endpoint,
+        #     minio_access_key=os.getenv("MINIO_ROOT_USER"),
+        #     minio_secret_key=os.getenv("MINIO_ROOT_PASSWORD"),
+        #     minio_secure=False,
+        # )
 
-        # TODO: pass in user_id and only load documents for that user
-        documents = loader.load_data()
-        print("documents", documents)
+        # # TODO: pass in user_id and only load documents for that user
+        # documents = loader.load_data()
+        # print("documents", documents)
 
         index = VectorStoreIndex.from_documents(
             documents, service_context=service_context  # noqa: F821
