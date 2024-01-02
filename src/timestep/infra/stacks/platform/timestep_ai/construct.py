@@ -181,9 +181,11 @@ class TimestepAIConstruct(Construct):
         web_config_map = ConfigMapV1(
             id_="web_config_map",
             data={
+                "KUBECONTEXT": config.kubecontext,
                 "MINIO_ENDPOINT": "minio.default.svc.cluster.local:9000",
                 "MINIO_ROOT_USER": config.minio_root_user,
                 "PREFECT_API_URL": "http://prefect-server.default.svc.cluster.local:4200/api",
+                "PRIMARY_DOMAIN_NAME": config.primary_domain_name,
                 "VERSION": config.version,
             },
             metadata=ConfigMapV1Metadata(

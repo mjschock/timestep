@@ -198,7 +198,9 @@ export default defineComponent({
         })
     }
 
-    const sendMessage = async () => {
+    const sendMessage = async (event) => {
+      event.preventDefault()
+
       loading.value = true
       const content = text.value
       text.value = ''

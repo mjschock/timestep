@@ -9,10 +9,12 @@ import sky
 import yaml
 from llama_index import ServiceContext
 from prefect import Flow, State, Task, flow, task
+from prefect.blocks.kubernetes import KubernetesClusterConfig
 from prefect.flows import FlowRun
 from prefect.logging import get_run_logger
 from prefect.tasks import TaskRun
 from prefect.utilities.annotations import quote
+from prefect_kubernetes.credentials import KubernetesCredentials
 from prefect_shell import ShellOperation
 
 from .utils.index import get_index, get_service_context
@@ -22,67 +24,32 @@ def load_kubeconfig(overwrite=True):
     kubeconfig_path = os.path.expanduser(sky.clouds.kubernetes.CREDENTIAL_PATH)
 
     if overwrite or not os.path.exists(kubeconfig_path):
-        kubecontext = os.getenv(
-            "KUBECONTEXT", "timestep.local"
-        )  # TODO: remove default, throw error instead  # noqa: E501
+        cluster_name = os.getenv("PRIMARY_DOMAIN_NAME")
+        kubecontext = os.getenv("KUBECONTEXT")
         kubernetes_service_host = os.getenv("KUBERNETES_SERVICE_HOST")
         kubernetes_service_port = os.getenv("KUBERNETES_SERVICE_PORT")
+        user_name = os.getenv("PRIMARY_DOMAIN_NAME")
 
         ca_certificate_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
         namespace_path = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
         service_account_token_path = (
-            "/var/run/secrets/kubernetes.io/serviceaccount/token"  # noqa: E501
+            "/var/run/secrets/kubernetes.io/serviceaccount/token"
         )
 
         with open(namespace_path, "r") as file:
-            namespace = file.read()
+            file.read()
 
-        # print("before load_incluster_config")
         kubernetes.config.load_incluster_config()
         config = kubernetes.client.Configuration.get_default_copy()
 
-        # kube_config_loader = kubernetes.config.kube_config.KubeConfigLoader(
-        #     config_dict=config.to_dict()
-        # )
-
-        # print("config", config)
-        # kube_config_contexts = kubernetes.config.list_kube_config_contexts()
-        # print('kube_config_contexts', kube_config_contexts)
-
-        # kube_config = kubernetes.config.load_kube_config(
-        #     client_configuration=config,
-        # )
-        # print('kube_config', kube_config)
-
-        # api_key = config.api_key
-        # print("api_key", api_key)
-
-        # auth = config.auth_settings()
-        # print("auth", auth)
-
-        # api_key_prefix = config.api_key_prefix
-        # print("api_key_prefix", api_key_prefix)
-
-        # cert_file = config.cert_file
-        # print("cert_file", cert_file)
-
-        # key_file = config.key_file
-        # print("key_file", key_file)
-
-        # username = config.username
-        # print("username", username)
-
-        # password = config.password
-        # print("password", password)
-
         server = config.host
-        # print("server", server)
+
         assert (
             server == f"https://{kubernetes_service_host}:{kubernetes_service_port}"
         ), f"{server} != https://{kubernetes_service_host}:{kubernetes_service_port}"
 
         ssl_ca_cert = config.ssl_ca_cert
-        # print("ssl_ca_cert", ssl_ca_cert)
+
         assert (
             ssl_ca_cert == ca_certificate_path
         ), f"{ssl_ca_cert} != {ca_certificate_path}"
@@ -96,9 +63,6 @@ def load_kubeconfig(overwrite=True):
         # Load service account token
         with open(service_account_token_path, "rb") as token_file:
             service_account_token = token_file.read()
-
-        cluster_name = "timestep.local"  # TODO: use config var
-        user_name = "ubuntu"  # TODO: pull from env
 
         # Create kubeconfig dictionary
         kubeconfig = {
@@ -117,7 +81,7 @@ def load_kubeconfig(overwrite=True):
                 {
                     "context": {
                         "cluster": cluster_name,
-                        "namespace": namespace,
+                        # "namespace": namespace,
                         "user": user_name,
                     },
                     "name": kubecontext,
@@ -128,13 +92,7 @@ def load_kubeconfig(overwrite=True):
             "users": [
                 {
                     "name": user_name,
-                    "user": {
-                        # "client-certificate-data": client_certificate_data,
-                        # "client-key-data": client_key_data,
-                        "token": service_account_token
-                        # "token-data": service_account_token,
-                        # "token": token_file,
-                    },
+                    "user": {"token": service_account_token},
                 }
             ],
         }
@@ -151,11 +109,6 @@ def load_kubeconfig(overwrite=True):
             raise RuntimeError(f"{kubeconfig_path} file has not been generated.")
 
         print(f"{kubeconfig_path} file has been generated.")
-
-        # with open(kubeconfig_path, "r") as file:
-        # content = file.read()
-        # print(f"{kubeconfig_path}:")
-        # print(content)
 
 
 @task
@@ -323,6 +276,7 @@ async def sky_serve_up_task():
 
     async with ShellOperation(
         commands=[
+            "ssh --help",  # ssh is needed
             "sky serve up --yes examples/serve/ray_serve/ray_serve.yaml",
         ],
         working_dir="workflows",
@@ -370,7 +324,65 @@ async def deploy_agent_flow(model_ids: list = None):
         service_context = await create_service_context_task(model_id=model_id)
         await create_index_task(service_context=quote(service_context))
 
-    # await sky_launch_task()  # TODO: sky launch -c min minimal.yaml
+    # print ~/.kube/config
+    logger.debug("=== ~/.kube/config ===")
+    with open(os.path.expanduser("~/.kube/config"), "r") as file:
+        logger.debug(file.read())
+
+    k8s_config: KubernetesClusterConfig = KubernetesClusterConfig.from_file(
+        context_name=os.getenv("KUBECONTEXT"), path="~/.kube/config"
+    )
+
+    logger.debug("k8s_config.config: %s", k8s_config.config)
+
+    k8s_credentials = KubernetesCredentials(cluster_config=k8s_config)
+
+    try:
+        with k8s_credentials.get_client("core") as core_v1_client:
+            for pod in core_v1_client.list_namespaced_pod(namespace="default"):
+                logger.debug("pod.metadata.name: %s", pod.metadata.name)
+
+        # for namespace in v1_core_client.list_namespace().items:
+        #     logger.debug(namespace.metadata.name)
+
+        # v1_deployment_metadata = await create_namespaced_deployment(
+        #     # kubernetes_credentials=KubernetesCredentials.load("k8s-creds"),
+        #     kubernetes_credentials=k8s_credentials,
+        #     namespace='default',
+        #     new_deployment=V1Deployment(metadata={"name": "test-agent-deployment"}),
+        # )
+
+        # logger.debug('v1_deployment_metadata: %s', v1_deployment_metadata)
+
+        # v1_deployment_list = await list_namespaced_deployment(
+        #     # kubernetes_credentials=KubernetesCredentials.load("k8s-creds")
+        #     kubernetes_credentials=k8s_credentials,
+        #     namespace='default',
+        # )
+
+        # logger.debug('v1_deployment_list: %s', v1_deployment_list)
+
+        # v1_deployment_updates = convert_manifest_to_model(
+        #     manifest="workflows/agent-deployment.yaml",
+        #     v1_model_name="V1Deployment",
+        # )
+
+        # v1_deployment = patch_namespaced_deployment(
+        #     # kubernetes_credentials=KubernetesCredentials.load("k8s-creds"),
+        #     kubernetes_credentials=k8s_credentials,
+        #     deployment_name="my-deployment",
+        #     deployment_updates=v1_deployment_updates,
+        #     namespace="my-namespace"
+        # )
+
+    except kubernetes.client.exceptions.ApiException as e:
+        logger.debug(e)
+
+    try:
+        await sky_launch_task()  # TODO: sky launch -c min minimal.yaml
+    except Exception as e:
+        logger.debug(e)
+
     # await sky_serve_up_task()
 
 

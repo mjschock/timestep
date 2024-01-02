@@ -6102,13 +6102,13 @@ files = [
 
 [[package]]
 name = "skypilot-nightly"
-version = "1.0.0.dev20231224"
+version = "1.0.0.dev20240101"
 description = "SkyPilot: An intercloud broker for the clouds"
 optional = false
 python-versions = "*"
 files = [
-    {file = "skypilot-nightly-1.0.0.dev20231224.tar.gz", hash = "sha256:b93d5137377b61eeb768ebdaf148f604547f7bf24dc9bb563481e31c27779126"},
-    {file = "skypilot_nightly-1.0.0.dev20231224-py3-none-any.whl", hash = "sha256:ca7334bd143e7cfe27475b8e38f7270fafedb81c7b1d1b753cbf10d33737e0c6"},
+    {file = "skypilot-nightly-1.0.0.dev20240101.tar.gz", hash = "sha256:91ad881dbee4c9051d2f8ae918bb1ae54c4b8852b5c705d89f20f0c06d34cf38"},
+    {file = "skypilot_nightly-1.0.0.dev20240101-py3-none-any.whl", hash = "sha256:cac1ce6e96a4ed6eebeba592979c47d07f827528208fa0b4c32a480e29fb3c19"},
 ]
 
 [package.dependencies]
@@ -7601,4 +7601,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11,<3.12"
-content-hash = "819a9eafe314d2adcea70cb199d8b1f08ecf7cbf6df3d878041117af7f257d2b"
+content-hash = "83d51e17776904c9001c33e71447083ad40a03fcf1685411e6147b0366738813"
