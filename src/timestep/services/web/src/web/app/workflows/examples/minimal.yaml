@@ -11,9 +11,10 @@ name: minimal
 resources:
   cloud: kubernetes
   cpus: 1+
+  memory: 0.5+
 
 setup: |
   echo "running setup"
 
 run: |
-  conda env list
+  echo "Hello, SkyPilot!"

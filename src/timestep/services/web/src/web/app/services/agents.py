@@ -271,6 +271,8 @@ async def deploy_agent(
                     s3fs=={s3fs.__version__}
                     skypilot-nightly[kubernetes]=={sky.__version__}
                 """,
+                "KUBECONTEXT": os.getenv("KUBECONTEXT"),
+                "PRIMARY_DOMAIN_NAME": os.getenv("PRIMARY_DOMAIN_NAME"),
             },
             # "image_pull_secrets": "regcred",
             "service_account_name": "prefect-worker-job-service-account",
@@ -313,8 +315,8 @@ async def deploy_agent(
         image=DeploymentImage(
             # name="berkeleyskypilot/skypilot-nightly",
             name="registry.gitlab.com/timestep-ai/timestep/web",
-            # tag="latest",
-            tag="tilt-96f6965e55017bbc",  # TODO: https://docs.tilt.dev/custom_resource#advanced-pod-creation
+            tag="latest",
+            # tag="tilt-96f6965e55017bbc",  # TODO: https://docs.tilt.dev/custom_resource#advanced-pod-creation
         ),
         push=False,
         work_pool_name="default-worker-pool",

@@ -1,7 +1,6 @@
 # import requests
 from typing import Annotated
 
-import httpx
 from fastapi import APIRouter, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
@@ -109,26 +108,36 @@ async def create_message(
     #     }
     # )
 
-    async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=None)) as client:
-        try:
-            response = await client.post(
-                "http://ollama.default.svc.cluster.local:80/api/chat",
-                json={
-                    "model": "phi:latest",
-                    "messages": _messages,
-                    "stream": False,
-                },
-            )
+    # async with httpx.AsyncClient(timeout=httpx.Timeout(timeout=None)) as client:
+    #     try:
+    #         response = await client.post(
+    #             "http://ollama.default.svc.cluster.local:80/api/chat",
+    #             json={
+    #                 "model": "phi:latest",
+    #                 "messages": _messages,
+    #                 "stream": False,
+    #             },
+    #         )
 
-        except httpx.HTTPError as exc:
-            print("=== (print) httpx.HTTPError ===")
-            print(exc)
-            raise exc
+    #     except httpx.HTTPError as exc:
+    #         print("=== (print) httpx.HTTPError ===")
+    #         print(exc)
+    #         raise exc
 
-    print("response: ", response)
+    # print("response: ", response)
 
-    data = response.json()
-    print("data: ", data)
+    # data = response.json()
+    # print("data: ", data)
+
+    data = {
+        "message": {
+            "role": "assistant",
+            # TODO: Implement in-app user reporting or flagging features to allow users
+            # to report or flag offensive content without needing to exit the app.
+            # See: https://support.google.com/googleplay/android-developer/answer/13985936
+            "content": "Sorry. I'm not operating yet. Please try again later.",
+        }
+    }
 
     return {
         "data": data,

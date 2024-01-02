@@ -33,7 +33,8 @@ DATA_DIR = "./data"  # directory containing the documents to index
 
 
 async def get_service_context() -> ServiceContext:
-    embed_model: EmbedType = "local"
+    # embed_model: EmbedType = "local"
+    embed_model: EmbedType = None  # MockEmbedding(embed_dim=1)
     llm: LLMType = Ollama(
         base_url="http://ollama.default.svc.cluster.local:80",
         model="phi:latest",
@@ -237,6 +238,7 @@ async def load_documents():
 
 async def get_index(service_context: ServiceContext):
     logging.getLogger("uvicorn")
+    index = None
 
     # check if storage already exists
     # if not os.path.exists(STORAGE_DIR):
