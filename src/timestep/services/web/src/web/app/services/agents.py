@@ -7,7 +7,8 @@ import prefect_shell
 import s3fs
 import sky
 from minio import Minio
-from prefect import deploy, flow, task
+from prefect import deploy, flow, get_run_logger, task
+from prefect.blocks.system import Secret
 from prefect.deployments.deployments import run_deployment
 from prefect.deployments.runner import DeploymentImage
 from prefect.runner.runner import RunnerDeployment
@@ -83,6 +84,16 @@ async def create_minio_storage_block(
     bucket_name: str,
     # minio_credentials_block: MinIOCredentials
 ):
+    # minio_root_user_secret_block = Secret(
+    #     value=SecretStr(os.getenv("MINIO_ROOT_USER"))
+    # )
+    # minio_root_password_secret_block = Secret(
+    #     value=SecretStr(os.getenv("MINIO_ROOT_PASSWORD"))
+    # )
+
+    # await minio_root_user_secret_block.save("minio-root-user", overwrite=True)
+    # await minio_root_password_secret_block.save("minio-root-password", overwrite=True)
+
     minio_endpoint_url = f'http://{os.getenv("MINIO_ENDPOINT")}'
     minio_storage_block = S3Bucket(
         bucket_folder=bucket_folder,
@@ -94,7 +105,9 @@ async def create_minio_storage_block(
                 use_ssl=False,
             ),
             minio_root_user=os.getenv("MINIO_ROOT_USER"),
+            # minio_root_user=minio_root_user_secret_block,
             minio_root_password=SecretStr(os.getenv("MINIO_ROOT_PASSWORD")),
+            # minio_root_password=minio_root_password_secret_block,
         ),
     )
 
@@ -179,6 +192,14 @@ async def deploy_agent(
     #     secure=False,
     # )
 
+    minio_root_user_secret_block = Secret(value=SecretStr(os.getenv("MINIO_ROOT_USER")))
+    minio_root_password_secret_block = Secret(
+        value=SecretStr(os.getenv("MINIO_ROOT_PASSWORD"))
+    )
+
+    await minio_root_user_secret_block.save("minio-root-user", overwrite=True)
+    await minio_root_password_secret_block.save("minio-root-password", overwrite=True)
+
     print("Creating storage")
     storage = RemoteStorage(
         # url="s3://my-bucket/my-folder",
@@ -191,15 +212,21 @@ async def deploy_agent(
         # secret=SecretStr(os.getenv("MINIO_ROOT_PASSWORD")),
         # token=?
         # minio_root_user=os.getenv("MINIO_ROOT_USER"),
-        key=os.getenv("MINIO_ROOT_USER"),
+        # key=os.getenv("MINIO_ROOT_USER"),
+        # key=Secret.load("minio-root-user"),
+        key=minio_root_user_secret_block,
         # minio_root_password=SecretStr(os.getenv("MINIO_ROOT_PASSWORD")),
-        secret=os.getenv("MINIO_ROOT_PASSWORD"),
+        # secret=os.getenv("MINIO_ROOT_PASSWORD"),
+        # secret=Secret.load("minio-root-password"),
+        secret=minio_root_password_secret_block,
         client_kwargs={
             "endpoint_url": minio_endpoint_url,
             "verify": False,
             "use_ssl": False,
         },
     )
+
+    # await storage.save()
 
     # await storage.pull_code()
 
@@ -272,6 +299,7 @@ async def deploy_agent(
                     skypilot-nightly[kubernetes]=={sky.__version__}
                 """,
                 "KUBECONTEXT": os.getenv("KUBECONTEXT"),
+                "MINIO_ENDPOINT": os.getenv("MINIO_ENDPOINT"),
                 "PRIMARY_DOMAIN_NAME": os.getenv("PRIMARY_DOMAIN_NAME"),
             },
             # "image_pull_secrets": "regcred",
@@ -331,7 +359,17 @@ async def deploy_agent(
 @flow(
     timeout_seconds=10,
 )
-async def create_agent_flow(bucket_folder="agent", bucket_name="default"):
+async def create_agent(bucket_folder="agent", bucket_name="default"):
+    get_run_logger()
+
+    # if True:
+    #     memo = await load_cloud_credentials(memo)
+    #     memo = await sky_check_task(memo)
+    #     memo = await sky_launch_task(memo)
+
+    #     logger.info(f"memo: {memo}")
+    #     return
+
     # await print_values([1, 2])  # runs immediately
     # coros = [print_values("abcd"), print_values("6789")]
 
@@ -368,12 +406,12 @@ async def create_agent_flow(bucket_folder="agent", bucket_name="default"):
         )
 
 
-def create_agent():
-    print("async create_agent_flow")
+# def create_agent():
+#     print("async create_agent_flow")
 
-    asyncio.run(create_agent_flow())
+#     asyncio.run(create_agent())
 
-    # deploy_flow()
+#     # deploy_flow()
 
 
 async def query_agent(query):
@@ -390,4 +428,4 @@ async def query_agent(query):
 
 
 async def init_agent_service():
-    await create_agent_flow()
+    await create_agent()

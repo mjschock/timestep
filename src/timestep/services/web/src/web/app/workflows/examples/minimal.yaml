@@ -14,7 +14,8 @@ resources:
   memory: 0.5+
 
 setup: |
-  echo "running setup"
+  echo "Running setup"
+  pip install "ray[serve]"
 
 run: |
   echo "Hello, SkyPilot!"

@@ -47,6 +47,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   openssh-server \
   rsync \
   socat \
+  sqlite3 \
   sudo \
   swig \
   tk-dev \

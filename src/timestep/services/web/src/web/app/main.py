@@ -2,7 +2,7 @@ import logging
 
 from fastapi import FastAPI
 
-from .routers import agents, chat, threads
+from .routers import agents, chat
 
 app = FastAPI()
 
@@ -26,4 +26,4 @@ async def get_ready():
 app.include_router(agents.router)
 app.include_router(chat.router)
 # app.include_router(documents.router)
-app.include_router(threads.router)
+# app.include_router(threads.router)
