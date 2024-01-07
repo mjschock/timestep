@@ -106,7 +106,7 @@ export default defineComponent({
       // { name: 'Documents', path: '/documents', metadata: { enabled: false, icon: 'document_scanner' } },
       // { name: 'Tasks', path: '/tasks', metadata: { enabled: true, icon: 'task' } },
       // { name: 'Tools', path: '/tools', metadata: { enabled: true, icon: 'build' } },
-      { name: 'Environments', path: '/threads', metadata: { enabled: true, icon: 'workspaces' } },
+      // { name: 'Environments', path: '/threads', metadata: { enabled: true, icon: 'workspaces' } },
     ])
     const router = useRouter();
 

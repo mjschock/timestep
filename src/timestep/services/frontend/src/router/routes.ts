@@ -50,8 +50,8 @@ const routes: RouteRecordRaw[] = [
       // { path: '/documents', component: () => import('pages/DocumentsPage.vue'), meta: { auth: true } },
       // { path: '/tasks', component: () => import('pages/TasksPage.vue'), meta: { auth: true } },
       // { path: '/tools', component: () => import('pages/ToolsPage.vue'), meta: { auth: true } },
-      { path: '/threads', component: () => import('pages/ThreadsPage.vue'), meta: { auth: true } },
-      { path: '/threads/:threadId', component: () => import('pages/ThreadPage.vue'), meta: { auth: true } },
+      // { path: '/threads', component: () => import('pages/ThreadsPage.vue'), meta: { auth: true } },
+      // { path: '/threads/:threadId', component: () => import('pages/ThreadPage.vue'), meta: { auth: true } },
       // { path: '/signout', component: Signout },
       // {
       //   path: '/signin',

@@ -1,0 +1,3 @@
+fastapi
+prefect
+ray[serve]
