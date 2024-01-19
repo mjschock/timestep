@@ -15,6 +15,9 @@ from pydantic import StrictStr
 
 from app.services import agents as agents_service
 
+account_id = "f215cf48-7458-4596-9aa5-2159fc6a3caf" # Temporary; same as S3_ROOT_FOLDER in NhostConstruct  # noqa: E501
+available_agent_names = ("gpt-2", "gpt-4-vision-preview", "spaceflights-pandas")
+
 agents_router = APIRouter()
 
 @agents_router.post(
@@ -22,13 +25,10 @@ agents_router = APIRouter()
     status_code=status.HTTP_202_ACCEPTED,
     tags=["agents"],
 )
-async def create_agent(name: str, background_tasks: BackgroundTasks):
-    available_agents = ("gpt-2", "gpt-4-vision-preview", "spaceflights-pandas")
-    account_id = "2d4cedf0-b629-11ee-80e8-efb6a79cbe3c"
-
-    if name not in available_agents:
+async def create_agent(agent_name: str, background_tasks: BackgroundTasks):
+    if agent_name not in available_agent_names:
         return Response(
-            content=f"Please choose one of the following agents: {available_agents}",
+            content=f"Please choose one of the following agents: {available_agent_names}",  # noqa: E501
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -37,7 +37,15 @@ async def create_agent(name: str, background_tasks: BackgroundTasks):
 
     # background_tasks.add_task(create_agent_background_task, name)
 
-    await agents_service.create_agent(name, folder=account_id)
+    agents = await agents_service.get_agents(account_id)
+
+    if agent_name in [agent["name"] for agent in agents]:
+        return Response(
+            content=f"Agent with name '{agent_name}' already exists.",
+            status_code=status.HTTP_409_CONFLICT,
+        )
+
+    await agents_service.create_agent(account_id=account_id, agent_name=agent_name)
 
     return Response(
         status_code=status.HTTP_202_ACCEPTED,
@@ -48,7 +56,6 @@ async def create_agent(name: str, background_tasks: BackgroundTasks):
     tags=["agents"],
 )
 async def delete_agent(agent_id: str):
-    account_id = "2d4cedf0-b629-11ee-80e8-efb6a79cbe3c"
     agent: Dict[str, Any] = await agents_service.delete_agent(account_id, agent_id)
 
     return {
@@ -60,8 +67,6 @@ async def delete_agent(agent_id: str):
     tags=["agents"],
 )
 async def get_agent(agent_id: str):
-    account_id = "2d4cedf0-b629-11ee-80e8-efb6a79cbe3c"
-    # agent: Dict[str, Any] = await agents_service.get_agent(agent_id)
     agent: Dict[str, Any] = await agents_service.get_agent(account_id, agent_id)
 
     return {
@@ -69,22 +74,25 @@ async def get_agent(agent_id: str):
     }
 
 @agents_router.get(
+    "/{agent_id}/livez",
+    tags=["agents"],
+)
+async def get_agent_livez(agent_id: str):
+    return await agents_service.get_agent_livez(account_id, agent_id)
+
+@agents_router.get(
     "/{agent_id}/readyz",
     tags=["agents"],
 )
 async def get_agent_readyz(agent_id: str):
-    agent: Dict[str, Any] = await agents_service.get_agent_readyz(agent_id)
-
-    return {
-        "agent": agent,
-    }
+    return await agents_service.get_agent_readyz(account_id, agent_id)
 
 @agents_router.get(
     "",
     tags=["agents"],
 )
-async def get_agents():
-    agents: List[Dict[str, Any]] = await agents_service.get_agents()
+async def list_agents():
+    agents: List[Dict[str, Any]] = await agents_service.get_agents(account_id)
 
     return {
         "agents": agents,
@@ -95,11 +103,11 @@ async def get_agents():
     tags=["agents"],
 )
 async def update_agent(agent_id: str):
-    agent: Dict[str, Any] = await agents_service.update_agent(agent_id)
+    agent: Dict[str, Any] = await agents_service.update_agent(account_id, agent_id)
 
-    return {
-        "agent": agent,
-    }
+    return Response(
+        status_code=status.HTTP_202_ACCEPTED,
+    )
 
 @agents_router.post(
     "/{agent_id}/ap/v1/agent/tasks",

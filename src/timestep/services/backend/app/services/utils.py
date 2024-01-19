@@ -1,8 +1,8 @@
 import base64
 import os
 from typing import Any, Dict
-import kedro
 
+import kedro
 import kubernetes
 import sky
 import yaml
@@ -16,95 +16,150 @@ from prefect.runner.storage import RemoteStorage
 from prefect_aws import AwsClientParameters, MinIOCredentials, S3Bucket
 from pydantic import SecretStr
 
+def load_kubeconfig(overwrite=True, memo: Dict[str, Any] = {}):
+    kubeconfig_path = os.path.expanduser(sky.clouds.kubernetes.CREDENTIAL_PATH)
 
-# def load_kubeconfig(overwrite=True, memo: Dict[str, Any] = {}):
-#     kubeconfig_path = os.path.expanduser(sky.clouds.kubernetes.CREDENTIAL_PATH)
+    if overwrite or not os.path.exists(kubeconfig_path):
+        cluster_name = os.getenv("PRIMARY_DOMAIN_NAME")
+        kubecontext = os.getenv("KUBECONTEXT")
+        kubernetes_service_host = os.getenv("KUBERNETES_SERVICE_HOST")
+        kubernetes_service_port = os.getenv("KUBERNETES_SERVICE_PORT")
+        user_name = os.getenv("PRIMARY_DOMAIN_NAME")
 
-#     if overwrite or not os.path.exists(kubeconfig_path):
-#         cluster_name = os.getenv("PRIMARY_DOMAIN_NAME")
-#         kubecontext = os.getenv("KUBECONTEXT")
-#         kubernetes_service_host = os.getenv("KUBERNETES_SERVICE_HOST")
-#         kubernetes_service_port = os.getenv("KUBERNETES_SERVICE_PORT")
-#         user_name = os.getenv("PRIMARY_DOMAIN_NAME")
+        ca_certificate_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+        # namespace_path = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
+        service_account_token_path = (
+            "/var/run/secrets/kubernetes.io/serviceaccount/token"
+        )
 
-#         ca_certificate_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-#         # namespace_path = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
-#         service_account_token_path = (
-#             "/var/run/secrets/kubernetes.io/serviceaccount/token"
-#         )
+        kubernetes.config.load_incluster_config()
+        config = kubernetes.client.Configuration.get_default_copy()
 
-#         kubernetes.config.load_incluster_config()
-#         config = kubernetes.client.Configuration.get_default_copy()
+        server = config.host
 
-#         server = config.host
+        assert (
+            server == f"https://{kubernetes_service_host}:{kubernetes_service_port}"
+        ), f"{server} != https://{kubernetes_service_host}:{kubernetes_service_port}"
 
-#         assert (
-#             server == f"https://{kubernetes_service_host}:{kubernetes_service_port}"
-#         ), f"{server} != https://{kubernetes_service_host}:{kubernetes_service_port}"
+        ssl_ca_cert = config.ssl_ca_cert
 
-#         ssl_ca_cert = config.ssl_ca_cert
+        assert (
+            ssl_ca_cert == ca_certificate_path
+        ), f"{ssl_ca_cert} != {ca_certificate_path}"
 
-#         assert (
-#             ssl_ca_cert == ca_certificate_path
-#         ), f"{ssl_ca_cert} != {ca_certificate_path}"
+        # Load CA certificate and encode it in base64
+        with open(ssl_ca_cert, "rb") as ssl_ca_cert_file:
+            certificate_authority_data = base64.b64encode(
+                ssl_ca_cert_file.read()
+            ).decode("utf-8")
 
-#         # Load CA certificate and encode it in base64
-#         with open(ssl_ca_cert, "rb") as ssl_ca_cert_file:
-#             certificate_authority_data = base64.b64encode(
-#                 ssl_ca_cert_file.read()
-#             ).decode("utf-8")
+        # Load service account token
+        with open(service_account_token_path, "rb") as token_file:
+            service_account_token = token_file.read()
 
-#         # Load service account token
-#         with open(service_account_token_path, "rb") as token_file:
-#             service_account_token = token_file.read()
+        # Create kubeconfig dictionary
+        kubeconfig = {
+            "apiVersion": "v1",
+            "kind": "Config",
+            "clusters": [
+                {
+                    "cluster": {
+                        "certificate-authority-data": certificate_authority_data,
+                        "server": server,
+                    },
+                    "name": cluster_name,
+                }
+            ],
+            "contexts": [
+                {
+                    "context": {
+                        "cluster": cluster_name,
+                        # "namespace": namespace,
+                        "user": user_name,
+                    },
+                    "name": kubecontext,
+                }
+            ],
+            "current-context": kubecontext,
+            "preferences": {},
+            "users": [
+                {
+                    "name": user_name,
+                    "user": {"token": service_account_token},
+                }
+            ],
+        }
 
-#         # Create kubeconfig dictionary
-#         kubeconfig = {
-#             "apiVersion": "v1",
-#             "kind": "Config",
-#             "clusters": [
-#                 {
-#                     "cluster": {
-#                         "certificate-authority-data": certificate_authority_data,
-#                         "server": server,
-#                     },
-#                     "name": cluster_name,
-#                 }
-#             ],
-#             "contexts": [
-#                 {
-#                     "context": {
-#                         "cluster": cluster_name,
-#                         # "namespace": namespace,
-#                         "user": user_name,
-#                     },
-#                     "name": kubecontext,
-#                 }
-#             ],
-#             "current-context": kubecontext,
-#             "preferences": {},
-#             "users": [
-#                 {
-#                     "name": user_name,
-#                     "user": {"token": service_account_token},
-#                 }
-#             ],
-#         }
+        # Create ~/.kube directory if it doesn't exist
+        kube_dir = os.path.dirname(kubeconfig_path)
+        os.makedirs(kube_dir, exist_ok=True)
 
-#         # Create ~/.kube directory if it doesn't exist
-#         kube_dir = os.path.dirname(kubeconfig_path)
-#         os.makedirs(kube_dir, exist_ok=True)
+        # Save the kubeconfig dictionary to ~/.kube/config
+        with open(kubeconfig_path, "w") as outfile:
+            yaml.dump(kubeconfig, outfile, default_flow_style=False)
 
-#         # Save the kubeconfig dictionary to ~/.kube/config
-#         with open(kubeconfig_path, "w") as outfile:
-#             yaml.dump(kubeconfig, outfile, default_flow_style=False)
+        if not os.path.exists(kubeconfig_path):
+            raise RuntimeError(f"{kubeconfig_path} file has not been generated.")
 
-#         if not os.path.exists(kubeconfig_path):
-#             raise RuntimeError(f"{kubeconfig_path} file has not been generated.")
+    # memo["kubeconfig_path"] = kubeconfig_path
 
-#     # memo["kubeconfig_path"] = kubeconfig_path
+    return memo
 
-#     return memo
+# @task
+async def load_cloud_credentials(memo: Dict[str, Any]):
+    # logger = get_run_logger()
+
+    try:
+        kubernetes.config.load_incluster_config()
+        memo = load_kubeconfig(memo)
+
+    except kubernetes.config.config_exception.ConfigException as e:
+        # logger.info(e)
+        print(e)
+
+    return memo
+
+# @task
+async def sky_check_task(memo: dict[str, Any]):
+    # logger = get_run_logger()
+
+    sky.check.check()
+
+    enabled_clouds: list[sky.clouds.Cloud] = sky.global_user_state.get_enabled_clouds()
+    enabled_storage_clouds: list[
+        str
+    ] = sky.global_user_state.get_enabled_storage_clouds()
+
+    # logger.info("enabled_clouds: %s", enabled_clouds)
+    # logger.info("enabled_storage_clouds: %s", enabled_storage_clouds)
+
+    memo["enabled_clouds"] = enabled_clouds
+    memo["enabled_storage_clouds"] = enabled_storage_clouds
+
+    return memo
+
+# @task
+async def sky_status_task(memo: dict[str, Any]):
+    # logger: logging.Logger = get_run_logger()
+
+    # async with ShellOperation(
+    #     commands=[
+    #         f"sky status",
+    #     ],
+    #     # working_dir="workflows",
+    #     # working_dir=f"{cwd}/app/api/routers/workflows",
+    # ) as sky_op:
+    #     sky_op_process = await sky_op.trigger()
+    #     await sky_op_process.wait_for_completion()
+
+    memo["cluster_statuses"]: list[dict[str, Any]] = sky.core.status(refresh=True)
+
+    return memo
+
+async def sky_queue_task(name: str, memo: dict[str, Any]):
+    memo["cluster_queue"]: list[dict] = sky.core.queue(cluster_name=name)  # noqa: E501
+
+    return memo
 
 # @task
 async def create_minio_bucket(bucket_name: str, ignore_exists: bool = False) -> str:
@@ -167,9 +222,9 @@ async def upload_directory_to_minio(
 # )
 async def deploy_agent(
     uploaded_file_count: int,
+    account_id: str,
+    agent_name: str,
     bucket_name: str,
-    folder: str,
-    name: str,
 ):
     minio_endpoint = os.getenv("MINIO_ENDPOINT")
     minio_endpoint_url = f"http://{minio_endpoint}"
@@ -182,7 +237,7 @@ async def deploy_agent(
     await minio_root_password_secret_block.save("minio-root-password", overwrite=True)
 
     storage = RemoteStorage(
-        url=f"s3://{bucket_name}/{folder}/agents/{name}",
+        url=f"s3://{bucket_name}/{account_id}/agents/{agent_name}",
         key=minio_root_user_secret_block,
         secret=minio_root_password_secret_block,
         client_kwargs={
@@ -227,9 +282,9 @@ async def deploy_agent(
         # name=f"{name}-agent-flow-deployment",
         name="serve-agent-flow-deployment",
         parameters={
-            "account_id": folder,
+            "account_id": account_id,
             # "model_ids": ["phi:latest"]
-            "name": name,
+            "name": agent_name,
             # "work_pool_name": "default-worker-pool",
             # "work_queue_name": "default",
             # "pipeline_name": "__default__",
@@ -243,11 +298,12 @@ async def deploy_agent(
     deployment_ids: list = await deploy(
         deployment,
         build=False,
-        image=DeploymentImage(
-            name="registry.gitlab.com/timestep-ai/timestep/backend",
-            # tag="latest",
-            tag="tilt-10e7c7af83cae422", # TODO: Use Tilt to get appropriate tag
-        ),
+        # image=DeploymentImage(
+        #     name="registry.gitlab.com/timestep-ai/timestep/backend",
+        #     # tag="latest",
+        #     tag="tilt-10e7c7af83cae422", # TODO: Use Tilt to get appropriate tag
+        # ),
+        image="registry.gitlab.com/timestep-ai/timestep/backend:latest",
         push=False,
         work_pool_name="default-worker-pool",
     )

@@ -29,16 +29,22 @@ from app.services.utils import (
     create_minio_bucket,
     create_minio_storage_block,
     deploy_agent,
+    load_cloud_credentials,
+    sky_check_task,
+    sky_queue_task,
+    sky_status_task,
     # load_kubeconfig,
     upload_directory_to_minio,
 )
+
+DEFAULT_BUCKET_NAME="default"
 
 
 # @flow(
 #     log_prints=True,
 #     timeout_seconds=10,
 # )
-async def create_agent(name: str, bucket_name="default", folder="24754b2a-b4e2-11ee-bc65-472151297db6") -> Dict[str, Any]:
+async def create_agent(account_id: str, agent_name: str) -> dict[str, Any]:
     # logger: logging.Logger = get_run_logger()
     # agent: Dict[str, Any] = {
     #     "name": name,
@@ -75,25 +81,25 @@ async def create_agent(name: str, bucket_name="default", folder="24754b2a-b4e2-1
 
     # return agent
 
-    bucket_name: str = await create_minio_bucket(bucket_name, ignore_exists=True)
+    bucket_name: str = await create_minio_bucket(DEFAULT_BUCKET_NAME, ignore_exists=True)
     minio_storage_block = await create_minio_storage_block(
-        bucket_folder=folder,
+        bucket_folder=account_id,
         bucket_name=bucket_name,
     )
     # print('local_path')
     # print(f"{os.getcwd()}/app/workflows/agents/{name}")
     uploaded_file_count: int = await upload_directory_to_minio(
         minio_storage_block=minio_storage_block,
-        local_path=f"{os.getcwd()}/app/workflows/agents/{name}",
-        to_path=f"agents/{name}"
+        local_path=f"{os.getcwd()}/app/workflows/agents/{agent_name}",
+        to_path=f"agents/{agent_name}"
     )
     # print('uploaded_file_count: ')
     # print(uploaded_file_count)
     deployment_ids: list = await deploy_agent(
         uploaded_file_count,
+        account_id,
+        agent_name,
         bucket_name,
-        folder,
-        name,
     )
 
     for deployment_id in deployment_ids:
@@ -397,9 +403,9 @@ async def delete_agent(account_id: str, agent_id: str) -> Dict[str, Any]:
 # @flow
 async def get_agent(account_id: str, agent_id: str) -> Dict[str, Any]:
     # logger: logging.Logger = get_run_logger()
-    agent: Dict[str, Any] = {
-        "id": agent_id,
-    }
+    # agent: Dict[str, Any] = {
+    #     "id": agent_id,
+    # }
     memo: Dict[str, Any] = {}
 
     # memo = await load_cloud_credentials(memo)
@@ -425,27 +431,163 @@ async def get_agent(account_id: str, agent_id: str) -> Dict[str, Any]:
 
     # return agent
 
-    deployment_id = "serve-agent-flow/serve-agent-flow-deployment"
+    # deployment_id = "serve-agent-flow/serve-agent-flow-deployment"
 
-    resp = await run_deployment(
-        deployment_id,
-        # timeout=0,
-        parameters={
-            "account_id": account_id,
-            # "agent_id": agent_id,
-            "operation": "read",
-        },
-    )
+    # resp = await run_deployment(
+    #     deployment_id,
+    #     # timeout=0,
+    #     parameters={
+    #         "account_id": account_id,
+    #         # "agent_id": agent_id,
+    #         "operation": "read",
+    #     },
+    # )
+
+    # # logger.info("resp:")
+    # # logger.info(resp)
+    # print("resp:")
+    # print(resp)
+
+    # return agent
+
+    agents = await get_agents(account_id)
+
+    for agent in agents:
+        if agent["id"] == agent_id:
+            agent_name = agent["name"]
+            memo = await sky_queue_task(agent_name, memo)
+
+            # agent["cluster_queue"] = memo["cluster_queue"]
+            agent["iterations"] = [
+                {
+                    "id": job["job_id"],
+                    "status": job["status"],
+                } for job in memo["cluster_queue"]
+            ]
+
+            return agent
+
+    raise Exception(f"Agent {agent_id} not found")
+
+async def get_agent_livez(account_id: str, agent_id: str):
+    cluster_statuses = sky.core.status(refresh=True)
+
+    for cluster_status in cluster_statuses:
+        if cluster_status["cluster_hash"] == agent_id:
+            head_ip = cluster_status["handle"].head_ip
+
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(f"http://{head_ip}:8000/livez")
+                assert resp.json() == "ok", f"{resp.json()} != ok"
+                return resp.json()
+
+            # async with httpx.AsyncClient() as client:
+            #     resp = await client.get(f"http://{head_ip}:8000/readyz")
+            #     assert resp.json() == "ok", f"{resp.json()} != ok"
+
+    raise Exception(f"Agent {agent_id} not found")
+
+# @flow
+async def get_agent_readyz(account_id: str, agent_id: str):
+    cluster_statuses = sky.core.status(refresh=True)
+
+    for cluster_status in cluster_statuses:
+        if cluster_status["cluster_hash"] == agent_id:
+            head_ip = cluster_status["handle"].head_ip
+
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(f"http://{head_ip}:8000/readyz")
+                assert resp.json() == "ok", f"{resp.json()} != ok"
+                # return resp.json()
+
+            async with ShellOperation(
+                commands=[
+                    "curl -fsSL https://agentprotocol.ai/test.sh > test.sh",
+                    "dos2unix test.sh",
+                    f"URL=http://{head_ip}:8000 bash test.sh",
+                ],
+                shell="bash",
+                working_dir="/tmp",
+            ) as sky_op:
+                sky_op_process = await sky_op.trigger()
+
+                try:
+                    await sky_op_process.wait_for_completion()
+                except RuntimeError:
+                    # print(e)
+                    return "not ok"
+
+                return "ok"
+                # return await sky_op_process.fetch_result()
+
+            # async with httpx.AsyncClient() as client:
+            #     resp = await client.get(f"http://{head_ip}:8000/readyz")
+            #     assert resp.json() == "ok", f"{resp.json()} != ok"
+
+    #     async with ShellOperation(
+    #         commands=[
+    #             # f'URL=http://{head_ip}:8000 bash -c "$(curl -fsSL https://agentprotocol.ai/test.sh)"',
+    #             # f"URL=http://{head_ip}:8000 bash -c test.sh",
+    #             # f"URL=http://{head_ip}:8000 ls -al",
+    #             # "ls -al /bin",
+    #             # f"URL=http://{head_ip}:8000 bash test.sh",
+    #             "curl -fsSL https://agentprotocol.ai/test.sh > test.sh",
+    #             "dos2unix test.sh",
+    #             f"URL=http://{head_ip}:8000 bash test.sh",
+    #         ],
+    #         shell="bash",
+    #         # working_dir=f"{os.getcwd()}/app/workflows",
+    #         # working_dir=f"{os.getcwd()}/tests",
+    #         working_dir="/tmp",
+    #     ) as sky_op:
+    #         sky_op_process = await sky_op.trigger()
+    #         await sky_op_process.wait_for_completion()
+
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+
+    # for cluster_status in memo["cluster_statuses"]:
+    #     logger.info(cluster_status)
+
+    #     if cluster_status["cluster_hash"] == agent_id:
+    #         agent["name"] = cluster_status["name"]
+    #         agent["cluster_status"] = cluster_status
+    #         agent["links"] = {
+    #             "tasks": f"/api/agents/{agent_id}/ap/v1/agent/tasks",
+    #         }
+
+    #         break
+
+    # memo = await sky_queue_task(agent["name"], memo)
+    # agent["cluster_queue"] = memo["cluster_queue"]
+
+    # logger.info(memo)
+
+    # return agent
+
+    # deployment_id = "serve-agent-flow/serve-agent-flow-deployment"
+
+    # resp = await run_deployment(
+    #     deployment_id,
+    #     # timeout=0,
+    #     parameters={
+    #         "account_id": account_id,
+    #         "ap_check": True,
+    #         # "agent_id": agent_id,
+    #         "operation": "read",
+    #     },
+    # )
+
+    # return resp
 
     # logger.info("resp:")
     # logger.info(resp)
-    print("resp:")
-    print(resp)
+    # print("resp:")
+    # print(resp)
 
-    return agent
+    # raise Exception(f"Agent {agent_id} not found")
 
-# @flow
-# async def get_agent_readyz(agent_id: str):
 #     agent: Dict[str, Any] = {
 #         "id": agent_id,
 #     }
@@ -492,60 +634,119 @@ async def get_agent(account_id: str, agent_id: str) -> Dict[str, Any]:
 #     return agent
 
 # @flow
-# async def get_agents() -> Dict[str, Any]:
-#     # logger: logging.Logger = get_run_logger()
-#     agents: List[Dict[str, Any]] = []
-#     memo: Dict[str, Any] = {}
+async def get_agents(account_id: str) -> Dict[str, Any]:
+    # logger: logging.Logger = get_run_logger()
+    agents: List[Dict[str, Any]] = []
+    memo: Dict[str, Any] = {}
 
-#     # memo = await load_cloud_credentials(memo)
-#     # memo = await sky_check_task(memo)
-#     memo = await sky_status_task(memo)
+    memo = await load_cloud_credentials(memo)
+    memo = await sky_check_task(memo)
+    memo = await sky_status_task(memo)
 
-#     for cluster_status in memo["cluster_statuses"]:
-#         agent_id = cluster_status["cluster_hash"]
+    for cluster_status in memo["cluster_statuses"]:
+        agent_id = cluster_status["cluster_hash"]
 
-#         agent = {
-#             "id": agent_id,
-#             "name": cluster_status["name"],
-#             "links": {
-#                 f"/api/agents/{agent_id}/ap/v1/agent/tasks",
-#             },
-#             "status": cluster_status["status"],
-#         }
+        agent = {
+            "id": agent_id,
+            "name": cluster_status["name"],
+            "links": {
+                f"/api/agents/{agent_id}/ap/v1/agent/tasks",
+            },
+            "status": cluster_status["status"],
+        }
 
-#         agents.append(agent)
+        agents.append(agent)
 
-#     return agents
+    return agents
 
 # @flow
-# async def update_agent(agent_id: str) -> Dict[str, Any]:
-#     logger: logging.Logger = get_run_logger()
-#     agent: Dict[str, Any] = {
-#         "id": agent_id,
-#     }
-#     memo: Dict[str, Any] = {}
+async def update_agent(account_id: str, agent_id: str) -> Dict[str, Any]:
+    # logger: logging.Logger = get_run_logger()
+    # agent: Dict[str, Any] = {
+    #     "id": agent_id,
+    # }
+    # memo: Dict[str, Any] = {}
 
-#     memo = await load_cloud_credentials(memo)
-#     memo = await sky_check_task(memo)
-#     memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
 
-#     for cluster_status in memo["cluster_statuses"]:
-#         if cluster_status["cluster_hash"] == agent_id:
-#             agent["name"] = cluster_status["name"]
+    # for cluster_status in memo["cluster_statuses"]:
+    #     if cluster_status["cluster_hash"] == agent_id:
+    #         agent["name"] = cluster_status["name"]
 
-#             break
+    #         break
 
-#     logger.info("Updating agent cluster")
-#     memo = await sky_exec_task(agent["name"], memo)
-#     memo = await sky_status_task(memo)
+    # logger.info("Updating agent cluster")
+    # memo = await sky_exec_task(agent["name"], memo)
+    # memo = await sky_status_task(memo)
 
-#     for cluster_status in memo["cluster_statuses"]:
-#         if cluster_status["cluster_hash"] == agent_id:
-#             agent["cluster_status"] = cluster_status
+    # for cluster_status in memo["cluster_statuses"]:
+    #     if cluster_status["cluster_hash"] == agent_id:
+    #         agent["cluster_status"] = cluster_status
 
-#             break
+    #         break
 
-#     return agent
+    # return agent
+
+    # agent: Dict[str, Any] = {
+    #     "id": agent_id,
+    # }
+    # memo: Dict[str, Any] = {}
+
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+
+    # for cluster_status in memo["cluster_statuses"]:
+
+    #     if cluster_status["cluster_hash"] == agent_id:
+    #         agent["name"] = cluster_status["name"]
+
+    #         memo = await sky_down_task(agent["name"], memo)
+
+    #         break
+
+    # memo = await sky_status_task(memo)
+
+    # return agent
+
+    agent = await get_agent(account_id, agent_id)
+
+    agent_name = agent["name"]
+
+    bucket_name: str = await create_minio_bucket(DEFAULT_BUCKET_NAME, ignore_exists=True)
+    minio_storage_block = await create_minio_storage_block(
+        bucket_folder=account_id,
+        bucket_name=bucket_name,
+    )
+    # print('local_path')
+    # print(f"{os.getcwd()}/app/workflows/agents/{name}")
+    uploaded_file_count: int = await upload_directory_to_minio(
+        minio_storage_block=minio_storage_block,
+        local_path=f"{os.getcwd()}/app/workflows/agents/{agent_name}",
+        to_path=f"agents/{agent_name}"
+    )
+
+    deployment_id = "serve-agent-flow/serve-agent-flow-deployment"
+
+    resp = await run_deployment(
+        deployment_id,
+        # timeout=0,
+        parameters={
+            "account_id": account_id,
+            # "agent_id": agent_id,
+            "operation": "update",
+        },
+        timeout=0,
+    )
+
+    # logger.info("resp:")
+    # logger.info(resp)
+    # print("resp:")
+    # print(resp)
+
+    return agent
 
 # @task
 # async def load_cloud_credentials(memo: Dict[str, Any]):

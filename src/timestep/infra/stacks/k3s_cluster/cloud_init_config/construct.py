@@ -91,6 +91,13 @@ class CloudInitConfigConstruct(Construct):
 --local \
 --user {config.cloud_instance_user}""",
                 ],
+                [
+                    "runuser",
+                    "-l",
+                    config.cloud_instance_user,
+                    "-c",
+                    "mkdir -p $HOME/.sky",
+                ],
             ],
             users=[
                 "default",

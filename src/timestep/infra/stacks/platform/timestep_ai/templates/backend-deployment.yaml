@@ -71,11 +71,11 @@ spec:
           # volumeMounts:
           #   - mountPath: /home/ubuntu/.sky
           #     name: sky-volume
-          # volumeMounts:
-          # - name: sky-volume
-          #   mountPath: /home/ubuntu/.sky
-          # - name: ssh-volume
-          #   mountPath: /home/ubuntu/.ssh
+          volumeMounts:
+          - name: sky-pv-storage
+            mountPath: /home/ubuntu/.sky
+          - name: ssh-pv-storage
+            mountPath: /home/ubuntu/.ssh
 
         # - name: litestream
         #   image: litestream/litestream:0.3
@@ -184,6 +184,13 @@ spec:
       #   - name: sky-volume
       #     persistentVolumeClaim:
       #       claimName: sky-pvc
+      volumes:
+      - name: sky-pv-storage
+        persistentVolumeClaim:
+          claimName: sky-pv-claim
+      - name: ssh-pv-storage
+        persistentVolumeClaim:
+          claimName: ssh-pv-claim
   # volumeClaimTemplates:
   # - metadata:
   #     name: sky-volume
