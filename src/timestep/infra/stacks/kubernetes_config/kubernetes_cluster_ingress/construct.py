@@ -39,4 +39,5 @@ class KubernetesClusterIngressConstruct(Construct):
                 ),
             ],
             scope=self,
+            version="1.1.0",
         )

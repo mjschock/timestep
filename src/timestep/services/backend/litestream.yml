@@ -1,0 +1,97 @@
+# dbs:
+#   - path: /home/ubuntu/.sky/benchmark.db
+#     replicas:
+#       - access_key: ${MINIO_ROOT_USER}
+#         bucket: default
+#         # endpoint: http://${MINIO_ENDPOINT}
+#         endpoint: ${MINIO_ENDPOINT}
+#         path: benchmark.db
+#         secret_key: ${MINIO_ROOT_PASSWORD}
+#         skip-verify: true
+#         type: s3
+
+# AWS credentials
+access-key-id: admin
+secret-access-key: kAKxQMQn6gHG4ic9w3yG9udmPX7LeEUy
+
+dbs:
+  - path: /home/ubuntu/.sky/benchmark.db            # Database to replicate from
+    replicas:
+      - endpoint: http://${MINIO_ENDPOINT}
+        skip-verify: true
+        url: "s3://default/agent"
+  - path: /home/ubuntu/.sky/jobs.db            # Database to replicate from
+    replicas:
+      - endpoint: http://${MINIO_ENDPOINT}
+        skip-verify: true
+        url: "s3://default/agent"
+  - path: /home/ubuntu/.sky/spot_jobs.db
+    replicas:
+      - endpoint: http://${MINIO_ENDPOINT}
+        skip-verify: true
+        url: "s3://default/agent"
+  - path: /home/ubuntu/.sky/state.db
+    replicas:
+      - endpoint: http://${MINIO_ENDPOINT}
+        skip-verify: true
+        url: "s3://default/agent"
+# dbs:
+#   - path: /home/ubuntu/.sky/benchmark.db            # Database to replicate from
+#     replicas:
+#       - bucket: default
+#       # - bucket: default.${MINIO_ENDPOINT}
+#         endpoint: http://${MINIO_ENDPOINT}
+#         path: benchmark.db
+#         skip-verify: true
+#         type: s3
+#         # url: s3://default.${MINIO_ENDPOINT}/benchmark.db
+#         # url: s3://${MINIO_ENDPOINT}/benchmark.db
+#         # url: s3://${MINIO_ENDPOINT}/default/benchmark.db
+
+# 2024/01/09 22:00:31 ERROR failed to run error="replica url scheme required: python"
+
+# dbs:
+#   - path: /home/ubuntu/.sky/benchmark.db            # Database to replicate from
+#     replicas:
+#       - endpoint: http://${MINIO_ENDPOINT}
+#         skip-verify: true
+#         url: s3://default.${MINIO_ENDPOINT}/benchmark.db
+
+# oSuchBucket: The specified bucket does not exist\n\tstatus code: 404,
+
+# dbs:
+#   - path: /home/ubuntu/.sky/benchmark.db            # Database to replicate from
+#     replicas:
+#       - endpoint: http://${MINIO_ENDPOINT}
+#         skip-verify: true
+#         url: s3://${MINIO_ENDPOINT}/default/benchmark.db
+
+# NoSuchBucket: The specified bucket does not exist\n\tstatus code: 404,
+
+
+# #     minio_endpoint = os.getenv("MINIO_ENDPOINT")
+# #     minio_endpoint_url = f"http://{minio_endpoint}"
+# #     storage = RemoteStorage(
+# #         url="s3://default/agent",
+# #         key=minio_root_user_secret_block,
+# #         secret=minio_root_password_secret_block,
+# #         client_kwargs={
+# #             "endpoint_url": minio_endpoint_url,
+# #             "verify": False,
+# #             "use_ssl": False,
+# #         },
+# #     )
+
+# dbs:
+#   - path: /home/ubuntu/.sky/benchmark.db            # Database to replicate from
+#     replicas:
+#       - endpoint: http://${MINIO_ENDPOINT}
+#         skip-verify: true
+#         url: "s3://default/agent"
+
+# No database found, restoring from replica if exists
+# time=2024-01-09T22:14:22.943-08:00 level=INFO msg="no matching backups found"
+# 2024/01/09 22:14:23 INFO litestream version=v0.3.13
+# 2024/01/09 22:14:23 ERROR failed to run error="replica url scheme required: python"
+# # same
+

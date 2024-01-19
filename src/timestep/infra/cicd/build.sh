@@ -52,6 +52,24 @@ elif [ ${IMAGE_NAME} = "postgresql-repmgr" ]; then
     --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
     src/timestep/infra/stacks/kubernetes_config/postgresql
 
+elif [ ${IMAGE_NAME} = "caddy" ]; then
+  docker buildx build \
+    --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \
+    --build-arg GOENV_VERSION=${GOENV_VERSION} \
+    --build-arg NODENV_VERSION=${NODENV_VERSION} \
+    --build-arg PYENV_VERSION=${PYENV_VERSION} \
+    --build-arg UBUNTU_VERSION=${UBUNTU_VERSION} \
+    --cache-from ${CI_REGISTRY_IMAGE}:latest \
+    --cache-from ${CI_REGISTRY_IMAGE}:${VERSION} \
+    --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
+    --cache-from ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
+    --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
+    --cache-to type=inline,ref=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
+    --push \
+    --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
+    --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
+    src/timestep/services
+
 else
   docker buildx build \
     --build-arg CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION} \

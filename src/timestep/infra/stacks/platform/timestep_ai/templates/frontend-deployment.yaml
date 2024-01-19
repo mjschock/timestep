@@ -24,25 +24,26 @@ spec:
         app: frontend
     spec:
       containers:
-        - command:
-            - /home/ubuntu/docker-entrypoint.sh
-            - quasar
-            - serve
-            - dist/spa
-            - --hostname
-            - 0.0.0.0
-            - -p
-            - "9000"
-          # env:
+        # - command:
+        #     - /home/ubuntu/docker-entrypoint.sh
+        #     - npm
+        #     - run
+        #     - dev
+        # - env:
           # {{- with (first .Values.ingress.hosts) }}
           #   - name: GRAPHQL_URI
           #     value: https://www.{{ .host }}/graphql
           # {{- end }}
+        - envFrom:
+            - configMapRef:
+                name: frontend-config-map
+            - secretRef:
+                name: frontend-secret
           image: registry.gitlab.com/timestep-ai/timestep/frontend:{{ .Chart.AppVersion }}
           imagePullPolicy: Always
           name: frontend
           ports:
-            - containerPort: 9000
+            - containerPort: 3000
               # hostPort: 9000
               # protocol: TCP
           # resources: {}

@@ -1,0 +1,6 @@
+agent-protocol
+llama-hub
+llama-index
+minio
+ray[serve]
+transformers[agents,deepspeed,torch]

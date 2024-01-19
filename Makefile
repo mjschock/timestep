@@ -5,8 +5,10 @@ default:
 clean:
 	multipass delete timestep-ai --purge || true
 	rm -rf cdktf.out
+	rm secrets/kubeconfig
 
 hosts:
+	# cat cdktf.out/stacks/timestep.local.k3s_cluster/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
 	cat cdktf.out/stacks/timestep.local.k3s_cluster/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
 
 info:
@@ -34,6 +36,7 @@ kubernetes-dashboard-token:
 local-tls-cert:
 	ark get mkcert
 	mkcert -install
+	# mkcert -cert-file secrets/local_tls_crt -key-file secrets/local_tls_key timestep.local www.timestep.local
 	mkcert -cert-file secrets/local_tls_crt -key-file secrets/local_tls_key timestep.local www.timestep.local
 
 # nvidia:
@@ -56,6 +59,9 @@ quasar-dev-ios:
 
 runner:
 	cd actions-runner && ./run.sh
+
+sky-watch:
+	watch kubectl get all -l parent=skypilot
 
 ssh:
 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@137.184.180.182

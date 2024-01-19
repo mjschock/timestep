@@ -1,3 +1,6 @@
+import json
+import os
+from cdktf import AssetType, Fn, TerraformAsset
 from cdktf_cdktf_provider_helm.provider import HelmProvider
 from cdktf_cdktf_provider_helm.release import (
     Release,
@@ -109,7 +112,25 @@ class PrefectConstruct(Construct):
                 )
             ],
             scope=self,
+            version="2024.1.12",
         )
+
+        # sidecar_container = DeploymentV1SpecTemplateSpecContainer(
+        #     command=["sh", "-c", "while true; do sleep 30; done;"],
+        #     image="alpine:latest",
+        #     name="sidecar",
+        # )
+
+        # base_job_template_values_asset = TerraformAsset(
+        #     id="base_job_template_values_asset",
+        #     path=os.path.join(os.path.dirname(__file__), "base-job-template.json"),
+        #     scope=self,
+        #     type=AssetType.FILE,
+        # )
+
+        with open(os.path.join(os.path.dirname(__file__), "base-job-template.json"), "r") as f:
+            # base_job_template = f.read()
+            base_job_template_json = json.load(f)
 
         self.prefect_default_worker_helm_release_resource = Release(
             depends_on=[self.prefect_server_helm_release_resource],
@@ -124,6 +145,18 @@ class PrefectConstruct(Construct):
                 ReleaseSet(
                     name="worker.apiConfig",
                     value="server",
+                ),
+                # ReleaseSet(
+                #     name="worker.config.baseJobTemplate",
+                #     # value=Fn.file(base_job_template_values_asset.path)
+                #     # value=base_job_template_values_asset.path
+                #     # value=os.path.join(os.path.dirname(__file__), "base-job-template.json"),
+                #     # value=f,
+                #     value=str(base_job_template_json)
+                # ),
+                ReleaseSet(
+                    name="worker.config.limit",
+                    value="1",
                 ),
                 ReleaseSet(
                     name="worker.config.workPool",
@@ -143,12 +176,53 @@ class PrefectConstruct(Construct):
                 ),
             ],
             set_list=[
+                # ReleaseSetListStruct(
+                #     # -- additional sidecar containers
+                #     name="worker.extraContainers",
+                #     # value=["\\{\"timeout\": \"30s\"\\}"],
+                #     value=[sidecar_container.metadata.name],
+                # ),
+                # ReleaseSetListStruct(
+                #     # -- array with extra volumes for the worker pod
+                #     name="worker.extraVolumes",
+                #     value=[
+                #         {
+                #             "name": "extra-volume",
+                #             "emptyDir": {},
+                #         }
+                #     ],
+                # ),
+                # ReleaseSetListStruct(
+                #     # -- array with extra volumeMounts for the worker pod
+                #     name="worker.extraVolumeMounts",
+                #     value=[
+                #         {
+                #             "name": "extra-volume",
+                #             "mountPath": "/extra-volume",
+                #         }
+                #     ],
+                # ),
                 ReleaseSetListStruct(
                     name="worker.image.pullSecrets",
                     value=["regcred"],
                 ),
             ],
             scope=self,
+            values=[f"""worker:
+  config:
+    baseJobTemplate: |
+        {json.dumps(base_job_template_json)}
+"""
+#                 """worker:
+#   extraVolumes:
+#     - name: cache-volume
+#       emptyDir:
+#         sizeLimit: 500Mi
+#   extraVolumeMounts:
+#     - name: cache-volume
+#       mountPath: /cache
+#             """
+            ],
         )
 
         # Create prefect-worker-job service account, role, and role binding

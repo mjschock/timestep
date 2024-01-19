@@ -1,0 +1,4 @@
+agent-protocol
+llama-index
+ray[serve]
+transformers[agents,deepspeed,torch]

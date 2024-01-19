@@ -8,6 +8,8 @@
 
 [![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=2184d1107783&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
+## Architecture
+
 <!-- ```mermaid
 classDiagram
     class Agent {
@@ -22,9 +24,11 @@ classDiagram
     }
 
     Agent --|> Environment
-```
+``` -->
 
-<img src="src/timestep/services/web/src/web/flows/IntelligentAgent-Learning.png" />
+<img src="timestep_ai.png" />
+
+<!-- <img src="src/timestep/services/backend/src/web/flows/IntelligentAgent-Learning.png" /> -->
 
 ## TODO:
 

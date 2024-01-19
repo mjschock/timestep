@@ -1,41 +1,30 @@
-# Timestep AI (frontend)
+This is a [LlamaIndex](https://www.llamaindex.ai/) project using [Next.js](https://nextjs.org/) bootstrapped with [`create-llama`](https://github.com/run-llama/LlamaIndexTS/tree/main/packages/create-llama).
 
-A Quasar Project
+## Getting Started
 
-## Install the dependencies
-```bash
-yarn
-# or
+First, install the dependencies:
+
+```
 npm install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
+Second, run the development server:
+
+```
+npm run dev
 ```
 
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Lint the files
-```bash
-yarn lint
-# or
-npm run lint
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-### Format the files
-```bash
-yarn format
-# or
-npm run format
-```
+## Learn More
 
+To learn more about LlamaIndex, take a look at the following resources:
 
+- [LlamaIndex Documentation](https://docs.llamaindex.ai) - learn about LlamaIndex (Python features).
+- [LlamaIndexTS Documentation](https://ts.llamaindex.ai) - learn about LlamaIndex (Typescript features).
 
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+You can check out [the LlamaIndexTS GitHub repository](https://github.com/run-llama/LlamaIndexTS) - your feedback and contributions are welcome!

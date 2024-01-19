@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Web: Remote Attach",
+            "name": "Backend: Remote Attach",
             "type": "python",
             "request": "attach",
             "connect": {
@@ -14,11 +14,11 @@
             },
             "pathMappings": [
                 {
-                    "localRoot": "${workspaceFolder}/src/timestep/services/web",
+                    "localRoot": "${workspaceFolder}/src/timestep/services/backend",
                     "remoteRoot": "/home/ubuntu/app"
                 }
             ],
-            "justMyCode": true
+            "justMyCode": false,
         }
     ]
 }

@@ -41,4 +41,5 @@ class MinioConstruct(Construct):
                 ),
             ],
             scope=self,
+            version="13.1.0",
         )
