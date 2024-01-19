@@ -2,6 +2,7 @@ import base64
 import logging
 import os
 from typing import Any, Dict, List
+import httpx
 
 import kubernetes
 import minio
@@ -487,9 +488,10 @@ async def sky_down_task(name: str, memo: dict[str, Any]):
 @flow(
     log_prints=True,
 )
-async def serve_agent_flow(account_id: str, name: str, operation: str = "create"):
+async def serve_agent_flow(account_id: str, name: str, operation: str = "create", ap_check=False):
     logger: logging.Logger = get_run_logger()
     logger.info(f"account_id: {account_id}")
+    logger.info(f"ap_check: {ap_check}")
     logger.info(f"name: {name}")
     logger.info(f"operation: {operation}")
     # agent: Dict[str, Any] = {
@@ -514,6 +516,28 @@ async def serve_agent_flow(account_id: str, name: str, operation: str = "create"
             agent_cluster_is_already_deployed = True
 
             break
+
+    if ap_check:
+        head_ip = cluster_status["handle"].head_ip
+        async with ShellOperation(
+            commands=[
+                # f'URL=http://{head_ip}:8000 bash -c "$(curl -fsSL https://agentprotocol.ai/test.sh)"',
+                # f"URL=http://{head_ip}:8000 bash -c test.sh",
+                # f"URL=http://{head_ip}:8000 ls -al",
+                # "ls -al /bin",
+                # f"URL=http://{head_ip}:8000 bash test.sh",
+                "curl -fsSL https://agentprotocol.ai/test.sh > test.sh",
+                "dos2unix test.sh",
+                f"URL=http://{head_ip}:8000 bash test.sh",
+            ],
+            shell="bash",
+            # working_dir=f"{os.getcwd()}/app/workflows",
+            # working_dir=f"{os.getcwd()}/tests",
+            working_dir="/tmp",
+        ) as sky_op:
+            sky_op_process = await sky_op.trigger()
+            await sky_op_process.wait_for_completion()
+            return await sky_op_process.fetch_result()
 
     if operation == "create":
         if agent_cluster_is_already_deployed:
@@ -555,7 +579,24 @@ async def serve_agent_flow(account_id: str, name: str, operation: str = "create"
     # #         agent["id"] = cluster_status["cluster_hash"] # TODO: use db to store agent id instead of cluster hash
     # #         agent["cluster_status"] = cluster_status
             logger.info(f"cluster_status: {cluster_status}")
-            assert cluster_status["status"] == sky.ClusterStatus.UP, f"{cluster_status['status']} != {sky.ClusterStatus.UP}"
+
+            if operation in ("create", "update"):
+            #     logger.info(f"Waiting for agent cluster {name} to be ready")
+
+                assert cluster_status["status"] == sky.ClusterStatus.UP, f"{cluster_status['status']} != {sky.ClusterStatus.UP}"
+
+            #     head_ip = cluster_status["handle"].head_ip
+
+            #     async with httpx.AsyncClient() as client:
+            #         logger.info(f"GET http://{head_ip}:8000/livez")
+            #         resp = await client.get(f"http://{head_ip}:8000/livez")
+            #         assert resp.json() == "ok", f"{resp.json()} != ok"
+
+            #     async with httpx.AsyncClient() as client:
+            #         logger.info(f"GET http://{head_ip}:8000/readyz")
+            #         resp = await client.get(f"http://{head_ip}:8000/readyz")
+            #         assert resp.json() == "ok", f"{resp.json()} != ok"
+
             break
 
     # return agent
