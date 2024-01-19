@@ -1,8 +1,8 @@
 FROM registry.gitlab.com/timestep-ai/timestep:latest
 
-# ARG QUASAR_CLI_VERSION
-# ENV QUASAR_CLI_VERSION=${QUASAR_CLI_VERSION:-2.2.3}
-# RUN npm install -g @quasar/cli@${QUASAR_CLI_VERSION}
+ARG QUASAR_CLI_VERSION
+ENV QUASAR_CLI_VERSION=${QUASAR_CLI_VERSION:-2.2.3}
+RUN npm install -g @quasar/cli@${QUASAR_CLI_VERSION}
 
 RUN mkdir -p /home/ubuntu/app/node_modules && chown -R ubuntu:ubuntu /home/ubuntu/app
 WORKDIR /home/ubuntu/app
@@ -14,10 +14,6 @@ RUN npm install
 COPY --chown=ubuntu:ubuntu . .
 RUN npm run build
 
-# EXPOSE 9000
+EXPOSE 9000
 
-# CMD ["quasar", "serve", "dist/spa", "--hostname", "0.0.0.0", "-p", "9000"]
-
-EXPOSE 3000
-
-CMD ["npm", "run", "dev"]
+CMD ["quasar", "serve", "dist/spa", "--hostname", "0.0.0.0", "-p", "9000"]

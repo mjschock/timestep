@@ -43,7 +43,7 @@ spec:
           imagePullPolicy: Always
           name: frontend
           ports:
-            - containerPort: 3000
+            - containerPort: 9000
               # hostPort: 9000
               # protocol: TCP
           # resources: {}

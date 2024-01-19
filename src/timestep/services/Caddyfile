@@ -153,7 +153,6 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 	# }
 
 	handle {
-		# reverse_proxy frontend:9000
-		reverse_proxy frontend:3000
+		reverse_proxy frontend:9000
 	}
 }
