@@ -2,4 +2,4 @@ ingress:
   hosts:
     - host: timestep.ai
 
-replicaCount: 3
+replicaCount: 1

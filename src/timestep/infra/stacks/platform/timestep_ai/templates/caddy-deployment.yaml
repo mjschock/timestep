@@ -32,15 +32,15 @@ spec:
         #     - /home/ubuntu/src/timestep/services/caddy/Caddyfile
         #     - --adapter
         #     - caddyfile
-        - command:
-            - /home/ubuntu/docker-entrypoint.sh
-            - caddy
-            - run
-            - --config
-            - src/Caddyfile
-            - --adapter
-            - caddyfile
-          env:
+        # - command:
+        #     - /home/ubuntu/docker-entrypoint.sh
+        #     - caddy
+        #     - run
+        #     - --config
+        #     - Caddyfile
+        #     - --adapter
+        #     - caddyfile
+        - env:
           {{- with (first .Values.ingress.hosts) }}
             - name: PRIMARY_DOMAIN_NAME
               value: {{ .host }}

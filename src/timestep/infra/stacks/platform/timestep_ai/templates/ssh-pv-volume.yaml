@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ssh-pv-volume
+  labels:
+    type: local
+  annotations:
+    pv.beta.kubernetes.io/gid: "1000"
+    pv.beta.kubernetes.io/uid: "1000"
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/ubuntu/.ssh"

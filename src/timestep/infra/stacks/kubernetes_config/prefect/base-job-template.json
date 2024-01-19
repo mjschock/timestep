@@ -28,8 +28,37 @@
                 "env": "{{ env }}",
                 "image": "{{ image }}",
                 "imagePullPolicy": "{{ image_pull_policy }}",
-                "args": "{{ command }}"
+                "args": "{{ command }}",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/home/ubuntu/.sky",
+                    "name": "sky-pv-storage"
+                  },
+                  {
+                    "mountPath": "/home/ubuntu/.ssh",
+                    "name": "ssh-pv-storage"
+                  }
+                ],
+                "securityContext": {
+                  "runAsUser": 1000,
+                  "runAsGroup": 1000,
+                  "fsGroup": 1000
+                }
               }
+            ],
+            "volumes": [
+                {
+                    "name": "sky-pv-storage",
+                    "persistentVolumeClaim": {
+                        "claimName": "sky-pv-claim"
+                    }
+                },
+                {
+                    "name": "ssh-pv-storage",
+                    "persistentVolumeClaim": {
+                        "claimName": "ssh-pv-claim"
+                    }
+                }
             ]
           }
         }

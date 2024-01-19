@@ -25,4 +25,5 @@ class ArgoCDConstruct(Construct):
             repository="https://charts.bitnami.com/bitnami",
             provider=helm_provider,
             scope=self,
+            version="5.4.3",
         )

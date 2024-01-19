@@ -1,0 +1,40 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+[tool]
+
+[tool.poetry]
+authors = ["Michael Schock <m@mjschock.com>"]
+description = ""
+name = "app"
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+agent-protocol = "^1.0.2"
+agent-protocol-client = "^1.1.0"
+asyncpg = ">=0.28.0,<0.29.0"
+fastapi = ">=0.100.0,<0.101.0"
+kedro = "^0.19.1"
+llama-index = {version = "^0.9.19"}
+minio = "^7.2.3"
+pgvector = "^0.2.4"
+prefect = "^2.14.13"
+prefect-aws = "^0.4.7"
+prefect-kubernetes = "^0.3.2"
+prefect-shell = "^0.2.2"
+psycopg2-binary = "^2.9.9"
+pypdf = "^3.17.0"
+python = "^3.11,<3.12"
+python-dotenv = "^1.0.0"
+skypilot-nightly = {extras = ["kubernetes"], version = "^1.0.0.dev20240111"}
+sqlalchemy = {extras = ["extras"], version = "^2.0.25"}
+
+[tool.poetry.dependencies.uvicorn]
+extras = ["standard"]
+version = "^0.23.2"
+
+[tool.poetry.group.dev.dependencies]
+debugpy = "^1.8.0"
+toml-sort = "^0.23.1"

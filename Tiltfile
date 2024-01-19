@@ -65,6 +65,7 @@ local_resource(
         'cdktf.json',
         'pyproject.toml',
         'poetry.lock',
+        'secrets',
         'src/timestep/__main__.py',
         'src/timestep/config.py',
         'src/timestep/infra/stacks/k3s_cluster',
@@ -77,6 +78,7 @@ local_resource(
     ignore=[
         '__pycache__',
         '*/**/__pycache__',
+        'secrets/kubeconfig',
     ],
     labels=['deploy'],
     resource_deps=['poetry install'],
@@ -99,17 +101,11 @@ allow_k8s_contexts(
     os.getenv('KUBECONTEXT'), # TODO: hardcode this to timestep.local instead?
 )
 
-if k8s_context() != 'timestep.local': # TODO: remove this?
-    print('k8s context is not timestep.local, skipping k8s resources')
-    exit()
+# if k8s_context() != 'timestep.local': # TODO: remove this?
+#     print('k8s context is not timestep.local, skipping k8s resources')
+#     exit()
 
-local_resource(
-    'port-forward argo-cd-server 8080:80',
-    auto_init=False,
-    labels=['ops'],
-    links=['https://localhost:8080'],
-    serve_cmd='src/timestep/infra/stacks/kubernetes_config/argo_cd/port_forward.sh',
-)
+include("./src/timestep/infra/stacks/kubernetes_config/argo_cd/Tiltfile")
 
 if os.getenv('KUBE_PROMETHEUS_STACK_IS_ENABLED', False) == 'true':
     local_resource(
@@ -148,16 +144,8 @@ local_resource(
     'port-forward minio 9001:9001',
     auto_init=False,
     labels=['ops'],
-    links=['http://localhost:9001'],
+    links=['http://127.0.0.1:9001', 'http://localhost:9001'],
     serve_cmd='src/timestep/infra/stacks/kubernetes_config/minio/scripts/port_forward.sh',
-)
-
-local_resource(
-    'port-forward ollama 11434:80',
-    auto_init=False,
-    labels=['ops'],
-    links=['http://localhost:11434', 'http://localhost:11434/api/tags'],
-    serve_cmd='kubectl port-forward --namespace default svc/ollama 11434:80',
 )
 
 local_resource(
@@ -175,28 +163,55 @@ local_resource(
     serve_cmd='kubectl port-forward --namespace default svc/prefect-server 4200:4200',
 )
 
-if os.getenv('KUBE_RAY_IS_ENABLED', False) == 'true':
-    local_resource(
-        'port-forward ray-cluster-kuberay-head-svc 8265:8265',
-        auto_init=False,
-        labels=['ops'],
-        links=['http://localhost:8265'],
-        serve_cmd='kubectl port-forward --address 0.0.0.0 svc/ray-cluster-kuberay-head-svc 8265:8265',
-    )
-
 watch_file('src/timestep/infra/stacks/platform/timestep_ai')
 
 if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/caddy',
-        context='src/timestep/services/caddy',
+        context='src/timestep/services',
         live_update=[
-            sync('src/timestep/services/caddy/src', '/home/ubuntu/app/src'),
+            sync('src/timestep/services/Caddyfile', '/home/ubuntu/app/Caddyfile'),
             run(
-                'caddy reload --config /home/ubuntu/app/src/Caddyfile --adapter caddyfile',
-                trigger=['src/timestep/services/caddy/src/Caddyfile']
+                'caddy reload --config /home/ubuntu/app/Caddyfile --adapter caddyfile',
+                trigger=['src/timestep/services/Caddyfile']
             )
         ],
+        only=['Caddyfile'],
+    )
+
+    docker_build(
+        'registry.gitlab.com/timestep-ai/timestep/backend',
+        context='src/timestep/services/backend',
+        entrypoint=[
+            "/home/ubuntu/app/docker-entrypoint.sh",
+            "poetry",
+            "run",
+            "python",
+            "-m",
+            "debugpy",
+            "--listen",
+            "0.0.0.0:5678",
+            "main.py",
+            "--reload",
+        ],
+        # entrypoint=[
+        #     "/home/ubuntu/app/docker-entrypoint.sh",
+        #     "poetry",
+        #     "run",
+        #     "python",
+        #     "-Xfrozen_modules=off",
+        #     "-m",
+        #     "debugpy",
+        #     "--listen",
+        #     "0.0.0.0:5678",
+        #     "main.py",
+        #     "--reload"
+        # ],
+        ignore=['.venv', '__pycache__'],
+        live_update=[
+            sync('src/timestep/services/backend', '/home/ubuntu/app'),
+        ],
+        match_in_env_vars=True # https://docs.tilt.dev/custom_resource#env-variable-injection
     )
 
     docker_build(
@@ -204,46 +219,24 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         context='src/timestep/services/frontend',
         entrypoint=[
             "/home/ubuntu/docker-entrypoint.sh",
-            "quasar",
+            "npm",
+            "run",
             "dev",
-            "-m",
-            "spa"
         ],
         # entrypoint=["/home/ubuntu/docker-entrypoint.sh", "npm", "run", "dev"],
         # entrypoint="npm run dev",
         # ignore=['dist', 'node_modules', 'src-capacitor', 'src-electron'],
+        ignore=['node_modules'],
         live_update=[
-            fall_back_on('src/timestep/services/frontend/quasar.config.js'),
+        #     # fall_back_on('src/timestep/services/frontend/quasar.config.js'),
             sync('src/timestep/services/frontend', '/home/ubuntu/app'),
-            run(
-                'npm install',
-                trigger=['src/timestep/services/frontend/package.json', 'src/timestep/services/frontend/package-lock.json']
-            )
+        #     run(
+        #         'npm install',
+        #         trigger=['src/timestep/services/frontend/package.json', 'src/timestep/services/frontend/package-lock.json']
+        #     )
         ],
         # only=['.'],
         # extra_tag=str(local(command='echo $VERSION')).strip(),
-    )
-
-    docker_build(
-        'registry.gitlab.com/timestep-ai/timestep/web',
-        context='src/timestep/services/web',
-        entrypoint=[
-            "/home/ubuntu/app/docker-entrypoint.sh",
-            "poetry",
-            "run",
-            "python",
-            "-Xfrozen_modules=off",
-            "-m",
-            "debugpy",
-            "--listen",
-            "0.0.0.0:5678",
-            "src/web/server.py",
-            "--reload"
-        ],
-        live_update=[
-            sync('src/timestep/services/web/src', '/home/ubuntu/app/src'),
-        ],
-        match_in_env_vars=True # https://docs.tilt.dev/custom_resource#env-variable-injection
     )
 
     if os.getenv('LOCAL_TLS_CERT_IS_ENABLED', False) == 'true':
@@ -252,6 +245,7 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         k8s_yaml(
             local(
                 'helm template --values src/timestep/infra/stacks/platform/timestep_ai/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.tls.yaml src/timestep/infra/stacks/platform/timestep_ai'
+                # 'helm template --values src/timestep/infra/stacks/platform/timestep_ai/values.timestep.local' + '.tls.yaml src/timestep/infra/stacks/platform/timestep_ai'
             )
         )
 
@@ -273,14 +267,17 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     )
 
     k8s_resource(
-        'frontend',
-        links=['https://' + os.getenv('PRIMARY_DOMAIN_NAME')],
-    )
-
-    k8s_resource(
-        'web',
+        'backend',
         links=['https://' + os.getenv('PRIMARY_DOMAIN_NAME') + '/docs', 'https://' + os.getenv('PRIMARY_DOMAIN_NAME') + '/redoc'],
+        # objects=[
+        #     'sky-pvc:persistentvolumeclaim',
+        # ],
         port_forwards=[
             '5678:5678'
         ],
+    )
+
+    k8s_resource(
+        'frontend',
+        links=['https://' + os.getenv('PRIMARY_DOMAIN_NAME')],
     )

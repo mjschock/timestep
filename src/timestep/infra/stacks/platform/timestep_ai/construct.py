@@ -1,3 +1,8 @@
+import os
+from cdktf import AssetType, Fn, TerraformAsset
+
+import git
+
 from cdktf_cdktf_provider_helm.provider import HelmProvider
 from cdktf_cdktf_provider_kubernetes.cluster_role_binding_v1 import (
     ClusterRoleBindingV1,
@@ -178,44 +183,97 @@ class TimestepAIConstruct(Construct):
         postgres_password = config.postgresql_password.get_secret_value()
         postgres_username = "postgres"
 
-        web_config_map = ConfigMapV1(
-            id_="web_config_map",
+        backend_config_map = ConfigMapV1(
+            id_="backend_config_map",
             data={
                 "KUBECONTEXT": config.kubecontext,
+                "LITESTREAM_ACCESS_KEY_ID": config.minio_root_user,
                 "MINIO_ENDPOINT": "minio.default.svc.cluster.local:9000",
                 "MINIO_ROOT_USER": config.minio_root_user,
+                "POSTGRES_DATABASE": postgres_database,
+                "POSTGRES_HOSTNAME": postgres_hostname,
+                "POSTGRES_USERNAME": postgres_username,
                 "PREFECT_API_URL": "http://prefect-server.default.svc.cluster.local:4200/api",
                 "PRIMARY_DOMAIN_NAME": config.primary_domain_name,
+                # "REPLICA_URL": "s3://minio.default.svc.cluster.local:9000/default/db",
+                # "REPLICA_URL": "http://minio.default.svc.cluster.local:9000",
                 "VERSION": config.version,
             },
             metadata=ConfigMapV1Metadata(
-                name="web-config-map",
+                name="backend-config-map",
                 namespace="default",
             ),
             scope=self,
         )
 
-        web_secret = SecretV1(
-            id_="web_secret",
+        backend_secret = SecretV1(
+            id_="backend_secret",
             data={
+                "LITESTREAM_SECRET_ACCESS_KEY": config.minio_root_password.get_secret_value(),  # noqa: E501
                 "MINIO_ROOT_PASSWORD": config.minio_root_password.get_secret_value(),
-                # "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
+                "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
                 "POSTGRES_CONNECTION_STRING": f"postgresql+asyncpg://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}",
                 "POSTGRES_PASSWORD": config.postgresql_password.get_secret_value(),
             },
             metadata=SecretV1Metadata(
-                name="web-secret",
+                name="backend-secret",
+                namespace="default",
+            ),
+            scope=self,
+        )
+
+        frontend_config_map = ConfigMapV1(
+            id_="frontend_config_map",
+            data={
+                "NEXT_PUBLIC_MODEL": "gpt-4-vision-preview",
+            },
+            metadata=ConfigMapV1Metadata(
+                name="frontend-config-map",
+                namespace="default",
+            ),
+            scope=self,
+        )
+
+        frontend_secret = SecretV1(
+            id_="frontend_secret",
+            data={
+                "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
+            },
+            metadata=SecretV1Metadata(
+                name="frontend-secret",
+                namespace="default",
+            ),
+            scope=self,
+        )
+
+        litestream_yaml_file_asset = TerraformAsset(
+            id="litestream_yaml_file_asset",
+            path=os.path.join(os.path.dirname(__file__), "litestream.yml"),
+            scope=self,
+            type=AssetType.FILE,
+        )
+
+        litestream_config_map = ConfigMapV1(
+            id_="litestream_config_map",
+            data={
+                "litestream.yml": Fn.file(litestream_yaml_file_asset.path),
+            },
+            metadata=ConfigMapV1Metadata(
+                name="litestream-config-map",
                 namespace="default",
             ),
             scope=self,
         )
 
         timestep_ai_manifest_deps = [
+            backend_config_map,
+            backend_secret,
             default_sa_cluster_role_binding,
             default_sa_role_binding,
+            frontend_config_map,
+            frontend_secret,
+            litestream_config_map,
             private_repo_secret,
-            web_config_map,
-            web_secret,
         ]
 
         if config.local_tls_cert_is_enabled:
@@ -226,7 +284,7 @@ class TimestepAIConstruct(Construct):
                     "tls.key": config.local_tls_key.get_secret_value(),
                 },
                 metadata=SecretV1Metadata(
-                    name="timestep-local-tls",
+                    name="ssl-timestep.local",
                     namespace="default",
                 ),
                 scope=self,
@@ -260,8 +318,8 @@ class TimestepAIConstruct(Construct):
                                 else f"values.{config.primary_domain_name}.yaml",
                             ],
                         },
-                        "path": "src/timestep/infra/stacks/platform/timestep_ai",
-                        "repoURL": "https://github.com/mjschock/timestep.git",  # TODO: use env var  # noqa: E501
+                        "path": os.path.relpath(os.path.dirname(__file__), os.getcwd()),
+                        "repoURL": git.Repo().remote('origin').url, # TODO: use env var for remote
                         "targetRevision": "HEAD",
                     },
                     "syncPolicy": {

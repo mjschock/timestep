@@ -5,6 +5,6 @@ ingress:
     - hosts:
       - timestep.local
       - www.timestep.local
-      secretName: timestep-local-tls
+      secretName: ssl-timestep.local
 
 replicaCount: 1

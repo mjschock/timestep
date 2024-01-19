@@ -1,9 +1,0 @@
-accelerate
-agent-protocol
-# git+https://github.com/EleutherAI/lm-evaluation-harness.git@main
-lm-eval[openai]
-prefect
-prefect-shell
-ray[serve]
-transformers[agents,deepspeed,torch]
-trl
