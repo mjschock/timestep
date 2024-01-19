@@ -244,10 +244,9 @@ async def deploy_agent(
         deployment,
         build=False,
         image=DeploymentImage(
-            # name="registry.gitlab.com/timestep-ai/timestep/web",
             name="registry.gitlab.com/timestep-ai/timestep/backend",
             # tag="latest",
-            tag="tilt-10e7c7af83cae422", # TODO: Use Tile to get appropriate tag
+            tag="tilt-10e7c7af83cae422", # TODO: Use Tilt to get appropriate tag
         ),
         push=False,
         work_pool_name="default-worker-pool",
