@@ -11,8 +11,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   dos2unix \
   && rm -rf /var/lib/apt/lists/*
 
-# COPY litestream.yml /etc/litestream.yml
-
 RUN mkdir -p /home/ubuntu/.sky && chown ubuntu:ubuntu /home/ubuntu/.sky
 RUN mkdir -p /home/ubuntu/.ssh && chown ubuntu:ubuntu /home/ubuntu/.ssh
 
@@ -42,28 +40,7 @@ RUN poetry install --no-root
 COPY --chown=ubuntu:ubuntu . ./
 RUN poetry install
 
-# COPY litestream.yml /etc/litestream.yml
-# RUN mkdir -p /home/ubuntu/.sky && chown ubuntu:ubuntu /home/ubuntu/.sky
-# RUN mkdir -p /home/ubuntu/.ssh && chown ubuntu:ubuntu /home/ubuntu/.ssh
-
-# EXPOSE 5000
 EXPOSE 8000
 
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
-# RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-# USER appuser
-
 ENTRYPOINT ["/home/ubuntu/app/docker-entrypoint.sh"]
-# CMD ["poetry", "run", "uvicorn", "src.web.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "5000"]
-# CMD ["poetry", "run", "python", "-m", "src.web.server"]
-# CMD ["poetry", "run", "python", "src/web/server.py"]
-
-# During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-# CMD ["gunicorn", "--bind", "0.0.0.0:5000", "-k", "uvicorn.workers.UvicornWorker", "src.timestep/services/web/src/web/main:app"]
-
 CMD ["poetry", "run", "python", "main.py"]
-
-# ENV ENVIRONMENT=prod
-
-# CMD ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]
