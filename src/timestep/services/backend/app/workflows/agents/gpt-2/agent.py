@@ -2,7 +2,7 @@ import logging
 import os
 from typing import List
 
-from agent_protocol import StepHandler, TaskDB, TaskHandler
+from agent_protocol import Artifact, Step, StepHandler, TaskDB, TaskHandler
 from agent_protocol import Task as AgentProtocolTask
 from agent_protocol.db import InMemoryTaskDB
 from llama_index.agent import (
@@ -13,8 +13,11 @@ from llama_index.agent.types import (
     Task as AgentRunnerTask,
 )
 from llama_index.callbacks import CallbackManager
+from llama_index.chat_engine.types import (
+    AGENT_CHAT_RESPONSE_TYPE,
+)
 from llama_index.multi_modal_llms import MultiModalLLM, OpenAIMultiModal
-from tools import add_tool, divide_tool, multiply_tool
+from tools import add_tool, divide_tool, multiply_tool, write_to_file_tool
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -22,7 +25,6 @@ from transformers import (
 )
 from utils import StreamingCallbackHandler
 
-# logger = logging.getLogger("uvicorn")
 logger = logging.getLogger(__name__)
 
 
@@ -33,70 +35,14 @@ class Agent:
     def __init__(
             self,
             db: TaskDB,
-            # step_handler: StepHandler,
-            # task_handler: TaskHandler,
             workspace: str
     ) -> None:
         self.db = db
         self.models = {}
-        # self.step_handler = step_handler
-        # self.task_handler = task_handler
         self.tokenizers = {}
         self.workspace = workspace
 
-        # checkpoint = "gpt2"
-        # tokenizer = AutoTokenizer.from_pretrained(checkpoint)
-        # model = AutoModelForCausalLM.from_pretrained(
-        #     checkpoint,
-        #     device_map="auto",
-        #     pad_token_id=tokenizer.eos_token_id,
-        # )
-
-        # self.model = model
-        # self.tokenizer = tokenizer
-
-        # self.agent = LocalAgent(
-        #     self.model,
-        #     self.tokenizer,
-        #     additional_tools=None,
-        #     chat_prompt_template=None,
-        #     run_prompt_template=None,
-        # )
-
-    def chat(self, conversation):
         self.reset()
-
-        try:
-            # https://huggingface.co/docs/transformers/main/en/main_classes/tokenizer#transformers.PreTrainedTokenizerFast.apply_chat_template
-            token_ids: List[int] = self.tokenizers["gpt2"].apply_chat_template(
-                conversation,
-                add_generation_prompt=True,
-                return_tensors="pt",
-                tokenize=True,
-            )
-
-            # return self.tokenizers["gpt2"].decode(token_ids[0])
-
-            # https://huggingface.co/docs/transformers/main_classes/model.html#transformers.PreTrainedModel.generate
-            outputs = self.models["gpt2"].generate(
-                token_ids,
-                do_sample=True,
-                top_k=50,
-                top_p=0.95,
-                temperature=0.9,
-                max_length=200,
-                min_length=50,
-                num_return_sequences=1,
-            )
-
-            return self.tokenizers["gpt2"].decode(outputs[0])
-            # return self.tokenizers["gtp2"].batch_decode(outputs, skip_special_tokens=True)[0]
-
-        except Exception as e:
-            return str(e)
-
-        # return self.agent.chat(messages)
-        return "Hello worlds!"
 
     async def create_task(self, input: str, additional_input: str) -> AgentProtocolTask:
         """
@@ -107,11 +53,12 @@ class Agent:
         agent_runner_task: AgentRunnerTask = self.agent_runner.create_task(
             input,
             # extra_state={"image_docs": [image_document]},
-            extra_state={},
+            # extra_state={},
+            extra_state={"image_docs": []}
         )
 
         agent_runner_task_id = agent_runner_task.task_id
-        additional_input["agent_runner_task_id"] = agent_runner_task_id
+        # additional_input["agent_runner_task_id"] = agent_runner_task_id
         task: AgentProtocolTask = await self.db.create_task(input, additional_input)
 
         async def task_handler(task: AgentProtocolTask) -> None:
@@ -126,7 +73,7 @@ class Agent:
                 input=task.input,
                 is_last=False,
                 additional_properties={
-                    "agent_runner_task_id": agent_runner_task.task_id,
+                    "agent_runner_task_id": agent_runner_task_id,
                     "agent_runner_task_step_id": agent_runner_task_step_id
                 },
                 # artifacts=[],
@@ -137,11 +84,85 @@ class Agent:
 
         return task
 
+    async def execute(self, step: Step) -> Step:
+        # Use tools, websearch, etc.
+        agent_runner_task_id = step.additional_properties["agent_runner_task_id"]
+        agent_runner_task_step_id = step.additional_properties["agent_runner_task_step_id"]
+        agent_runner_task: AgentRunnerTask = self.agent_runner.get_task(task_id=agent_runner_task_id)
+
+        def execute_step(agent_runner: AgentRunner, agent_runner_task: AgentRunnerTask):
+            step_output = agent_runner.run_step(agent_runner_task.task_id)
+
+            if step_output.is_last:
+                response = agent_runner.finalize_response(agent_runner_task.task_id)
+                print(f"> Agent finished: {str(response)}")
+                return response
+
+            else:
+                return None
+
+        def execute_steps(agent_runner: AgentRunner, agent_runner_task: AgentRunnerTask):
+            response = execute_step(agent_runner, agent_runner_task)
+
+            while response is None:
+                response = execute_step(agent_runner, agent_runner_task)
+
+            return response
+
+        response: AGENT_CHAT_RESPONSE_TYPE | None = execute_step(self.agent_runner, agent_runner_task)
+
+        step.output = str(response)
+
+        return step
+
+    def get_artifact_folder(self, task_id: str, artifact: Artifact) -> str:
+        """
+        Get the artifact folder for the specified task and artifact.
+        """
+        # workspace_path = Agent.get_workspace(task_id)
+        workspace_path = self.get_workspace(task_id)
+        relative_path = artifact.relative_path or ""
+        # return os.path.join(workspace_path, relative_path)
+        # return f"{workspace_path}/{relative_path}"
+        return f"{workspace_path}" if relative_path == "" else f"{workspace_path}/{relative_path}"
+
+    def get_artifact_path(self, task_id: str, artifact: Artifact) -> str:
+        """
+        Get the artifact path for the specified task and artifact.
+        """
+        # return os.path.join(
+        #     # Agent.get_artifact_folder(task_id, artifact), artifact.file_name
+        #     self.get_artifact_folder(task_id, artifact), artifact.file_name
+        # )
+        return f"{self.get_artifact_folder(task_id, artifact)}/{artifact.file_name}"
+
     async def get_tasks(self) -> List[AgentProtocolTask]:
         """
         List all tasks that have been created for the agent.
         """
         return await self.db.list_tasks()
+
+    def get_workspace(self, task_id: str) -> str:
+        """
+        Get the workspace path for the specified task.
+        """
+        # return os.path.join(os.getcwd(), Agent.workspace, task_id)
+        # return os.path.join(os.getcwd(), self.workspace, task_id)
+        # bucket_name = "default"
+        # return f"s3://{bucket_name}/{self.workspace}/{task_id}"
+        return f"{self.workspace}/{task_id}"
+
+    # async def plan(self, step: Step) -> Step:
+    #     task = await Agent.db.get_task(step.task_id)
+    #     steps = generete_steps(task.input)
+
+    #     last_step = steps[-1]
+    #     for step in steps[:-1]:
+    #         await Agent.db.create_step(task_id=task.task_id, name=step, ...)
+
+    #     await Agent.db.create_step(task_id=task.task_id, name=last_step, is_last=True)
+    #     step.output = steps
+    #     return step
 
     def reset(self, seed: int = 42):
         """
@@ -160,16 +181,15 @@ class Agent:
         )
         self.models[checkpoint] = model
 
-        self.tools = [add_tool, divide_tool, multiply_tool]
+        self.tools = [add_tool, divide_tool, multiply_tool, write_to_file_tool]
 
         handler = StreamingCallbackHandler()
         callback_manager = CallbackManager([handler])
 
-        multi_modal_llm: MultiModalLLM = OpenAIMultiModal(
-            model="gpt-4-vision-preview",
-            max_new_tokens=1000
+        multi_modal_llm = MultiModalLLM(
+            model=model,
+            max_new_tokens=1000,
         )
-        # TODO: multi_modal_llm = MultiModalLLM()
 
         multi_modal_react_agent_worker: MultimodalReActAgentWorker = (
             MultimodalReActAgentWorker.from_tools(
@@ -187,40 +207,28 @@ class Agent:
 
         logger.info("Built agent.")
 
-    # @staticmethod
-    # def setup_agent(task_handler: TaskHandler, step_handler: StepHandler):
-    #     """
-    #     Set the agent's task and step handlers.
-    #     """
-    #     global _task_handler
-    #     _task_handler = task_handler
+    async def step(self, step: Step) -> Step:
+        """
+        Step the agent.
+        """
+        logger.info(f"Stepping agent for task {step.task_id}.")
+        print(f"Stepping agent for task {step.task_id}.")
 
-    #     global _step_handler
-    #     _step_handler = step_handler
+        # if step.name == "plan":
+        #     await self.plan(step)
 
-    #     return Agent
+        # elif step.name == "train":
+        #     await self.train(step)
 
-    # @staticmethod
-    # def get_workspace(task_id: str) -> str:
-    #     """
-    #     Get the workspace path for the specified task.
-    #     """
-    #     return os.path.join(os.getcwd(), Agent.workspace, task_id)
+        # else:
+        #     await self.execute(step)
 
-    # @staticmethod
-    # def get_artifact_folder(task_id: str, artifact: Artifact) -> str:
-    #     """
-    #     Get the artifact path for the specified task and artifact.
-    #     """
-    #     workspace_path = Agent.get_workspace(task_id)
-    #     relative_path = artifact.relative_path or ""
-    #     return os.path.join(workspace_path, relative_path)
+        step = await self.execute(step)
 
-    # @staticmethod
-    # def get_artifact_path(task_id: str, artifact: Artifact) -> str:
-    #     """
-    #     Get the artifact path for the specified task and artifact.
-    #     """
-    #     return os.path.join(
-    #         Agent.get_artifact_folder(task_id, artifact), artifact.file_name
-    #     )
+        return step
+
+    async def train(self, step: Step) -> Step:
+        """
+        Train the agent.
+        """
+        return step

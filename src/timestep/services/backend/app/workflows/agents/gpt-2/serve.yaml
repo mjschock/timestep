@@ -1,5 +1,4 @@
 resources:
-  # ports: 8080
   cpus: 2
   memory: 2
 
@@ -17,4 +16,4 @@ setup: |
   pip install --upgrade pip
   pip install -r requirements.txt
 
-workdir: agents/gpt-2
+workdir: .
