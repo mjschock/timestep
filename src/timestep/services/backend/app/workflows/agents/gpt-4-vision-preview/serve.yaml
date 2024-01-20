@@ -1,27 +1,19 @@
 resources:
-  # ports: 8080
   cpus: 2
   memory: 2
 
 # Typical use: make use of resources, such as running training.
 # Invoked under the workdir (i.e., can use its files).
 run: |
-  echo "run"
-  pwd
-  ls -al
   source .venv/bin/activate
   serve run serve:deployment --host 0.0.0.0
 
 # Typical use: pip install -r requirements.txt
 # Invoked under the workdir (i.e., can use its files).
 setup: |
-  echo "setup"
-  pwd
-  ls -al
   python -m venv .venv
   source .venv/bin/activate
   pip install --upgrade pip
   pip install -r requirements.txt
 
-# workdir: agents/gpt-4-vision-preview
 workdir: .

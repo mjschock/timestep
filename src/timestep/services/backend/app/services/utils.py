@@ -7,14 +7,13 @@ import kubernetes
 import sky
 import yaml
 from minio import Minio
-from prefect import deploy, flow, task
+from prefect import deploy
 from prefect.blocks.system import Secret
-from prefect.deployments.deployments import run_deployment
-from prefect.deployments.runner import DeploymentImage
 from prefect.runner.runner import RunnerDeployment
 from prefect.runner.storage import RemoteStorage
 from prefect_aws import AwsClientParameters, MinIOCredentials, S3Bucket
 from pydantic import SecretStr
+
 
 def load_kubeconfig(overwrite=True, memo: Dict[str, Any] = {}):
     kubeconfig_path = os.path.expanduser(sky.clouds.kubernetes.CREDENTIAL_PATH)
@@ -105,24 +104,17 @@ def load_kubeconfig(overwrite=True, memo: Dict[str, Any] = {}):
 
     return memo
 
-# @task
 async def load_cloud_credentials(memo: Dict[str, Any]):
-    # logger = get_run_logger()
-
     try:
         kubernetes.config.load_incluster_config()
         memo = load_kubeconfig(memo)
 
     except kubernetes.config.config_exception.ConfigException as e:
-        # logger.info(e)
         print(e)
 
     return memo
 
-# @task
 async def sky_check_task(memo: dict[str, Any]):
-    # logger = get_run_logger()
-
     sky.check.check()
 
     enabled_clouds: list[sky.clouds.Cloud] = sky.global_user_state.get_enabled_clouds()
@@ -130,38 +122,21 @@ async def sky_check_task(memo: dict[str, Any]):
         str
     ] = sky.global_user_state.get_enabled_storage_clouds()
 
-    # logger.info("enabled_clouds: %s", enabled_clouds)
-    # logger.info("enabled_storage_clouds: %s", enabled_storage_clouds)
-
     memo["enabled_clouds"] = enabled_clouds
     memo["enabled_storage_clouds"] = enabled_storage_clouds
 
     return memo
 
-# @task
 async def sky_status_task(memo: dict[str, Any]):
-    # logger: logging.Logger = get_run_logger()
-
-    # async with ShellOperation(
-    #     commands=[
-    #         f"sky status",
-    #     ],
-    #     # working_dir="workflows",
-    #     # working_dir=f"{cwd}/app/api/routers/workflows",
-    # ) as sky_op:
-    #     sky_op_process = await sky_op.trigger()
-    #     await sky_op_process.wait_for_completion()
-
     memo["cluster_statuses"]: list[dict[str, Any]] = sky.core.status(refresh=True)
 
     return memo
 
 async def sky_queue_task(name: str, memo: dict[str, Any]):
-    memo["cluster_queue"]: list[dict] = sky.core.queue(cluster_name=name)  # noqa: E501
+    memo["cluster_queue"]: list[dict] = sky.core.queue(cluster_name=name)
 
     return memo
 
-# @task
 async def create_minio_bucket(bucket_name: str, ignore_exists: bool = False) -> str:
     minio_endpoint = os.getenv("MINIO_ENDPOINT")
     minio_client = Minio(
@@ -182,8 +157,9 @@ async def create_minio_bucket(bucket_name: str, ignore_exists: bool = False) -> 
 
     return bucket_name
 
-# @task
 async def create_minio_storage_block(
+    account_id: str,
+    agent_name: str,
     bucket_folder: str,
     bucket_name: str,
 ):
@@ -201,12 +177,12 @@ async def create_minio_storage_block(
             minio_root_password=SecretStr(os.getenv("MINIO_ROOT_PASSWORD")),
         ),
     )
+    storage_block_name = f"{bucket_name}-{bucket_folder}"
 
-    await minio_storage_block.save("minio-storage", overwrite=True)
+    await minio_storage_block.save(storage_block_name, overwrite=True)
 
-    return await S3Bucket.load("minio-storage")
+    return await S3Bucket.load(storage_block_name)
 
-# @task
 async def upload_directory_to_minio(
     minio_storage_block: S3Bucket,
     local_path: str,
@@ -217,9 +193,6 @@ async def upload_directory_to_minio(
         to_path=to_path,
     )
 
-# @task(
-#     timeout_seconds=10,
-# )
 async def deploy_agent(
     uploaded_file_count: int,
     account_id: str,
@@ -248,23 +221,10 @@ async def deploy_agent(
     )
 
     deployment: RunnerDeployment = RunnerDeployment(
-        # flow_name="agent-flow",
         flow_name="serve-agent-flow",
-        # flow_name=f"{name}-agent-flow",
-        # entrypoint="workflows/agents.py:deploy_agent_flow",
-        # entrypoint="serve.py:serve_agent",
         entrypoint="flow.py:serve_agent_flow",
-        # entrypoint="register_prefect_flow.py:prefect_deploy",
-        # entrypoint="register_prefect_flow.py:my_flow",
         job_variables={
             "env": {
-                # "EXTRA_PIP_PACKAGES": f"""
-                #     fastapi=={fastapi.__version__}
-                #     prefect-aws=={prefect_aws.__version__}
-                #     prefect-shell=={prefect_shell.__version__}
-                #     s3fs=={s3fs.__version__}
-                #     skypilot-nightly[kubernetes]=={sky.__version__}
-                # """,
                 "EXTRA_PIP_PACKAGES": f"""
                     kedro=={kedro.__version__}
                 """,
@@ -277,18 +237,10 @@ async def deploy_agent(
             },
             "service_account_name": "prefect-worker-job-service-account",
         },
-        # name="agent-flow-deployment",
-        # name=f"{name}-agent-deployment",
-        # name=f"{name}-agent-flow-deployment",
         name="serve-agent-flow-deployment",
         parameters={
             "account_id": account_id,
-            # "model_ids": ["phi:latest"]
-            "name": agent_name,
-            # "work_pool_name": "default-worker-pool",
-            # "work_queue_name": "default",
-            # "pipeline_name": "__default__",
-            # "env": "base",
+            "agent_name": agent_name,
         },
         storage=storage,
         work_pool_name="default-worker-pool",
@@ -298,11 +250,6 @@ async def deploy_agent(
     deployment_ids: list = await deploy(
         deployment,
         build=False,
-        # image=DeploymentImage(
-        #     name="registry.gitlab.com/timestep-ai/timestep/backend",
-        #     # tag="latest",
-        #     tag="tilt-10e7c7af83cae422", # TODO: Use Tilt to get appropriate tag
-        # ),
         image="registry.gitlab.com/timestep-ai/timestep/backend:latest",
         push=False,
         work_pool_name="default-worker-pool",

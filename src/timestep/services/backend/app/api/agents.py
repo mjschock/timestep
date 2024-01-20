@@ -7,7 +7,6 @@ from agent_protocol.models import (
 )
 from fastapi import (
     APIRouter,
-    BackgroundTasks,
     Response,
     status,
 )
@@ -16,7 +15,7 @@ from pydantic import StrictStr
 from app.services import agents as agents_service
 
 account_id = "f215cf48-7458-4596-9aa5-2159fc6a3caf" # Temporary; same as S3_ROOT_FOLDER in NhostConstruct  # noqa: E501
-available_agent_names = ("gpt-2", "gpt-4-vision-preview", "spaceflights-pandas")
+available_agent_names = ("gpt-2", "gpt-4-vision-preview")
 
 agents_router = APIRouter()
 
@@ -25,17 +24,12 @@ agents_router = APIRouter()
     status_code=status.HTTP_202_ACCEPTED,
     tags=["agents"],
 )
-async def create_agent(agent_name: str, background_tasks: BackgroundTasks):
+async def create_agent(agent_name: str):
     if agent_name not in available_agent_names:
         return Response(
-            content=f"Please choose one of the following agents: {available_agent_names}",  # noqa: E501
+            content=f"Please an agent name from {available_agent_names}.",
             status_code=status.HTTP_400_BAD_REQUEST,
         )
-
-    # async def create_agent_background_task(name: str):
-        # await agents_service.create_agent(name)
-
-    # background_tasks.add_task(create_agent_background_task, name)
 
     agents = await agents_service.get_agents(account_id)
 
@@ -103,7 +97,7 @@ async def list_agents():
     tags=["agents"],
 )
 async def update_agent(agent_id: str):
-    agent: Dict[str, Any] = await agents_service.update_agent(account_id, agent_id)
+    await agents_service.update_agent(account_id, agent_id)
 
     return Response(
         status_code=status.HTTP_202_ACCEPTED,
@@ -154,7 +148,12 @@ async def list_agent_task_steps(
     """
     List all steps for the specified task.
     """
-    return await agents_service.list_agent_task_steps(agent_id, task_id, page_size, current_page)
+    return await agents_service.list_agent_task_steps(
+        agent_id,
+        task_id,
+        page_size,
+        current_page
+    )
 
 @agents_router.post(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}/steps",

@@ -19,8 +19,6 @@ from llama_index.chat_engine.types import (
 from llama_index.multi_modal_llms import MultiModalLLM, OpenAIMultiModal
 from tools import add_tool, divide_tool, multiply_tool, write_to_file_tool
 from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
     set_seed,
 )
 from utils import StreamingCallbackHandler
@@ -38,8 +36,8 @@ class Agent:
             workspace: str
     ) -> None:
         self.db = db
-        # self.models = {}
-        # self.tokenizers = {}
+        self.models = {}
+        self.tokenizers = {}
         self.workspace = workspace
 
         self.reset()
