@@ -1,10 +1,8 @@
-import Agent, {
-  type Task
-} from 'agent-protocol'
+export interface Todo {
+  id: number;
+  content: string;
+}
 
-export interface Env {
-  agents: Agent[];
-  metadata: {
-    [key: string]: any;
-  }
+export interface Meta {
+  totalCount: number;
 }

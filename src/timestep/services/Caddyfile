@@ -1,9 +1,9 @@
-(cors) {
-	@origin header Origin {args[0]}
-	header @origin Access-Control-Allow-Origin "{args[0]}"
-	header @origin Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
-	header @origin Access-Control-Allow-Headers "Origin,Accept,Content-Type,Authorization"
-}
+# (cors) {
+# 	@origin header Origin {args[0]}
+# 	header @origin Access-Control-Allow-Origin "{args[0]}"
+# 	header @origin Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
+# 	header @origin Access-Control-Allow-Headers "Origin,Accept,Content-Type,Authorization"
+# }
 
 http://{$PRIMARY_DOMAIN_NAME}:80 {
 	redir http://www.{$PRIMARY_DOMAIN_NAME}{uri}
@@ -11,7 +11,7 @@ http://{$PRIMARY_DOMAIN_NAME}:80 {
 
 http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 	# import cors {http.request.header.Origin}
-	import cors http://localhost:8000
+	# import cors http://localhost:8000
 
 	encode gzip
 
@@ -134,25 +134,29 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 
 	# add_header X-Content-Type-Options "nosniff";
 
-	# header {
-	# 	# # disable FLoC tracking
-	# 	# Permissions-Policy interest-cohort=()
+	header {
+		# 	# # disable FLoC tracking
+		# 	# Permissions-Policy interest-cohort=()
 
-	# 	# # enable HSTS
-	# 	# Strict-Transport-Security max-age=31536000;
+		# 	# # enable HSTS
+		# 	# Strict-Transport-Security max-age=31536000;
 
-	# 	# # disable clients from sniffing the media type
-	# 	# X-Content-Type-Options nosniff
+		# 	# # disable clients from sniffing the media type
+		# 	# X-Content-Type-Options nosniff
 
-	# 	# # clickjacking protection
-	# 	# X-Frame-Options DENY
+		# 	# # clickjacking protection
+		# 	# X-Frame-Options DENY
 
-	# 	X-Frame-Options "SAMEORIGIN"
-	# 	X-XSS-Protection "1; mode=block"
-	# 	X-Content-Type-Options "nosniff"
-	# }
+		X-Frame-Options "SAMEORIGIN"
+		X-XSS-Protection "1; mode=block"
+		X-Content-Type-Options "nosniff"
+	}
 
 	handle {
-		reverse_proxy frontend:9000
+		# reverse_proxy frontend:9000
+
+		root * /home/ubuntu/app/frontend/dist/spa
+		try_files {path} /index.html
+		file_server
 	}
 }

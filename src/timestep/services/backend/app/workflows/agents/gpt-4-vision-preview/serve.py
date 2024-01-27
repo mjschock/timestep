@@ -3,24 +3,48 @@ import tempfile
 from typing import Annotated, List, Optional
 from uuid import uuid4
 
-from agent import Agent
 from agent_protocol import (
+    Artifact,
+    Step,
     TaskRequestBody,
 )
-from agent_protocol.db import InMemoryTaskDB, NotFoundException, Step, Task, TaskDB
+from agent_protocol.db import Task
 from agent_protocol.models import (
-    Artifact,
     Pagination,
     Status,
     StepRequestBody,
     TaskListResponse,
     TaskStepsListResponse,
 )
+from agent_protocol.models import (
+    Step as APIStep,
+)
+from agent_protocol.models import (
+    Task as APITask,
+)
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
+from llama_index.agent import (
+    AgentRunner,
+    MultimodalReActAgentWorker,
+)
+from llama_index.agent.runner.base import (
+    TaskState as AgentTaskState,
+)
+from llama_index.agent.types import (
+    Task as AgentTask,
+)
+from llama_index.agent.types import (
+    TaskStep as AgentTaskStep,
+)
+from llama_index.agent.types import (
+    TaskStepOutput as AgentTaskStepOutput,
+)
+from llama_index.multi_modal_llms import MultiModalLLM, OpenAIMultiModal
 from minio import Minio
 from ray import serve
 from starlette.background import BackgroundTask
+from tools import add_tool, divide_tool, multiply_tool, write_to_file_tool
 
 app = FastAPI()
 
@@ -29,13 +53,32 @@ app = FastAPI()
 @serve.ingress(app)
 class AgentDeployment:
     def __init__(self) -> None:
-        db: TaskDB = InMemoryTaskDB() # TODO: use PostgreSQL database
-        workspace: str = os.getenv("AGENT_WORKSPACE", "workspace") # TODO: use MinIO bucket
+        tools = [
+            add_tool,
+            divide_tool,
+            multiply_tool,
+            write_to_file_tool
+        ]
 
-        self.agent = Agent(
-            db=db,
-            workspace=workspace,
+        multi_modal_llm: MultiModalLLM = OpenAIMultiModal(
+            model="gpt-4-vision-preview",
+            max_new_tokens=1000
         )
+
+        agent_worker = MultimodalReActAgentWorker.from_tools(
+            multi_modal_llm=multi_modal_llm,
+            tools=tools,
+            verbose=True,
+        )
+
+        self.agent = AgentRunner(
+            agent_worker=agent_worker,
+            # callback_manager=callback_manager,
+            # init_task_state_kwargs=init_task_state_kwargs,
+        )
+
+        self.agent_workspace: str = os.getenv("AGENT_WORKSPACE", "workspace")
+        # self.agent_workspace: str = os.getenv("MINIO_ENDPOINT")
 
     @app.get("/livez")
     async def is_live(self) -> str:
@@ -46,30 +89,88 @@ class AgentDeployment:
         return "ok"
 
     @app.post("/ap/v1/agent/tasks", response_model=Task, tags=["agent"])
-    async def create_agent_task(self, body: TaskRequestBody | None = None) -> Task:
+    async def create_agent_task(self, body: TaskRequestBody | None = None) -> APITask:
         """
         Creates a task for the agent.
         """
-        return await self.agent.create_task(
+        agent_task: AgentTask = self.agent.create_task(
             input=body.input if body else None,
-            additional_input=body.additional_input if body else None,
+            extra_state={
+                "additional_input": body.additional_input if body else None,
+                "artifacts": [],
+                "image_docs": []
+            }
+        )
+
+        extra_state = agent_task.extra_state
+        agent_task_additional_input = extra_state.get('additional_input')
+        agent_task_artifacts = extra_state.get("artifacts", None)
+        agent_task_image_docs = extra_state.get("image_docs", None)
+
+        assert agent_task.input == body.input, \
+            f"{agent_task.input}!= {body.input}"
+        assert agent_task_additional_input == body.additional_input, \
+            f"{agent_task_additional_input} != {body.additional_input}"
+        assert agent_task_artifacts == [], \
+            f"{agent_task_artifacts} != []"
+        assert agent_task_image_docs == [], \
+            f"{agent_task_image_docs} != []"
+
+        agent_task_steps: List[AgentTaskStep] = self.agent.get_upcoming_steps(
+            task_id=agent_task.task_id,
+        )
+
+        assert len(agent_task_steps) == 1, \
+            f"{len(agent_task_steps)} != 1"
+
+        agent_task_step = agent_task_steps[0]
+
+        assert agent_task_step.input == agent_task.input, \
+            f"{agent_task_step.input}!= {agent_task.input}"
+
+        step_state = agent_task_step.step_state
+
+        assert step_state.get("is_first", False) is True, \
+            f"{step_state.get('is_first', False)}!= True"
+
+        assert step_state.get("image_docs", None) == agent_task_image_docs, \
+            f"{step_state.get('image_docs', None)}!= {agent_task_image_docs}"
+
+        return APITask(
+            input=agent_task.input,
+            additional_input=agent_task_additional_input,
+            artifacts=agent_task_artifacts,
+            task_id=agent_task.task_id,
         )
 
     @app.get("/ap/v1/agent/tasks", response_model=TaskListResponse, tags=["agent"])
     async def list_agent_tasks(
         self,
+        current_page: int = 1,
         page_size: int = 10,
-        current_page: int = 1
     ) -> TaskListResponse:
         """
         List all tasks that have been created for the agent.
         """
-        tasks = await self.agent.get_tasks()
+        agent_task_states: List[AgentTaskState] = self.agent.list_tasks() # TODO: why does list_tasks return task states?  # noqa: E501
+        agent_tasks: List[AgentTask] = [
+            agent_task_state.task for agent_task_state in agent_task_states
+        ]
         start_index = (current_page - 1) * page_size
-        end_index = start_index + page_size
+        tasks: List[APITask] = []
+
+        for agent_task in agent_tasks:
+            tasks.append(
+                APITask(
+                    input=agent_task.input,
+                    additional_input=agent_task.extra_state["additional_input"],
+                    artifacts=agent_task.extra_state["artifacts"],
+                    task_id=agent_task.task_id,
+                )
+            )
 
         return TaskListResponse(
-            tasks=tasks[start_index:end_index],
+            tasks=tasks[start_index:start_index + page_size],
             pagination=Pagination(
                 total_items=len(tasks),
                 total_pages=len(tasks) // page_size + 1,
@@ -79,11 +180,18 @@ class AgentDeployment:
         )
 
     @app.get("/ap/v1/agent/tasks/{task_id}", response_model=Task, tags=["agent"])
-    async def get_agent_task(self, task_id: str) -> Task:
+    async def get_agent_task(self, task_id: str) -> APITask:
         """
         Get details about a specified agent task.
         """
-        return await self.agent.db.get_task(task_id)
+        agent_task: AgentTask = self.agent.get_task(task_id)
+
+        return APITask(
+            input=agent_task.input,
+            additional_input=agent_task.extra_state["additional_input"],
+            artifacts=agent_task.extra_state.get("artifacts", []),
+            task_id=agent_task.task_id,
+        )
 
     @app.get(
         "/ap/v1/agent/tasks/{task_id}/steps",
@@ -91,23 +199,64 @@ class AgentDeployment:
         tags=["agent"],
     )
     async def list_agent_task_steps(
-        self, task_id: str, page_size: int = 10, current_page: int = 1
-    ) -> List[str]:
+        self,
+        task_id: str,
+        current_page: int = 1,
+        page_size: int = 10,
+    ) -> TaskStepsListResponse:
         """
         List all steps for the specified task.
         """
-        task = await self.agent.db.get_task(task_id)
+        agent_task: AgentTask = self.agent.get_task(task_id)
+        completed_agent_task_step_outputs: List[AgentTaskStepOutput] = self.agent.get_completed_steps( # TODO: why does get_completed_steps return TaskStepOutputs instead of TaskSteps?  # noqa: E501
+            task_id=agent_task.task_id,
+        ) # TODO: AgentTaskStepOutput has an is_last field; what's the meaning of that? if is_last is True, must there be no upcoming steps?  # noqa: E501
+        upcoming_agent_task_steps: List[AgentTaskStep] = self.agent.get_upcoming_steps(
+            task_id=agent_task.task_id,
+        )
+        steps: List[APIStep] = []
         start_index = (current_page - 1) * page_size
-        end_index = start_index + page_size
+
+        for i, agent_task_step_output in enumerate(completed_agent_task_step_outputs):
+            agent_task_step: AgentTaskStep = agent_task_step_output.task_step
+            is_last: bool = agent_task_step_output.is_last
+
+            if is_last:
+                assert len(upcoming_agent_task_steps) == 0, \
+                    f"{len(upcoming_agent_task_steps)}!= 0"
+                assert i == len(completed_agent_task_step_outputs) - 1, \
+                    f"{i}!= {len(completed_agent_task_step_outputs) - 1}"
+
+            steps.append(
+                APIStep(
+                    artifacts=agent_task_step.step_state.get("artifacts", []),
+                    is_last=is_last,
+                    output=agent_task_step_output.output,
+                    status=Status.completed,
+                    step_id=agent_task_step.step_id,
+                    task_id=agent_task_step.task_id,
+                )
+            )
+
+        for i, agent_task_step in enumerate(upcoming_agent_task_steps):
+            steps.append(
+                APIStep(
+                    artifacts=agent_task_step.step_state.get("artifacts", []),
+                    is_last=i == len(upcoming_agent_task_steps) - 1,
+                    status=Status.created, # TODO: what about status.running?
+                    step_id=agent_task_step.step_id,
+                    task_id=agent_task_step.task_id,
+                )
+            )
 
         return TaskStepsListResponse(
-            steps=task.steps[start_index:end_index],
             pagination=Pagination(
-                total_items=len(task.steps),
-                total_pages=len(task.steps) // page_size + 1,
                 current_page=current_page,
                 page_size=page_size,
+                total_items=len(steps),
+                total_pages=len(steps) // page_size + 1,
             ),
+            steps=steps[start_index : start_index + page_size], # TODO: cut out early above if len(steps) < start_index + page_size  # noqa: E501
         )
 
     @app.post(
@@ -119,33 +268,34 @@ class AgentDeployment:
         self,
         task_id: str,
         body: StepRequestBody | None = None,
-    ) -> Step:
+    ) -> APIStep:
         """
         Execute a step in the specified agent task.
         """
-        try:
-            task = await self.agent.db.get_task(task_id)
-            step = next(filter(lambda x: x.status == Status.created, task.steps), None)
+        agent_task: AgentTask = self.agent.get_task(task_id)
+        agent_task_step_output: AgentTaskStepOutput = self.agent.run_step(
+            agent_task.task_id,
+        )
 
-            if not step:
-                raise HTTPException(
-                    detail="No steps to execute",
-                    status_code=200,
-                )
+        if agent_task_step_output.is_last:
+            output = self.agent.finalize_response(agent_task.task_id)
+            print(f"> Agent finished: {str(output)}")
+            assert output == agent_task_step_output.output, \
+                f"{output} != {agent_task_step_output.output}"
 
-            step.status = Status.running
-            step.input = body.input if body else None
-            step.additional_input = body.additional_input if body else None
-            step = await self.agent.step(step)
-            step.status = Status.completed
-
-            return step
-
-        except NotFoundException as e:
-            raise HTTPException(
-                detail=f"{e.item_name} with {e.item_id} not found.",
-                status_code=400,
-            )
+        return APIStep(
+            artifacts=agent_task_step_output.task_step.step_state.get("artifacts", []),
+            input=agent_task_step_output.task_step.input,
+            additional_input=agent_task_step_output.task_step.step_state.get(
+                "additional_input",
+                None,
+            ),
+            is_last=agent_task_step_output.is_last,
+            output=str(agent_task_step_output.output),
+            status=Status.completed if agent_task_step_output.is_last else Status.created,  # noqa: E501
+            step_id=agent_task_step_output.task_step.step_id,
+            task_id=agent_task_step_output.task_step.task_id,
+        )
 
     @app.get(
         "/ap/v1/agent/tasks/{task_id}/steps/{step_id}",
@@ -156,7 +306,51 @@ class AgentDeployment:
         """
         Get details about a specified task step.
         """
-        return await self.agent.db.get_step(task_id, step_id)
+        agent_task: AgentTask = self.agent.get_task(task_id)
+        completed_agent_task_step_outputs: List[AgentTaskStepOutput] = self.agent.get_completed_steps( # TODO: why does get_completed_steps return TaskStepOutputs instead of TaskSteps?  # noqa: E501
+            task_id=agent_task.task_id,
+        ) # TODO: AgentTaskStepOutput has an is_last field; what's the meaning of that? if is_last is True, must there be no upcoming steps?  # noqa: E501
+        upcoming_agent_task_steps: List[AgentTaskStep] = self.agent.get_upcoming_steps(
+            task_id=agent_task.task_id,
+        )
+
+        for agent_task_step_output in completed_agent_task_step_outputs:
+            agent_task_step: AgentTaskStep = agent_task_step_output.task_step
+
+            if agent_task_step.step_id == step_id:
+                return Step(
+                    artifacts=agent_task_step.step_state.get("artifacts", []),
+                    input=agent_task_step.input,
+                    additional_input=agent_task_step.step_state.get(
+                        "additional_input",
+                        None,
+                    ),
+                    is_last=agent_task_step_output.is_last,
+                    output=str(agent_task_step_output.output),
+                    status=Status.completed, # TODO: what about status.running?
+                    step_id=agent_task_step.step_id,
+                    task_id=agent_task_step.task_id,
+                )
+
+        for i, agent_task_step in enumerate(upcoming_agent_task_steps):
+            if agent_task_step.step_id == step_id:
+                return Step(
+                    artifacts=agent_task_step.step_state.get("artifacts", []),
+                    input=agent_task_step.input,
+                    additional_input=agent_task_step.step_state.get(
+                        "additional_input",
+                        None,
+                    ),
+                    is_last=i == len(upcoming_agent_task_steps) - 1,
+                    status=Status.created, # TODO: what about status.running?
+                    step_id=agent_task_step.step_id,
+                    task_id=agent_task_step.task_id,
+                )
+
+        raise HTTPException(
+            detail=f"Step with {step_id} not found.",
+            status_code=404,
+        )
 
     @app.get(
         "/ap/v1/agent/tasks/{task_id}/artifacts",
@@ -167,7 +361,13 @@ class AgentDeployment:
         """
         List all artifacts for the specified task.
         """
-        return await self.agent.db.get_task(task_id)
+        agent_task: AgentTask = self.agent.get_task(task_id)
+        artifacts: List[Artifact] = agent_task.extra_state.get(
+            "artifacts",
+            [],
+        )
+
+        return artifacts
 
     @app.post(
         "/ap/v1/agent/tasks/{task_id}/artifacts",
@@ -184,12 +384,6 @@ class AgentDeployment:
         Upload an artifact for the specified task.
         """
         file_name = file.filename or str(uuid4())
-        artifact = await self.agent.db.create_artifact(
-            task_id=task_id,
-            agent_created=False,
-            file_name=file_name,
-            relative_path=relative_path,
-        )
 
         minio_endpoint = os.getenv("MINIO_ENDPOINT")
         minio_client = Minio(
@@ -211,7 +405,11 @@ class AgentDeployment:
 
         # TODO: use nhost storage to store files
 
-        artifact_path = self.agent.get_artifact_path(task_id, artifact)
+        if relative_path is None:
+            artifact_path = f"{self.agent_workspace}/{task_id}/{file_name}"
+
+        else:
+            artifact_path = f"{self.agent_workspace}/{task_id}/{relative_path}/{file_name}"  # noqa: E501
 
         minio_client.put_object(
             bucket_name=bucket_name,
@@ -220,6 +418,15 @@ class AgentDeployment:
             length=file.size,
             content_type="application/octet-stream",
         )
+
+        artifact = Artifact(
+            agent_created=False,
+            artifact_id=str(uuid4()),
+            file_name=file_name,
+            relative_path=relative_path,
+        )
+
+        self.agent.get_task(task_id).extra_state["artifacts"].append(artifact)
 
         return artifact
 
@@ -235,8 +442,31 @@ class AgentDeployment:
         """
         Download the specified artifact.
         """
-        artifact = await self.agent.db.get_artifact(task_id, artifact_id)
-        artifact_path = self.agent.get_artifact_path(task_id, artifact)
+        # artifact = await self.agent.db.get_artifact(task_id, artifact_id)
+        artifacts: List[Artifact] = self.agent.get_task(task_id).extra_state["artifacts"]
+
+        artifact_found: bool = False
+
+        for artifact in artifacts:
+            if artifact.artifact_id == artifact_id:
+                artifact: Artifact = artifact
+                artifact_found = True
+
+                break
+
+        if not artifact_found:
+            raise HTTPException(
+                detail=f"Artifact with {artifact_id} not found.",
+                status_code=404,
+            )
+
+        # artifact_path = self.agent.get_artifact_path(task_id, artifact)
+
+        if artifact.relative_path is None:
+            artifact_path = f"{self.agent_workspace}/{task_id}/{artifact.file_name}"
+
+        else:
+            artifact_path = f"{self.agent_workspace}/{task_id}/{artifact.relative_path}/{artifact.file_name}"  # noqa: E501
 
         minio_endpoint = os.getenv("MINIO_ENDPOINT")
         minio_client = Minio(
@@ -266,6 +496,5 @@ class AgentDeployment:
                 filename=artifact.file_name,
                 background=BackgroundTask(cleanup, tmp_file_path),
             )
-
 
 deployment = AgentDeployment.bind()

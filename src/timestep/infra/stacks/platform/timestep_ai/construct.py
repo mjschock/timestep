@@ -1,3 +1,4 @@
+import base64
 import os
 from cdktf import AssetType, Fn, TerraformAsset
 
@@ -276,23 +277,27 @@ class TimestepAIConstruct(Construct):
             private_repo_secret,
         ]
 
-        if config.local_tls_cert_is_enabled:
-            timestep_local_tls_secret = SecretV1(
-                id_="timestep_local_tls_secret",
-                data={
-                    "tls.crt": config.local_tls_crt.get_secret_value(),
-                    "tls.key": config.local_tls_key.get_secret_value(),
-                },
-                metadata=SecretV1Metadata(
-                    name="ssl-timestep.local",
-                    namespace="default",
-                ),
-                scope=self,
-                type="kubernetes.io/tls",
-            )
-            timestep_ai_manifest_deps.append(
-                timestep_local_tls_secret,
-            )
+        # if config.local_tls_cert_is_enabled:
+        #     timestep_local_tls_secret = SecretV1(
+        #         id_="timestep_local_tls_secret",
+        #         data={
+        #             "tls.crt": config.local_tls_crt.get_secret_value(),
+        #             "tls.key": config.local_tls_key.get_secret_value(),
+        #             # "tls.crt": base64.b64encode(config.local_tls_crt.get_secret_value().encode("utf-8")).decode("utf-8"),
+        #             # "tls.key": base64.b64encode(config.local_tls_key.get_secret_value().encode("utf-8")).decode("utf-8"),
+        #             # "tls.crt": base64.encode(config.local_tls_cert)
+        #             # "tls.key": base64.b64encode(config.local_tls_key.get_secret_value()).decode("utf-8"),
+        #         },
+        #         metadata=SecretV1Metadata(
+        #             name="ssl-timestep.local",
+        #             namespace="default",
+        #         ),
+        #         scope=self,
+        #         type="kubernetes.io/tls",
+        #     )
+        #     timestep_ai_manifest_deps.append(
+        #         timestep_local_tls_secret,
+        #     )
 
         Manifest(
             depends_on=timestep_ai_manifest_deps,

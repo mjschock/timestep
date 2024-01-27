@@ -1,15 +1,19 @@
-from typing import Any, Dict, List, Optional
+from typing import Annotated, Any, Dict, List, Optional
 
-from agent_protocol import Step, StepRequestBody
+from agent_protocol import Artifact, Step, StepRequestBody
 from agent_protocol.models import (
     TaskListResponse,
     TaskStepsListResponse,
 )
 from fastapi import (
     APIRouter,
+    File,
+    Form,
     Response,
+    UploadFile,
     status,
 )
+from fastapi.responses import FileResponse
 from pydantic import StrictStr
 
 from app.services import agents as agents_service
@@ -47,14 +51,15 @@ async def create_agent(agent_name: str):
 
 @agents_router.delete(
     "/{agent_id}",
+    status_code=status.HTTP_202_ACCEPTED,
     tags=["agents"],
 )
 async def delete_agent(agent_id: str):
-    agent: Dict[str, Any] = await agents_service.delete_agent(account_id, agent_id)
+    await agents_service.delete_agent(account_id, agent_id)
 
-    return {
-        "agent": agent,
-    }
+    return Response(
+        status_code=status.HTTP_202_ACCEPTED,
+    )
 
 @agents_router.get(
     "/{agent_id}",
@@ -138,6 +143,62 @@ async def get_agent_task(
     return await agents_service.get_agent_task(agent_id, task_id)
 
 @agents_router.get(
+    "/{agent_id}/ap/v1/agent/tasks/{task_id}/artifacts",
+    response_model=List[Artifact],
+    tags=["agent", "agents"],
+)
+async def list_agent_task_artifacts(
+    agent_id: str, task_id: str,
+) -> List[Artifact]:
+    """
+    List all artifacts for the specified task.
+    """
+    return await agents_service.list_agent_task_artifacts(
+        agent_id,
+        task_id,
+    )
+
+@agents_router.post(
+    "/{agent_id}/ap/v1/agent/tasks/{task_id}/artifacts",
+    response_model=Artifact,
+    tags=["agent", "agents"],
+)
+async def upload_agent_task_artifacts(
+    agent_id: str,
+    task_id: str,
+    file: Annotated[UploadFile, File()],
+    relative_path: Annotated[Optional[str], Form()] = None,
+) -> Artifact:
+    """
+    Upload an artifact for the specified task.
+    """
+    return await agents_service.upload_agent_task_artifacts(
+        agent_id,
+        task_id,
+        file,
+        relative_path,
+    )
+
+@agents_router.get(
+    "/{agent_id}/ap/v1/agent/tasks/{task_id}/artifacts/{artifact_id}",
+    response_model=Artifact,
+    tags=["agent", "agents"],
+)
+async def download_agent_task_artifact(
+    agent_id: str,
+    task_id: str,
+    artifact_id: str
+) -> FileResponse:
+    """
+    Download a specified artifact.
+    """
+    return await agents_service.download_agent_task_artifact(
+        agent_id,
+        task_id,
+        artifact_id,
+    )
+
+@agents_router.get(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}/steps",
     response_model=TaskStepsListResponse,
     tags=["agent", "agents"],
@@ -175,7 +236,7 @@ async def execute_agent_task_step(
     response_model=Step,
     tags=["agent", "agents"],
 )
-async def get_agent_task_step(self, agent_id: str, task_id: str, step_id: str) -> Step:
+async def get_agent_task_step(agent_id: str, task_id: str, step_id: str) -> Step:
     """
     Get details about a specified task step.
     """

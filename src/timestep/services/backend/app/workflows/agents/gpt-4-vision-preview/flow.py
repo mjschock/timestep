@@ -148,7 +148,7 @@ async def sky_launch_task(agent_name: str, memo: dict[str, Any]):
                 --env MINIO_ROOT_USER={minio_root_user} \
                 --env MINIO_ROOT_PASSWORD={minio_root_password} \
                 --env OPENAI_API_KEY={openai_api_key} \
-                --yes serve.yaml
+                --yes launch.yaml
             """,
         ],
     ) as sky_op:
@@ -176,13 +176,19 @@ async def sky_queue_task(agent_name: str, memo: dict[str, Any]):
     return memo
 
 @task
-async def sky_exec_task(agent_name: str, memo: dict[str, Any]):
+async def sky_exec_task(
+    agent_name: str,
+    memo: dict[str, Any],
+    task_yaml_name: str = "serve.yaml",
+    cancel_all: bool = False,
+):
     minio_endpoint = os.environ["MINIO_ENDPOINT"]
     minio_root_user = os.environ["MINIO_ROOT_USER"]
     minio_root_password = os.environ["MINIO_ROOT_PASSWORD"]
     openai_api_key = os.environ["OPENAI_API_KEY"]
 
-    sky.core.cancel(cluster_name=agent_name, all=True) # TODO: Make this configurable
+    if cancel_all:
+        sky.core.cancel(cluster_name=agent_name, all=True) # TODO: Make this configurable
 
     async with ShellOperation(
         commands=[
@@ -192,7 +198,7 @@ async def sky_exec_task(agent_name: str, memo: dict[str, Any]):
                 --env MINIO_ROOT_USER={minio_root_user} \
                 --env MINIO_ROOT_PASSWORD={minio_root_password} \
                 --env OPENAI_API_KEY={openai_api_key} \
-                serve.yaml
+                {task_yaml_name}
             """,
         ],
     ) as sky_op:
@@ -227,6 +233,9 @@ async def serve_agent_flow(account_id: str, agent_name: str, operation: str = "c
             raise Exception(f"Agent cluster {agent_name} is already deployed")
 
         memo = await sky_launch_task(agent_name, memo)
+        memo = await sky_exec_task(agent_name, memo, task_yaml_name="serve.yaml", cancel_all=True)
+        memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=False)
+        # memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=True)
 
     elif operation == "delete":
         memo = await sky_down_task(agent_name, memo)
@@ -243,7 +252,9 @@ async def serve_agent_flow(account_id: str, agent_name: str, operation: str = "c
             # memo = await sky_start_task(name, memo)
 
     elif operation == "update":
-        memo = await sky_exec_task(agent_name, memo)
+        memo = await sky_exec_task(agent_name, memo, task_yaml_name="serve.yaml", cancel_all=True)
+        memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=False)
+        # memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=True)
 
     memo = await sky_status_task(memo)
 

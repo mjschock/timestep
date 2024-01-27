@@ -5,6 +5,7 @@
 # from llama_index import download_loader
 import io
 import os
+
 from llama_index.tools import FunctionTool
 from minio import Minio
 
@@ -64,7 +65,7 @@ multiply_tool = FunctionTool.from_defaults(fn=multiply)
 
 # minio_reader_tool = FunctionTool.from_defaults(fn=read_minio_file)
 
-def write_to_file(
+def write_to_file( # TODO: register artifact here and also have a read_from_file
     # bucket_name: str,
     # minio_endpoint: str,
     # minio_secure: bool,

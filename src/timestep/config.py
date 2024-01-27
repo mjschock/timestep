@@ -48,6 +48,7 @@ class Settings(BaseSettings):
     )
     hasura_graphql_admin_secret: SecretStr = Field()
     hasura_graphql_jwt_secret_key: SecretStr = Field()
+    hf_token: SecretStr = Field(default=None)
     ingress_controller_acme_ca: str = Field()
     ingress_controller_debug: str = Field()
     ingress_controller_email: str = Field()
