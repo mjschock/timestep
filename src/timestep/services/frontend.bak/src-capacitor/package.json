@@ -1,0 +1,14 @@
+{
+  "name": "frontend",
+  "version": "5.0.4",
+  "description": "Timestep AI (frontend)",
+  "author": "Michael Schock <m@mjschock.com>",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^5.2.2",
+    "@capacitor/app": "^5.0.0",
+    "@capacitor/cli": "^5.0.0",
+    "@capacitor/core": "^5.0.0",
+    "@capacitor/ios": "^5.6.0"
+  }
+}

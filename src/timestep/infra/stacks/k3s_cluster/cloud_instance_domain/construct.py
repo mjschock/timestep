@@ -33,6 +33,8 @@ class CloudInstanceDomainConstruct(Construct):
         super().__init__(scope, id)
 
         subdomains = [
+            "example1",
+            "example2",
             "www",
         ]
 

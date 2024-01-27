@@ -176,7 +176,7 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
                 trigger=['src/timestep/services/Caddyfile']
             )
         ],
-        only=['Caddyfile'],
+        # only=['Caddyfile'],
     )
 
     docker_build(
@@ -214,30 +214,32 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         match_in_env_vars=True # https://docs.tilt.dev/custom_resource#env-variable-injection
     )
 
-    docker_build(
-        'registry.gitlab.com/timestep-ai/timestep/frontend',
-        context='src/timestep/services/frontend',
-        entrypoint=[
-            "/home/ubuntu/docker-entrypoint.sh",
-            "npm",
-            "run",
-            "dev",
-        ],
-        # entrypoint=["/home/ubuntu/docker-entrypoint.sh", "npm", "run", "dev"],
-        # entrypoint="npm run dev",
-        # ignore=['dist', 'node_modules', 'src-capacitor', 'src-electron'],
-        ignore=['node_modules'],
-        live_update=[
-        #     # fall_back_on('src/timestep/services/frontend/quasar.config.js'),
-            sync('src/timestep/services/frontend', '/home/ubuntu/app'),
-        #     run(
-        #         'npm install',
-        #         trigger=['src/timestep/services/frontend/package.json', 'src/timestep/services/frontend/package-lock.json']
-        #     )
-        ],
-        # only=['.'],
-        # extra_tag=str(local(command='echo $VERSION')).strip(),
-    )
+    # docker_build(
+    #     'registry.gitlab.com/timestep-ai/timestep/frontend',
+    #     context='src/timestep/services/frontend',
+    #     entrypoint=[
+    #         "/home/ubuntu/docker-entrypoint.sh",
+    #         "quasar",
+    #         "dev",
+    #         "--hostname",
+    #         "0.0.0.0",
+    #         "-m",
+    #         "spa"
+    #     ],
+    #     # entrypoint=["/home/ubuntu/docker-entrypoint.sh", "npm", "run", "dev"],
+    #     # entrypoint="npm run dev",
+    #     # ignore=['dist', 'node_modules', 'src-capacitor', 'src-electron'],
+    #     live_update=[
+    #         fall_back_on('src/timestep/services/frontend/quasar.config.js'),
+    #         sync('src/timestep/services/frontend', '/home/ubuntu/app'),
+    #         run(
+    #             'npm install',
+    #             trigger=['src/timestep/services/frontend/package.json', 'src/timestep/services/frontend/package-lock.json']
+    #         )
+    #     ],
+    #     # only=['.'],
+    #     # extra_tag=str(local(command='echo $VERSION')).strip(),
+    # )
 
     if os.getenv('LOCAL_TLS_CERT_IS_ENABLED', False) == 'true':
         print('local tls cert is enabled')

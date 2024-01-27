@@ -32,7 +32,7 @@ classDiagram
 
 <!-- ## TODO:
 
-from shimmy import GymnasiumMultiAgentCompatibilityV0 --> -->
+from shimmy import GymnasiumMultiAgentCompatibilityV0 -->
 
 ## Requirements
 
