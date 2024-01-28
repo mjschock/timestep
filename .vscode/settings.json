@@ -1,7 +1,6 @@
 {
     "python.analysis.extraPaths": [
         "./src/timestep/services/backend",
-        "./src/timestep/services/backend/app/workflows/agents/gpt-2",
-        "./src/timestep/services/backend/app/workflows/agents/gpt-4-vision-preview",
+        "./src/timestep/services/backend/app/workers/agents/gpt-4-vision-preview",
     ]
 }

@@ -1,6 +1,6 @@
 import base64
 import os
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 import kedro
 import kubernetes
@@ -127,13 +127,13 @@ async def sky_check_task(memo: dict[str, Any]):
 
     return memo
 
-async def sky_status_task(memo: dict[str, Any]):
-    memo["cluster_statuses"]: list[dict[str, Any]] = sky.core.status(refresh=True)
+async def sky_status_task(memo: dict[str, Any], refresh: bool = True):
+    memo["cluster_statuses"]: list[dict[str, Any]] = sky.core.status(refresh=refresh)
 
     return memo
 
 async def sky_queue_task(name: str, memo: dict[str, Any]):
-    memo["cluster_queue"]: list[dict] = sky.core.queue(cluster_name=name)
+    memo["cluster_queue"]: List[dict] = sky.core.queue(cluster_name=name)
 
     return memo
 

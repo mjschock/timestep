@@ -1,8 +1,0 @@
-agent-protocol
-llama-hub
-llama-index
-minio
-ray[serve]
-# torch
-# transformers[agents,deepspeed,torch]
-transformers[agents,torch]

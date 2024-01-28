@@ -1,5 +1,5 @@
 default:
-	ark get tilt@v${TILT_VERSION}
+	# ark get tilt@v${TILT_VERSION}
 	tilt up
 
 clean:
@@ -43,6 +43,8 @@ local-tls-cert:
 	# mkcert -cert-file tls.crt -key-file tls.key timestep.local example1.timestep.local example2.timestep.local www.timestep.local
 	mkcert -cert-file secrets/local_tls_crt -key-file secrets/local_tls_key timestep.local example1.timestep.local example2.timestep.local www.timestep.local
 	kubectl create secret tls ssl-timestep.local --cert=secrets/local_tls_crt --key=secrets/local_tls_key
+	echo "You may need to restart your browser for the new certificate to take effect."
+	echo "You may need to restart caddy for the new certificate to take effect."
 
 # nvidia:
 # 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.61.136.131 'bash -s' < src/timestep/infra/cicd/nvidia.sh

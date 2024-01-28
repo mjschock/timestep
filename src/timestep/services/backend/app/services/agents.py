@@ -41,8 +41,9 @@ from app.services.utils import (
     upload_directory_to_minio,
 )
 
-DEFAULT_BUCKET_NAME="default"
-
+DEFAULT_ACCOUNT_ID = "f215cf48-7458-4596-9aa5-2159fc6a3caf" # Temporary; same as S3_ROOT_FOLDER in NhostConstruct  # noqa: E501
+DEFAULT_AGENT_NAME = "gpt-4-vision-preview"
+DEFAULT_BUCKET_NAME = "default"
 
 async def create_agent(account_id: str, agent_name: str) -> dict[str, Any]:
     bucket_name: str = await create_minio_bucket(
@@ -57,7 +58,7 @@ async def create_agent(account_id: str, agent_name: str) -> dict[str, Any]:
     )
     uploaded_file_count: int = await upload_directory_to_minio(
         minio_storage_block=minio_storage_block,
-        local_path=f"{os.getcwd()}/app/workflows/agents/{agent_name}",
+        local_path=f"{os.getcwd()}/app/workers/agents/{agent_name}",
         to_path=f"agents/{agent_name}"
     )
     deployment_ids: list = await deploy_agent(
@@ -83,9 +84,10 @@ async def create_agent_task(
     }
     memo: Dict[str, Any] = {}
 
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
 
@@ -115,9 +117,10 @@ async def list_agent_tasks(agent_id: str) -> TaskListResponse:
     }
     memo: Dict[str, Any] = {}
 
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
 
@@ -131,9 +134,9 @@ async def list_agent_tasks(agent_id: str) -> TaskListResponse:
 
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
-        tasks = await api_instance.list_agent_tasks()
+        tasks_list_response: TaskListResponse = await api_instance.list_agent_tasks()
 
-    return tasks
+    return tasks_list_response
 
 async def get_agent_task(agent_id: str, task_id: str) -> APITask:
     agent: Dict[str, Any] = {
@@ -141,9 +144,10 @@ async def get_agent_task(agent_id: str, task_id: str) -> APITask:
     }
     memo: Dict[str, Any] = {}
 
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
 
@@ -157,7 +161,7 @@ async def get_agent_task(agent_id: str, task_id: str) -> APITask:
 
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
-        task = await api_instance.get_agent_task(task_id=task_id)
+        task: APITask = await api_instance.get_agent_task(task_id=task_id)
 
     return task
 
@@ -172,9 +176,10 @@ async def list_agent_task_artifacts(
     }
     memo: Dict[str, Any] = {}
 
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
 
@@ -208,9 +213,10 @@ async def list_agent_task_steps(
     }
     memo: Dict[str, Any] = {}
 
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
 
@@ -244,9 +250,10 @@ async def upload_agent_task_artifacts(
     }
     memo: Dict[str, Any] = {}
 
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
         if cluster_status["cluster_hash"] == agent_id:
@@ -277,9 +284,10 @@ async def execute_agent_task_step(
     }
     memo: Dict[str, Any] = {}
 
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
 
@@ -310,9 +318,10 @@ async def download_agent_task_artifact(
     }
     memo: Dict[str, Any] = {}
 
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
         if cluster_status["cluster_hash"] == agent_id:
@@ -337,9 +346,10 @@ async def get_agent_task_step(agent_id: str, task_id: str, step_id: str) -> APIS
     }
     memo: Dict[str, Any] = {}
 
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
         if cluster_status["cluster_hash"] == agent_id:
@@ -394,7 +404,8 @@ async def get_agent(account_id: str, agent_id: str) -> Dict[str, Any]:
     raise Exception(f"Agent {agent_id} not found")
 
 async def get_agent_livez(account_id: str, agent_id: str):
-    cluster_statuses = sky.core.status(refresh=True)
+    # cluster_statuses = sky.core.status(refresh=True)
+    cluster_statuses = sky.core.status(refresh=False)
 
     for cluster_status in cluster_statuses:
         if cluster_status["cluster_hash"] == agent_id:
@@ -408,7 +419,8 @@ async def get_agent_livez(account_id: str, agent_id: str):
     raise Exception(f"Agent {agent_id} not found")
 
 async def get_agent_readyz(account_id: str, agent_id: str):
-    cluster_statuses = sky.core.status(refresh=True)
+    # cluster_statuses = sky.core.status(refresh=True)
+    cluster_statuses = sky.core.status(refresh=False)
 
     for cluster_status in cluster_statuses:
         if cluster_status["cluster_hash"] == agent_id:
@@ -437,13 +449,14 @@ async def get_agent_readyz(account_id: str, agent_id: str):
 
                 return "ok"
 
-async def get_agents(account_id: str) -> Dict[str, Any]:
+async def get_agents(account_id: str) -> List[Dict[str, Any]]:
     agents: List[Dict[str, Any]] = []
     memo: Dict[str, Any] = {}
 
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo)
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
         agent_id = cluster_status["cluster_hash"]
@@ -473,7 +486,7 @@ async def update_agent(account_id: str, agent_id: str):
     )
     await upload_directory_to_minio(
         minio_storage_block=minio_storage_block,
-        local_path=f"{os.getcwd()}/app/workflows/agents/{agent_name}",
+        local_path=f"{os.getcwd()}/app/workers/agents/{agent_name}",
         to_path=f"agents/{agent_name}"
     )
 
@@ -486,3 +499,28 @@ async def update_agent(account_id: str, agent_id: str):
         },
         timeout=0,
     )
+
+async def on_startup():
+    print(f'\n=== {__name__} on_startup (BEGIN) ===\n')
+
+    memo: Dict[str, Any] = {}
+
+    memo = await load_cloud_credentials(memo)
+    memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo)
+    memo = await sky_status_task(memo, refresh=True)
+
+    agents = await get_agents(DEFAULT_ACCOUNT_ID)
+
+    if not agents:
+        await create_agent(DEFAULT_ACCOUNT_ID, DEFAULT_AGENT_NAME)
+
+    else:
+        for agent in agents:
+            await update_agent(DEFAULT_ACCOUNT_ID, agent["id"])
+
+    print(f'\n=== {__name__} on_startup (END) ===\n')
+
+async def on_shutdown():
+    print(f'\n=== {__name__} on_shutdown (BEGIN) ===\n')
+    print(f'\n=== {__name__} on_shutdown (END) ===\n')
