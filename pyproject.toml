@@ -29,8 +29,6 @@ version_files = [
   "src/timestep/services/backend/pyproject.toml:version",
   "src/timestep/services/frontend/package-lock.json:version",
   "src/timestep/services/frontend/package.json:version",
-  "src/timestep/services/frontend/src-capacitor/package-lock.json:version",
-  "src/timestep/services/frontend/src-capacitor/package.json:version"
 ]
 version_provider = "poetry"
 version_scheme = "semver"
@@ -60,6 +58,8 @@ cloud-init-gen = "^1.2.0"
 diagrams = "^0.23.4"
 gitpython = "^3.1.40"
 networkx = {extras = ["default"], version = "^3.2.1"}
+prefect = "^2.14.17"
+prefect-shell = "^0.2.2"
 pydantic = "<2.0.0"
 python = ">=3.11,<3.12"
 python-dotenv = "^1.0.0"

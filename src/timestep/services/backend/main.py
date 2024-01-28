@@ -1,15 +1,29 @@
 import argparse
 import logging
+from contextlib import asynccontextmanager
 
 import uvicorn
 from app.api.agents import agents_router
+from app.services import agents as agents_service
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Load the ML model
+    # ml_models["answer_to_everything"] = fake_answer_to_everything_ml_model
+    await agents_service.on_startup()
+    yield
+    # Clean up the ML models and release the resources
+    # ml_models.clear()
+    await agents_service.on_shutdown()
+
+app = FastAPI(
+    lifespan=lifespan,
+)
 
 # environment = os.getenv("ENVIRONMENT", "dev")  # Default to 'development' if not set
-
 
 # if environment == "dev":
 def enable_cors(app):

@@ -214,9 +214,9 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         match_in_env_vars=True # https://docs.tilt.dev/custom_resource#env-variable-injection
     )
 
-    # docker_build(
-    #     'registry.gitlab.com/timestep-ai/timestep/frontend',
-    #     context='src/timestep/services/frontend',
+    docker_build(
+        'registry.gitlab.com/timestep-ai/timestep/frontend',
+        context='src/timestep/services/frontend',
     #     entrypoint=[
     #         "/home/ubuntu/docker-entrypoint.sh",
     #         "quasar",
@@ -239,7 +239,7 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     #     ],
     #     # only=['.'],
     #     # extra_tag=str(local(command='echo $VERSION')).strip(),
-    # )
+    )
 
     if os.getenv('LOCAL_TLS_CERT_IS_ENABLED', False) == 'true':
         print('local tls cert is enabled')
