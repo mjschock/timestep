@@ -1,3 +1,10 @@
+## 6.0.0 (2024-01-28)
+
+### Refactor
+
+- cleanup/refactoring - wip
+- wip refactoring
+
 ## 5.0.4 (2024-01-19)
 
 ### Fix
