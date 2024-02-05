@@ -1,7 +1,7 @@
 '''
 # `provider`
 
-Refer to the Terraform Registory for docs: [`namecheap`](https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs).
+Refer to the Terraform Registory for docs: [`namecheap`](https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class NamecheapProvider(
     metaclass=jsii.JSIIMeta,
     jsii_type="namecheap.provider.NamecheapProvider",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs namecheap}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs namecheap}.'''
 
     def __init__(
         self,
@@ -40,16 +40,16 @@ class NamecheapProvider(
         client_ip: typing.Optional[builtins.str] = None,
         use_sandbox: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs namecheap} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs namecheap} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param api_key: The namecheap API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#api_key NamecheapProvider#api_key}
-        :param api_user: A registered api user for namecheap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#api_user NamecheapProvider#api_user}
-        :param user_name: A registered user name for namecheap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#user_name NamecheapProvider#user_name}
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#alias NamecheapProvider#alias}
-        :param client_ip: Client IP address. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#client_ip NamecheapProvider#client_ip}
-        :param use_sandbox: Use sandbox API endpoints. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#use_sandbox NamecheapProvider#use_sandbox}
+        :param api_key: The namecheap API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#api_key NamecheapProvider#api_key}
+        :param api_user: A registered api user for namecheap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#api_user NamecheapProvider#api_user}
+        :param user_name: A registered user name for namecheap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#user_name NamecheapProvider#user_name}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#alias NamecheapProvider#alias}
+        :param client_ip: Client IP address. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#client_ip NamecheapProvider#client_ip}
+        :param use_sandbox: Use sandbox API endpoints. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#use_sandbox NamecheapProvider#use_sandbox}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0e8296e4cd4ed43ef2fb357d86c488288a909c4655223c3ace96996d1483bf59)
@@ -79,7 +79,7 @@ class NamecheapProvider(
 
         :param scope: The scope in which to define this construct.
         :param import_to_id: The construct id used in the generated config for the NamecheapProvider to import.
-        :param import_from_id: The id of the existing NamecheapProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#import import section} in the documentation of this resource for the id to use
+        :param import_from_id: The id of the existing NamecheapProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#import import section} in the documentation of this resource for the id to use
         :param provider: ? Optional instance of the provider where the NamecheapProvider to import is found.
         '''
         if __debug__:
@@ -245,12 +245,12 @@ class NamecheapProviderConfig:
         use_sandbox: typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]] = None,
     ) -> None:
         '''
-        :param api_key: The namecheap API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#api_key NamecheapProvider#api_key}
-        :param api_user: A registered api user for namecheap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#api_user NamecheapProvider#api_user}
-        :param user_name: A registered user name for namecheap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#user_name NamecheapProvider#user_name}
-        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#alias NamecheapProvider#alias}
-        :param client_ip: Client IP address. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#client_ip NamecheapProvider#client_ip}
-        :param use_sandbox: Use sandbox API endpoints. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#use_sandbox NamecheapProvider#use_sandbox}
+        :param api_key: The namecheap API key. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#api_key NamecheapProvider#api_key}
+        :param api_user: A registered api user for namecheap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#api_user NamecheapProvider#api_user}
+        :param user_name: A registered user name for namecheap. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#user_name NamecheapProvider#user_name}
+        :param alias: Alias name. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#alias NamecheapProvider#alias}
+        :param client_ip: Client IP address. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#client_ip NamecheapProvider#client_ip}
+        :param use_sandbox: Use sandbox API endpoints. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#use_sandbox NamecheapProvider#use_sandbox}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2bbe67cb9997df680cfc0ead837d5c20cf2b21da7a92e63a090950d3fc9bc5d9)
@@ -276,7 +276,7 @@ class NamecheapProviderConfig:
     def api_key(self) -> builtins.str:
         '''The namecheap API key.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#api_key NamecheapProvider#api_key}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#api_key NamecheapProvider#api_key}
         '''
         result = self._values.get("api_key")
         assert result is not None, "Required property 'api_key' is missing"
@@ -286,7 +286,7 @@ class NamecheapProviderConfig:
     def api_user(self) -> builtins.str:
         '''A registered api user for namecheap.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#api_user NamecheapProvider#api_user}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#api_user NamecheapProvider#api_user}
         '''
         result = self._values.get("api_user")
         assert result is not None, "Required property 'api_user' is missing"
@@ -296,7 +296,7 @@ class NamecheapProviderConfig:
     def user_name(self) -> builtins.str:
         '''A registered user name for namecheap.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#user_name NamecheapProvider#user_name}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#user_name NamecheapProvider#user_name}
         '''
         result = self._values.get("user_name")
         assert result is not None, "Required property 'user_name' is missing"
@@ -306,7 +306,7 @@ class NamecheapProviderConfig:
     def alias(self) -> typing.Optional[builtins.str]:
         '''Alias name.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#alias NamecheapProvider#alias}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#alias NamecheapProvider#alias}
         '''
         result = self._values.get("alias")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -315,7 +315,7 @@ class NamecheapProviderConfig:
     def client_ip(self) -> typing.Optional[builtins.str]:
         '''Client IP address.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#client_ip NamecheapProvider#client_ip}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#client_ip NamecheapProvider#client_ip}
         '''
         result = self._values.get("client_ip")
         return typing.cast(typing.Optional[builtins.str], result)
@@ -326,7 +326,7 @@ class NamecheapProviderConfig:
     ) -> typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]]:
         '''Use sandbox API endpoints.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs#use_sandbox NamecheapProvider#use_sandbox}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs#use_sandbox NamecheapProvider#use_sandbox}
         '''
         result = self._values.get("use_sandbox")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _cdktf_9a9027ec.IResolvable]], result)
