@@ -6,16 +6,16 @@ metadata:
     # rollme: '{{ randAlphaNum 5 | quote }}'
   # creationTimestamp: null
   labels:
-    app: backend
-  name: backend
+    app: server
+  name: server
   namespace: default
 spec:
   # replicas: {{ .Values.replicaCount }}
   replicas: 1
   selector:
     matchLabels:
-      app: backend
-  serviceName: backend
+      app: server
+  serviceName: server
   # strategy: {}
   template:
     metadata:
@@ -24,7 +24,7 @@ spec:
       # creationTimestamp: null
       labels:
         # io.kompose.network/timestep-default: "true"
-        app: backend
+        app: server
     spec:
       containers:
         # - command:
@@ -32,7 +32,7 @@ spec:
         #     - poetry
         #     - run
         #     - uvicorn
-        #     - src.backend.main:app
+        #     - src.server.main:app
         #     - --proxy-headers
         #     - --host
         #     - 0.0.0.0
@@ -40,12 +40,12 @@ spec:
         #     - "5000"
         - envFrom:
             - configMapRef:
-                name: backend-config-map
+                name: server-config-map
             - secretRef:
-                name: backend-secret
-          image: registry.gitlab.com/timestep-ai/timestep/backend:{{ .Chart.AppVersion }}
+                name: server-secret
+          image: registry.gitlab.com/timestep-ai/timestep/server:{{ .Chart.AppVersion }}
           imagePullPolicy: Always
-          name: backend
+          name: server
           ports:
             - containerPort: 8000
               # hostPort: 5000
@@ -93,13 +93,13 @@ spec:
         #         # name: litestream
         #         # key: LITESTREAM_ACCESS_KEY_ID
         #       configMapKeyRef:
-        #         name: backend-config-map
+        #         name: server-config-map
         #         key: LITESTREAM_ACCESS_KEY_ID
         #   - name: LITESTREAM_SECRET_ACCESS_KEY
         #     valueFrom:
         #       secretKeyRef:
         #         # name: litestream
-        #         name: backend-secret
+        #         name: server-secret
         #         key: LITESTREAM_SECRET_ACCESS_KEY
         #   ports:
         #   - name: metrics
@@ -125,17 +125,17 @@ spec:
       #   - name: MINIO_ENDPOINT
       #     valueFrom:
       #       configMapKeyRef:
-      #         name: backend-config-map
+      #         name: server-config-map
       #         key: MINIO_ENDPOINT
       #   - name: MINIO_ROOT_USER
       #     valueFrom:
       #       configMapKeyRef:
-      #         name: backend-config-map
+      #         name: server-config-map
       #         key: MINIO_ROOT_USER
       #   - name: MINIO_ROOT_PASSWORD
       #     valueFrom:
       #       secretKeyRef:
-      #         name: backend-secret
+      #         name: server-secret
       #         key: MINIO_ROOT_PASSWORD
 
       # - name: init-litestream
@@ -156,14 +156,14 @@ spec:
       #       #   name: litestream
       #       #   key: LITESTREAM_ACCESS_KEY_ID
       #       configMapKeyRef:
-      #         name: backend-config-map
+      #         name: server-config-map
       #         key: LITESTREAM_ACCESS_KEY_ID
       #   - name: LITESTREAM_SECRET_ACCESS_KEY
       #     valueFrom:
       #       secretKeyRef:
       #         # name: litestream
       #         # key: LITESTREAM_SECRET_ACCESS_KEY
-      #         name: backend-secret
+      #         name: server-secret
       #         key: LITESTREAM_SECRET_ACCESS_KEY
       #   securityContext:
       #     runAsUser: 1001 # ubuntu

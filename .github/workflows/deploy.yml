@@ -112,7 +112,7 @@ jobs:
     needs: build-base
     strategy:
       matrix:
-       image_name: [ "backend", "caddy", "frontend" ]
+       image_name: [ "caddy", "client", "server" ]
     runs-on: ubuntu-latest
     # runs-on: self-hosted
     steps:

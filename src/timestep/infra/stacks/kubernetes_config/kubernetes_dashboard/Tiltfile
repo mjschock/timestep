@@ -1,0 +1,12 @@
+load('ext://uibutton', 'cmd_button')
+
+port_forward_local_resource_name = 'port-forward kubernetes-dashboard 8443:8443'
+
+local_resource(
+    port_forward_local_resource_name,
+    auto_init=False,
+    labels=['ops'],
+    links=['https://localhost:8443'],
+    serve_cmd="src/timestep/infra/stacks/kubernetes_config/kubernetes_dashboard/scripts/port_forward.sh",
+    serve_dir='../../../../../../',
+)

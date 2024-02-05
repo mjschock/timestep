@@ -39,12 +39,13 @@ local_resource(
 local_resource(
     'poetry run cdktf get',
     auto_init=False,
-    cmd='make imports',
+    cmd='poetry run cdktf get --force --language python --log-level ${CDKTF_LOG_LEVEL} --output src/timestep/infra/imports',
     deps=[
         'cdktf.json',
     ],
     labels=['build'],
     resource_deps=['poetry install'],
+    trigger_mode=TRIGGER_MODE_MANUAL,
 )
 
 local_resource(
@@ -168,20 +169,20 @@ watch_file('src/timestep/infra/stacks/platform/timestep_ai')
 if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/caddy',
-        context='src/timestep/services',
+        context='src/timestep/platform',
         live_update=[
-            sync('src/timestep/services/Caddyfile', '/home/ubuntu/app/Caddyfile'),
+            sync('src/timestep/platform/Caddyfile', '/home/ubuntu/app/Caddyfile'),
             run(
                 'caddy reload --config /home/ubuntu/app/Caddyfile --adapter caddyfile',
-                trigger=['src/timestep/services/Caddyfile']
+                trigger=['src/timestep/platform/Caddyfile']
             )
         ],
         # only=['Caddyfile'],
     )
 
     docker_build(
-        'registry.gitlab.com/timestep-ai/timestep/backend',
-        context='src/timestep/services/backend',
+        'registry.gitlab.com/timestep-ai/timestep/server',
+        context='src/timestep/platform/server',
         entrypoint=[
             "/home/ubuntu/app/docker-entrypoint.sh",
             "poetry",
@@ -209,14 +210,14 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         # ],
         ignore=['.venv', '__pycache__'],
         live_update=[
-            sync('src/timestep/services/backend', '/home/ubuntu/app'),
+            sync('src/timestep/platform/server', '/home/ubuntu/app'),
         ],
         match_in_env_vars=True # https://docs.tilt.dev/custom_resource#env-variable-injection
     )
 
     docker_build(
-        'registry.gitlab.com/timestep-ai/timestep/frontend',
-        context='src/timestep/services/frontend',
+        'registry.gitlab.com/timestep-ai/timestep/client',
+        context='src/timestep/platform/client',
     #     entrypoint=[
     #         "/home/ubuntu/docker-entrypoint.sh",
     #         "quasar",
@@ -230,11 +231,11 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     #     # entrypoint="npm run dev",
     #     # ignore=['dist', 'node_modules', 'src-capacitor', 'src-electron'],
     #     live_update=[
-    #         fall_back_on('src/timestep/services/frontend/quasar.config.js'),
-    #         sync('src/timestep/services/frontend', '/home/ubuntu/app'),
+    #         fall_back_on('src/timestep/platform/client/quasar.config.js'),
+    #         sync('src/timestep/platform/client', '/home/ubuntu/app'),
     #         run(
     #             'npm install',
-    #             trigger=['src/timestep/services/frontend/package.json', 'src/timestep/services/frontend/package-lock.json']
+    #             trigger=['src/timestep/platform/client/package.json', 'src/timestep/platform/client/package-lock.json']
     #         )
     #     ],
     #     # only=['.'],
@@ -247,7 +248,6 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         k8s_yaml(
             local(
                 'helm template --values src/timestep/infra/stacks/platform/timestep_ai/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.tls.yaml src/timestep/infra/stacks/platform/timestep_ai'
-                # 'helm template --values src/timestep/infra/stacks/platform/timestep_ai/values.timestep.local' + '.tls.yaml src/timestep/infra/stacks/platform/timestep_ai'
             )
         )
 
@@ -269,17 +269,14 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     )
 
     k8s_resource(
-        'backend',
+        'server',
         links=['https://' + os.getenv('PRIMARY_DOMAIN_NAME') + '/docs', 'https://' + os.getenv('PRIMARY_DOMAIN_NAME') + '/redoc'],
-        # objects=[
-        #     'sky-pvc:persistentvolumeclaim',
-        # ],
         port_forwards=[
             '5678:5678'
         ],
     )
 
     k8s_resource(
-        'frontend',
+        'client',
         links=['https://' + os.getenv('PRIMARY_DOMAIN_NAME')],
     )

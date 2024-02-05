@@ -68,7 +68,7 @@ elif [ ${IMAGE_NAME} = "caddy" ]; then
     --push \
     --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
     --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
-    src/timestep/services
+    src/timestep/platform
 
 else
   docker buildx build \
@@ -86,6 +86,6 @@ else
     --push \
     --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:latest \
     --tag ${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${VERSION} \
-    src/timestep/services/${IMAGE_NAME}
+    src/timestep/platform/${IMAGE_NAME}
 
 fi

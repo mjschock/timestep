@@ -1,9 +1,7 @@
-import base64
 import os
-from cdktf import AssetType, Fn, TerraformAsset
 
 import git
-
+from cdktf import AssetType, Fn, TerraformAsset
 from cdktf_cdktf_provider_helm.provider import HelmProvider
 from cdktf_cdktf_provider_kubernetes.cluster_role_binding_v1 import (
     ClusterRoleBindingV1,
@@ -184,8 +182,8 @@ class TimestepAIConstruct(Construct):
         postgres_password = config.postgresql_password.get_secret_value()
         postgres_username = "postgres"
 
-        backend_config_map = ConfigMapV1(
-            id_="backend_config_map",
+        server_config_map = ConfigMapV1(
+            id_="server_config_map",
             data={
                 "KUBECONTEXT": config.kubecontext,
                 "LITESTREAM_ACCESS_KEY_ID": config.minio_root_user,
@@ -201,47 +199,47 @@ class TimestepAIConstruct(Construct):
                 "VERSION": config.version,
             },
             metadata=ConfigMapV1Metadata(
-                name="backend-config-map",
+                name="server-config-map",
                 namespace="default",
             ),
             scope=self,
         )
 
-        backend_secret = SecretV1(
-            id_="backend_secret",
+        server_secret = SecretV1(
+            id_="server_secret",
             data={
                 "LITESTREAM_SECRET_ACCESS_KEY": config.minio_root_password.get_secret_value(),  # noqa: E501
                 "MINIO_ROOT_PASSWORD": config.minio_root_password.get_secret_value(),
-                "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
+                # "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
                 "POSTGRES_CONNECTION_STRING": f"postgresql+asyncpg://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}",
                 "POSTGRES_PASSWORD": config.postgresql_password.get_secret_value(),
             },
             metadata=SecretV1Metadata(
-                name="backend-secret",
+                name="server-secret",
                 namespace="default",
             ),
             scope=self,
         )
 
-        frontend_config_map = ConfigMapV1(
-            id_="frontend_config_map",
+        client_config_map = ConfigMapV1(
+            id_="client_config_map",
             data={
                 "NEXT_PUBLIC_MODEL": "gpt-4-vision-preview",
             },
             metadata=ConfigMapV1Metadata(
-                name="frontend-config-map",
+                name="client-config-map",
                 namespace="default",
             ),
             scope=self,
         )
 
-        frontend_secret = SecretV1(
-            id_="frontend_secret",
+        client_secret = SecretV1(
+            id_="client_secret",
             data={
-                "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
+                # "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
             },
             metadata=SecretV1Metadata(
-                name="frontend-secret",
+                name="client-secret",
                 namespace="default",
             ),
             scope=self,
@@ -267,12 +265,12 @@ class TimestepAIConstruct(Construct):
         )
 
         timestep_ai_manifest_deps = [
-            backend_config_map,
-            backend_secret,
+            server_config_map,
+            server_secret,
             default_sa_cluster_role_binding,
             default_sa_role_binding,
-            frontend_config_map,
-            frontend_secret,
+            client_config_map,
+            client_secret,
             litestream_config_map,
             private_repo_secret,
         ]

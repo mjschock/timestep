@@ -47,7 +47,7 @@ class Settings(BaseSettings):
         default=DomainNameRegistrarProvider.NONE,
     )
     hasura_graphql_admin_secret: SecretStr = Field()
-    hasura_graphql_jwt_secret_key: SecretStr = Field()
+    hasura_graphql_jwt_secret_key: SecretStr = Field(min_length=32)
     hf_token: SecretStr = Field(default=None)
     ingress_controller_acme_ca: str = Field()
     ingress_controller_debug: str = Field()
@@ -68,7 +68,7 @@ class Settings(BaseSettings):
     namecheap_api_key: SecretStr = Field(default=None)
     namecheap_api_user: str = Field(default=None)
     namecheap_user_name: str = Field(default=None)
-    openai_api_key: SecretStr = Field(default=None)
+    # openai_api_key: SecretStr = Field(default=None)
     pgpool_admin_password: SecretStr = Field()
     postgresql_password: SecretStr = Field()
     postgresql_repmgr_password: SecretStr = Field()

@@ -5,8 +5,8 @@ metadata:
     # rollme: '{{ randAlphaNum 5 | quote }}'
   # creationTimestamp: null
   labels:
-    app: backend
-  name: backend
+    app: server
+  name: server
   namespace: default
 spec:
   ports:
@@ -16,6 +16,6 @@ spec:
     - port: 9090
       name: metrics
   selector:
-    app: backend
+    app: server
 # status:
 #   loadBalancer: {}

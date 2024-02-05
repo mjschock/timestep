@@ -1,0 +1,70 @@
+http://{$PRIMARY_DOMAIN_NAME}:80 {
+	redir http://www.{$PRIMARY_DOMAIN_NAME}{uri}
+}
+
+http://www.{$PRIMARY_DOMAIN_NAME}:80 {
+	encode gzip
+
+	handle /api/rest* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	handle /api* {
+		reverse_proxy server:8000
+	}
+
+	handle /console* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	handle /docs {
+		reverse_proxy server:8000
+	}
+
+	handle /openapi.json {
+		reverse_proxy server:8000
+	}
+
+	handle /redoc {
+		reverse_proxy server:8000
+	}
+
+	handle /v1/graphql {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	handle /v1/auth* {
+		uri strip_prefix /v1/auth
+		reverse_proxy nhost-hasura-auth:4000
+	}
+
+	handle /v1/functions* {
+		uri replace /v1/functions /api
+		reverse_proxy server:8000
+	}
+
+	handle /v1/storage* {
+		uri replace /v1/storage /v1
+		reverse_proxy nhost-hasura-storage:8000
+	}
+
+	handle /v1* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	handle /v2* {
+		reverse_proxy hasura-graphql-engine:8080
+	}
+
+	header {
+		X-Frame-Options "SAMEORIGIN"
+		X-XSS-Protection "1; mode=block"
+		X-Content-Type-Options "nosniff"
+	}
+
+	handle {
+		root * /home/ubuntu/app/client/dist/spa
+		try_files {path} /index.html
+		file_server
+	}
+}

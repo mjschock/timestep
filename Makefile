@@ -1,77 +1,41 @@
-default:
-	# ark get tilt@v${TILT_VERSION}
-	tilt up
-
-clean:
-	multipass delete timestep-ai --purge || true
-	rm -rf cdktf.out
-	rm secrets/kubeconfig
+SHELL := /usr/bin/env bash
 
 hosts:
-	# cat cdktf.out/stacks/timestep.local.k3s_cluster/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
-	cat cdktf.out/stacks/timestep.local.k3s_cluster/hosts | sudo $(shell which hostctl) add timestep.local --wait 0
-
-info:
-	watch multipass info timestep-ai
-
-imports:
-	poetry run cdktf get --force --language python --log-level ${CDKTF_LOG_LEVEL} --output src/timestep/infra/imports
+	@echo "See https://guumaster.github.io/hostctl/docs/getting-started/#linuxmacwindows-and-permissions if you have issues."
+	cat cdktf.out/stacks/timestep.local.k3s_cluster/hosts | sudo $(shell which hostctl) add ephemeral --wait 0
 
 k3s-cluster:
-	k3sup install --context timestep.ai --ip 137.184.180.182 --local-path secrets/kubeconfig --merge --skip-install --ssh-key ./.ssh/id_ed25519 --user ubuntu
-
-kubeapps-port-forward:
-	echo "Kubeapps URL: http://localhost:8484"
-	kubectl port-forward --namespace kubeapps service/kubeapps 8484:80
-
-kubeapps-token:
-	kubectl get --namespace default secret kubeapps-operator-token -o go-template='{{.data.token | base64decode}}' && echo
-
-kubernetes-dashboard-port-forward:
-	src/timestep/infra/stacks/kubernetes_config/kubernetes_dashboard/kubernetes_dashboard_port_forward.sh
-
-kubernetes-dashboard-token:
-	src/timestep/infra/stacks/kubernetes_config/kubernetes_dashboard/kubernetes_dashboard_token.sh
+	@PRIMARY_DOMAIN_NAME_IP_ADDRESS=$$(dig +short $(PRIMARY_DOMAIN_NAME)); \
+	k3sup install --context $$KUBECONTEXT --ip $$PRIMARY_DOMAIN_NAME_IP_ADDRESS --local-path secrets/kubeconfig --merge --skip-install --ssh-key secrets/ssh_private_key --user ubuntu
 
 local-tls-cert:
-	# ark get mkcert
 	mkcert -install
-	# mkcert -cert-file secrets/local_tls_crt -key-file secrets/local_tls_key timestep.local www.timestep.local
-	# mkcert -cert-file dist/local_tls_crt -key-file dist/local_tls_key timestep.local example1.timestep.local example2.timestep.local www.timestep.local
-	# cat dist/local_tls_crt | base64 | tr -d '\n' > secrets/local_tls_crt
-	# cat dist/local_tls_key | base64 | tr -d '\n' > secrets/local_tls_key
-	# mkcert -cert-file tls.crt -key-file tls.key timestep.local example1.timestep.local example2.timestep.local www.timestep.local
 	mkcert -cert-file secrets/local_tls_crt -key-file secrets/local_tls_key timestep.local example1.timestep.local example2.timestep.local www.timestep.local
 	kubectl create secret tls ssl-timestep.local --cert=secrets/local_tls_crt --key=secrets/local_tls_key
-	echo "You may need to restart your browser for the new certificate to take effect."
-	echo "You may need to restart caddy for the new certificate to take effect."
-
-# nvidia:
-# 	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@10.61.136.131 'bash -s' < src/timestep/infra/cicd/nvidia.sh
 
 pre-commit:
 	poetry run pre-commit run --all-files
 
-pyreverse:
-	rm -rf docs/Architecture && rm -rf */**/__pycache__ && mkdir docs/Architecture && poetry run pyreverse --all-ancestors --all-associated --module-names y --colorized --output html --output-directory docs/Architecture src.timestep
-
 quasar-dev-android:
-	cd src/timestep/services/frontend && npx quasar dev -m capacitor -T android
+	cd src/timestep/platform/client && npx quasar dev -m capacitor -T android
 
 quasar-dev-electron:
-	cd src/timestep/services/frontend && npx quasar dev -m electron --devtools
+	cd src/timestep/platform/client && npx quasar dev -m electron --devtools
 
 quasar-dev-ios:
-	cd src/timestep/services/frontend && npx quasar dev -m capacitor -T ios
+	cd src/timestep/platform/client && npx quasar dev -m capacitor -T ios
 
 runner:
-	cd actions-runner && ./run.sh
+	test -f ~/actions-runner/run.sh || ark system install actions-runner
+	~/actions-runner/run.sh
 
-sky-watch:
-	watch kubectl get all -l parent=skypilot
+sky-clear:
+	kubectl delete all -l parent=skypilot
 
 ssh:
-	ssh -i .ssh/id_ed25519 -o IdentitiesOnly=yes ubuntu@137.184.180.182
+	@PRIMARY_DOMAIN_NAME_IP_ADDRESS=$$(dig +short $(PRIMARY_DOMAIN_NAME)); \
+	ssh -i secrets/ssh_private_key -o IdentitiesOnly=yes ubuntu@$$PRIMARY_DOMAIN_NAME_IP_ADDRESS
 
 ssh-keygen:
-	ssh-keygen -t ed25519 -C "timestep.ai" -f .ssh/id_ed25519 -N ""
+	ssh-keygen -t ed25519 -C "timestep.ai" -f secrets/ssh_private_key -N ""
+	chmod 400 secrets/ssh_private_key

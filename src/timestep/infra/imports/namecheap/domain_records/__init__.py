@@ -1,7 +1,7 @@
 '''
 # `namecheap_domain_records`
 
-Refer to the Terraform Registory for docs: [`namecheap_domain_records`](https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records).
+Refer to the Terraform Registory for docs: [`namecheap_domain_records`](https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records).
 '''
 import abc
 import builtins
@@ -26,7 +26,7 @@ class DomainRecords(
     metaclass=jsii.JSIIMeta,
     jsii_type="namecheap.domainRecords.DomainRecords",
 ):
-    '''Represents a {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records namecheap_domain_records}.'''
+    '''Represents a {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records namecheap_domain_records}.'''
 
     def __init__(
         self,
@@ -47,16 +47,16 @@ class DomainRecords(
         provider: typing.Optional[_cdktf_9a9027ec.TerraformProvider] = None,
         provisioners: typing.Optional[typing.Sequence[typing.Union[typing.Union[_cdktf_9a9027ec.FileProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.LocalExecProvisioner, typing.Dict[builtins.str, typing.Any]], typing.Union[_cdktf_9a9027ec.RemoteExecProvisioner, typing.Dict[builtins.str, typing.Any]]]]] = None,
     ) -> None:
-        '''Create a new {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records namecheap_domain_records} Resource.
+        '''Create a new {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records namecheap_domain_records} Resource.
 
         :param scope: The scope in which to define this construct.
         :param id_: The scoped construct ID. Must be unique amongst siblings in the same scope
-        :param domain: Purchased available domain name on your account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#domain DomainRecords#domain}
-        :param email_type: Possible values: NONE, MXE, MX, FWD, OX, GMAIL. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#email_type DomainRecords#email_type}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#id DomainRecords#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param mode: Possible values: MERGE (default), OVERWRITE. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#mode DomainRecords#mode}
-        :param nameservers: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#nameservers DomainRecords#nameservers}.
-        :param record: record block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#record DomainRecords#record}
+        :param domain: Purchased available domain name on your account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#domain DomainRecords#domain}
+        :param email_type: Possible values: NONE, MXE, MX, FWD, OX, GMAIL. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#email_type DomainRecords#email_type}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#id DomainRecords#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param mode: Possible values: MERGE (default), OVERWRITE. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#mode DomainRecords#mode}
+        :param nameservers: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#nameservers DomainRecords#nameservers}.
+        :param record: record block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#record DomainRecords#record}
         :param connection: 
         :param count: 
         :param depends_on: 
@@ -100,7 +100,7 @@ class DomainRecords(
 
         :param scope: The scope in which to define this construct.
         :param import_to_id: The construct id used in the generated config for the DomainRecords to import.
-        :param import_from_id: The id of the existing DomainRecords that should be imported. Refer to the {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#import import section} in the documentation of this resource for the id to use
+        :param import_from_id: The id of the existing DomainRecords that should be imported. Refer to the {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#import import section} in the documentation of this resource for the id to use
         :param provider: ? Optional instance of the provider where the DomainRecords to import is found.
         '''
         if __debug__:
@@ -296,12 +296,12 @@ class DomainRecordsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
         :param lifecycle: 
         :param provider: 
         :param provisioners: 
-        :param domain: Purchased available domain name on your account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#domain DomainRecords#domain}
-        :param email_type: Possible values: NONE, MXE, MX, FWD, OX, GMAIL. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#email_type DomainRecords#email_type}
-        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#id DomainRecords#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
-        :param mode: Possible values: MERGE (default), OVERWRITE. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#mode DomainRecords#mode}
-        :param nameservers: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#nameservers DomainRecords#nameservers}.
-        :param record: record block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#record DomainRecords#record}
+        :param domain: Purchased available domain name on your account. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#domain DomainRecords#domain}
+        :param email_type: Possible values: NONE, MXE, MX, FWD, OX, GMAIL. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#email_type DomainRecords#email_type}
+        :param id: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#id DomainRecords#id}. Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2. If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+        :param mode: Possible values: MERGE (default), OVERWRITE. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#mode DomainRecords#mode}
+        :param nameservers: Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#nameservers DomainRecords#nameservers}.
+        :param record: record block. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#record DomainRecords#record}
         '''
         if isinstance(lifecycle, dict):
             lifecycle = _cdktf_9a9027ec.TerraformResourceLifecycle(**lifecycle)
@@ -416,7 +416,7 @@ class DomainRecordsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def domain(self) -> builtins.str:
         '''Purchased available domain name on your account.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#domain DomainRecords#domain}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#domain DomainRecords#domain}
         '''
         result = self._values.get("domain")
         assert result is not None, "Required property 'domain' is missing"
@@ -426,14 +426,14 @@ class DomainRecordsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def email_type(self) -> typing.Optional[builtins.str]:
         '''Possible values: NONE, MXE, MX, FWD, OX, GMAIL.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#email_type DomainRecords#email_type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#email_type DomainRecords#email_type}
         '''
         result = self._values.get("email_type")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def id(self) -> typing.Optional[builtins.str]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#id DomainRecords#id}.
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#id DomainRecords#id}.
 
         Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
         If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -445,14 +445,14 @@ class DomainRecordsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     def mode(self) -> typing.Optional[builtins.str]:
         '''Possible values: MERGE (default), OVERWRITE.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#mode DomainRecords#mode}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#mode DomainRecords#mode}
         '''
         result = self._values.get("mode")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def nameservers(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#nameservers DomainRecords#nameservers}.'''
+        '''Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#nameservers DomainRecords#nameservers}.'''
         result = self._values.get("nameservers")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
@@ -462,7 +462,7 @@ class DomainRecordsConfig(_cdktf_9a9027ec.TerraformMetaArguments):
     ) -> typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DomainRecordsRecord"]]]:
         '''record block.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#record DomainRecords#record}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#record DomainRecords#record}
         '''
         result = self._values.get("record")
         return typing.cast(typing.Optional[typing.Union[_cdktf_9a9027ec.IResolvable, typing.List["DomainRecordsRecord"]]], result)
@@ -501,11 +501,11 @@ class DomainRecordsRecord:
         ttl: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''
-        :param address: Possible values are URL or IP address. The value for this parameter is based on record type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#address DomainRecords#address}
-        :param hostname: Sub-domain/hostname to create the record for. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#hostname DomainRecords#hostname}
-        :param type: Possible values: A, AAAA, ALIAS, CAA, CNAME, MX, MXE, NS, TXT, URL, URL301, FRAME. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#type DomainRecords#type}
-        :param mx_pref: MX preference for host. Applicable for MX records only. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#mx_pref DomainRecords#mx_pref}
-        :param ttl: Time to live for all record types. Possible values: any value between 60 to 60000. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#ttl DomainRecords#ttl}
+        :param address: Possible values are URL or IP address. The value for this parameter is based on record type. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#address DomainRecords#address}
+        :param hostname: Sub-domain/hostname to create the record for. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#hostname DomainRecords#hostname}
+        :param type: Possible values: A, AAAA, ALIAS, CAA, CNAME, MX, MXE, NS, TXT, URL, URL301, FRAME. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#type DomainRecords#type}
+        :param mx_pref: MX preference for host. Applicable for MX records only. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#mx_pref DomainRecords#mx_pref}
+        :param ttl: Time to live for all record types. Possible values: any value between 60 to 60000. Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#ttl DomainRecords#ttl}
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a86a2c2de9e6dc6723130ba4921818ca9dc4a090b79f8fec182783c276e87b01)
@@ -528,7 +528,7 @@ class DomainRecordsRecord:
     def address(self) -> builtins.str:
         '''Possible values are URL or IP address. The value for this parameter is based on record type.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#address DomainRecords#address}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#address DomainRecords#address}
         '''
         result = self._values.get("address")
         assert result is not None, "Required property 'address' is missing"
@@ -538,7 +538,7 @@ class DomainRecordsRecord:
     def hostname(self) -> builtins.str:
         '''Sub-domain/hostname to create the record for.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#hostname DomainRecords#hostname}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#hostname DomainRecords#hostname}
         '''
         result = self._values.get("hostname")
         assert result is not None, "Required property 'hostname' is missing"
@@ -548,7 +548,7 @@ class DomainRecordsRecord:
     def type(self) -> builtins.str:
         '''Possible values: A, AAAA, ALIAS, CAA, CNAME, MX, MXE, NS, TXT, URL, URL301, FRAME.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#type DomainRecords#type}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#type DomainRecords#type}
         '''
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
@@ -558,7 +558,7 @@ class DomainRecordsRecord:
     def mx_pref(self) -> typing.Optional[jsii.Number]:
         '''MX preference for host. Applicable for MX records only.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#mx_pref DomainRecords#mx_pref}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#mx_pref DomainRecords#mx_pref}
         '''
         result = self._values.get("mx_pref")
         return typing.cast(typing.Optional[jsii.Number], result)
@@ -567,7 +567,7 @@ class DomainRecordsRecord:
     def ttl(self) -> typing.Optional[jsii.Number]:
         '''Time to live for all record types. Possible values: any value between 60 to 60000.
 
-        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.0/docs/resources/domain_records#ttl DomainRecords#ttl}
+        Docs at Terraform Registry: {@link https://registry.terraform.io/providers/namecheap/namecheap/2.1.1/docs/resources/domain_records#ttl DomainRecords#ttl}
         '''
         result = self._values.get("ttl")
         return typing.cast(typing.Optional[jsii.Number], result)
