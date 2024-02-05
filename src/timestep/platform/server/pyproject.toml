@@ -9,7 +9,7 @@ authors = ["Michael Schock <m@mjschock.com>"]
 description = ""
 name = "Timestep AI (server)"
 readme = "README.md"
-version = "6.0.2"
+version = "6.1.0"
 
 [tool.poetry.dependencies]
 agent-protocol = "^1.0.2"
