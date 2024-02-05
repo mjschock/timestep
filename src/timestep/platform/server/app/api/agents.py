@@ -1,4 +1,3 @@
-# from contextlib import asynccontextmanager
 from typing import Annotated, Any, Dict, List, Optional
 
 from agent_protocol import Artifact, Step, StepRequestBody
@@ -11,7 +10,6 @@ from agent_protocol.models import (
 )
 from fastapi import (
     APIRouter,
-    # FastAPI,
     File,
     Form,
     Response,
@@ -28,21 +26,7 @@ DEFAULT_AGENT_NAME = "gpt-4-vision-preview"
 
 available_agent_names = ("gpt-4-vision-preview")
 
-# @asynccontextmanager
-# async def lifespan(app: FastAPI):
-#     # Load the ML model
-#     # ml_models["answer_to_everything"] = fake_answer_to_everything_ml_model
-#     await agents_service.on_startup()
-#     yield
-#     # Clean up the ML models and release the resources
-#     # ml_models.clear()
-#     await agents_service.on_shutdown()
-
-agents_router = APIRouter(
-    # lifespan=lifespan,
-    # on_startup=[agents_service.on_startup],
-    # on_shutdown=[agents_service.on_shutdown],
-)
+agents_router = APIRouter()
 
 @agents_router.post(
     "",
