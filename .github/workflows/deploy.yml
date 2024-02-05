@@ -11,9 +11,9 @@ jobs:
     # runs-on: self-hosted
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Prepare environment 
+      - name: Prepare environment
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
           VARS_CONTEXT: ${{ toJson(vars) }}
@@ -44,9 +44,9 @@ jobs:
     # runs-on: self-hosted
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Prepare environment 
+      - name: Prepare environment
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
           VARS_CONTEXT: ${{ toJson(vars) }}
@@ -79,9 +79,9 @@ jobs:
     # runs-on: self-hosted
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Prepare environment 
+      - name: Prepare environment
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
           VARS_CONTEXT: ${{ toJson(vars) }}
@@ -117,7 +117,7 @@ jobs:
     # runs-on: self-hosted
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -154,9 +154,9 @@ jobs:
   #   needs: [build-cicd, build-postgresql-repmgr, build]
   #   steps:
   #     - name: Checkout repository
-  #       uses: actions/checkout@v3
+  #       uses: actions/checkout@v4
 
-  #     - name: Prepare environment 
+  #     - name: Prepare environment
   #       env:
   #         SECRETS_CONTEXT: ${{ toJson(secrets) }}
   #         VARS_CONTEXT: ${{ toJson(vars) }}
@@ -190,9 +190,9 @@ jobs:
     needs: [build-cicd, build-postgresql-repmgr, build]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Prepare environment 
+      - name: Prepare environment
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
           VARS_CONTEXT: ${{ toJson(vars) }}
