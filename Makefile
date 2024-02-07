@@ -39,3 +39,8 @@ ssh:
 ssh-keygen:
 	ssh-keygen -t ed25519 -C "timestep.ai" -f secrets/ssh_private_key -N ""
 	chmod 400 secrets/ssh_private_key
+
+test:
+	poetry run pytest
+	URL=https://www.$$PRIMARY_DOMAIN_NAME/api/agents/default bash tests/test_agent_protocol_v1.sh
+	poetry run agbenchmark start --cutoff 1

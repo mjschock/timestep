@@ -8,11 +8,12 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
-    "dev": "quasar dev",
+    "dev": "quasar dev --hostname 0.0.0.0 -m spa -p 9000",
     "build": "quasar build"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "agent-protocol": "^1.0.3",
     "axios": "^1.2.1",
     "core-js": "^3.6.5",
     "pinia": "^2.0.11",

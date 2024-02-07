@@ -45,6 +45,7 @@ readme = "README.md"
 version = "6.1.0"
 
 [tool.poetry.dependencies]
+agbenchmark = "^0.0.10"
 cdktf = "^0.19.2"
 cdktf-cdktf-provider-cloudinit = "^9.0.1"
 cdktf-cdktf-provider-digitalocean = "^10.0.2"

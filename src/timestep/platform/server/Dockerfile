@@ -35,10 +35,10 @@ ENV PYTHONUNBUFFERED=1
 RUN python -m venv /home/ubuntu/app/.venv
 
 COPY --chown=ubuntu:ubuntu ./pyproject.toml ./poetry.lock* ./
-RUN poetry install --no-root
+RUN poetry install --no-directory --no-root
 
 COPY --chown=ubuntu:ubuntu . ./
-RUN poetry install
+RUN poetry install --no-root
 
 EXPOSE 8000
 

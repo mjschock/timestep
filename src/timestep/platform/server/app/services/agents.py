@@ -1,9 +1,10 @@
 import os
+from tempfile import NamedTemporaryFile
 from typing import Annotated, Any, Dict, List, Optional
 
 import httpx
 import sky
-from agent_protocol import Artifact
+from agent_protocol import Artifact, Task
 from agent_protocol.models import (
     Step as APIStep,
 )
@@ -28,12 +29,13 @@ from fastapi import File, Form, UploadFile
 from fastapi.responses import FileResponse
 from prefect.deployments.deployments import run_deployment
 from prefect_shell import ShellOperation
-from pydantic import StrictStr
+from pydantic import StrictBytes, StrictStr
 
 from app.services.utils import (
     create_minio_bucket,
     create_minio_storage_block,
     deploy_agent,
+    get_agent_deployment_idempotency_key,
     load_cloud_credentials,
     sky_check_task,
     sky_queue_task,
@@ -42,7 +44,7 @@ from app.services.utils import (
 )
 
 DEFAULT_ACCOUNT_ID = "f215cf48-7458-4596-9aa5-2159fc6a3caf" # Temporary; same as S3_ROOT_FOLDER in NhostConstruct  # noqa: E501
-DEFAULT_AGENT_NAME = "gpt-4-vision-preview"
+DEFAULT_AGENT_NAME = "agent" # TODO: Make this an environment variable
 DEFAULT_BUCKET_NAME = "default"
 
 async def create_agent(account_id: str, agent_name: str) -> dict[str, Any]:
@@ -71,26 +73,26 @@ async def create_agent(account_id: str, agent_name: str) -> dict[str, Any]:
     for deployment_id in deployment_ids:
         await run_deployment(
             deployment_id,
+            idempotency_key=get_agent_deployment_idempotency_key(
+                local_path=f"{os.getcwd()}/app/workers/agents/{agent_name}",
+            ),
             timeout=0,
         )
 
 async def create_agent_task(
     agent_id,
-    input: Optional[StrictStr],
-    additional_input: Optional[Dict[str, Any]]
+    body: TaskRequestBody | None = None,
 ) -> APITask:
+    """
+    Creates a task for the agent.
+    """
     agent: Dict[str, Any] = {
         "id": agent_id,
     }
     memo: Dict[str, Any] = {}
-
-    # memo = await load_cloud_credentials(memo)
-    # memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
-
         if cluster_status["cluster_hash"] == agent_id:
             agent["name"] = cluster_status["name"]
             head_ip = cluster_status["handle"].head_ip
@@ -101,29 +103,28 @@ async def create_agent_task(
 
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
-        task_request_body = TaskRequestBody(
-            input=input,
-            additional_input=additional_input,
-        )
+
         task: APITask = await api_instance.create_agent_task(
-            task_request_body=task_request_body
+            task_request_body=body,
         )
 
     return task
 
-async def list_agent_tasks(agent_id: str) -> TaskListResponse:
+async def list_agent_tasks_ids(
+    agent_id: str,
+    current_page: int = 1,
+    page_size: int = 10,
+) -> TaskListResponse:
+    """
+    List all tasks that have been created for the agent.
+    """
     agent: Dict[str, Any] = {
         "id": agent_id,
     }
     memo: Dict[str, Any] = {}
-
-    # memo = await load_cloud_credentials(memo)
-    # memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
-
         if cluster_status["cluster_hash"] == agent_id:
             agent["name"] = cluster_status["name"]
             head_ip = cluster_status["handle"].head_ip
@@ -134,23 +135,24 @@ async def list_agent_tasks(agent_id: str) -> TaskListResponse:
 
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
-        tasks_list_response: TaskListResponse = await api_instance.list_agent_tasks()
+        tasks_list_response: TaskListResponse = await api_instance.list_agent_tasks(
+            current_page=current_page,
+            page_size=page_size,
+        )
 
     return tasks_list_response
 
-async def get_agent_task(agent_id: str, task_id: str) -> APITask:
+async def get_agent_task(agent_id: str, task_id: str) -> Task:
+    """
+    Get details about a specified agent task.
+    """
     agent: Dict[str, Any] = {
         "id": agent_id,
     }
     memo: Dict[str, Any] = {}
-
-    # memo = await load_cloud_credentials(memo)
-    # memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
-
         if cluster_status["cluster_hash"] == agent_id:
             agent["name"] = cluster_status["name"]
             head_ip = cluster_status["handle"].head_ip
@@ -161,28 +163,26 @@ async def get_agent_task(agent_id: str, task_id: str) -> APITask:
 
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
-        task: APITask = await api_instance.get_agent_task(task_id=task_id)
+        task: Task = await api_instance.get_agent_task(task_id=task_id)
 
     return task
 
 async def list_agent_task_artifacts(
     agent_id: str,
     task_id: str,
+    current_page: int = 1,
     page_size: int = 10,
-    current_page: int = 1
 ) ->  List[Artifact]:
+    """
+    List all artifacts for the specified task.
+    """
     agent: Dict[str, Any] = {
         "id": agent_id,
     }
     memo: Dict[str, Any] = {}
-
-    # memo = await load_cloud_credentials(memo)
-    # memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
-
         if cluster_status["cluster_hash"] == agent_id:
             agent["name"] = cluster_status["name"]
             head_ip = cluster_status["handle"].head_ip
@@ -193,11 +193,12 @@ async def list_agent_task_artifacts(
 
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
+
         tasks_artifacts_list_response: TaskArtifactsListResponse = \
             await api_instance.list_agent_task_artifacts(
                 task_id=task_id,
-                page_size=page_size,
                 current_page=current_page,
+                page_size=page_size,
             )
 
     return tasks_artifacts_list_response.artifacts
@@ -205,21 +206,19 @@ async def list_agent_task_artifacts(
 async def list_agent_task_steps(
     agent_id: str,
     task_id: str,
+    current_page: int = 1,
     page_size: int = 10,
-    current_page: int = 1
 ) -> TaskStepsListResponse:
+    """
+    List all steps for the specified task.
+    """
     agent: Dict[str, Any] = {
         "id": agent_id,
     }
     memo: Dict[str, Any] = {}
-
-    # memo = await load_cloud_credentials(memo)
-    # memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
-
         if cluster_status["cluster_hash"] == agent_id:
             agent["name"] = cluster_status["name"]
             head_ip = cluster_status["handle"].head_ip
@@ -230,6 +229,7 @@ async def list_agent_task_steps(
 
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
+
         task_steps_list_response: TaskStepsListResponse = \
             await api_instance.list_agent_task_steps(
                 task_id=task_id,
@@ -245,14 +245,13 @@ async def upload_agent_task_artifacts(
     file: Annotated[UploadFile, File()],
     relative_path: Annotated[Optional[str], Form()] = None,
 ) -> Artifact:
+    """
+    Upload an artifact for the specified task.
+    """
     agent: Dict[str, Any] = {
         "id": agent_id,
     }
     memo: Dict[str, Any] = {}
-
-    # memo = await load_cloud_credentials(memo)
-    # memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
@@ -266,11 +265,24 @@ async def upload_agent_task_artifacts(
 
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
-        artifact: Artifact = await api_instance.upload_agent_task_artifacts(
-            task_id=task_id,
-            file=file,
-            relative_path=relative_path,
-        )
+
+        try:
+            # Save the file to a temporary location
+            with NamedTemporaryFile(delete=False) as temp_file:
+                temp_file.write(await file.read())
+                temp_file_path = temp_file.name
+
+            # Call the function with the temporary file path
+            artifact: Artifact = await api_instance.upload_agent_task_artifacts(
+                task_id=task_id,
+                file=temp_file_path,
+                relative_path=relative_path,
+            )
+
+        finally:
+            # Cleanup the temporary file
+            if temp_file_path:
+                os.unlink(temp_file_path)
 
     return artifact
 
@@ -283,10 +295,6 @@ async def execute_agent_task_step(
         "id": agent_id,
     }
     memo: Dict[str, Any] = {}
-
-    # memo = await load_cloud_credentials(memo)
-    # memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
@@ -301,6 +309,7 @@ async def execute_agent_task_step(
 
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
+
         step: APIStep = await api_instance.execute_agent_task_step(
             task_id=task_id,
             step_request_body=body
@@ -308,19 +317,18 @@ async def execute_agent_task_step(
 
     return step
 
-async def download_agent_task_artifact(
+async def download_agent_task_artifacts(
     agent_id: str,
     task_id: str,
     artifact_id: str
 ) -> FileResponse:
+    """
+    Download the specified artifact.
+    """
     agent: Dict[str, Any] = {
         "id": agent_id,
     }
     memo: Dict[str, Any] = {}
-
-    # memo = await load_cloud_credentials(memo)
-    # memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
@@ -345,10 +353,6 @@ async def get_agent_task_step(agent_id: str, task_id: str, step_id: str) -> APIS
         "id": agent_id,
     }
     memo: Dict[str, Any] = {}
-
-    # memo = await load_cloud_credentials(memo)
-    # memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
@@ -404,7 +408,6 @@ async def get_agent(account_id: str, agent_id: str) -> Dict[str, Any]:
     raise Exception(f"Agent {agent_id} not found")
 
 async def get_agent_livez(account_id: str, agent_id: str):
-    # cluster_statuses = sky.core.status(refresh=True)
     cluster_statuses = sky.core.status(refresh=False)
 
     for cluster_status in cluster_statuses:
@@ -419,7 +422,6 @@ async def get_agent_livez(account_id: str, agent_id: str):
     raise Exception(f"Agent {agent_id} not found")
 
 async def get_agent_readyz(account_id: str, agent_id: str):
-    # cluster_statuses = sky.core.status(refresh=True)
     cluster_statuses = sky.core.status(refresh=False)
 
     for cluster_status in cluster_statuses:
@@ -452,15 +454,10 @@ async def get_agent_readyz(account_id: str, agent_id: str):
 async def get_agents(account_id: str) -> List[Dict[str, Any]]:
     agents: List[Dict[str, Any]] = []
     memo: Dict[str, Any] = {}
-
-    # memo = await load_cloud_credentials(memo)
-    # memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
         agent_id = cluster_status["cluster_hash"]
-
         agent = {
             "id": agent_id,
             "name": cluster_status["name"],
@@ -484,6 +481,7 @@ async def update_agent(account_id: str, agent_id: str):
         bucket_folder=account_id,
         bucket_name=bucket_name,
     )
+
     await upload_directory_to_minio(
         minio_storage_block=minio_storage_block,
         local_path=f"{os.getcwd()}/app/workers/agents/{agent_name}",
@@ -492,6 +490,9 @@ async def update_agent(account_id: str, agent_id: str):
 
     await run_deployment(
         "serve-agent-flow/serve-agent-flow-deployment",
+        idempotency_key=get_agent_deployment_idempotency_key(
+            local_path=f"{os.getcwd()}/app/workers/agents/{agent_name}",
+        ),
         parameters={
             "account_id": account_id,
             "agent_name": agent_name,
@@ -504,12 +505,9 @@ async def on_startup():
     print(f'\n=== {__name__} on_startup (BEGIN) ===\n')
 
     memo: Dict[str, Any] = {}
-
     memo = await load_cloud_credentials(memo)
     memo = await sky_check_task(memo)
-    # memo = await sky_status_task(memo)
     memo = await sky_status_task(memo, refresh=True)
-
     agents = await get_agents(DEFAULT_ACCOUNT_ID)
 
     if not agents:

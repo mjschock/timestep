@@ -3,7 +3,6 @@ kind: Service
 metadata:
   annotations:
     kubernetes.io/ingress.class: caddy
-  # creationTimestamp: null
   labels:
     app: caddy
   name: caddy

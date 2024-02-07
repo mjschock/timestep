@@ -13,27 +13,12 @@ spec:
   selector:
     matchLabels:
       app: client
-  # strategy: {}
   template:
     metadata:
-      # annotations:
-        # rollme: {{ randAlphaNum 5 | quote }}
-      # creationTimestamp: null
       labels:
-        # io.kompose.network/timestep-default: "true"
         app: client
     spec:
       containers:
-        # - command:
-        #     - /home/ubuntu/docker-entrypoint.sh
-        #     - npm
-        #     - run
-        #     - dev
-        # - env:
-          # {{- with (first .Values.ingress.hosts) }}
-          #   - name: GRAPHQL_URI
-          #     value: https://www.{{ .host }}/graphql
-          # {{- end }}
         - envFrom:
             - configMapRef:
                 name: client-config-map
@@ -44,10 +29,5 @@ spec:
           name: client
           ports:
             - containerPort: 9000
-              # hostPort: 9000
-              # protocol: TCP
-          # resources: {}
       imagePullSecrets:
         - name: regcred
-      # restartPolicy: Always
-# status: {}
