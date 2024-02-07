@@ -1,3 +1,9 @@
+## 7.0.0 (2024-02-06)
+
+### Refactor
+
+- ap fixes, refactoring, etc. - wip
+
 ## 6.1.0 (2024-02-04)
 
 ### Feat
