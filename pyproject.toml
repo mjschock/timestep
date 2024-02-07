@@ -42,7 +42,7 @@ description = ""
 name = "timestep"
 packages = [{from = "src", include = "timestep"}]
 readme = "README.md"
-version = "6.1.0"
+version = "7.0.0"
 
 [tool.poetry.dependencies]
 agbenchmark = "^0.0.10"
