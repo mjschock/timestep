@@ -43,17 +43,15 @@ Running the tests, this might take a while. Please wait...
 
 EOF
 
-# export NODE_EXTRA_CA_CERTS="$(mkcert -CAROOT)/rootCA.pem" # https://github.com/FiloSottile/mkcert#using-the-root-with-nodejs
-
 echo "Washington" >> dist/test_output.txt
 
-# newman run https://raw.githubusercontent.com/AI-Engineer-Foundation/agent-protocol/main/testing_suite/agent_protocol_v1.json \
-newman run ./tests/agent_protocol_v1.json \
+newman run https://raw.githubusercontent.com/AI-Engineer-Foundation/agent-protocol/main/testing_suite/agent_protocol_v1.json \
 --bail \
 --env-var "url=$URL" \
 --ssl-client-cert ./secrets/local_tls_crt \
 --ssl-client-key ./secrets/local_tls_key \
---ssl-extra-ca-certs $(mkcert -CAROOT)/rootCA.pem
+--ssl-extra-ca-certs $(mkcert -CAROOT)/rootCA.pem \
+--working-dir dist
 
 agent_protocol_tests_results=$?
 

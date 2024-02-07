@@ -82,6 +82,9 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-devServer
     devServer: {
+      client: {
+        webSocketURL: 'auto://0.0.0.0:0/ws'
+      },
       server: {
         type: 'http'
       },

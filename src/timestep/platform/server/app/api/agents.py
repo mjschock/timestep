@@ -1,6 +1,6 @@
 from typing import Annotated, Any, Dict, List, Optional
 
-from agent_protocol import Artifact, Step, StepRequestBody
+from agent_protocol import Artifact, Step, StepRequestBody, Task, TaskRequestBody
 from agent_protocol.models import (
     Task as APITask,
 )
@@ -22,9 +22,9 @@ from pydantic import StrictStr
 from app.services import agents as agents_service
 
 DEFAULT_ACCOUNT_ID = "f215cf48-7458-4596-9aa5-2159fc6a3caf" # Temporary; same as S3_ROOT_FOLDER in NhostConstruct  # noqa: E5010
-DEFAULT_AGENT_NAME = "gpt-4-vision-preview"
+DEFAULT_AGENT_NAME = "agent" # TODO: Make this an environment variable
 
-available_agent_names = ("gpt-4-vision-preview")
+available_agent_names = ("agent", "gpt-4-vision-preview")
 
 agents_router = APIRouter()
 
@@ -148,56 +148,57 @@ async def update_agent(agent_id: str):
 
 @agents_router.post(
     "/{agent_id}/ap/v1/agent/tasks",
+    response_model=Task,
     tags=["agent", "agents"],
 )
 async def create_agent_task(
     agent_id: str,
-    input: Optional[StrictStr]="Write 'Hello world!' to hi.txt.",
-    additional_input: Optional[Dict[str, Any]] = None
-) -> APITask:
+    body: TaskRequestBody | None = None
+) -> Task:
+    """
+    Creates a task for the agent.
+    """
     if agent_id == "default":
         agents = await agents_service.get_agents(DEFAULT_ACCOUNT_ID)
         agent_id = [
             agent["id"] for agent in agents if agent["name"] == DEFAULT_AGENT_NAME
         ][0]
 
-    task = await agents_service.create_agent_task(agent_id, input, additional_input)
-
-    # return {
-    #     "task": task,
-    # }
-
-    return task
+    return await agents_service.create_agent_task(agent_id, body)
 
 @agents_router.get(
     "/{agent_id}/ap/v1/agent/tasks",
-    # response_model=List[APITask],
+    response_model=TaskListResponse,
     tags=["agent", "agents"],
 )
-async def list_agent_tasks(
+async def list_agent_tasks_ids(
     agent_id: str,
-) -> TaskListResponse:
-# ) -> List[APITask]:
+    current_page: int = 1,
+    page_size: int = 10,
+) -> List[str]:
+    """
+    List all tasks that have been created for the agent.
+    """
     if agent_id == "default":
         agents = await agents_service.get_agents(DEFAULT_ACCOUNT_ID)
         agent_id = [
             agent["id"] for agent in agents if agent["name"] == DEFAULT_AGENT_NAME
         ][0]
 
-    # return await agents_service.list_agent_tasks(agent_id)
-    task_list_response = await agents_service.list_agent_tasks(agent_id)
-
-    # return task_list_response.tasks
-    return task_list_response
+    return await agents_service.list_agent_tasks_ids(agent_id, current_page, page_size)
 
 @agents_router.get(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}",
+    response_model=Task,
     tags=["agent", "agents"],
 )
 async def get_agent_task(
     agent_id: str,
     task_id: str,
-) -> APITask:
+) -> Task:
+    """
+    Get details about a specified agent task.
+    """
     if agent_id == "default":
         agents = await agents_service.get_agents(DEFAULT_ACCOUNT_ID)
         agent_id = [
@@ -212,7 +213,10 @@ async def get_agent_task(
     tags=["agent", "agents"],
 )
 async def list_agent_task_artifacts(
-    agent_id: str, task_id: str,
+    agent_id: str,
+    task_id: str,
+    current_page: int = 1,
+    page_size: int = 10,
 ) -> List[Artifact]:
     """
     List all artifacts for the specified task.
@@ -224,8 +228,10 @@ async def list_agent_task_artifacts(
         ][0]
 
     return await agents_service.list_agent_task_artifacts(
-        agent_id,
-        task_id,
+        agent_id=agent_id,
+        task_id=task_id,
+        current_page=current_page,
+        page_size=page_size,
     )
 
 @agents_router.post(
@@ -249,24 +255,23 @@ async def upload_agent_task_artifacts(
         ][0]
 
     return await agents_service.upload_agent_task_artifacts(
-        agent_id,
-        task_id,
-        file,
-        relative_path,
+        agent_id=agent_id,
+        task_id=task_id,
+        file=file,
+        relative_path=relative_path,
     )
 
 @agents_router.get(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}/artifacts/{artifact_id}",
-    response_model=Artifact,
     tags=["agent", "agents"],
 )
-async def download_agent_task_artifact(
+async def download_agent_task_artifacts(
     agent_id: str,
     task_id: str,
     artifact_id: str
 ) -> FileResponse:
     """
-    Download a specified artifact.
+    Download the specified artifact.
     """
     if agent_id == "default":
         agents = await agents_service.get_agents(DEFAULT_ACCOUNT_ID)
@@ -274,10 +279,10 @@ async def download_agent_task_artifact(
             agent["id"] for agent in agents if agent["name"] == DEFAULT_AGENT_NAME
         ][0]
 
-    return await agents_service.download_agent_task_artifact(
-        agent_id,
-        task_id,
-        artifact_id,
+    return await agents_service.download_agent_task_artifacts(
+        agent_id=agent_id,
+        task_id=task_id,
+        artifact_id=artifact_id,
     )
 
 @agents_router.get(
@@ -286,7 +291,7 @@ async def download_agent_task_artifact(
     tags=["agent", "agents"],
 )
 async def list_agent_task_steps(
-    agent_id: str, task_id: str, page_size: int = 10, current_page: int = 1
+    agent_id: str, task_id: str, current_page: int = 1, page_size: int = 10,
 ) -> List[str]:
     """
     List all steps for the specified task.
@@ -298,10 +303,10 @@ async def list_agent_task_steps(
         ][0]
 
     return await agents_service.list_agent_task_steps(
-        agent_id,
-        task_id,
-        page_size,
-        current_page
+        agent_id=agent_id,
+        current_page=current_page,
+        page_size=page_size,
+        task_id=task_id,
     )
 
 @agents_router.post(

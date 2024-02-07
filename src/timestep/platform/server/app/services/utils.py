@@ -1,4 +1,5 @@
 import base64
+import hashlib
 import os
 from typing import Any, Dict, List
 
@@ -232,7 +233,7 @@ async def deploy_agent(
                 "MINIO_ENDPOINT": os.getenv("MINIO_ENDPOINT"),
                 "MINIO_ROOT_USER": os.getenv("MINIO_ROOT_USER"),
                 "MINIO_ROOT_PASSWORD": os.getenv("MINIO_ROOT_PASSWORD"), # TODO: Use Secrets
-                # "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
+                "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
                 "PRIMARY_DOMAIN_NAME": os.getenv("PRIMARY_DOMAIN_NAME"),
             },
             "service_account_name": "prefect-worker-job-service-account",
@@ -250,9 +251,32 @@ async def deploy_agent(
     deployment_ids: list = await deploy(
         deployment,
         build=False,
-        image="registry.gitlab.com/timestep-ai/timestep/server:latest",
+        image="registry.gitlab.com/timestep-ai/timestep/server:tilt-22455abc88357aeb",
         push=False,
         work_pool_name="default-worker-pool",
     )
 
     return deployment_ids
+
+def generate_folder_hash(folder_path, hash_algorithm='sha256'):
+    # Choose the hash algorithm (e.g., 'sha256', 'md5', etc.)
+    hasher = hashlib.new(hash_algorithm)
+
+    # Walk through all files and subdirectories in the folder
+    for root, dirs, files in os.walk(folder_path):
+        for filename in files:
+            file_path = os.path.join(root, filename)
+
+            # Calculate hash for each file
+            with open(file_path, 'rb') as f:
+                # Read the file in chunks to handle large files
+                for chunk in iter(lambda: f.read(4096), b''):
+                    hasher.update(chunk)
+
+    # Return the hexadecimal digest of the hash
+    return hasher.hexdigest()
+
+def get_agent_deployment_idempotency_key(
+    local_path: str,
+):
+    return generate_folder_hash(local_path)

@@ -56,15 +56,25 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 		reverse_proxy hasura-graphql-engine:8080
 	}
 
-	header {
-		X-Frame-Options "SAMEORIGIN"
-		X-XSS-Protection "1; mode=block"
-		X-Content-Type-Options "nosniff"
-	}
-
 	handle {
-		root * /home/ubuntu/app/client/dist/spa
-		try_files {path} /index.html
-		file_server
+		# root * /home/ubuntu/app/client/dist/spa
+
+		# Check if PRIMARY_DOMAIN_NAME ends with ".local"
+		@isLocalDomain {
+			expression {host}.endsWith(".local")
+		}
+
+		# Use reverse_proxy to client:9000 if it's a ".local" domain
+		reverse_proxy @isLocalDomain client:9000
+
+		# header {
+		# 	X-Frame-Options "SAMEORIGIN"
+		# 	X-XSS-Protection "1; mode=block"
+		# 	X-Content-Type-Options "nosniff"
+		# }
+
+		# If not a ".local" domain, serve static content
+		# try_files {path} /index.html
+		# file_server
 	}
 }

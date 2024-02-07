@@ -34,6 +34,7 @@ from timestep.infra.stacks.kubernetes_config.prefect.construct import PrefectCon
 from timestep.infra.stacks.kubernetes_config.sealed_secrets.construct import (
     SealedSecretsConstruct,
 )
+from timestep.infra.stacks.kubernetes_config.stalwart.construct import StalwartConstruct
 
 
 class KubernetesConfigStack(TerraformStack):
@@ -140,6 +141,14 @@ class KubernetesConfigStack(TerraformStack):
                     helm_provider=self.helm_provider,
                     scope=self,
                 )
+            )
+
+        if config.stalwart_is_enabled:
+            self.stalwart_construct: StalwartConstruct(
+                config=config,
+                id="stalwart_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
             )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:

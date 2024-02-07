@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   annotations:
     kubernetes.io/ingress.class: caddy
-  # creationTimestamp: null
   labels:
     app: caddy
   name: caddy
@@ -13,33 +12,14 @@ spec:
   selector:
     matchLabels:
       app: caddy
-  # strategy:
-    # type: Recreate
   template:
     metadata:
       annotations:
         kubernetes.io/ingress.class: caddy
-      # creationTimestamp: null
       labels:
-        # io.kompose.network/timestep-default: "true"
         app: caddy
     spec:
       containers:
-        # - args:
-        #     - caddy
-        #     - run
-        #     - --config
-        #     - /home/ubuntu/src/timestep/platform/caddy/Caddyfile
-        #     - --adapter
-        #     - caddyfile
-        # - command:
-        #     - /home/ubuntu/docker-entrypoint.sh
-        #     - caddy
-        #     - run
-        #     - --config
-        #     - Caddyfile
-        #     - --adapter
-        #     - caddyfile
         - env:
           {{- with (first .Values.ingress.hosts) }}
             - name: PRIMARY_DOMAIN_NAME
@@ -49,17 +29,12 @@ spec:
           name: caddy
           ports:
             - containerPort: 80
-              # hostPort: 2019
-              # protocol: TCP
-          # resources: {}
           volumeMounts:
             - mountPath: /home/ubuntu/.caddy
               name: caddy-certs
       imagePullSecrets:
         - name: regcred
-      # restartPolicy: Always
       volumes:
         - name: caddy-certs
           persistentVolumeClaim:
             claimName: caddy-certs
-# status: {}

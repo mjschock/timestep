@@ -181,6 +181,33 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     )
 
     docker_build(
+        'registry.gitlab.com/timestep-ai/timestep/client',
+        context='src/timestep/platform/client',
+    #     entrypoint=[
+    #         "/home/ubuntu/docker-entrypoint.sh",
+    #         "quasar",
+    #         "dev",
+    #         "--hostname",
+    #         "0.0.0.0",
+    #         "-m",
+    #         "spa"
+    #     ],
+    #     # entrypoint=["/home/ubuntu/docker-entrypoint.sh", "npm", "run", "dev"],
+        entrypoint="npm run dev",
+    #     # ignore=['dist', 'node_modules', 'src-capacitor', 'src-electron'],
+        live_update=[
+            fall_back_on('src/timestep/platform/client/quasar.config.js'),
+            sync('src/timestep/platform/client', '/home/ubuntu/app'),
+            run(
+                'npm install',
+                trigger=['src/timestep/platform/client/package.json', 'src/timestep/platform/client/package-lock.json']
+            )
+        ],
+    #     # only=['.'],
+    #     # extra_tag=str(local(command='echo $VERSION')).strip(),
+    )
+
+    docker_build(
         'registry.gitlab.com/timestep-ai/timestep/server',
         context='src/timestep/platform/server',
         entrypoint=[
@@ -215,33 +242,6 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
         match_in_env_vars=True # https://docs.tilt.dev/custom_resource#env-variable-injection
     )
 
-    docker_build(
-        'registry.gitlab.com/timestep-ai/timestep/client',
-        context='src/timestep/platform/client',
-    #     entrypoint=[
-    #         "/home/ubuntu/docker-entrypoint.sh",
-    #         "quasar",
-    #         "dev",
-    #         "--hostname",
-    #         "0.0.0.0",
-    #         "-m",
-    #         "spa"
-    #     ],
-    #     # entrypoint=["/home/ubuntu/docker-entrypoint.sh", "npm", "run", "dev"],
-    #     # entrypoint="npm run dev",
-    #     # ignore=['dist', 'node_modules', 'src-capacitor', 'src-electron'],
-    #     live_update=[
-    #         fall_back_on('src/timestep/platform/client/quasar.config.js'),
-    #         sync('src/timestep/platform/client', '/home/ubuntu/app'),
-    #         run(
-    #             'npm install',
-    #             trigger=['src/timestep/platform/client/package.json', 'src/timestep/platform/client/package-lock.json']
-    #         )
-    #     ],
-    #     # only=['.'],
-    #     # extra_tag=str(local(command='echo $VERSION')).strip(),
-    )
-
     if os.getenv('LOCAL_TLS_CERT_IS_ENABLED', False) == 'true':
         print('local tls cert is enabled')
 
@@ -269,14 +269,14 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     )
 
     k8s_resource(
+        'client',
+        links=['https://' + os.getenv('PRIMARY_DOMAIN_NAME')],
+    )
+
+    k8s_resource(
         'server',
         links=['https://' + os.getenv('PRIMARY_DOMAIN_NAME') + '/docs', 'https://' + os.getenv('PRIMARY_DOMAIN_NAME') + '/redoc'],
         port_forwards=[
             '5678:5678'
         ],
-    )
-
-    k8s_resource(
-        'client',
-        links=['https://' + os.getenv('PRIMARY_DOMAIN_NAME')],
     )

@@ -24,5 +24,6 @@ dist/
 
 ## MISC ##
 actions-runner
+agbenchmark_config
 docs
 !dist/.gitkeep

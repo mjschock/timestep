@@ -1,5 +1,9 @@
 <template>
   <q-layout view="lHh Lpr lFf">
+    <!-- <HeaderComponent
+      @toggle="toggleLeftDrawer"
+    /> -->
+
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -48,6 +52,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+// import HeaderComponent from 'components/HeaderComponent.vue'
 
 const linksList = [
   {
@@ -99,6 +104,7 @@ export default defineComponent({
 
   components: {
     EssentialLink
+    // HeaderComponent
   },
 
   setup () {
