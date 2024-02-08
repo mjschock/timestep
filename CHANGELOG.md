@@ -1,3 +1,9 @@
+## 7.0.2 (2024-02-07)
+
+### Fix
+
+- fix symbolic link to workers
+
 ## 7.0.1 (2024-02-07)
 
 ### Fix
