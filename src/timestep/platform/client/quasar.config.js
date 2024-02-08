@@ -32,7 +32,9 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
     boot: [
       'i18n',
-      'axios'
+      'apollo',
+      'axios',
+      'nhost'
     ],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
@@ -51,7 +53,8 @@ module.exports = configure(function (ctx) {
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
-      'material-icons' // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
+      'mdi-v7'
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
@@ -107,7 +110,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Notify', 'LocalStorage', 'SessionStorage']
     },
 
     // animations: 'all', // --- includes all animations

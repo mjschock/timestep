@@ -177,7 +177,7 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
                 trigger=['src/timestep/platform/Caddyfile']
             )
         ],
-        # only=['Caddyfile'],
+        only=['Caddyfile'],
     )
 
     docker_build(

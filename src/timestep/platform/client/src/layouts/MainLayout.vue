@@ -1,46 +1,62 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <!-- <HeaderComponent
-      @toggle="toggleLeftDrawer"
-    /> -->
-
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
-        <q-toolbar-title>
-          Timestep AI
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
-    </q-header>
+  <q-layout view="hHh Lpr lff">
+    <HeaderComponent
+      title="Timestep AI"
+      :is-signed-in="isSignedIn"
+      :on-menu-button-click="() => { drawer = !drawer }"
+      :on-title-click="() => $router.push('/')"
+    />
 
     <q-drawer
-      v-model="leftDrawerOpen"
+      v-model="drawer"
       show-if-above
+      :mini="!drawer || miniState"
+      :width="200"
+      :breakpoint="500"
       bordered
+      :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
+      @click.capture="drawerClick"
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+      <q-scroll-area
+        class="fit"
+        :horizontal-thumb-style="{ opacity: '0' }"
+      >
+        <q-list padding>
+          <q-item
+            v-for="page in pages"
+            :key="page.name"
+            v-ripple
+            clickable
+            :to="page.path"
+            :active="$router.currentRoute.value.path === page.path"
+          >
+            <q-item-section
+              v-if="page.metadata && page.metadata.icon"
+              avatar
+            >
+              <q-icon :name="page.metadata.icon" />
+            </q-item-section>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
+            <q-item-section>
+              {{ page.name }}
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
+
+      <div
+        class="q-mini-drawer-hide absolute"
+        style="top: 15px; right: -17px"
+      >
+        <q-btn
+          dense
+          round
+          unelevated
+          color="accent"
+          icon="chevron_left"
+          @click="miniState = true"
         />
-      </q-list>
+      </div>
     </q-drawer>
 
     <q-page-container>
@@ -51,71 +67,70 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-// import HeaderComponent from 'components/HeaderComponent.vue'
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+import { AuthChangeEvent } from '@nhost/nhost-js'
+
+import HeaderComponent from 'components/HeaderComponent.vue'
+import { nhost } from 'src/boot/nhost'
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
-    // HeaderComponent
+    HeaderComponent
   },
 
   setup () {
-    const leftDrawerOpen = ref(false)
+    const isSignedIn = ref(false)
+    const miniState = ref(false)
+    const pages = ref([
+      // { name: 'Home', path: '/' },
+      {
+        name: 'Accounts',
+        path: '/accounts',
+        metadata: { enabled: true, icon: 'manage_accounts' }
+      },
+      {
+        name: 'Agents',
+        path: '/agents',
+        metadata: { enabled: true, icon: 'support_agent' }
+      },
+      // {
+      //   name: 'Artifacts',
+      //   path: '/artifacts',
+      //   metadata: { enabled: true, icon: 'art_track' }
+      // },
+      // { name: 'Calendars', path: '/calendars', metadata: { enabled: true, icon: 'event_repeat' } },
+      // { name: 'Contacts', path: '/contacts', metadata: { enabled: true, icon: 'contacts' } },
+      // { name: 'Documents', path: '/documents', metadata: { enabled: false, icon: 'document_scanner' } },
+      { name: 'Tasks', path: '/tasks', metadata: { enabled: true, icon: 'task' } }
+      // { name: 'Tools', path: '/tools', metadata: { enabled: true, icon: 'build' } }
+      // {
+      //   name: 'Environments',
+      //   path: '/threads',
+      //   metadata: { enabled: true, icon: 'workspaces' }
+      // }
+    ])
+
+    const { isAuthenticated } = nhost.auth.getAuthenticationStatus()
+
+    isSignedIn.value = isAuthenticated
+
+    nhost.auth.onAuthStateChanged((event: AuthChangeEvent) => {
+      isSignedIn.value = event === 'SIGNED_IN'
+    })
 
     return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      drawer: ref(false),
+      drawerClick (e: { stopPropagation: () => void }) {
+        if (miniState.value) {
+          miniState.value = false
+          e.stopPropagation()
+        }
+      },
+      isSignedIn,
+      miniState,
+      pages
     }
   }
 })
