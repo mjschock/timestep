@@ -251,7 +251,7 @@ async def deploy_agent(
     deployment_ids: list = await deploy(
         deployment,
         build=False,
-        image="registry.gitlab.com/timestep-ai/timestep/server:tilt-22455abc88357aeb",
+        image="registry.gitlab.com/timestep-ai/timestep/server:latest",
         push=False,
         work_pool_name="default-worker-pool",
     )
