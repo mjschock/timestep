@@ -1,9 +1,10 @@
 # contents of refraction.py
+from __future__ import annotations
 
 import numpy as np
 
 
-def snell(theta_inc: float, n1: float, n2: float) -> float:
+def snell(theta_inc: float, n1: float, n2: float) -> np.ndarray:
     """
     Compute the refraction angle using Snell's Law.
 
@@ -29,4 +30,8 @@ def snell(theta_inc: float, n1: float, n2: float) -> float:
     >>> snell(np.pi/4, 1.00, 1.33)
     0.5605584137424605
     """
-    return np.arcsin(n1 / n2 * np.sin(theta_inc))
+    angle: np.ndarray = np.arcsin(n1 / n2 * np.sin(theta_inc))
+
+    assert type(angle) == np.ndarray, f"{type(angle)} != np.ndarray"
+
+    return angle
