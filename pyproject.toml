@@ -5,7 +5,7 @@ build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.poetry]
 name = "timestep"
-version = "0.0.0"
+version = "8.0.0"
 authors = [
   "Michael Schock <m@mjschock.com>",
 ]
@@ -25,7 +25,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = ">=3.9"
 
 furo = { version = ">=2023.08.17", optional = true }
 myst_parser = { version = ">=0.13", optional = true }
@@ -34,6 +34,7 @@ pytest-cov = { version = ">=3", optional = true }
 sphinx = { version = ">=7.0", optional = true }
 sphinx_copybutton = { version = ">=0.3.0", optional = true }
 sphinx-autodoc-typehints = { version = "*", optional = true }
+numpy = "^1.26.4"
 
 [tool.poetry.dev-dependencies]
 pytest = ">= 6"
@@ -81,7 +82,7 @@ report.exclude_also = [
 
 [tool.mypy]
 files = ["src", "tests"]
-python_version = "3.8"
+python_version = "3.9"
 warn_unused_configs = true
 strict = true
 enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
@@ -97,7 +98,7 @@ disallow_incomplete_defs = true
 
 [tool.ruff]
 src = ["src"]
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.lint]
 extend-select = [
@@ -138,7 +139,7 @@ isort.required-imports = ["from __future__ import annotations"]
 
 
 [tool.pylint]
-py-version = "3.8"
+py-version = "3.9"
 ignore-paths = [".*/_version.py"]
 reports.output-format = "colorized"
 similarities.ignore-imports = "yes"
@@ -150,3 +151,6 @@ messages_control.disable = [
   "missing-function-docstring",
   "wrong-import-position",
 ]
+
+[tool.poetry.scripts]
+timestep = 'timestep.__main__:main'
