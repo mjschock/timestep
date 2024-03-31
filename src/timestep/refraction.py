@@ -30,8 +30,8 @@ def snell(theta_inc: float, n1: float, n2: float) -> np.ndarray:
     >>> snell(np.pi/4, 1.00, 1.33)
     0.5605584137424605
     """
-    angle: np.ndarray = np.arcsin(n1 / n2 * np.sin(theta_inc))
+    angle: np.float64 = np.arcsin(n1 / n2 * np.sin(theta_inc))
 
-    assert type(angle) == np.ndarray, f"{type(angle)} != np.ndarray"
+    assert isinstance(angle, np.float64), f"{isinstance(angle, np.float64)} != True"
 
     return angle
