@@ -1,0 +1,6 @@
+{
+    "files.watcherExclude": {
+        "**/.venv/**": true,
+        "notebooks": true,
+    }
+}
