@@ -1,27 +1,29 @@
-from transformers import (
-    AutoFeatureExtractor,
-    AutoImageProcessor,
-    AutoProcessor,
-    AutoTokenizer,
+from __future__ import annotations
+
+from transformers import (  # type: ignore[import-not-found]
     FeatureExtractionMixin,
     ImageProcessingMixin,
     PreTrainedTokenizerBase,
     ProcessorMixin,
 )
 
-class ModelFeatureExtractor(FeatureExtractionMixin):
+
+class ModelFeatureExtractor(FeatureExtractionMixin):  # type: ignore[misc]
     _auto_class = "AutoFeatureExtractor"
 
-class ModelImageProcessor(ImageProcessingMixin):
+
+class ModelImageProcessor(ImageProcessingMixin):  # type: ignore[misc]
     _auto_class = "AutoImageProcessor"
 
-class ModelTokenizer(PreTrainedTokenizerBase):
+
+class ModelTokenizer(PreTrainedTokenizerBase):  # type: ignore[misc]
     _auto_class = "AutoTokenizer"
 
-class ModelProcessor(ProcessorMixin):
+
+class ModelProcessor(ProcessorMixin):  # type: ignore[misc]
     _auto_class = "AutoProcessor"
 
-    attributes = [
+    attributes = [  # noqa: RUF012
         "feature_extractor",
         "image_processor",
         "tokenizer",

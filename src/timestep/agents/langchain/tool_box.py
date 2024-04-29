@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 from langchain.tools.wikipedia.tool import WikipediaQueryRun
 from langchain_community.agent_toolkits.file_management import FileManagementToolkit
@@ -7,7 +8,8 @@ from langchain_community.tools.wikidata.tool import WikidataAPIWrapper, Wikidata
 from langchain_community.tools.yahoo_finance_news import YahooFinanceNewsTool
 from langchain_community.tools.youtube.search import YouTubeSearchTool
 from langchain_community.utilities.wikipedia import WikipediaAPIWrapper
-
+from langchain_core.language_models import BaseChatModel
+from langchain_core.tools import BaseTool
 
 # @contextmanager
 # def pushd(new_dir):
@@ -94,43 +96,44 @@ from langchain_community.utilities.wikipedia import WikipediaAPIWrapper
 #     )
 
 
-class WebpageQATool(BaseTool):
-    name = "query_webpage"
-    description = (
-        "Browse a webpage and retrieve the information relevant to the question."
-    )
-    text_splitter: RecursiveCharacterTextSplitter = Field(
-        default_factory=_get_text_splitter
-    )
-    qa_chain: BaseCombineDocumentsChain
+# class WebpageQATool(BaseTool):
+#     name = "query_webpage"
+#     description = (
+#         "Browse a webpage and retrieve the information relevant to the question."
+#     )
+#     text_splitter: RecursiveCharacterTextSplitter = Field(
+#         default_factory=_get_text_splitter
+#     )
+#     qa_chain: BaseCombineDocumentsChain
 
-    def _run(self, url: str, question: str) -> str:
-        """Useful for browsing websites and scraping the text information."""
-        result = browse_web_page.run(url)
-        docs = [Document(page_content=result, metadata={"source": url})]
-        web_docs = self.text_splitter.split_documents(docs)
-        results = []
-        # TODO: Handle this with a MapReduceChain
-        for i in range(0, len(web_docs), 4):
-            input_docs = web_docs[i : i + 4]
-            window_result = self.qa_chain(
-                {"input_documents": input_docs, "question": question},
-                return_only_outputs=True,
-            )
-            results.append(f"Response from window {i} - {window_result}")
-        results_docs = [
-            Document(page_content="\n".join(results), metadata={"source": url})
-        ]
-        return self.qa_chain(
-            {"input_documents": results_docs, "question": question},
-            return_only_outputs=True,
-        )
+#     def _run(self, url: str, question: str) -> str:
+#         """Useful for browsing websites and scraping the text information."""
+#         result = browse_web_page.run(url)
+#         docs = [Document(page_content=result, metadata={"source": url})]
+#         web_docs = self.text_splitter.split_documents(docs)
+#         results = []
+#         # TODO: Handle this with a MapReduceChain
+#         for i in range(0, len(web_docs), 4):
+#             input_docs = web_docs[i : i + 4]
+#             window_result = self.qa_chain(
+#                 {"input_documents": input_docs, "question": question},
+#                 return_only_outputs=True,
+#             )
+#             results.append(f"Response from window {i} - {window_result}")
+#         results_docs = [
+#             Document(page_content="\n".join(results), metadata={"source": url})
+#         ]
+#         return self.qa_chain(
+#             {"input_documents": results_docs, "question": question},
+#             return_only_outputs=True,
+#         )
 
-    async def _arun(self, url: str, question: str) -> str:
-        raise NotImplementedError
+#     async def _arun(self, url: str, question: str) -> str:
+#         raise NotImplementedError
 
 
-def get_tools(llm, workspace_path):
+# def get_tools(llm, workspace_path):
+def get_tools(llm: BaseChatModel, workspace_path: str) -> list[BaseTool]:  # noqa: ARG001
     file_management_toolkit = FileManagementToolkit(
         root_dir=workspace_path,
         # selected_tools=["read_file", "write_file"],
@@ -151,7 +154,7 @@ def get_tools(llm, workspace_path):
         # ShellTool(),
         YahooFinanceNewsTool(),
         YouTubeSearchTool(),
-        WebpageQATool(qa_chain=load_qa_with_sources_chain(llm)),
+        # WebpageQATool(qa_chain=load_qa_with_sources_chain(llm)),
         WikidataQueryRun(api_wrapper=WikidataAPIWrapper()),
         WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper()),
         # WriteFileTool(),

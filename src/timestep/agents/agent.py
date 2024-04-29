@@ -1,8 +1,10 @@
-import mesa
-
-
 # class Agent(mesa.Agent):
 # TODO: Take inspiration from https://pettingzoo.farama.org/tutorials/langchain/langchain/#gymnasium-agent
+from __future__ import annotations
+
+from pettingzoo.utils.env import ActionType
+
+
 class Agent:
     """
     An agent.
@@ -15,17 +17,13 @@ class Agent:
     #     self.unique_id = unique_id
     #     super().__init__(unique_id, model)
 
-    # def step(self):
-    #     """
-    #     Modify this method to change what an individual agent will do during each step.
-    #     Can include logic based on neighbors states.
-    #     """
-    #     pass
-
-    def act(self, observation):
+    def act(  # type: ignore[no-untyped-def]
+        self, observation, reward, termination, truncation, info
+    ) -> ActionType:
         """
-        Choose an action based on the observation.
+        Observe, orient, decide, etc. and return an action.
         """
-        action = None
 
-        return action
+        raise NotImplementedError
+
+    # TODO: rename to `step` and either package up the observation, reward, termination, truncation, and info into a single object that could have different fields or add @overload to the method signature for the env.step method

@@ -1,10 +1,15 @@
+from __future__ import annotations
+
 import pytest
+from pettingzoo.utils.conversions import aec_to_parallel
+from pettingzoo.utils.env import AECEnv
 
 from timestep.agents.agent import Agent
 from timestep.environments import environment as mod
-from timestep.environments.environment import env as env_fn, Environment, parallel_env as parallel_env_fn
-from pettingzoo.utils.conversions import aec_to_parallel
-from pettingzoo.utils.env import AECEnv
+from timestep.environments.environment import Environment
+from timestep.environments.environment import env as env_fn
+from timestep.environments.environment import parallel_env as parallel_env_fn
+
 
 def test_pettingzoo_compatibility():
     with pytest.deprecated_call():
@@ -46,9 +51,7 @@ def test_pettingzoo_compatibility():
 
     max_cycles_test(mod=mod)
 
-    custom_tests = {
-        "svg": lambda render_result: isinstance(render_result, str)
-    }
+    custom_tests = {"svg": lambda render_result: isinstance(render_result, str)}
 
     render_test(env_fn=env_fn, custom_tests=custom_tests)
 

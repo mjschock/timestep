@@ -1,8 +1,10 @@
 # <project_root>/register_prefect_flow.py
-import click
-from pathlib import Path
-from typing import Dict, List, Union, Callable
+from __future__ import annotations
 
+from pathlib import Path
+from typing import Callable
+
+import click
 from kedro.framework.hooks.manager import _create_hook_manager
 from kedro.framework.project import pipelines
 from kedro.framework.session import KedroSession
@@ -10,8 +12,7 @@ from kedro.framework.startup import bootstrap_project
 from kedro.io import DataCatalog, MemoryDataset
 from kedro.pipeline.node import Node
 from kedro.runner import run_node
-
-from prefect import flow, task, get_run_logger
+from prefect import flow, get_run_logger, task
 from prefect.deployments import Deployment
 
 
@@ -22,7 +23,7 @@ from prefect.deployments import Deployment
 @click.option("--work_pool_name", "work_pool_name", default="default")
 @click.option("--work_queue_name", "work_queue_name", default="default")
 @click.option("--version", "version", default="1.0")
-def prefect_deploy(
+def prefect_deploy(  # type: ignore[no-untyped-def]
     pipeline_name, env, deployment_name, work_pool_name, work_queue_name, version
 ):
     """Register a Kedro pipeline as a Prefect flow."""
@@ -49,8 +50,8 @@ def prefect_deploy(
     deployment.apply()
 
 
-@flow(name="my_flow")
-def my_flow(pipeline_name: str, env: str):
+@flow(name="my_flow")  # type: ignore[misc]
+def my_flow(pipeline_name: str, env: str):  # type: ignore[no-untyped-def]
     logger = get_run_logger()
     project_path = Path.cwd()
 
@@ -74,8 +75,8 @@ def my_flow(pipeline_name: str, env: str):
             node_task()
 
 
-@task()
-def kedro_init(
+@task()  # type: ignore[misc]
+def kedro_init(  # type: ignore[no-untyped-def]
     pipeline_name: str,
     project_path: Path,
     env: str,
@@ -109,8 +110,8 @@ def kedro_init(
 
 def init_kedro_tasks_by_execution_layer(
     pipeline_name: str,
-    execution_config: Union[None, Dict[str, Union[DataCatalog, str]]] = None,
-) -> List[List[Callable]]:
+    execution_config: None | dict[str, DataCatalog | str] = None,
+) -> list[list[Callable]]:  # type: ignore[type-arg]
     """
     Inits the Kedro tasks ordered topologically in groups, which implies that an earlier group
     is the dependency of later one.
@@ -143,21 +144,19 @@ def init_kedro_tasks_by_execution_layer(
     return execution_layers
 
 
-def kedro_task(
-    node: Node, task_dict: Union[None, Dict[str, Union[DataCatalog, str]]] = None
-):
+def kedro_task(node: Node, task_dict: None | dict[str, DataCatalog | str] = None):  # type: ignore[no-untyped-def]
     run_node(
         node,
-        task_dict["catalog"],
+        task_dict["catalog"],  # type: ignore[index]
         _create_hook_manager(),
-        task_dict["sess_id"],
+        task_dict["sess_id"],  # type: ignore[index]
     )
 
 
 def instantiate_task(
     node: Node,
-    execution_config: Union[None, Dict[str, Union[DataCatalog, str]]] = None,
-) -> Callable:
+    execution_config: None | dict[str, DataCatalog | str] = None,
+) -> Callable:  # type: ignore[type-arg]
     """
     Function that wraps a Node inside a task for future execution
 
@@ -169,7 +168,7 @@ def instantiate_task(
     Returns: Prefect task for the passed node
 
     """
-    return task(lambda: kedro_task(node, execution_config)).with_options(name=node.name)
+    return task(lambda: kedro_task(node, execution_config)).with_options(name=node.name)  # type: ignore[no-any-return]
 
 
 if __name__ == "__main__":

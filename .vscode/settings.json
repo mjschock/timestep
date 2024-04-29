@@ -1,6 +1,6 @@
 {
-    "files.watcherExclude": {
-        "**/.venv/**": true,
-        "notebooks": true,
-    }
+  "files.watcherExclude": {
+    "**/.venv/**": true,
+    "notebooks": true
+  }
 }

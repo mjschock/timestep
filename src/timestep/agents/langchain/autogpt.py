@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
-from typing import List, Optional
 
 from langchain.chains.llm import LLMChain
 from langchain.memory import ChatMessageHistory
@@ -17,11 +18,12 @@ from langchain_experimental.autonomous_agents.autogpt.output_parser import (
     BaseAutoGPTOutputParser,
 )
 from langchain_experimental.autonomous_agents.autogpt.prompt import AutoGPTPrompt
+from pettingzoo.utils.env import ActionType
 
 from timestep.agents.agent import Agent
 
 
-def _get_default_memory():
+def _get_default_memory():  # type: ignore[no-untyped-def]
     return InMemoryVectorStore(
         embedding=DeterministicFakeEmbedding(size=512)
     ).as_retriever()
@@ -37,16 +39,16 @@ class LangChainAutoGPTAgent(Agent):
             default_factory=ChatMessageHistory
         )
         human_in_the_loop: bool = True
-        feedback_tool: Optional[HumanInputRun] = None
+        feedback_tool: HumanInputRun | None = None
         llm: BaseChatModel = field(default_factory=FakeChatModel)
         memory: VectorStoreRetriever = field(default_factory=_get_default_memory)
         output_parser: BaseAutoGPTOutputParser = field(
             default_factory=AutoGPTOutputParser
         )
-        tools: List[BaseTool] = field(default_factory=list)
+        tools: list[BaseTool] = field(default_factory=list)
         verbose: bool = True
 
-        def __post_init__(self):
+        def __post_init__(self) -> None:
             if self.chain is None:
                 self.chain = LLMChain(
                     llm=self.llm,
@@ -69,7 +71,7 @@ class LangChainAutoGPTAgent(Agent):
     def __init__(
         self,
         *,
-        config: Config = Config(),
+        config: Config = Config(),  # noqa: B008
     ):
         super().__init__()
 
@@ -91,5 +93,88 @@ class LangChainAutoGPTAgent(Agent):
             tools=tools,
         )
 
-    def step(self):
-        return self.agent.run(goals=[""])
+    def step(  # type: ignore[no-untyped-def]
+        self,
+        observation,  # noqa: ARG002
+        reward,  # noqa: ARG002
+        termination,  # noqa: ARG002
+        truncation,  # noqa: ARG002
+        info,  # noqa: ARG002
+        *args,  # noqa: ARG002
+        **kwargs,  # noqa: ARG002
+    ) -> ActionType:
+        # action = super().step(observation, reward, termination, truncation, info)
+
+        # observation = self.sense(observation, reward, termination, truncation, info)
+        # orientation = self.orient(observation, reward, termination, truncation, info)
+        # action = self.decide(orientation)
+        # action = self.act(observation, reward, termination, truncation, info)
+
+        # def observe(
+        #     observation, reward, termination, truncation, info, *args, **kwargs
+        # ):
+        #     return observation
+
+        # def orient(observation, reward, termination, truncation, info, *args, **kwargs):
+        #     orientation = {
+        #         "goals": [""],
+        #     }
+
+        #     return orientation
+
+        # def decide(
+        #     orientation,
+        #     observation,
+        #     reward,
+        #     termination,
+        #     truncation,
+        #     info,
+        #     *args,
+        #     **kwargs,
+        # ):
+        #     decision = self.agent.run(**orientation)
+
+        #     return decision
+
+        # def act(
+        #     decision,
+        #     observation,
+        #     reward,
+        #     termination,
+        #     truncation,
+        #     info,
+        #     *args,
+        #     **kwargs,
+        # ):
+        #     return decision
+
+        # observation = observe(
+        #     observation, reward, termination, truncation, info, *args, **kwargs
+        # )
+        # orientation = orient(
+        #     observation, reward, termination, truncation, info, *args, **kwargs
+        # )
+        # decision = decide(
+        #     orientation,
+        #     observation,
+        #     reward,
+        #     termination,
+        #     truncation,
+        #     info,
+        #     *args,
+        #     **kwargs,
+        # )
+        # action = act(
+        #     decision,
+        #     observation,
+        #     reward,
+        #     termination,
+        #     truncation,
+        #     info,
+        #     *args,
+        #     **kwargs,
+        # )
+
+        return self.agent.run(
+            goals=[""],
+        )

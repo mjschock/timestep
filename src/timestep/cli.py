@@ -1,18 +1,17 @@
+from __future__ import annotations
+
 import asyncio
-import inspect
-from timestep.flows.register_prefect_flow import prefect_deploy, my_flow
+from typing import Any
+
 from timestep.flows.__main__ import main
+from timestep.flows.register_prefect_flow import my_flow
 
-def cli():
-    print("=== BEGIN CLI ===")
 
-    print('...')
+def cli() -> None:
+    pass
 
-    print("=== END CLI ===")
 
-def run(*args, **kwargs):
-    print("=== BEGIN RUN ===")
-
+def run(*args: list[Any], **kwargs: dict[str, Any]) -> None:
     # print('args:', args)
     # print('kwargs:', kwargs)
 
@@ -39,5 +38,3 @@ def run(*args, **kwargs):
 
     # main()
     asyncio.run(main(*args, **kwargs))
-
-    print("=== END RUN ===")

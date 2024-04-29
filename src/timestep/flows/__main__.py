@@ -1,16 +1,26 @@
+from __future__ import annotations
+
 import asyncio
-from PIL import Image
+from typing import Any
+
 import numpy as np
+from PIL import Image
 from prefect import State, flow
-from prefect.client.schemas import StateType
 
-from timestep.environments.environment import ActionType, AgentID, Environment, ObsType
+from timestep.environments.environment import Environment
 
 
-@flow(log_prints=True)
-async def main_flow(max_cycles=3, render_mode="rgb_array"):
-    print("=== BEGIN MAIN FLOW ===")
+@flow(log_prints=True)  # type: ignore[misc]
+async def sub_flow() -> State:
+    return None
 
+
+@flow(log_prints=True)  # type: ignore[misc]
+async def main_flow(
+    max_cycles: int = 3,
+    render_mode: str = "rgb_array",
+    # ) -> Coroutine[Any, Any, State]:
+) -> State:
     aec_env = Environment(
         max_cycles=max_cycles,
         render_mode=render_mode,
@@ -18,7 +28,9 @@ async def main_flow(max_cycles=3, render_mode="rgb_array"):
 
     # Observe
     rgb_array: np.ndarray = aec_env.render()
-    assert isinstance(rgb_array, np.ndarray), f"rgb_array must be a numpy array, got {type(rgb_array)}."
+    assert isinstance(
+        rgb_array, np.ndarray
+    ), f"rgb_array must be a numpy array, got {type(rgb_array)}."
 
     if render_mode == "human":
         Image.fromarray(rgb_array).show()
@@ -27,12 +39,7 @@ async def main_flow(max_cycles=3, render_mode="rgb_array"):
     # print("Observations:", observations)
     # print("Infos:", infos)
 
-    agent_ids: AgentID = aec_env.agents
-
     for agent_id in aec_env.agent_iter():
-        print("Timestep:", aec_env.timestep)
-        print("Agent ID:", agent_id)
-
         observation, reward, termination, truncation, info = aec_env.last()
         # print("Observation:", observation)
         # print("Reward:", reward)
@@ -49,13 +56,18 @@ async def main_flow(max_cycles=3, render_mode="rgb_array"):
 
         aec_env.step(action)
 
-    print("=== END MAIN FLOW ===")
+    # future = await sub_flow.submit()
+    return await sub_flow()
+    # result = await future.result()
 
-async def main(*args, **kwargs):
+    # return result + 1
+
+
+async def main(*args: list[Any], **kwargs: dict[str, Any]) -> None:
     state: State = await main_flow(*args, **kwargs, return_state=True)
-    print("state:", state)
     assert state.is_final()
     assert state.is_completed()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -1,18 +1,13 @@
-from dataclasses import dataclass, field
-from typing import List
+from __future__ import annotations
 
-from langchain.agents import AgentExecutor, Tool
-from langchain.agents.react.agent import create_react_agent
-from langchain.chains.llm import LLMChain
-from langchain.memory import ChatMessageHistory
-from langchain.schema import BaseChatMessageHistory
+from dataclasses import dataclass, field
+
 from langchain.tools.base import BaseTool
-from langchain_community.tools.human.tool import HumanInputRun
 from langchain_community.vectorstores.inmemory import InMemoryVectorStore
 from langchain_core.embeddings.fake import DeterministicFakeEmbedding
 from langchain_core.language_models import BaseChatModel
 from langchain_core.language_models.fake_chat_models import FakeChatModel
-from langchain_core.vectorstores import VectorStore, VectorStoreRetriever
+from langchain_core.vectorstores import VectorStore
 from langchain_experimental.autonomous_agents import BabyAGI
 from langchain_experimental.autonomous_agents.baby_agi.task_creation import (
     TaskCreationChain,
@@ -35,7 +30,7 @@ def _get_default_suffix() -> str:
     return """Question: {task}\n{agent_scratchpad}"""
 
 
-def _get_default_vector_store():
+def _get_default_vector_store() -> VectorStore:
     return InMemoryVectorStore(embedding=DeterministicFakeEmbedding(size=512))
 
 
@@ -55,11 +50,11 @@ class LangChainBabyAGIAgent(Agent):
         # prefix: str = field(default_factory=_get_default_prefix)
         # suffix: str = field(default_factory=_get_default_suffix)
         task_execution_chain: TaskExecutionChain = None
-        tools: List[BaseTool] = field(default_factory=list)
+        tools: list[BaseTool] = field(default_factory=list)
         vector_store: VectorStore = field(default_factory=_get_default_vector_store)
         verbose: bool = True
 
-        def __post_init__(self):
+        def __post_init__(self) -> None:
             #     if self.chain is None:
             #         self.chain = LLMChain(
             #             llm=self.llm,
@@ -115,7 +110,7 @@ class LangChainBabyAGIAgent(Agent):
     def __init__(
         self,
         *,
-        config: Config = Config(),
+        config: Config = Config(),  # noqa: B008
     ):
         super().__init__()
 

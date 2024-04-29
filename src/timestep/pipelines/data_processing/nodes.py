@@ -1,4 +1,6 @@
-from typing import Dict, Tuple
+#!/usr/bin/env python
+
+from __future__ import annotations
 
 import pandas as pd
 
@@ -9,17 +11,15 @@ def _is_true(x: pd.Series) -> pd.Series:
 
 def _parse_percentage(x: pd.Series) -> pd.Series:
     x = x.str.replace("%", "")
-    x = x.astype(float) / 100
-    return x
+    return x.astype(float) / 100
 
 
 def _parse_money(x: pd.Series) -> pd.Series:
     x = x.str.replace("$", "").str.replace(",", "")
-    x = x.astype(float)
-    return x
+    return x.astype(float)
 
 
-def preprocess_companies(companies: pd.DataFrame) -> Tuple[pd.DataFrame, Dict]:
+def preprocess_companies(companies: pd.DataFrame) -> tuple[pd.DataFrame, dict]:  # type: ignore[type-arg]
     """Preprocesses the data for companies.
 
     Args:
@@ -66,5 +66,4 @@ def create_model_input_table(
     model_input_table = rated_shuttles.merge(
         companies, left_on="company_id", right_on="id"
     )
-    model_input_table = model_input_table.dropna()
-    return model_input_table
+    return model_input_table.dropna()

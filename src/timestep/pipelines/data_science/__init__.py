@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
 """Complete Data Science pipeline for the spaceflights tutorial"""
 
-from .pipeline import create_pipeline  # NOQA
+from __future__ import annotations
+
+from .pipeline import create_pipeline  # noqa: F401

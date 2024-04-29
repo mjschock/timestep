@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from kedro.pipeline import Pipeline, node, pipeline
 
 from .nodes import (
@@ -7,7 +9,7 @@ from .nodes import (
 )
 
 
-def create_pipeline(**kwargs) -> Pipeline:
+def create_pipeline() -> Pipeline:
     """This is a simple pipeline which generates a pair of plots"""
     return pipeline(
         [

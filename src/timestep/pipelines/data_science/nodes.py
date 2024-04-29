@@ -1,5 +1,9 @@
+#!/usr/bin/env python
+
+from __future__ import annotations
+
 import logging
-from typing import Dict, Tuple
+from typing import Any
 
 import pandas as pd
 from sklearn.linear_model import LinearRegression
@@ -7,7 +11,9 @@ from sklearn.metrics import max_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 
 
-def split_data(data: pd.DataFrame, parameters: Dict) -> Tuple:
+def split_data(
+    data: pd.DataFrame, parameters: dict[str, Any]
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     """Splits data into features and targets training and test sets.
 
     Args:
@@ -41,7 +47,7 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> LinearRegression:
 
 def evaluate_model(
     regressor: LinearRegression, X_test: pd.DataFrame, y_test: pd.Series
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """Calculates and logs the coefficient of determination.
 
     Args:

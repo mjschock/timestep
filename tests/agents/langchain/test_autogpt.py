@@ -1,21 +1,16 @@
+from __future__ import annotations
+
 import pytest
 
 from timestep.agents.agent import Agent
 from timestep.agents.langchain.autogpt import LangChainAutoGPTAgent
 
-from typing import Callable, Optional
-
-from langchain_core.callbacks import CallbackManagerForToolRun
-from langchain_core.pydantic_v1 import Field
-from langchain_core.tools import BaseTool
-from langchain_community.tools.human.tool import HumanInputRun
-
 # def _input_func() -> str:
 #     return "q"
 
 # def _prompt_func(query: str) -> None:
-#     print("\n")  # noqa: T201
-#     print(query)  # noqa: T201
+#     print("\n")
+#     print(query)
 
 # class HumanInputRun(BaseTool):
 #     """Tool that asks user for input."""
@@ -41,7 +36,6 @@ from langchain_community.tools.human.tool import HumanInputRun
 #         return self.input_func()
 
 # class HumanInputRunQuitter(HumanInputRun):
-
 
 
 def test_langchain_autogpt_agent():

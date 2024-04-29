@@ -1,9 +1,13 @@
+#!/usr/bin/env python
+
+from __future__ import annotations
+
 from kedro.pipeline import Pipeline, node, pipeline
 
 from .nodes import evaluate_model, split_data, train_model
 
 
-def create_pipeline(**kwargs) -> Pipeline:
+def create_pipeline() -> Pipeline:
     return pipeline(
         [
             node(
