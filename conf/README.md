@@ -6,7 +6,7 @@ separate tools.
 This file can be used to provide users with instructions for how to reproduce
 local configuration with their own credentials. You can edit the file however
 you like, but you may wish to retain the information below and add your own
-section in the section titled **Instructions**.
+section in the [Instructions](#Instructions) section.
 
 ## Local configuration
 
@@ -22,7 +22,8 @@ project-related configuration that may be shared across team members.
 
 WARNING: Please do not put access credentials in the base configuration folder.
 
-## Find out more
+## Instructions
 
-You can find out more about configuration from the
-[user guide documentation](https://docs.kedro.org/en/stable/configuration/configuration_basics.html).
+## Need help?
+
+[Find out more about configuration from the Kedro documentation](https://docs.kedro.org/en/stable/kedro_project_setup/configuration.html).

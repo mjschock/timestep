@@ -3802,6 +3802,17 @@ files = [
 ]
 
 [[package]]
+name = "diskcache"
+version = "5.6.3"
+description = "Disk Cache -- Disk and file backed persistent cache."
+optional = false
+python-versions = ">=3"
+files = [
+    {file = "diskcache-5.6.3-py3-none-any.whl", hash = "sha256:5e31b2d5fbad117cc363ebaf6b689474db18a1f6438bc82358b024abd4c2ca19"},
+    {file = "diskcache-5.6.3.tar.gz", hash = "sha256:2c3a3fa2743d8535d832ec61c2054a1641f41775aa7c556758a109941e33e4fc"},
+]
+
+[[package]]
 name = "distlib"
 version = "0.3.8"
 description = "Distribution utilities"
@@ -4317,6 +4328,43 @@ files = [
     {file = "filetype-1.2.0-py2.py3-none-any.whl", hash = "sha256:7ce71b6880181241cf7ac8697a2f1eb6a8bd9b429f7ad6d27b8db9ba5f1c2d25"},
     {file = "filetype-1.2.0.tar.gz", hash = "sha256:66b56cd6474bf41d8c54660347d37afcc3f7d1970648de365c102ef77548aadb"},
 ]
+
+[[package]]
+name = "flaml"
+version = "2.1.2"
+description = "A fast library for automated machine learning and tuning"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "FLAML-2.1.2-py3-none-any.whl", hash = "sha256:42b0b75623ec93c4d4afcb6f3ce0d820d2ace5b7146b103bd851641dcde4a8cd"},
+    {file = "FLAML-2.1.2.tar.gz", hash = "sha256:33102862a21c63d004f78e1349ccd55753e3534bfcdcb6e65a08562c14d69e44"},
+]
+
+[package.dependencies]
+NumPy = ">=1.17"
+
+[package.extras]
+autogen = ["diskcache", "openai (==0.27.8)", "termcolor"]
+automl = ["lightgbm (>=2.3.1)", "pandas (>=1.1.4)", "scikit-learn (>=0.24)", "scipy (>=1.4.1)", "xgboost (>=0.90)"]
+autozero = ["packaging", "pandas", "scikit-learn"]
+azureml = ["azureml-mlflow"]
+benchmark = ["catboost (>=0.26)", "pandas (==1.1.4)", "psutil (==5.8.0)", "xgboost (==1.3.3)"]
+blendsearch = ["optuna (==2.8.0)", "packaging"]
+catboost = ["catboost (>=0.26)"]
+forecast = ["hcrystalball (==0.1.10)", "holidays (<0.14)", "prophet (>=1.0.1)", "pytorch-forecasting (>=0.9.0)", "pytorch-lightning (==1.9.0)", "statsmodels (>=0.12.2)", "tensorboardX (==2.6)"]
+hf = ["datasets", "nltk", "rouge-score", "seqeval", "transformers[torch] (==4.26)"]
+mathchat = ["diskcache", "openai (==0.27.8)", "pydantic (==1.10.9)", "sympy", "termcolor", "wolframalpha"]
+nlp = ["datasets", "nltk", "rouge-score", "seqeval", "transformers[torch] (==4.26)"]
+nni = ["nni"]
+notebook = ["jupyter"]
+openai = ["diskcache", "openai (==0.27.8)"]
+ray = ["ray[tune] (>=1.13,<2.0)"]
+retrievechat = ["chromadb", "diskcache", "openai (==0.27.8)", "sentence-transformers", "termcolor", "tiktoken"]
+spark = ["joblibspark (>=0.5.0)", "pyspark (>=3.2.0)"]
+synapse = ["joblibspark (>=0.5.0)", "optuna (==2.8.0)", "pyspark (>=3.2.0)"]
+test = ["catboost (>=0.26,<1.2)", "coverage (>=5.3)", "dataclasses", "datasets", "hcrystalball (==0.1.10)", "ipykernel", "joblibspark (>=0.5.0)", "lightgbm (>=2.3.1)", "mlflow", "nbconvert", "nbformat", "nltk", "openml", "optuna (==2.8.0)", "packaging", "pandas (>=1.1.4)", "pre-commit", "psutil (==5.8.0)", "pydantic (==1.10.9)", "pyspark (>=3.2.0)", "pytest (>=6.1.1)", "pytorch-forecasting (>=0.9.0,<=0.10.1)", "pytorch-lightning (<1.9.1)", "requests (<2.29.0)", "rgf-python", "rouge-score", "scikit-learn (>=0.24)", "scipy (>=1.4.1)", "seqeval", "statsmodels (>=0.12.2)", "sympy", "tensorboardX (==2.6)", "thop", "torch", "torchvision", "transformers[torch] (==4.26)", "wolframalpha", "xgboost (>=0.90)"]
+ts-forecast = ["hcrystalball (==0.1.10)", "holidays (<0.14)", "prophet (>=1.0.1)", "statsmodels (>=0.12.2)"]
+vw = ["scikit-learn", "vowpalwabbit (>=8.10.0,<9.0.0)"]
 
 [[package]]
 name = "flash-attn"
@@ -10536,6 +10584,49 @@ files = [
 pyasn1 = ">=0.4.6,<0.7.0"
 
 [[package]]
+name = "pyautogen"
+version = "0.2.27"
+description = "Enabling Next-Gen LLM Applications via Multi-Agent Conversation Framework"
+optional = false
+python-versions = "<3.13,>=3.8"
+files = [
+    {file = "pyautogen-0.2.27-py3-none-any.whl", hash = "sha256:9eb5c38544a0f79475c43442f9c5af2623165e32a7b9dd24ec141492f603a630"},
+    {file = "pyautogen-0.2.27.tar.gz", hash = "sha256:a8939d14fed1893109738a4c34ce490bfc6d869fd8a4ecb22932b86c81d9a5a5"},
+]
+
+[package.dependencies]
+diskcache = "*"
+docker = "*"
+flaml = "*"
+numpy = ">=1.17.0,<2"
+openai = ">=1.3"
+pillow = {version = "*", optional = true, markers = "extra == \"lmm\""}
+pydantic = ">=1.10,<2.6.0 || >2.6.0,<3"
+python-dotenv = "*"
+replicate = {version = "*", optional = true, markers = "extra == \"lmm\""}
+termcolor = "*"
+tiktoken = "*"
+
+[package.extras]
+autobuild = ["chromadb", "huggingface-hub", "sentence-transformers"]
+blendsearch = ["flaml[blendsearch]"]
+cosmosdb = ["azure-cosmos (>=4.2.0)"]
+gemini = ["google-generativeai (>=0.5,<1)", "pillow", "pydantic"]
+graph = ["matplotlib", "networkx"]
+jupyter-executor = ["ipykernel (>=6.29.0)", "jupyter-client (>=8.6.0)", "jupyter-kernel-gateway", "requests", "websocket-client"]
+lmm = ["pillow", "replicate"]
+mathchat = ["pydantic (==1.10.9)", "sympy", "wolframalpha"]
+redis = ["redis"]
+retrievechat = ["beautifulsoup4", "chromadb", "ipython", "markdownify", "pypdf", "sentence-transformers"]
+retrievechat-pgvector = ["beautifulsoup4", "chromadb", "ipython", "markdownify", "pgvector (>=0.2.5)", "psycopg (>=3.1.18)", "pypdf", "sentence-transformers"]
+retrievechat-qdrant = ["beautifulsoup4", "chromadb", "ipython", "markdownify", "pypdf", "qdrant-client[fastembed]", "sentence-transformers"]
+teachable = ["chromadb"]
+test = ["ipykernel", "nbconvert", "nbformat", "pandas", "pre-commit", "pytest (>=6.1.1,<8)", "pytest-asyncio", "pytest-cov (>=5)"]
+types = ["ipykernel (>=6.29.0)", "jupyter-client (>=8.6.0)", "jupyter-kernel-gateway", "mypy (==1.9.0)", "pytest (>=6.1.1,<8)", "requests", "websocket-client"]
+websockets = ["websockets (>=12.0,<13)"]
+websurfer = ["beautifulsoup4", "markdownify", "pathvalidate", "pdfminer.six"]
+
+[[package]]
 name = "pybcj"
 version = "1.0.2"
 description = "bcj filter library"
@@ -12549,6 +12640,26 @@ files = [
     {file = "regex-2023.12.25-cp39-cp39-win_amd64.whl", hash = "sha256:e693e233ac92ba83a87024e1d32b5f9ab15ca55ddd916d878146f4e3406b5c91"},
     {file = "regex-2023.12.25.tar.gz", hash = "sha256:29171aa128da69afdf4bde412d5bedc335f2ca8fcfe4489038577d05f16181e5"},
 ]
+
+[[package]]
+name = "replicate"
+version = "0.25.2"
+description = "Python client for Replicate"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "replicate-0.25.2-py3-none-any.whl", hash = "sha256:9d4caa333d2734ff9fabfb37a882689fb2320dcbef5d5a15eb3113fd2975d88f"},
+    {file = "replicate-0.25.2.tar.gz", hash = "sha256:bac2f4e928f15bae6313baee80267c902fbe1be9636522ff0a2e375ac0684b97"},
+]
+
+[package.dependencies]
+httpx = ">=0.21.0,<1"
+packaging = "*"
+pydantic = ">1.10.7"
+typing-extensions = ">=4.5.0"
+
+[package.extras]
+dev = ["pylint", "pyright", "pytest", "pytest-asyncio", "pytest-recording", "respx", "ruff (>=0.3.3)"]
 
 [[package]]
 name = "repo-review"
@@ -17007,4 +17118,4 @@ test = ["pytest", "pytest-cov"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "617cbcde0568d50228b8fa2261fa145c679dcd3a02930f7c26c441067becfccd"
+content-hash = "139e8c08149031af17d91ae8a7415f42b6569a2ab7ab3fef5a1e76d51a726409"

@@ -190,6 +190,7 @@ pdf2image = "^1.17.0"
 pettingzoo = {extras = ["classic"], version = "^1.24.3"}
 playwright = "^1.42.0"
 prefect = "^2.16.5"
+pyautogen = {extras = ["lmm"], version = "^0.2.27"}
 pylatex = "^1.4.2"
 pytest = {optional = true, version = ">=6"}
 pytest-cov = {optional = true, version = ">=3"}
