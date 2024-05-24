@@ -112,26 +112,29 @@ class KubernetesConfigStack(TerraformStack):
             )
         )
 
-        self.minio_construct: MinioConstruct = MinioConstruct(
-            config=config,
-            id="minio_construct",
-            helm_provider=self.helm_provider,
-            scope=self,
-        )
+        if config.minio_in_cluster_is_enabled:
+            self.minio_construct: MinioConstruct = MinioConstruct(
+                config=config,
+                id="minio_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
 
-        self.postgresql_construct: PostgreSQLConstruct = PostgreSQLConstruct(
-            config=config,
-            id="postgresql_construct",
-            helm_provider=self.helm_provider,
-            scope=self,
-        )
+        if config.postgresql_in_cluster_is_enabled:
+            self.postgresql_construct: PostgreSQLConstruct = PostgreSQLConstruct(
+                config=config,
+                id="postgresql_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
 
-        self.prefect_construct: PrefectConstruct = PrefectConstruct(
-            config=config,
-            id="prefect_construct",
-            helm_provider=self.helm_provider,
-            scope=self,
-        )
+        if config.prefect_in_cluster_is_enabled:
+            self.prefect_construct: PrefectConstruct = PrefectConstruct(
+                config=config,
+                id="prefect_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
 
         if config.sealed_secrets_is_enabled:
             self.sealed_secrets_construct: SealedSecretsConstruct = (
@@ -144,7 +147,7 @@ class KubernetesConfigStack(TerraformStack):
             )
 
         if config.stalwart_is_enabled:
-            self.stalwart_construct: StalwartConstruct(
+            self.stalwart_construct: StalwartConstruct = StalwartConstruct(
                 config=config,
                 id="stalwart_construct",
                 helm_provider=self.helm_provider,

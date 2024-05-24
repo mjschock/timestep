@@ -177,10 +177,10 @@ class TimestepAIConstruct(Construct):
             scope=self,
         )
 
-        postgres_database = "postgres"
-        postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
-        postgres_password = config.postgresql_password.get_secret_value()
-        postgres_username = "postgres"
+        # postgres_database = "postgres"
+        # postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
+        # postgres_password = config.postgresql_password.get_secret_value()
+        # postgres_username = "postgres"
 
         client_config_map = ConfigMapV1(
             id_="client_config_map",
@@ -229,12 +229,12 @@ class TimestepAIConstruct(Construct):
             id_="server_config_map",
             data={
                 "KUBECONTEXT": config.kubecontext,
-                "LITESTREAM_ACCESS_KEY_ID": config.minio_root_user,
-                "MINIO_ENDPOINT": "minio.default.svc.cluster.local:9000",
-                "MINIO_ROOT_USER": config.minio_root_user,
-                "POSTGRES_DATABASE": postgres_database,
-                "POSTGRES_HOSTNAME": postgres_hostname,
-                "POSTGRES_USERNAME": postgres_username,
+                # "LITESTREAM_ACCESS_KEY_ID": config.minio_root_user,
+                # "MINIO_ENDPOINT": "minio.default.svc.cluster.local:9000",
+                # "MINIO_ROOT_USER": config.minio_root_user,
+                # "POSTGRES_DATABASE": postgres_database,
+                # "POSTGRES_HOSTNAME": postgres_hostname,
+                # "POSTGRES_USERNAME": postgres_username,
                 "PREFECT_API_URL": "http://prefect-server.default.svc.cluster.local:4200/api",
                 "PRIMARY_DOMAIN_NAME": config.primary_domain_name,
                 # "REPLICA_URL": "s3://minio.default.svc.cluster.local:9000/default/db",
@@ -251,11 +251,11 @@ class TimestepAIConstruct(Construct):
         server_secret = SecretV1(
             id_="server_secret",
             data={
-                "LITESTREAM_SECRET_ACCESS_KEY": config.minio_root_password.get_secret_value(),  # noqa: E501
-                "MINIO_ROOT_PASSWORD": config.minio_root_password.get_secret_value(),
+                # "LITESTREAM_SECRET_ACCESS_KEY": config.minio_root_password.get_secret_value(),  # noqa: E501
+                # "MINIO_ROOT_PASSWORD": config.minio_root_password.get_secret_value(),
                 "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
-                "POSTGRES_CONNECTION_STRING": f"postgresql+asyncpg://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}",
-                "POSTGRES_PASSWORD": config.postgresql_password.get_secret_value(),
+                # "POSTGRES_CONNECTION_STRING": f"postgresql+asyncpg://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}",
+                # "POSTGRES_PASSWORD": config.postgresql_password.get_secret_value(),
             },
             metadata=SecretV1Metadata(
                 name="server-secret",

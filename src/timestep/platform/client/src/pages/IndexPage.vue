@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-card
+      <!-- <q-card
         v-if="!isSignedIn"
         class="my-card"
         flat
@@ -31,7 +31,7 @@
             <sign-up-component />
           </q-tab-panel>
         </q-tab-panels>
-      </q-card>
+      </q-card> -->
     </div>
   </q-page>
 </template>
@@ -42,15 +42,15 @@ import { defineComponent, ref } from 'vue'
 import { AuthChangeEvent } from '@nhost/nhost-js'
 
 import { nhost } from 'src/boot/nhost'
-import SignInComponent from 'src/components/SignInComponent.vue'
-import SignUpComponent from 'src/components/SignUpComponent.vue'
+// import SignInComponent from 'src/components/SignInComponent.vue'
+// import SignUpComponent from 'src/components/SignUpComponent.vue'
 
 export default defineComponent({
   name: 'IndexPage',
 
   components: {
-    SignInComponent,
-    SignUpComponent
+    // SignInComponent,
+    // SignUpComponent
   },
 
   setup () {

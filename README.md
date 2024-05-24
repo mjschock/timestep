@@ -36,7 +36,7 @@ secrets/tf_api_token (TF_API_TOKEN)
 
 ### Local / GitHub Actions Variables
 
-Copy `.env.example` to `.env` and ajust the values as needed. The following variables are also required:
+Copy `.env.sample` to `.env` and ajust the values as needed. The following variables are also required:
 
 ```bash
 ARGO_CD_PRIVATE_REPO_USERNAME
@@ -62,6 +62,10 @@ tilt up
 
 ```bash
 make hosts # In a separate terminal
+```
+
+```bash
+make local-tls-cert # If LOCAL_TLS_CERT_IS_ENABLED is true and trigger caddy update
 ```
 
 ## Usage
