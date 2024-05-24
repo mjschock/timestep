@@ -10,6 +10,7 @@ from constructs import Construct
 from timestep.config import CloudInstanceProvider, Settings
 from timestep.infra.stacks.platform.hasura.construct import HasuraConstruct
 from timestep.infra.stacks.platform.nhost.construct import NhostConstruct
+from timestep.infra.stacks.platform.open_gpts.construct import OpenGPTsConstruct
 from timestep.infra.stacks.platform.timestep_ai.construct import TimestepAIConstruct
 
 
@@ -36,26 +37,37 @@ class PlatformStack(TerraformStack):
             scope=self,
         )
 
-        self.hasura_construct: HasuraConstruct = HasuraConstruct(
-            config=config,
-            id="hasura_construct",
-            helm_provider=self.helm_provider,
-            scope=self,
-        )
+        if config.hasura_in_cluster_is_enabled:
+            self.hasura_construct: HasuraConstruct = HasuraConstruct(
+                config=config,
+                id="hasura_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
 
-        self.nhost_construct: NhostConstruct = NhostConstruct(
-            config=config,
-            id="nhost_construct",
-            helm_provider=self.helm_provider,
-            scope=self,
-        )
+        if config.nhost_in_cluster_is_enabled:
+            self.nhost_construct: NhostConstruct = NhostConstruct(
+                config=config,
+                id="nhost_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
 
-        self.timestep_ai_construct: TimestepAIConstruct = TimestepAIConstruct(
-            config=config,
-            id="timestep_ai_construct",
-            helm_provider=self.helm_provider,
-            scope=self,
-        )
+        if config.open_gpts_in_cluster_is_enabled:
+            self.open_gpts_construct: OpenGPTsConstruct = OpenGPTsConstruct(
+                config=config,
+                id="open_gpts_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
+
+        if config.timestep_ai_is_enabled:
+            self.timestep_ai_construct: TimestepAIConstruct = TimestepAIConstruct(
+                config=config,
+                id="timestep_ai_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
             LocalBackend(

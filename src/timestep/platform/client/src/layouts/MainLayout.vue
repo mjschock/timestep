@@ -7,7 +7,7 @@
       :on-title-click="() => $router.push('/')"
     />
 
-    <q-drawer
+    <!-- <q-drawer
       v-model="drawer"
       show-if-above
       :mini="!drawer || miniState"
@@ -57,7 +57,7 @@
           @click="miniState = true"
         />
       </div>
-    </q-drawer>
+    </q-drawer> -->
 
     <q-page-container>
       <router-view />
@@ -85,16 +85,16 @@ export default defineComponent({
     const miniState = ref(false)
     const pages = ref([
       // { name: 'Home', path: '/' },
-      {
-        name: 'Accounts',
-        path: '/accounts',
-        metadata: { enabled: true, icon: 'manage_accounts' }
-      },
-      {
-        name: 'Agents',
-        path: '/agents',
-        metadata: { enabled: true, icon: 'support_agent' }
-      },
+      // {
+      //   name: 'Accounts',
+      //   path: '/accounts',
+      //   metadata: { enabled: true, icon: 'manage_accounts' }
+      // },
+      // {
+      //   name: 'Agents',
+      //   path: '/agents',
+      //   metadata: { enabled: true, icon: 'support_agent' }
+      // },
       // {
       //   name: 'Artifacts',
       //   path: '/artifacts',
@@ -103,7 +103,7 @@ export default defineComponent({
       // { name: 'Calendars', path: '/calendars', metadata: { enabled: true, icon: 'event_repeat' } },
       // { name: 'Contacts', path: '/contacts', metadata: { enabled: true, icon: 'contacts' } },
       // { name: 'Documents', path: '/documents', metadata: { enabled: false, icon: 'document_scanner' } },
-      { name: 'Tasks', path: '/tasks', metadata: { enabled: true, icon: 'task' } }
+      // { name: 'Tasks', path: '/tasks', metadata: { enabled: true, icon: 'task' } }
       // { name: 'Tools', path: '/tools', metadata: { enabled: true, icon: 'build' } }
       // {
       //   name: 'Environments',

@@ -133,36 +133,49 @@ local_resource(
     serve_cmd='make kubernetes-dashboard-port-forward',
 )
 
-local_resource(
-    'port-forward hasura-graphql-engine 9000:8080',
-    auto_init=False,
-    labels=['ops'],
-    links=['http://localhost:9000'],
-    serve_cmd='kubectl port-forward --namespace default svc/hasura-graphql-engine 9000:8080',
-)
+if os.getenv('HASURA_IN_CLUSTER_IS_ENABLED', False) == 'true':
+    local_resource(
+        'port-forward hasura-graphql-engine 9000:8080',
+        auto_init=False,
+        labels=['ops'],
+        links=['http://localhost:9000'],
+        serve_cmd='kubectl port-forward --namespace default svc/hasura-graphql-engine 9000:8080',
+    )
 
-local_resource(
-    'port-forward minio 9001:9001',
-    auto_init=False,
-    labels=['ops'],
-    links=['http://127.0.0.1:9001', 'http://localhost:9001'],
-    serve_cmd='src/timestep/infra/stacks/kubernetes_config/minio/scripts/port_forward.sh',
-)
+if os.getenv('MINIO_IN_CLUSTER_IS_ENABLED', False) == 'true':
+    local_resource(
+        'port-forward minio 9001:9001',
+        auto_init=False,
+        labels=['ops'],
+        links=['http://127.0.0.1:9001', 'http://localhost:9001'],
+        serve_cmd='src/timestep/infra/stacks/kubernetes_config/minio/scripts/port_forward.sh',
+    )
 
-local_resource(
-    'port-forward postgresql-postgresql-ha-pgpool 5432:5432',
-    auto_init=False,
-    labels=['ops'],
-    serve_cmd='kubectl port-forward --namespace default svc/postgresql-postgresql-ha-pgpool 5432:5432',
-)
+if os.getenv('OPEN_GPTS_IN_CLUSTER_IS_ENABLED', False) == 'true':
+    local_resource(
+        'port-forward open-gpts-backend 8100:8000',
+        auto_init=False,
+        labels=['ops'],
+        links=['http://localhost:8100'],
+        serve_cmd='kubectl port-forward --namespace default svc/open-gpts-backend 8100:8000',
+    )
 
-local_resource(
-    'port-forward prefect-server 4200:4200',
-    auto_init=False,
-    labels=['ops'],
-    links=['http://localhost:4200'],
-    serve_cmd='kubectl port-forward --namespace default svc/prefect-server 4200:4200',
-)
+if os.getenv('POSTGRESQL_IN_CLUSTER_IS_ENABLED', False) == 'true':
+    local_resource(
+        'port-forward postgresql-postgresql-ha-pgpool 5432:5432',
+        auto_init=False,
+        labels=['ops'],
+        serve_cmd='kubectl port-forward --namespace default svc/postgresql-postgresql-ha-pgpool 5432:5432',
+    )
+
+if os.getenv('PREFECT_IN_CLUSTER_IS_ENABLED', False) == 'true':
+    local_resource(
+        'port-forward prefect-server 4200:4200',
+        auto_init=False,
+        labels=['ops'],
+        links=['http://localhost:4200'],
+        serve_cmd='kubectl port-forward --namespace default svc/prefect-server 4200:4200',
+    )
 
 watch_file('src/timestep/infra/stacks/platform/timestep_ai')
 
@@ -177,7 +190,7 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
                 trigger=['src/timestep/platform/Caddyfile']
             )
         ],
-        only=['Caddyfile'],
+        only=['Caddyfile', 'client'],
     )
 
     docker_build(

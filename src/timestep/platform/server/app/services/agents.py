@@ -504,18 +504,18 @@ async def update_agent(account_id: str, agent_id: str):
 async def on_startup():
     print(f'\n=== {__name__} on_startup (BEGIN) ===\n')
 
-    memo: Dict[str, Any] = {}
-    memo = await load_cloud_credentials(memo)
-    memo = await sky_check_task(memo)
-    memo = await sky_status_task(memo, refresh=True)
-    agents = await get_agents(DEFAULT_ACCOUNT_ID)
+    # memo: Dict[str, Any] = {}
+    # memo = await load_cloud_credentials(memo)
+    # memo = await sky_check_task(memo)
+    # memo = await sky_status_task(memo, refresh=True)
+    # agents = await get_agents(DEFAULT_ACCOUNT_ID)
 
-    if not agents:
-        await create_agent(DEFAULT_ACCOUNT_ID, DEFAULT_AGENT_NAME)
+    # if not agents:
+    #     await create_agent(DEFAULT_ACCOUNT_ID, DEFAULT_AGENT_NAME)
 
-    else:
-        for agent in agents:
-            await update_agent(DEFAULT_ACCOUNT_ID, agent["id"])
+    # else:
+    #     for agent in agents:
+    #         await update_agent(DEFAULT_ACCOUNT_ID, agent["id"])
 
     print(f'\n=== {__name__} on_startup (END) ===\n')
 

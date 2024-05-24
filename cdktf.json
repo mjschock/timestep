@@ -13,6 +13,9 @@
   "terraformProviders": [
     "larstobi/multipass@~> 1.4",
     "namecheap/namecheap@~> 2.1",
-    "oboukili/argocd@~> 6.0"
+    "oboukili/argocd@~> 6.0",
+    "supabase/supabase@~> 1.4",
+    "vercel/vercel@~> 1.11",
+    "timescale/timescale@~> 1.11"
   ]
 }

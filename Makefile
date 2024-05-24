@@ -10,7 +10,7 @@ k3s-cluster:
 
 local-tls-cert:
 	mkcert -install
-	mkcert -cert-file secrets/local_tls_crt -key-file secrets/local_tls_key timestep.local example1.timestep.local example2.timestep.local www.timestep.local
+	mkcert -cert-file secrets/local_tls_crt -key-file secrets/local_tls_key timestep.local *.timestep.local
 	kubectl create secret tls ssl-timestep.local --cert=secrets/local_tls_crt --key=secrets/local_tls_key
 
 pre-commit:
@@ -44,3 +44,15 @@ test:
 	poetry run pytest
 	URL=https://www.$$PRIMARY_DOMAIN_NAME/api/agents/default bash tests/test_agent_protocol_v1.sh
 	poetry run agbenchmark start --cutoff 1
+
+workspace:
+	docker run \
+		-it \
+		--pull=always \
+		-e SANDBOX_USER_ID=$$(id -u) \
+		-e WORKSPACE_MOUNT_PATH=$$WORKSPACE_BASE \
+		-v $$WORKSPACE_BASE:/opt/workspace_base \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-p 3000:3000 \
+		--add-host host.docker.internal:host-gateway \
+		ghcr.io/opendevin/opendevin:0.5
