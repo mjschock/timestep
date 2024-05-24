@@ -7,8 +7,8 @@ on:
 
 jobs:
   build-base:
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,8 +40,8 @@ jobs:
 
   build-cicd:
     needs: build-base
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -75,8 +75,8 @@ jobs:
 
   build-postgresql-repmgr:
     needs: build-base
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -113,8 +113,8 @@ jobs:
     strategy:
       matrix:
        image_name: [ "caddy", "client", "server" ]
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -184,8 +184,8 @@ jobs:
   #         ./src/timestep/infra/cicd/deploy-diff.sh
 
   deploy:
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     # needs: [deploy-diff]
     needs: [build-cicd, build-postgresql-repmgr, build]
     steps:
@@ -218,8 +218,8 @@ jobs:
           ./src/timestep/infra/cicd/deploy.sh
 
   test:
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [deploy]
     steps:
       - name: Set up Node.js
