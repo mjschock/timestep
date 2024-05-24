@@ -8,14 +8,6 @@ from cdktf_cdktf_provider_kubernetes.deployment_v1 import (
     DeploymentV1SpecTemplateMetadata,
     DeploymentV1SpecTemplateSpec,
     DeploymentV1SpecTemplateSpecContainer,
-    DeploymentV1SpecTemplateSpecContainerEnv,
-    DeploymentV1SpecTemplateSpecContainerPort,
-)
-from cdktf_cdktf_provider_kubernetes.service_v1 import (
-    ServiceV1,
-    ServiceV1Metadata,
-    ServiceV1Spec,
-    ServiceV1SpecPort,
 )
 from constructs import Construct
 
@@ -31,14 +23,6 @@ class StalwartConstruct(Construct):
         helm_provider: HelmProvider,
     ) -> None:
         super().__init__(scope, id)
-
-        minio_root_password = config.minio_root_password.get_secret_value()
-        minio_root_user = config.minio_root_user
-
-        postgres_database = "postgres"
-        postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
-        postgres_password = config.postgresql_password.get_secret_value()
-        postgres_username = "postgres"
 
         self.stalwart_mail_server_deployment_resource = DeploymentV1(
             id_="stalwart_mail_server_deployment_resource",
@@ -65,8 +49,7 @@ class StalwartConstruct(Construct):
                     spec=DeploymentV1SpecTemplateSpec(
                         container=[
                             DeploymentV1SpecTemplateSpecContainer(
-                                env=[
-                                ],
+                                env=[],
                                 image="stalwartlabs/mail-server:latest",
                                 image_pull_policy="IfNotPresent",
                                 name="stalwart-mail-server",
@@ -85,7 +68,7 @@ class StalwartConstruct(Construct):
                                     # # ),
                                     # DeploymentV1SpecTemplateSpecContainerPort(
                                     #     container_port=465,
-                                    #     name="submissions", # TLS encrypted SMTP submissions
+                                    #     name="submissions", # TLS encrypted SMTP submissions # noqa E501
                                     # ),
                                     # DeploymentV1SpecTemplateSpecContainerPort(
                                     #     container_port=587, # SMTP submissions

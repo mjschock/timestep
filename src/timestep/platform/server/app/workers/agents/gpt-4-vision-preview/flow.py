@@ -99,6 +99,7 @@ def load_kubeconfig(overwrite=False, memo: dict[str, Any] = {}):
 
     return memo
 
+
 @task
 async def load_cloud_credentials(memo: dict[str, Any]):
     logger = get_run_logger()
@@ -111,6 +112,7 @@ async def load_cloud_credentials(memo: dict[str, Any]):
         logger.info(e)
 
     return memo
+
 
 @task
 async def sky_check_task(memo: dict[str, Any]):
@@ -126,11 +128,13 @@ async def sky_check_task(memo: dict[str, Any]):
 
     return memo
 
+
 @task
 async def sky_status_task(memo: dict[str, Any]):
     memo["cluster_statuses"]: list[dict[str, Any]] = sky.core.status(refresh=True)
 
     return memo
+
 
 @task
 async def sky_launch_task(agent_name: str, memo: dict[str, Any]):
@@ -156,23 +160,24 @@ async def sky_launch_task(agent_name: str, memo: dict[str, Any]):
 
     return memo
 
+
 @task
 async def sky_down_task(agent_name: str, memo: dict[str, Any]):
     async with ShellOperation(
-        commands=[
-            f"sky down {agent_name} --purge --yes"
-        ],
+        commands=[f"sky down {agent_name} --purge --yes"],
     ) as sky_op:
         sky_op_process = await sky_op.trigger()
         await sky_op_process.wait_for_completion()
 
     return memo
 
+
 @task
 async def sky_queue_task(agent_name: str, memo: dict[str, Any]):
     memo["cluster_queue"]: list[dict] = sky.core.queue(cluster_name=agent_name)
 
     return memo
+
 
 @task
 async def sky_exec_task(
@@ -187,7 +192,9 @@ async def sky_exec_task(
     # openai_api_key = os.environ["OPENAI_API_KEY"]
 
     if cancel_all:
-        sky.core.cancel(cluster_name=agent_name, all=True) # TODO: Make this configurable
+        sky.core.cancel(
+            cluster_name=agent_name, all=True
+        )  # TODO: Make this configurable # noqa: E501
 
     async with ShellOperation(
         commands=[
@@ -204,6 +211,7 @@ async def sky_exec_task(
         await sky_op_process.wait_for_completion()
 
     return memo
+
 
 @flow
 async def serve_agent_flow(account_id: str, agent_name: str, operation: str = "create"):
@@ -231,9 +239,13 @@ async def serve_agent_flow(account_id: str, agent_name: str, operation: str = "c
             raise Exception(f"Agent cluster {agent_name} is already deployed")
 
         memo = await sky_launch_task(agent_name, memo)
-        memo = await sky_exec_task(agent_name, memo, task_yaml_name="serve.yaml", cancel_all=True)
-        memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=False)
-        # memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=True)
+        memo = await sky_exec_task(
+            agent_name, memo, task_yaml_name="serve.yaml", cancel_all=True
+        )  # noqa: E501
+        memo = await sky_exec_task(
+            agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=False
+        )  # noqa: E501
+        # memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=True) # noqa: E501
 
     elif operation == "delete":
         memo = await sky_down_task(agent_name, memo)
@@ -250,9 +262,13 @@ async def serve_agent_flow(account_id: str, agent_name: str, operation: str = "c
             # memo = await sky_start_task(name, memo)
 
     elif operation == "update":
-        memo = await sky_exec_task(agent_name, memo, task_yaml_name="serve.yaml", cancel_all=True)
-        memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=False)
-        # memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=True)
+        memo = await sky_exec_task(
+            agent_name, memo, task_yaml_name="serve.yaml", cancel_all=True
+        )  # noqa: E501
+        memo = await sky_exec_task(
+            agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=False
+        )  # noqa: E501
+        # memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=True) # noqa: E501
 
     memo = await sky_status_task(memo)
 

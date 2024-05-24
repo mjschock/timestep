@@ -128,7 +128,9 @@ class PrefectConstruct(Construct):
         #     type=AssetType.FILE,
         # )
 
-        with open(os.path.join(os.path.dirname(__file__), "base-job-template.json"), "r") as f:
+        with open(
+            os.path.join(os.path.dirname(__file__), "base-job-template.json"), "r"
+        ) as f:  # noqa: E501
             # base_job_template = f.read()
             base_job_template_json = json.load(f)
 
@@ -146,14 +148,6 @@ class PrefectConstruct(Construct):
                     name="worker.apiConfig",
                     value="server",
                 ),
-                # ReleaseSet(
-                #     name="worker.config.baseJobTemplate",
-                #     # value=Fn.file(base_job_template_values_asset.path)
-                #     # value=base_job_template_values_asset.path
-                #     # value=os.path.join(os.path.dirname(__file__), "base-job-template.json"),
-                #     # value=f,
-                #     value=str(base_job_template_json)
-                # ),
                 ReleaseSet(
                     name="worker.config.limit",
                     value="1",
@@ -208,20 +202,21 @@ class PrefectConstruct(Construct):
                 ),
             ],
             scope=self,
-            values=[f"""worker:
+            values=[
+                f"""worker:
   config:
     baseJobTemplate: |
         {json.dumps(base_job_template_json)}
 """
-#                 """worker:
-#   extraVolumes:
-#     - name: cache-volume
-#       emptyDir:
-#         sizeLimit: 500Mi
-#   extraVolumeMounts:
-#     - name: cache-volume
-#       mountPath: /cache
-#             """
+                #                 """worker:
+                #   extraVolumes:
+                #     - name: cache-volume
+                #       emptyDir:
+                #         sizeLimit: 500Mi
+                #   extraVolumeMounts:
+                #     - name: cache-volume
+                #       mountPath: /cache
+                #             """
             ],
         )
 

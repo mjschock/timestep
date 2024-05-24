@@ -29,23 +29,21 @@ from fastapi import File, Form, UploadFile
 from fastapi.responses import FileResponse
 from prefect.deployments.deployments import run_deployment
 from prefect_shell import ShellOperation
-from pydantic import StrictBytes, StrictStr
 
 from app.services.utils import (
     create_minio_bucket,
     create_minio_storage_block,
     deploy_agent,
     get_agent_deployment_idempotency_key,
-    load_cloud_credentials,
-    sky_check_task,
     sky_queue_task,
     sky_status_task,
     upload_directory_to_minio,
 )
 
-DEFAULT_ACCOUNT_ID = "f215cf48-7458-4596-9aa5-2159fc6a3caf" # Temporary; same as S3_ROOT_FOLDER in NhostConstruct  # noqa: E501
-DEFAULT_AGENT_NAME = "agent" # TODO: Make this an environment variable
+DEFAULT_ACCOUNT_ID = "f215cf48-7458-4596-9aa5-2159fc6a3caf"  # Temporary; same as S3_ROOT_FOLDER in NhostConstruct  # noqa: E501
+DEFAULT_AGENT_NAME = "agent"  # TODO: Make this an environment variable
 DEFAULT_BUCKET_NAME = "default"
+
 
 async def create_agent(account_id: str, agent_name: str) -> dict[str, Any]:
     bucket_name: str = await create_minio_bucket(
@@ -61,7 +59,7 @@ async def create_agent(account_id: str, agent_name: str) -> dict[str, Any]:
     uploaded_file_count: int = await upload_directory_to_minio(
         minio_storage_block=minio_storage_block,
         local_path=f"{os.getcwd()}/app/workers/agents/{agent_name}",
-        to_path=f"agents/{agent_name}"
+        to_path=f"agents/{agent_name}",
     )
     deployment_ids: list = await deploy_agent(
         uploaded_file_count,
@@ -78,6 +76,7 @@ async def create_agent(account_id: str, agent_name: str) -> dict[str, Any]:
             ),
             timeout=0,
         )
+
 
 async def create_agent_task(
     agent_id,
@@ -109,6 +108,7 @@ async def create_agent_task(
         )
 
     return task
+
 
 async def list_agent_tasks_ids(
     agent_id: str,
@@ -142,6 +142,7 @@ async def list_agent_tasks_ids(
 
     return tasks_list_response
 
+
 async def get_agent_task(agent_id: str, task_id: str) -> Task:
     """
     Get details about a specified agent task.
@@ -167,12 +168,13 @@ async def get_agent_task(agent_id: str, task_id: str) -> Task:
 
     return task
 
+
 async def list_agent_task_artifacts(
     agent_id: str,
     task_id: str,
     current_page: int = 1,
     page_size: int = 10,
-) ->  List[Artifact]:
+) -> List[Artifact]:
     """
     List all artifacts for the specified task.
     """
@@ -194,14 +196,16 @@ async def list_agent_task_artifacts(
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
 
-        tasks_artifacts_list_response: TaskArtifactsListResponse = \
+        tasks_artifacts_list_response: TaskArtifactsListResponse = (
             await api_instance.list_agent_task_artifacts(
                 task_id=task_id,
                 current_page=current_page,
                 page_size=page_size,
             )
+        )
 
     return tasks_artifacts_list_response.artifacts
+
 
 async def list_agent_task_steps(
     agent_id: str,
@@ -230,14 +234,16 @@ async def list_agent_task_steps(
     async with ApiClient(configuration) as api_client:
         api_instance = AgentApi(api_client)
 
-        task_steps_list_response: TaskStepsListResponse = \
+        task_steps_list_response: TaskStepsListResponse = (
             await api_instance.list_agent_task_steps(
                 task_id=task_id,
                 page_size=page_size,
                 current_page=current_page,
             )
+        )
 
     return task_steps_list_response
+
 
 async def upload_agent_task_artifacts(
     agent_id: str,
@@ -286,10 +292,9 @@ async def upload_agent_task_artifacts(
 
     return artifact
 
+
 async def execute_agent_task_step(
-    agent_id: str,
-    task_id: str,
-    body: StepRequestBody | None = None
+    agent_id: str, task_id: str, body: StepRequestBody | None = None
 ) -> APIStep:
     agent: Dict[str, Any] = {
         "id": agent_id,
@@ -298,7 +303,6 @@ async def execute_agent_task_step(
     memo = await sky_status_task(memo, refresh=False)
 
     for cluster_status in memo["cluster_statuses"]:
-
         if cluster_status["cluster_hash"] == agent_id:
             agent["name"] = cluster_status["name"]
             head_ip = cluster_status["handle"].head_ip
@@ -311,16 +315,14 @@ async def execute_agent_task_step(
         api_instance = AgentApi(api_client)
 
         step: APIStep = await api_instance.execute_agent_task_step(
-            task_id=task_id,
-            step_request_body=body
+            task_id=task_id, step_request_body=body
         )
 
     return step
 
+
 async def download_agent_task_artifacts(
-    agent_id: str,
-    task_id: str,
-    artifact_id: str
+    agent_id: str, task_id: str, artifact_id: str
 ) -> FileResponse:
     """
     Download the specified artifact.
@@ -348,6 +350,7 @@ async def download_agent_task_artifacts(
             artifact_id=artifact_id,
         )
 
+
 async def get_agent_task_step(agent_id: str, task_id: str, step_id: str) -> APIStep:
     agent: Dict[str, Any] = {
         "id": agent_id,
@@ -373,11 +376,12 @@ async def get_agent_task_step(agent_id: str, task_id: str, step_id: str) -> APIS
 
     return step
 
+
 async def delete_agent(account_id: str, agent_id: str):
     agent = await get_agent(account_id, agent_id)
     assert agent["id"] == agent_id, f"{agent['id']} != {agent_id}"
 
-    await run_deployment( # TODO: cleanup minio on delete
+    await run_deployment(  # TODO: cleanup minio on delete
         "serve-agent-flow/serve-agent-flow-deployment",
         parameters={
             "account_id": account_id,
@@ -386,6 +390,7 @@ async def delete_agent(account_id: str, agent_id: str):
         },
         timeout=0,
     )
+
 
 async def get_agent(account_id: str, agent_id: str) -> Dict[str, Any]:
     memo: Dict[str, Any] = {}
@@ -400,12 +405,14 @@ async def get_agent(account_id: str, agent_id: str) -> Dict[str, Any]:
                 {
                     "id": job["job_id"],
                     "status": job["status"],
-                } for job in memo["cluster_queue"]
+                }
+                for job in memo["cluster_queue"]
             ]
 
             return agent
 
     raise Exception(f"Agent {agent_id} not found")
+
 
 async def get_agent_livez(account_id: str, agent_id: str):
     cluster_statuses = sky.core.status(refresh=False)
@@ -420,6 +427,7 @@ async def get_agent_livez(account_id: str, agent_id: str):
                 return resp.json()
 
     raise Exception(f"Agent {agent_id} not found")
+
 
 async def get_agent_readyz(account_id: str, agent_id: str):
     cluster_statuses = sky.core.status(refresh=False)
@@ -451,6 +459,7 @@ async def get_agent_readyz(account_id: str, agent_id: str):
 
                 return "ok"
 
+
 async def get_agents(account_id: str) -> List[Dict[str, Any]]:
     agents: List[Dict[str, Any]] = []
     memo: Dict[str, Any] = {}
@@ -471,10 +480,14 @@ async def get_agents(account_id: str) -> List[Dict[str, Any]]:
 
     return agents
 
+
 async def update_agent(account_id: str, agent_id: str):
     agent = await get_agent(account_id, agent_id)
     agent_name = agent["name"]
-    bucket_name: str = await create_minio_bucket(DEFAULT_BUCKET_NAME, ignore_exists=True)
+    bucket_name: str = await create_minio_bucket(
+        bucket_name=DEFAULT_BUCKET_NAME,
+        ignore_exists=True,
+    )
     minio_storage_block = await create_minio_storage_block(
         account_id=account_id,
         agent_name=agent_name,
@@ -485,7 +498,7 @@ async def update_agent(account_id: str, agent_id: str):
     await upload_directory_to_minio(
         minio_storage_block=minio_storage_block,
         local_path=f"{os.getcwd()}/app/workers/agents/{agent_name}",
-        to_path=f"agents/{agent_name}"
+        to_path=f"agents/{agent_name}",
     )
 
     await run_deployment(
@@ -501,8 +514,9 @@ async def update_agent(account_id: str, agent_id: str):
         timeout=0,
     )
 
+
 async def on_startup():
-    print(f'\n=== {__name__} on_startup (BEGIN) ===\n')
+    print(f"\n=== {__name__} on_startup (BEGIN) ===\n")
 
     # memo: Dict[str, Any] = {}
     # memo = await load_cloud_credentials(memo)
@@ -517,8 +531,9 @@ async def on_startup():
     #     for agent in agents:
     #         await update_agent(DEFAULT_ACCOUNT_ID, agent["id"])
 
-    print(f'\n=== {__name__} on_startup (END) ===\n')
+    print(f"\n=== {__name__} on_startup (END) ===\n")
+
 
 async def on_shutdown():
-    print(f'\n=== {__name__} on_shutdown (BEGIN) ===\n')
-    print(f'\n=== {__name__} on_shutdown (END) ===\n')
+    print(f"\n=== {__name__} on_shutdown (BEGIN) ===\n")
+    print(f"\n=== {__name__} on_shutdown (END) ===\n")

@@ -2,10 +2,7 @@ import argparse
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-
 from app.api.accounts import accounts_router
 from app.api.agents import agents_router
 from app.api.artifacts import artifacts_router
@@ -16,6 +13,8 @@ from app.services import agents as agents_service
 from app.services import artifacts as artifacts_service
 from app.services import chat as chat_service
 from app.services import tasks as tasks_service
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 
 @asynccontextmanager
@@ -32,9 +31,11 @@ async def lifespan(app: FastAPI):
     await agents_service.on_shutdown()
     await accounts_service.on_shutdown()
 
+
 app = FastAPI(
     lifespan=lifespan,
 )
+
 
 def enable_cors(app):
     logger = logging.getLogger("uvicorn")
@@ -46,6 +47,7 @@ def enable_cors(app):
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
 
 app.include_router(accounts_router, prefix="/api/accounts")
 app.include_router(agents_router, prefix="/api/agents")
@@ -60,7 +62,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.reload:
-        enable_cors(app) # TODO: does this need to be added before the router?
+        enable_cors(app)  # TODO: does this need to be added before the router?
 
     uvicorn.run(
         "main:app",

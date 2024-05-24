@@ -2,6 +2,7 @@ import json
 import os
 from typing import Annotated, List, Optional
 
+from agent import ForgeAgent
 from fastapi import FastAPI, File, Form, Response, UploadFile, status
 from fastapi.responses import StreamingResponse
 from forge.db import ForgeDatabase
@@ -19,8 +20,6 @@ from forge.sdk import (
 )
 from forge.sdk.errors import NotFoundError
 from ray import serve
-
-from agent import ForgeAgent
 
 app = FastAPI()
 
@@ -52,7 +51,9 @@ class AgentDeployment:
         return "ok"
 
     @app.post("/ap/v1/agent/tasks", response_model=Task, tags=["agent"])
-    async def create_agent_task(self, task_request: TaskRequestBody | None = None) -> Task:
+    async def create_agent_task(
+        self, task_request: TaskRequestBody | None = None
+    ) -> Task:  # noqa: E501
         """
         Creates a new task using the provided TaskRequestBody and returns a Task.
 
@@ -77,7 +78,7 @@ class AgentDeployment:
                     "additional_input": "python/code",
                     "artifacts": [],
                 }
-        """
+        """  # noqa: E501
         try:
             task_request = await self.agent.create_task(
                 task_request=task_request,
@@ -180,7 +181,7 @@ class AgentDeployment:
                     "additional_output": "Supplementary details...",
                     ...
                 }
-        """
+        """  # noqa: E501
         try:
             # An empty step request represents a yes to continue command
             if not step:
@@ -277,7 +278,7 @@ class AgentDeployment:
                     "relative_path": "/my_folder/my_other_folder/",
                     "file_name": "main.py"
                 }
-        """
+        """  # noqa: E501
         if file is None:
             return Response(
                 content=json.dumps({"error": "File must be specified"}),

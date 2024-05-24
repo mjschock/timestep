@@ -105,6 +105,7 @@ def load_kubeconfig(overwrite=True, memo: Dict[str, Any] = {}):
 
     return memo
 
+
 async def load_cloud_credentials(memo: Dict[str, Any]):
     try:
         kubernetes.config.load_incluster_config()
@@ -114,6 +115,7 @@ async def load_cloud_credentials(memo: Dict[str, Any]):
         print(e)
 
     return memo
+
 
 async def sky_check_task(memo: dict[str, Any]):
     sky.check.check()
@@ -128,15 +130,18 @@ async def sky_check_task(memo: dict[str, Any]):
 
     return memo
 
+
 async def sky_status_task(memo: dict[str, Any], refresh: bool = True):
     memo["cluster_statuses"]: list[dict[str, Any]] = sky.core.status(refresh=refresh)
 
     return memo
 
+
 async def sky_queue_task(name: str, memo: dict[str, Any]):
     memo["cluster_queue"]: List[dict] = sky.core.queue(cluster_name=name)
 
     return memo
+
 
 async def create_minio_bucket(bucket_name: str, ignore_exists: bool = False) -> str:
     minio_endpoint = os.getenv("MINIO_ENDPOINT")
@@ -157,6 +162,7 @@ async def create_minio_bucket(bucket_name: str, ignore_exists: bool = False) -> 
     minio_client.make_bucket(bucket_name)
 
     return bucket_name
+
 
 async def create_minio_storage_block(
     account_id: str,
@@ -184,6 +190,7 @@ async def create_minio_storage_block(
 
     return await S3Bucket.load(storage_block_name)
 
+
 async def upload_directory_to_minio(
     minio_storage_block: S3Bucket,
     local_path: str,
@@ -193,6 +200,7 @@ async def upload_directory_to_minio(
         local_path=local_path,
         to_path=to_path,
     )
+
 
 async def deploy_agent(
     uploaded_file_count: int,
@@ -232,7 +240,9 @@ async def deploy_agent(
                 "KUBECONTEXT": os.getenv("KUBECONTEXT"),
                 "MINIO_ENDPOINT": os.getenv("MINIO_ENDPOINT"),
                 "MINIO_ROOT_USER": os.getenv("MINIO_ROOT_USER"),
-                "MINIO_ROOT_PASSWORD": os.getenv("MINIO_ROOT_PASSWORD"), # TODO: Use Secrets
+                "MINIO_ROOT_PASSWORD": os.getenv(
+                    "MINIO_ROOT_PASSWORD"
+                ),  # TODO: Use Secrets # noqa E501
                 "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
                 "PRIMARY_DOMAIN_NAME": os.getenv("PRIMARY_DOMAIN_NAME"),
             },
@@ -258,7 +268,8 @@ async def deploy_agent(
 
     return deployment_ids
 
-def generate_folder_hash(folder_path, hash_algorithm='sha256'):
+
+def generate_folder_hash(folder_path, hash_algorithm="sha256"):
     # Choose the hash algorithm (e.g., 'sha256', 'md5', etc.)
     hasher = hashlib.new(hash_algorithm)
 
@@ -268,13 +279,14 @@ def generate_folder_hash(folder_path, hash_algorithm='sha256'):
             file_path = os.path.join(root, filename)
 
             # Calculate hash for each file
-            with open(file_path, 'rb') as f:
+            with open(file_path, "rb") as f:
                 # Read the file in chunks to handle large files
-                for chunk in iter(lambda: f.read(4096), b''):
+                for chunk in iter(lambda: f.read(4096), b""):
                     hasher.update(chunk)
 
     # Return the hexadecimal digest of the hash
     return hasher.hexdigest()
+
 
 def get_agent_deployment_idempotency_key(
     local_path: str,

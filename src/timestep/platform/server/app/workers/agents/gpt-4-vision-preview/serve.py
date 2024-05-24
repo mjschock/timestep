@@ -53,16 +53,10 @@ app = FastAPI()
 @serve.ingress(app)
 class AgentDeployment:
     def __init__(self) -> None:
-        tools = [
-            add_tool,
-            divide_tool,
-            multiply_tool,
-            write_to_file_tool
-        ]
+        tools = [add_tool, divide_tool, multiply_tool, write_to_file_tool]
 
         multi_modal_llm: MultiModalLLM = OpenAIMultiModal(
-            model="gpt-4-vision-preview",
-            max_new_tokens=1000
+            model="gpt-4-vision-preview", max_new_tokens=1000
         )
 
         agent_worker = MultimodalReActAgentWorker.from_tools(
@@ -99,43 +93,45 @@ class AgentDeployment:
             extra_state={
                 "additional_input": body.additional_input if body else None,
                 "artifacts": [],
-                "image_docs": []
-            }
+                "image_docs": [],
+            },
         )
 
         extra_state = agent_task.extra_state
-        agent_task_additional_input = extra_state.get('additional_input')
+        agent_task_additional_input = extra_state.get("additional_input")
         agent_task_artifacts = extra_state.get("artifacts", None)
         agent_task_image_docs = extra_state.get("image_docs", None)
 
-        assert agent_task.input == (body and body.input), \
-            f"{agent_task.input}!= {(body and body.input)}"
-        assert agent_task_additional_input == (body and body.additional_input), \
-            f"{agent_task_additional_input} != {(body and body.additional_input)}"
-        assert agent_task_artifacts == [], \
-            f"{agent_task_artifacts} != []"
-        assert agent_task_image_docs == [], \
-            f"{agent_task_image_docs} != []"
+        assert agent_task.input == (
+            body and body.input
+        ), f"{agent_task.input}!= {(body and body.input)}"
+        assert agent_task_additional_input == (
+            body and body.additional_input
+        ), f"{agent_task_additional_input} != {(body and body.additional_input)}"
+        assert agent_task_artifacts == [], f"{agent_task_artifacts} != []"
+        assert agent_task_image_docs == [], f"{agent_task_image_docs} != []"
 
         agent_task_steps: List[AgentTaskStep] = self.agent.get_upcoming_steps(
             task_id=agent_task.task_id,
         )
 
-        assert len(agent_task_steps) == 1, \
-            f"{len(agent_task_steps)} != 1"
+        assert len(agent_task_steps) == 1, f"{len(agent_task_steps)} != 1"
 
         agent_task_step = agent_task_steps[0]
 
-        assert agent_task_step.input == agent_task.input, \
-            f"{agent_task_step.input}!= {agent_task.input}"
+        assert (
+            agent_task_step.input == agent_task.input
+        ), f"{agent_task_step.input}!= {agent_task.input}"
 
         step_state = agent_task_step.step_state
 
-        assert step_state.get("is_first", False) is True, \
-            f"{step_state.get('is_first', False)}!= True"
+        assert (
+            step_state.get("is_first", False) is True
+        ), f"{step_state.get('is_first', False)}!= True"
 
-        assert step_state.get("image_docs", None) == agent_task_image_docs, \
-            f"{step_state.get('image_docs', None)}!= {agent_task_image_docs}"
+        assert (
+            step_state.get("image_docs", None) == agent_task_image_docs
+        ), f"{step_state.get('image_docs', None)}!= {agent_task_image_docs}"
 
         ## Trying to satisfy the AP test suite here by executing the first step
         # agent_task_step: APIStep = await self.execute_agent_task_step(
@@ -162,7 +158,11 @@ class AgentDeployment:
         """
         List all tasks that have been created for the agent.
         """
-        agent_task_states: List[AgentTaskState] = self.agent.list_tasks() # TODO: why does list_tasks return task states?  # noqa: E501
+        agent_task_states: List[
+            AgentTaskState
+        ] = (
+            self.agent.list_tasks()
+        )  # TODO: why does list_tasks return task states?  # noqa: E501
         agent_tasks: List[AgentTask] = [
             agent_task_state.task for agent_task_state in agent_task_states
         ]
@@ -172,8 +172,9 @@ class AgentDeployment:
         for agent_task in agent_tasks:
             try:
                 # TODO: trying to appease the AP test suite by not returning completed tasks  # noqa: E501
-                agent_task_step_output: AgentTaskStepOutput = \
+                agent_task_step_output: AgentTaskStepOutput = (
                     self.agent.get_completed_steps(agent_task.task_id)[-1]
+                )
 
                 if agent_task_step_output.is_last:
                     continue
@@ -190,7 +191,7 @@ class AgentDeployment:
                 )
             )
 
-        page = tasks[start_index:start_index + page_size]
+        page = tasks[start_index : start_index + page_size]
 
         return TaskListResponse(
             # tasks=tasks[start_index:start_index + page_size],
@@ -233,9 +234,11 @@ class AgentDeployment:
         List all steps for the specified task.
         """
         agent_task: AgentTask = self.agent.get_task(task_id)
-        completed_agent_task_step_outputs: List[AgentTaskStepOutput] = self.agent.get_completed_steps( # TODO: why does get_completed_steps return TaskStepOutputs instead of TaskSteps?  # noqa: E501
+        completed_agent_task_step_outputs: List[
+            AgentTaskStepOutput
+        ] = self.agent.get_completed_steps(  # TODO: why does get_completed_steps return TaskStepOutputs instead of TaskSteps?  # noqa: E501
             task_id=agent_task.task_id,
-        ) # TODO: AgentTaskStepOutput has an is_last field; what's the meaning of that? if is_last is True, must there be no upcoming steps?  # noqa: E501
+        )  # TODO: AgentTaskStepOutput has an is_last field; what's the meaning of that? if is_last is True, must there be no upcoming steps?  # noqa: E501
         upcoming_agent_task_steps: List[AgentTaskStep] = self.agent.get_upcoming_steps(
             task_id=agent_task.task_id,
         )
@@ -247,10 +250,12 @@ class AgentDeployment:
             is_last: bool = agent_task_step_output.is_last
 
             if is_last:
-                assert len(upcoming_agent_task_steps) == 0, \
-                    f"{len(upcoming_agent_task_steps)}!= 0"
-                assert i == len(completed_agent_task_step_outputs) - 1, \
-                    f"{i}!= {len(completed_agent_task_step_outputs) - 1}"
+                assert (
+                    len(upcoming_agent_task_steps) == 0
+                ), f"{len(upcoming_agent_task_steps)}!= 0"
+                assert (
+                    i == len(completed_agent_task_step_outputs) - 1
+                ), f"{i}!= {len(completed_agent_task_step_outputs) - 1}"
 
             steps.append(
                 APIStep(
@@ -268,7 +273,7 @@ class AgentDeployment:
                 APIStep(
                     artifacts=agent_task_step.step_state.get("artifacts", []),
                     is_last=i == len(upcoming_agent_task_steps) - 1,
-                    status=Status.created, # TODO: what about status.running?
+                    status=Status.created,  # TODO: what about status.running?
                     step_id=agent_task_step.step_id,
                     task_id=agent_task_step.task_id,
                 )
@@ -281,7 +286,9 @@ class AgentDeployment:
                 total_items=len(steps),
                 total_pages=len(steps) // page_size + 1,
             ),
-            steps=steps[start_index : start_index + page_size], # TODO: cut out early above if len(steps) < start_index + page_size  # noqa: E501
+            steps=steps[
+                start_index : start_index + page_size
+            ],  # TODO: cut out early above if len(steps) < start_index + page_size  # noqa: E501
         )
 
     @app.post(
@@ -301,16 +308,16 @@ class AgentDeployment:
         agent_task: AgentTask = self.agent.get_task(task_id)
 
         # except KeyError:
-            ## Trying to satisfy the AP test suite here by returning 200 here
-            # return APIStep(
-            #     input=body and body.input,
-            #     additional_input=body and body.additional_input,
-            #     artifacts=[],
-            #     is_last=True,
-            #     task_id=task_id,
-            #     status=Status.completed,
-            #     step_id=str("Unknown"), # TODO: maybe don't delete tasks but don't return completed ones from list_agent_tasks instead?  # noqa: E501
-            # )
+        ## Trying to satisfy the AP test suite here by returning 200 here
+        # return APIStep(
+        #     input=body and body.input,
+        #     additional_input=body and body.additional_input,
+        #     artifacts=[],
+        #     is_last=True,
+        #     task_id=task_id,
+        #     status=Status.completed,
+        #     step_id=str("Unknown"), # TODO: maybe don't delete tasks but don't return completed ones from list_agent_tasks instead?  # noqa: E501
+        # )
 
         try:
             agent_task_step_output: AgentTaskStepOutput = self.agent.run_step(
@@ -319,8 +326,9 @@ class AgentDeployment:
 
         except IndexError:
             # Trying to appease the AP test suite by returning last step here
-            agent_task_step_output: AgentTaskStepOutput = \
+            agent_task_step_output: AgentTaskStepOutput = (
                 self.agent.get_completed_steps(agent_task.task_id)[-1]
+            )
 
         # TODO: trying to appease the AP test suite by executing until the end
         while not agent_task_step_output.is_last:
@@ -331,8 +339,9 @@ class AgentDeployment:
         if agent_task_step_output.is_last:
             output = self.agent.finalize_response(agent_task.task_id)
             print(f"> Agent finished: {str(output)}")
-            assert output == agent_task_step_output.output, \
-                f"{output} != {agent_task_step_output.output}"
+            assert (
+                output == agent_task_step_output.output
+            ), f"{output} != {agent_task_step_output.output}"
 
         return APIStep(
             artifacts=agent_task_step_output.task_step.step_state.get("artifacts", []),
@@ -343,7 +352,9 @@ class AgentDeployment:
             ),
             is_last=agent_task_step_output.is_last,
             output=str(agent_task_step_output.output),
-            status=Status.completed if agent_task_step_output.is_last else Status.created,  # noqa: E501
+            status=Status.completed
+            if agent_task_step_output.is_last
+            else Status.created,  # noqa: E501
             step_id=agent_task_step_output.task_step.step_id,
             task_id=agent_task_step_output.task_step.task_id,
         )
@@ -358,9 +369,11 @@ class AgentDeployment:
         Get details about a specified task step.
         """
         agent_task: AgentTask = self.agent.get_task(task_id)
-        completed_agent_task_step_outputs: List[AgentTaskStepOutput] = self.agent.get_completed_steps( # TODO: why does get_completed_steps return TaskStepOutputs instead of TaskSteps?  # noqa: E501
+        completed_agent_task_step_outputs: List[
+            AgentTaskStepOutput
+        ] = self.agent.get_completed_steps(  # TODO: why does get_completed_steps return TaskStepOutputs instead of TaskSteps?  # noqa: E501
             task_id=agent_task.task_id,
-        ) # TODO: AgentTaskStepOutput has an is_last field; what's the meaning of that? if is_last is True, must there be no upcoming steps?  # noqa: E501
+        )  # TODO: AgentTaskStepOutput has an is_last field; what's the meaning of that? if is_last is True, must there be no upcoming steps?  # noqa: E501
         upcoming_agent_task_steps: List[AgentTaskStep] = self.agent.get_upcoming_steps(
             task_id=agent_task.task_id,
         )
@@ -378,7 +391,7 @@ class AgentDeployment:
                     ),
                     is_last=agent_task_step_output.is_last,
                     output=str(agent_task_step_output.output),
-                    status=Status.completed, # TODO: what about status.running?
+                    status=Status.completed,  # TODO: what about status.running?
                     step_id=agent_task_step.step_id,
                     task_id=agent_task_step.task_id,
                 )
@@ -393,7 +406,7 @@ class AgentDeployment:
                         None,
                     ),
                     is_last=i == len(upcoming_agent_task_steps) - 1,
-                    status=Status.created, # TODO: what about status.running?
+                    status=Status.created,  # TODO: what about status.running?
                     step_id=agent_task_step.step_id,
                     task_id=agent_task_step.task_id,
                 )
@@ -486,15 +499,15 @@ class AgentDeployment:
         tags=["agent"],
     )
     async def download_agent_task_artifacts(
-        self,
-        task_id: str,
-        artifact_id: str
+        self, task_id: str, artifact_id: str
     ) -> FileResponse:
         """
         Download the specified artifact.
         """
         # artifact = await self.agent.db.get_artifact(task_id, artifact_id)
-        artifacts: List[Artifact] = self.agent.get_task(task_id).extra_state["artifacts"]
+        artifacts: List[Artifact] = self.agent.get_task(task_id).extra_state[
+            "artifacts"
+        ]  # noqa: E501
 
         artifact_found: bool = False
 
@@ -535,7 +548,7 @@ class AgentDeployment:
             minio_client.fget_object(
                 bucket_name=bucket_name,
                 object_name=artifact_path,
-                file_path=tmp_file_path
+                file_path=tmp_file_path,
             )
 
             def cleanup(tmp_file_path: str) -> None:
@@ -547,5 +560,6 @@ class AgentDeployment:
                 filename=artifact.file_name,
                 background=BackgroundTask(cleanup, tmp_file_path),
             )
+
 
 deployment = AgentDeployment.bind()
