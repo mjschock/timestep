@@ -119,9 +119,9 @@ async def sky_check_task(memo: dict[str, Any]):
     sky.check.check()
 
     enabled_clouds: list[sky.clouds.Cloud] = sky.global_user_state.get_enabled_clouds()
-    enabled_storage_clouds: list[str] = (
-        sky.global_user_state.get_enabled_storage_clouds()
-    )
+    enabled_storage_clouds: list[
+        str
+    ] = sky.global_user_state.get_enabled_storage_clouds()
 
     memo["enabled_clouds"] = enabled_clouds
     memo["enabled_storage_clouds"] = enabled_storage_clouds
@@ -247,7 +247,7 @@ async def serve_agent_flow(account_id: str, agent_name: str, operation: str = "c
         memo = await sky_exec_task(
             agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=False
         )
-        # memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=True)
+        # memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=True) # noqa: E501
 
     elif operation == "delete":
         memo = await sky_down_task(agent_name, memo)
@@ -270,7 +270,7 @@ async def serve_agent_flow(account_id: str, agent_name: str, operation: str = "c
         memo = await sky_exec_task(
             agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=False
         )
-        # memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=True)
+        # memo = await sky_exec_task(agent_name, memo, task_yaml_name="jupyter_lab.yaml", cancel_all=True) # noqa: E501
 
     memo = await sky_status_task(memo)
 

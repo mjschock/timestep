@@ -2,9 +2,6 @@ from typing import Annotated, Any, Dict, List, Optional
 
 from agent_protocol import Artifact, Step, StepRequestBody, Task, TaskRequestBody
 from agent_protocol.models import (
-    Task as APITask,
-)
-from agent_protocol.models import (
     TaskListResponse,
     TaskStepsListResponse,
 )
@@ -17,16 +14,16 @@ from fastapi import (
     status,
 )
 from fastapi.responses import FileResponse
-from pydantic import StrictStr
 
 from app.services import agents as agents_service
 
-DEFAULT_ACCOUNT_ID = "f215cf48-7458-4596-9aa5-2159fc6a3caf" # Temporary; same as S3_ROOT_FOLDER in NhostConstruct  # noqa: E5010
-DEFAULT_AGENT_NAME = "agent" # TODO: Make this an environment variable
+DEFAULT_ACCOUNT_ID = "f215cf48-7458-4596-9aa5-2159fc6a3caf"  # Temporary; same as S3_ROOT_FOLDER in NhostConstruct  # noqa: E501
+DEFAULT_AGENT_NAME = "agent"  # TODO: Make this an environment variable
 
 available_agent_names = ("agent", "gpt-4-vision-preview")
 
 agents_router = APIRouter()
+
 
 @agents_router.post(
     "",
@@ -49,13 +46,13 @@ async def create_agent(agent_name: str):
         )
 
     await agents_service.create_agent(
-        account_id=DEFAULT_ACCOUNT_ID,
-        agent_name=agent_name
+        account_id=DEFAULT_ACCOUNT_ID, agent_name=agent_name
     )
 
     return Response(
         status_code=status.HTTP_202_ACCEPTED,
     )
+
 
 @agents_router.delete(
     "/{agent_id}",
@@ -75,6 +72,7 @@ async def delete_agent(agent_id: str):
         status_code=status.HTTP_202_ACCEPTED,
     )
 
+
 @agents_router.get(
     "/{agent_id}",
     tags=["agents"],
@@ -92,6 +90,7 @@ async def get_agent(agent_id: str):
         "agent": agent,
     }
 
+
 @agents_router.get(
     "/{agent_id}/livez",
     tags=["agents"],
@@ -104,6 +103,7 @@ async def get_agent_livez(agent_id: str):
         ][0]
 
     return await agents_service.get_agent_livez(DEFAULT_ACCOUNT_ID, agent_id)
+
 
 @agents_router.get(
     "/{agent_id}/readyz",
@@ -118,6 +118,7 @@ async def get_agent_readyz(agent_id: str):
 
     return await agents_service.get_agent_readyz(DEFAULT_ACCOUNT_ID, agent_id)
 
+
 @agents_router.get(
     "",
     tags=["agents"],
@@ -128,6 +129,7 @@ async def list_agents():
     return {
         "agents": agents,
     }
+
 
 @agents_router.put(
     "/{agent_id}",
@@ -146,15 +148,13 @@ async def update_agent(agent_id: str):
         status_code=status.HTTP_202_ACCEPTED,
     )
 
+
 @agents_router.post(
     "/{agent_id}/ap/v1/agent/tasks",
     response_model=Task,
     tags=["agent", "agents"],
 )
-async def create_agent_task(
-    agent_id: str,
-    body: TaskRequestBody | None = None
-) -> Task:
+async def create_agent_task(agent_id: str, body: TaskRequestBody | None = None) -> Task:
     """
     Creates a task for the agent.
     """
@@ -165,6 +165,7 @@ async def create_agent_task(
         ][0]
 
     return await agents_service.create_agent_task(agent_id, body)
+
 
 @agents_router.get(
     "/{agent_id}/ap/v1/agent/tasks",
@@ -187,6 +188,7 @@ async def list_agent_tasks_ids(
 
     return await agents_service.list_agent_tasks_ids(agent_id, current_page, page_size)
 
+
 @agents_router.get(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}",
     response_model=Task,
@@ -206,6 +208,7 @@ async def get_agent_task(
         ][0]
 
     return await agents_service.get_agent_task(agent_id, task_id)
+
 
 @agents_router.get(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}/artifacts",
@@ -234,6 +237,7 @@ async def list_agent_task_artifacts(
         page_size=page_size,
     )
 
+
 @agents_router.post(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}/artifacts",
     response_model=Artifact,
@@ -261,14 +265,13 @@ async def upload_agent_task_artifacts(
         relative_path=relative_path,
     )
 
+
 @agents_router.get(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}/artifacts/{artifact_id}",
     tags=["agent", "agents"],
 )
 async def download_agent_task_artifacts(
-    agent_id: str,
-    task_id: str,
-    artifact_id: str
+    agent_id: str, task_id: str, artifact_id: str
 ) -> FileResponse:
     """
     Download the specified artifact.
@@ -285,13 +288,17 @@ async def download_agent_task_artifacts(
         artifact_id=artifact_id,
     )
 
+
 @agents_router.get(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}/steps",
     response_model=TaskStepsListResponse,
     tags=["agent", "agents"],
 )
 async def list_agent_task_steps(
-    agent_id: str, task_id: str, current_page: int = 1, page_size: int = 10,
+    agent_id: str,
+    task_id: str,
+    current_page: int = 1,
+    page_size: int = 10,
 ) -> List[str]:
     """
     List all steps for the specified task.
@@ -308,6 +315,7 @@ async def list_agent_task_steps(
         page_size=page_size,
         task_id=task_id,
     )
+
 
 @agents_router.post(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}/steps",
@@ -329,6 +337,7 @@ async def execute_agent_task_step(
         ][0]
 
     return await agents_service.execute_agent_task_step(agent_id, task_id, body)
+
 
 @agents_router.get(
     "/{agent_id}/ap/v1/agent/tasks/{task_id}/steps/{step_id}",

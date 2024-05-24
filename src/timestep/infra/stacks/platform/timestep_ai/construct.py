@@ -177,11 +177,6 @@ class TimestepAIConstruct(Construct):
             scope=self,
         )
 
-        # postgres_database = "postgres"
-        # postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
-        # postgres_password = config.postgresql_password.get_secret_value()
-        # postgres_username = "postgres"
-
         client_config_map = ConfigMapV1(
             id_="client_config_map",
             data={
@@ -281,10 +276,10 @@ class TimestepAIConstruct(Construct):
         #         data={
         #             "tls.crt": config.local_tls_crt.get_secret_value(),
         #             "tls.key": config.local_tls_key.get_secret_value(),
-        #             # "tls.crt": base64.b64encode(config.local_tls_crt.get_secret_value().encode("utf-8")).decode("utf-8"),
-        #             # "tls.key": base64.b64encode(config.local_tls_key.get_secret_value().encode("utf-8")).decode("utf-8"),
+        #             # "tls.crt": base64.b64encode(config.local_tls_crt.get_secret_value().encode("utf-8")).decode("utf-8"), # noqa: E501
+        #             # "tls.key": base64.b64encode(config.local_tls_key.get_secret_value().encode("utf-8")).decode("utf-8"), # noqa: E501
         #             # "tls.crt": base64.encode(config.local_tls_cert)
-        #             # "tls.key": base64.b64encode(config.local_tls_key.get_secret_value()).decode("utf-8"),
+        #             # "tls.key": base64.b64encode(config.local_tls_key.get_secret_value()).decode("utf-8"), # noqa: E501
         #         },
         #         metadata=SecretV1Metadata(
         #             name="ssl-timestep.local",
@@ -322,7 +317,9 @@ class TimestepAIConstruct(Construct):
                             ],
                         },
                         "path": os.path.relpath(os.path.dirname(__file__), os.getcwd()),
-                        "repoURL": git.Repo().remote('origin').url, # TODO: use env var for remote
+                        "repoURL": git.Repo()
+                        .remote("origin")
+                        .url,  # TODO: use env var for remote # noqa: E501
                         "targetRevision": "HEAD",
                     },
                     "syncPolicy": {

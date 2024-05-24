@@ -43,10 +43,7 @@ class StreamingCallbackHandler(BaseCallbackHandler):
         if event_type == CBEventType.FUNCTION_CALL:
             response = payload["function_call_response"]
             # Add this to queue
-            print_str = (
-                f"\n\nGot output: {response}\n"
-                "========================\n\n"
-            )
+            print_str = f"\n\nGot output: {response}\n" "========================\n\n"
             self._queue.append(print_str)
 
     def reset(self) -> None:

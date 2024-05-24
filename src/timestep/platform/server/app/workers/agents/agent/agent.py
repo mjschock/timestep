@@ -68,7 +68,7 @@ class ForgeAgent(Agent):
 
     The Forge has a basic module for each of these areas. However, you are free to implement your own.
     This is just a starting point.
-    """
+    """  # noqa: E501
 
     def __init__(self, database: AgentDB, workspace: Workspace):
         """
@@ -76,7 +76,7 @@ class ForgeAgent(Agent):
         store artifacts. The workspace is a directory on the file system.
 
         Feel free to create subclasses of the database and workspace to implement your own storage
-        """
+        """  # noqa: E501
         super().__init__(database, workspace)
 
     async def create_task(self, task_request: TaskRequestBody) -> Task:
@@ -87,10 +87,10 @@ class ForgeAgent(Agent):
 
         We are hooking into function to add a custom log message. Though you can do anything you
         want here.
-        """
+        """  # noqa: E501
         task = await super().create_task(task_request)
         LOG.info(
-            f"📦 Task created: {task.task_id} input: {task.input[:40]}{'...' if len(task.input) > 40 else ''}"
+            f"📦 Task created: {task.task_id} input: {task.input[:40]}{'...' if len(task.input) > 40 else ''}"  # noqa: E501
         )
         return task
 
@@ -121,7 +121,7 @@ class ForgeAgent(Agent):
         as a step object. You can do everything in a single step or you can break it down into
         multiple steps. Returning a request to continue in the step output, the user can then decide
         if they want the agent to continue or not.
-        """
+        """  # noqa: E501
         # Firstly we get the task this step is for so we can access the task input
         task = await self.db.get_task(task_id)
 
@@ -170,7 +170,7 @@ class ForgeAgent(Agent):
             # Log the answer for debugging purposes
             LOG.info(pprint.pformat(answer))
 
-        except json.JSONDecodeError as e:
+        except json.JSONDecodeError:
             # Handle JSON decoding errors
             LOG.error(f"Unable to decode chat response: {chat_response}")
 
@@ -183,7 +183,7 @@ class ForgeAgent(Agent):
 
         # Run the ability and get the output
         # We don't actually use the output in this example
-        output = await self.abilities.run_ability(
+        output = await self.abilities.run_ability(  # noqa: F841
             task_id, ability["name"], **ability["args"]
         )
 

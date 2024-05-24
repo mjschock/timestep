@@ -23,21 +23,27 @@ from minio import Minio
 #     minio_secret_key="minio_secret_key",
 # )
 
+
 def add(a: int, b: int) -> int:
     """Add two integers and returns the result integer"""
     return a + b
 
+
 add_tool = FunctionTool.from_defaults(fn=add)
+
 
 def divide(a: int, b: int) -> float:
     """Divide two integers and returns the result float"""
     return a / b
 
+
 divide_tool = FunctionTool.from_defaults(fn=divide)
+
 
 def multiply(a: int, b: int) -> int:
     """Multiple two integers and returns the result integer"""
     return a * b
+
 
 multiply_tool = FunctionTool.from_defaults(fn=multiply)
 
@@ -65,7 +71,8 @@ multiply_tool = FunctionTool.from_defaults(fn=multiply)
 
 # minio_reader_tool = FunctionTool.from_defaults(fn=read_minio_file)
 
-def write_to_file( # TODO: register artifact here and also have a read_from_file
+
+def write_to_file(  # TODO: register artifact here and also have a read_from_file
     # bucket_name: str,
     # minio_endpoint: str,
     # minio_secure: bool,
@@ -119,6 +126,7 @@ def write_to_file( # TODO: register artifact here and also have a read_from_file
     #     source_file, "successfully uploaded as object",
     #     destination_file, "to bucket", bucket_name,
     # )
+
 
 write_to_file_tool = FunctionTool.from_defaults(fn=write_to_file)
 

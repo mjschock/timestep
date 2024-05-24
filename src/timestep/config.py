@@ -81,7 +81,9 @@ class Settings(BaseSettings):
     # postgres_database = "postgres"
     postgres_database: str = Field(default="postgres")
     # postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
-    postgres_hostname: str = Field(default="postgresql-postgresql-ha-pgpool.default.svc.cluster.local")
+    postgres_hostname: str = Field(
+        default="postgresql-postgresql-ha-pgpool.default.svc.cluster.local",
+    )
     # postgres_password = config.postgresql_password.get_secret_value()
     postgres_password: SecretStr = Field(default="postgres")
     # postgres_username = "postgres"
