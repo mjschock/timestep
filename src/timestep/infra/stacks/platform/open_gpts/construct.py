@@ -60,6 +60,49 @@ class OpenGPTsConstruct(Construct):
         #     version="0.1.2",
         # )
 
+        env = [
+            DeploymentV1SpecTemplateSpecContainerEnv(
+                name="LANGCHAIN_API_KEY",
+                value=config.langsmith_api_key.get_secret_value(),
+            ),
+            DeploymentV1SpecTemplateSpecContainerEnv(
+                name="LANGCHAIN_TRACING_V2",
+                value="true",
+            ),
+            DeploymentV1SpecTemplateSpecContainerEnv(
+                name="OPENAI_API_KEY",  # TODO: move to secret
+                value=config.openai_api_key.get_secret_value(),
+            ),
+            DeploymentV1SpecTemplateSpecContainerEnv(
+                name="POSTGRES_DB",
+                value=config.postgres_database,
+            ),
+            DeploymentV1SpecTemplateSpecContainerEnv(
+                name="POSTGRES_HOST",
+                value=config.postgres_hostname,
+            ),
+            DeploymentV1SpecTemplateSpecContainerEnv(
+                name="POSTGRES_PASSWORD",  # TODO: move to secret # noqa: E501
+                value=config.postgres_password.get_secret_value(),
+            ),
+            DeploymentV1SpecTemplateSpecContainerEnv(
+                name="POSTGRES_PORT",
+                value=config.postgres_port,
+            ),
+            DeploymentV1SpecTemplateSpecContainerEnv(
+                name="POSTGRES_USER",
+                value=config.postgres_username,
+            ),
+        ]
+
+        if config.anthropic_api_key:
+            env.append(
+                DeploymentV1SpecTemplateSpecContainerEnv(
+                    name="ANTHROPIC_API_KEY",
+                    value=config.anthropic_api_key.get_secret_value(),
+                )
+            )
+
         self.open_gpts_backend_deployment_resource = DeploymentV1(
             id_="open_gpts_backend_deployment_resource",
             metadata=DeploymentV1Metadata(
@@ -85,44 +128,7 @@ class OpenGPTsConstruct(Construct):
                     spec=DeploymentV1SpecTemplateSpec(
                         container=[
                             DeploymentV1SpecTemplateSpecContainer(
-                                env=[
-                                    DeploymentV1SpecTemplateSpecContainerEnv(
-                                        name="ANTHROPIC_API_KEY",
-                                        value=config.anthropic_api_key.get_secret_value(),
-                                    ),
-                                    DeploymentV1SpecTemplateSpecContainerEnv(
-                                        name="LANGCHAIN_API_KEY",
-                                        value=config.langsmith_api_key.get_secret_value(),
-                                    ),
-                                    DeploymentV1SpecTemplateSpecContainerEnv(
-                                        name="LANGCHAIN_TRACING_V2",
-                                        value="true",
-                                    ),
-                                    DeploymentV1SpecTemplateSpecContainerEnv(
-                                        name="OPENAI_API_KEY",  # TODO: move to secret
-                                        value=config.openai_api_key.get_secret_value(),
-                                    ),
-                                    DeploymentV1SpecTemplateSpecContainerEnv(
-                                        name="POSTGRES_DB",
-                                        value=config.postgres_database,
-                                    ),
-                                    DeploymentV1SpecTemplateSpecContainerEnv(
-                                        name="POSTGRES_HOST",
-                                        value=config.postgres_hostname,
-                                    ),
-                                    DeploymentV1SpecTemplateSpecContainerEnv(
-                                        name="POSTGRES_PASSWORD",  # TODO: move to secret # noqa: E501
-                                        value=config.postgres_password.get_secret_value(),
-                                    ),
-                                    DeploymentV1SpecTemplateSpecContainerEnv(
-                                        name="POSTGRES_PORT",
-                                        value=config.postgres_port,
-                                    ),
-                                    DeploymentV1SpecTemplateSpecContainerEnv(
-                                        name="POSTGRES_USER",
-                                        value=config.postgres_username,
-                                    ),
-                                ],
+                                env=env,
                                 image="docker.io/mschock/open-gpts:latest",
                                 image_pull_policy="IfNotPresent",
                                 name="open-gpts-backend",

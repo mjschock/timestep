@@ -20,14 +20,7 @@ from timestep.infra.stacks.kubernetes_config.kubernetes_cluster_ingress.construc
 from timestep.infra.stacks.kubernetes_config.kubernetes_dashboard.construct import (
     KubernetesDashboardConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.minio.construct import MinioConstruct
-from timestep.infra.stacks.kubernetes_config.postgresql.construct import (
-    PostgreSQLConstruct,
-)
 from timestep.infra.stacks.kubernetes_config.prefect.construct import PrefectConstruct
-from timestep.infra.stacks.kubernetes_config.sealed_secrets.construct import (
-    SealedSecretsConstruct,
-)
 
 
 class KubernetesConfigStack(TerraformStack):
@@ -87,38 +80,12 @@ class KubernetesConfigStack(TerraformStack):
             )
         )
 
-        if config.minio_in_cluster_is_enabled:
-            self.minio_construct: MinioConstruct = MinioConstruct(
-                config=config,
-                id="minio_construct",
-                helm_provider=self.helm_provider,
-                scope=self,
-            )
-
-        if config.postgresql_in_cluster_is_enabled:
-            self.postgresql_construct: PostgreSQLConstruct = PostgreSQLConstruct(
-                config=config,
-                id="postgresql_construct",
-                helm_provider=self.helm_provider,
-                scope=self,
-            )
-
         if config.prefect_in_cluster_is_enabled:
             self.prefect_construct: PrefectConstruct = PrefectConstruct(
                 config=config,
                 id="prefect_construct",
                 helm_provider=self.helm_provider,
                 scope=self,
-            )
-
-        if config.sealed_secrets_is_enabled:
-            self.sealed_secrets_construct: SealedSecretsConstruct = (
-                SealedSecretsConstruct(
-                    config=config,
-                    id="sealed_secrets_construct",
-                    helm_provider=self.helm_provider,
-                    scope=self,
-                )
             )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
