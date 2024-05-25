@@ -46,6 +46,56 @@ class TimestepAIConstruct(Construct):
     ) -> None:
         super().__init__(scope, id)
 
+        app_config_map = ConfigMapV1(
+            id_="app_config_map",
+            data={},
+            metadata=ConfigMapV1Metadata(
+                name="app-config-map",
+                namespace="default",
+            ),
+            scope=self,
+        )
+
+        app_secret = SecretV1(
+            id_="app_secret",
+            data={
+                "API_URL": f"https://app.{config.primary_domain_name}",
+                # "DB_URL": f"postgresql+asyncpg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}", # noqa: E501
+                # "DB_URL": f"postgresql+psycopg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}",  # noqa: E501
+                "SLACK_BOT_TOKEN": config.slack_bot_token.get_secret_value(),
+                "SLACK_SIGNING_SECRET": config.slack_signing_secret.get_secret_value(),
+            },
+            metadata=SecretV1Metadata(
+                name="app-secret",
+                namespace="default",
+            ),
+            scope=self,
+        )
+
+        client_config_map = ConfigMapV1(
+            id_="client_config_map",
+            data={
+                "NEXT_PUBLIC_MODEL": "gpt-4-vision-preview",
+            },
+            metadata=ConfigMapV1Metadata(
+                name="client-config-map",
+                namespace="default",
+            ),
+            scope=self,
+        )
+
+        client_secret = SecretV1(
+            id_="client_secret",
+            data={
+                # "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
+            },
+            metadata=SecretV1Metadata(
+                name="client-secret",
+                namespace="default",
+            ),
+            scope=self,
+        )
+
         default_sa_cluster_role = ClusterRoleV1(
             id_="default_sa_cluster_role",
             metadata=ClusterRoleV1Metadata(
@@ -177,30 +227,6 @@ class TimestepAIConstruct(Construct):
             scope=self,
         )
 
-        client_config_map = ConfigMapV1(
-            id_="client_config_map",
-            data={
-                "NEXT_PUBLIC_MODEL": "gpt-4-vision-preview",
-            },
-            metadata=ConfigMapV1Metadata(
-                name="client-config-map",
-                namespace="default",
-            ),
-            scope=self,
-        )
-
-        client_secret = SecretV1(
-            id_="client_secret",
-            data={
-                # "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
-            },
-            metadata=SecretV1Metadata(
-                name="client-secret",
-                namespace="default",
-            ),
-            scope=self,
-        )
-
         litestream_yaml_file_asset = TerraformAsset(
             id="litestream_yaml_file_asset",
             path=os.path.join(os.path.dirname(__file__), "litestream.yml"),
@@ -260,10 +286,12 @@ class TimestepAIConstruct(Construct):
         )
 
         timestep_ai_manifest_deps = [
-            default_sa_cluster_role_binding,
-            default_sa_role_binding,
+            app_config_map,
+            app_secret,
             client_config_map,
             client_secret,
+            default_sa_cluster_role_binding,
+            default_sa_role_binding,
             litestream_config_map,
             private_repo_secret,
             server_config_map,

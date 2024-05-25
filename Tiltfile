@@ -181,6 +181,14 @@ watch_file('src/timestep/infra/stacks/platform/timestep_ai')
 
 if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     docker_build(
+        'registry.gitlab.com/timestep-ai/timestep/app',
+        context='src/timestep/platform/app',
+        live_update=[
+            sync('src/timestep/platform/app', '/home/ubuntu/app'),
+        ],
+    )
+
+    docker_build(
         'registry.gitlab.com/timestep-ai/timestep/caddy',
         context='src/timestep/platform',
         live_update=[
@@ -272,6 +280,11 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
                 'helm template --values src/timestep/infra/stacks/platform/timestep_ai/values.' + os.getenv('PRIMARY_DOMAIN_NAME') + '.yaml src/timestep/infra/stacks/platform/timestep_ai'
             )
         )
+
+    k8s_resource(
+        'app',
+        links=['https://app.' + os.getenv('PRIMARY_DOMAIN_NAME')],
+    )
 
     k8s_resource(
         'caddy',

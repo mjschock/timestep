@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app
+  name: app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  serviceName: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: app-config-map
+            - secretRef:
+                name: app-secret
+          image: registry.gitlab.com/timestep-ai/timestep/app:{{ .Chart.AppVersion }}
+          imagePullPolicy: Always
+          name: app
+          ports:
+            - containerPort: 3000
+            - containerPort: 8000
+          # resources:
+          #   limits:
+          #     cpu: 2000m
+          #     memory: 2048Mi
+          #   requests:
+          #     cpu: 100m
+          #     memory: 128Mi
+          # volumeMounts:
+          # - name: sky-pv-storage
+          #   mountPath: /home/ubuntu/.sky
+          # - name: ssh-pv-storage
+          #   mountPath: /home/ubuntu/.ssh
+      imagePullSecrets:
+        - name: regcred
+      # volumes:
+      # - name: sky-pv-storage
+      #   persistentVolumeClaim:
+      #     claimName: sky-pv-claim
+      # - name: ssh-pv-storage
+      #   persistentVolumeClaim:
+      #     claimName: ssh-pv-claim
