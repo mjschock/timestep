@@ -98,6 +98,13 @@ class CloudInitConfigConstruct(Construct):
                     "-c",
                     "mkdir -p $HOME/.sky",
                 ],
+                [
+                    "runuser",
+                    "-l",
+                    config.cloud_instance_user,
+                    "-c",
+                    "mkdir -p $HOME/secrets",
+                ],
             ],
             users=[
                 "default",
