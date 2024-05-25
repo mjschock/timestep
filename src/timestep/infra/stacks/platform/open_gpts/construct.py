@@ -62,14 +62,6 @@ class OpenGPTsConstruct(Construct):
 
         env = [
             DeploymentV1SpecTemplateSpecContainerEnv(
-                name="LANGCHAIN_API_KEY",
-                value=config.langsmith_api_key.get_secret_value(),
-            ),
-            DeploymentV1SpecTemplateSpecContainerEnv(
-                name="LANGCHAIN_TRACING_V2",
-                value="true",
-            ),
-            DeploymentV1SpecTemplateSpecContainerEnv(
                 name="OPENAI_API_KEY",  # TODO: move to secret
                 value=config.openai_api_key.get_secret_value(),
             ),
@@ -100,6 +92,20 @@ class OpenGPTsConstruct(Construct):
                 DeploymentV1SpecTemplateSpecContainerEnv(
                     name="ANTHROPIC_API_KEY",
                     value=config.anthropic_api_key.get_secret_value(),
+                )
+            )
+
+        if config.langchain_api_key:
+            env.append(
+                DeploymentV1SpecTemplateSpecContainerEnv(
+                    name="LANGCHAIN_API_KEY",
+                    value=config.langchain_api_key.get_secret_value(),
+                )
+            )
+            env.append(
+                DeploymentV1SpecTemplateSpecContainerEnv(
+                    name="LANGCHAIN_TRACING_V2",
+                    value="true",
                 )
             )
 
