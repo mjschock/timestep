@@ -22,7 +22,7 @@
 secrets/argo_cd_private_repo_access_token (ARGO_CD_PRIVATE_REPO_ACCESS_TOKEN)
 secrets/do_token (DO_TOKEN)
 secrets/docker_registry_password (DOCKER_REGISTRY_PASSWORD)
-secrets/postgresql_password (POSTGRESQL_PASSWORD)
+secrets/postgres_password (POSTGRESQL_PASSWORD)
 secrets/smtp_password (SMTP_PASSWORD)
 secrets/ssh_private_key (SSH_PRIVATE_KEY)
 secrets/ssh_public_key (SSH_PUBLIC_KEY)

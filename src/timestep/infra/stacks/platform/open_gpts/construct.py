@@ -62,10 +62,6 @@ class OpenGPTsConstruct(Construct):
 
         env = [
             DeploymentV1SpecTemplateSpecContainerEnv(
-                name="OPENAI_API_KEY",  # TODO: move to secret
-                value=config.openai_api_key.get_secret_value(),
-            ),
-            DeploymentV1SpecTemplateSpecContainerEnv(
                 name="POSTGRES_DB",
                 value=config.postgres_database,
             ),
@@ -106,6 +102,14 @@ class OpenGPTsConstruct(Construct):
                 DeploymentV1SpecTemplateSpecContainerEnv(
                     name="LANGCHAIN_TRACING_V2",
                     value="true",
+                )
+            )
+
+        if config.openai_api_key:
+            env.append(
+                DeploymentV1SpecTemplateSpecContainerEnv(
+                    name="OPENAI_API_KEY",  # TODO: move to secret
+                    value=config.openai_api_key.get_secret_value(),
                 )
             )
 
