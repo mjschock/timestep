@@ -3,19 +3,9 @@
 import os
 
 import reflex as rx
-from fastapi import Request
 from rxconfig import config
-from slack_bolt.adapter.fastapi.async_handler import AsyncSlackRequestHandler
-from slack_bolt.async_app import AsyncApp
 
-slack_bot_token = os.environ.get("SLACK_BOT_TOKEN")
-slack_signing_secret = os.environ.get("SLACK_SIGNING_SECRET")
-
-slack_app = AsyncApp(
-    signing_secret=slack_signing_secret,
-    token=slack_bot_token,
-)
-slack_app_handler = AsyncSlackRequestHandler(slack_app)
+from app.bots.slack import add_bot as add_slack_bot
 
 
 class State(rx.State):
@@ -26,28 +16,6 @@ class State(rx.State):
 
 async def api_test(item_id: int):
     return {"my_result": item_id}
-
-
-# @app.post("/api/slack-action-endpoint")
-async def slack_action_endpoint(req: Request):
-    return await slack_app_handler.handle(req)
-
-
-@slack_app.event("app_mention")
-async def handle_app_mentions(body, say, logger):
-    logger.info(body)
-
-    try:
-        text = body["event"]["text"]
-        # Remove the mention, e.g. <@U074N9R7CGH> hello -> hello
-        text = text.split(" ", 1)[1]
-
-        await say(f"Hello! You said: {text}")
-
-    except Exception as e:
-        logger.error(e)
-
-        await say("Sorry, I didn't understand that. Please try again.")
 
 
 def index() -> rx.Component:
@@ -75,10 +43,12 @@ def index() -> rx.Component:
 
 
 app = rx.App()
-app.api.add_api_route(
-    "/api/slack-action-endpoint",
-    slack_action_endpoint,
-    methods=["POST"],
-)
+
+slack_bot_token = os.environ.get("SLACK_BOT_TOKEN")
+slack_signing_secret = os.environ.get("SLACK_SIGNING_SECRET")
+
+if slack_bot_token and slack_signing_secret:
+    add_slack_bot(app)
+
 app.api.add_api_route("/items/{item_id}", api_test)
 app.add_page(index)
