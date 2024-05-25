@@ -1,3 +1,16 @@
+## 7.0.3 (2024-05-24)
+
+### Fix
+
+- f
+
+## 7.0.2 (2024-05-24)
+
+### Fix
+
+- fix symbolic link to workers
+- miscellany wip
+
 ## 7.0.0 (2024-02-06)
 
 ### Refactor
