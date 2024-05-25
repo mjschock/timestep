@@ -1,3 +1,10 @@
+## 7.0.14 (2024-05-25)
+
+### Fix
+
+- Create secrets folder with cloud_instance_user permissions
+- Make DO_TOKEN optional
+
 ## 7.0.13 (2024-05-25)
 
 ### Fix
