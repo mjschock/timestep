@@ -74,11 +74,11 @@ tilt up
 ```
 
 ```bash
-make hosts # In a separate terminal
+make local-tls-cert # If LOCAL_TLS_CERT_IS_ENABLED is true and trigger caddy update
 ```
 
 ```bash
-make local-tls-cert # If LOCAL_TLS_CERT_IS_ENABLED is true and trigger caddy update
+make hosts # In a separate terminal
 ```
 
 ## Usage

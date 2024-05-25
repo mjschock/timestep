@@ -33,15 +33,17 @@ class TimestepAIConstruct(Construct):
             scope=self,
         )
 
+        secret_data = {
+            "API_URL": f"https://www.{config.primary_domain_name}",
+            # "DB_URL": f"postgresql+asyncpg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}", # noqa: E501
+            # "DB_URL": f"postgresql+psycopg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}",  # noqa: E501
+            "SLACK_BOT_TOKEN": config.slack_bot_token.get_secret_value(),
+            "SLACK_SIGNING_SECRET": config.slack_signing_secret.get_secret_value(),
+        }
+
         app_secret = SecretV1(
             id_="app_secret",
-            data={
-                "API_URL": f"https://www.{config.primary_domain_name}",
-                # "DB_URL": f"postgresql+asyncpg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}", # noqa: E501
-                # "DB_URL": f"postgresql+psycopg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}",  # noqa: E501
-                # "SLACK_BOT_TOKEN": config.slack_bot_token.get_secret_value(),
-                # "SLACK_SIGNING_SECRET": config.slack_signing_secret.get_secret_value(), # noqa: E501
-            },
+            data=secret_data,
             metadata=SecretV1Metadata(
                 name="app-secret",
                 namespace="default",
