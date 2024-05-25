@@ -13,6 +13,6 @@
   "terraformProviders": [
     "larstobi/multipass@~> 1.4",
     "namecheap/namecheap@~> 2.1",
-    "oboukili/argocd@~> 6.0",
+    "oboukili/argocd@~> 6.0"
   ]
 }
