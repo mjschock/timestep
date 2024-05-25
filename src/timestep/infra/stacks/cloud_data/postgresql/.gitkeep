@@ -1,2 +1,0 @@
-# TODO: Optionally externalize PostgreSQL to a managed service, such as TimescaleDB.
-#       This will also enable pointing K3s to this external database.

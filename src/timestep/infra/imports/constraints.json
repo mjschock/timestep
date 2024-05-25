@@ -3,9 +3,6 @@
   "providers": {
     "argocd": "~> 6.0",
     "multipass": "~> 1.4",
-    "namecheap": "~> 2.1",
-    "supabase": "~> 1.4",
-    "timescale": "~> 1.11",
-    "vercel": "~> 1.11"
+    "namecheap": "~> 2.1"
   }
 }
