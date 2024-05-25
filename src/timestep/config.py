@@ -104,7 +104,6 @@ class Settings(BaseSettings):
     smtp_user: str = Field()
     ssh_private_key: SecretStr = Field()
     ssh_public_key: SecretStr = Field()
-    supabase_access_token: SecretStr = Field(default=None)
     tavily_api_key: SecretStr = Field(default=None)
     tf_api_token: SecretStr = Field()
     tf_http_address: str = Field()
