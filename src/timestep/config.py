@@ -39,7 +39,7 @@ class Settings(BaseSettings):
     do_droplet_image: str = Field()
     do_droplet_region: str = Field()
     do_droplet_size: str = Field(default=DO_DROPLET_SIZE)
-    do_token: SecretStr = Field()
+    do_token: SecretStr = Field(default=None)
     docker_registry_email: str = Field()
     docker_registry_password: SecretStr = Field()
     docker_registry_server: str = Field()
