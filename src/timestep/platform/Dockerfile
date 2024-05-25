@@ -9,10 +9,10 @@ WORKDIR /home/ubuntu/app
 
 COPY --chown=ubuntu:ubuntu . .
 
-WORKDIR /home/ubuntu/app/client
-RUN npm install
-RUN npm run build
-WORKDIR /home/ubuntu/app
+# WORKDIR /home/ubuntu/app/client
+# RUN npm install
+# RUN npm run build
+# WORKDIR /home/ubuntu/app
 
 EXPOSE 2019
 
