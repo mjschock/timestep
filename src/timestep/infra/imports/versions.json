@@ -1,8 +1,5 @@
 {
   "registry.terraform.io/larstobi/multipass": "1.4.2",
   "registry.terraform.io/namecheap/namecheap": "2.1.1",
-  "registry.terraform.io/oboukili/argocd": "6.0.3",
-  "registry.terraform.io/supabase/supabase": "1.4.0",
-  "registry.terraform.io/vercel/vercel": "1.11.0",
-  "registry.terraform.io/timescale/timescale": "1.11.0"
+  "registry.terraform.io/oboukili/argocd": "6.0.3"
 }

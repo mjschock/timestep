@@ -108,23 +108,6 @@ allow_k8s_contexts(
 
 include("./src/timestep/infra/stacks/kubernetes_config/argo_cd/Tiltfile")
 
-if os.getenv('KUBE_PROMETHEUS_STACK_IS_ENABLED', False) == 'true':
-    local_resource(
-        'port-forward kube-prometheus-grafana 3000:80',
-        auto_init=False,
-        labels=['ops'],
-        links=['http://localhost:3000'],
-        serve_cmd='kubectl port-forward --namespace kube-prometheus svc/kube-prometheus-grafana 3000:80',
-    )
-
-if os.getenv('KUBEAPPS_IS_ENABLED', False) == 'true':
-    local_resource(
-        'port-forward kubeapps 8484:80',
-        labels=['deploy'],
-        links=['http://localhost:8484'],
-        serve_cmd='make kubeapps-port-forward',
-    )
-
 local_resource(
     'port-forward kubernetes-dashboard 8443:8443',
     auto_init=False,

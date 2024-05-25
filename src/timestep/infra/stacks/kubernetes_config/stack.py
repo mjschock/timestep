@@ -14,12 +14,6 @@ from timestep.infra.stacks.kubernetes_config.argo_cd.construct import (
 from timestep.infra.stacks.kubernetes_config.container_registry.construct import (
     ContainerRegistryConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.kube_prometheus_stack.construct import (
-    KubePrometheusStackConstruct,
-)
-from timestep.infra.stacks.kubernetes_config.kubeapps.construct import (
-    KubeappsConstruct,
-)
 from timestep.infra.stacks.kubernetes_config.kubernetes_cluster_ingress.construct import (  # noqa: E501
     KubernetesClusterIngressConstruct,
 )
@@ -34,7 +28,6 @@ from timestep.infra.stacks.kubernetes_config.prefect.construct import PrefectCon
 from timestep.infra.stacks.kubernetes_config.sealed_secrets.construct import (
     SealedSecretsConstruct,
 )
-from timestep.infra.stacks.kubernetes_config.stalwart.construct import StalwartConstruct
 
 
 class KubernetesConfigStack(TerraformStack):
@@ -75,24 +68,6 @@ class KubernetesConfigStack(TerraformStack):
                 scope=self,
             )
         )
-
-        if config.kube_prometheus_stack_is_enabled:
-            self.kube_prometheus_stack_contruct: KubePrometheusStackConstruct = (
-                KubePrometheusStackConstruct(
-                    config=config,
-                    id="kube_prometheus_stack_contruct",
-                    helm_provider=self.helm_provider,
-                    scope=self,
-                )
-            )
-
-        if config.kubeapps_is_enabled:
-            self.kubeapps_contruct: KubeappsConstruct = KubeappsConstruct(
-                config=config,
-                id="kubeapps_contruct",
-                helm_provider=self.helm_provider,
-                scope=self,
-            )
 
         self.kubernetes_cluster_ingress_construct: KubernetesClusterIngressConstruct = (
             KubernetesClusterIngressConstruct(
@@ -144,14 +119,6 @@ class KubernetesConfigStack(TerraformStack):
                     helm_provider=self.helm_provider,
                     scope=self,
                 )
-            )
-
-        if config.stalwart_is_enabled:
-            self.stalwart_construct: StalwartConstruct = StalwartConstruct(
-                config=config,
-                id="stalwart_construct",
-                helm_provider=self.helm_provider,
-                scope=self,
             )
 
         if config.cloud_instance_provider == CloudInstanceProvider.MULTIPASS:
