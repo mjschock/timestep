@@ -14,41 +14,56 @@
 - [direnv](https://direnv.net/)
 - [Multipass](https://multipass.run/install)
 
-## Setup
+## Configuration
 
-### Local Secrets (GitHub Actions Secrets)
+### Variables
 
-```bash
-secrets/argo_cd_private_repo_access_token (ARGO_CD_PRIVATE_REPO_ACCESS_TOKEN)
-secrets/do_token (DO_TOKEN)
-secrets/docker_registry_password (DOCKER_REGISTRY_PASSWORD)
-secrets/postgres_password (POSTGRESQL_PASSWORD)
-secrets/smtp_password (SMTP_PASSWORD)
-secrets/ssh_private_key (SSH_PRIVATE_KEY)
-secrets/ssh_public_key (SSH_PUBLIC_KEY)
-secrets/tf_api_token (TF_API_TOKEN)
-```
+For local configuration, copy `.env.sample` to `.env` and adjust the values as needed. For remote configuration, create a GitHub repository variable for each variable in `.env`. For example:
 
-### Local / GitHub Actions Variables
+| Variable | Local Value (empty if default) | Remote Value (empty if default) |
+| --- | --- | --- |
+| ARGO_CD_PRIVATE_REPO_USERNAME | mjschock | mjschock |
+| CI_REGISTRY_IMAGE | registry.gitlab.com/timestep-ai/timestep | registry.gitlab.com/timestep-ai/timestep |
+| CLOUD_INSTANCE_NAME | timestep-ai | timestep-ai |
+| CLOUD_INSTANCE_PROVIDER | multipass | digitalocean |
+| DOCKER_REGISTRY_EMAIL | m@mjschock.com | m@mjschock.com |
+| DOCKER_REGISTRY_SERVER | registry.gitlab.com | registry.gitlab.com |
+| DOCKER_REGISTRY_USERNAME | m.schock | m.schock |
+| INGRESS_CONTROLLER_ACME_CA | https://acme-staging-v02.api.letsencrypt.org/directory | |
+| INGRESS_CONTROLLER_DEBUG | true | |
+| INGRESS_CONTROLLER_EMAIL | agent@timestep.ai | agent@timestep.ai |
+| KUBECONTEXT | timestep.local | timestep.ai |
+| LOCAL_TLS_CERT_IS_ENABLED | true | |
+| NAMECHEAP_API_USER | | mschock |
+| NAMECHEAP_USER_NAME | | mschock |
+| OPEN_GPTS_IN_CLUSTER_IS_ENABLED | true | |
+| POSTGRES_DATABASE | | |
+| POSTGRES_HOSTNAME | aws-0-us-west-1.pooler.supabase.com | aws-0-us-west-1.pooler.supabase.com |
+| POSTGRES_PORT | | |
+| POSTGRES_USERNAME | postgres.iuoxbzzwmbwctbhztahw | postgres.iuoxbzzwmbwctbhztahw |
+| PRIMARY_DOMAIN_NAME | timestep.local | timestep.ai |
+| SMTP_SENDER | agent@timestep.ai.test-google-a.com | agent@timestep.ai.test-google-a.com |
+| SMTP_USER | agent@timestep.ai | agent@timestep.ai |
+| TF_HTTP_ADDRESS | https://gitlab.com/api/v4/projects/47704767/terraform/state | https://gitlab.com/api/v4/projects/47704767/terraform/state |
+| TF_USERNAME | m.schock | m.schock |
 
-Copy `.env.sample` to `.env` and ajust the values as needed. The following variables are also required:
+### Secrets
 
-```bash
-ARGO_CD_PRIVATE_REPO_USERNAME
-CI_REGISTRY_IMAGE
-CLOUD_INSTANCE_NAME
-DOCKER_REGISTRY_EMAIL
-DOCKER_REGISTRY_SERVER
-DOCKER_REGISTRY_USERNAME
-INGRESS_CONTROLLER_EMAIL
-POSTGRES_DATABASE
-POSTGRES_HOSTNAME
-POSTGRES_USERNAME
-SMTP_SENDER
-SMTP_USER
-TF_HTTP_ADDRESS
-TF_USERNAME
-```
+For local configuration, create a file in the `secrets` directory for each secret below, using the lowercased secret name as the filename.
+For remote configuration, create a GitHub repository secret for each secret below. For example, if the secret is `OPENAI_API_KEY`, the local secret file would be `secrets/openai_api_key` and the remote repository secret would be `OPENAI_API_KEY`. The mapping is as follows:
+
+| Local File Secret (empty if unset) | Remote Repository Secret |
+| --- | --- |
+| `secrets/argo_cd_private_repo_access_token` | ARGO_CD_PRIVATE_REPO_ACCESS_TOKEN |
+| `secrets/do_token` | DO_TOKEN |
+| `secrets/docker_registry_password` | DOCKER_REGISTRY_PASSWORD |
+| | NAMECHEAP_API_KEY |
+| `secrets/openai_api_key` | OPENAI_API_KEY |
+| `secrets/postgres_password` | POSTGRESQL_PASSWORD |
+| `secrets/smtp_password` | SMTP_PASSWORD |
+| `secrets/ssh_private_key` | SSH_PRIVATE_KEY |
+| `secrets/ssh_public_key` | SSH_PUBLIC_KEY |
+| `secrets/tf_api_token` | TF_API_TOKEN |
 
 ## Setup
 

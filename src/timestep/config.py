@@ -67,9 +67,7 @@ class Settings(BaseSettings):
     openai_api_key: SecretStr = Field(default=None)
     open_gpts_in_cluster_is_enabled: bool = Field(default=True)
     postgres_database: str = Field(default="postgres")
-    postgres_hostname: str = Field(
-        default="postgresql-postgresql-ha-pgpool.default.svc.cluster.local",
-    )
+    postgres_hostname: str = Field()
     postgres_password: SecretStr = Field(default="postgres")
     postgres_username: str = Field(default="postgres")
     postgres_port: str = Field(default="5432")
