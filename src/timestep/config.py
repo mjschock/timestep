@@ -60,7 +60,6 @@ class Settings(BaseSettings):
     local_tls_cert_is_enabled: bool = Field()
     local_tls_crt: SecretStr = Field(default=None)
     local_tls_key: SecretStr = Field(default=None)
-    minio_in_cluster_is_enabled: bool = Field(default=False)
     minio_root_user: str = Field()
     # minio_root_password: SecretStr = Field()
     multipass_instance_cpus: int = Field(default=MULTIPASS_INSTANCE_CPUS)
@@ -73,27 +72,18 @@ class Settings(BaseSettings):
     nhost_in_cluster_is_enabled: bool = Field(default=False)
     openai_api_key: SecretStr = Field(default=None)
     open_gpts_in_cluster_is_enabled: bool = Field(default=True)
-    # pgpool_admin_password: SecretStr = Field()
-    postgresql_in_cluster_is_enabled: bool = Field(default=False)
-    # postgresql_password: SecretStr = Field()
-    # postgres_database = "postgres"
     postgres_database: str = Field(default="postgres")
-    # postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
     postgres_hostname: str = Field(
         default="postgresql-postgresql-ha-pgpool.default.svc.cluster.local",
     )
-    # postgres_password = config.postgresql_password.get_secret_value()
     postgres_password: SecretStr = Field(default="postgres")
-    # postgres_username = "postgres"
     postgres_username: str = Field(default="postgres")
     postgres_port: str = Field(default="5432")
-    # postgresql_repmgr_password: SecretStr = Field()
     prefect_in_cluster_is_enabled: bool = Field(default=False)
     prefect_server_version: str = Field()
     primary_domain_name: str = Field()
     python_target_version: str = Field()
     ray_version: str = Field()
-    sealed_secrets_is_enabled: bool = Field(default=False)
     slack_bot_token: SecretStr = Field(default=None)
     slack_signing_secret: SecretStr = Field(default=None)
     smtp_password: SecretStr = Field()
