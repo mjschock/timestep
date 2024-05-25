@@ -22,12 +22,7 @@
 secrets/argo_cd_private_repo_access_token (ARGO_CD_PRIVATE_REPO_ACCESS_TOKEN)
 secrets/do_token (DO_TOKEN)
 secrets/docker_registry_password (DOCKER_REGISTRY_PASSWORD)
-secrets/hasura_graphql_admin_secret (HASURA_GRAPHQL_ADMIN_SECRET)
-secrets/hasura_graphql_jwt_secret_key (HASURA_GRAPHQL_JWT_SECRET_KEY)
-secrets/minio_root_password (MINIO_ROOT_PASSWORD)
-secrets/pgpool_admin_password (PGPOOL_ADMIN_PASSWORD)
 secrets/postgresql_password (POSTGRESQL_PASSWORD)
-secrets/postgresql_repmgr_password (POSTGRESQL_REPMGR_PASSWORD)
 secrets/smtp_password (SMTP_PASSWORD)
 secrets/ssh_private_key (SSH_PRIVATE_KEY)
 secrets/ssh_public_key (SSH_PUBLIC_KEY)
@@ -46,6 +41,9 @@ DOCKER_REGISTRY_EMAIL
 DOCKER_REGISTRY_SERVER
 DOCKER_REGISTRY_USERNAME
 INGRESS_CONTROLLER_EMAIL
+POSTGRES_DATABASE
+POSTGRES_HOSTNAME
+POSTGRES_USERNAME
 SMTP_SENDER
 SMTP_USER
 TF_HTTP_ADDRESS
