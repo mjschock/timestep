@@ -3,6 +3,7 @@
 import os
 
 import reflex as rx
+import requests
 from rxconfig import config
 
 from app.bots.slack import add_bot as add_slack_bot
@@ -52,3 +53,41 @@ if slack_bot_token and slack_signing_secret:
 
 app.api.add_api_route("/items/{item_id}", api_test)
 app.add_page(index)
+
+open_gpts_url = "http://open-gpts-backend.default.svc.cluster.local:8000"
+
+
+async def execute_agent_task_step():
+    requests.post(
+        f"{open_gpts_url}/runs",
+        cookies={"opengpts_user_id": "foo"},
+        json={
+            "assistant_id": "9c7d7e6e-654b-4eaa-b160-f19f922fc63b",
+            "thread_id": "231dc7f3-33ee-4040-98fe-27f6e2aa8b2b",
+            "input": {
+                "messages": [
+                    {
+                        "content": "whats my name? respond in spanish",
+                        "type": "human",
+                    }
+                ]
+            },
+        },
+    ).content
+
+
+app.api.add_api_route(
+    "/ap/v1/agent/tasks/<task_id>/steps", execute_agent_task_step, methods=["POST"]
+)  # noqa: E501
+
+
+async def get_agent_task_step():
+    requests.get(
+        f"{open_gpts_url}/threads/231dc7f3-33ee-4040-98fe-27f6e2aa8b2b/state",
+        cookies={"opengpts_user_id": "foo"},
+    ).content  # noqa: E501
+
+
+app.api.add_api_route(
+    "/ap/v1/agent/tasks/<task_id>/steps/<step_id>", get_agent_task_step, methods=["GET"]
+)  # noqa: E501
