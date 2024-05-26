@@ -129,6 +129,8 @@ COPY --chown=ubuntu:ubuntu docker-entrypoint.sh .dot.env .env .envrc ./
 
 RUN mkdir /home/ubuntu/secrets
 RUN touch /home/ubuntu/secrets/hello
+RUN chown -R ubuntu:ubuntu /home/ubuntu/secrets
+RUN ls -al /home/ubuntu/secrets
 VOLUME /home/ubuntu/secrets
 
 ENTRYPOINT ["/home/ubuntu/docker-entrypoint.sh"]
