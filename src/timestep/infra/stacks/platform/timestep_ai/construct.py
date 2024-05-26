@@ -200,7 +200,8 @@ class TimestepAIConstruct(Construct):
             data={
                 "password": config.argo_cd_private_repo_access_token.get_secret_value(),
                 "project": "default",
-                "url": "https://github.com/mjschock/timestep.git",
+                # "url": "https://github.com/mjschock/timestep.git",
+                "url": git.Repo().remote("origin").url,
                 "username": config.argo_cd_private_repo_username,
                 "type": "git",
             },
