@@ -72,8 +72,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   ros-iron-ros-base \
   && rm -rf /var/lib/apt/lists/*
 
+# TODO: pass in ids as ARGs
 # RUN groupadd --gid 123 --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid 1001 ubuntu
-RUN groupadd --gid 1000 --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid 1000 ubuntu
+RUN groupadd --gid 1001 --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid 1001 ubuntu
 
 SHELL [ "/bin/bash", "-c" ]
 USER ubuntu
@@ -127,6 +128,7 @@ RUN python -m venv /home/ubuntu/.venv
 
 COPY --chown=ubuntu:ubuntu docker-entrypoint.sh .dot.env .env .envrc ./
 
+# TODO: use build secret mounts instead, cleanup below
 RUN mkdir /home/ubuntu/secrets
 RUN touch /home/ubuntu/secrets/hello
 RUN chown -R ubuntu:ubuntu /home/ubuntu/secrets
