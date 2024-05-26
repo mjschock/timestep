@@ -131,12 +131,7 @@ RUN pipx install poetry
 # Create virtual env
 RUN python -m venv /home/ubuntu/.venv
 
-COPY --chown=ubuntu:ubuntu docker-entrypoint.sh .dot.env .env .envrc secrets /home/ubuntu/
-
-RUN ls -al /home/ubuntu/secrets
-
-# TODO: use build secret mounts instead
-VOLUME /home/ubuntu/secrets
+COPY --chown=ubuntu:ubuntu docker-entrypoint.sh .dot.env .env .envrc ./
 
 ENTRYPOINT ["/home/ubuntu/docker-entrypoint.sh"]
 CMD ["--help"]
