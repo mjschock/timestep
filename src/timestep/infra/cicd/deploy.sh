@@ -27,6 +27,13 @@ docker login -u ${DOCKER_REGISTRY_USERNAME} -p $(cat ./secrets/docker_registry_p
 #  --volume $(pwd)/secrets:/home/ubuntu/secrets:rw \
 #  ${CI_REGISTRY_IMAGE}/cicd:${VERSION} poetry run cdktf deploy --auto-approve ${PRIMARY_DOMAIN_NAME}.k3s_cluster ${PRIMARY_DOMAIN_NAME}.kubernetes_config ${PRIMARY_DOMAIN_NAME}.platform
 
+echo $(id -u)
+echo $(id -g)
+echo $(whoami)
+echo $(pwd)
+
+ls -al ./secrets
+
 docker run \
  --env-file .dot.env \
  --env-file .env \
