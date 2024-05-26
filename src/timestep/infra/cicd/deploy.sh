@@ -34,6 +34,10 @@ echo $(pwd)
 
 ls -al ./secrets
 
+chown -R $(id -u):$(id -g) ./secrets
+
+ls -al ./secrets
+
 docker run \
  --env-file .dot.env \
  --env-file .env \
