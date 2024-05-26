@@ -4843,6 +4843,24 @@ google-auth = "*"
 httplib2 = ">=0.19.0"
 
 [[package]]
+name = "google-auth-oauthlib"
+version = "1.2.0"
+description = "Google Authentication Library"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "google-auth-oauthlib-1.2.0.tar.gz", hash = "sha256:292d2d3783349f2b0734a0a0207b1e1e322ac193c2c09d8f7c613fb7cc501ea8"},
+    {file = "google_auth_oauthlib-1.2.0-py2.py3-none-any.whl", hash = "sha256:297c1ce4cb13a99b5834c74a1fe03252e1e499716718b190f56bcb9c4abc4faf"},
+]
+
+[package.dependencies]
+google-auth = ">=2.15.0"
+requests-oauthlib = ">=0.7.0"
+
+[package.extras]
+tool = ["click (>=6.0.0)"]
+
+[[package]]
 name = "google-cloud-core"
 version = "2.4.1"
 description = "Google Cloud API client core library"
@@ -7571,6 +7589,24 @@ playwright = ">=1.30,<2.0"
 requests = ">=2.31.0,<3.0.0"
 selenium = ">=4.17.2,<5.0.0"
 urllib3 = ">=1.1.0"
+
+[[package]]
+name = "llama-index-tools-google"
+version = "0.1.5"
+description = "llama-index tools google integration"
+optional = false
+python-versions = "<4.0,>=3.8.1"
+files = [
+    {file = "llama_index_tools_google-0.1.5-py3-none-any.whl", hash = "sha256:aae1060adb3a8e4dc213708b2e129416011836221609005a4f984d2360c377a2"},
+    {file = "llama_index_tools_google-0.1.5.tar.gz", hash = "sha256:e06555e98643d78dc37ec5ca8bb9857f010bee630d58d00dc178961443bd21e2"},
+]
+
+[package.dependencies]
+beautifulsoup4 = ">=4.12.3,<5.0.0"
+google-api-python-client = ">=2.115.0,<3.0.0"
+google-auth-httplib2 = ">=0.2.0,<0.3.0"
+google-auth-oauthlib = ">=1.2.0,<2.0.0"
+llama-index-core = ">=0.10.1,<0.11.0"
 
 [[package]]
 name = "llama-index-tools-wikipedia"
@@ -17118,4 +17154,4 @@ test = ["pytest", "pytest-cov"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "139e8c08149031af17d91ae8a7415f42b6569a2ab7ab3fef5a1e76d51a726409"
+content-hash = "975a951f51ab84c8478f1728a7818690ca60a159b5d77dba2ca61e42616b68ac"
