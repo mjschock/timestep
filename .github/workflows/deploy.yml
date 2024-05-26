@@ -147,15 +147,23 @@ jobs:
           ./src/timestep/infra/cicd/deploy.sh
 
   test:
-    # runs-on: ubuntu-latest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+    # runs-on: self-hosted
     needs: [deploy]
     steps:
+      - name: Install doc2unix
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends dos2unix
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Validate agent protocol compliance
         run: |
-          URL=https://www.timestep.ai/api/agents/default bash -c "$(curl -fsSL https://agentprotocol.ai/test.sh)"
+          # URL=https://www.timestep.ai/api/agents/<agent_id> bash -c "$(curl -fsSL https://agentprotocol.ai/test.sh)"
+          curl -fsSL https://agentprotocol.ai/test.sh > test.sh
+          dos2unix test.sh
+          URL="https://www.timestep.ai/api/agents/<agent_id>" bash test.sh
