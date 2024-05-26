@@ -103,7 +103,7 @@ class CloudInitConfigConstruct(Construct):
                     "-l",
                     config.cloud_instance_user,
                     "-c",
-                    "mkdir -p $HOME/secrets",
+                    "mkdir -p $HOME/secrets",  # TODO: Remove this line?
                 ],
             ],
             users=[

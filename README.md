@@ -22,7 +22,7 @@ For local configuration, copy `.env.sample` to `.env` and adjust the values as n
 
 | Variable | Local Value (empty if default) | Remote Value (empty if default) |
 | --- | --- | --- |
-| ARGO_CD_PRIVATE_REPO_USERNAME | mjschock | mjschock |
+| ARGO_CD_PRIVATE_REPO_USERNAME | m.schock | mjschock |
 | CI_REGISTRY_IMAGE | registry.gitlab.com/timestep-ai/timestep | registry.gitlab.com/timestep-ai/timestep |
 | CLOUD_INSTANCE_NAME | timestep-ai | timestep-ai |
 | CLOUD_INSTANCE_PROVIDER | multipass | digitalocean |
