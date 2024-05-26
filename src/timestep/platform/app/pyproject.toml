@@ -1,0 +1,27 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+[tool.poetry]
+authors = ["Michael James Schock <m@mjschock.com>"]
+description = ""
+license = "MIT"
+name = "app"
+package-mode = false
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+agent-protocol = "^1.0.2"
+agent-protocol-client = "^1.1.0"
+open-gpts-api-client = {git = "https://github.com/Timestep-AI/open-gpts-api-client.git"}
+python = ">=3.11,<=3.13"
+reflex = "^0.5.1"
+slack-bolt = "^1.18.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+mypy = "^1.10.0"
+pylint = "^3.2.2"
+ruff = "^0.4.5"
+toml-sort = "^0.23.1"
