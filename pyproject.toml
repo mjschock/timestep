@@ -23,6 +23,7 @@ tag_format = "$version"
 update_changelog_on_bump = true
 version_files = [
   ".dot.env:VERSION",
+  "Dockerfile.cicd:VERSION",
   "pyproject.toml:version",
   "src/timestep/infra/stacks/platform/timestep_ai/Chart.yaml:appVersion",
   "src/timestep/infra/stacks/platform/timestep_ai/Chart.yaml:version",
