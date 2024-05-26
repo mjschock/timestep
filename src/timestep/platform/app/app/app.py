@@ -4,6 +4,17 @@ import os
 
 import reflex as rx
 import requests
+from agent_protocol import Agent, Step, Task  # noqa
+from agent_protocol.models import StepRequestBody  # noqa
+from agent_protocol_client import (  # noqa
+    AgentApi,
+    ApiClient,
+    Configuration,
+    StepRequestBody,
+    TaskRequestBody,
+)
+from open_gpts_api_client import AuthenticatedClient, Client  # noqa
+from open_gpts_api_client.models import Assistant, AssistantConfig  # noqa
 from rxconfig import config
 
 from app.bots.slack import add_bot as add_slack_bot
