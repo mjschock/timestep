@@ -120,7 +120,7 @@ class OpenGPTsConstruct(Construct):
                     "app": "open-gpts-backend",
                 },
                 name="open-gpts-backend",
-                namespace="default",
+                namespace="default",  # TODO: open-gpts
             ),
             spec=DeploymentV1Spec(
                 replicas="1",

@@ -64,6 +64,7 @@ class Settings(BaseSettings):
     namecheap_api_key: SecretStr = Field(default=None)
     namecheap_api_user: str = Field(default=None)
     namecheap_user_name: str = Field(default=None)
+    ollama_in_cluster_is_enabled: bool = Field(default=False)
     openai_api_key: SecretStr = Field(default=None)
     open_gpts_in_cluster_is_enabled: bool = Field(default=True)
     postgres_database: str = Field(default="postgres")

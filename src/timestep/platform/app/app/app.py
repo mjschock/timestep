@@ -92,7 +92,9 @@ async def execute_agent_task_step():
 
 
 app.api.add_api_route(
-    "/ap/v1/agent/tasks/<task_id>/steps", execute_agent_task_step, methods=["POST"]
+    "/api/agents/<agent_id>/ap/v1/agent/tasks/<task_id>/steps",
+    endpoint=execute_agent_task_step,
+    methods=["POST"],
 )
 
 
@@ -103,12 +105,13 @@ async def get_agent_task_step():
     response = requests.get(
         f"{open_gpts_url}/threads/{thread_id}/state",
         cookies={"opengpts_user_id": openpgts_user_id},
-        # ).content
     )
 
     return response.json()
 
 
 app.api.add_api_route(
-    "/ap/v1/agent/tasks/<task_id>/steps/<step_id>", get_agent_task_step, methods=["GET"]
+    "/api/agents/<agent_id>/ap/v1/agent/tasks/<task_id>/steps/<step_id>",
+    endpoint=get_agent_task_step,
+    methods=["GET"],
 )
