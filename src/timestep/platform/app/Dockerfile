@@ -77,7 +77,9 @@
 # # CMD reflex db migrate && reflex run --env prod --backend-only
 # CMD reflex run --env prod --backend-only
 
-FROM registry.gitlab.com/timestep-ai/timestep:latest
+ARG VERSION=7.0.23
+
+FROM registry.gitlab.com/timestep-ai/timestep:${VERSION} as base
 
 USER root
 
