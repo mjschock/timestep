@@ -89,10 +89,13 @@ async def get_agent_task_step():
     openpgts_user_id = "b128d50d-a72b-4089-ad06-1f503b2697aa"
     thread_id = "5fe4bd43-bb58-4b51-84b6-528facc1a3f7"
 
-    requests.get(
+    response = requests.get(
         f"{open_gpts_url}/threads/{thread_id}/state",
         cookies={"opengpts_user_id": openpgts_user_id},
-    ).content
+        # ).content
+    )
+
+    return response.json()
 
 
 app.api.add_api_route(
