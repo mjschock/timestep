@@ -34,3 +34,5 @@ RUN pwd
 RUN whoami
 RUN ls -al secrets
 
+RUN ls -al .
+
