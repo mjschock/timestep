@@ -126,7 +126,6 @@ RUN source /home/ubuntu/app/.venv/bin/activate && pip install -r requirements.tx
 
 EXPOSE 8000
 
-# ENTRYPOINT ["/home/ubuntu/app/docker-entrypoint.sh"]
 # CMD ["poetry", "run", "python", "main.py"]
 # CMD ["reflex", "run", "--env", "prod", "--backend-only"]
 CMD ["reflex", "run", "--env", "prod"]

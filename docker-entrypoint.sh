@@ -5,8 +5,11 @@ eval "$(direnv hook bash)"
 direnv allow .
 
 eval "$(anyenv init -)"
-# source /home/ubuntu/.venv/bin/activate
-source .venv/bin/activate
+
+# if .venv exists, activate it
+if [ -d .venv ]; then
+  source .venv/bin/activate
+fi
 
 # if /home/ubuntu/secrets exists, change ownership to ubuntu
 if [ -d /home/ubuntu/secrets ]; then

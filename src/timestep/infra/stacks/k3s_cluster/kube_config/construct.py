@@ -45,8 +45,8 @@ class KubeConfigConstruct(Construct):
             provider=kube_config_provider,
             provisioners=[
                 LocalExecProvisioner(
-                    command=f"ls -al {config.base_path}/secrets && whoami && k3sup install --context {kubecontext} --ip {ipv4} --local-path {local_kube_config_path} --skip-install --ssh-key {ssh_private_key_path} --user {username}",  # noqa: E501
-                    interpreter=["bash", "-c"],
+                    command=f"k3sup install --context {kubecontext} --ip {ipv4} --local-path {local_kube_config_path} --skip-install --ssh-key {ssh_private_key_path} --user {username}",  # noqa: E501
+                    interpreter=["bash", "-c"],  # TODO: check if this is necessary
                     type="local-exec",
                     when="create",
                 ),

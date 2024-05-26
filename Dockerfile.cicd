@@ -30,6 +30,4 @@ RUN poetry install --no-root
 COPY --chown=ubuntu:ubuntu . ./
 RUN poetry install
 
-RUN echo "hello" > /home/ubuntu/secrets/hello.txt
-RUN ls -al /home/ubuntu/secrets
 VOLUME /home/ubuntu/secrets
