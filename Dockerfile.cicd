@@ -27,6 +27,3 @@ RUN poetry install --no-root
 # Copy the rest of the project and install it with poetry
 COPY --chown=ubuntu:ubuntu . ./
 RUN poetry install
-
-RUN ls -al /home/ubuntu
-RUN ls -al /home/ubuntu/secrets
