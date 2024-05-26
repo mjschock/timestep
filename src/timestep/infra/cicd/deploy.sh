@@ -34,7 +34,8 @@ echo $(pwd)
 
 ls -al ./secrets
 
-chown -R $(id -u):$(id -g) ./secrets
+# chown -R $(id -u):$(id -g) ./secrets
+chown -R ubuntu:ubuntu ./secrets
 
 ls -al ./secrets
 
