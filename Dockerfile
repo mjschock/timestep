@@ -127,6 +127,8 @@ RUN python -m venv /home/ubuntu/.venv
 
 COPY --chown=ubuntu:ubuntu docker-entrypoint.sh .dot.env .env .envrc ./
 
+RUN mkdir /home/ubuntu/secrets
 VOLUME /home/ubuntu/secrets
+
 ENTRYPOINT ["/home/ubuntu/docker-entrypoint.sh"]
 CMD ["--help"]
