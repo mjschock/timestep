@@ -33,5 +33,5 @@ ssh-keygen:
 
 test:
 	poetry run pytest
-	URL=https://www.$$PRIMARY_DOMAIN_NAME/api/agents/default bash tests/test_agent_protocol_v1.sh
+	URL=https://www.$$PRIMARY_DOMAIN_NAME/api/agents/<agent_id> bash tests/test_agent_protocol_v1.sh
 	poetry run agbenchmark start --cutoff 1

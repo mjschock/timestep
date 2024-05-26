@@ -8,6 +8,7 @@ from cdktf_cdktf_provider_kubernetes.provider import KubernetesProvider
 from constructs import Construct
 
 from timestep.config import CloudInstanceProvider, Settings
+from timestep.infra.stacks.platform.ollama.construct import OllamaConstruct
 from timestep.infra.stacks.platform.open_gpts.construct import OpenGPTsConstruct
 from timestep.infra.stacks.platform.timestep_ai.construct import TimestepAIConstruct
 
@@ -34,6 +35,14 @@ class PlatformStack(TerraformStack):
             ),
             scope=self,
         )
+
+        if config.ollama_in_cluster_is_enabled:
+            self.ollama_construct: OllamaConstruct = OllamaConstruct(
+                config=config,
+                id="ollama_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
 
         if config.open_gpts_in_cluster_is_enabled:
             self.open_gpts_construct: OpenGPTsConstruct = OpenGPTsConstruct(
