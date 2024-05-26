@@ -1,6 +1,6 @@
 ARG VERSION=7.0.23
 
-FROM registry.gitlab.com/timestep-ai/timestep:${VERSION} as cicd
+FROM registry.gitlab.com/timestep-ai/timestep:${VERSION} as base
 
 # Install helm with arkade
 ENV HELM_VERSION=3.12.1
