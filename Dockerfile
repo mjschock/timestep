@@ -78,6 +78,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN groupadd --gid ${GID} --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid ${UID} ubuntu
 
+# Allow ubuntu user to run sudo chown without password
+RUN echo "ubuntu ALL=(ALL) NOPASSWD: /bin/chown" > /etc/sudoers.d/ubuntu
+
 SHELL [ "/bin/bash", "-c" ]
 USER ubuntu
 WORKDIR /home/ubuntu
@@ -129,6 +132,8 @@ RUN pipx install poetry
 RUN python -m venv /home/ubuntu/.venv
 
 COPY --chown=ubuntu:ubuntu docker-entrypoint.sh .dot.env .env .envrc secrets /home/ubuntu/
+
+RUN ls -al /home/ubuntu/secrets
 
 # TODO: use build secret mounts instead
 VOLUME /home/ubuntu/secrets

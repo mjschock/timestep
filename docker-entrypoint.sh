@@ -15,7 +15,8 @@ echo "=== Running in $(pwd) ==="
 echo "=== secrets before ==="
 ls -al /home/ubuntu/secrets
 
-chown -R ubuntu:ubuntu /home/ubuntu/secrets
+# chown -R ubuntu:ubuntu /home/ubuntu/secrets
+sudo chown -R ubuntu:ubuntu /home/ubuntu/secrets
 
 echo "=== secrets after ==="
 ls -al /home/ubuntu/secrets
