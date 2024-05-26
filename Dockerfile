@@ -3,15 +3,19 @@ ARG UBUNTU_VERSION=22.04
 FROM ubuntu:${UBUNTU_VERSION} as base
 
 ARG CDKTF_CLI_VERSION
+ARG GID
 ARG GOENV_VERSION
 ARG NODENV_VERSION
 ARG PYENV_VERSION
+ARG UID
 
 ENV CDKTF_CLI_VERSION=${CDKTF_CLI_VERSION:-0.19.2}
+ENV GID=${GID:-1000}
 ENV GOENV_VERSION=${GOENV_VERSION:-1.20.2}
 ENV LANG en_US.utf8
 ENV NODENV_VERSION=${NODENV_VERSION:-20.11.0}
 ENV PYENV_VERSION=${PYENV_VERSION:-3.11.7}
+ENV UID=${UID:-1000}
 ENV TZ=America/Los_Angeles
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -72,9 +76,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   ros-iron-ros-base \
   && rm -rf /var/lib/apt/lists/*
 
-# TODO: pass in ids as ARGs
-# RUN groupadd --gid 123 --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid 1001 ubuntu
-RUN groupadd --gid 1001 --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid 1001 ubuntu
+RUN groupadd --gid ${GID} --system ubuntu && useradd --create-home -g ubuntu --no-log-init --shell /bin/bash --system --uid ${UID} ubuntu
 
 SHELL [ "/bin/bash", "-c" ]
 USER ubuntu
@@ -126,13 +128,9 @@ RUN pipx install poetry
 # Create virtual env
 RUN python -m venv /home/ubuntu/.venv
 
-COPY --chown=ubuntu:ubuntu docker-entrypoint.sh .dot.env .env .envrc ./
+COPY --chown=ubuntu:ubuntu docker-entrypoint.sh .dot.env .env .envrc secrets /home/ubuntu/
 
-# TODO: use build secret mounts instead, cleanup below
-RUN mkdir /home/ubuntu/secrets
-RUN touch /home/ubuntu/secrets/hello
-RUN chown -R ubuntu:ubuntu /home/ubuntu/secrets
-RUN ls -al /home/ubuntu/secrets
+# TODO: use build secret mounts instead
 VOLUME /home/ubuntu/secrets
 
 ENTRYPOINT ["/home/ubuntu/docker-entrypoint.sh"]
