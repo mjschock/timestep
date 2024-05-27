@@ -28,6 +28,7 @@ from open_gpts_api_client.models import (  # noqa
 )
 from open_gpts_api_client.models.runnable_config import RunnableConfig  # noqa
 
+from app import __version__
 from app.bots.slack import add_bot as add_slack_bot
 
 
@@ -71,6 +72,16 @@ if slack_bot_token and slack_signing_secret:
 
 app.add_page(index)
 
+
+async def get_version():
+    return {"version": __version__}
+
+
+app.api.add_api_route(
+    "/api/version",
+    endpoint=get_version,
+    methods=["GET"],
+)
 
 # async def execute_agent_task_step():
 #     return requests.post(

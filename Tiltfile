@@ -245,7 +245,11 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
 
     k8s_resource(
         'app',
-        links=['https://app.' + os.getenv('PRIMARY_DOMAIN_NAME')],
+        links=[
+            'https://' + os.getenv('PRIMARY_DOMAIN_NAME'),
+            'https://' + os.getenv('PRIMARY_DOMAIN_NAME') + '/docs',
+            'https://' + os.getenv('PRIMARY_DOMAIN_NAME') + '/redoc',
+        ],
     )
 
     k8s_resource(

@@ -5,7 +5,7 @@ http://{$PRIMARY_DOMAIN_NAME}:80 {
 http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 	encode gzip
 
-	@backend_routes path /_event/* /api/* /docs /items/* /openapi.json /ping /_upload /_upload/*
+	@backend_routes path /_event/* /api/* /docs /openapi.json /ping /_upload /_upload/* /redoc
 	handle @backend_routes {
 		reverse_proxy app:8000
 	}
