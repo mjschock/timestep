@@ -27,6 +27,7 @@ version_files = [
   "pyproject.toml:version",
   "src/timestep/infra/stacks/platform/timestep_ai/Chart.yaml:appVersion",
   "src/timestep/infra/stacks/platform/timestep_ai/Chart.yaml:version",
+  "src/timestep/platform/app/app/__init__.py:__version__",
   "src/timestep/platform/app/Dockerfile:VERSION",
 ]
 version_provider = "poetry"

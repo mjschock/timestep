@@ -118,6 +118,7 @@ def add_bot(app):
 
     @slack_app.event("app_mention")
     async def handle_app_mentions(body, say, logger):
+        logger.info("=== handle_app_mentions ===")
         logger.info(body)
 
         try:
@@ -132,6 +133,11 @@ def add_bot(app):
             logger.error(e)
 
             await say("Sorry, I didn't understand that. Please try again.")
+
+    @slack_app.event("message")
+    async def handle_message_events(body, logger):
+        logger.info("=== handle_message_events ===")
+        logger.info(body)
 
     app.api.add_api_route(
         "/api/slack-action-endpoint",
