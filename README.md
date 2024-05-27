@@ -29,6 +29,7 @@ For local configuration, copy `.env.sample` to `.env` and adjust the values as n
 | DOCKER_REGISTRY_EMAIL | m@mjschock.com | m@mjschock.com |
 | DOCKER_REGISTRY_SERVER | registry.gitlab.com | registry.gitlab.com |
 | DOCKER_REGISTRY_USERNAME | m.schock | m.schock |
+| DOMAIN_NAME_REGISTRAR_PROVIDER | | namecheap |
 | INGRESS_CONTROLLER_ACME_CA | https://acme-staging-v02.api.letsencrypt.org/directory | |
 | INGRESS_CONTROLLER_DEBUG | true | |
 | INGRESS_CONTROLLER_EMAIL | agent@timestep.ai | agent@timestep.ai |
