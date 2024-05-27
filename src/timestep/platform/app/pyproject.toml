@@ -20,8 +20,6 @@ reflex = "^0.5.1"
 slack-bolt = "^1.18.1"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.4.2"
 mypy = "^1.10.0"
-pylint = "^3.2.2"
 ruff = "^0.4.5"
 toml-sort = "^0.23.1"

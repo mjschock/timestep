@@ -21,16 +21,6 @@ spec:
                   number: 2019
             path: /
             pathType: Prefix
-    - host: app.{{ .host }}
-      http:
-        paths:
-          - backend:
-              service:
-                name: caddy
-                port:
-                  number: 2019
-            path: /
-            pathType: Prefix
     - host: www.{{ .host }}
       http:
         paths:

@@ -140,6 +140,11 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
     docker_build(
         'registry.gitlab.com/timestep-ai/timestep/app',
         context='src/timestep/platform/app',
+        entrypoint=[
+            "/home/ubuntu/docker-entrypoint.sh",
+            "reflex",
+            "run",
+        ],
         live_update=[
             sync('src/timestep/platform/app', '/home/ubuntu/app'),
         ],
@@ -155,7 +160,7 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
                 trigger=['src/timestep/platform/Caddyfile']
             )
         ],
-        only=['Caddyfile', 'client'],
+        # only=['Caddyfile', 'client'],
     )
 
     # docker_build(

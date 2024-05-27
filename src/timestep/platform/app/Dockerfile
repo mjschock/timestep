@@ -124,8 +124,22 @@ COPY --chown=ubuntu:ubuntu . ./
 # RUN pip install -r requirements.txt
 RUN source /home/ubuntu/app/.venv/bin/activate && pip install -r requirements.txt
 
+RUN source /home/ubuntu/app/.venv/bin/activate && reflex init
+
+# RUN source /home/ubuntu/app/.venv/bin/activate && reflex export --frontend-only --no-zip
+
+# Needed until Reflex properly passes SIGTERM on backend.
+STOPSIGNAL SIGKILL
+
 EXPOSE 8000
 
 # CMD ["poetry", "run", "python", "main.py"]
 # CMD ["reflex", "run", "--env", "prod", "--backend-only"]
+# CMD ["reflex", "run", "--env", "prod"]
+
+# Apply migrations before starting the backend.
+# CMD [ -d alembic ] && reflex db migrate; \
+    # caddy start && reflex run --env prod --backend-only --loglevel debug
+
+# CMD [ "reflex", "run", "--env", "prod", "--backend-only" ]
 CMD ["reflex", "run", "--env", "prod"]
