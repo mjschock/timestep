@@ -114,8 +114,8 @@ jobs:
           ./src/timestep/infra/cicd/build.sh
 
   deploy:
-    runs-on: ubuntu-latest
-    # runs-on: self-hosted
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [build-cicd, build]
     steps:
       - name: Checkout repository
