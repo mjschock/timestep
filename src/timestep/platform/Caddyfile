@@ -7,7 +7,6 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 
 	@backend_routes path /_event/* /api/* /docs /items/* /openapi.json /ping /_upload /_upload/*
 	handle @backend_routes {
-		# reverse_proxy app:3000
 		reverse_proxy app:8000
 	}
 
@@ -15,12 +14,13 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 		# root * /home/ubuntu/app/client/dist/spa
 
 		# Check if PRIMARY_DOMAIN_NAME ends with ".local"
-		@isLocalDomain {
-			expression {host}.endsWith(".local")
-		}
+		# @isLocalDomain {
+		# 	expression {host}.endsWith(".local")
+		# }
 
-		# Use reverse_proxy to client:9000 if it's a ".local" domain
-		reverse_proxy @isLocalDomain app:3000
+		# Use reverse_proxy to client:3000 if it's a ".local" domain
+		# reverse_proxy @isLocalDomain app:3000
+		reverse_proxy app:3000
 
 		# header {
 		# 	X-Frame-Options "SAMEORIGIN"
@@ -28,15 +28,10 @@ http://www.{$PRIMARY_DOMAIN_NAME}:80 {
 		# 	X-Content-Type-Options "nosniff"
 		# }
 
-		# If not a ".local" domain, serve static content
-		# try_files {path} /index.html
-		# file_server
-	}
-
-	# TODO: move this inside the handle block?
-	root * /srv
-	route {
-		try_files {path} {path}/ /404.html
-		file_server
+		# root * /srv
+		# route {
+		# 	try_files {path} {path}/ /404.html
+		# 	file_server
+		# }
 	}
 }
