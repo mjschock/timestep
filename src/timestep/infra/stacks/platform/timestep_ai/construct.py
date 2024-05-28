@@ -25,7 +25,11 @@ class TimestepAIConstruct(Construct):
 
         app_config_map = ConfigMapV1(
             id_="app_config_map",
-            data={},
+            data={
+                "OPEN_GPTS_ASSISTANT_ID": config.open_gpts_assistant_id,
+                "OPEN_GPTS_USER_ID": config.open_gpts_user_id,
+                "OPEN_GPTS_THREAD_ID": config.open_gpts_thread_id,
+            },
             metadata=ConfigMapV1Metadata(
                 name="app-config-map",
                 namespace="default",
@@ -37,14 +41,10 @@ class TimestepAIConstruct(Construct):
             "API_URL": f"https://www.{config.primary_domain_name}",
             # "DB_URL": f"postgresql+asyncpg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}", # noqa: E501
             # "DB_URL": f"postgresql+psycopg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}",  # noqa: E501
-            # "SLACK_BOT_TOKEN": config.slack_bot_token.get_secret_value(),
-            # "SLACK_SIGNING_SECRET": config.slack_signing_secret.get_secret_value(),
         }
 
-        if config.slack_bot_token:
+        if config.slack_bot_token and config.slack_signing_secret:
             secret_data["SLACK_BOT_TOKEN"] = config.slack_bot_token.get_secret_value()
-
-        if config.slack_signing_secret:
             secret_data[
                 "SLACK_SIGNING_SECRET"
             ] = config.slack_signing_secret.get_secret_value()
