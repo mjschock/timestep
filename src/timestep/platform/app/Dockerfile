@@ -142,4 +142,4 @@ EXPOSE 8000
     # caddy start && reflex run --env prod --backend-only --loglevel debug
 
 # CMD [ "reflex", "run", "--env", "prod", "--backend-only" ]
-CMD ["reflex", "run", "--env", "prod"]
+CMD ["reflex", "run", "--env", "prod", "--loglevel", "debug"]
