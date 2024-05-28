@@ -8,12 +8,12 @@ from open_gpts_api_client.models import Assistant, AssistantConfig  # noqa
 from slack_bolt.adapter.fastapi.async_handler import AsyncSlackRequestHandler
 from slack_bolt.async_app import AsyncApp
 
-assistant_id = "108beb69-d947-4365-ac74-6d1f53e49913"
+assistant_id = os.environ.get("OPEN_GPTS_ASSISTANT_ID")
 open_gpts_url = "http://open-gpts-backend.default.svc.cluster.local:8000"
-openpgts_user_id = "b128d50d-a72b-4089-ad06-1f503b2697aa"
+open_gpts_user_id = os.environ.get("OPEN_GPTS_USER_ID")
 slack_bot_token = os.environ.get("SLACK_BOT_TOKEN")
 slack_signing_secret = os.environ.get("SLACK_SIGNING_SECRET")
-thread_id = "5109b37f-bf8f-400d-994b-4e8ee26b28c3"
+thread_id = os.environ.get("OPEN_GPTS_THREAD_ID")
 
 
 async def invoke(callback, logger, query):
@@ -48,7 +48,7 @@ async def invoke(callback, logger, query):
 
     response = requests.post(
         f"{open_gpts_url}/runs/stream",
-        cookies={"opengpts_user_id": openpgts_user_id},
+        cookies={"opengpts_user_id": open_gpts_user_id},
         json={
             "assistant_id": assistant_id,
             "input": [
