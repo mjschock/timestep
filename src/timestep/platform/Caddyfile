@@ -1,8 +1,8 @@
-http://{$PRIMARY_DOMAIN_NAME}:80 {
-	redir http://www.{$PRIMARY_DOMAIN_NAME}{uri}
+http://www.{$PRIMARY_DOMAIN_NAME}:80 {
+	redir http://{$PRIMARY_DOMAIN_NAME}{uri} permanent
 }
 
-http://www.{$PRIMARY_DOMAIN_NAME}:80 {
+http://{$PRIMARY_DOMAIN_NAME}:80 {
 	encode gzip
 
 	@backend_routes path /_event/* /api/* /docs /openapi.json /ping /_upload /_upload/* /redoc

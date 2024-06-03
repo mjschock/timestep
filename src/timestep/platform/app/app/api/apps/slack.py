@@ -1,6 +1,7 @@
 import json
 import os
 
+import reflex as rx
 import requests
 from fastapi import Request
 from open_gpts_api_client import AuthenticatedClient, Client  # noqa
@@ -9,7 +10,7 @@ from slack_bolt.adapter.fastapi.async_handler import AsyncSlackRequestHandler
 from slack_bolt.async_app import AsyncApp
 
 assistant_id = os.environ.get("OPEN_GPTS_ASSISTANT_ID")
-open_gpts_url = "http://open-gpts-backend.default.svc.cluster.local:8000"
+open_gpts_url = "http://open-gpts-backend.open-gpts.svc.cluster.local:8000"
 open_gpts_user_id = os.environ.get("OPEN_GPTS_USER_ID")
 slack_bot_token = os.environ.get("SLACK_BOT_TOKEN")
 slack_signing_secret = os.environ.get("SLACK_SIGNING_SECRET")
@@ -106,7 +107,10 @@ async def invoke(callback, logger, query):
     }
 
 
-def add_bot(app):
+def add_api_routes(app: rx.App):
+    if not slack_bot_token or not slack_signing_secret:
+        return
+
     slack_app = AsyncApp(
         signing_secret=slack_signing_secret,
         token=slack_bot_token,
@@ -141,17 +145,24 @@ def add_bot(app):
 
     app.api.add_api_route(
         "/api/slack-action-endpoint",
-        slack_action_endpoint,
+        endpoint=slack_action_endpoint,
         methods=["POST"],
     )
 
-    # async def invoke_test(query):
-    #     import logging
-    #     logger = logging.getLogger("invoke_test")
-    #     async def callback(message):
-    #         logger.info(message)
-    #         return message
+    async def invoke_test(query):
+        import logging
 
-    #     return await invoke(callback, logger, query)
+        logger = logging.getLogger("invoke_test")
 
-    # app.api.add_api_route("/api/invoke/{query}", invoke_test, methods=["POST"])
+        async def callback(message):
+            logger.info(message)
+            return message
+
+        return await invoke(callback, logger, query)
+
+    app.api.add_api_route(
+        "/api/invoke/{query}",
+        endpoint=invoke_test,
+        include_in_schema=False,
+        methods=["POST"],
+    )

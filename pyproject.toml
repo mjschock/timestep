@@ -27,8 +27,8 @@ version_files = [
   "pyproject.toml:version",
   "src/timestep/infra/stacks/platform/timestep_ai/Chart.yaml:appVersion",
   "src/timestep/infra/stacks/platform/timestep_ai/Chart.yaml:version",
-  "src/timestep/platform/app/app/__init__.py:__version__",
   "src/timestep/platform/app/Dockerfile:VERSION",
+  "src/timestep/platform/app/app/__init__.py:__version__"
 ]
 version_provider = "poetry"
 version_scheme = "semver"
@@ -45,7 +45,9 @@ readme = "README.md"
 version = "8.0.2"
 
 [tool.poetry.dependencies]
-agbenchmark = "^0.0.10"
+agbenchmark = {git = "https://github.com/Significant-Gravitas/AutoGPT.git", subdirectory = "benchmark"}
+agent-protocol-client = "^1.1.0"
+autogenstudio = "^0.0.56"
 cdktf = "^0.19.2"
 cdktf-cdktf-provider-cloudinit = "^9.0.1"
 cdktf-cdktf-provider-digitalocean = "^10.0.2"
@@ -57,12 +59,13 @@ cdktf-cdktf-provider-local = "^9.0.0"
 cdktf-cdktf-provider-null = "^9.0.1"
 cloud-init-gen = "^1.2.0"
 gitpython = "^3.1.40"
+locust = "^2.28.0"
+open-gpts-api-client = {git = "https://github.com/Timestep-AI/open-gpts-api-client.git"}
 prefect = "^2.14.17"
 prefect-shell = "^0.2.2"
 pydantic = "<2.0.0"
 python = ">=3.11,<3.12"
 python-dotenv = "^1.0.0"
-locust = "^2.28.0"
 
 [tool.poetry.group.dev.dependencies]
 commitizen = "^3.6.0"

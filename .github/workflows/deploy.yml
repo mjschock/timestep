@@ -163,7 +163,7 @@ jobs:
 
       - name: Validate agent protocol compliance
         run: |
-          # URL=https://www.timestep.ai/api/agents/<agent_id> bash -c "$(curl -fsSL https://agentprotocol.ai/test.sh)"
+          # URL=https://timestep.ai/api/agents/<agent_id> bash -c "$(curl -fsSL https://agentprotocol.ai/test.sh)"
           curl -fsSL https://agentprotocol.ai/test.sh > test.sh
           dos2unix test.sh
-          URL="https://www.timestep.ai/api/agents/<agent_id>" bash test.sh
+          URL="https://timestep.ai/api/agents/<agent_id>" bash test.sh

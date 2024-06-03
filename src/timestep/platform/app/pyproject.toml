@@ -13,11 +13,14 @@ version = "0.1.0"
 
 [tool.poetry.dependencies]
 agent-protocol = "^1.0.2"
-agent-protocol-client = "^1.1.0"
+aiohttp = "^3.9.5"
 open-gpts-api-client = {git = "https://github.com/Timestep-AI/open-gpts-api-client.git"}
-python = ">=3.11,<=3.13"
+pyautogen = "^0.2.27"
+python = ">=3.11,<3.13"
 reflex = "^0.5.1"
+skypilot-nightly = {extras = ["kubernetes", "paperspace"], version = "^1.0.0.dev20240529"}
 slack-bolt = "^1.18.1"
+sqlmodel = "^0.0.18"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.10.0"

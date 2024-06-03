@@ -1,5 +1,8 @@
 from cdktf_cdktf_provider_helm.provider import HelmProvider
-from cdktf_cdktf_provider_helm.release import Release
+from cdktf_cdktf_provider_helm.release import (
+    Release,
+    ReleaseSetListStruct,
+)
 from constructs import Construct
 
 from timestep.config import Settings
@@ -19,12 +22,19 @@ class OllamaConstruct(Construct):
         self.ollama_helm_release_resource = Release(
             id_="ollama_helm_release_resource",
             atomic=True,
-            chart="ollama-helm/ollama",
+            chart="ollama",
+            cleanup_on_fail=True,
             create_namespace=True,
             name="ollama",
             namespace="ollama",
             repository="https://otwld.github.io/ollama-helm/",
             provider=helm_provider,
+            set_list=[
+                ReleaseSetListStruct(
+                    name="ollama.models",
+                    value=["llava-phi3:3.8b"],
+                ),
+            ],
             scope=self,
-            version="0.1.38",
+            version="0.32.0",
         )

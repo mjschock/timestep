@@ -51,10 +51,13 @@ class PrefectConstruct(Construct):
     ) -> None:
         super().__init__(scope, id)
 
-        postgres_database = "postgres"
-        postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local"
-        postgres_password = config.postgresql_password.get_secret_value()
-        postgres_username = "postgres"
+        # postgres_database = "postgres"
+        postgres_database = "prefect"
+        # postgres_hostname = "postgresql-postgresql-ha-pgpool.default.svc.cluster.local" # noqa: E501
+        postgres_hostname = config.postgres_hostname
+        postgres_password = config.postgres_password.get_secret_value()
+        # postgres_username = "postgres"
+        postgres_username = config.postgres_username
         postgres_connection_string = f"postgresql+asyncpg://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}"
 
         self.prefect_server_postgresql_connection_secret_resource = SecretV1(
@@ -76,7 +79,8 @@ class PrefectConstruct(Construct):
             chart="prefect-server",
             create_namespace=True,
             name="prefect-server",
-            namespace="default",
+            # namespace="default",
+            namespace="prefect",
             repository="https://prefecthq.github.io/prefect-helm",
             provider=helm_provider,
             set=[

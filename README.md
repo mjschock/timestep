@@ -41,7 +41,7 @@ For local configuration, copy `.env.sample` to `.env` and adjust the values as n
 | POSTGRES_DATABASE | | |
 | POSTGRES_HOSTNAME | aws-0-us-west-1.pooler.supabase.com | aws-0-us-west-1.pooler.supabase.com |
 | POSTGRES_PORT | | |
-| POSTGRES_USERNAME | postgres.iuoxbzzwmbwctbhztahw | postgres.iuoxbzzwmbwctbhztahw |
+| POSTGRES_USERNAME | postgres.jhrieculvvcouhjfgijp | postgres.iuoxbzzwmbwctbhztahw |
 | PRIMARY_DOMAIN_NAME | timestep.local | timestep.ai |
 | SMTP_SENDER | agent@timestep.ai.test-google-a.com | agent@timestep.ai.test-google-a.com |
 | SMTP_USER | agent@timestep.ai | agent@timestep.ai |
