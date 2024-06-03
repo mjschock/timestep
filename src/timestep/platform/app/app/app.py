@@ -1,35 +1,11 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 
-import os
 
 import reflex as rx
-from agent_protocol import Agent, Step, Task  # noqa
-from agent_protocol.models import StepRequestBody  # noqa
-from agent_protocol_client import (  # noqa
-    AgentApi,
-    ApiClient,
-    Configuration,
-    StepRequestBody,
-    TaskRequestBody,
-)
-from open_gpts_api_client import AuthenticatedClient, Client  # noqa
-from open_gpts_api_client.api.assistants import list_assistants_assistants_get  # noqa
-from open_gpts_api_client.api.default import health_health_get  # noqa
-from open_gpts_api_client.models import (  # noqa
-    AIMessage,
-    Assistant,
-    AssistantConfig,
-    ChatMessage,
-    FunctionMessage,
-    HumanMessage,
-    HumanMessageAdditionalKwargs,
-    SystemMessage,
-    ToolMessage,
-)
-from open_gpts_api_client.models.runnable_config import RunnableConfig  # noqa
 
+import app.api.agents.api_router as agents_api_router
+import app.api.apps.slack as apps_api_router
 from app import __version__
-from app.bots.slack import add_bot as add_slack_bot
 
 
 class State(rx.State):
@@ -64,12 +40,6 @@ def index() -> rx.Component:
 
 app = rx.App()
 
-slack_bot_token = os.environ.get("SLACK_BOT_TOKEN")
-slack_signing_secret = os.environ.get("SLACK_SIGNING_SECRET")
-
-if slack_bot_token and slack_signing_secret:
-    add_slack_bot(app)
-
 app.add_page(index)
 
 
@@ -83,41 +53,28 @@ app.api.add_api_route(
     methods=["GET"],
 )
 
-# async def execute_agent_task_step():
-#     return requests.post(
-#         f"{open_gpts_url}/runs",
-#         cookies={"opengpts_user_id": openpgts_user_id},
-#         json={
-#             "assistant_id": assistant_id,
-#             "thread_id": thread_id,
-#             "input": [
-#                 {
-#                     "content": "whats my name? respond in spanish",
-#                     "role": "human",
-#                 }
-#             ]
-#         },
-#     ).json()
+
+async def chat_completions():
+    class Message:
+        def __init__(self, content: str):
+            self.content = content
+
+    class Choice:
+        def __init__(self, content: str):
+            self.message = Message(content)
+
+    return {
+        "choices": [
+            Choice("Hello!"),
+        ]
+    }
 
 
-# app.api.add_api_route(
-#     "/api/agents/<agent_id>/ap/v1/agent/tasks/<task_id>/steps",
-#     endpoint=execute_agent_task_step,
-#     methods=["POST"],
-# )
+app.api.add_api_route(
+    "/api/chat/completions",
+    endpoint=chat_completions,
+    methods=["POST"],
+)
 
-
-# async def get_agent_task_step():
-#     response = requests.get(
-#         f"{open_gpts_url}/threads/{thread_id}/state",
-#         cookies={"opengpts_user_id": openpgts_user_id},
-#     )
-
-#     return response.json()
-
-
-# app.api.add_api_route(
-#     "/api/agents/<agent_id>/ap/v1/agent/tasks/<task_id>/steps/<step_id>",
-#     endpoint=get_agent_task_step,
-#     methods=["GET"],
-# )
+agents_api_router.add_api_routes(app)
+apps_api_router.add_api_routes(app)

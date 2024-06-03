@@ -122,7 +122,7 @@ if os.getenv('OPEN_GPTS_IN_CLUSTER_IS_ENABLED', False) == 'true':
         auto_init=False,
         labels=['ops'],
         links=['http://localhost:8100'],
-        serve_cmd='kubectl port-forward --namespace default svc/open-gpts-backend 8100:8000',
+        serve_cmd='kubectl port-forward --namespace open-gpts svc/open-gpts-backend 8100:8000',
     )
 
 if os.getenv('PREFECT_IN_CLUSTER_IS_ENABLED', False) == 'true':
@@ -131,7 +131,7 @@ if os.getenv('PREFECT_IN_CLUSTER_IS_ENABLED', False) == 'true':
         auto_init=False,
         labels=['ops'],
         links=['http://localhost:4200'],
-        serve_cmd='kubectl port-forward --namespace default svc/prefect-server 4200:4200',
+        serve_cmd='kubectl port-forward --namespace prefect svc/prefect-server 4200:4200',
     )
 
 watch_file('src/timestep/infra/stacks/platform/timestep_ai')
@@ -144,6 +144,8 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
             "/home/ubuntu/docker-entrypoint.sh",
             "reflex",
             "run",
+            "--loglevel",
+            "debug",
         ],
         live_update=[
             sync('src/timestep/platform/app', '/home/ubuntu/app'),

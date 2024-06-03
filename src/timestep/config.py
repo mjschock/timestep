@@ -70,6 +70,7 @@ class Settings(BaseSettings):
     open_gpts_in_cluster_is_enabled: bool = Field(default=True)
     open_gpts_user_id: str = Field()
     open_gpts_thread_id: str = Field()
+    paperspace_api_key: SecretStr = Field(default=None)
     postgres_database: str = Field(default="postgres")
     postgres_hostname: str = Field()
     postgres_password: SecretStr = Field(default="postgres")

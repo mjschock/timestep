@@ -38,7 +38,7 @@ class TimestepAIConstruct(Construct):
         )
 
         secret_data = {
-            "API_URL": f"https://www.{config.primary_domain_name}",
+            "API_URL": f"https://{config.primary_domain_name}",
             # "DB_URL": f"postgresql+asyncpg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}", # noqa: E501
             # "DB_URL": f"postgresql+psycopg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}",  # noqa: E501
         }

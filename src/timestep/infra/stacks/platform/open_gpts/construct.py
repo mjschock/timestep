@@ -1,4 +1,8 @@
 from cdktf_cdktf_provider_helm.provider import HelmProvider
+from cdktf_cdktf_provider_kubernetes.config_map_v1 import (
+    ConfigMapV1,
+    ConfigMapV1Metadata,
+)
 from cdktf_cdktf_provider_kubernetes.deployment_v1 import (
     DeploymentV1,
     DeploymentV1Metadata,
@@ -8,12 +12,21 @@ from cdktf_cdktf_provider_kubernetes.deployment_v1 import (
     DeploymentV1SpecTemplateMetadata,
     DeploymentV1SpecTemplateSpec,
     DeploymentV1SpecTemplateSpecContainer,
-    DeploymentV1SpecTemplateSpecContainerEnv,
+    DeploymentV1SpecTemplateSpecContainerEnvFrom,
+    DeploymentV1SpecTemplateSpecContainerEnvFromConfigMapRef,
+    DeploymentV1SpecTemplateSpecContainerEnvFromSecretRef,
     DeploymentV1SpecTemplateSpecContainerPort,
     DeploymentV1SpecTemplateSpecContainerResources,
     DeploymentV1SpecTemplateSpecInitContainer,
-    DeploymentV1SpecTemplateSpecInitContainerEnv,
+    DeploymentV1SpecTemplateSpecInitContainerEnvFrom,
+    DeploymentV1SpecTemplateSpecInitContainerEnvFromConfigMapRef,
+    DeploymentV1SpecTemplateSpecInitContainerEnvFromSecretRef,
 )
+from cdktf_cdktf_provider_kubernetes.namespace_v1 import (
+    NamespaceV1,
+    NamespaceV1Metadata,
+)
+from cdktf_cdktf_provider_kubernetes.secret_v1 import SecretV1, SecretV1Metadata
 from cdktf_cdktf_provider_kubernetes.service_v1 import (
     ServiceV1,
     ServiceV1Metadata,
@@ -60,58 +73,60 @@ class OpenGPTsConstruct(Construct):
         #     version="0.1.2",
         # )
 
-        env = [
-            DeploymentV1SpecTemplateSpecContainerEnv(
-                name="POSTGRES_DB",
-                value=config.postgres_database,
+        open_gpts_namespace = NamespaceV1(
+            id_="open_gpts_namespace",
+            metadata=NamespaceV1Metadata(
+                name="open-gpts",
             ),
-            DeploymentV1SpecTemplateSpecContainerEnv(
-                name="POSTGRES_HOST",
-                value=config.postgres_hostname,
+            scope=self,
+        )
+
+        open_gpts_config_map = ConfigMapV1(
+            id_="open_gpts_config_map",
+            data={
+                "OLLAMA_MODEL": "llava-phi3:3.8b",
+                "OLLAMA_BASE_URL": "http://ollama.ollama.svc.cluster.local:11434",
+                "POSTGRES_DB": "open_gpts",
+                "POSTGRES_HOST": config.postgres_hostname,
+                "POSTGRES_PORT": config.postgres_port,
+                "POSTGRES_USER": config.postgres_username,
+            },
+            metadata=ConfigMapV1Metadata(
+                name="open-gpts-config-map",
+                namespace=open_gpts_namespace.metadata.name,
             ),
-            DeploymentV1SpecTemplateSpecContainerEnv(
-                name="POSTGRES_PASSWORD",  # TODO: move to secret # noqa: E501
-                value=config.postgres_password.get_secret_value(),
-            ),
-            DeploymentV1SpecTemplateSpecContainerEnv(
-                name="POSTGRES_PORT",
-                value=config.postgres_port,
-            ),
-            DeploymentV1SpecTemplateSpecContainerEnv(
-                name="POSTGRES_USER",
-                value=config.postgres_username,
-            ),
-        ]
+            scope=self,
+        )
+
+        open_gpts_secret_data = {
+            "POSTGRES_PASSWORD": config.postgres_password.get_secret_value(),
+        }
 
         if config.anthropic_api_key:
-            env.append(
-                DeploymentV1SpecTemplateSpecContainerEnv(
-                    name="ANTHROPIC_API_KEY",
-                    value=config.anthropic_api_key.get_secret_value(),
-                )
-            )
+            open_gpts_secret_data[
+                "ANTHROPIC_API_KEY"
+            ] = config.anthropic_api_key.get_secret_value()
 
         if config.langchain_api_key:
-            env.append(
-                DeploymentV1SpecTemplateSpecContainerEnv(
-                    name="LANGCHAIN_API_KEY",
-                    value=config.langchain_api_key.get_secret_value(),
-                )
-            )
-            env.append(
-                DeploymentV1SpecTemplateSpecContainerEnv(
-                    name="LANGCHAIN_TRACING_V2",
-                    value="true",
-                )
-            )
+            open_gpts_secret_data[
+                "LANGCHAIN_API_KEY"
+            ] = config.langchain_api_key.get_secret_value()
+            open_gpts_secret_data["LANGCHAIN_TRACING_V2"] = "true"
 
         if config.openai_api_key:
-            env.append(
-                DeploymentV1SpecTemplateSpecContainerEnv(
-                    name="OPENAI_API_KEY",  # TODO: move to secret
-                    value=config.openai_api_key.get_secret_value(),
-                )
-            )
+            open_gpts_secret_data[
+                "OPENAI_API_KEY"
+            ] = config.openai_api_key.get_secret_value()
+
+        open_gpts_secret = SecretV1(
+            id_="open_gpts_secret",
+            data=open_gpts_secret_data,
+            metadata=SecretV1Metadata(
+                name="open-gpts-secret",
+                namespace=open_gpts_namespace.metadata.name,
+            ),
+            scope=self,
+        )
 
         self.open_gpts_backend_deployment_resource = DeploymentV1(
             id_="open_gpts_backend_deployment_resource",
@@ -120,7 +135,7 @@ class OpenGPTsConstruct(Construct):
                     "app": "open-gpts-backend",
                 },
                 name="open-gpts-backend",
-                namespace="default",  # TODO: open-gpts
+                namespace=open_gpts_namespace.metadata.name,
             ),
             spec=DeploymentV1Spec(
                 replicas="1",
@@ -138,7 +153,18 @@ class OpenGPTsConstruct(Construct):
                     spec=DeploymentV1SpecTemplateSpec(
                         container=[
                             DeploymentV1SpecTemplateSpecContainer(
-                                env=env,
+                                env_from=[
+                                    DeploymentV1SpecTemplateSpecContainerEnvFrom(
+                                        config_map_ref=DeploymentV1SpecTemplateSpecContainerEnvFromConfigMapRef(
+                                            name=open_gpts_config_map.metadata.name,
+                                        ),
+                                    ),
+                                    DeploymentV1SpecTemplateSpecContainerEnvFrom(
+                                        secret_ref=DeploymentV1SpecTemplateSpecContainerEnvFromSecretRef(
+                                            name=open_gpts_secret.metadata.name,
+                                        ),
+                                    ),
+                                ],
                                 image="docker.io/mschock/open-gpts:latest",
                                 image_pull_policy="IfNotPresent",
                                 name="open-gpts-backend",
@@ -167,26 +193,16 @@ class OpenGPTsConstruct(Construct):
                                     "make",
                                     "migrate",
                                 ],
-                                env=[
-                                    DeploymentV1SpecTemplateSpecInitContainerEnv(
-                                        name="POSTGRES_DB",
-                                        value=config.postgres_database,
+                                env_from=[
+                                    DeploymentV1SpecTemplateSpecInitContainerEnvFrom(
+                                        config_map_ref=DeploymentV1SpecTemplateSpecInitContainerEnvFromConfigMapRef(
+                                            name=open_gpts_config_map.metadata.name,
+                                        ),
                                     ),
-                                    DeploymentV1SpecTemplateSpecInitContainerEnv(
-                                        name="POSTGRES_HOST",
-                                        value=config.postgres_hostname,
-                                    ),
-                                    DeploymentV1SpecTemplateSpecInitContainerEnv(
-                                        name="POSTGRES_PASSWORD",  # TODO: move to secret # noqa: E501
-                                        value=config.postgres_password.get_secret_value(),
-                                    ),
-                                    DeploymentV1SpecTemplateSpecInitContainerEnv(
-                                        name="POSTGRES_PORT",
-                                        value=config.postgres_port,
-                                    ),
-                                    DeploymentV1SpecTemplateSpecInitContainerEnv(
-                                        name="POSTGRES_USER",
-                                        value=config.postgres_username,
+                                    DeploymentV1SpecTemplateSpecInitContainerEnvFrom(
+                                        secret_ref=DeploymentV1SpecTemplateSpecInitContainerEnvFromSecretRef(
+                                            name=open_gpts_secret.metadata.name,
+                                        ),
                                     ),
                                 ],
                                 image="docker.io/mschock/open-gpts:latest",
@@ -205,10 +221,10 @@ class OpenGPTsConstruct(Construct):
             id_="open_gpts_backend_service_resource",
             metadata=ServiceV1Metadata(
                 labels={
-                    "app": "open-gpts-backend",
+                    "app": self.open_gpts_backend_deployment_resource.metadata.name,
                 },
                 name="open-gpts-backend",
-                namespace="default",
+                namespace=open_gpts_namespace.metadata.name,
             ),
             spec=ServiceV1Spec(
                 port=[
@@ -218,7 +234,7 @@ class OpenGPTsConstruct(Construct):
                     )
                 ],
                 selector={
-                    "app": "open-gpts-backend",
+                    "app": self.open_gpts_backend_deployment_resource.metadata.name,
                 },
                 type="ClusterIP",
             ),

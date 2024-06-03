@@ -1,5 +1,8 @@
 SHELL := /usr/bin/env bash
 
+autogenstudio:
+	poetry run autogenstudio ui
+
 hosts:
 	@echo "See https://guumaster.github.io/hostctl/docs/getting-started/#linuxmacwindows-and-permissions if you have issues."
 	cat cdktf.out/stacks/timestep.local.k3s_cluster/hosts | sudo $(shell which hostctl) add ephemeral --wait 0
@@ -12,6 +15,9 @@ local-tls-cert:
 	mkcert -install
 	mkcert -cert-file secrets/local_tls_crt -key-file secrets/local_tls_key timestep.local *.timestep.local
 	kubectl create secret tls ssl-timestep.local --cert=secrets/local_tls_crt --key=secrets/local_tls_key
+
+ngrok:
+	ngrok http --host-header=rewrite https://$$PRIMARY_DOMAIN_NAME
 
 pre-commit:
 	poetry run pre-commit run --all-files
@@ -33,8 +39,8 @@ ssh-keygen:
 
 test:
 	poetry run pytest tests
-	URL="https://www.$$PRIMARY_DOMAIN_NAME/api/agents/<agent_id>" bash tests/test_agent_protocol_v1.sh
+	URL="https://$$PRIMARY_DOMAIN_NAME/api/agents/$$DEFAULT_AGENT_ID" bash tests/test_agent_protocol_v1.sh
 	poetry run agbenchmark start --cutoff 1
 
 test-load:
-	poetry run locust -f tests/locustfile.py --host=https://www.$$PRIMARY_DOMAIN_NAME
+	poetry run locust -f tests/locustfile.py --host=https://$$PRIMARY_DOMAIN_NAME
