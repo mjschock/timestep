@@ -1,3 +1,9 @@
+## 8.2.0 (2024-06-03)
+
+### Feat
+
+- set ollama_in_cluster_is_enabled default to true
+
 ## 8.1.0 (2024-06-03)
 
 ### Feat
