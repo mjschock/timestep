@@ -42,7 +42,7 @@ description = ""
 name = "timestep"
 packages = [{from = "src", include = "timestep"}]
 readme = "README.md"
-version = "8.0.2"
+version = "8.1.0"
 
 [tool.poetry.dependencies]
 agbenchmark = {git = "https://github.com/Significant-Gravitas/AutoGPT.git", subdirectory = "benchmark"}
