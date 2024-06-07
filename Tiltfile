@@ -116,6 +116,14 @@ local_resource(
     serve_cmd='make kubernetes-dashboard-port-forward',
 )
 
+local_resource(
+    'port-forward litellm-proxy 4000:4000',
+    auto_init=False,
+    labels=['ops'],
+    links=['http://localhost:4000'],
+    serve_cmd='kubectl port-forward --namespace litellm-proxy svc/litellm-proxy 4000:4000',
+)
+
 if os.getenv('OPEN_GPTS_IN_CLUSTER_IS_ENABLED', False) == 'true':
     local_resource(
         'port-forward open-gpts-backend 8100:8000',
@@ -148,6 +156,7 @@ if os.path.exists('src/timestep/infra/stacks/platform/timestep_ai'):
             "debug",
         ],
         live_update=[
+            fall_back_on('src/timestep/platform/app/requirements.txt'),
             sync('src/timestep/platform/app', '/home/ubuntu/app'),
         ],
     )

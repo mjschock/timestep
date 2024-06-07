@@ -119,10 +119,12 @@ RUN python -m venv /home/ubuntu/app/.venv
 # RUN poetry install --no-directory --no-root
 COPY --chown=ubuntu:ubuntu requirements.txt ./
 
+RUN source /home/ubuntu/app/.venv/bin/activate && pip install -r requirements.txt
+
 COPY --chown=ubuntu:ubuntu . ./
 # RUN poetry install --no-root
 # RUN pip install -r requirements.txt
-RUN source /home/ubuntu/app/.venv/bin/activate && pip install -r requirements.txt
+# RUN source /home/ubuntu/app/.venv/bin/activate && pip install -r requirements.txt
 
 RUN source /home/ubuntu/app/.venv/bin/activate && reflex init
 

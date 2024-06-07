@@ -20,6 +20,10 @@ from timestep.infra.stacks.kubernetes_config.kubernetes_cluster_ingress.construc
 from timestep.infra.stacks.kubernetes_config.kubernetes_dashboard.construct import (
     KubernetesDashboardConstruct,
 )
+from timestep.infra.stacks.kubernetes_config.ollama.construct import OllamaConstruct
+from timestep.infra.stacks.kubernetes_config.open_gpts.construct import (
+    OpenGPTsConstruct,
+)
 from timestep.infra.stacks.kubernetes_config.prefect.construct import PrefectConstruct
 
 
@@ -79,6 +83,22 @@ class KubernetesConfigStack(TerraformStack):
                 scope=self,
             )
         )
+
+        if config.ollama_in_cluster_is_enabled:
+            self.ollama_construct: OllamaConstruct = OllamaConstruct(
+                config=config,
+                id="ollama_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
+
+        if config.open_gpts_in_cluster_is_enabled:
+            self.open_gpts_construct: OpenGPTsConstruct = OpenGPTsConstruct(
+                config=config,
+                id="open_gpts_construct",
+                helm_provider=self.helm_provider,
+                scope=self,
+            )
 
         if config.prefect_in_cluster_is_enabled:
             self.prefect_construct: PrefectConstruct = PrefectConstruct(
