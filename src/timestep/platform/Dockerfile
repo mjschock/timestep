@@ -1,4 +1,4 @@
-ARG VERSION=7.0.42
+ARG VERSION=8.2.0
 
 FROM registry.gitlab.com/timestep-ai/timestep:${VERSION}
 
