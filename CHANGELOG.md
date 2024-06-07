@@ -1,3 +1,9 @@
+## 8.2.1 (2024-06-07)
+
+### Refactor
+
+- refactor: refactoring, add litellm-proxy, start bringing in skypilot - wip
+
 ## 8.2.0 (2024-06-03)
 
 ### Feat
