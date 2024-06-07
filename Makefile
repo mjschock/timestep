@@ -20,6 +20,7 @@ ngrok:
 	ngrok http --host-header=rewrite https://$$PRIMARY_DOMAIN_NAME
 
 pre-commit:
+	pushd src/timestep/platform/app && poetry export --without-hashes --without-urls -o requirements.txt && popd
 	poetry run pre-commit run --all-files
 
 runner:

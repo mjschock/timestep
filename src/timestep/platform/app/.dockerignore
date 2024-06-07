@@ -1,5 +1,6 @@
-.web
-.git
 __pycache__/*
+.git
+.venv
+.web
 Dockerfile
 uploaded_files

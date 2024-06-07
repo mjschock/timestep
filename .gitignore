@@ -27,3 +27,4 @@ actions-runner
 agbenchmark_config
 docs
 !dist/.gitkeep
+notebooks

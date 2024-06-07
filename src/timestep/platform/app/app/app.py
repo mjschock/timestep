@@ -1,11 +1,18 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 
+import logging
 
 import reflex as rx
 
 import app.api.agents.api_router as agents_api_router
-import app.api.apps.slack as apps_api_router
+
+# import app.api.assistants.api_router as assistants_api_router
+import app.api.bots.slack as bots_api_router
+
+# import app.api.services.api_router as services_api_router
 from app import __version__
+
+logger = logging.getLogger(__name__)
 
 
 class State(rx.State):
@@ -53,28 +60,38 @@ app.api.add_api_route(
     methods=["GET"],
 )
 
-
-async def chat_completions():
-    class Message:
-        def __init__(self, content: str):
-            self.content = content
-
-    class Choice:
-        def __init__(self, content: str):
-            self.message = Message(content)
-
-    return {
-        "choices": [
-            Choice("Hello!"),
-        ]
-    }
-
-
-app.api.add_api_route(
-    "/api/chat/completions",
-    endpoint=chat_completions,
-    methods=["POST"],
-)
-
 agents_api_router.add_api_routes(app)
-apps_api_router.add_api_routes(app)
+# assistants_api_router.add_api_routes(app)
+bots_api_router.add_api_routes(app)
+# services_api_router.add_api_routes(app)
+
+
+# # @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     # Load the ML model
+#     # ml_models["answer_to_everything"] = fake_answer_to_everything_ml_model
+#     # yield
+#     # # Clean up the ML models and release the resources
+#     # ml_models.clear()
+
+#     load_kubeconfig(overwrite=True)
+
+#     await sky.check.check(
+#         clouds=None,
+#         quiet=False,
+#         verbose=True,
+#     )
+
+#     logger.warn("Checking sky status")
+
+#     await sky.status(
+#         refresh=True,
+#     )
+
+#     service_statuses = await sky.serve.core.status()
+#     print(service_statuses)
+#     logger.warn(service_statuses)
+
+# app.register_lifespan_task(
+#     task=lifespan,
+# )
