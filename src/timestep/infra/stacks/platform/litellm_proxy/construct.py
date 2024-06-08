@@ -65,11 +65,13 @@ class LiteLLMProxyConstruct(Construct):
             set=[
                 ReleaseSet(
                     name="image.repository",
-                    value="ghcr.io/berriai/litellm-database",
+                    # value="ghcr.io/berriai/litellm-database",
+                    value="docker.io/mschock/litellm-database",
                 ),
                 ReleaseSet(
                     name="image.tag",
-                    value="main-v1.40.3-stable",
+                    # value="main-v1.40.3-stable",
+                    value="latest",
                 ),
                 ReleaseSet(
                     name="db.database",
