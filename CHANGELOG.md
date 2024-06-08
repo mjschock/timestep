@@ -1,3 +1,9 @@
+## 8.2.4 (2024-06-07)
+
+### Fix
+
+- move API_URL to config map and will bump to pick up new secrets
+
 ## 8.2.3 (2024-06-07)
 
 ### Fix
