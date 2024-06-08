@@ -1,3 +1,10 @@
+## 8.2.5 (2024-06-08)
+
+### Fix
+
+- fix slack bot, with streaming response
+- swap litellm-database
+
 ## 8.2.4 (2024-06-07)
 
 ### Fix
