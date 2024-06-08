@@ -26,6 +26,7 @@ class TimestepAIConstruct(Construct):
         app_config_map = ConfigMapV1(
             id_="app_config_map",
             data={
+                "API_URL": f"https://{config.primary_domain_name}",
                 "KUBECONTEXT": config.kubecontext,
                 "OPEN_GPTS_ASSISTANT_ID": config.open_gpts_assistant_id,
                 "OPEN_GPTS_USER_ID": config.open_gpts_user_id,
@@ -40,7 +41,7 @@ class TimestepAIConstruct(Construct):
         )
 
         secret_data = {
-            "API_URL": f"https://{config.primary_domain_name}",  # TODO: why is this a secret? # noqa: E501
+            # "API_URL": f"https://{config.primary_domain_name}",  # TODO: why is this a secret? # noqa: E501
             # "DB_URL": f"postgresql+asyncpg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}", # noqa: E501
             # "DB_URL": f"postgresql+psycopg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}",  # noqa: E501
         }
