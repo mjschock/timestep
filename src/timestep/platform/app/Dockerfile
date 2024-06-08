@@ -77,7 +77,7 @@
 # # CMD reflex db migrate && reflex run --env prod --backend-only
 # CMD reflex run --env prod --backend-only
 
-ARG VERSION=8.2.4
+ARG VERSION=8.2.5
 
 FROM registry.gitlab.com/timestep-ai/timestep:${VERSION} as base
 
