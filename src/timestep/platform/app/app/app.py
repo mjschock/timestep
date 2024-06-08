@@ -3,6 +3,7 @@
 import logging
 
 import reflex as rx
+from prefect import flow
 
 import app.api.agents.api_router as agents_api_router
 
@@ -50,8 +51,15 @@ app = rx.App()
 app.add_page(index)
 
 
-async def get_version():
+@flow(log_prints=True)
+async def get_version_flow():
     return {"version": __version__}
+
+
+# @flow(log_prints=True)
+async def get_version():
+    # return {"version": __version__}
+    return await get_version_flow()
 
 
 app.api.add_api_route(

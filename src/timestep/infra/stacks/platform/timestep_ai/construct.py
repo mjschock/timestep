@@ -31,6 +31,7 @@ class TimestepAIConstruct(Construct):
                 "OPEN_GPTS_ASSISTANT_ID": config.open_gpts_assistant_id,
                 "OPEN_GPTS_USER_ID": config.open_gpts_user_id,
                 "OPEN_GPTS_THREAD_ID": config.open_gpts_thread_id,
+                "PREFECT_API_URL": config.prefect_api_url,
                 "PRIMARY_DOMAIN_NAME": config.primary_domain_name,
             },
             metadata=ConfigMapV1Metadata(
@@ -41,10 +42,12 @@ class TimestepAIConstruct(Construct):
         )
 
         secret_data = {
-            # "API_URL": f"https://{config.primary_domain_name}",  # TODO: why is this a secret? # noqa: E501
             # "DB_URL": f"postgresql+asyncpg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}", # noqa: E501
             # "DB_URL": f"postgresql+psycopg://{config.postgres_username}:{config.postgres_password}@{config.postgres_hostname}/{config.postgres_database}",  # noqa: E501
         }
+
+        if config.prefect_api_key:
+            secret_data["PREFECT_API_KEY"] = config.prefect_api_key.get_secret_value()
 
         if config.slack_bot_token and config.slack_signing_secret:
             secret_data["SLACK_BOT_TOKEN"] = config.slack_bot_token.get_secret_value()
