@@ -1,3 +1,9 @@
+## 8.2.2 (2024-06-07)
+
+### Refactor
+
+- temporarily disable ollama to allow tf cleanup of helm resource from platform stack
+
 ## 8.2.1 (2024-06-07)
 
 ### Refactor
