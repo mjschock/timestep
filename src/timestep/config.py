@@ -93,6 +93,10 @@ class Settings(BaseSettings):
     postgres_password: SecretStr = Field(default="postgres")
     postgres_username: str = Field(default="postgres")
     postgres_port: str = Field(default="5432")
+    prefect_api_key: Optional[SecretStr] = Field(default=None)
+    prefect_api_url: str = Field(
+        default="http://prefect-server.default.svc.cluster.local:4200/api"
+    )
     prefect_in_cluster_is_enabled: bool = Field(default=False)
     prefect_server_version: str = Field()
     primary_domain_name: str = Field()

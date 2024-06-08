@@ -66,7 +66,7 @@ litellm = "^1.40.1"
 locust = "^2.28.0"
 marvin = {extras = ["video"], version = "^2.3.4"}
 open-gpts-api-client = {git = "https://github.com/Timestep-AI/open-gpts-api-client.git"}
-prefect = "^2.16.5"
+prefect = "2.16.8"
 prefect-shell = "^0.2.5"
 pyautogen = "^0.2.28"
 pydantic-settings = "^2.3.0"

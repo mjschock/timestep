@@ -115,6 +115,12 @@ ENV PYTHONUNBUFFERED=1
 # Create virtual env
 RUN python -m venv /home/ubuntu/app/.venv
 
+RUN source /home/ubuntu/app/.venv/bin/activate && pip install --upgrade pip
+
+# TODO: pull in as build arg
+ENV PREFECT_SERVER_VERSION=2.16.8
+RUN source /home/ubuntu/app/.venv/bin/activate && pip install prefect==${PREFECT_SERVER_VERSION}
+
 # COPY --chown=ubuntu:ubuntu ./pyproject.toml ./poetry.lock* ./
 # RUN poetry install --no-directory --no-root
 COPY --chown=ubuntu:ubuntu requirements.txt ./
