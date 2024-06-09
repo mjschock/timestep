@@ -107,14 +107,7 @@ allow_k8s_contexts(
 #     exit()
 
 include("./src/timestep/infra/stacks/kubernetes_config/argo_cd/Tiltfile")
-
-local_resource(
-    'port-forward kubernetes-dashboard 8443:8443',
-    auto_init=False,
-    labels=['ops'],
-    links=['https://localhost:8443'],
-    serve_cmd='make kubernetes-dashboard-port-forward',
-)
+include("./src/timestep/infra/stacks/kubernetes_config/kubernetes_dashboard/Tiltfile")
 
 local_resource(
     'port-forward litellm-proxy 4000:4000',

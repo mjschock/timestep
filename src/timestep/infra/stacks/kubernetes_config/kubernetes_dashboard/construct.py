@@ -38,6 +38,7 @@ class KubernetesDashboardConstruct(Construct):
             namespace="kubernetes-dashboard",
             repository="https://kubernetes.github.io/dashboard",
             provider=helm_provider,
+            scope=self,
             set=[
                 ReleaseSet(
                     name="app.ingress.enabled",
@@ -52,7 +53,7 @@ class KubernetesDashboardConstruct(Construct):
                     value="false",
                 ),
             ],
-            scope=self,
+            version="7.5.0",
         )
 
         self.kubernetes_dashboard_admin_user_service_account = ServiceAccountV1(

@@ -49,3 +49,4 @@ spec:
       # - name: ssh-pv-storage
       #   persistentVolumeClaim:
       #     claimName: ssh-pv-claim
+      serviceAccountName: skypilot-service-account

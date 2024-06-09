@@ -7,17 +7,26 @@ import sky.clouds.kubernetes
 import yaml
 
 
-def create_sky_config(overwrite=False, service_account_name: str = "sky-sa"):
+def create_sky_config(overwrite=False):
     # # ~/.sky/config.yaml
     # kubernetes:
-    #     remote_identity: sky-sa   # Or your service account name
+    #     remote_identity: skypilot-service-account   # Or your service account name
 
     sky_config_path = os.path.expanduser("~/.sky/config.yaml")
 
     if overwrite or not os.path.exists(sky_config_path):
         sky_config = {
             "kubernetes": {
-                "remote_identity": service_account_name,
+                # "remote_identity": "default",
+                # "remote_identity": "skypilot-service-account",
+                # "remote_identity": "LOCAL_CREDENTIALS",
+                "remote_identity": "SERVICE_ACCOUNT",
+                # Activated account: timestep.local_timestep.local_default
+                # "remote_identity": "timestep.local_timestep.local_default",
+                # TODO: try skypilot-service-account-role
+                # "remote_identity": "skypilot-service-account-role",
+                # "remote_identity": "default",
+                # "remote_identity": "system:serviceaccount:default:default",
             }
         }
 
@@ -33,9 +42,7 @@ def create_sky_config(overwrite=False, service_account_name: str = "sky-sa"):
             raise RuntimeError(f"{sky_config_path} file has not been generated.")
 
 
-def load_kubeconfig(
-    overwrite=False, service_account_name: str = "sky-sa"
-):  # TODO: use service_account_name # noqa E501
+def load_kubeconfig(overwrite=False):
     kubernetes.config.load_incluster_config()
 
     kubeconfig_path = os.path.expanduser(sky.clouds.kubernetes.CREDENTIAL_PATH)
@@ -45,7 +52,13 @@ def load_kubeconfig(
         kubecontext = os.getenv("KUBECONTEXT")
         kubernetes_service_host = os.getenv("KUBERNETES_SERVICE_HOST")
         kubernetes_service_port = os.getenv("KUBERNETES_SERVICE_PORT")
-        # user_name = os.getenv("PRIMARY_DOMAIN_NAME")
+        user_account_name = os.getenv("PRIMARY_DOMAIN_NAME")
+        # user_account_name = "skypilot-service-account-role"
+        # user_account_name = "default"
+        # user_account_name = "system:serviceaccount:default:default"
+        # user_account_name = "system:serviceaccount:default:
+        # user_account_name = "skypilot-service-account"
+        # user_account_name = "ubuntu"
 
         ca_certificate_path = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
         # namespace_path = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
@@ -95,9 +108,7 @@ def load_kubeconfig(
                 {
                     "context": {
                         "cluster": cluster_name,
-                        # "namespace": namespace,
-                        # "user": user_name,
-                        "user": service_account_name,
+                        "user": user_account_name,
                     },
                     "name": kubecontext,
                 }
@@ -106,8 +117,7 @@ def load_kubeconfig(
             "preferences": {},
             "users": [
                 {
-                    # "name": user_name,
-                    "name": service_account_name,
+                    "name": user_account_name,
                     "user": {"token": service_account_token},
                 }
             ],
