@@ -2,12 +2,42 @@ import os
 
 import git
 from cdktf_cdktf_provider_helm.provider import HelmProvider
+from cdktf_cdktf_provider_kubernetes.cluster_role_binding_v1 import (
+    ClusterRoleBindingV1,
+    ClusterRoleBindingV1Metadata,
+    ClusterRoleBindingV1RoleRef,
+    ClusterRoleBindingV1Subject,
+)
+from cdktf_cdktf_provider_kubernetes.cluster_role_v1 import (
+    ClusterRoleV1,
+    ClusterRoleV1Metadata,
+    ClusterRoleV1Rule,
+)
 from cdktf_cdktf_provider_kubernetes.config_map_v1 import (
     ConfigMapV1,
     ConfigMapV1Metadata,
 )
 from cdktf_cdktf_provider_kubernetes.manifest import Manifest
+from cdktf_cdktf_provider_kubernetes.namespace_v1 import (
+    NamespaceV1,
+    NamespaceV1Metadata,
+)
+from cdktf_cdktf_provider_kubernetes.role_binding_v1 import (
+    RoleBindingV1,
+    RoleBindingV1Metadata,
+    RoleBindingV1RoleRef,
+    RoleBindingV1Subject,
+)
+from cdktf_cdktf_provider_kubernetes.role_v1 import (
+    RoleV1,
+    RoleV1Metadata,
+    RoleV1Rule,
+)
 from cdktf_cdktf_provider_kubernetes.secret_v1 import SecretV1, SecretV1Metadata
+from cdktf_cdktf_provider_kubernetes.service_account_v1 import (
+    ServiceAccountV1,
+    ServiceAccountV1Metadata,
+)
 from constructs import Construct
 
 from timestep.config import Settings
@@ -65,188 +95,250 @@ class TimestepAIConstruct(Construct):
             scope=self,
         )
 
-        # client_config_map = ConfigMapV1(
-        #     id_="client_config_map",
-        #     data={
-        #         "NEXT_PUBLIC_MODEL": "gpt-4-vision-preview",
-        #     },
-        #     metadata=ConfigMapV1Metadata(
-        #         name="client-config-map",
-        #         namespace="default",
-        #     ),
-        #     scope=self,
-        # )
+        ####################### SkyPilot Kubernetes Permissions #######################
+        # See https://skypilot.readthedocs.io/en/latest/cloud-setup/cloud-permissions/kubernetes.html#example-using-custom-service-account
 
-        # client_secret = SecretV1(
-        #     id_="client_secret",
-        #     data={
-        #         # "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
-        #     },
-        #     metadata=SecretV1Metadata(
-        #         name="client-secret",
-        #         namespace="default",
-        #     ),
-        #     scope=self,
-        # )
+        skypilot_service_account = ServiceAccountV1(
+            id_="skypilot_service_account",
+            # image_pull_secrets=[
+            #     ServiceAccountV1ImagePullSecret(
+            #         name="skypilot-registry-credentials",
+            #     ),
+            # ],
+            # image_pull_secret=[
+            #     ServiceAccountV1ImagePullSecret(
+            #         name="regcred",
+            #     ),
+            # ],
+            metadata=ServiceAccountV1Metadata(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-service-account",
+                namespace="default",
+            ),
+            scope=self,
+        )
 
-        # skypilot_service_account = ServiceAccountV1(
-        #     id_="skypilot_service_account",
-        #     metadata=ServiceAccountV1Metadata(
-        #         labels={
-        #             "parent": "skypilot",
-        #         },
-        #         name="sky-sa",
-        #         namespace="default",
-        #     ),
-        #     scope=self,
-        # )
+        skypilot_service_account_role = RoleV1(
+            id_="skypilot_service_account_role",
+            metadata=RoleV1Metadata(
+                labels={
+                    "parent": "skypilot",
+                },
+                # name="skypilot-service-account-role",
+                name="skypilot-service-account-role",
+                namespace="default",
+            ),
+            rule=[
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["events"],
+                    verbs=["list"],
+                ),
+                # RoleV1Rule(
+                #     api_groups=[""],
+                #     resources=["clusterroles"],
+                #     verbs=["list"],
+                # ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["pods"],
+                    # verbs=["list"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["pods/exec"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["pods/status"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["rolebindings"],
+                    verbs=["create", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["roles"],
+                    verbs=["create", "list"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    # resource_names=["sky-ssh-keys"],
+                    resources=["secrets"],
+                    # verbs=["get", "patch"],
+                    verbs=["create", "delete", "get", "list", "patch"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["services"],
+                    verbs=["create", "delete", "get", "list", "patch"],
+                ),
+                RoleV1Rule(
+                    api_groups=[""],
+                    resources=["serviceaccounts"],
+                    # verbs=["create"],
+                    verbs=["create", "list"],
+                ),
+                RoleV1Rule(  # TODO: Figure out why this is needed, it seems like a security risk!  # noqa: E501
+                    api_groups=["*"],
+                    resources=["*"],
+                    verbs=["*"],
+                ),
+            ],
+            scope=self,
+        )
 
-        # skypilot_system_namespace = NamespaceV1(
-        #     id_="skypilot_system_namespace",
-        #     metadata=NamespaceV1Metadata(
-        #         name="skypilot-system",
-        #         labels={
-        #             "parent": "skypilot",
-        #         }
-        #     ),
-        #     scope=self,
-        # )
+        skypilot_service_account_role_binding = RoleBindingV1(
+            id_="skypilot_service_account_role_binding",
+            metadata=RoleBindingV1Metadata(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-service-account-role-binding",
+                namespace="default",
+            ),
+            role_ref=RoleBindingV1RoleRef(
+                api_group="rbac.authorization.k8s.io",
+                kind="Role",
+                name=skypilot_service_account_role.metadata.name,
+            ),
+            scope=self,
+            subject=[
+                RoleBindingV1Subject(
+                    api_group="",
+                    kind="ServiceAccount",
+                    # name="default",
+                    name=skypilot_service_account.metadata.name,
+                )
+            ],
+        )
 
-        # default_sa_cluster_role = ClusterRoleV1(
-        #     id_="default_sa_cluster_role",
-        #     metadata=ClusterRoleV1Metadata(
-        #         generate_name="default-sa-cluster-role-",
-        #     ),
-        #     rule=[
-        #         # ClusterRoleV1Rule(
-        #         #     api_groups=[""],
-        #         #     resources=["clusterroles"],
-        #         #     verbs=["list"],
-        #         # ),
-        #         # ClusterRoleV1Rule(
-        #         #     api_groups=[""],
-        #         #     resources=["nodes"],
-        #         #     verbs=["list"],
-        #         # )
-        #     ],
-        #     scope=self,
-        # )
+        skypilot_service_account_cluster_role = ClusterRoleV1(
+            id_="skypilot_service_account_cluster_role",
+            metadata=ClusterRoleV1Metadata(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-service-account-cluster-role",
+            ),
+            rule=[
+                ClusterRoleV1Rule(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["clusterroles"],
+                    verbs=["get"],
+                ),
+                ClusterRoleV1Rule(
+                    api_groups=[""],
+                    resources=["namespaces"],
+                    verbs=["list"],
+                ),
+                ClusterRoleV1Rule(
+                    api_groups=[""],
+                    resources=["nodes"],
+                    verbs=["get", "list", "watch"],
+                ),
+                ClusterRoleV1Rule(
+                    api_groups=["node.k8s.io"],
+                    resources=["runtimeclasses"],
+                    verbs=["get", "list", "watch"],
+                ),
+                ClusterRoleV1Rule(
+                    api_groups=["networking.k8s.io"],
+                    resources=["ingressclasses"],
+                    verbs=["get", "list", "watch"],
+                ),
+            ],
+            scope=self,
+        )
 
-        # default_sa_cluster_role_binding = ClusterRoleBindingV1(
-        #     id_="default_sa_cluster_role_binding",
-        #     metadata=ClusterRoleBindingV1Metadata(
-        #         generate_name="default-sa-cluster-role-binding-",
-        #     ),
-        #     subject=[
-        #         ClusterRoleBindingV1Subject(
-        #             kind="ServiceAccount",
-        #             name="default",
-        #             api_group="",
-        #         )
-        #     ],
-        #     role_ref=ClusterRoleBindingV1RoleRef(
-        #         kind="ClusterRole",
-        #         name=default_sa_cluster_role.metadata.name,
-        #         api_group="rbac.authorization.k8s.io",
-        #     ),
-        #     scope=self,
-        # )
+        skypilot_service_account_cluster_role_binding = ClusterRoleBindingV1(
+            id_="skypilot_service_account_cluster_role_binding",
+            metadata=ClusterRoleBindingV1Metadata(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-service-account-cluster-role-binding",
+            ),
+            role_ref=ClusterRoleBindingV1RoleRef(
+                api_group="rbac.authorization.k8s.io",
+                kind="ClusterRole",
+                name=skypilot_service_account_cluster_role.metadata.name,
+            ),
+            scope=self,
+            subject=[
+                ClusterRoleBindingV1Subject(
+                    # api_group="",
+                    kind="ServiceAccount",
+                    # name="default",
+                    # namespace="default",
+                    name=skypilot_service_account.metadata.name,
+                    namespace="default",
+                )
+            ],
+        )
 
-        # default_sa_role = RoleV1(
-        # skypilot_service_account_role = RoleV1(
-        #     # id_="default_sa_role",
-        #     id_="skypilot_service_account_role",
-        #     metadata=RoleV1Metadata(
-        #         # generate_name="default-sa-role-",
-        #         labels={
-        #             "parent": "skypilot",
-        #         },
-        #         name="sky-sa-role",
-        #         namespace="default",
-        #     ),
-        #     rule=[
-        #         # RoleV1Rule(
-        #         #     api_groups=[""],
-        #         #     resources=["clusterroles"],
-        #         #     verbs=["list"],
-        #         # ),
-        #         # RoleV1Rule(
-        #         #     api_groups=[""],
-        #         #     resources=["pods"],
-        #         #     verbs=["create", "delete", "get", "list"],
-        #         # ),
-        #         # RoleV1Rule(
-        #         #     api_groups=[""],
-        #         #     resources=["pods/exec"],
-        #         #     verbs=["create", "delete", "get", "list"],
-        #         # ),
-        #         # RoleV1Rule(
-        #         #     api_groups=[""],
-        #         #     resources=["pods/status"],
-        #         #     verbs=["create", "delete", "get", "list"],
-        #         # ),
-        #         # RoleV1Rule(
-        #         #     api_groups=["rbac.authorization.k8s.io"],
-        #         #     resources=["rolebindings"],
-        #         #     verbs=["create", "list"],
-        #         # ),
-        #         # RoleV1Rule(
-        #         #     api_groups=["rbac.authorization.k8s.io"],
-        #         #     resources=["roles"],
-        #         #     verbs=["create", "list"],
-        #         # ),
-        #         # RoleV1Rule(
-        #         #     api_groups=[""],
-        #         #     resources=["secrets"],
-        #         #     verbs=["create", "get", "patch"],
-        #         # ),
-        #         # RoleV1Rule(
-        #         #     api_groups=[""],
-        #         #     resources=["services"],
-        #         #     verbs=["create", "delete", "get", "list"],
-        #         # ),
-        #         # RoleV1Rule(
-        #         #     api_groups=[""],
-        #         #     resources=["serviceaccounts"],
-        #         #     verbs=["create", "list"],
-        #         # ),
-        #         RoleV1Rule(  # TODO: Figure out why this is needed, it seems like a security risk!  # noqa: E501
-        #             api_groups=["*"],
-        #             resources=["*"],
-        #             verbs=["*"],
-        #         ),
-        #     ],
-        #     scope=self,
-        # )
+        skypilot_system_namespace = NamespaceV1(
+            id_="skypilot_system_namespace",
+            metadata=NamespaceV1Metadata(
+                name="skypilot-system",
+                labels={
+                    "parent": "skypilot",
+                },
+            ),
+            scope=self,
+        )
 
-        # default_sa_role_binding = RoleBindingV1(
-        # skypilot_service_account_role_binding = RoleBindingV1(
-        #     # id_="default_sa_role_binding",
-        #     id_="skypilot_service_account_role_binding",
-        #     metadata=RoleBindingV1Metadata(
-        #         # generate_name="default-sa-role-binding-",
-        #         labels={
-        #             "parent": "skypilot",
-        #         },
-        #         name="sky-sa-rb",
-        #         namespace="default",
-        #     ),
-        #     role_ref=RoleBindingV1RoleRef(
-        #         api_group="rbac.authorization.k8s.io",
-        #         kind="Role",
-        #         # name=default_sa_role.metadata.name,
-        #         name=skypilot_service_account_role.metadata.name,
-        #     ),
-        #     scope=self,
-        #     subject=[
-        #         RoleBindingV1Subject(
-        #             kind="ServiceAccount",
-        #             # name="default",
-        #             name=skypilot_service_account.metadata.name,
-        #             # api_group="",
-        #         )
-        #     ],
-        # )
+        skypilot_system_service_account_role = RoleV1(
+            id_="skypilot_system_service_account_role",
+            metadata=RoleV1Metadata(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-system-service-account-role",
+                namespace=skypilot_system_namespace.metadata.name,
+            ),
+            rule=[
+                RoleV1Rule(
+                    api_groups=["*"],
+                    resources=["*"],
+                    verbs=["*"],
+                ),
+            ],
+            scope=self,
+        )
+
+        skypilot_system_service_account_role_binding = RoleBindingV1(
+            id_="skypilot_system_service_account_role_binding",
+            metadata=RoleBindingV1Metadata(
+                labels={
+                    "parent": "skypilot",
+                },
+                # name="skypilot-system-service-account-role-binding",
+                name="skypilot-system-service-account-role-binding-default",
+                namespace=skypilot_system_namespace.metadata.name,
+            ),
+            role_ref=RoleBindingV1RoleRef(
+                api_group="rbac.authorization.k8s.io",
+                kind="Role",
+                name=skypilot_system_service_account_role.metadata.name,
+            ),
+            scope=self,
+            subject=[
+                RoleBindingV1Subject(
+                    api_group="",
+                    kind="ServiceAccount",
+                    # name="default",
+                    name=skypilot_service_account.metadata.name,
+                    namespace="default",
+                )
+            ],
+        )
 
         private_repo_secret = SecretV1(
             # TODO: Use a GitHub App Credential instead?
@@ -289,56 +381,14 @@ class TimestepAIConstruct(Construct):
         #     scope=self,
         # )
 
-        # server_config_map = ConfigMapV1(
-        #     id_="server_config_map",
-        #     data={
-        #         "KUBECONTEXT": config.kubecontext,
-        #         # "LITESTREAM_ACCESS_KEY_ID": config.minio_root_user,
-        #         # "MINIO_ENDPOINT": "minio.default.svc.cluster.local:9000",
-        #         # "MINIO_ROOT_USER": config.minio_root_user,
-        #         # "POSTGRES_DATABASE": postgres_database,
-        #         # "POSTGRES_HOSTNAME": postgres_hostname,
-        #         # "POSTGRES_USERNAME": postgres_username,
-        #         "PREFECT_API_URL": "http://prefect-server.default.svc.cluster.local:4200/api",
-        #         "PRIMARY_DOMAIN_NAME": config.primary_domain_name,
-        #         # "REPLICA_URL": "s3://minio.default.svc.cluster.local:9000/default/db",
-        #         # "REPLICA_URL": "http://minio.default.svc.cluster.local:9000",
-        #         "VERSION": config.version,
-        #     },
-        #     metadata=ConfigMapV1Metadata(
-        #         name="server-config-map",
-        #         namespace="default",
-        #     ),
-        #     scope=self,
-        # )
-
-        # server_secret = SecretV1(
-        #     id_="server_secret",
-        #     data={
-        #         # "LITESTREAM_SECRET_ACCESS_KEY": config.minio_root_password.get_secret_value(),  # noqa: E501
-        #         # "MINIO_ROOT_PASSWORD": config.minio_root_password.get_secret_value(), # noqa: E501
-        #         "OPENAI_API_KEY": config.openai_api_key.get_secret_value(),
-        #         # "POSTGRES_CONNECTION_STRING": f"postgresql+asyncpg://{postgres_username}:{postgres_password}@{postgres_hostname}/{postgres_database}",
-        #         # "POSTGRES_PASSWORD": config.postgresql_password.get_secret_value(),
-        #     },
-        #     metadata=SecretV1Metadata(
-        #         name="server-secret",
-        #         namespace="default",
-        #     ),
-        #     scope=self,
-        # )
-
         timestep_ai_manifest_deps = [
             app_config_map,
             app_secret,
-            # client_config_map,
-            # client_secret,
-            # default_sa_cluster_role_binding,
-            # default_sa_role_binding,
             # litestream_config_map,
             private_repo_secret,
-            # server_config_map,
-            # server_secret,
+            skypilot_service_account_cluster_role_binding,
+            skypilot_service_account_role_binding,
+            skypilot_system_service_account_role_binding,
         ]
 
         # if config.local_tls_cert_is_enabled:

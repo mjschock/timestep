@@ -7,7 +7,7 @@ import sky.exceptions
 import sky.serve.core
 from fastapi import FastAPI
 
-from app.utils import create_sky_config, load_kubeconfig
+from app.utils import create_sky_config, load_kubeconfig  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
@@ -60,41 +60,67 @@ def add_api_routes(app: rx.App):
     logger.info("Done registering lifespan task")
     logger.info("Launching task")
 
-    create_sky_config(overwrite=True, service_account_name="sky-sa")
-
-    load_kubeconfig(overwrite=True, service_account_name="sky-sa")
-
-    # await sky.check.check(
-    sky.check.check(
-        clouds=None,
-        quiet=False,
-        verbose=True,
-    )
-
-    # cluster_statuses = await sky.status(refresh=True)
-    cluster_statuses = sky.status(refresh=True)
-    logger.info(f"Cluster statuses: {cluster_statuses}")
-
-    # service_statuses = await sky.serve.core.status()
-    try:
-        service_statuses = sky.serve.core.status()
-        logger.info(f"Service statuses: {service_statuses}")
-
-    except sky.exceptions.ClusterNotUpError as e:
-        logger.error(f"Cluster not up: {e}")
-
-    task = sky.Task(run='echo "Hello, SkyPilot!"')
-    # await sky.launch(task)
+    # load_kubeconfig(overwrite=True)
+    # create_sky_config(overwrite=True)
 
     try:
-        job_id, handle = sky.launch(
-            task,
-            cluster_name="sky-9b40-ubuntu",
+        sky.check.check(
+            clouds=None,
+            quiet=False,
+            verbose=True,
         )
-        logger.info(f"Job ID: {job_id}")
-        logger.info(f"Handle: {handle}")
 
-    except sky.exceptions.ResourcesUnavailableError as e:
-        logger.error(f"Resources unavailable: {e}")
+    except SystemExit as e:
+        logger.error(f"System exit: {e}")
+
+        return app
+
+    try:
+        cluster_statuses = sky.status(refresh=True)
+        logger.warn(f"Cluster statuses: {cluster_statuses}")
+
+    except Exception as e:
+        logger.error(f"type: {type(e)}")
+        logger.error(f"Exception: {e}")
+
+        return app
+
+    # try:
+    #     service_statuses = sky.serve.core.status()
+    #     logger.debug(f"Service statuses: {service_statuses}")
+
+    # except sky.exceptions.ClusterNotUpError as e:
+    #     logger.error(f"Cluster not up: {e}")
+
+    # return app
+
+    # try:
+
+    #     # with sky.Dag() as dag:
+    #     task = sky.Task(run='echo "Hello, SkyPilot!"')
+    #     # task.set_resources([
+    #     task.set_resources(
+    #         sky.Resources(
+    #             # cloud=sky.clouds.Kubernetes(),
+    #             cpus="0.1+",
+    #             # cpus=3,
+    #             memory="0.1+",
+    #             # memory=3
+    #         ),
+    #     # ])
+    #     )
+    #     job_id, handle = sky.launch(
+    #         task,
+    #         # cluster_name="sky-9b40-ubuntu",
+    #         cluster_name="sky-train-cluster", # "sky-serve-cluster",
+    #     )
+
+    #     logger.info(f"Job ID: {job_id}")
+    #     logger.info(f"Handle: {handle}")
+
+    # except sky.exceptions.ResourcesUnavailableError as e:
+    #     logger.error(f"Resources unavailable: {e}")
+
+    #     return app
 
     return app
