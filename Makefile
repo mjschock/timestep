@@ -16,6 +16,9 @@ local-tls-cert:
 	mkcert -cert-file secrets/local_tls_crt -key-file secrets/local_tls_key timestep.local *.timestep.local
 	kubectl create secret tls ssl-timestep.local --cert=secrets/local_tls_crt --key=secrets/local_tls_key
 
+multipass-cloud-init-output-log-tail:
+	multipass exec $$CLOUD_INSTANCE_NAME -- tail -f /var/log/cloud-init-output.log
+
 ngrok:
 	ngrok http --host-header=rewrite https://$$PRIMARY_DOMAIN_NAME
 

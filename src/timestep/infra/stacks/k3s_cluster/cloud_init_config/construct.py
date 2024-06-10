@@ -65,6 +65,12 @@ class CloudInitConfigConstruct(Construct):
                 "sed -i -E '/^#?PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config",  # noqa: E501
                 f"sed -i -e '$aAllowUsers {config.cloud_instance_user}' /etc/ssh/sshd_config",  # noqa: E501
                 "service ssh restart",
+                """curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+                && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+                    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+                    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list""",  # noqa: E501
+                "apt-get update",
+                "apt-get install -y nvidia-container-runtime",
                 "curl -sLS https://get.arkade.dev | sudo sh",
                 [
                     "runuser",
@@ -87,7 +93,7 @@ class CloudInitConfigConstruct(Construct):
                     "-c",
                     f"""$HOME/.arkade/bin/k3sup install \
 --context {config.kubecontext} \
---k3s-extra-args '--disable traefik' \
+--k3s-extra-args '--disable traefik --write-kubeconfig-mode "0644"' \
 --local \
 --user {config.cloud_instance_user}""",
                 ],
