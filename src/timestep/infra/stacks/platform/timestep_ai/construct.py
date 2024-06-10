@@ -2,6 +2,10 @@ import os
 
 import git
 from cdktf_cdktf_provider_helm.provider import HelmProvider
+from cdktf_cdktf_provider_helm.release import (
+    Release,
+    ReleaseSet,
+)
 from cdktf_cdktf_provider_kubernetes.cluster_role_binding_v1 import (
     ClusterRoleBindingV1,
     ClusterRoleBindingV1Metadata,
@@ -95,8 +99,98 @@ class TimestepAIConstruct(Construct):
             scope=self,
         )
 
-        ####################### SkyPilot Kubernetes Permissions #######################
-        # See https://skypilot.readthedocs.io/en/latest/cloud-setup/cloud-permissions/kubernetes.html#example-using-custom-service-account
+        # litestream_yaml_file_asset = TerraformAsset(
+        #     id="litestream_yaml_file_asset",
+        #     path=os.path.join(os.path.dirname(__file__), "litestream.yml"),
+        #     scope=self,
+        #     type=AssetType.FILE,
+        # )
+
+        # litestream_config_map = ConfigMapV1(
+        #     id_="litestream_config_map",
+        #     data={
+        #         "litestream.yml": Fn.file(litestream_yaml_file_asset.path),
+        #     },
+        #     metadata=ConfigMapV1Metadata(
+        #         name="litestream-config-map",
+        #         namespace="default",
+        #     ),
+        #     scope=self,
+        # )
+
+        # See:
+        # - https://catalog.ngc.nvidia.com/orgs/nvidia/helm-charts/gpu-operator
+        # - https://github.com/skypilot-org/skypilot/blob/master/tests/kubernetes/scripts/deploy_k3s.sh#L99
+        nvidia_gpu_operator_helm_release_resource = Release(
+            id_="nvidia_gpu_operator_helm_release_resource",
+            atomic=True,
+            chart="gpu-operator",
+            cleanup_on_fail=True,
+            create_namespace=True,
+            name="gpu-operator",
+            namespace="gpu-operator",
+            repository="https://helm.ngc.nvidia.com/nvidia",
+            provider=helm_provider,
+            set=[
+                ReleaseSet(
+                    name="toolkit.env[0].name",
+                    value="CONTAINERD_CONFIG",
+                ),
+                ReleaseSet(
+                    name="toolkit.env[0].value",
+                    value="/var/lib/rancher/k3s/agent/etc/containerd/config.toml",
+                ),
+                ReleaseSet(
+                    name="toolkit.env[1].name",
+                    value="CONTAINERD_SOCKET",
+                ),
+                ReleaseSet(
+                    name="toolkit.env[1].value",
+                    value="/run/k3s/containerd/containerd.sock",
+                ),
+                ReleaseSet(
+                    name="toolkit.env[2].name",
+                    value="CONTAINERD_RUNTIME_CLASS",
+                ),
+                ReleaseSet(
+                    name="toolkit.env[2].value",
+                    value="nvidia",
+                ),
+            ],
+            scope=self,
+            version="24.3.0",
+        )
+
+        # nvidia_runtime_class = RuntimeClassV1(
+        #     id_="nvidia_runtime_class",
+        #     handler="nvidia",
+        #     metadata={
+        #         "name": "nvidia",
+        #     },
+        #     scope=self,
+        # )
+
+        private_repo_secret = SecretV1(
+            # TODO: Use a GitHub App Credential instead?
+            # See https://github.com/argoproj/argo-cd/blob/master/docs/user-guide/private-repositories.md#github-app-credential
+            id_="private_repo_secret",
+            data={
+                "password": config.argo_cd_private_repo_access_token.get_secret_value(),
+                "project": "default",
+                # "url": "https://github.com/mjschock/timestep.git",
+                "url": git.Repo().remote("origin").url,
+                "username": config.argo_cd_private_repo_username,
+                "type": "git",
+            },
+            metadata=SecretV1Metadata(
+                labels={
+                    "argocd.argoproj.io/secret-type": "repository",
+                },
+                name="private-repo",
+                namespace="default",
+            ),
+            scope=self,
+        )
 
         skypilot_service_account = ServiceAccountV1(
             id_="skypilot_service_account",
@@ -231,12 +325,33 @@ class TimestepAIConstruct(Construct):
                 ClusterRoleV1Rule(
                     api_groups=["rbac.authorization.k8s.io"],
                     resources=["clusterroles"],
-                    verbs=["get"],
+                    verbs=[
+                        "create",
+                        "delete",
+                        "get",
+                        "list",
+                        "patch",
+                        "update",
+                        "watch",
+                    ],
+                ),
+                ClusterRoleV1Rule(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["clusterrolebindings"],
+                    verbs=[
+                        "create",
+                        "delete",
+                        "get",
+                        "list",
+                        "patch",
+                        "update",
+                        "watch",
+                    ],
                 ),
                 ClusterRoleV1Rule(
                     api_groups=[""],
                     resources=["namespaces"],
-                    verbs=["list"],
+                    verbs=["create", "get", "list", "watch"],
                 ),
                 ClusterRoleV1Rule(
                     api_groups=[""],
@@ -340,51 +455,12 @@ class TimestepAIConstruct(Construct):
             ],
         )
 
-        private_repo_secret = SecretV1(
-            # TODO: Use a GitHub App Credential instead?
-            # See https://github.com/argoproj/argo-cd/blob/master/docs/user-guide/private-repositories.md#github-app-credential
-            id_="private_repo_secret",
-            data={
-                "password": config.argo_cd_private_repo_access_token.get_secret_value(),
-                "project": "default",
-                # "url": "https://github.com/mjschock/timestep.git",
-                "url": git.Repo().remote("origin").url,
-                "username": config.argo_cd_private_repo_username,
-                "type": "git",
-            },
-            metadata=SecretV1Metadata(
-                labels={
-                    "argocd.argoproj.io/secret-type": "repository",
-                },
-                name="private-repo",
-                namespace="default",
-            ),
-            scope=self,
-        )
-
-        # litestream_yaml_file_asset = TerraformAsset(
-        #     id="litestream_yaml_file_asset",
-        #     path=os.path.join(os.path.dirname(__file__), "litestream.yml"),
-        #     scope=self,
-        #     type=AssetType.FILE,
-        # )
-
-        # litestream_config_map = ConfigMapV1(
-        #     id_="litestream_config_map",
-        #     data={
-        #         "litestream.yml": Fn.file(litestream_yaml_file_asset.path),
-        #     },
-        #     metadata=ConfigMapV1Metadata(
-        #         name="litestream-config-map",
-        #         namespace="default",
-        #     ),
-        #     scope=self,
-        # )
-
         timestep_ai_manifest_deps = [
             app_config_map,
             app_secret,
             # litestream_config_map,
+            nvidia_gpu_operator_helm_release_resource,
+            # nvidia_runtime_class,
             private_repo_secret,
             skypilot_service_account_cluster_role_binding,
             skypilot_service_account_role_binding,

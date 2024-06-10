@@ -94,33 +94,41 @@ def add_api_routes(app: rx.App):
 
     # return app
 
-    # try:
+    try:
+        # with sky.Dag() as dag:
+        # A Task that will sync up local workdir '.', containing
+        # requirements.txt and train.py.
+        # sky.Task(setup='pip install requirements.txt',
+        #          run='python train.py',
+        #          workdir='.')
+        task = sky.Task(
+            # docker_image="gpuci/miniforge-cuda:11.4-devel-ubuntu18.04",
+            run='echo "Hello, SkyPilot!"',
+        )
+        # task.set_resources([
+        # task.set_resources(
+        #     sky.Resources(
+        #         cloud=sky.clouds.Kubernetes(),
+        #         cpus="0.1+",
+        #         # cpus=3,
+        #         memory="0.1+",
+        #         # memory=3
+        #     ),
+        # # ])
+        # )
+        job_id, handle = sky.launch(
+            task,
+            # cluster_name="sky-9b40-ubuntu",
+            cluster_name="sky-train-cluster",  # "sky-serve-cluster",
+            # gpus="none",
+        )
 
-    #     # with sky.Dag() as dag:
-    #     task = sky.Task(run='echo "Hello, SkyPilot!"')
-    #     # task.set_resources([
-    #     task.set_resources(
-    #         sky.Resources(
-    #             # cloud=sky.clouds.Kubernetes(),
-    #             cpus="0.1+",
-    #             # cpus=3,
-    #             memory="0.1+",
-    #             # memory=3
-    #         ),
-    #     # ])
-    #     )
-    #     job_id, handle = sky.launch(
-    #         task,
-    #         # cluster_name="sky-9b40-ubuntu",
-    #         cluster_name="sky-train-cluster", # "sky-serve-cluster",
-    #     )
+        logger.info(f"Job ID: {job_id}")
+        logger.info(f"Handle: {handle}")
 
-    #     logger.info(f"Job ID: {job_id}")
-    #     logger.info(f"Handle: {handle}")
+    except sky.exceptions.ResourcesUnavailableError as e:
+        logger.error(f"Resources unavailable: {e}")
 
-    # except sky.exceptions.ResourcesUnavailableError as e:
-    #     logger.error(f"Resources unavailable: {e}")
-
-    #     return app
+        return app
 
     return app
