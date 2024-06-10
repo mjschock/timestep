@@ -1,3 +1,9 @@
+## 8.3.1 (2024-06-10)
+
+### Fix
+
+- (task, pid=1518) Hello, SkyPilot! INFO: Job finished (status: SUCCEEDED)
+
 ## 8.3.0 (2024-06-09)
 
 ### Feat
