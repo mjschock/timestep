@@ -1,4 +1,4 @@
-ARG VERSION=8.4.2
+ARG VERSION=8.4.3
 
 FROM registry.gitlab.com/timestep-ai/timestep:${VERSION} as base
 
