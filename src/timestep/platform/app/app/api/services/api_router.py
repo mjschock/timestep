@@ -1,4 +1,5 @@
 import logging
+import os
 
 import reflex as rx
 import sky
@@ -57,9 +58,6 @@ def add_api_routes(app: rx.App):
         # }
     )
 
-    logger.info("Done registering lifespan task")
-    logger.info("Launching task")
-
     # load_kubeconfig(overwrite=True)
     # create_sky_config(overwrite=True)
 
@@ -77,7 +75,7 @@ def add_api_routes(app: rx.App):
 
     try:
         cluster_statuses = sky.status(refresh=True)
-        logger.warn(f"Cluster statuses: {cluster_statuses}")
+        logger.debug(f"Cluster statuses: {cluster_statuses}")
 
     except Exception as e:
         logger.error(f"type: {type(e)}")
@@ -101,34 +99,79 @@ def add_api_routes(app: rx.App):
         # sky.Task(setup='pip install requirements.txt',
         #          run='python train.py',
         #          workdir='.')
+
+        # sky.down(
+        #     cluster_name="sky-train-cluster",
+        # )
+
         task = sky.Task(
-            # docker_image="gpuci/miniforge-cuda:11.4-devel-ubuntu18.04",
-            run='echo "Hello, SkyPilot!"',
+            # run='echo "Hello, SkyPilot!"',
+            run="python train.py",
+            setup="pip install -r requirements.txt",
+            workdir=f"{os.getcwd()}/app/api/services/ray_train",
         )
         # task.set_resources([
-        # task.set_resources(
-        #     sky.Resources(
-        #         cloud=sky.clouds.Kubernetes(),
-        #         cpus="0.1+",
-        #         # cpus=3,
-        #         memory="0.1+",
-        #         # memory=3
-        #     ),
-        # # ])
-        # )
+        task.set_resources(
+            sky.Resources(
+                cloud=sky.clouds.Kubernetes(),
+                cpus="1+",
+                memory="0.1+",
+            ),
+            # ])
+        )
         job_id, handle = sky.launch(
             task,
-            # cluster_name="sky-9b40-ubuntu",
             cluster_name="sky-train-cluster",  # "sky-serve-cluster",
-            # gpus="none",
+            down=True,
         )
 
         logger.info(f"Job ID: {job_id}")
         logger.info(f"Handle: {handle}")
 
+        logger.debug(f"cwd: {os.getcwd()}")
+
+        ray_serve_task = sky.Task(
+            run="serve run serve:app --host 0.0.0.0",
+            # setup='pip install "ray[serve]"',
+            setup="pip install -r requirements.txt",
+            workdir=f"{os.getcwd()}/app/api/services/ray_serve",
+        )
+        ray_serve_task.set_resources(
+            [
+                sky.Resources(
+                    cloud=sky.clouds.Kubernetes(),
+                    cpus="1+",
+                    memory="0.1+",
+                    ports=[8000],
+                ),
+            ]
+        )
+        ray_serve_task.set_service(
+            service=sky.serve.SkyServiceSpec(
+                initial_delay_seconds=3,
+                min_replicas=1,
+                readiness_path="/",
+            )
+        )
+        ray_serve_job_id, ray_serve_handle = sky.launch(
+            ray_serve_task,
+            cluster_name="sky-serve-cluster",
+        )
+
+        logger.info(f"Ray Serve Job ID: {ray_serve_job_id}")
+        logger.info(f"Ray Serve Handle: {ray_serve_handle}")
+    except RuntimeError as e:
+        logger.error(f"Runtime error: {e}")
+
+        return app
+
     except sky.exceptions.ResourcesUnavailableError as e:
         logger.error(f"Resources unavailable: {e}")
 
         return app
+
+    except Exception as e:
+        logger.error(f"type: {type(e)}")
+        logger.error(f"Exception: {e}")
 
     return app

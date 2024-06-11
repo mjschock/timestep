@@ -12,6 +12,8 @@ import app.api.services.api_router as services_api_router
 from app import __version__
 
 logger = logging.getLogger(__name__)
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.DEBUG)
 
 
 class State(rx.State):
