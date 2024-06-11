@@ -141,6 +141,9 @@ STOPSIGNAL SIGKILL
 
 EXPOSE 8000
 
+VOLUME [ "/home/ubuntu/.ssh" ]
+VOLUME [ "/home/ubuntu/.sky" ]
+
 # CMD ["poetry", "run", "python", "main.py"]
 # CMD ["reflex", "run", "--env", "prod", "--backend-only"]
 # CMD ["reflex", "run", "--env", "prod"]

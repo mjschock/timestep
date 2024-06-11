@@ -35,18 +35,18 @@ spec:
           #   requests:
           #     cpu: 100m
           #     memory: 128Mi
-          # volumeMounts:
-          # - name: sky-pv-storage
-          #   mountPath: /home/ubuntu/.sky
-          # - name: ssh-pv-storage
-          #   mountPath: /home/ubuntu/.ssh
+          volumeMounts:
+          - name: sky-pv-storage
+            mountPath: /home/ubuntu/.sky
+          - name: ssh-pv-storage
+            mountPath: /home/ubuntu/.ssh
       imagePullSecrets:
         - name: regcred
-      # volumes:
-      # - name: sky-pv-storage
-      #   persistentVolumeClaim:
-      #     claimName: sky-pv-claim
-      # - name: ssh-pv-storage
-      #   persistentVolumeClaim:
-      #     claimName: ssh-pv-claim
+      volumes:
+      - name: sky-pv-storage
+        persistentVolumeClaim:
+          claimName: sky-pv-claim
+      - name: ssh-pv-storage
+        persistentVolumeClaim:
+          claimName: ssh-pv-claim
       serviceAccountName: skypilot-service-account
