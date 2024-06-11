@@ -1,3 +1,9 @@
+## 8.4.1 (2024-06-10)
+
+### Refactor
+
+- todo prep, minor refactor
+
 ## 8.4.0 (2024-06-10)
 
 ### Feat
