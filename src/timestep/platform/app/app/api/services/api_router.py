@@ -93,35 +93,27 @@ def add_api_routes(app: rx.App):
     # return app
 
     try:
-        # with sky.Dag() as dag:
-        # A Task that will sync up local workdir '.', containing
-        # requirements.txt and train.py.
-        # sky.Task(setup='pip install requirements.txt',
-        #          run='python train.py',
-        #          workdir='.')
-
-        # sky.down(
-        #     cluster_name="sky-train-cluster",
-        # )
-
+        # TODO: move this to a Dag
+        # TODO: run this as a cron job w/ Prefect
         task = sky.Task(
-            # run='echo "Hello, SkyPilot!"',
             run="python train.py",
             setup="pip install -r requirements.txt",
             workdir=f"{os.getcwd()}/app/api/services/ray_train",
+        ).set_resources(
+            [
+                sky.Resources(
+                    cloud=sky.clouds.Kubernetes(),
+                    cpus="1+",
+                    memory="0.1+",
+                ),
+            ]
         )
-        # task.set_resources([
-        task.set_resources(
-            sky.Resources(
-                cloud=sky.clouds.Kubernetes(),
-                cpus="1+",
-                memory="0.1+",
-            ),
-            # ])
-        )
+
         job_id, handle = sky.launch(
             task,
             cluster_name="sky-train-cluster",  # "sky-serve-cluster",
+            detach_setup=True,
+            detach_run=True,
             down=True,
         )
 
@@ -130,29 +122,32 @@ def add_api_routes(app: rx.App):
 
         logger.debug(f"cwd: {os.getcwd()}")
 
-        ray_serve_task = sky.Task(
-            run="serve run serve:app --host 0.0.0.0",
-            # setup='pip install "ray[serve]"',
-            setup="pip install -r requirements.txt",
-            workdir=f"{os.getcwd()}/app/api/services/ray_serve",
-        )
-        ray_serve_task.set_resources(
-            [
-                sky.Resources(
-                    cloud=sky.clouds.Kubernetes(),
-                    cpus="1+",
-                    memory="0.1+",
-                    ports=[8000],
-                ),
-            ]
-        )
-        ray_serve_task.set_service(
-            service=sky.serve.SkyServiceSpec(
-                initial_delay_seconds=3,
-                min_replicas=1,
-                readiness_path="/",
+        # TODO: run service as ClusterIP instead of LoadBalancer and proxy via Caddy
+        ray_serve_task = (
+            sky.Task(
+                run="serve run serve:app --host 0.0.0.0",
+                setup="pip install -r requirements.txt",
+                workdir=f"{os.getcwd()}/app/api/services/ray_serve",
+            )
+            .set_resources(
+                [
+                    sky.Resources(
+                        cloud=sky.clouds.Kubernetes(),
+                        cpus="1+",
+                        memory="0.1+",
+                        ports=[8000],
+                    ),
+                ]
+            )
+            .set_service(
+                service=sky.serve.SkyServiceSpec(
+                    initial_delay_seconds=3,
+                    min_replicas=1,
+                    readiness_path="/",
+                )
             )
         )
+
         ray_serve_job_id, ray_serve_handle = sky.launch(
             ray_serve_task,
             cluster_name="sky-serve-cluster",
@@ -160,6 +155,7 @@ def add_api_routes(app: rx.App):
 
         logger.info(f"Ray Serve Job ID: {ray_serve_job_id}")
         logger.info(f"Ray Serve Handle: {ray_serve_handle}")
+
     except RuntimeError as e:
         logger.error(f"Runtime error: {e}")
 
