@@ -1,3 +1,9 @@
+## 8.4.0 (2024-06-10)
+
+### Feat
+
+- testing skypilot train/serve w/ ray
+
 ## 8.3.1 (2024-06-10)
 
 ### Fix
