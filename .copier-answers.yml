@@ -1,0 +1,12 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: 2024.03.10
+_src_path: gh:scientific-python/cookie
+backend: poetry
+email: m@mjschock.com
+full_name: Michael Schock
+license: MIT
+org: Timestep-AI
+project_name: timestep
+project_short_description: A great package.
+url: https://github.com/Timestep-AI/timestep
+vcs: true
