@@ -1,6 +1,0 @@
-.github/workflows/*.yml
-.gitlab-ci.yml
-docs
-Dockerfile
-Dockerfile.cicd
-Tiltfile
