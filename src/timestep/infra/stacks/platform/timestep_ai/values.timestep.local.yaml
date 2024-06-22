@@ -1,5 +1,0 @@
-ingress:
-  hosts:
-    - host: timestep.local
-
-replicaCount: 1
