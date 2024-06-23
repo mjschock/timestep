@@ -347,6 +347,10 @@ class Stack2(pulumi.ComponentResource):
                             # image="local/reflex-app",
                             image="mschock/reflex-app",
                             name="app",
+                            ports=[kubernetes.core.v1.ContainerPortArgs(
+                                container_port=8000,
+                                protocol="TCP",
+                            )],
                             volume_mounts=[
                                 kubernetes.core.v1.VolumeMountArgs(
                                     mount_path="/app/data",
@@ -499,10 +503,10 @@ class Stack2(pulumi.ComponentResource):
                             image="mschock/webserver",
                             name="webserver",
                             ports=[
-                                kubernetes.core.v1.ContainerPortArgs(
-                                    container_port=443,
-                                    protocol="TCP",
-                                ),
+                                # kubernetes.core.v1.ContainerPortArgs(
+                                #     container_port=443,
+                                #     protocol="TCP",
+                                # ),
                                 kubernetes.core.v1.ContainerPortArgs(
                                     container_port=80,
                                     protocol="TCP",
@@ -742,6 +746,26 @@ class Stack2(pulumi.ComponentResource):
                     kubernetes.networking.v1.IngressRuleArgs(
                         # host="example2.kubernetes.localhost",
                         host=infra.get_output("domain_name"),
+                        http=kubernetes.networking.v1.HTTPIngressRuleValueArgs(
+                            paths=[
+                                kubernetes.networking.v1.HTTPIngressPathArgs(
+                                    backend=kubernetes.networking.v1.IngressBackendArgs(
+                                        service=kubernetes.networking.v1.IngressServiceBackendArgs(
+                                            name="webserver", # TODO: caddy?
+                                            port=kubernetes.networking.v1.ServiceBackendPortArgs(
+                                                number=2019,
+                                            ),
+                                        ),
+                                    ),
+                                    path="/",
+                                    path_type="Prefix",
+                                ),
+                            ],
+                        ),
+                    ),
+                    kubernetes.networking.v1.IngressRuleArgs(
+                        # host="example2.kubernetes.localhost",
+                        host=infra.get_output("wwwFqdn"),
                         http=kubernetes.networking.v1.HTTPIngressRuleValueArgs(
                             paths=[
                                 kubernetes.networking.v1.HTTPIngressPathArgs(
