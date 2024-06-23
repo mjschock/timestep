@@ -307,6 +307,76 @@ class Stack2(pulumi.ComponentResource):
         #     ),
         # )
 
+        app_deployment = kubernetes.apps.v1.Deployment("app",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "io.kompose.service": "app",
+                },
+                name="app",
+            ),
+            opts=ResourceOptions(
+                depends_on=[
+                    db_data,
+                    upload_data,
+                ],
+                parent=self,
+                provider=provider,
+            ),
+            spec=kubernetes.apps.v1.DeploymentSpecArgs(
+                replicas=1,
+                selector=kubernetes.meta.v1.LabelSelectorArgs(
+                    match_labels={
+                        "io.kompose.service": "app",
+                    },
+                ),
+                strategy=kubernetes.apps.v1.DeploymentStrategyArgs(
+                    type="Recreate",
+                ),
+                template=kubernetes.core.v1.PodTemplateSpecArgs(
+                    metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                        labels={
+                            "io.kompose.service": "app",
+                        },
+                    ),
+                    spec=kubernetes.core.v1.PodSpecArgs(
+                        containers=[kubernetes.core.v1.ContainerArgs(
+                            env=[kubernetes.core.v1.EnvVarArgs(
+                                name="DB_URL",
+                                value="sqlite:///data/reflex.db",
+                            )],
+                            # image="local/reflex-app",
+                            image="mschock/reflex-app",
+                            name="app",
+                            volume_mounts=[
+                                kubernetes.core.v1.VolumeMountArgs(
+                                    mount_path="/app/data",
+                                    name="db-data",
+                                ),
+                                kubernetes.core.v1.VolumeMountArgs(
+                                    mount_path="/app/uploaded_files",
+                                    name="upload-data",
+                                ),
+                            ],
+                        )],
+                        restart_policy="Always",
+                        volumes=[
+                            kubernetes.core.v1.VolumeArgs(
+                                name="db-data",
+                                persistent_volume_claim=kubernetes.core.v1.PersistentVolumeClaimVolumeSourceArgs(
+                                    claim_name="db-data",
+                                ),
+                            ),
+                            kubernetes.core.v1.VolumeArgs(
+                                name="upload-data",
+                                persistent_volume_claim=kubernetes.core.v1.PersistentVolumeClaimVolumeSourceArgs(
+                                    claim_name="upload-data",
+                                ),
+                            ),
+                        ],
+                    ),
+                ),
+            ))
+
         example1_deployment = kubernetes.apps.v1.Deployment("example1",
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
                 labels={
@@ -387,76 +457,6 @@ class Stack2(pulumi.ComponentResource):
                 ),
             ))
 
-        app_deployment = kubernetes.apps.v1.Deployment("app",
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                labels={
-                    "io.kompose.service": "app",
-                },
-                name="app",
-            ),
-            opts=ResourceOptions(
-                depends_on=[
-                    db_data,
-                    upload_data,
-                ],
-                parent=self,
-                provider=provider,
-            ),
-            spec=kubernetes.apps.v1.DeploymentSpecArgs(
-                replicas=1,
-                selector=kubernetes.meta.v1.LabelSelectorArgs(
-                    match_labels={
-                        "io.kompose.service": "app",
-                    },
-                ),
-                strategy=kubernetes.apps.v1.DeploymentStrategyArgs(
-                    type="Recreate",
-                ),
-                template=kubernetes.core.v1.PodTemplateSpecArgs(
-                    metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                        labels={
-                            "io.kompose.service": "app",
-                        },
-                    ),
-                    spec=kubernetes.core.v1.PodSpecArgs(
-                        containers=[kubernetes.core.v1.ContainerArgs(
-                            env=[kubernetes.core.v1.EnvVarArgs(
-                                name="DB_URL",
-                                value="sqlite:///data/reflex.db",
-                            )],
-                            # image="local/reflex-app",
-                            image="mschock/reflex-app",
-                            name="app",
-                            volume_mounts=[
-                                kubernetes.core.v1.VolumeMountArgs(
-                                    mount_path="/app/data",
-                                    name="db-data",
-                                ),
-                                kubernetes.core.v1.VolumeMountArgs(
-                                    mount_path="/app/uploaded_files",
-                                    name="upload-data",
-                                ),
-                            ],
-                        )],
-                        restart_policy="Always",
-                        volumes=[
-                            kubernetes.core.v1.VolumeArgs(
-                                name="db-data",
-                                persistent_volume_claim=kubernetes.core.v1.PersistentVolumeClaimVolumeSourceArgs(
-                                    claim_name="db-data",
-                                ),
-                            ),
-                            kubernetes.core.v1.VolumeArgs(
-                                name="upload-data",
-                                persistent_volume_claim=kubernetes.core.v1.PersistentVolumeClaimVolumeSourceArgs(
-                                    claim_name="upload-data",
-                                ),
-                            ),
-                        ],
-                    ),
-                ),
-            ))
-
         webserver_deployment = kubernetes.apps.v1.Deployment("webserver",
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
                 labels={
@@ -522,6 +522,31 @@ class Stack2(pulumi.ComponentResource):
                         )],
                     ),
                 ),
+            ))
+
+        app_service = kubernetes.core.v1.Service("app",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "io.kompose.service": "app",
+                },
+                name="app",
+            ),
+            opts=ResourceOptions(
+                depends_on=[app_deployment],
+                parent=self,
+                provider=provider,
+            ),
+            spec=kubernetes.core.v1.ServiceSpecArgs(
+                ports=[
+                    kubernetes.core.v1.ServicePortArgs(
+                        name="8000",
+                        port=8000,
+                        target_port=8000,
+                    ),
+                ],
+                selector={
+                    "io.kompose.service": "app",
+                },
             ))
 
         example1_service = kubernetes.core.v1.Service("example1",
@@ -639,9 +664,11 @@ class Stack2(pulumi.ComponentResource):
             ),
             opts=ResourceOptions(
                 depends_on=[
+                    app_service,
                     example1_service,
                     example2_service,
                     ingress_controller,
+                    webserver_service,
                 ],
                 parent=self,
                 provider=provider,
