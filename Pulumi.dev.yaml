@@ -1,0 +1,6 @@
+config:
+  digitalocean:token:
+    secure: AAABAPrOGQ4QQF/oPfvTykhvgLbb5x7yfpSZ/roa5faY1GHLFsDOmOD7NwpudZvYHY02QG6yLC9sVC6s8sqaJAYZ3+B+lMxZPUxXryXF6AELuSFd+uE3yyqEA9HpQtLnPY/0smGNrQ==
+  timestep-ai:ingress_controller_acme_ca: https://acme-staging-v02.api.letsencrypt.org/directory
+  timestep-ai:ingress_controller_debug: true
+  timestep-ai:ingress_controller_email: agent@timestep.ai

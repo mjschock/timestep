@@ -1,0 +1,2 @@
+- `pulumi login s3://...` w/ supabase S3 (see https://www.pulumi.com/docs/concepts/state/#aws-s3)
+- add text_search tool with vecs
