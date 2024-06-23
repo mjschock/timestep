@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "timestep"
+version = "9.0.0"
+description = ""
+authors = ["Michael James Schock <m@mjschock.com>"]
+readme = "README.md"
+packages = [{include = "timestep", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+dvc = {extras = ["all"], version = "^3.51.2"}
+matplotlib = "^3.9.0"
+vecs = "^0.4.3"
+sentence-transformers = "^3.0.1"
+skypilot-nightly = {extras = ["kubernetes", "paperspace"], version = "^1.0.0.dev20240619"}
+
+[tool.poetry.scripts]
+seed = "timestep.tools.image_search.main:seed"
+search = "timestep.tools.image_search.main:search"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

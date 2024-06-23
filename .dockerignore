@@ -1,0 +1,15 @@
+.web
+.git
+__pycache__/*
+data
+deploy
+deploy_k3s.sh
+Dockerfile
+Caddy.Dockerfile
+compose.yaml
+compose.*.yaml
+kubeconfig
+Pulumi.dev.yaml
+Pulumi.yaml
+supabase
+uploaded_files
