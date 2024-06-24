@@ -44,12 +44,12 @@ def sidebar_footer() -> rx.Component:
         rx.spacer(),
         rx.link(
             rx.text("Docs"),
-            href="https://timestep.ai/docs/getting-started/introduction/",
+            href="./docs/getting-started/introduction/",
             color_scheme="gray",
         ),
         rx.link(
             rx.text("Blog"),
-            href="https://timestep.ai/blog/",
+            href="./blog/",
             color_scheme="gray",
         ),
         width="100%",
