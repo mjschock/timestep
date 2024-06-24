@@ -1,2 +1,4 @@
 - `pulumi login s3://...` w/ supabase S3 (see https://www.pulumi.com/docs/concepts/state/#aws-s3)
 - add text_search tool with vecs
+- add load balancer? (see https://github.com/pulumi/examples/blob/master/digitalocean-py-loadbalanced-droplets/README.md)
+- use private registry with image pull secrets
