@@ -1,7 +1,11 @@
+cloud-config.yaml
 *.db
 .env
+.etchosts
 kubeconfig
 __pycache__/
 *.py[cod]
+tls.crt
+tls.key
 .venv
 .web
