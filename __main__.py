@@ -496,9 +496,9 @@ class Stack2(pulumi.ComponentResource):
                 values={
                     "ingressController": {
                         "config": {
-                            "acmeCA": config.get('ingress_controller_acme_ca'),
+                            "acmeCA": config.get('ingress_controller_acme_ca'), # TODO: delete this for local?
                             "debug": config.get_bool('ingress_controller_debug'),
-                            "email": config.get("ingress_controller_email"),
+                            "email": config.get("ingress_controller_email"), # TODO: delete this for local?
                         },
                     },
                 },
