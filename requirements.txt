@@ -5,3 +5,4 @@ pulumi-kubernetes>=4.0.0,<5.0.0
 pulumi-std==1.6.2
 pyyaml
 reflex
+skypilot-nightly[kubernetes,paperspace]

@@ -6,7 +6,15 @@
 # During build and run, set environment DOMAIN pointing
 # to publicly accessible domain where app will be hosted
 services:
+  base:
+    image: mschock/base
+    build:
+      context: .
+      dockerfile: Dockerfile
+
   app:
+    depends_on:
+      - base
     # image: local/reflex-app
     image: mschock/reflex-app
     environment:
@@ -15,10 +23,11 @@ services:
       # REDIS_URL: redis://redis:6379
     build:
       context: .
-      dockerfile: prod.Dockerfile
-    volumes:
-       - db-data:/app/data
-       - upload-data:/app/uploaded_files
+      # dockerfile: prod.Dockerfile
+      dockerfile: Dockerfile
+    # volumes:
+    #    - db-data:/app/data
+    #    - upload-data:/app/uploaded_files
     restart: always
 
   webserver:
@@ -32,9 +41,10 @@ services:
       - 2019:80
     build:
       context: .
-      dockerfile: Caddy.Dockerfile
-    volumes:
-       - caddy-data:/root/.caddy
+      # dockerfile: Caddy.Dockerfile
+      dockerfile: Dockerfile
+    # volumes:
+    #    - caddy-data:/home/ubuntu/.caddy
     restart: always
     depends_on:
       - app

@@ -2,9 +2,11 @@ SHELL := /usr/bin/env bash
 
 default:
 	npx supabase start
-	docker compose -f compose.yaml build --push
 
 local: default
+	docker compose -f compose.yaml build \
+		--build-arg="API_URL=https://timestep.local" \
+		--push
 	pulumi stack select local
 	pulumi config set kubernetes:context timestep.local
 	mkcert -install
@@ -13,6 +15,9 @@ local: default
 	cat .etchosts  | sudo $(shell which hostctl) add ephemeral --wait 0
 
 prod: default
+	docker compose -f compose.yaml build \
+		--build-arg="API_URL=https://timestep.ai" \
+		--push
 	pulumi stack select dev
 	pulumi config set kubernetes:context timestep.ai
 	pulumi up

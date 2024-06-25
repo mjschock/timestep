@@ -1,6 +1,7 @@
 config:
   kubernetes:context: timestep.local
-  timestep-ai:ingress_controller_acme_ca: https://acme-staging-v02.api.letsencrypt.org/directory
+  # timestep-ai:ingress_controller_acme_ca: https://acme-staging-v02.api.letsencrypt.org/directory
+  timestep-ai:ingress_controller_acme_ca: ""
   timestep-ai:ingress_controller_debug: "true"
   timestep-ai:ingress_controller_email: agent@timestep.ai
   timestep-ai:primary_domain_name: timestep.local

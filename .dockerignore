@@ -17,6 +17,6 @@ supabase
 Tiltfile
 tls.crt
 tls.key
-TODO.md
 uploaded_files
+.venv
 .web
