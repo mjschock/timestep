@@ -254,6 +254,26 @@ class Stack2(pulumi.ComponentResource):
                 ),
             ))
 
+        caddy_config = kubernetes.core.v1.PersistentVolumeClaim("caddy-config",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "io.kompose.service": "caddy-config",
+                },
+                name="caddy-config",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            spec=kubernetes.core.v1.PersistentVolumeClaimSpecArgs(
+                access_modes=["ReadWriteOnce"],
+                resources=kubernetes.core.v1.VolumeResourceRequirementsArgs(
+                    requests={
+                        "storage": "100Mi",
+                    },
+                ),
+            ))
+
         db_data = kubernetes.core.v1.PersistentVolumeClaim("db-data",
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
                 labels={
@@ -337,10 +357,17 @@ class Stack2(pulumi.ComponentResource):
                     ),
                     spec=kubernetes.core.v1.PodSpecArgs(
                         containers=[kubernetes.core.v1.ContainerArgs(
-                            env=[kubernetes.core.v1.EnvVarArgs(
-                                name="DB_URL",
-                                value="sqlite:///data/reflex.db",
-                            )],
+                            args=["reflex", "run", "--backend-only", "--env", "prod", "--loglevel", "debug"],
+                            env=[
+                                kubernetes.core.v1.EnvVarArgs(
+                                    name="API_URL",
+                                    value=f"https://{config.get('primary_domain_name')}",
+                                ),
+                                kubernetes.core.v1.EnvVarArgs(
+                                    name="DB_URL",
+                                    value="sqlite:///data/reflex.db",
+                                ),
+                            ],
                             image="mschock/reflex-app",
                             name="app",
                             ports=[kubernetes.core.v1.ContainerPortArgs(
@@ -349,11 +376,11 @@ class Stack2(pulumi.ComponentResource):
                             )],
                             volume_mounts=[
                                 kubernetes.core.v1.VolumeMountArgs(
-                                    mount_path="/app/data",
+                                    mount_path="/home/ubuntu/app/data",
                                     name="db-data",
                                 ),
                                 kubernetes.core.v1.VolumeMountArgs(
-                                    mount_path="/app/uploaded_files",
+                                    mount_path="/home/ubuntu/app/uploaded_files",
                                     name="upload-data",
                                 ),
                             ],
@@ -406,6 +433,7 @@ class Stack2(pulumi.ComponentResource):
                     ),
                     spec=kubernetes.core.v1.PodSpecArgs(
                         containers=[kubernetes.core.v1.ContainerArgs(
+                            args=["caddy", "run", "--config", "Caddyfile", "--adapter", "caddyfile"],
                             env=[kubernetes.core.v1.EnvVarArgs(
                                 name="DOMAIN",
                                 value=config.get('primary_domain_name'),
@@ -418,18 +446,32 @@ class Stack2(pulumi.ComponentResource):
                                     protocol="TCP",
                                 ),
                             ],
-                            volume_mounts=[kubernetes.core.v1.VolumeMountArgs(
-                                mount_path="/data",
-                                name="caddy-data",
-                            )],
+                            volume_mounts=[
+                                kubernetes.core.v1.VolumeMountArgs(
+                                    mount_path="/home/ubuntu/.local/share/caddy",
+                                    name="caddy-data",
+                                ),
+                                kubernetes.core.v1.VolumeMountArgs(
+                                    mount_path="/home/ubuntu/.config/caddy",
+                                    name="caddy-config",
+                                ),
+                            ],
                         )],
                         restart_policy="Always",
-                        volumes=[kubernetes.core.v1.VolumeArgs(
-                            name="caddy-data",
-                            persistent_volume_claim=kubernetes.core.v1.PersistentVolumeClaimVolumeSourceArgs(
-                                claim_name="caddy-data",
+                        volumes=[
+                            kubernetes.core.v1.VolumeArgs(
+                                name="caddy-data",
+                                persistent_volume_claim=kubernetes.core.v1.PersistentVolumeClaimVolumeSourceArgs(
+                                    claim_name="caddy-data",
+                                ),
                             ),
-                        )],
+                            kubernetes.core.v1.VolumeArgs(
+                                name="caddy-config",
+                                persistent_volume_claim=kubernetes.core.v1.PersistentVolumeClaimVolumeSourceArgs(
+                                    claim_name="caddy-config",
+                                ),
+                            ),
+                        ],
                     ),
                 ),
             ))
