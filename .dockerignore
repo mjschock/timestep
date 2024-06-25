@@ -5,6 +5,7 @@ deploy_k3s.sh
 .env
 .etchosts
 .git
+k8s
 kubeconfig
 __main__.py
 Makefile
@@ -14,6 +15,7 @@ Pulumi.*.yaml
 Pulumi.yaml
 __pycache__/*
 supabase
+Tiltfile
 Tiltfile
 tls.crt
 tls.key

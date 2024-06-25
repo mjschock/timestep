@@ -220,7 +220,7 @@ class Stack2(pulumi.ComponentResource):
         if get_stack() == "local":
             # provider = Provider('k8s-yaml-rendered',
             #     opts=ResourceOptions(parent=self),
-            #     render_yaml_to_directory='yaml' # TODO: deploy or k8s?
+            #     render_yaml_to_directory='k8s'
             # )
 
             provider = Provider("k8s",
@@ -336,6 +336,7 @@ class Stack2(pulumi.ComponentResource):
                 name="app",
             ),
             opts=ResourceOptions(
+                # ignore_changes=["spec.template.spec.containers[*]"] if get_stack() == "local" else None,
                 parent=self,
                 provider=provider,
             ),
@@ -370,10 +371,17 @@ class Stack2(pulumi.ComponentResource):
                             ],
                             image="mschock/reflex-app",
                             name="app",
-                            ports=[kubernetes.core.v1.ContainerPortArgs(
-                                container_port=8000,
-                                protocol="TCP",
-                            )],
+                            ports=([
+                                kubernetes.core.v1.ContainerPortArgs(
+                                    container_port=3000,
+                                    protocol="TCP",
+                                ),
+                            ] if get_stack() == "local" else []) + [
+                                kubernetes.core.v1.ContainerPortArgs(
+                                    container_port=8000,
+                                    protocol="TCP",
+                                ),
+                            ],
                             volume_mounts=[
                                 kubernetes.core.v1.VolumeMountArgs(
                                     mount_path="/home/ubuntu/app/data",
@@ -402,6 +410,36 @@ class Stack2(pulumi.ComponentResource):
                         ],
                     ),
                 ),
+            ))
+
+        app_service = kubernetes.core.v1.Service("app-service",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "io.kompose.service": "app",
+                },
+                name="app",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            spec=kubernetes.core.v1.ServiceSpecArgs(
+                ports=([
+                    kubernetes.core.v1.ServicePortArgs(
+                        name="3000",
+                        port=3000,
+                        target_port=3000,
+                    ),
+                ] if get_stack() == "local" else []) + [
+                    kubernetes.core.v1.ServicePortArgs(
+                        name="8000",
+                        port=8000,
+                        target_port=8000,
+                    ),
+                ],
+                selector={
+                    "io.kompose.service": "app",
+                },
             ))
 
         webserver_deployment = kubernetes.apps.v1.Deployment("webserver-deployment",
@@ -474,30 +512,6 @@ class Stack2(pulumi.ComponentResource):
                         ],
                     ),
                 ),
-            ))
-
-        app_service = kubernetes.core.v1.Service("app-service",
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                labels={
-                    "io.kompose.service": "app",
-                },
-                name="app",
-            ),
-            opts=ResourceOptions(
-                parent=self,
-                provider=provider,
-            ),
-            spec=kubernetes.core.v1.ServiceSpecArgs(
-                ports=[
-                    kubernetes.core.v1.ServicePortArgs(
-                        name="8000",
-                        port=8000,
-                        target_port=8000,
-                    ),
-                ],
-                selector={
-                    "io.kompose.service": "app",
-                },
             ))
 
         webserver_service = kubernetes.core.v1.Service("webserver-service",

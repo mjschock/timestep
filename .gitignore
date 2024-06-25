@@ -2,9 +2,11 @@ cloud-config.yaml
 *.db
 .env
 .etchosts
+k8s
 kubeconfig
 __pycache__/
 *.py[cod]
+Tiltfile
 tls.crt
 tls.key
 .venv

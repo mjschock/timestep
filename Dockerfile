@@ -161,8 +161,10 @@ ENV PATH="/home/ubuntu/.cargo/bin:${PATH}"
 # COPY --chown=ubuntu:ubuntu requirements.txt 
 
 ARG API_URL
+ARG DEPLOY_URL
 
 ENV API_URL=${API_URL:-http://localhost:8000}
+ENV DEPLOY_URL=${DEPLOY_URL:-http://localhost:3000}
 
 # ARG uv=/root/.cargo/bin/uv
 
