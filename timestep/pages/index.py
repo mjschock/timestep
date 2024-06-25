@@ -16,4 +16,14 @@ def index() -> rx.Component:
     with open("README.md", encoding="utf-8") as readme:
         content = readme.read()
 
-    return rx.markdown(content, component_map=styles.markdown_style)
+    # return rx.markdown(content, component_map=styles.markdown_style)
+
+    return rx.vstack(
+        rx.heading("Home", size="8"),
+        # rx.text("Welcome to Reflex!"),
+        # rx.text(
+        #     "You can edit this page in ",
+        #     rx.code("{your_app}/pages/dashboard.py"),
+        # ),
+        rx.markdown(content, component_map=styles.markdown_style)
+    )

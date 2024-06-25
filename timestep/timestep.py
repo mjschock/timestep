@@ -27,4 +27,4 @@ logger.critical("critical message")
 async def api_test(item_id: int):
     return {"my_result": item_id}
 
-app.api.add_api_route("/items/{item_id}", api_test)
+# app.api.add_api_route("/items/{item_id}", api_test)

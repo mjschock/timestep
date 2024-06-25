@@ -10,6 +10,11 @@ http://{$DOMAIN}:80 {
 		reverse_proxy app:8000
 	}
 
+	@local_domain expression {host}.endsWith(".local")
+	handle @local_domain {
+		reverse_proxy app:3000
+	}
+
 	root * /home/ubuntu/app/.web/_static
 	route {
 		try_files {path} {path}/ /404.html
