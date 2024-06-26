@@ -15,6 +15,9 @@ local: default
 	pulumi up
 	cat .etchosts | sudo $(shell which hostctl) add ephemeral --wait 0
 
+local-tilt-up:
+	KUBECONFIG=kubeconfig tilt up
+
 prod: default
 	docker compose -f compose.yaml build \
 		--build-arg="API_URL=https://timestep.ai" \

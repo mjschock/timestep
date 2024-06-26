@@ -8,6 +8,16 @@ import yaml
 
 logger = logging.getLogger(__name__)
 
+try:
+    import sky
+    import sky.check
+    import sky.exceptions
+    import sky.clouds.kubernetes
+    import sky.serve.core
+
+except PermissionError as e:
+    logger.error(f"Permission error: {e}")
+
 def create_sky_config(overwrite=False):
     # # ~/.sky/config.yaml
     # kubernetes:
@@ -18,16 +28,9 @@ def create_sky_config(overwrite=False):
     if overwrite or not os.path.exists(sky_config_path):
         sky_config = {
             "kubernetes": {
-                # "remote_identity": "default",
-                # "remote_identity": "skypilot-service-account",
-                # "remote_identity": "LOCAL_CREDENTIALS",
-                "remote_identity": "SERVICE_ACCOUNT",
-                # Activated account: timestep.local_timestep.local_default
-                # "remote_identity": "timestep.local_timestep.local_default",
-                # TODO: try skypilot-service-account-role
-                # "remote_identity": "skypilot-service-account-role",
-                # "remote_identity": "default",
-                # "remote_identity": "system:serviceaccount:default:default",
+                "networking": "nodeport",
+                "ports": "ingress",
+                "remote_identity": "LOCAL_CREDENTIALS",
             }
         }
 
@@ -135,7 +138,7 @@ def load_kubeconfig(overwrite=False):
         if not os.path.exists(kubeconfig_path):
             raise RuntimeError(f"{kubeconfig_path} file has not been generated.")
 
-def add_api_routes(app: rx.App):
+async def serve():
     logger.debug("debug message")
     logger.info("info message")
     logger.warning("warn message")
@@ -155,7 +158,7 @@ def add_api_routes(app: rx.App):
     except PermissionError as e:
         logger.error(f"Permission error: {e}")
 
-        return app
+        return
 
     try:
         sky.check.check(
@@ -167,103 +170,111 @@ def add_api_routes(app: rx.App):
     except SystemExit as e:
         logger.error(f"System exit: {e}")
 
-        return app
+        return
 
-    # try:
-    #     cluster_statuses = sky.status(refresh=True)
-    #     logger.debug(f"Cluster statuses: {cluster_statuses}")
+    try:
+        cluster_statuses = sky.status(refresh=True)
+        logger.info(f"Cluster statuses: {cluster_statuses}")
 
-    # except Exception as e:
-    #     logger.error(f"type: {type(e)}")
-    #     logger.error(f"Exception: {e}")
+    except Exception as e:
+        logger.error(f"type: {type(e)}")
+        logger.error(f"Exception: {e}")
 
-    #     return app
+        return
 
-    # try:
-    #     service_statuses = sky.serve.core.status()
-    #     logger.debug(f"Service statuses: {service_statuses}")
+    try:
+        service_statuses = sky.serve.core.status()
+        logger.info(f"Service statuses: {service_statuses}")
 
-    # except sky.exceptions.ClusterNotUpError as e:
-    #     logger.error(f"Cluster not up: {e}")
+    except sky.exceptions.ClusterNotUpError as e:
+        logger.error(f"Cluster not up: {e}")
 
-    # return app
+        # return
 
-    # try:
-    #     # TODO: move this to a Dag
-    #     # TODO: run this as a cron job w/ Prefect
-    #     task = sky.Task(
-    #         run="python train.py",
-    #         setup="pip install -r requirements.txt",
-    #         workdir=f"{os.getcwd()}/app/api/services/ray_train",
-    #     ).set_resources(
-    #         [
-    #             sky.Resources(
-    #                 cloud=sky.clouds.Kubernetes(),
-    #                 cpus="1+",
-    #                 memory="0.1+",
-    #             ),
-    #         ]
-    #     )
+    try:
+        # TODO: move this to a Dag
+        # TODO: run this as a cron job w/ Prefect
+        # task = sky.Task(
+        #     run="python train.py",
+        #     setup="pip install -r requirements.txt",
+        #     workdir=f"{os.getcwd()}/app/api/services/ray_train",
+        # ).set_resources(
+        #     [
+        #         sky.Resources(
+        #             cloud=sky.clouds.Kubernetes(),
+        #             cpus="1+",
+        #             memory="0.1+",
+        #         ),
+        #     ]
+        # )
 
-    #     job_id, handle = sky.launch(
-    #         task,
-    #         cluster_name="sky-train-cluster",  # "sky-serve-cluster",
-    #         detach_setup=True,
-    #         detach_run=True,
-    #         down=True,
-    #     )
+        # job_id, handle = sky.launch(
+        #     task,
+        #     cluster_name="sky-train-cluster",  # "sky-serve-cluster",
+        #     detach_setup=True,
+        #     detach_run=True,
+        #     down=True,
+        # )
 
-    #     logger.info(f"Job ID: {job_id}")
-    #     logger.info(f"Handle: {handle}")
+        # logger.info(f"Job ID: {job_id}")
+        # logger.info(f"Handle: {handle}")
 
-    #     logger.debug(f"cwd: {os.getcwd()}")
+        # logger.debug(f"cwd: {os.getcwd()}")
 
-    #     # TODO: run service as ClusterIP instead of LoadBalancer and proxy via Caddy
-    #     ray_serve_task = (
-    #         sky.Task(
-    #             run="serve run serve:app --host 0.0.0.0",
-    #             setup="pip install -r requirements.txt",
-    #             workdir=f"{os.getcwd()}/app/api/services/ray_serve",
-    #         )
-    #         .set_resources(
-    #             [
-    #                 sky.Resources(
-    #                     cloud=sky.clouds.Kubernetes(),
-    #                     cpus="1+",
-    #                     memory="0.1+",
-    #                     ports=[8000],
-    #                 ),
-    #             ]
-    #         )
-    #         .set_service(
-    #             service=sky.serve.SkyServiceSpec(
-    #                 initial_delay_seconds=3,
-    #                 min_replicas=1,
-    #                 readiness_path="/",
-    #             )
-    #         )
-    #     )
+        # TODO: run service as ClusterIP instead of LoadBalancer and proxy via Caddy
+        ray_serve_task = (
+            sky.Task(
+                run="serve run serve:app --host 0.0.0.0",
+                setup="pip install -r requirements.txt",
+                workdir=f"{os.getcwd()}/timestep/services/serve",
+            )
+            .set_resources(
+                [
+                    sky.Resources(
+                        cloud=sky.clouds.Kubernetes(),
+                        cpus="1+",
+                        memory="0.1+",
+                        ports=[8000],
+                    ),
+                ]
+            )
+            .set_service(
+                service=sky.serve.SkyServiceSpec(
+                    initial_delay_seconds=3,
+                    min_replicas=1,
+                    readiness_path="/",
+                    readiness_timeout_seconds=30,
+                )
+            )
+        )
 
-    #     ray_serve_job_id, ray_serve_handle = sky.launch(
-    #         ray_serve_task,
-    #         cluster_name="sky-serve-cluster",
-    #     )
+        ray_serve_job_id, ray_serve_handle = sky.launch(
+            ray_serve_task,
+            cluster_name="sky-serve-cluster",
+            detach_run=True,
+            detach_setup=True,
+        )
 
-    #     logger.info(f"Ray Serve Job ID: {ray_serve_job_id}")
-    #     logger.info(f"Ray Serve Handle: {ray_serve_handle}")
+        logger.info(f"Ray Serve Job ID: {ray_serve_job_id}")
+        logger.info(f"Ray Serve Handle: {ray_serve_handle}")
 
-    # except RuntimeError as e:
-    #     logger.error(f"Runtime error: {e}")
+        return ray_serve_job_id
 
-    #     return app
+    except RuntimeError as e:
+        logger.error(f"Runtime error: {e}")
 
-    # except sky.exceptions.ResourcesUnavailableError as e:
-    #     logger.error(f"Resources unavailable: {e}")
+        return
 
-    #     return app
+    except sky.exceptions.ResourcesUnavailableError as e:
+        logger.error(f"Resources unavailable: {e}")
 
-    # except Exception as e:
-    #     logger.error(f"type: {type(e)}")
-    #     logger.error(f"Exception: {e}")
+        return
 
-    return app
+    except Exception as e:
+        logger.error(f"type: {type(e)}")
+        logger.error(f"Exception: {e}")
+
+    return
+
+def train():
+    return

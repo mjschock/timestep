@@ -328,6 +328,257 @@ class Stack2(pulumi.ComponentResource):
             ),
         )
 
+        # # =========== GPU support ===========
+        # helm repo add nvidia https://helm.ngc.nvidia.com/nvidia && helm repo update
+
+        # # Create namespace if it doesn't exist
+        # echo "Creating namespace gpu-operator"
+        # kubectl create namespace gpu-operator || true
+
+        # # Install GPU operator
+        # echo "Installing GPU operator"
+        # helm install gpu-operator -n gpu-operator --create-namespace \
+        # nvidia/gpu-operator $HELM_OPTIONS \
+        # --set 'toolkit.env[0].name=CONTAINERD_CONFIG' \
+        # --set 'toolkit.env[0].value=/var/lib/rancher/k3s/agent/etc/containerd/config.toml' \
+        # --set 'toolkit.env[1].name=CONTAINERD_SOCKET' \
+        # --set 'toolkit.env[1].value=/run/k3s/containerd/containerd.sock' \
+        # --set 'toolkit.env[2].name=CONTAINERD_RUNTIME_CLASS' \
+        # --set 'toolkit.env[2].value=nvidia' || true
+
+        # # Create RuntimeClass
+        # echo "Creating RuntimeClass"
+        # kubectl apply -f - <<EOF
+        # apiVersion: node.k8s.io/v1
+        # kind: RuntimeClass
+        # metadata:
+        # name: nvidia
+        # handler: nvidia
+        # EOF
+
+
+        # See:
+        # - https://catalog.ngc.nvidia.com/orgs/nvidia/helm-charts/gpu-operator
+        # - https://github.com/skypilot-org/skypilot/blob/master/tests/kubernetes/scripts/deploy_k3s.sh#L99
+        gpu_operator = kubernetes.helm.v3.Release(
+            "gpu-operator",
+            args=ReleaseArgs(
+                atomic=True,
+                chart="gpu-operator",
+                cleanup_on_fail=True,
+                create_namespace=True,
+                namespace="gpu-operator",
+                repository_opts=RepositoryOptsArgs(
+                    repo="https://helm.ngc.nvidia.com/nvidia",
+                ),
+                values={
+                    "toolkit": {
+                        "env": [{
+                            "name": "CONTAINERD_CONFIG",
+                            "value": "/var/lib/rancher/k3s/agent/etc/containerd/config.toml",
+                        }, {
+                            "name": "CONTAINERD_SOCKET",
+                            "value": "/run/k3s/containerd/containerd.sock",
+                        }, {
+                            "name": "CONTAINERD_RUNTIME_CLASS",
+                            "value": "nvidia",
+                        }]
+                    }
+                },
+                version="24.3.0",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+        )
+
+        kubernetes.node.v1.RuntimeClass(
+            "nvidia-runtime-class",
+            handler="nvidia",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name="nvidia",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+        )
+
+        skypilot_service_account = kubernetes.core.v1.ServiceAccount(
+            "skypilot-service-account",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-service-account",
+                namespace="default",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+        )
+
+        skypilot_service_account_role = kubernetes.rbac.v1.Role(
+            "skypilot-service-account-role",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-service-account-role",
+                namespace="default",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            rules=[
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=[""],
+                    resources=["pods"],
+                    verbs=["create", "delete", "get", "list", "patch"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=[""],
+                    resources=["pods/exec"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=[""],
+                    resources=["pods/portforward"],
+                    verbs=["create"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=[""],
+                    resources=["pods/status"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["rolebindings"],
+                    verbs=["create"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    # resource_names=["sky-ssh-jump-role"],
+                    resources=["roles"],
+                    verbs=["create"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=[""],
+                    resources=["secrets"],
+                    verbs=["create"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=[""],
+                    resource_names=["sky-ssh-keys"],
+                    resources=["secrets"],
+                    verbs=["get", "patch"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=[""],
+                    resources=["serviceaccounts"],
+                    verbs=["create"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=[""],
+                    resources=["services"],
+                    verbs=["create", "delete", "get", "list"],
+                ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=[""],
+                #     resource_names=["sky-ssh-jump-pod"],
+                #     resources=["services"],
+                #     verbs=["get"],
+                # ),
+            ]
+        )
+
+        skypilot_service_account_role_binding = kubernetes.rbac.v1.RoleBinding(
+            "skypilot-service-account-role-binding",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-service-account-role-binding",
+                namespace="default",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            role_ref=kubernetes.rbac.v1.RoleRefArgs(
+                api_group="rbac.authorization.k8s.io",
+                kind="Role",
+                name=skypilot_service_account_role.metadata.name,
+            ),
+            subjects=[
+                kubernetes.rbac.v1.SubjectArgs(
+                    api_group="",
+                    kind="ServiceAccount",
+                    name=skypilot_service_account.metadata.name,
+                )
+            ]
+        )
+
+        skypilot_service_account_cluster_role = kubernetes.rbac.v1.ClusterRole(
+            "skypilot-service-account-cluster-role",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-service-account-cluster-role",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            rules=[
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=["networking.k8s.io"],
+                    resources=["ingressclasses"],
+                    verbs=["list"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=[""],
+                    resources=["nodes"],
+                    verbs=["list"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=["node.k8s.io"],
+                    resources=["runtimeclasses"],
+                    verbs=["list"],
+                ),
+            ]
+        )
+
+        skypilot_service_account_cluster_role_binding = kubernetes.rbac.v1.ClusterRoleBinding(
+            "skypilot-service-account-cluster-role-binding",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-service-account-cluster-role-binding",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            role_ref=kubernetes.rbac.v1.RoleRefArgs(
+                api_group="rbac.authorization.k8s.io",
+                kind="ClusterRole",
+                name=skypilot_service_account_cluster_role.metadata.name,
+            ),
+            subjects=[
+                kubernetes.rbac.v1.SubjectArgs(
+                    kind="ServiceAccount",
+                    name=skypilot_service_account.metadata.name,
+                    namespace="default",
+                )
+            ]
+        )
+
         app_deployment = kubernetes.apps.v1.Deployment("app-deployment",
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
                 labels={
@@ -336,7 +587,7 @@ class Stack2(pulumi.ComponentResource):
                 name="app",
             ),
             opts=ResourceOptions(
-                # ignore_changes=["spec.template.spec.containers[*]"] if get_stack() == "local" else None,
+                ignore_changes=["spec.template.spec.containers[*]"] if get_stack() == "local" else None,
                 parent=self,
                 provider=provider,
             ),
@@ -394,6 +645,7 @@ class Stack2(pulumi.ComponentResource):
                             ],
                         )],
                         restart_policy="Always",
+                        service_account_name=skypilot_service_account.metadata.name,
                         volumes=[
                             kubernetes.core.v1.VolumeArgs(
                                 name="db-data",
