@@ -6,6 +6,7 @@ ARG CADDY_VERSION
 ARG DORA_VERSION
 ARG GID
 # ARG GOENV_VERSION
+ARG KUBECTL_VERSION
 ARG LANG
 ARG NODENV_VERSION
 ARG PYENV_VERSION
@@ -16,6 +17,7 @@ ENV CADDY_VERSION=${CADDY_VERSION:-v2.7.4}
 ENV DORA_VERSION=${DORA_VERSION:-v0.3.2}
 ENV GID=${GID:-1000}
 # ENV GOENV_VERSION=${GOENV_VERSION:-1.20.2}
+ENV KUBECTL_VERSION=${KUBECTL_VERSION:-v1.30.2}
 ENV LANG=${LANG:-en_US.utf8}
 ENV NODENV_VERSION=${NODENV_VERSION:-20.14.0}
 ENV PYENV_VERSION=${PYENV_VERSION:-3.11.9}
@@ -112,6 +114,9 @@ RUN ark get caddy --version ${CADDY_VERSION}
 
 # # Install ${GOENV_VERSION} with goenv
 # RUN eval "$(anyenv init -)" && goenv install ${GOENV_VERSION}
+
+# Install kubectl with arkade
+RUN ark get kubectl --version ${KUBECTL_VERSION}
 
 # Install nodenv with anyenv
 RUN anyenv install nodenv
