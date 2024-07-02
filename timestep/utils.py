@@ -28,8 +28,69 @@ def create_sky_config(overwrite=False):
     if overwrite or not os.path.exists(sky_config_path):
         sky_config = {
             "kubernetes": {
-                "networking": "nodeport",
-                "ports": "ingress",
+                # The networking mode for accessing SSH jump pod (optional).
+                #
+                # This must be either: 'nodeport' or 'portforward'. If not specified,
+                # defaults to 'portforward'.
+                #
+                # nodeport: Exposes the jump pod SSH service on a static port number on each
+                # Node, allowing external access to using <NodeIP>:<NodePort>. Using this
+                # mode requires opening multiple ports on nodes in the Kubernetes cluster.
+                #
+                # portforward: Uses `kubectl port-forward` to create a tunnel and directly
+                # access the jump pod SSH service in the Kubernetes cluster. Does not
+                # require opening ports the cluster nodes and is more secure. 'portforward'
+                # is used as default if 'networking' is not specified.
+                # "networking": "nodeport",
+                "networking": "portforward",
+
+                # The mode to use for opening ports on Kubernetes
+                #
+                # This must be either: 'loadbalancer', 'ingress' or 'podip'.
+                #
+                # loadbalancer: Creates services of type `LoadBalancer` to expose ports.
+                # See https://skypilot.readthedocs.io/en/latest/reference/kubernetes/kubernetes-setup.html#loadbalancer-service.
+                # This mode is supported out of the box on most cloud managed Kubernetes
+                # environments (e.g., GKE, EKS).
+                #
+                # ingress: Creates an ingress and a ClusterIP service for each port opened.
+                # Requires an Nginx ingress controller to be configured on the Kubernetes cluster.
+                # Refer to https://skypilot.readthedocs.io/en/latest/reference/kubernetes/kubernetes-setup.html#nginx-ingress
+                # for details on deploying the NGINX ingress controller.
+                #
+                # podip: Directly returns the IP address of the pod. This mode does not
+                # create any Kubernetes services and is a lightweight way to expose ports.
+                # NOTE - ports exposed with podip mode are not accessible from outside the
+                # Kubernetes cluster. This mode is useful for hosting internal services
+                # that need to be accessed only by other pods in the same cluster.
+                #
+                # Default: loadbalancer
+                # "ports": "ingress",
+                # "ports": "loadbalancer",
+                "ports": "podip",
+
+                # Identity to use for all Kubernetes pods (optional).
+                #
+                # LOCAL_CREDENTIALS: The user's local ~/.kube/config will be uploaded to the
+                # Kubernetes pods created by SkyPilot. They are used for authenticating with
+                # the Kubernetes API server and launching new pods (e.g., for
+                # spot/serve controllers).
+                #
+                # SERVICE_ACCOUNT: Local ~/.kube/config is not uploaded to Kubernetes pods.
+                # SkyPilot will auto-create and reuse a service account with necessary roles
+                # in the user's namespace.
+                #
+                # <string>: The name of a service account to use for all Kubernetes pods.
+                # This service account must exist in the user's namespace and have all
+                # necessary permissions. Refer to https://skypilot.readthedocs.io/en/latest/cloud-setup/cloud-permissions/kubernetes.html
+                # for details on the roles required by the service account.
+                #
+                # Using SERVICE_ACCOUNT or a custom service account only affects Kubernetes
+                # instances. Local ~/.kube/config will still be uploaded to non-Kubernetes
+                # instances (e.g., a serve controller on GCP or AWS may need to provision
+                # Kubernetes resources).
+                #
+                # Default: 'SERVICE_ACCOUNT'.
                 "remote_identity": "LOCAL_CREDENTIALS",
             }
         }
@@ -138,7 +199,7 @@ def load_kubeconfig(overwrite=False):
         if not os.path.exists(kubeconfig_path):
             raise RuntimeError(f"{kubeconfig_path} file has not been generated.")
 
-async def serve():
+async def serve(cluster_name: str = "sky-serve-cluster"):
     logger.debug("debug message")
     logger.info("info message")
     logger.warning("warn message")
@@ -225,6 +286,8 @@ async def serve():
         ray_serve_task = (
             sky.Task(
                 run="serve run serve:app --host 0.0.0.0",
+                # Specifying `--host` and `--port` to `serve run` is deprecated and will be removed in a future version. To specify custom HTTP options, use the `serve start` command.
+                # run="serve run serve:app",
                 setup="pip install -r requirements.txt",
                 workdir=f"{os.getcwd()}/timestep/services/serve",
             )
@@ -250,7 +313,7 @@ async def serve():
 
         ray_serve_job_id, ray_serve_handle = sky.launch(
             ray_serve_task,
-            cluster_name="sky-serve-cluster",
+            cluster_name=cluster_name,
             detach_run=True,
             detach_setup=True,
         )

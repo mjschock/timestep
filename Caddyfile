@@ -5,9 +5,15 @@ http://www.{$DOMAIN}:80 {
 http://{$DOMAIN}:80 {
 	encode gzip
 
-	@backend_routes path /_event/* /docs /items/* /openapi.json /ping /_upload /_upload/* /redoc
+	@backend_routes path /_event/* /docs /items/* /openapi.json /ping /_upload /_upload/* /redoc /sky/*
 	handle @backend_routes {
 		reverse_proxy app:8000
+	}
+
+	@skypilot_routes path /skypilot/*
+	handle @skypilot_routes {
+		# reverse_proxy sky-serve-cluster-8eee--skypilot-lb:8000
+		reverse_proxy sky-serve-cluster-8eee-head:8265
 	}
 
 	@local_domain expression {host}.endsWith(".local")

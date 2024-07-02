@@ -217,6 +217,11 @@ class Stack2(pulumi.ComponentResource):
             opts=ResourceOptions(parent=self),
         )
 
+        print('type(infra): ', type(infra))
+        print('type(stack1): ', type(stack1))
+
+        infra.name.apply(lambda v: print(f"prefix{v}suffix"))
+
         if get_stack() == "local":
             # provider = Provider('k8s-yaml-rendered',
             #     opts=ResourceOptions(parent=self),
@@ -234,25 +239,7 @@ class Stack2(pulumi.ComponentResource):
                 opts=ResourceOptions(parent=self),
             )
 
-        caddy_data = kubernetes.core.v1.PersistentVolumeClaim("caddy-data",
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                labels={
-                    "io.kompose.service": "caddy-data",
-                },
-                name="caddy-data",
-            ),
-            opts=ResourceOptions(
-                parent=self,
-                provider=provider,
-            ),
-            spec=kubernetes.core.v1.PersistentVolumeClaimSpecArgs(
-                access_modes=["ReadWriteOnce"],
-                resources=kubernetes.core.v1.VolumeResourceRequirementsArgs(
-                    requests={
-                        "storage": "100Mi",
-                    },
-                ),
-            ))
+        return
 
         caddy_config = kubernetes.core.v1.PersistentVolumeClaim("caddy-config",
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
@@ -274,12 +261,80 @@ class Stack2(pulumi.ComponentResource):
                 ),
             ))
 
+        caddy_data = kubernetes.core.v1.PersistentVolumeClaim("caddy-data",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "io.kompose.service": "caddy-data",
+                },
+                name="caddy-data",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            spec=kubernetes.core.v1.PersistentVolumeClaimSpecArgs(
+                access_modes=["ReadWriteOnce"],
+                resources=kubernetes.core.v1.VolumeResourceRequirementsArgs(
+                    requests={
+                        "storage": "100Mi",
+                    },
+                ),
+            ))
+
+        caddy_global_options = kubernetes.core.v1.ConfigMap("caddy-global-options",
+            data={
+                "acmeCA": "internal",
+            },
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name="caddy-global-options",
+                namespace="caddy-system",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+        )
+
         db_data = kubernetes.core.v1.PersistentVolumeClaim("db-data",
             metadata=kubernetes.meta.v1.ObjectMetaArgs(
                 labels={
                     "io.kompose.service": "db-data",
                 },
                 name="db-data",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            spec=kubernetes.core.v1.PersistentVolumeClaimSpecArgs(
+                access_modes=["ReadWriteOnce"],
+                resources=kubernetes.core.v1.VolumeResourceRequirementsArgs(
+                    requests={
+                        "storage": "100Mi",
+                    },
+                ),
+            ))
+
+        sky_data = kubernetes.core.v1.PersistentVolumeClaim("sky-data",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name="sky-data",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            spec=kubernetes.core.v1.PersistentVolumeClaimSpecArgs(
+                access_modes=["ReadWriteOnce"],
+                resources=kubernetes.core.v1.VolumeResourceRequirementsArgs(
+                    requests={
+                        "storage": "100Mi",
+                    },
+                ),
+            ))
+
+        ssh_data = kubernetes.core.v1.PersistentVolumeClaim("ssh-data",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                name="ssh-data",
             ),
             opts=ResourceOptions(
                 parent=self,
@@ -313,20 +368,6 @@ class Stack2(pulumi.ComponentResource):
                     },
                 ),
             ))
-
-        caddy_global_options = kubernetes.core.v1.ConfigMap("caddy-global-options",
-            data={
-                "acmeCA": "internal",
-            },
-            metadata=kubernetes.meta.v1.ObjectMetaArgs(
-                name="caddy-global-options",
-                namespace="caddy-system",
-            ),
-            opts=ResourceOptions(
-                parent=self,
-                provider=provider,
-            ),
-        )
 
         # # =========== GPU support ===========
         # helm repo add nvidia https://helm.ngc.nvidia.com/nvidia && helm repo update
@@ -434,64 +475,63 @@ class Stack2(pulumi.ComponentResource):
                 provider=provider,
             ),
             rules=[
-                kubernetes.rbac.v1.PolicyRuleArgs(
-                    api_groups=[""],
-                    resources=["pods"],
-                    verbs=["create", "delete", "get", "list", "patch"],
-                ),
-                kubernetes.rbac.v1.PolicyRuleArgs(
-                    api_groups=[""],
-                    resources=["pods/exec"],
-                    verbs=["create", "delete", "get", "list"],
-                ),
-                kubernetes.rbac.v1.PolicyRuleArgs(
-                    api_groups=[""],
-                    resources=["pods/portforward"],
-                    verbs=["create"],
-                ),
-                kubernetes.rbac.v1.PolicyRuleArgs(
-                    api_groups=[""],
-                    resources=["pods/status"],
-                    verbs=["create", "delete", "get", "list"],
-                ),
-                kubernetes.rbac.v1.PolicyRuleArgs(
-                    api_groups=["rbac.authorization.k8s.io"],
-                    resources=["rolebindings"],
-                    verbs=["create"],
-                ),
-                kubernetes.rbac.v1.PolicyRuleArgs(
-                    api_groups=["rbac.authorization.k8s.io"],
-                    # resource_names=["sky-ssh-jump-role"],
-                    resources=["roles"],
-                    verbs=["create"],
-                ),
-                kubernetes.rbac.v1.PolicyRuleArgs(
-                    api_groups=[""],
-                    resources=["secrets"],
-                    verbs=["create"],
-                ),
-                kubernetes.rbac.v1.PolicyRuleArgs(
-                    api_groups=[""],
-                    resource_names=["sky-ssh-keys"],
-                    resources=["secrets"],
-                    verbs=["get", "patch"],
-                ),
-                kubernetes.rbac.v1.PolicyRuleArgs(
-                    api_groups=[""],
-                    resources=["serviceaccounts"],
-                    verbs=["create"],
-                ),
-                kubernetes.rbac.v1.PolicyRuleArgs(
-                    api_groups=[""],
-                    resources=["services"],
-                    verbs=["create", "delete", "get", "list"],
-                ),
                 # kubernetes.rbac.v1.PolicyRuleArgs(
                 #     api_groups=[""],
-                #     resource_names=["sky-ssh-jump-pod"],
-                #     resources=["services"],
-                #     verbs=["get"],
+                #     resources=["pods"],
+                #     verbs=["create", "delete", "get", "list", "patch"],
                 # ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=[""],
+                #     resources=["pods/exec"],
+                #     verbs=["create", "delete", "get", "list"],
+                # ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=[""],
+                #     resources=["pods/portforward"],
+                #     verbs=["create"],
+                # ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=[""],
+                #     resources=["pods/status"],
+                #     verbs=["create", "delete", "get", "list"],
+                # ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=["rbac.authorization.k8s.io"],
+                #     resources=["rolebindings"],
+                #     verbs=["create"],
+                # ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=["rbac.authorization.k8s.io"],
+                #     # resource_names=["sky-ssh-jump-role"],
+                #     resources=["roles"],
+                #     verbs=["create", "list", "patch"],
+                # ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=[""],
+                #     resources=["secrets"],
+                #     verbs=["create"],
+                # ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=[""],
+                #     resource_names=["sky-ssh-keys"],
+                #     resources=["secrets"],
+                #     verbs=["get", "patch"],
+                # ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=[""],
+                #     resources=["serviceaccounts"],
+                #     verbs=["create", "list"],
+                # ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=[""],
+                #     resources=["services"],
+                #     verbs=["create", "delete", "get", "list"],
+                # ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=["*"],
+                    resources=["*"],
+                    verbs=["*"],
+                ),
             ]
         )
 
@@ -529,6 +569,7 @@ class Stack2(pulumi.ComponentResource):
                     "parent": "skypilot",
                 },
                 name="skypilot-service-account-cluster-role",
+                namespace="default",
             ),
             opts=ResourceOptions(
                 parent=self,
@@ -536,19 +577,34 @@ class Stack2(pulumi.ComponentResource):
             ),
             rules=[
                 kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["clusterrolebindings"],
+                    verbs=["create", "delete", "get", "list", "patch", "update", "watch"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=["rbac.authorization.k8s.io"],
+                    resources=["clusterroles"],
+                    verbs=["create", "delete", "get", "list", "patch", "update", "watch"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
                     api_groups=["networking.k8s.io"],
                     resources=["ingressclasses"],
-                    verbs=["list"],
+                    verbs=["get", "list", "watch"],
+                ),
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=[""],
+                    resources=["namespaces"],
+                    verbs=["create", "get", "list", "watch"],
                 ),
                 kubernetes.rbac.v1.PolicyRuleArgs(
                     api_groups=[""],
                     resources=["nodes"],
-                    verbs=["list"],
+                    verbs=["get", "list", "watch"],
                 ),
                 kubernetes.rbac.v1.PolicyRuleArgs(
                     api_groups=["node.k8s.io"],
                     resources=["runtimeclasses"],
-                    verbs=["list"],
+                    verbs=["get", "list", "watch"],
                 ),
             ]
         )
@@ -560,6 +616,7 @@ class Stack2(pulumi.ComponentResource):
                     "parent": "skypilot",
                 },
                 name="skypilot-service-account-cluster-role-binding",
+                namespace="default",
             ),
             opts=ResourceOptions(
                 parent=self,
@@ -575,6 +632,75 @@ class Stack2(pulumi.ComponentResource):
                     kind="ServiceAccount",
                     name=skypilot_service_account.metadata.name,
                     namespace="default",
+                )
+            ]
+        )
+
+        skypilot_system_namespace = kubernetes.core.v1.Namespace(
+            "skypilot-system-namespace",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-system",
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+        )
+
+        skypilot_system_service_account_role = kubernetes.rbac.v1.Role(
+            "skypilot-system-service-account-role",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-system-service-account-role",
+                namespace=skypilot_system_namespace.metadata.name,
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            rules=[
+                kubernetes.rbac.v1.PolicyRuleArgs(
+                    api_groups=["*"],
+                    resources=["*"],
+                    verbs=["*"],
+                ),
+                # kubernetes.rbac.v1.PolicyRuleArgs(
+                #     api_groups=["rbac.authorization.k8s.io"],
+                #     resources=["roles"],
+                #     verbs=["list"],
+                # ),
+            ]
+        )
+
+        skypilot_system_service_account_role_binding = kubernetes.rbac.v1.RoleBinding(
+            "skypilot-system-service-account-role-binding",
+            metadata=kubernetes.meta.v1.ObjectMetaArgs(
+                labels={
+                    "parent": "skypilot",
+                },
+                name="skypilot-system-service-account-role-binding",
+                namespace=skypilot_system_namespace.metadata.name,
+            ),
+            opts=ResourceOptions(
+                parent=self,
+                provider=provider,
+            ),
+            role_ref=kubernetes.rbac.v1.RoleRefArgs(
+                api_group="rbac.authorization.k8s.io",
+                kind="Role",
+                name=skypilot_system_service_account_role.metadata.name,
+            ),
+            subjects=[
+                kubernetes.rbac.v1.SubjectArgs(
+                    api_group="",
+                    kind="ServiceAccount",
+                    name=skypilot_service_account.metadata.name,
+                    namespace=skypilot_service_account.metadata.namespace,
                 )
             ]
         )
@@ -621,6 +747,7 @@ class Stack2(pulumi.ComponentResource):
                                 ),
                             ],
                             image="mschock/reflex-app",
+                            # image="mschock/timestep",
                             name="app",
                             ports=([
                                 kubernetes.core.v1.ContainerPortArgs(
@@ -639,6 +766,14 @@ class Stack2(pulumi.ComponentResource):
                                     name="db-data",
                                 ),
                                 kubernetes.core.v1.VolumeMountArgs(
+                                    mount_path="/home/ubuntu/.sky",
+                                    name="sky-data",
+                                ),
+                                kubernetes.core.v1.VolumeMountArgs(
+                                    mount_path="/home/ubuntu/.ssh",
+                                    name="ssh-data",
+                                ),
+                                kubernetes.core.v1.VolumeMountArgs(
                                     mount_path="/home/ubuntu/app/uploaded_files",
                                     name="upload-data",
                                 ),
@@ -651,6 +786,18 @@ class Stack2(pulumi.ComponentResource):
                                 name="db-data",
                                 persistent_volume_claim=kubernetes.core.v1.PersistentVolumeClaimVolumeSourceArgs(
                                     claim_name="db-data",
+                                ),
+                            ),
+                            kubernetes.core.v1.VolumeArgs(
+                                name="sky-data",
+                                persistent_volume_claim=kubernetes.core.v1.PersistentVolumeClaimVolumeSourceArgs(
+                                    claim_name="sky-data",
+                                ),
+                            ),
+                            kubernetes.core.v1.VolumeArgs(
+                                name="ssh-data",
+                                persistent_volume_claim=kubernetes.core.v1.PersistentVolumeClaimVolumeSourceArgs(
+                                    claim_name="ssh-data",
                                 ),
                             ),
                             kubernetes.core.v1.VolumeArgs(
@@ -729,6 +876,7 @@ class Stack2(pulumi.ComponentResource):
                                 value=config.get('primary_domain_name'),
                             )],
                             image="mschock/webserver",
+                            # image="mschock/timestep",
                             name="webserver",
                             ports=[
                                 kubernetes.core.v1.ContainerPortArgs(
