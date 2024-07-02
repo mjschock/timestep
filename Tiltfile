@@ -1,9 +1,22 @@
 version_settings(constraint='>=0.22.2')
 
+# local_resource(
+#     'supabase',
+#     cmd='npx supabase start && npx supabase status',
+# )
+
+# local_resource(
+#     'mkcert',
+#     cmd='mkcert -install && mkcert -cert-file tls.crt -key-file tls.key timestep.local *.timestep.local',
+# )
+
 local_resource(
     'pulumi',
     cmd='pulumi stack select local && pulumi up --yes',
-    deps=['__main__.py'],
+    deps=[
+        '__main__.py',
+        'Pulumi.local.yaml',
+    ],
 )
 
 docker_build(
@@ -64,33 +77,3 @@ k8s_yaml(
         'kubectl --kubeconfig kubeconfig get deployment/webserver -o yaml'
     )
 )
-
-# k8s_custom_deploy(
-#   "app",
-#   apply_cmd="""
-#     kubectl --kubeconfig kubeconfig -v=0 set image deployment/app *=$TILT_IMAGE_0 > /dev/null && \
-#       kubectl --kubeconfig kubeconfig get deployment/app -o yaml
-#   """,
-#   delete_cmd="echo App managed outside of Tilt",
-# #   delete_cmd="""
-# #     kubectl --kubeconfig kubeconfig -v=0 set image deployment/app *=mschock/reflex-app > /dev/null && \
-# #       kubectl --kubeconfig kubeconfig get deployment/app -o yaml
-# #   """,
-#   deps=[
-#     "Dockerfile"
-#   ],
-#   image_deps=["mschock/reflex-app"]
-# )
-
-# k8s_custom_deploy(
-#   "webserver",
-#   apply_cmd="""
-#     kubectl --kubeconfig kubeconfig -v=0 set image deployment/webserver *=$TILT_IMAGE_0 > /dev/null && \
-#       kubectl --kubeconfig kubeconfig get deployment/webserver -o yaml
-#   """,
-#   delete_cmd="echo Webserver managed outside of Tilt",
-#   deps=[
-#     "Dockerfile"
-#   ],
-#   image_deps=["mschock/webserver"]
-# )

@@ -1,5 +1,6 @@
 Caddy.Dockerfile
 cloud-config.yaml
+clusters
 compose.yaml
 deploy_k3s.sh
 .env

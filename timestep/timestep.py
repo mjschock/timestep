@@ -1,10 +1,12 @@
 import logging
 
+from fastapi import FastAPI
 import reflex as rx
 from reflex.constants import LogLevel
 
 from timestep.pages import *
 from timestep.utils import create_sky_config, load_kubeconfig, serve, train
+from timestep.routes.sky_router import add_api_routes as add_sky_api_routes
 from rxconfig import config
 
 log_level: LogLevel = config.get_value("loglevel").name
@@ -71,10 +73,10 @@ logger.warning('warn message')
 logger.error('error message')
 logger.critical('critical message')
 
-loggers = ['fastapi', 'uvicorn', 'reflex']
+# loggers = ['fastapi', 'uvicorn', 'reflex']
 
-for _logger in loggers:
-    print(f'{_logger} level: {logging.getLogger(_logger).getEffectiveLevel()}')
+# for _logger in loggers:
+#     print(f'{_logger} level: {logging.getLogger(_logger).getEffectiveLevel()}')
 
 class State(rx.State):
     """Define empty state to allow access to rx.State.router."""
@@ -83,23 +85,15 @@ class State(rx.State):
 # Create the app.
 app = rx.App()
 
-# app = add_api_routes(app)
+app = add_sky_api_routes(app)
 
-async def api_test(item_id: int):
-    # print(f"=== api_test ===")
-    # logger.debug("debug message")
-    # logger.info("info message")
-    # logger.warning("warn message")
-    # logger.error("error message")
-    # logger.critical("critical message")
-
+async def lifespan(app: FastAPI):
+    logger.info('=== lifespace ===')
     create_sky_config(overwrite=True)
 
-    ray_serve_job_id = await serve()
-
-    return {
-        "my_result": item_id,
-        "ray_serve_job_id": ray_serve_job_id,
-    }
-
-app.api.add_api_route("/items/{item_id}", api_test)
+app.register_lifespan_task(
+    task=lifespan,
+    # task_kwargs={
+    #     "logger": logger,
+    # }
+)
