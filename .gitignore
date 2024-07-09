@@ -1,13 +1,6 @@
-cloud-config.yaml
-*.db
+dist
 .env
-.etchosts
-k8s
-kubeconfig
-__pycache__/
-*.py[cod]
-Tiltfile
-tls.crt
-tls.key
+*.log
+models
+__pycache__
 .venv
-.web
