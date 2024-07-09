@@ -12,9 +12,9 @@ default_llamafile_url = f"https://huggingface.co/Mozilla/TinyLlama-1.1B-Chat-v1.
 
 @typer_app.command()
 def load(
-    # llamafile_path=f"{os.getcwd()}/models/{default_llamafile_filename}",
     llamafile_path=f"./models/{default_llamafile_filename}",
     host='0.0.0.0',
+    public_path='/zip/llama.cpp/server/public',
     port=8080,
 ):
     """
@@ -31,7 +31,7 @@ def load(
     process = start_shell_script(
         llamafile_path,
         '--host', host,
-        '--path', '/zip/llama.cpp/server/public',
+        '--path', public_path,
         '--port', f'{port}',
     )
 

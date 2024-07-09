@@ -7,13 +7,14 @@ authors = ["Michael James Schock <m@mjschock.com>"]
 description = ""
 license = "MIT"
 name = "timestep"
-packages = [{from = "src", include = "timestep"}]
 readme = "README.md"
-version = "10.0.23"
+version = "10.0.24"
 
 [tool.poetry.dependencies]
 openai = "^1.35.10"
 python = "^3.10"
+reflex = "^0.5.6"
+reflex-chat = "^0.0.1"
 typer = {extras = ["all"], version = "^0.12.3"}
 
 [tool.poetry.group.dev.dependencies]
