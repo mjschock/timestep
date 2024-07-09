@@ -14,3 +14,6 @@ up-with-gpus:
 	# TODO: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#rootless-mode
 	sudo docker build -t timestep:latest .
 	sudo docker run -it --rm --gpus all -p 8080:8080 --name timestep timestep:latest
+
+serve:
+	poetry run python3 -m llama_cpp.server --config_file config.json
