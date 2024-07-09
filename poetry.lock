@@ -1877,23 +1877,6 @@ wrapt = [
 ]
 
 [[package]]
-name = "reflex-chat"
-version = "0.0.1"
-description = "Reflex custom component chat"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "reflex_chat-0.0.1-py3-none-any.whl", hash = "sha256:ef86f60567be8a552d2fd1f60d5d5863935d07f4a512c59ae55c5acb8e048437"},
-    {file = "reflex_chat-0.0.1.tar.gz", hash = "sha256:58b01ee2c45327094ad3976d4caa9619b0d5a4565da58a3cfb06fec5de9f01f1"},
-]
-
-[package.dependencies]
-reflex = ">=0.4.7"
-
-[package.extras]
-dev = ["build", "twine"]
-
-[[package]]
 name = "reflex-hosting-cli"
 version = "0.1.13"
 description = "Reflex Hosting CLI"
@@ -2774,4 +2757,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "875f4f36bea2a92f653c69628b8ac3613f53f425bbd0edf0547d0c1ded7f07a7"
+content-hash = "4ff9ad16390ad46a3e9a028993a22bfa14457629b0f2461ebf5314dcb97f0b86"
