@@ -8,7 +8,7 @@ description = ""
 license = "MIT"
 name = "timestep"
 readme = "README.md"
-version = "10.0.26"
+version = "10.0.27"
 
 [tool.poetry.dependencies]
 huggingface-hub = "^0.23.4"
