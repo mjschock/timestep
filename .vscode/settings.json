@@ -6,14 +6,18 @@
     //     "debug.testOverrideProxyUrl": "http://localhost:8080/infill",
     //     "debug.overrideProxyUrl": "http://localhost:8080/infill"
     // },
+    "github.copilot.advanced": {
+        "debug.testOverrideProxyUrl": "http://localhost:8000",
+        "debug.overrideProxyUrl": "http://localhost:8000"
+    },
     // "github.copilot.advanced": {
     //     "debug.testOverrideProxyUrl": "http://localhost:8000?api_key=sk-no-key-required&model_alias=replit-code-v1_5-3b.Q4_0",
     //     "debug.overrideProxyUrl": "http://localhost:8000?api_key=sk-no-key-required&model_alias=replit-code-v1_5-3b.Q4_0"
     // },
-    "github.copilot.advanced": {
-        "debug.testOverrideProxyUrl": "http://localhost:8000?api_key=sk-no-key-required&model_alias=moondream2",
-        "debug.overrideProxyUrl": "http://localhost:8000?api_key=sk-no-key-required&model_alias=moondream2"
-    },
+    // "github.copilot.advanced": {
+    //     "debug.testOverrideProxyUrl": "http://localhost:8000?api_key=sk-no-key-required&model_alias=moondream2",
+    //     "debug.overrideProxyUrl": "http://localhost:8000?api_key=sk-no-key-required&model_alias=moondream2"
+    // },
     // "github.copilot.advanced": {
     //     "debug.testOverrideProxyUrl": "http://localhost:8000?api_key=sk-no-key-required&model_alias=nanoLLaVA",
     //     "debug.overrideProxyUrl": "http://localhost:8000?api_key=sk-no-key-required&model_alias=nanoLLaVA"

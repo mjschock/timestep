@@ -3,7 +3,6 @@ Dockerfile
 .env
 .git
 *.log
-Makefile
 models
 __pycache__/*
 uploaded_files

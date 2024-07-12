@@ -1,0 +1,6 @@
+{
+  "allowUnicodeIdentifiers": true,
+  "ensureUniqueParams": false,
+  "flattenSpec": false,
+  "sortParamsByRequiredFlag": false
+}
