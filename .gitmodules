@@ -1,0 +1,15 @@
+[submodule "3rdparty/llama.cpp"]
+	path = 3rdparty/llama.cpp
+	url = https://github.com/ggerganov/llama.cpp.git
+[submodule "3rdparty/llamafile"]
+	path = 3rdparty/llamafile
+	url = https://github.com/Mozilla-Ocho/llamafile.git
+[submodule "3rdparty/llama-cpp-python"]
+	path = 3rdparty/llama-cpp-python
+	url = https://github.com/abetlen/llama-cpp-python.git
+[submodule "3rdparty/openai-openapi"]
+	path = 3rdparty/openai-openapi
+	url = https://github.com/openai/openai-openapi.git
+[submodule "3rdparty/openai-cookbook"]
+	path = 3rdparty/openai-cookbook
+	url = https://github.com/openai/openai-cookbook.git

@@ -1,0 +1,62 @@
+# CONFIG OPTIONS
+
+#         allowUnicodeIdentifiers
+#             boolean, toggles whether unicode identifiers are allowed in names or not, default is false (Default: false)
+
+#         controllerPackage
+#             controller package (Default: controllers)
+
+#         defaultController
+#             default controller (Default: default_controller)
+
+#         disallowAdditionalPropertiesIfNotPresent
+#             If false, the 'additionalProperties' implementation (set to true by default) is compliant with the OAS and JSON schema specifications. If true (default), keep the old (incorrect) behaviour that 'additionalProperties' is set to false by default. (Default: true)
+#                 false - The 'additionalProperties' implementation is compliant with the OAS and JSON schema specifications.
+#                 true - Keep the old (incorrect) behaviour that 'additionalProperties' is set to false by default.
+
+#         ensureUniqueParams
+#             Whether to ensure parameter names are unique in an operation (rename parameters that are not). (Default: true)
+
+#         enumUnknownDefaultCase
+#             If the server adds new enum cases, that are unknown by an old spec/client, the client will fail to parse the network response.With this option enabled, each enum will have a new case, 'unknown_default_open_api', so that when the server sends an enum case that is not known by the client/spec, they can safely fallback to this case. (Default: false)
+#                 false - No changes to the enum's are made, this is the default option.
+#                 true - With this option enabled, each enum will have a new case, 'unknown_default_open_api', so that when the enum case sent by the server is not known by the client/spec, can safely be decoded to this case.
+
+#         featureCORS
+#             use flask-cors for handling CORS requests (Default: false)
+
+#         legacyDiscriminatorBehavior
+#             Set to false for generators with better support for discriminators. (Python, Java, Go, PowerShell, C# have this enabled by default). (Default: true)
+#                 true - The mapping in the discriminator includes descendent schemas that allOf inherit from self and the discriminator mapping schemas in the OAS document.
+#                 false - The mapping in the discriminator includes any descendent schemas that allOf inherit from self, any oneOf schemas, any anyOf schemas, any x-discriminator-values, and the discriminator mapping schemas in the OAS document AND Codegen validates that oneOf and anyOf schemas contain the required discriminator and throws an error if the discriminator is missing.
+
+#         packageName
+#             python package name (convention: snake_case). (Default: openapi_server)
+packageName: timestep.apis.openai
+
+#         packageVersion
+#             python package version. (Default: 1.0.0)
+
+#         prependFormOrBodyParameters
+#             Add form or body parameters to the beginning of the parameter list. (Default: false)
+
+#         pythonSrcRoot
+#             put python sources in this subdirectory of output folder (defaults to "" for). Use this for src/ layout. (Default: )
+
+#         serverPort
+#             TCP port to listen to in app.run (Default: 8080)
+
+#         sortModelPropertiesByRequiredFlag
+#             Sort model properties to place required parameters before optional parameters. (Default: true)
+
+#         sortParamsByRequiredFlag
+#             Sort method arguments to place required parameters before optional parameters. (Default: true)
+
+#         testsUsePythonSrcRoot
+#             generates test under the pythonSrcRoot folder. (Default: false)
+
+#         useNose
+#             use the nose test framework (Default: false)
+
+#         usePythonSrcRootInImports
+#             include pythonSrcRoot in import namespaces. (Default: false)
