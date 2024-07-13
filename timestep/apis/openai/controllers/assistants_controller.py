@@ -8,6 +8,8 @@ from typing import Union
 from openai.types.beta.assistant import Assistant
 from openai.types.beta.thread import ToolResourcesCodeInterpreter, ToolResourcesFileSearch, Thread
 from openai.types.beta.threads.message import Message, MessageContent
+from openai.types.beta.threads.run import Run, RunStatus
+from openai.types.beta.threads.runs import RunStep
 from openai.types.beta.threads.text import Text
 from openai.types.beta.threads.text_content_block import TextContentBlock
 
@@ -159,8 +161,7 @@ def create_message(body, token_info, thread_id, user):
     return message.model_dump(mode="json")
 
 
-# def create_run(assistant_id, token_info, user, thread_id=None):  # noqa: E501
-def create_run(*args, **kwargs):
+def create_run(body, token_info, user, thread_id):
     """Create a run.
 
      # noqa: E501
@@ -176,11 +177,34 @@ def create_run(*args, **kwargs):
     #     create_run_request = CreateRunRequest.from_dict(connexion.request.get_json())  # noqa: E501
     # return 'do some magic!'
 
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    # print('args: ', args)
+    # print('kwargs: ', kwargs)
 
     # print('assistant_id, token_info, thread_id, user: ', assistant_id, token_info, thread_id, user)
 
+    print('body: ', body)
+
+    assistant_id = body.get("assistant_id")
+
+    assistant: Assistant = assistants_db.get(assistant_id)
+    thread: Thread = threads_db.get(thread_id)
+
+    run = Run(
+        id=str(uuid.uuid4()),
+        assistant_id=assistant.id,
+        created_at=int(time.time()),
+        instructions=assistant.instructions,
+        model=assistant.model,
+        object="thread.run",
+        parallel_tool_calls=False,
+        status="queued",
+        thread_id=thread.id,
+        tools=assistant.tools,
+    )
+
+    runs_db[run.id] = run
+
+    return run.model_dump(mode="json")
 
 
 def create_thread(body, token_info, user):  # noqa: E501
@@ -293,7 +317,7 @@ def get_message(thread_id, message_id):  # noqa: E501
     return 'do some magic!'
 
 
-def get_run(thread_id, run_id):  # noqa: E501
+def get_run(run_id, thread_id, token_info, user):
     """Retrieves a run.
 
      # noqa: E501
@@ -305,7 +329,12 @@ def get_run(thread_id, run_id):  # noqa: E501
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
     """
-    return 'do some magic!'
+
+    run: Run = runs_db[run_id]
+
+    assert run.thread_id == thread_id, f"{run.thread_id} != {thread_id}"
+
+    return run.model_dump(mode="json")
 
 
 def get_run_step(thread_id, run_id, step_id):  # noqa: E501

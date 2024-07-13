@@ -3,6 +3,6 @@
         "debug.overrideProxyUrl": "http://localhost:8000",
     },
     "github.copilot.enable": {
-        "*": true,
+        "*": false,
     },
 }
