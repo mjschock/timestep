@@ -1,4 +1,5 @@
 import time
+import uuid
 import connexion
 from typing import Dict, Literal
 from typing import Tuple
@@ -11,6 +12,8 @@ from timestep.apis.openai.models.delete_file_response import DeleteFileResponse 
 from timestep.apis.openai.models.list_files_response import ListFilesResponse  # noqa: E501
 from timestep.apis.openai.models.open_ai_file import OpenAIFile  # noqa: E501
 from timestep.apis.openai import util
+
+file_objects_db = {}
 
 # def create_file(file, purpose):  # noqa: E501
 # def create_file(file):
@@ -41,15 +44,19 @@ def create_file(body, file: UploadFile):
     if purpose == "fine-tune":
         print('TODO: create file for fine-tuning')
 
-        return FileObject(
-            id=file.filename,
+        file_object = FileObject(
+            id=str(uuid.uuid4()),
             bytes=file.size,
             created_at=int(time.time()),
             filename=file.filename,
             object="file",
             purpose="fine-tune",
             status="uploaded",
-        ).model_dump(mode="json")
+        )
+
+        file_objects_db[file_object.id] = file_object
+
+        return file_object.model_dump(mode="json")
 
     else:
         raise NotImplementedError
