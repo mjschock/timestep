@@ -74,6 +74,7 @@ chat-with-lora:
 
 run:
 	uvicorn timestep.run:app --reload
+	# uvicorn timestep.run:app
 
 run-prod:
 	gunicorn -k uvicorn.workers.UvicornWorker timestep.run:app
@@ -86,27 +87,27 @@ serve:
 		--model_alias TinyLLama-v0.1-5M-F16 \
 		--n_ctx 16192
 
-serve-with-embeddings:
-	timestep_serve \
-		--embedding true \
-		--model 3rdparty/llamafile/models/TinyLLama-v0.1-5M-F16.gguf \
-		--model_alias TinyLLama-v0.1-5M-F16 \
-		--n_ctx 16192
+# serve-with-embeddings:
+# 	timestep_serve \
+# 		--embedding true \
+# 		--model 3rdparty/llamafile/models/TinyLLama-v0.1-5M-F16.gguf \
+# 		--model_alias TinyLLama-v0.1-5M-F16 \
+# 		--n_ctx 16192
 
-serve-with-lora:
-	timestep_serve \
-		--lora workspace/lora-TinyLLama-v0.1-5M-F16-shakespeare-LATEST.bin \
-		--model 3rdparty/llamafile/models/TinyLLama-v0.1-5M-F16.gguf \
-		--model_alias TinyLLama-v0.1-5M-F16 \
-		--n_ctx 16192
+# serve-with-lora:
+# 	timestep_serve \
+# 		--lora workspace/lora-TinyLLama-v0.1-5M-F16-shakespeare-LATEST.bin \
+# 		--model 3rdparty/llamafile/models/TinyLLama-v0.1-5M-F16.gguf \
+# 		--model_alias TinyLLama-v0.1-5M-F16 \
+# 		--n_ctx 16192
 
-train:
-	./3rdparty/llama-cpp-python/vendor/llama.cpp/llama-finetune \
-		--checkpoint-in workspace/chk-lora-TinyLLama-v0.1-5M-F16-shakespeare-LATEST.gguf \
-		--checkpoint-out workspace/chk-lora-TinyLLama-v0.1-5M-F16-shakespeare-ITERATION.gguf \
-		--lora-out workspace/lora-TinyLLama-v0.1-5M-F16-shakespeare-ITERATION.bin \
-		--model-base 3rdparty/llamafile/models/TinyLLama-v0.1-5M-F16.gguf \
-		--save-every 10 \
-		--threads 6 --adam-iter 30 --batch 4 --ctx 64 \
-		--train-data data/shakespeare.txt \
-		--use-checkpointing
+# train:
+# 	./3rdparty/llama-cpp-python/vendor/llama.cpp/llama-finetune \
+# 		--checkpoint-in workspace/chk-lora-TinyLLama-v0.1-5M-F16-shakespeare-LATEST.gguf \
+# 		--checkpoint-out workspace/chk-lora-TinyLLama-v0.1-5M-F16-shakespeare-ITERATION.gguf \
+# 		--lora-out workspace/lora-TinyLLama-v0.1-5M-F16-shakespeare-ITERATION.bin \
+# 		--model-base 3rdparty/llamafile/models/TinyLLama-v0.1-5M-F16.gguf \
+# 		--save-every 10 \
+# 		--threads 6 --adam-iter 30 --batch 4 --ctx 64 \
+# 		--train-data data/shakespeare.txt \
+# 		--use-checkpointing

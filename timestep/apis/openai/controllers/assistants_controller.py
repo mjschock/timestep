@@ -1,7 +1,17 @@
+import time
+import uuid
 import connexion
-from typing import Dict
+from typing import Dict, List
 from typing import Tuple
 from typing import Union
+
+from openai.types.beta.assistant import Assistant
+from openai.types.beta.thread import ToolResourcesCodeInterpreter, ToolResourcesFileSearch, Thread
+from openai.types.beta.threads.message import Message, MessageContent
+from openai.types.beta.threads.text import Text
+from openai.types.beta.threads.text_content_block import TextContentBlock
+
+from prefect_sqlalchemy import AsyncDriver, SqlAlchemyConnector, ConnectionComponents, SyncDriver
 
 from timestep.apis.openai.models.assistant_object import AssistantObject  # noqa: E501
 from timestep.apis.openai.models.create_assistant_request import CreateAssistantRequest  # noqa: E501
@@ -28,6 +38,26 @@ from timestep.apis.openai.models.thread_object import ThreadObject  # noqa: E501
 from timestep.apis.openai import util
 
 
+# async_connector = SqlAlchemyConnector(
+#     connection_info=ConnectionComponents(
+#         driver=AsyncDriver.SQLITE_AIOSQLITE,
+#         database="assistants.db"
+#     )
+# )
+
+# connector = SqlAlchemyConnector(
+#     connection_info=ConnectionComponents(
+#         driver=SyncDriver.SQLITE_PYSQLITE,
+#         database="assistants.db"
+#     )
+# )
+
+assistants_db = {}
+messages_db = {}
+runs_db = {}
+threads_db = {}
+
+
 def cancel_run(thread_id, run_id):  # noqa: E501
     """Cancels a run that is &#x60;in_progress&#x60;.
 
@@ -43,7 +73,7 @@ def cancel_run(thread_id, run_id):  # noqa: E501
     return 'do some magic!'
 
 
-def create_assistant(create_assistant_request):  # noqa: E501
+def create_assistant(body):  # noqa: E501
     """Create an assistant with a model and instructions.
 
      # noqa: E501
@@ -53,12 +83,38 @@ def create_assistant(create_assistant_request):  # noqa: E501
 
     :rtype: Union[AssistantObject, Tuple[AssistantObject, int], Tuple[AssistantObject, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        create_assistant_request = CreateAssistantRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    # if connexion.request.is_json:
+    #     create_assistant_request = CreateAssistantRequest.from_dict(connexion.request.get_json())  # noqa: E501
+
+    # return 'do some magic!'
+    # kwargs:  {
+    #     'body': {
+    #         'model': 'gpt-4-1106-preview',
+    #         'instructions': 'You are a personal math tutor. Answer questions briefly, in a sentence or less.',
+    #         'name': 'Math Tutor'},
+    #         'user': 'user_id',
+    #         'token_info': {'uid': 'user_id'}
+    #     }
+
+    # assistant = Assistant(**body)
+    assistant = Assistant(
+        id=str(uuid.uuid4()),
+        created_at=int(time.time()),
+        description=body.get("description"),
+        instructions=body.get("instructions"),
+        model=body.get("model"),
+        name=body.get("name"),
+        object="assistant",
+        tools=body.get("tools", [])
+    )
+    print('assistant: ', assistant)
+
+    assistants_db[assistant.id] = assistant
+
+    return assistant.model_dump(mode="json")
 
 
-def create_message(thread_id, create_message_request):  # noqa: E501
+def create_message(body, token_info, thread_id, user):
     """Create a message.
 
      # noqa: E501
@@ -70,12 +126,41 @@ def create_message(thread_id, create_message_request):  # noqa: E501
 
     :rtype: Union[MessageObject, Tuple[MessageObject, int], Tuple[MessageObject, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        create_message_request = CreateMessageRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    # print('args: ', args)
+    # print('kwargs: ', kwargs)
+    # {'thread_id': '6d2aa996-fea2-4fde-98a3-ec176a11b4e5',
+    #  'body': {'content': 'I need to solve the equation `3x + 11 = 14`. Can you help me?', 'role': 'user'},
+    #  'user': 'user_id',
+    #  'token_info': {'uid': 'user_id'}}
+
+    content: List[MessageContent] = []
+
+    if body.get("content"):
+        content.append(TextContentBlock(
+            text=Text(
+                annotations=[],
+                value=body.get("content"),
+            ),
+            type="text",
+        ))
+
+    message = Message(
+        id=str(uuid.uuid4()),
+        content=content,
+        created_at=int(time.time()),
+        object="thread.message",
+        role=body.get("role"),
+        thread_id=thread_id,
+        status="incomplete",
+    )
+
+    messages_db[message.id] = message
+
+    return message.model_dump(mode="json")
 
 
-def create_run(thread_id, create_run_request):  # noqa: E501
+# def create_run(assistant_id, token_info, user, thread_id=None):  # noqa: E501
+def create_run(*args, **kwargs):
     """Create a run.
 
      # noqa: E501
@@ -87,12 +172,18 @@ def create_run(thread_id, create_run_request):  # noqa: E501
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        create_run_request = CreateRunRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    # if connexion.request.is_json:
+    #     create_run_request = CreateRunRequest.from_dict(connexion.request.get_json())  # noqa: E501
+    # return 'do some magic!'
+
+    print('args: ', args)
+    print('kwargs: ', kwargs)
+
+    # print('assistant_id, token_info, thread_id, user: ', assistant_id, token_info, thread_id, user)
 
 
-def create_thread(create_thread_request=None):  # noqa: E501
+
+def create_thread(body, token_info, user):  # noqa: E501
     """Create a thread.
 
      # noqa: E501
@@ -102,9 +193,20 @@ def create_thread(create_thread_request=None):  # noqa: E501
 
     :rtype: Union[ThreadObject, Tuple[ThreadObject, int], Tuple[ThreadObject, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        create_thread_request = CreateThreadRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    print('body: ', body)
+    print('token_info: ', token_info)
+    print('user: ', user)
+
+    thread = Thread(
+        id=str(uuid.uuid4()),
+        created_at=int(time.time()),
+        object="thread",
+        # tool_resources
+    )
+
+    threads_db[thread.id] = thread
+
+    return thread.model_dump(mode="json")
 
 
 def create_thread_and_run(create_thread_and_run_request):  # noqa: E501
