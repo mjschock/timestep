@@ -13,3 +13,9 @@
 [submodule "3rdparty/openai-cookbook"]
 	path = 3rdparty/openai-cookbook
 	url = https://github.com/openai/openai-cookbook.git
+[submodule "3rdparty/ControlFlow"]
+	path = 3rdparty/ControlFlow
+	url = https://github.com/Timestep-AI/ControlFlow.git
+[submodule "3rdparty/reflex"]
+	path = 3rdparty/reflex
+	url = https://github.com/Timestep-AI/reflex.git

@@ -74,7 +74,10 @@ chat-with-lora:
 		--prompt 'You are a friendly chatbot named Reflex. Respond in markdown.'
 
 run:
-	uvicorn timestep.run:app
+	uvicorn timestep.run:app --reload
+
+run-prod:
+	gunicorn -k uvicorn.workers.UvicornWorker timestep.run:app
 
 serve:
 	# poetry run python3 -m llama_cpp.server --config_file config.json
