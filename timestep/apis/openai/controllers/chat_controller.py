@@ -8,6 +8,7 @@ from typing import Union
 from fastapi.responses import StreamingResponse
 import flask
 from llama_cpp.llama_types import CreateChatCompletionResponse, CreateChatCompletionStreamResponse
+from llama_cpp.server.types import CreateChatCompletionRequest
 from openai import OpenAI, Stream
 from openai.types.chat.chat_completion_chunk import ChatCompletionChunk
 from openai.types.chat.chat_completion import ChatCompletion
@@ -31,19 +32,23 @@ async def create_chat_completion(body): # req: Request
     # if connexion.request.is_json:
     #     create_chat_completion_request = CreateChatCompletionRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    if body.get("stream", False) == True:
+    create_chat_completion_request = CreateChatCompletionRequest(**body)
+    create_chat_completion_kwargs = create_chat_completion_request.model_dump(
+        exclude=[
+            'logit_bias_type',
+            'min_tokens',
+            'n',
+            'user',
+        ]
+    )
+
+    if create_chat_completion_request.stream:
         async def event_publisher():
-            response: Iterator[CreateChatCompletionStreamResponse] = llm.create_chat_completion(
-                messages=body.get("messages"),
-                model=body.get("model"),
-                stream=body.get("stream"),
-                temperature=body.get("temperature"),
-            )
+            response: Iterator[CreateChatCompletionStreamResponse] = llm.create_chat_completion(**create_chat_completion_kwargs)
 
             try:
                 for chunk in response:
                     yield json.dumps(chunk)
-                    # await asyncio.sleep(0.2)
 
             except asyncio.CancelledError as e:
                 # print(f"Disconnected from client (via refresh/close) {req.client}")
@@ -54,11 +59,6 @@ async def create_chat_completion(body): # req: Request
         return EventSourceResponse(event_publisher())
 
     else:
-        response: CreateChatCompletionResponse = llm.create_chat_completion(
-            messages=body.get("messages"),
-            model=body.get("model"),
-            stream=body.get("stream"),
-            temperature=body.get("temperature"),
-        )
+        response: CreateChatCompletionResponse = llm.create_chat_completion(**create_chat_completion_kwargs)
 
         return response

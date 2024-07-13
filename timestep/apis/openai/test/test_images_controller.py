@@ -47,7 +47,7 @@ class TestImagesController(BaseTestCase):
                     mask='/path/to/file',
                     model=timestep.apis.openai.CreateImageEditRequestModel(),
                     n=1,
-                    size=1024x1024,
+                    size="1024x1024",
                     response_format=url,
                     user='user_example')
         response = self.client.open(
@@ -74,7 +74,7 @@ class TestImagesController(BaseTestCase):
                     model=timestep.apis.openai.CreateImageEditRequestModel(),
                     n=1,
                     response_format=url,
-                    size=1024x1024,
+                    size="1024x1024",
                     user='user_example')
         response = self.client.open(
             '/v1/images/variations',
