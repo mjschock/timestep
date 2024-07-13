@@ -2856,6 +2856,41 @@ snowflake = ["prefect-snowflake (>=0.28.0rc1)"]
 sqlalchemy = ["prefect-sqlalchemy (>=0.5.0rc1)"]
 
 [[package]]
+name = "prefect-shell"
+version = "0.3.0rc1"
+description = "Prefect integrations for interacting with shell commands."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "prefect_shell-0.3.0rc1-py3-none-any.whl", hash = "sha256:1d9651988310fef668bc7b75f405f880c2b3052b0da7437a36d5f8883dcb6a47"},
+    {file = "prefect_shell-0.3.0rc1.tar.gz", hash = "sha256:d5b2ae2cb54141c6272203df802fd3e2832dddd924ea442da0f987327f584564"},
+]
+
+[package.dependencies]
+prefect = ">=3.0.0rc1"
+
+[package.extras]
+dev = ["aiohttp", "coverage", "interrogate", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings[python]", "mypy", "pillow", "pre-commit", "pytest", "pytest-asyncio", "pytest-xdist"]
+
+[[package]]
+name = "prefect-sqlalchemy"
+version = "0.5.0rc2"
+description = "Prefect integrations for working with databases"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "prefect_sqlalchemy-0.5.0rc2-py3-none-any.whl", hash = "sha256:0425f4d833260f3014a8a4c03ff43c3b3af1b1f60df2f241aece0ea6c5ace101"},
+    {file = "prefect_sqlalchemy-0.5.0rc2.tar.gz", hash = "sha256:cfa096b885b1eb8e46d65d01ae954cab1a3d552330045382b09b937b531f0de7"},
+]
+
+[package.dependencies]
+prefect = ">=3.0.0rc1"
+sqlalchemy = ">=1.4.31,<3"
+
+[package.extras]
+dev = ["aiosqlite", "asyncpg", "coverage", "interrogate", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings[python]", "mypy", "pillow", "pre-commit", "psycopg2", "pytest", "pytest-asyncio", "pytest-env", "pytest-xdist"]
+
+[[package]]
 name = "prompt-toolkit"
 version = "3.0.47"
 description = "Library for building powerful interactive command lines in Python"
@@ -5196,4 +5231,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "1908e7746329a4b23d79d3150c6f98c83cb65b30fefce9c8f2f5bcae6c4de2c3"
+content-hash = "0c383b53f03ece93437046fcdddb9a2c622505ee505549634ed6c4f1d3badf27"

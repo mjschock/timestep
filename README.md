@@ -16,10 +16,25 @@ $ timestep [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
+* `launch`: Launch
 * `llamafile`
 * `serve`: Serve
 * `test`: Test
 * `train`: Train
+
+## `timestep launch`
+
+Launch
+
+**Usage**:
+
+```console
+$ timestep launch [OPTIONS]
+```
+
+**Options**:
+
+* `--help`: Show this message and exit.
 
 ## `timestep llamafile`
 
@@ -100,8 +115,8 @@ $ timestep test [OPTIONS]
 
 **Options**:
 
-* `--api-key TEXT`: [default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjA3MzkwNjMsImV4cCI6MTcyMDczOTY2Mywic3ViIjoiNDcifQ.FAkQVjpop6nw6kCh0wSvtZVW3huLJdPtIq3_cCjPc6Y]
-* `--base-url TEXT`: [default: http://0.0.0.0:8000/api/openai/v1]
+* `--api-key TEXT`: [default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjA3MzQ0NTgsImV4cCI6MTcyMDczNTA1OCwic3ViIjoiNDcifQ.1dmckj48HdxUb2uAyvrdeRHbLZQkEUKdQClSCtpKtQ0]
+* `--base-url TEXT`: [default: http://localhost:8000/api/openai/v1]
 * `--message TEXT`: [default: Count to 10, with a comma between each number and no newlines. E.g., 1, 2, 3, ...]
 * `--stream / --no-stream`: [default: stream]
 * `--help`: Show this message and exit.

@@ -9,11 +9,15 @@ from openai.types.chat.chat_completion import ChatCompletion
 import typer
 
 import timestep.llamafile
+from timestep.serve import main as timestep_serve
 
 typer_app = typer.Typer()
 
 host = '0.0.0.0'
 port = 8000
+
+with open("OPENAI_API_KEY") as f:
+    temporary_openai_api_key = f.read()
 
 
 @typer_app.callback()
@@ -21,6 +25,15 @@ def callback():
     """
     Timestep AI CLI
     """
+
+@typer_app.command()
+def launch():
+    """
+    Launch
+    """
+    typer.echo("Serving...")
+
+    typer.launch(f'{os.getenv("OPENAI_BASE_URL", "http://0.0.0.0:8000/api/openai/v1")}/ui')
 
 
 @typer_app.command()
@@ -30,14 +43,14 @@ def serve():
     """
     typer.echo("Serving...")
 
-    raise NotImplementedError
+    timestep_serve()
 
 
 @typer_app.command()
 def test(
     # api_key = "sk-no-key-required",
-    api_key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjA3MzkwNjMsImV4cCI6MTcyMDczOTY2Mywic3ViIjoiNDcifQ.FAkQVjpop6nw6kCh0wSvtZVW3huLJdPtIq3_cCjPc6Y",
-    base_url: str = f"http://{host}:{port}/api/openai/v1",
+    api_key: str = os.getenv("OPENAI_API_KEY", temporary_openai_api_key),
+    base_url: str = os.getenv("OPENAI_BASE_URL", "http://0.0.0.0:8000/api/openai/v1"),
     message: str = 'Count to 10, with a comma between each number and no newlines. E.g., 1, 2, 3, ...',
     stream: bool = True,
 ):

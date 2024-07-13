@@ -8,5 +8,6 @@ __pycache__
 __pycache__/
 dist
 models
+OPENAI_API_KEY
 TODO.txt
 tmp
