@@ -16,7 +16,7 @@ from timestep.apis.openai.models.list_fine_tuning_job_checkpoints_response impor
 from timestep.apis.openai.models.list_fine_tuning_job_events_response import ListFineTuningJobEventsResponse  # noqa: E501
 from timestep.apis.openai.models.list_paginated_fine_tuning_jobs_response import ListPaginatedFineTuningJobsResponse  # noqa: E501
 from timestep.apis.openai import util
-from timestep.services.data import fine_tuning_job_events_db, fine_tuning_jobs_db
+from timestep.database import borg
 from timestep.services.training import train_model
 
 
@@ -33,7 +33,7 @@ def cancel_fine_tuning_job(fine_tuning_job_id):  # noqa: E501
     return 'do some magic!'
 
 
-def create_fine_tuning_job(body, token_info, user):
+async def create_fine_tuning_job(body, token_info, user):
     """Creates a fine-tuning job which begins the process of creating a new model from a given dataset.  Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.  [Learn more about fine-tuning](/docs/guides/fine-tuning) 
 
      # noqa: E501
@@ -63,7 +63,7 @@ def create_fine_tuning_job(body, token_info, user):
         validation_file=body.get("validation_file"),
     )
 
-    fine_tuning_jobs_db[fine_tuning_job.id] = fine_tuning_job
+    borg._shared_borg_state["fine_tuning_jobs"][fine_tuning_job.id] = fine_tuning_job
 
     fine_tuning_job_event = FineTuningJobEvent(
         id=str(uuid.uuid4()),
@@ -73,10 +73,10 @@ def create_fine_tuning_job(body, token_info, user):
         object="fine_tuning.job.event",
     )
 
-    fine_tuning_job_events_db[fine_tuning_job.id] = [fine_tuning_job_event]
+    borg._shared_borg_state["fine_tuning_job_events"][fine_tuning_job.id] = [fine_tuning_job_event]
 
     # TODO: make this async, etc.
-    train_model(fine_tuning_job_id=fine_tuning_job.id)
+    await train_model(fine_tuning_job_id=fine_tuning_job.id)
 
     return fine_tuning_job.model_dump(mode="json")
 
@@ -100,7 +100,7 @@ def list_fine_tuning_events(fine_tuning_job_id, limit, token_info, user):
     # print("kwargs: ", kwargs)
 
     # TODO: handle AsyncCursorPage
-    fine_tuning_job_events: List[FineTuningJobEvent] = fine_tuning_job_events_db[fine_tuning_job_id][-limit:]
+    fine_tuning_job_events: List[FineTuningJobEvent] = borg._shared_borg_state["fine_tuning_job_events"][fine_tuning_job_id][-limit:]
 
     sync_cursor_page: SyncCursorPage[FineTuningJobEvent] = SyncCursorPage(
         data=fine_tuning_job_events,
@@ -152,6 +152,6 @@ def retrieve_fine_tuning_job(fine_tuning_job_id, token_info, user):
     :rtype: Union[FineTuningJob, Tuple[FineTuningJob, int], Tuple[FineTuningJob, int, Dict[str, str]]
     """
 
-    fine_tuning_job: FineTuningJob = fine_tuning_jobs_db.get(fine_tuning_job_id)
+    fine_tuning_job: FineTuningJob = borg._shared_borg_state["fine_tuning_jobs"].get(fine_tuning_job_id)
 
     return fine_tuning_job.model_dump(mode="json")

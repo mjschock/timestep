@@ -4,6 +4,7 @@ from connexion import AsyncApp
 import uvicorn
 
 from timestep.api import generate_token
+from timestep.services.serving import serve_model
 
 user_id = -1
 token = generate_token(user_id)
@@ -33,6 +34,8 @@ cwd = os.getcwd()
 print('cwd: ', cwd)
 
 def main():
+    serve_model()
+
     uvicorn.run(
         "timestep.serve:app",
         host="0.0.0.0",

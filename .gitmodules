@@ -19,3 +19,6 @@
 [submodule "3rdparty/reflex"]
 	path = 3rdparty/reflex
 	url = https://github.com/Timestep-AI/reflex.git
+[submodule "3rdparty/agent-protocol"]
+	path = 3rdparty/agent-protocol
+	url = https://github.com/AI-Engineer-Foundation/agent-protocol.git

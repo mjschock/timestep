@@ -5,4 +5,7 @@
     "github.copilot.enable": {
         "*": false,
     },
+    "python.analysis.extraPaths": [
+        "./3rdparty/ControlFlow/src"
+    ],
 }
