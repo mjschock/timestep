@@ -1,7 +1,8 @@
-*.log
-*.py[cod]
-.env
-.venv
-__pycache__
+build
 dist
+.env
+*.log
 models
+__pycache__
+*.py[cod]
+.venv

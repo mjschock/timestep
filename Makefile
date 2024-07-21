@@ -1,5 +1,6 @@
 default:
-	@echo "Please specify a target"
+	git submodule update --recursive
+	poetry install
 
 apis:
 	rm -rf build && mkdir -p build
@@ -65,5 +66,5 @@ dev:
 publish:
 	poetry install
 	poetry run toml-sort -ai pyproject.toml
-	poetry run typer timestep/__main__.py utils docs --output README.md --name timestep
+	poetry run typer timestep.__main__ utils docs --output README.md --name timestep
 	poetry publish --build
