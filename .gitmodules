@@ -7,9 +7,9 @@
 [submodule "3rdparty/llama-cpp-python"]
 	path = 3rdparty/llama-cpp-python
 	url = https://github.com/abetlen/llama-cpp-python.git
-[submodule "3rdparty/openai-openapi"]
-	path = 3rdparty/openai-openapi
-	url = https://github.com/openai/openai-openapi.git
+# [submodule "3rdparty/openai-openapi"]
+# 	path = 3rdparty/openai-openapi
+# 	url = https://github.com/openai/openai-openapi.git
 [submodule "3rdparty/openai-cookbook"]
 	path = 3rdparty/openai-cookbook
 	url = https://github.com/openai/openai-cookbook.git
