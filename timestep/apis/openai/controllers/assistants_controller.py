@@ -38,26 +38,7 @@ from timestep.apis.openai.models.run_step_object import RunStepObject  # noqa: E
 from timestep.apis.openai.models.submit_tool_outputs_run_request import SubmitToolOutputsRunRequest  # noqa: E501
 from timestep.apis.openai.models.thread_object import ThreadObject  # noqa: E501
 from timestep.apis.openai import util
-
-
-# async_connector = SqlAlchemyConnector(
-#     connection_info=ConnectionComponents(
-#         driver=AsyncDriver.SQLITE_AIOSQLITE,
-#         database="assistants.db"
-#     )
-# )
-
-# connector = SqlAlchemyConnector(
-#     connection_info=ConnectionComponents(
-#         driver=SyncDriver.SQLITE_PYSQLITE,
-#         database="assistants.db"
-#     )
-# )
-
-assistants_db = {}
-messages_db = {}
-runs_db = {}
-threads_db = {}
+from timestep.database import borg
 
 
 def cancel_run(thread_id, run_id):  # noqa: E501
@@ -111,7 +92,7 @@ def create_assistant(body):  # noqa: E501
     )
     print('assistant: ', assistant)
 
-    assistants_db[assistant.id] = assistant
+    borg._shared_borg_state["assistants"][assistant.id] = assistant
 
     return assistant.model_dump(mode="json")
 
@@ -156,7 +137,7 @@ def create_message(body, token_info, thread_id, user):
         status="incomplete",
     )
 
-    messages_db[message.id] = message
+    borg._shared_borg_state["messages"][message.id] = message
 
     return message.model_dump(mode="json")
 
@@ -186,8 +167,8 @@ def create_run(body, token_info, user, thread_id):
 
     assistant_id = body.get("assistant_id")
 
-    assistant: Assistant = assistants_db.get(assistant_id)
-    thread: Thread = threads_db.get(thread_id)
+    assistant: Assistant = borg._shared_borg_state["assistants"].get(assistant_id)
+    thread: Thread = borg._shared_borg_state["threads"].get(thread_id)
 
     run = Run(
         id=str(uuid.uuid4()),
@@ -202,7 +183,7 @@ def create_run(body, token_info, user, thread_id):
         tools=assistant.tools,
     )
 
-    runs_db[run.id] = run
+    borg._shared_borg_state["runs"][run.id] = run
 
     return run.model_dump(mode="json")
 
@@ -228,7 +209,7 @@ def create_thread(body, token_info, user):  # noqa: E501
         # tool_resources
     )
 
-    threads_db[thread.id] = thread
+    borg._shared_borg_state["threads"][thread.id] = thread
 
     return thread.model_dump(mode="json")
 
@@ -330,7 +311,9 @@ def get_run(run_id, thread_id, token_info, user):
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
     """
 
-    run: Run = runs_db[run_id]
+    run: Run = borg._shared_borg_state["runs"][run_id]
+
+    print('run: ', run)
 
     assert run.thread_id == thread_id, f"{run.thread_id} != {thread_id}"
 

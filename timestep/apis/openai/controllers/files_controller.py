@@ -12,8 +12,7 @@ from timestep.apis.openai.models.delete_file_response import DeleteFileResponse 
 from timestep.apis.openai.models.list_files_response import ListFilesResponse  # noqa: E501
 from timestep.apis.openai.models.open_ai_file import OpenAIFile  # noqa: E501
 from timestep.apis.openai import util
-
-file_objects_db = {}
+from timestep.database import borg
 
 # def create_file(file, purpose):  # noqa: E501
 # def create_file(file):
@@ -30,20 +29,9 @@ def create_file(body, file: UploadFile):
     :rtype: Union[OpenAIFile, Tuple[OpenAIFile, int], Tuple[OpenAIFile, int, Dict[str, str]]
     """
 
-    print('file: ', file)
-    # file:  UploadFile(
-    # filename='tmp_recipe_finetune_training.jsonl', 
-    # size=58688,
-    # headers=Headers({'content-disposition': 'form-data; name="file"; filename="tmp_recipe_finetune_training.jsonl"', 'content-type': 'application/octet-stream'}))
-    print('type(file): ', type(file))
-    print('body: ', body)
-
     purpose = body.get('purpose')
-    print('purpose: ', purpose)
 
     if purpose == "fine-tune":
-        print('TODO: create file for fine-tuning')
-
         file_object = FileObject(
             id=str(uuid.uuid4()),
             bytes=file.size,
@@ -54,7 +42,7 @@ def create_file(body, file: UploadFile):
             status="uploaded",
         )
 
-        file_objects_db[file_object.id] = file_object
+        borg._shared_borg_state["file_objects"][file_object.id] = file_object
 
         return file_object.model_dump(mode="json")
 

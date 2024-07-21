@@ -1,21 +1,15 @@
 import asyncio
 import json
-import connexion
-from typing import Dict, Iterator
-from typing import Tuple
-from typing import Union
+from typing import Iterator
 
-from fastapi.responses import StreamingResponse
-import flask
+from llama_cpp import Llama
 from llama_cpp.llama_types import CreateCompletionStreamResponse, CreateCompletionStreamResponse
 from llama_cpp.server.types import CreateCompletionRequest
 from openai import OpenAI, Stream
-from openai.types.chat.chat_completion_chunk import ChatCompletionChunk
-from openai.types.chat.chat_completion import ChatCompletion
+from openai.types.completion import Completion
 from sse_starlette.sse import EventSourceResponse
 
-from timestep.apis.openai import util
-from timestep.services.model import llm
+from timestep.database import borg
 
 async def create_completion(body):  # noqa: E501
     """Creates a completion for the provided prompt and parameters.
@@ -43,14 +37,18 @@ async def create_completion(body):  # noqa: E501
             'user',
         ]
     )
+    model: Llama = borg._shared_borg_state["models"][create_completion_request.model]
 
     if create_completion_request.stream:
         async def event_publisher():
-            response: Iterator[CreateCompletionStreamResponse] = llm.create_completion(**create_completion_kwargs)
+            response: Iterator[CreateCompletionStreamResponse] = model.create_completion(**create_completion_kwargs)
 
             try:
                 for chunk in response:
+                    # chunk = Completion(**chunk)
+                    # chunk = Stream
                     yield json.dumps(chunk)
+                    # yield json.dumps(chunk.model_dump(mode="json"))
                     # await asyncio.sleep(0.2)
 
             except asyncio.CancelledError as e:
@@ -62,6 +60,7 @@ async def create_completion(body):  # noqa: E501
         return EventSourceResponse(event_publisher())
 
     else:
-        response: CreateCompletionStreamResponse = llm.create_completion(**create_completion_kwargs)
+        response: CreateCompletionStreamResponse = model.create_completion(**create_completion_kwargs)
+        completion = Completion(**response)
 
-        return response
+        return completion.model_dump(mode="json")

@@ -7,6 +7,7 @@ from timestep.apis.openai.models.delete_model_response import DeleteModelRespons
 from timestep.apis.openai.models.list_models_response import ListModelsResponse  # noqa: E501
 from timestep.apis.openai.models.model import Model  # noqa: E501
 from timestep.apis.openai import util
+from timestep.database import borg
 
 
 def delete_model(model):  # noqa: E501

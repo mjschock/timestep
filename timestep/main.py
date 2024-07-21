@@ -111,6 +111,7 @@ def test(
 
         # print the time delay and text received
         print(f"Full response received {time.time() - start_time:.2f} seconds after request")
+        # print("chat_completion: ", chat_completion)
 
         full_reply_content = chat_completion.choices[0].message.content
 

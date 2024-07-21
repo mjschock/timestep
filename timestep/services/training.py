@@ -3,17 +3,18 @@ from datetime import datetime
 import time
 import uuid
 
+from llama_cpp import Llama
 from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparameters
 from openai.types.fine_tuning.fine_tuning_job_event import FineTuningJobEvent
 from openai.types.fine_tuning.fine_tuning_job_integration import FineTuningJobIntegration
-
 from prefect import flow
 from prefect_shell import ShellOperation
 
-from timestep.services.data import fine_tuning_job_events_db, fine_tuning_jobs_db
+from timestep.database import borg
+from timestep.services.serving import serve_model
 
 @flow
-def train_model(fine_tuning_job_id: str):
+async def train_model(fine_tuning_job_id: str):
     # (.venv) mjschock@pop-os:~/Projects/Timestep-AI/.github-private/submodules/timestep$ 3rdparty/llama-cpp-python/vendor/llama.cpp/llama-finetune --help
     # usage: 3rdparty/llama-cpp-python/vendor/llama.cpp/llama-finetune [options]
 
@@ -89,12 +90,14 @@ def train_model(fine_tuning_job_id: str):
     model_base = f"{os.getcwd()}/3rdparty/llamafile/models/TinyLLama-v0.1-5M-F16.gguf"
     task = "Recipe_NER"
     today = datetime.today().strftime("%Y%m%d")
+    working_dir = f"work/{today}"
+    os.makedirs(working_dir, exist_ok=True)
 
     print("=== training model ===")
     print("fine_tuning_job_id: ", fine_tuning_job_id)
-    print("fine_tuning_job: ", fine_tuning_jobs_db[fine_tuning_job_id])
+    print("fine_tuning_job: ", borg._shared_borg_state["fine_tuning_jobs"][fine_tuning_job_id])
 
-    fine_tuning_job: FineTuningJob = fine_tuning_jobs_db.get(fine_tuning_job_id)
+    fine_tuning_job: FineTuningJob = borg._shared_borg_state["fine_tuning_jobs"].get(fine_tuning_job_id)
     hyperparameters: Hyperparameters = fine_tuning_job.hyperparameters
     max_epochs = -1 if hyperparameters.n_epochs == "auto" else hyperparameters.n_epochs
 
@@ -112,53 +115,56 @@ def train_model(fine_tuning_job_id: str):
     #     validation_file=body.get("validation_file"),
     # )
 
-    # fine_tuning_jobs_db[fine_tuning_job.id] = fine_tuning_job
+    # fine_tuning_jobs_timestep.db[fine_tuning_job.id] = fine_tuning_job
 
     fine_tuning_job.__setattr__(
         "status",
         "running",
     )
 
-    # for short running operations, you can use the `run` method
-    # which automatically manages the context
-    ShellOperation(
-        commands=[
-            "mkdir -p data",
-            "mkdir -p data/${today}"
-        ],
-        env={"today": today}
-    ).run()
+    fine_tuning_job_event = FineTuningJobEvent(
+        id=str(uuid.uuid4()),
+        created_at=int(time.time()),
+        level="info",
+        message=f"The job has begun",
+        object="fine_tuning.job.event",
+    )
+
+    train_data = f"{os.getcwd()}/notebooks/openai-cookbook/examples/tmp_recipe_finetune_training.jsonl"
+    # train_data = fine_tuning_job.training_file
 
     # for long running operations, you can use a context manager
-    with ShellOperation(
+    async with ShellOperation(
         commands=[
             # "curl -O https://masie_web.apps.nsidc.org/pub/DATASETS/NOAA/G02135/north/daily/data/N_seaice_extent_daily_v3.0.csv",
+            # f"""{os.getcwd()}/3rdparty/llama-cpp-python/vendor/llama.cpp/llama-finetune \
+            # TODO: move llama-finetune to vendored dep and use Python CPP bindings to run llama-cpp
             f"""{os.getcwd()}/3rdparty/llama-cpp-python/vendor/llama.cpp/llama-finetune \
             --epochs {max_epochs} \
             --model-base {model_base} \
-            --checkpoint-in "chk-lora-TinyLLama-v0.1-5M-F16-{task}-LATEST.gguf" \
-            --checkpoint-out "chk-lora-TinyLLama-v0.1-5M-F16-{task}-ITERATION.gguf" \
-            --lora-out "lora-TinyLLama-v0.1-5M-F16-{task}-ITERATION.bin" \
-            --train-data "/home/mjschock/Projects/Timestep-AI/.github-private/submodules/timestep/notebooks/training_dataset.txt" \
+            --checkpoint-in "chk-lora-{fine_tuning_job.model}-{task}-LATEST.gguf" \
+            --checkpoint-out "chk-lora-{fine_tuning_job.model}-{task}-ITERATION.gguf" \
+            --lora-out "lora-{fine_tuning_job.model}-{task}-ITERATION.bin"  \
+            --train-data "{train_data}" \
             --save-every 10 \
             --seed {fine_tuning_job.seed} \
             --threads 6 --adam-iter 30 --batch 4 --ctx 64 \
             --use-checkpointing"""
         ],
-        working_dir=f"data/{today}",
+        working_dir=working_dir,
     ) as download_csv_operation:
 
         # trigger runs the process in the background
-        download_csv_process = download_csv_operation.trigger()
+        download_csv_process = await download_csv_operation.trigger()
 
         # then do other things here in the meantime, like download another file
         ...
 
         # when you're ready, wait for the process to finish
-        download_csv_process.wait_for_completion()
+        await download_csv_process.wait_for_completion()
 
         # if you'd like to get the output lines, you can use the `fetch_result` method
-        output_lines = download_csv_process.fetch_result()
+        output_lines = await download_csv_process.fetch_result()
 
         for output_line in output_lines:
             fine_tuning_job_event = FineTuningJobEvent(
@@ -169,12 +175,51 @@ def train_model(fine_tuning_job_id: str):
                 object="fine_tuning.job.event",
             )
 
-            fine_tuning_job_events_db[fine_tuning_job.id].append(fine_tuning_job_event)
+            borg._shared_borg_state["fine_tuning_job_events"][fine_tuning_job.id].append(fine_tuning_job_event)
+
+        fine_tuning_job.__setattr__(
+            "fine_tuned_model",
+            "ft:gpt-3.5-turbo-0613:personal:recipe-ner:8PjmcwDH"
+        )
+
+        fine_tuning_job_event = FineTuningJobEvent(
+            id=str(uuid.uuid4()),
+            created_at=int(time.time()),
+            level="info",
+            message=f"New fine-tuned model created: {fine_tuning_job.fine_tuned_model}",
+            object="fine_tuning.job.event",
+        )
+
+        borg._shared_borg_state["fine_tuning_job_events"][fine_tuning_job.id].append(fine_tuning_job_event)
 
         fine_tuning_job.__setattr__(
             "status",
             "succeeded",
         )
+
+        fine_tuning_job_event = FineTuningJobEvent(
+            id=str(uuid.uuid4()),
+            created_at=int(time.time()),
+            level="info",
+            message="The job has successfully completed",
+            object="fine_tuning.job.event",
+        )
+
+        borg._shared_borg_state["fine_tuning_job_events"][fine_tuning_job.id].append(fine_tuning_job_event)
+
+        base_model: Llama = borg._shared_borg_state["models"][fine_tuning_job.model]
+
+        # model = Llama(
+        #     chat_format=base_model.chat_format,
+        #     lora_base=f"{os.getcwd()}/{base_model.model_path}",
+        #     lora_path=f"{os.getcwd()}/{working_dir}/lora-{fine_tuning_job.model}-{task}-ITERATION.bin",
+        #     model_path=base_model.model_path,
+        #     n_ctx=base_model.n_ctx(),
+        # )
+
+        # model = serve_model()
+
+        # borg._shared_borg_state["models"][fine_tuning_job.fine_tuned_model] = model
 
 if __name__ == "__main__":
     train_model()
