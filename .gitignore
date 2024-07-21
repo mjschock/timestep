@@ -1,13 +1,7 @@
-*.db
 *.log
 *.py[cod]
 .env
 .venv
-.web
 __pycache__
-__pycache__/
 dist
 models
-OPENAI_API_KEY
-TODO.txt
-tmp
