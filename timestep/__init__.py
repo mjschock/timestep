@@ -1,6 +1,6 @@
 def decode_token(*args, **kwargs):
-    print('args:', args)
-    print('kwargs:', kwargs)
+    print("args:", args)
+    print("kwargs:", kwargs)
 
     # raise NotImplementedError
     token_info = {
