@@ -66,5 +66,5 @@ dev:
 publish:
 	poetry install
 	poetry run toml-sort -ai pyproject.toml
-	poetry run typer timestep.__main__ utils docs --output README.md --name timestep
+	poetry run typer timestep.main utils docs --output README.md --name timestep
 	poetry publish --build
