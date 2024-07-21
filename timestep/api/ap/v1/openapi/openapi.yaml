@@ -1,0 +1,874 @@
+openapi: 3.0.1
+info:
+  description: Specification of the API protocol for communication with an agent.
+  title: Agent Protocol
+  version: v1
+servers:
+- description: Agent Protocol API
+  url: http://0.0.0.0:8000
+paths:
+  /ap/v1/agent/tasks:
+    get:
+      operationId: list_agent_tasks
+      parameters:
+      - description: Page number
+        example: 2
+        explode: true
+        in: query
+        name: current_page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of items per page
+        example: 25
+        explode: true
+        in: query
+        name: page_size
+        required: false
+        schema:
+          default: 10
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskListResponse'
+          description: Returned list of agent's tasks.
+        default:
+          description: Internal Server Error
+      summary: List all tasks that have been created for the agent.
+      tags:
+      - agent
+      x-openapi-router-controller: timestep.api.ap.v1.controllers.agent_controller
+    post:
+      operationId: create_agent_task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRequestBody'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+          description: A new agent task was successfully created.
+          x-postman-variables:
+          - type: save
+            name: task_id
+            path: .task_id
+        "422":
+          content:
+            application/json:
+              schema:
+                description: A generic JSON object without any specific requirements.
+                type: object
+          description: Unable to process request. Likely due to improperly formatted
+            request.
+        default:
+          description: Internal Server Error
+      summary: Creates a task for the agent.
+      tags:
+      - agent
+      x-openapi-router-controller: timestep.api.ap.v1.controllers.agent_controller
+  /ap/v1/agent/tasks/{task_id}:
+    get:
+      operationId: get_agent_task
+      parameters:
+      - description: ID of the task
+        example: 1d5a533e-3904-4401-8a07-c49adf88b981
+        explode: false
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+        style: simple
+        x-postman-variables:
+        - type: load
+          name: task_id
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+          description: Returned details about an agent task.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAgentTask_404_response'
+          description: Unable to find entity with a given identifier
+        default:
+          description: Internal Server Error
+      summary: Get details about a specified agent task.
+      tags:
+      - agent
+      x-openapi-router-controller: timestep.api.ap.v1.controllers.agent_controller
+  /ap/v1/agent/tasks/{task_id}/artifacts:
+    get:
+      operationId: list_agent_task_artifacts
+      parameters:
+      - description: ID of the task
+        example: 50da533e-3904-4401-8a07-c49adf88b5eb
+        explode: false
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+        style: simple
+        x-postman-variables:
+        - type: load
+          name: task_id
+      - description: Page number
+        example: 2
+        explode: true
+        in: query
+        name: current_page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of items per page
+        example: 25
+        explode: true
+        in: query
+        name: page_size
+        required: false
+        schema:
+          default: 10
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskArtifactsListResponse'
+          description: Returned the list of artifacts for the task.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAgentTask_404_response'
+          description: Unable to find entity with a given identifier
+        default:
+          description: Internal Server Error
+      summary: List all artifacts that have been created for the given task.
+      tags:
+      - agent
+      x-openapi-router-controller: timestep.api.ap.v1.controllers.agent_controller
+    post:
+      operationId: upload_agent_task_artifacts
+      parameters:
+      - description: ID of the task
+        example: 50da533e-3904-4401-8a07-c49adf88b5eb
+        explode: false
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+        style: simple
+        x-postman-variables:
+        - type: load
+          name: task_id
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ArtifactUpload'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artifact'
+          description: Returned the content of the artifact.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAgentTask_404_response'
+          description: Unable to find entity with a given identifier
+        default:
+          description: Internal Server Error
+      summary: Upload an artifact for the specified task.
+      tags:
+      - agent
+      x-openapi-router-controller: timestep.api.ap.v1.controllers.agent_controller
+  /ap/v1/agent/tasks/{task_id}/artifacts/{artifact_id}:
+    get:
+      operationId: download_agent_task_artifact
+      parameters:
+      - description: ID of the task
+        example: 50da533e-3904-4401-8a07-c49adf88b5eb
+        explode: false
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+        style: simple
+        x-postman-variables:
+        - type: load
+          name: task_id
+      - description: ID of the artifact
+        example: 1e41533e-3904-4401-8a07-c49adf8893de
+        explode: false
+        in: path
+        name: artifact_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Returned the content of the artifact.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAgentTask_404_response'
+          description: Unable to find entity with a given identifier
+        default:
+          description: Internal Server Error
+      summary: Download a specified artifact.
+      tags:
+      - agent
+      x-openapi-router-controller: timestep.api.ap.v1.controllers.agent_controller
+  /ap/v1/agent/tasks/{task_id}/steps:
+    get:
+      operationId: list_agent_task_steps
+      parameters:
+      - description: ID of the task.
+        example: 50da533e-3904-4401-8a07-c49adf88b5eb
+        explode: false
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+        style: simple
+        x-postman-variables:
+        - type: load
+          name: task_id
+      - description: Page number
+        example: 2
+        explode: true
+        in: query
+        name: current_page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of items per page
+        example: 25
+        explode: true
+        in: query
+        name: page_size
+        required: false
+        schema:
+          default: 10
+          format: int32
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStepsListResponse'
+          description: Returned list of agent's steps for the specified task.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAgentTask_404_response'
+          description: Unable to find entity with a given identifier
+        default:
+          description: Internal Server Error
+      summary: List all steps for the specified task.
+      tags:
+      - agent
+      x-openapi-router-controller: timestep.api.ap.v1.controllers.agent_controller
+    post:
+      operationId: execute_agent_task_step
+      parameters:
+      - description: ID of the task
+        example: 50da533e-3904-4401-8a07-c49adf88b5eb
+        explode: false
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+        style: simple
+        x-postman-variables:
+        - type: load
+          name: task_id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StepRequestBody'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Step'
+          description: Executed step for the agent task.
+          x-postman-variables:
+          - type: save
+            name: step_id
+            path: .step_id
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAgentTask_404_response'
+          description: Unable to find entity with a given identifier
+        "422":
+          content:
+            application/json:
+              schema:
+                description: A generic JSON object without any specific requirements.
+                type: object
+          description: Unable to process request. Likely due to improperly formatted
+            request.
+        default:
+          description: Internal Server Error
+      summary: Execute a step in the specified agent task.
+      tags:
+      - agent
+      x-openapi-router-controller: timestep.api.ap.v1.controllers.agent_controller
+  /ap/v1/agent/tasks/{task_id}/steps/{step_id}:
+    get:
+      operationId: get_agent_task_step
+      parameters:
+      - description: ID of the task
+        example: 50da533e-3904-4401-8a07-c49adf88b5eb
+        explode: false
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+        style: simple
+        x-postman-variables:
+        - type: load
+          name: task_id
+        - type: load
+          name: step_id
+      - description: ID of the step
+        example: 28ca533e-3904-4401-8a07-c49adf8891c2
+        explode: false
+        in: path
+        name: step_id
+        required: true
+        schema:
+          type: string
+        style: simple
+        x-postman-variables:
+        - type: load
+          name: step_id
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Step'
+          description: Returned details about an agent task step.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAgentTask_404_response'
+          description: Unable to find entity with a given identifier
+        default:
+          description: Internal Server Error
+      summary: Get details about a specified task step.
+      tags:
+      - agent
+      x-openapi-router-controller: timestep.api.ap.v1.controllers.agent_controller
+components:
+  responses:
+    UnprocessableEntity:
+      content:
+        application/json:
+          schema:
+            description: A generic JSON object without any specific requirements.
+            type: object
+      description: Unable to process request. Likely due to improperly formatted request.
+    NotFound:
+      content:
+        application/json:
+          schema:
+            properties:
+              message:
+                description: Message stating the entity was not found
+                example: Unable to find entity with the provided id
+                type: string
+            required:
+            - message
+            type: object
+      description: Unable to find entity with a given identifier
+  schemas:
+    Pagination:
+      example:
+        total_pages: 97
+        total_items: 42
+        current_page: 1
+        page_size: 25
+      properties:
+        total_items:
+          description: Total number of items.
+          example: 42
+          title: total_items
+          type: integer
+        total_pages:
+          description: Total number of pages.
+          example: 97
+          title: total_pages
+          type: integer
+        current_page:
+          description: Current_page page number.
+          example: 1
+          title: current_page
+          type: integer
+        page_size:
+          description: Number of items per page.
+          example: 25
+          title: page_size
+          type: integer
+      required:
+      - current_page
+      - page_size
+      - total_items
+      - total_pages
+      title: Pagination
+      type: object
+    TaskListResponse:
+      example:
+        pagination:
+          total_pages: 97
+          total_items: 42
+          current_page: 1
+          page_size: 25
+        tasks:
+        - input: Write 'Washington' to the file 'output.txt'.
+          additional_input: |-
+            {
+            "debug": false,
+            "mode": "benchmarks"
+            }
+          task_id: 50da533e-3904-4401-8a07-c49adf88b5eb
+          artifacts:
+          - 7a49f31c-f9c6-4346-a22c-e32bc5af4d8e
+          - ab7b4091-2560-4692-a4fe-d831ea3ca7d6
+        - input: Write 'Washington' to the file 'output.txt'.
+          additional_input: |-
+            {
+            "debug": false,
+            "mode": "benchmarks"
+            }
+          task_id: 50da533e-3904-4401-8a07-c49adf88b5eb
+          artifacts:
+          - 7a49f31c-f9c6-4346-a22c-e32bc5af4d8e
+          - ab7b4091-2560-4692-a4fe-d831ea3ca7d6
+      properties:
+        tasks:
+          items:
+            $ref: '#/components/schemas/Task'
+          title: tasks
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - pagination
+      - tasks
+      title: TaskListResponse
+      type: object
+    TaskStepsListResponse:
+      example:
+        pagination:
+          total_pages: 97
+          total_items: 42
+          current_page: 1
+          page_size: 25
+        steps:
+        - output: "I am going to use the write_to_file command and write Washington\
+            \ to a file called output.txt <write_to_file('output.txt', 'Washington')"
+          input: Write the words you receive to the file 'output.txt'.
+          additional_input: |-
+            {
+            "file_to_refactor": "models.py"
+            }
+          is_last: true
+          name: Write to file
+          task_id: 50da533e-3904-4401-8a07-c49adf88b5eb
+          step_id: 6bb1801a-fd80-45e8-899a-4dd723cc602e
+          status: created
+          additional_output: |-
+            {
+            "tokens": 7894,
+            "estimated_cost": "0,24$"
+            }
+          artifacts:
+          - agent_created: false
+            file_name: main.py
+            artifact_id: b225e278-8b4c-4f99-a696-8facf19f0e56
+            relative_path: python/code/
+          - agent_created: false
+            file_name: main.py
+            artifact_id: b225e278-8b4c-4f99-a696-8facf19f0e56
+            relative_path: python/code/
+        - output: "I am going to use the write_to_file command and write Washington\
+            \ to a file called output.txt <write_to_file('output.txt', 'Washington')"
+          input: Write the words you receive to the file 'output.txt'.
+          additional_input: |-
+            {
+            "file_to_refactor": "models.py"
+            }
+          is_last: true
+          name: Write to file
+          task_id: 50da533e-3904-4401-8a07-c49adf88b5eb
+          step_id: 6bb1801a-fd80-45e8-899a-4dd723cc602e
+          status: created
+          additional_output: |-
+            {
+            "tokens": 7894,
+            "estimated_cost": "0,24$"
+            }
+          artifacts:
+          - agent_created: false
+            file_name: main.py
+            artifact_id: b225e278-8b4c-4f99-a696-8facf19f0e56
+            relative_path: python/code/
+          - agent_created: false
+            file_name: main.py
+            artifact_id: b225e278-8b4c-4f99-a696-8facf19f0e56
+            relative_path: python/code/
+      properties:
+        steps:
+          items:
+            $ref: '#/components/schemas/Step'
+          title: steps
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - pagination
+      - steps
+      title: TaskStepsListResponse
+      type: object
+    TaskArtifactsListResponse:
+      example:
+        pagination:
+          total_pages: 97
+          total_items: 42
+          current_page: 1
+          page_size: 25
+        artifacts:
+        - agent_created: false
+          file_name: main.py
+          artifact_id: b225e278-8b4c-4f99-a696-8facf19f0e56
+          relative_path: python/code/
+        - agent_created: false
+          file_name: main.py
+          artifact_id: b225e278-8b4c-4f99-a696-8facf19f0e56
+          relative_path: python/code/
+      properties:
+        artifacts:
+          items:
+            $ref: '#/components/schemas/Artifact'
+          title: artifacts
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+      - artifacts
+      - pagination
+      title: TaskArtifactsListResponse
+      type: object
+    TaskInput:
+      description: Input parameters for the task. Any value is allowed.
+      example: |-
+        {
+        "debug": false,
+        "mode": "benchmarks"
+        }
+      title: additional_input
+      type: object
+    Artifact:
+      description: An Artifact either created by or submitted to the agent.
+      example:
+        agent_created: false
+        file_name: main.py
+        artifact_id: b225e278-8b4c-4f99-a696-8facf19f0e56
+        relative_path: python/code/
+      properties:
+        artifact_id:
+          description: ID of the artifact.
+          example: b225e278-8b4c-4f99-a696-8facf19f0e56
+          title: artifact_id
+          type: string
+        agent_created:
+          description: Whether the artifact has been created by the agent.
+          example: false
+          title: agent_created
+          type: boolean
+        file_name:
+          description: Filename of the artifact.
+          example: main.py
+          title: file_name
+          type: string
+        relative_path:
+          description: Relative path of the artifact in the agent's workspace.
+          example: python/code/
+          nullable: true
+          title: relative_path
+          type: string
+      required:
+      - agent_created
+      - artifact_id
+      - file_name
+      title: Artifact
+      type: object
+    ArtifactUpload:
+      description: Artifact to upload to the agent.
+      properties:
+        file:
+          description: File to upload.
+          example: !!binary |-
+            WW1sdVlYSjVJSEpsY0hKbGMyVnVkR0YwYVc5dUlHOW1JR1pwYkdVPQ==
+          format: binary
+          type: string
+        relative_path:
+          description: Relative path of the artifact in the agent's workspace.
+          example: python/code
+          type: string
+      required:
+      - file
+      type: object
+    StepInput:
+      description: Input parameters for the task step. Any value is allowed.
+      example: |-
+        {
+        "file_to_refactor": "models.py"
+        }
+      title: additional_input
+      type: object
+    StepOutput:
+      description: Output that the task step has produced. Any value is allowed.
+      example: |-
+        {
+        "tokens": 7894,
+        "estimated_cost": "0,24$"
+        }
+      nullable: true
+      type: object
+    TaskRequestBody:
+      description: Body of the task request.
+      example:
+        input: Write 'Washington' to the file 'output.txt'.
+        additional_input: |-
+          {
+          "debug": false,
+          "mode": "benchmarks"
+          }
+      properties:
+        input:
+          description: Input prompt for the task.
+          example: Write 'Washington' to the file 'output.txt'.
+          nullable: true
+          title: input
+          type: string
+        additional_input:
+          description: Input parameters for the task. Any value is allowed.
+          example: |-
+            {
+            "debug": false,
+            "mode": "benchmarks"
+            }
+          title: additional_input
+          type: object
+      title: TaskRequestBody
+      type: object
+    Task:
+      allOf:
+      - $ref: '#/components/schemas/TaskRequestBody'
+      - description: Definition of an agent task.
+        properties:
+          task_id:
+            description: The ID of the task.
+            example: 50da533e-3904-4401-8a07-c49adf88b5eb
+            type: string
+          artifacts:
+            default: []
+            description: A list of artifacts that the task has produced.
+            example:
+            - 7a49f31c-f9c6-4346-a22c-e32bc5af4d8e
+            - ab7b4091-2560-4692-a4fe-d831ea3ca7d6
+            items:
+              $ref: '#/components/schemas/Artifact'
+            type: array
+        required:
+        - artifacts
+        - task_id
+        type: object
+      example:
+        input: Write 'Washington' to the file 'output.txt'.
+        additional_input: |-
+          {
+          "debug": false,
+          "mode": "benchmarks"
+          }
+        task_id: 50da533e-3904-4401-8a07-c49adf88b5eb
+        artifacts:
+        - 7a49f31c-f9c6-4346-a22c-e32bc5af4d8e
+        - ab7b4091-2560-4692-a4fe-d831ea3ca7d6
+      title: Task
+    StepRequestBody:
+      description: Body of the task request.
+      example:
+        input: Write the words you receive to the file 'output.txt'.
+        additional_input: |-
+          {
+          "file_to_refactor": "models.py"
+          }
+      properties:
+        input:
+          description: Input prompt for the step.
+          example: Write the words you receive to the file 'output.txt'.
+          nullable: true
+          title: input
+          type: string
+        additional_input:
+          description: Input parameters for the task step. Any value is allowed.
+          example: |-
+            {
+            "file_to_refactor": "models.py"
+            }
+          title: additional_input
+          type: object
+      title: StepRequestBody
+      type: object
+    Step:
+      allOf:
+      - $ref: '#/components/schemas/StepRequestBody'
+      - properties:
+          task_id:
+            description: The ID of the task this step belongs to.
+            example: 50da533e-3904-4401-8a07-c49adf88b5eb
+            type: string
+          step_id:
+            description: The ID of the task step.
+            example: 6bb1801a-fd80-45e8-899a-4dd723cc602e
+            type: string
+          name:
+            description: The name of the task step.
+            example: Write to file
+            nullable: true
+            type: string
+          status:
+            description: The status of the task step.
+            enum:
+            - created
+            - running
+            - completed
+            example: created
+            type: string
+          output:
+            description: Output of the task step.
+            example: "I am going to use the write_to_file command and write Washington\
+              \ to a file called output.txt <write_to_file('output.txt', 'Washington')"
+            nullable: true
+            type: string
+          additional_output:
+            $ref: '#/components/schemas/StepOutput'
+          artifacts:
+            default: []
+            description: A list of artifacts that the step has produced.
+            items:
+              $ref: '#/components/schemas/Artifact'
+            type: array
+          is_last:
+            default: false
+            description: Whether this is the last step in the task.
+            example: true
+            type: boolean
+        required:
+        - artifacts
+        - is_last
+        - status
+        - step_id
+        - task_id
+        type: object
+      example:
+        output: "I am going to use the write_to_file command and write Washington\
+          \ to a file called output.txt <write_to_file('output.txt', 'Washington')"
+        input: Write the words you receive to the file 'output.txt'.
+        additional_input: |-
+          {
+          "file_to_refactor": "models.py"
+          }
+        is_last: true
+        name: Write to file
+        task_id: 50da533e-3904-4401-8a07-c49adf88b5eb
+        step_id: 6bb1801a-fd80-45e8-899a-4dd723cc602e
+        status: created
+        additional_output: |-
+          {
+          "tokens": 7894,
+          "estimated_cost": "0,24$"
+          }
+        artifacts:
+        - agent_created: false
+          file_name: main.py
+          artifact_id: b225e278-8b4c-4f99-a696-8facf19f0e56
+          relative_path: python/code/
+        - agent_created: false
+          file_name: main.py
+          artifact_id: b225e278-8b4c-4f99-a696-8facf19f0e56
+          relative_path: python/code/
+      title: Step
+    getAgentTask_404_response:
+      example:
+        message: Unable to find entity with the provided id
+      properties:
+        message:
+          description: Message stating the entity was not found
+          example: Unable to find entity with the provided id
+          title: message
+          type: string
+      required:
+      - message
+      title: getAgentTask_404_response
+      type: object
