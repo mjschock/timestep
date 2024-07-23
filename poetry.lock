@@ -2375,13 +2375,14 @@ doc = ["myst-parser", "sphinx", "sphinx-book-theme"]
 test = ["coverage", "pytest", "pytest-cov"]
 
 [[package]]
-name = "llama_cpp_python"
+name = "llama-cpp-python"
 version = "0.2.82"
 description = "Python bindings for the llama.cpp library"
 optional = false
 python-versions = ">=3.8"
-files = []
-develop = true
+files = [
+    {file = "llama_cpp_python-0.2.82.tar.gz", hash = "sha256:55dbc02342bd128e12be7e6b59ba9f96a1bdb35a4e32b42694134970a6d96060"},
+]
 
 [package.dependencies]
 diskcache = ">=5.6.1"
@@ -2394,10 +2395,6 @@ all = ["llama_cpp_python[dev,server,test]"]
 dev = ["black (>=23.3.0)", "httpx (>=0.24.1)", "mkdocs (>=1.4.3)", "mkdocs-material (>=9.1.18)", "mkdocstrings[python] (>=0.22.0)", "pytest (>=7.4.0)", "twine (>=4.0.2)"]
 server = ["PyYAML (>=5.1)", "fastapi (>=0.100.0)", "pydantic-settings (>=2.0.1)", "sse-starlette (>=1.6.1)", "starlette-context (>=0.3.6,<0.4)", "uvicorn (>=0.22.0)"]
 test = ["httpx (>=0.24.1)", "pytest (>=7.4.0)", "scipy (>=1.10)"]
-
-[package.source]
-type = "directory"
-url = "3rdparty/llama-cpp-python"
 
 [[package]]
 name = "locust"
@@ -3299,6 +3296,24 @@ prefect = ">=3.0.0rc1"
 
 [package.extras]
 dev = ["aiohttp", "coverage", "interrogate", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings[python]", "mypy", "pillow", "pre-commit", "pytest", "pytest-asyncio", "pytest-xdist"]
+
+[[package]]
+name = "prefect-sqlalchemy"
+version = "0.5.0rc2"
+description = "Prefect integrations for working with databases"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "prefect_sqlalchemy-0.5.0rc2-py3-none-any.whl", hash = "sha256:0425f4d833260f3014a8a4c03ff43c3b3af1b1f60df2f241aece0ea6c5ace101"},
+    {file = "prefect_sqlalchemy-0.5.0rc2.tar.gz", hash = "sha256:cfa096b885b1eb8e46d65d01ae954cab1a3d552330045382b09b937b531f0de7"},
+]
+
+[package.dependencies]
+prefect = ">=3.0.0rc1"
+sqlalchemy = ">=1.4.31,<3"
+
+[package.extras]
+dev = ["aiosqlite", "asyncpg", "coverage", "interrogate", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings[python]", "mypy", "pillow", "pre-commit", "psycopg2", "pytest", "pytest-asyncio", "pytest-env", "pytest-xdist"]
 
 [[package]]
 name = "prompt-toolkit"
@@ -4470,6 +4485,21 @@ postgresql-psycopg2cffi = ["psycopg2cffi"]
 postgresql-psycopgbinary = ["psycopg[binary] (>=3.0.7)"]
 pymysql = ["pymysql"]
 sqlcipher = ["sqlcipher3_binary"]
+
+[[package]]
+name = "sqlmodel"
+version = "0.0.21"
+description = "SQLModel, SQL databases in Python, designed for simplicity, compatibility, and robustness."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "sqlmodel-0.0.21-py3-none-any.whl", hash = "sha256:eca104afe8a643f0764076b29f02e51d19d6b35c458f4c119942960362a4b52a"},
+    {file = "sqlmodel-0.0.21.tar.gz", hash = "sha256:b2034c23d930f66d2091b17a4280a9c23a7ea540a71e7fcf9c746d262f06f74a"},
+]
+
+[package.dependencies]
+pydantic = ">=1.10.13,<3.0.0"
+SQLAlchemy = ">=2.0.14,<2.1.0"
 
 [[package]]
 name = "sse-starlette"
@@ -5660,4 +5690,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d5b4d51aac55bacf71680452f9e9aed8d68d4bc942c224b1457b9d703e8b6098"
+content-hash = "dc2ab787d4f9fa06db5c27cebc0eadb27a0a3ad2d341f266e78aee596062fd3b"

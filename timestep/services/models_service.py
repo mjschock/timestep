@@ -10,7 +10,10 @@ from timestep.api.openai.v1 import util
 
 from openai.types.model import Model
 
-from timestep.services import models_service
+from timestep.database import InstanceStoreSingleton
+from llama_cpp import Llama
+
+instance_store = InstanceStoreSingleton()
 
 def delete_model(model):  # noqa: E501
     """Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
@@ -36,7 +39,7 @@ def list_models():  # noqa: E501
     raise NotImplementedError
 
 
-def retrieve_model(model: str, token_info: dict, user: str):
+def retrieve_model(model_id: str):
     """Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
 
      # noqa: E501
@@ -46,16 +49,14 @@ def retrieve_model(model: str, token_info: dict, user: str):
 
     :rtype: Union[Model, Tuple[Model, int], Tuple[Model, int, Dict[str, str]]
     """
-    # print('args: ', args)
-    # print('kwargs: ', kwargs)
 
-    model_info = models_service.retrieve_model(model_id=model)
+    model: Llama = instance_store._shared_instance_state["models"][model_id]
 
-    print('model_info: ', model_info)
-
-    return Model(
-        id=model,
-        created=0,
-        object="model",
-        owned_by=user,
-    ).model_dump(mode="json")
+    return {
+        "chat_format": model.chat_format,
+        "model_path": model.model_path,
+        "n_ctx": model.n_ctx(),
+        "lora_base": model.lora_base,
+        "lora_path": model.lora_path,
+        "lora_scale": model.lora_scale,
+    }

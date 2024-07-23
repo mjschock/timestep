@@ -21,6 +21,8 @@ from openai.types.beta.threads.runs import RunStep
 from openai.types.beta.threads.text import Text
 from openai.types.beta.threads.text_content_block import TextContentBlock
 from prefect import flow
+from prefect.deployments import run_deployment
+from prefect.deployments.flow_runs import FlowRun
 from sse_starlette import EventSourceResponse
 from starlette.background import BackgroundTask
 from starlette.responses import JSONResponse
@@ -28,8 +30,6 @@ from starlette.responses import JSONResponse
 from timestep.agent import step
 from timestep.api.openai.v1.controllers.chat_controller import create_chat_completion
 from timestep.database import InstanceStoreSingleton
-
-print('os.environ.get("OPENAI_API_KEY"): ', os.environ.get("OPENAI_API_KEY"))
 
 # set the default model
 cf.default_model = ChatOpenAI(
@@ -304,6 +304,20 @@ async def create_run(body, token_info, thread_id, user):
     instance_store = InstanceStoreSingleton()
     instance_store._shared_instance_state["runs"][run.id] = run
 
+    flow_run: FlowRun = await run_deployment(
+        idempotency_key=run.id,
+        name="agent-flow/agent-flow-deployment",
+        parameters={
+            "inputs": {
+                "run_id": run_id,
+            }
+        },
+        # job_variables={"env": {"MY_ENV_VAR": "staging"}},
+        timeout=0, # don't wait for the run to finish
+    )
+
+    print('flow_run: ', flow_run)
+
     if stream:
         async def run_event_publisher():
             run: Run = Run(**await get_run(run_id=run_id, token_info=token_info, thread_id=thread_id, user=user))
@@ -336,9 +350,10 @@ async def create_run(body, token_info, thread_id, user):
         return EventSourceResponse(run_event_publisher())
 
     else:
-        task = BackgroundTask(step, run_id=run.id, token_info=token_info, thread_id=run.thread_id, user=user)
+        # task = BackgroundTask(step, run_id=run.id, token_info=token_info, thread_id=run.thread_id, user=user)
 
-        return JSONResponse(run.model_dump(mode="json"), background=task)
+        # return JSONResponse(run.model_dump(mode="json"), background=task)
+        return run.model_dump(mode="json")
 
 
 # def create_thread(create_thread_request=None):  # noqa: E501

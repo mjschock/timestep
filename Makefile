@@ -47,21 +47,9 @@ apis:
 
 	mv build/openai/python-flask/timestep/api/openai/v1 timestep/api/openai/v1
 
-dev:
-	# ./3rdparty/llama.cpp/llama-server --hf-repo mjschock/TinySolar-248m-4k-code-instruct-Q4_K_M-GGUF --hf-file tinysolar-248m-4k-code-instruct-q4_k_m.gguf -c 2048 --port 8000
-
-	# ./models/llava-v1.5-7b-q4.llamafile --nobrowser --port 8000
-
-	# poetry run python3 -m llama_cpp.server --config_file config.json
-
-	poetry run uvicorn timestep.__main__:app \
-		--host 127.0.0.1 \
-		--log-level debug \
-		--loop asyncio \
-		--port 8000 \
-		--reload \
-		--reload-dir timestep \
-		--workers 1
+clean:
+	# rm -rf **/*/__pycache__ .venv 3rdparty build data dist models work database.db
+	rm -rf .venv 3rdparty build data dist models work database.db
 
 publish:
 	poetry install

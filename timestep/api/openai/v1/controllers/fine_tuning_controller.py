@@ -7,6 +7,8 @@ from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparamet
 from openai.types.fine_tuning.fine_tuning_job_event import FineTuningJobEvent
 from openai.types.fine_tuning.fine_tuning_job_integration import FineTuningJobIntegration
 from openai.pagination import SyncCursorPage
+from prefect.deployments import run_deployment
+from prefect.deployments.flow_runs import FlowRun
 
 from timestep.agent import train_model
 from timestep.api.openai.v1.models.create_fine_tuning_job_request import CreateFineTuningJobRequest
@@ -59,7 +61,16 @@ async def create_fine_tuning_job(body, token_info, user):
         validation_file=body.get("validation_file"),
     )
 
-    instance_store._shared_instance_state["fine_tuning_jobs"][fine_tuning_job.id] = fine_tuning_job
+    # instance_store._shared_instance_state["fine_tuning_jobs"][fine_tuning_job.id] = fine_tuning_job
+    instance_store.insert(fine_tuning_job)
+
+    fine_tuning_job_id = fine_tuning_job.id
+
+    fine_tuning_job = instance_store.select(FineTuningJob, id=fine_tuning_job_id)
+    # assert uuid.UUID(fine_tuning_job.id, version=4) == uuid.UUID(fine_tuning_job_id, version=4)
+    # assert uuid.UUID(fine_tuning_job.id) == uuid.UUID(fine_tuning_job_id)
+    print('type(fine_tuning_job.id):', type(fine_tuning_job.id))
+    assert str(fine_tuning_job.id) == fine_tuning_job_id
 
     fine_tuning_job_event = FineTuningJobEvent(
         id=str(uuid.uuid4()),
@@ -72,7 +83,22 @@ async def create_fine_tuning_job(body, token_info, user):
     instance_store._shared_instance_state["fine_tuning_job_events"][fine_tuning_job.id] = [fine_tuning_job_event]
 
     # TODO: make this async, etc.
-    await train_model(fine_tuning_job_id=fine_tuning_job.id)
+    # await train_model(fine_tuning_job_id=fine_tuning_job.id, suffix=suffix)
+    flow_run: FlowRun = await run_deployment(
+        idempotency_key=fine_tuning_job.id,
+        name="agent-flow/agent-flow-deployment",
+        # parameters={"names": ["Alice", "Bob"]},
+        parameters={
+            "inputs": {
+                "fine_tuning_job_id": fine_tuning_job.id,
+                "suffix": suffix,
+            }
+        },
+        # job_variables={"env": {"MY_ENV_VAR": "staging"}},
+        timeout=0, # don't wait for the run to finish
+    )
+
+    print('flow_run: ', flow_run)
 
     return fine_tuning_job.model_dump(mode="json")
 
@@ -135,7 +161,7 @@ def list_paginated_fine_tuning_jobs(after=None, limit=None):  # noqa: E501
 
 
 # def retrieve_fine_tuning_job(fine_tuning_job_id):  # noqa: E501
-def retrieve_fine_tuning_job(fine_tuning_job_id, token_info, user):
+def retrieve_fine_tuning_job(fine_tuning_job_id: str, token_info: dict, user: str):
     """Get info about a fine-tuning job.  [Learn more about fine-tuning](/docs/guides/fine-tuning) 
 
      # noqa: E501
@@ -145,6 +171,11 @@ def retrieve_fine_tuning_job(fine_tuning_job_id, token_info, user):
 
     :rtype: Union[FineTuningJob, Tuple[FineTuningJob, int], Tuple[FineTuningJob, int, Dict[str, str]]
     """
-    fine_tuning_job: FineTuningJob = instance_store._shared_instance_state["fine_tuning_jobs"].get(fine_tuning_job_id)
+    # fine_tuning_job: FineTuningJob = instance_store._shared_instance_state["fine_tuning_jobs"].get(fine_tuning_job_id)
+    fine_tuning_job: FineTuningJob = instance_store.select(
+        FineTuningJob,
+        # uuid.UUID(fine_tuning_job_id, version=4),
+        id=fine_tuning_job_id,
+    )
 
     return fine_tuning_job.model_dump(mode="json")
