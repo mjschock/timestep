@@ -2,9 +2,12 @@ import unittest
 
 from flask import json
 
-from timestep.api.openai.v1.models.create_image_edit_request_model import CreateImageEditRequestModel  # noqa: E501
-from timestep.api.openai.v1.models.create_image_request import CreateImageRequest  # noqa: E501
-from timestep.api.openai.v1.models.images_response import ImagesResponse  # noqa: E501
+from timestep.api.openai.v1.models.create_image_edit_request_model import \
+    CreateImageEditRequestModel  # noqa: E501
+from timestep.api.openai.v1.models.create_image_request import \
+    CreateImageRequest  # noqa: E501
+from timestep.api.openai.v1.models.images_response import \
+    ImagesResponse  # noqa: E501
 from timestep.api.openai.v1.test import BaseTestCase
 
 

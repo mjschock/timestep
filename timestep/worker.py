@@ -1,32 +1,26 @@
 import json
 import os
-import time
+import uuid
 from typing import Optional
-import uuid
-
-import os
-from datetime import datetime
-import time
-import uuid
-
-import httpx
-from llama_cpp import Llama
-from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparameters
-from openai.types.fine_tuning.fine_tuning_job_event import FineTuningJobEvent
-from prefect_shell import ShellOperation
 
 import controlflow as cf
+import httpx
+import openai
+import typer
 from langchain_openai import ChatOpenAI
 from openai.types.beta.assistant import Assistant
-from openai.types.chat.chat_completion import ChatCompletion
 from openai.types.beta.thread import Thread
 from openai.types.beta.threads.run import Run
-from prefect import flow, get_run_logger, task
-import typer
-from prefect import flow, task
-from prefect_sqlalchemy import SqlAlchemyConnector
-import openai
+from openai.types.chat.chat_completion import ChatCompletion
 from openai.types.file_object import FileObject
+from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparameters
+from prefect import flow, get_run_logger, task
+from prefect.deployments import run_deployment
+from prefect.deployments.flow_runs import FlowRun
+from prefect_shell import ShellOperation
+from prefect_sqlalchemy import AsyncDriver, ConnectionComponents, SqlAlchemyConnector
+
+from timestep.worker import train_model
 
 # from timestep.api.openai.v1.controllers.chat_controller import create_chat_completion
 # from timestep.database import InstanceStoreSingleton
@@ -34,14 +28,11 @@ from openai.types.file_object import FileObject
 
 # instance_store = InstanceStoreSingleton()
 
-from prefect_sqlalchemy import SqlAlchemyConnector, ConnectionComponents, AsyncDriver
-
+app_dir = typer.get_app_dir(__package__)
 block_name = "timestep-ai-sql-alchemy-connector-block"
-
 connector = SqlAlchemyConnector(
     connection_info=ConnectionComponents(
-        driver=AsyncDriver.SQLITE_AIOSQLITE,
-        database="database.db"
+        driver=AsyncDriver.SQLITE_AIOSQLITE, database=f"{app_dir}/database.db"
     )
 )
 
@@ -76,21 +67,23 @@ openai_client = openai.OpenAI(
 #     except ValueError as e:
 #         print(f"Error: {str(e)}")
 
+
 @cf.flow
 def iterative_task_flow():
     task = cf.Task("Generate a comprehensive report on AI trends")
-    
+
     while task.is_incomplete():
         task.run_once()
-        
+
         # Optionally, you can add logic here to modify the task,
         # create new tasks, or make decisions based on other results
-        
+
         # if some_condition:
         if True:
             break  # Allows for early termination if needed
 
     return task.result
+
 
 @flow
 async def agent_flow(inputs: dict):
@@ -102,7 +95,7 @@ async def agent_flow(inputs: dict):
 
     typer.echo("agent flow")
 
-    print('inputs: ', inputs)
+    print("inputs: ", inputs)
 
     await connector.save(block_name, overwrite=True)
 
@@ -110,13 +103,15 @@ async def agent_flow(inputs: dict):
     #     await say_hello(name)
 
     if "run_id" in inputs:
-        print('=== run_id ===')
+        print("=== run_id ===")
 
         # my_flow()
-        raise NotImplementedError("TODO: just use OpenAI lib to invoke model with messages right now")
+        raise NotImplementedError(
+            "TODO: just use OpenAI lib to invoke model with messages right now"
+        )
 
         result = iterative_task_flow()
-        print('result: ', result)
+        print("result: ", result)
 
         # async with cf.Flow() as greeting_flow:
         # with cf.Flow():
@@ -144,9 +139,9 @@ async def agent_flow(inputs: dict):
 
         #     typer.echo("agent flow")
 
-            # task = cf.Task("Write a generic 12-week proposal to get funding to implement agent serving and training with small local models")
+        # task = cf.Task("Write a generic 12-week proposal to get funding to implement agent serving and training with small local models")
 
-            # agent_run_flow.run_once()
+        # agent_run_flow.run_once()
 
     else:
         fine_tuning_job_id = inputs["fine_tuning_job_id"]
@@ -154,16 +149,23 @@ async def agent_flow(inputs: dict):
 
         await train_model(fine_tuning_job_id=fine_tuning_job_id, suffix=suffix)
 
+
 # TODO: move this somewhere more appropriate
 # maybe get rid of BackgroundTask and just trigger a run deployment
 # @flow(log_prints=True)
 # @cf.flow
 async def step(run_id: str, token_info: dict, thread_id: str, user: str):
-    print('=== run_run ===')
+    print("=== run_run ===")
     # run: Run = Run(**await get_run(run_id=run_id, token_info=token_info, thread_id=thread_id, user=user))
-    run: Run = await get_run(run_id=run_id, token_info=token_info, thread_id=thread_id, user=user)
-    assistant: Assistant = await get_assistant(assistant_id=run.assistant_id, token_info=token_info, user=user)
-    thread: Thread = await get_thread(token_info=token_info, thread_id=thread_id, user=user)
+    run: Run = await get_run(
+        run_id=run_id, token_info=token_info, thread_id=thread_id, user=user
+    )
+    assistant: Assistant = await get_assistant(
+        assistant_id=run.assistant_id, token_info=token_info, user=user
+    )
+    thread: Thread = await get_thread(
+        token_info=token_info, thread_id=thread_id, user=user
+    )
 
     # # TODO: use ControlFlow to run_once...
     # @cf.flow
@@ -194,7 +196,7 @@ async def step(run_id: str, token_info: dict, thread_id: str, user: str):
     # SyncCursorPage[Message] = await list_messages(
     messages = await list_messages(
         limit=-1,
-        order='asc',
+        order="asc",
         token_info=token_info,
         thread_id=thread_id,
         user=user,
@@ -206,17 +208,20 @@ async def step(run_id: str, token_info: dict, thread_id: str, user: str):
     }
 
     messages = [system_message] + messages
-    print('messages: ', messages)
+    print("messages: ", messages)
 
     def get_message_content(message):
         content = message.get("content")
 
         if type(content) == list:
             if message.get("role") == "user":
-                return [{
-                    "text": _content.get("text").get("value"),
-                    "type": _content.get("type"),
-                } for _content in content]
+                return [
+                    {
+                        "text": _content.get("text").get("value"),
+                        "type": _content.get("type"),
+                    }
+                    for _content in content
+                ]
 
             else:
                 assert len(content) == 1
@@ -225,25 +230,32 @@ async def step(run_id: str, token_info: dict, thread_id: str, user: str):
         else:
             return content
 
-    body = { # CompletionCreateParamsNonStreaming
-        "messages": [ {
-            "content": get_message_content(message),
-            "role": message.get("role"),
-        } for message in messages ],
+    body = {  # CompletionCreateParamsNonStreaming
+        "messages": [
+            {
+                "content": get_message_content(message),
+                "role": message.get("role"),
+            }
+            for message in messages
+        ],
         "model": assistant.model,
         "tools": assistant.tools,
     }
-    print('body: ', body)
+    print("body: ", body)
 
     # TODO: use service instead?
-    chat_completion: ChatCompletion = ChatCompletion(**await create_chat_completion(body=body, token_info=token_info, user=user)) # TODO: handle streaming use case
-    print('chat_completion: ', chat_completion)
+    chat_completion: ChatCompletion = ChatCompletion(
+        **await create_chat_completion(body=body, token_info=token_info, user=user)
+    )  # TODO: handle streaming use case
+    print("chat_completion: ", chat_completion)
 
     choice = chat_completion.choices[0]
-    print('choice: ', choice)
+    print("choice: ", choice)
 
     finish_reason = choice.finish_reason
-    print('finish_reason: ', finish_reason) # "stop", "length", "tool_calls", "content_filter", "function_call"
+    print(
+        "finish_reason: ", finish_reason
+    )  # "stop", "length", "tool_calls", "content_filter", "function_call"
 
     response_message = chat_completion.choices[0].message
 
@@ -252,10 +264,15 @@ async def step(run_id: str, token_info: dict, thread_id: str, user: str):
     if tool_calls:
         raise NotImplementedError
 
-    await create_message(body={
-        "content": response_message.content,
-        "role": response_message.role,
-    }, token_info=token_info, thread_id=thread_id, user=user)
+    await create_message(
+        body={
+            "content": response_message.content,
+            "role": response_message.role,
+        },
+        token_info=token_info,
+        thread_id=thread_id,
+        user=user,
+    )
 
     # time.sleep(1)  # wait for the process to finish
 
@@ -263,11 +280,18 @@ async def step(run_id: str, token_info: dict, thread_id: str, user: str):
         "status": "completed",
     }
 
-    await modify_run(modify_run_request=modify_run_request, run_id=run_id, token_info=token_info, thread_id=thread_id, user=user)
+    await modify_run(
+        modify_run_request=modify_run_request,
+        run_id=run_id,
+        token_info=token_info,
+        thread_id=thread_id,
+        user=user,
+    )
 
     # run: Run = Run(**await get_run(run_id=run_id, token_info=token_info, thread_id=thread_id, user=user))
 
     # return run
+
 
 @task
 # async def select_fine_tuning_job_by_id(id: str) -> list:
@@ -296,7 +320,7 @@ async def select_fine_tuning_job_by_id(id: str):
                 WHERE id = :id;""",
             parameters={"id": str(uuid.UUID(id, version=4)).replace("-", "")},
         )
-        print('results: ', results)
+        print("results: ", results)
 
         return FineTuningJob(
             id=id,
@@ -321,6 +345,7 @@ async def select_fine_tuning_job_by_id(id: str):
 
     # return all_rows
 
+
 @flow(log_prints=True)
 async def train_model(fine_tuning_job_id: str, suffix: Optional[str] = None):
     logger = get_run_logger()
@@ -335,30 +360,34 @@ async def train_model(fine_tuning_job_id: str, suffix: Optional[str] = None):
     os.makedirs(working_dir, exist_ok=True)
 
     # fine_tuning_job: FineTuningJob = instance_store._shared_instance_state["fine_tuning_jobs"].get(fine_tuning_job_id)
-    fine_tuning_job: FineTuningJob = await select_fine_tuning_job_by_id(fine_tuning_job_id)
-    print('fine_tuning_job: ', fine_tuning_job)
+    fine_tuning_job: FineTuningJob = await select_fine_tuning_job_by_id(
+        fine_tuning_job_id
+    )
+    print("fine_tuning_job: ", fine_tuning_job)
 
     hyperparameters: Hyperparameters = fine_tuning_job.hyperparameters
     max_epochs = -1 if hyperparameters.n_epochs == "auto" else hyperparameters.n_epochs
 
     # model: Llama = instance_store._shared_instance_state["models"][fine_tuning_job.model]
     async with httpx.AsyncClient() as client:
-        response = await client.get(f'{os.environ.get("OPENAI_BASE_URL").split("/api")[0]}/v2/models/{fine_tuning_job.model}')
-        print('response: ', response)
+        response = await client.get(
+            f'{os.environ.get("OPENAI_BASE_URL").split("/api")[0]}/v2/models/{fine_tuning_job.model}'
+        )
+        print("response: ", response)
         model_info = response.json()
-        print('model_info: ', model_info)
+        print("model_info: ", model_info)
 
     model_path: str = model_info.get("model_path")
-    print('model_path: ', model_path)
+    print("model_path: ", model_path)
 
     lora_base: str = model_info.get("lora_base")
-    print('lora_base: ', lora_base)
+    print("lora_base: ", lora_base)
 
     lora_path: str = model_info.get("lora_path")
-    print('lora_path: ', lora_path)
+    print("lora_path: ", lora_path)
 
     lora_scale: str = model_info.get("lora_scale")
-    print('lora_scale: ', lora_scale)
+    print("lora_scale: ", lora_scale)
 
     # fine_tuning_job = FineTuningJob(
     #     id=str(uuid.uuid4()),
@@ -400,13 +429,17 @@ async def train_model(fine_tuning_job_id: str, suffix: Optional[str] = None):
     # training_file_object = instance_store._shared_instance_state["file_objects"][training_file_id]
     # validation_file_object = instance_store._shared_instance_state["file_objects"][validation_file_id]
 
-    training_file_object: FileObject = openai_client.files.retrieve(file_id=training_file_id)
-    validation_file_object: FileObject = openai_client.files.retrieve(file_id=validation_file_id)
+    training_file_object: FileObject = openai_client.files.retrieve(
+        file_id=training_file_id
+    )
+    validation_file_object: FileObject = openai_client.files.retrieve(
+        file_id=validation_file_id
+    )
 
-    print('training_file_object: ', training_file_object)
-    print('validation_file_object: ', validation_file_object)
+    print("training_file_object: ", training_file_object)
+    print("validation_file_object: ", validation_file_object)
 
-# str(uuid.UUID(id, version=4)).replace("-", "")
+    # str(uuid.UUID(id, version=4)).replace("-", "")
 
     # for long running operations, you can use a context manager
     async with ShellOperation(
@@ -446,7 +479,7 @@ async def train_model(fine_tuning_job_id: str, suffix: Optional[str] = None):
 
         # if you'd like to get the output lines, you can use the `fetch_result` method
         output_lines = await llama_finetune_process.fetch_result()
-        print('output_lines: ', output_lines)
+        print("output_lines: ", output_lines)
 
     #     for output_line in output_lines:
     #         print('output_line: ', output_line)
@@ -506,6 +539,34 @@ async def train_model(fine_tuning_job_id: str, suffix: Optional[str] = None):
 
     #     # instance_store._shared_instance_state["models"][fine_tuning_job.fine_tuned_model] = model
 
+
+# async def main():
+def main(work_type="training"):
+    # run_deployment(
+    #     name="agent-flow/agent-flow-deployment",
+    #     parameters={"names": ["Alice", "Bob"]},
+    #     timeout=0,
+    # )
+
+    flow_run: FlowRun = run_deployment(
+        # idempotency_key=fine_tuning_job.id,
+        name="agent-flow/agent-flow-deployment",
+        # parameters={"names": ["Alice", "Bob"]},
+        parameters={
+            "inputs": {
+                # "fine_tuning_job_id": fine_tuning_job.id,
+                # "suffix": suffix,
+            },
+            "work_type": work_type,
+        },
+        # job_variables={"env": {"MY_ENV_VAR": "staging"}},
+        timeout=0,  # don't wait for the run to finish
+    )
+
+    print("flow_run: ", flow_run)
+
+
 if __name__ == "__main__":
     # create your first deployment to automate your flow
-    agent_flow.serve(name="your-first-deployment")
+    # agent_flow.serve(name="your-first-deployment")
+    main()

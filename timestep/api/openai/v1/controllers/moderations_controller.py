@@ -1,11 +1,12 @@
-import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
+from typing import Dict, Tuple, Union
 
-from timestep.api.openai.v1.models.create_moderation_request import CreateModerationRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_moderation_response import CreateModerationResponse  # noqa: E501
+import connexion
+
 from timestep.api.openai.v1 import util
+from timestep.api.openai.v1.models.create_moderation_request import \
+    CreateModerationRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_moderation_response import \
+    CreateModerationResponse  # noqa: E501
 
 
 def create_moderation(create_moderation_request):  # noqa: E501

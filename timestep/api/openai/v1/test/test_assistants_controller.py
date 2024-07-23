@@ -2,28 +2,49 @@ import unittest
 
 from flask import json
 
-from timestep.api.openai.v1.models.assistant_object import AssistantObject  # noqa: E501
-from timestep.api.openai.v1.models.create_assistant_request import CreateAssistantRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_message_request import CreateMessageRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_run_request import CreateRunRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_thread_and_run_request import CreateThreadAndRunRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_thread_request import CreateThreadRequest  # noqa: E501
-from timestep.api.openai.v1.models.delete_assistant_response import DeleteAssistantResponse  # noqa: E501
-from timestep.api.openai.v1.models.delete_message_response import DeleteMessageResponse  # noqa: E501
-from timestep.api.openai.v1.models.delete_thread_response import DeleteThreadResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_assistants_response import ListAssistantsResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_messages_response import ListMessagesResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_run_steps_response import ListRunStepsResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_runs_response import ListRunsResponse  # noqa: E501
-from timestep.api.openai.v1.models.message_object import MessageObject  # noqa: E501
-from timestep.api.openai.v1.models.modify_assistant_request import ModifyAssistantRequest  # noqa: E501
-from timestep.api.openai.v1.models.modify_message_request import ModifyMessageRequest  # noqa: E501
-from timestep.api.openai.v1.models.modify_run_request import ModifyRunRequest  # noqa: E501
-from timestep.api.openai.v1.models.modify_thread_request import ModifyThreadRequest  # noqa: E501
+from timestep.api.openai.v1.models.assistant_object import \
+    AssistantObject  # noqa: E501
+from timestep.api.openai.v1.models.create_assistant_request import \
+    CreateAssistantRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_message_request import \
+    CreateMessageRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_run_request import \
+    CreateRunRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_thread_and_run_request import \
+    CreateThreadAndRunRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_thread_request import \
+    CreateThreadRequest  # noqa: E501
+from timestep.api.openai.v1.models.delete_assistant_response import \
+    DeleteAssistantResponse  # noqa: E501
+from timestep.api.openai.v1.models.delete_message_response import \
+    DeleteMessageResponse  # noqa: E501
+from timestep.api.openai.v1.models.delete_thread_response import \
+    DeleteThreadResponse  # noqa: E501
+from timestep.api.openai.v1.models.list_assistants_response import \
+    ListAssistantsResponse  # noqa: E501
+from timestep.api.openai.v1.models.list_messages_response import \
+    ListMessagesResponse  # noqa: E501
+from timestep.api.openai.v1.models.list_run_steps_response import \
+    ListRunStepsResponse  # noqa: E501
+from timestep.api.openai.v1.models.list_runs_response import \
+    ListRunsResponse  # noqa: E501
+from timestep.api.openai.v1.models.message_object import \
+    MessageObject  # noqa: E501
+from timestep.api.openai.v1.models.modify_assistant_request import \
+    ModifyAssistantRequest  # noqa: E501
+from timestep.api.openai.v1.models.modify_message_request import \
+    ModifyMessageRequest  # noqa: E501
+from timestep.api.openai.v1.models.modify_run_request import \
+    ModifyRunRequest  # noqa: E501
+from timestep.api.openai.v1.models.modify_thread_request import \
+    ModifyThreadRequest  # noqa: E501
 from timestep.api.openai.v1.models.run_object import RunObject  # noqa: E501
-from timestep.api.openai.v1.models.run_step_object import RunStepObject  # noqa: E501
-from timestep.api.openai.v1.models.submit_tool_outputs_run_request import SubmitToolOutputsRunRequest  # noqa: E501
-from timestep.api.openai.v1.models.thread_object import ThreadObject  # noqa: E501
+from timestep.api.openai.v1.models.run_step_object import \
+    RunStepObject  # noqa: E501
+from timestep.api.openai.v1.models.submit_tool_outputs_run_request import \
+    SubmitToolOutputsRunRequest  # noqa: E501
+from timestep.api.openai.v1.models.thread_object import \
+    ThreadObject  # noqa: E501
 from timestep.api.openai.v1.test import BaseTestCase
 
 

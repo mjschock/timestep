@@ -2,8 +2,10 @@ import unittest
 
 from flask import json
 
-from timestep.api.openai.v1.models.create_moderation_request import CreateModerationRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_moderation_response import CreateModerationResponse  # noqa: E501
+from timestep.api.openai.v1.models.create_moderation_request import \
+    CreateModerationRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_moderation_response import \
+    CreateModerationResponse  # noqa: E501
 from timestep.api.openai.v1.test import BaseTestCase
 
 

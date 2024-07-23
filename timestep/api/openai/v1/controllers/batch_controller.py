@@ -1,12 +1,13 @@
-import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
+from typing import Dict, Tuple, Union
 
-from timestep.api.openai.v1.models.batch import Batch  # noqa: E501
-from timestep.api.openai.v1.models.create_batch_request import CreateBatchRequest  # noqa: E501
-from timestep.api.openai.v1.models.list_batches_response import ListBatchesResponse  # noqa: E501
+import connexion
+
 from timestep.api.openai.v1 import util
+from timestep.api.openai.v1.models.batch import Batch  # noqa: E501
+from timestep.api.openai.v1.models.create_batch_request import \
+    CreateBatchRequest  # noqa: E501
+from timestep.api.openai.v1.models.list_batches_response import \
+    ListBatchesResponse  # noqa: E501
 
 
 def cancel_batch(batch_id):  # noqa: E501

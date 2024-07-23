@@ -1,11 +1,12 @@
-import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
+from typing import Dict, Tuple, Union
 
-from timestep.api.openai.v1.models.create_embedding_request import CreateEmbeddingRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_embedding_response import CreateEmbeddingResponse  # noqa: E501
+import connexion
+
 from timestep.api.openai.v1 import util
+from timestep.api.openai.v1.models.create_embedding_request import \
+    CreateEmbeddingRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_embedding_response import \
+    CreateEmbeddingResponse  # noqa: E501
 
 
 def create_embedding(create_embedding_request):  # noqa: E501

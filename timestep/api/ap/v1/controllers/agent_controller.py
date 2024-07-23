@@ -1,18 +1,23 @@
-import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
+from typing import Dict, Tuple, Union
 
-from timestep.api.ap.v1.models.artifact import Artifact  # noqa: E501
-from timestep.api.ap.v1.models.get_agent_task404_response import GetAgentTask404Response  # noqa: E501
-from timestep.api.ap.v1.models.step import Step  # noqa: E501
-from timestep.api.ap.v1.models.step_request_body import StepRequestBody  # noqa: E501
-from timestep.api.ap.v1.models.task import Task  # noqa: E501
-from timestep.api.ap.v1.models.task_artifacts_list_response import TaskArtifactsListResponse  # noqa: E501
-from timestep.api.ap.v1.models.task_list_response import TaskListResponse  # noqa: E501
-from timestep.api.ap.v1.models.task_request_body import TaskRequestBody  # noqa: E501
-from timestep.api.ap.v1.models.task_steps_list_response import TaskStepsListResponse  # noqa: E501
+import connexion
+
 from timestep.api.ap.v1 import util
+from timestep.api.ap.v1.models.artifact import Artifact  # noqa: E501
+from timestep.api.ap.v1.models.get_agent_task404_response import \
+    GetAgentTask404Response  # noqa: E501
+from timestep.api.ap.v1.models.step import Step  # noqa: E501
+from timestep.api.ap.v1.models.step_request_body import \
+    StepRequestBody  # noqa: E501
+from timestep.api.ap.v1.models.task import Task  # noqa: E501
+from timestep.api.ap.v1.models.task_artifacts_list_response import \
+    TaskArtifactsListResponse  # noqa: E501
+from timestep.api.ap.v1.models.task_list_response import \
+    TaskListResponse  # noqa: E501
+from timestep.api.ap.v1.models.task_request_body import \
+    TaskRequestBody  # noqa: E501
+from timestep.api.ap.v1.models.task_steps_list_response import \
+    TaskStepsListResponse  # noqa: E501
 
 
 def create_agent_task(task_request_body=None):  # noqa: E501

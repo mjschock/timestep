@@ -2,11 +2,16 @@ import unittest
 
 from flask import json
 
-from timestep.api.openai.v1.models.create_fine_tuning_job_request import CreateFineTuningJobRequest  # noqa: E501
-from timestep.api.openai.v1.models.fine_tuning_job import FineTuningJob  # noqa: E501
-from timestep.api.openai.v1.models.list_fine_tuning_job_checkpoints_response import ListFineTuningJobCheckpointsResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_fine_tuning_job_events_response import ListFineTuningJobEventsResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_paginated_fine_tuning_jobs_response import ListPaginatedFineTuningJobsResponse  # noqa: E501
+from timestep.api.openai.v1.models.create_fine_tuning_job_request import \
+    CreateFineTuningJobRequest  # noqa: E501
+from timestep.api.openai.v1.models.fine_tuning_job import \
+    FineTuningJob  # noqa: E501
+from timestep.api.openai.v1.models.list_fine_tuning_job_checkpoints_response import \
+    ListFineTuningJobCheckpointsResponse  # noqa: E501
+from timestep.api.openai.v1.models.list_fine_tuning_job_events_response import \
+    ListFineTuningJobEventsResponse  # noqa: E501
+from timestep.api.openai.v1.models.list_paginated_fine_tuning_jobs_response import \
+    ListPaginatedFineTuningJobsResponse  # noqa: E501
 from timestep.api.openai.v1.test import BaseTestCase
 
 

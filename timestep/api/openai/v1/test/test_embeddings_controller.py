@@ -2,8 +2,10 @@ import unittest
 
 from flask import json
 
-from timestep.api.openai.v1.models.create_embedding_request import CreateEmbeddingRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_embedding_response import CreateEmbeddingResponse  # noqa: E501
+from timestep.api.openai.v1.models.create_embedding_request import \
+    CreateEmbeddingRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_embedding_response import \
+    CreateEmbeddingResponse  # noqa: E501
 from timestep.api.openai.v1.test import BaseTestCase
 
 

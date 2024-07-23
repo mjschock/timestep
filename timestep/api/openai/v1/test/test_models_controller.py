@@ -2,8 +2,10 @@ import unittest
 
 from flask import json
 
-from timestep.api.openai.v1.models.delete_model_response import DeleteModelResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_models_response import ListModelsResponse  # noqa: E501
+from timestep.api.openai.v1.models.delete_model_response import \
+    DeleteModelResponse  # noqa: E501
+from timestep.api.openai.v1.models.list_models_response import \
+    ListModelsResponse  # noqa: E501
 from timestep.api.openai.v1.models.model import Model  # noqa: E501
 from timestep.api.openai.v1.test import BaseTestCase
 

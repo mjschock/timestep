@@ -1,13 +1,11 @@
 import asyncio
 import json
 import pprint
-import connexion
-from typing import Dict, Iterator
-from typing import Tuple
-from typing import Union
+from typing import Dict, Iterator, Tuple, Union
 
+import connexion
 from llama_cpp import Llama
-from llama_cpp.llama_types import CreateCompletionStreamResponse, CreateCompletionStreamResponse
+from llama_cpp.llama_types import CreateCompletionStreamResponse
 from llama_cpp.server.types import CreateCompletionRequest
 from openai.types.completion import Completion
 from prefect import flow, task

@@ -1,6 +1,14 @@
-# `timestep`
+# Timestep AI
 
-Timestep AI CLI
+Timestep AI CLI - free, local-first, open-source AI
+
+**Setup**:
+
+```console
+$ prefect server start
+$ prefect worker start --pool "default"
+$ timestep serve
+```
 
 **Usage**:
 
@@ -16,16 +24,46 @@ $ timestep [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
-* `up`: Up
+* `evals`: Run evaluations.
+* `serve`: Run serving.
+* `train`: Run training.
 
-## `timestep up`
+## `timestep evals`
 
-Up
+Run evaluations.
 
 **Usage**:
 
 ```console
-$ timestep up [OPTIONS]
+$ timestep evals [OPTIONS]
+```
+
+**Options**:
+
+* `--help`: Show this message and exit.
+
+## `timestep serve`
+
+Run serving.
+
+**Usage**:
+
+```console
+$ timestep serve [OPTIONS]
+```
+
+**Options**:
+
+* `--help`: Show this message and exit.
+
+## `timestep train`
+
+Run training.
+
+**Usage**:
+
+```console
+$ timestep train [OPTIONS]
 ```
 
 **Options**:

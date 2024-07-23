@@ -1,5 +1,5 @@
 default:
-	git submodule update --recursive
+	# git submodule update --recursive
 	poetry install
 
 apis:
@@ -53,5 +53,5 @@ clean:
 publish:
 	poetry install
 	poetry run toml-sort -ai pyproject.toml
-	poetry run typer timestep.main utils docs --output README.md --name timestep
+	poetry run typer timestep.main utils docs --name timestep --output README.md --title "Timestep AI"
 	poetry publish --build

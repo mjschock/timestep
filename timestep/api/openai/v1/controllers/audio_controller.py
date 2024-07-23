@@ -1,13 +1,16 @@
-import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
+from typing import Dict, Tuple, Union
 
-from timestep.api.openai.v1.models.create_speech_request import CreateSpeechRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_transcription200_response import CreateTranscription200Response  # noqa: E501
-from timestep.api.openai.v1.models.create_transcription_request_model import CreateTranscriptionRequestModel  # noqa: E501
-from timestep.api.openai.v1.models.create_translation200_response import CreateTranslation200Response  # noqa: E501
+import connexion
+
 from timestep.api.openai.v1 import util
+from timestep.api.openai.v1.models.create_speech_request import \
+    CreateSpeechRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_transcription200_response import \
+    CreateTranscription200Response  # noqa: E501
+from timestep.api.openai.v1.models.create_transcription_request_model import \
+    CreateTranscriptionRequestModel  # noqa: E501
+from timestep.api.openai.v1.models.create_translation200_response import \
+    CreateTranslation200Response  # noqa: E501
 
 
 def create_speech(create_speech_request):  # noqa: E501

@@ -1,16 +1,16 @@
+from typing import Dict, Tuple, Union
+
 import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
-
-from timestep.api.openai.v1.models.delete_model_response import DeleteModelResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_models_response import ListModelsResponse  # noqa: E501
-from timestep.api.openai.v1.models.model import Model  # noqa: E501
-from timestep.api.openai.v1 import util
-
 from openai.types.model import Model
 
+from timestep.api.openai.v1 import util
+from timestep.api.openai.v1.models.delete_model_response import \
+    DeleteModelResponse  # noqa: E501
+from timestep.api.openai.v1.models.list_models_response import \
+    ListModelsResponse  # noqa: E501
+from timestep.api.openai.v1.models.model import Model  # noqa: E501
 from timestep.services import models_service
+
 
 def delete_model(model):  # noqa: E501
     """Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.

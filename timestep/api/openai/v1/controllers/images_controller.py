@@ -1,12 +1,14 @@
-import connexion
-from typing import Dict
-from typing import Tuple
-from typing import Union
+from typing import Dict, Tuple, Union
 
-from timestep.api.openai.v1.models.create_image_edit_request_model import CreateImageEditRequestModel  # noqa: E501
-from timestep.api.openai.v1.models.create_image_request import CreateImageRequest  # noqa: E501
-from timestep.api.openai.v1.models.images_response import ImagesResponse  # noqa: E501
+import connexion
+
 from timestep.api.openai.v1 import util
+from timestep.api.openai.v1.models.create_image_edit_request_model import \
+    CreateImageEditRequestModel  # noqa: E501
+from timestep.api.openai.v1.models.create_image_request import \
+    CreateImageRequest  # noqa: E501
+from timestep.api.openai.v1.models.images_response import \
+    ImagesResponse  # noqa: E501
 
 
 def create_image(create_image_request):  # noqa: E501
