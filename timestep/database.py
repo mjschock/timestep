@@ -1,40 +1,56 @@
-
-# Temporary in-memory dictionary db with instances and without locking
-# TODO: move to SQLite tables, add vector capabilities, etc.
-
-# db = {
-#     "assistants": {},
-#     "messages": {},
-#     "runs": {},
-#     "file_objects": {},
-#     "fine_tuning_jobs": {},
-#     "fine_tuning_job_events": {},
-#     "models": {},
-#     "threads": {},
-# }
-
-# print('db: ', db)
-
-# async_connector = SqlAlchemyConnector(
-#     connection_info=ConnectionComponents(
-#         driver=AsyncDriver.SQLITE_AIOSQLITE,
-#         database="assistants.db"
-#     )
-# )
-
-# connector = SqlAlchemyConnector(
-#     connection_info=ConnectionComponents(
-#         driver=SyncDriver.SQLITE_PYSQLITE,
-#         database="assistants.db"
-#     )
-# )
-
+import enum
+import uuid
+from typing import List, Optional
 
 from llama_cpp import Llama
-from llama_cpp.llama_chat_format import Llama3VisionAlpha, Llava15ChatHandler, Llava16ChatHandler, MoondreamChatHandler, NanoLlavaChatHandler, ObsidianChatHandler
+from llama_cpp.llama_chat_format import (Llama3VisionAlpha, Llava15ChatHandler,
+                                         Llava16ChatHandler,
+                                         MoondreamChatHandler,
+                                         NanoLlavaChatHandler,
+                                         ObsidianChatHandler)
 from llama_cpp.llama_speculative import LlamaPromptLookupDecoding
 from llama_cpp.llama_tokenizer import LlamaHFTokenizer
+from openai.types.fine_tuning.fine_tuning_job import (Error, FineTuningJob,
+                                                      Hyperparameters)
+from openai.types.fine_tuning.fine_tuning_job_event import FineTuningJobEvent
+from pydantic import BaseModel
+# from sqlalchemy import JSON
+# import sqlalchemy
+from sqlalchemy import Column, Enum
+# from sqlalchemy.dialects.sqlite.json import JSON
+from sqlalchemy.types import JSON
+from sqlmodel import Field, Session, SQLModel, create_engine, select
 
+# class FineTuningJobErrorSQLModel(Error, Column(JSON)):
+#   pass
+#   __tablename__: str = "fine_tuning_job_errors"
+
+#   id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+
+class FineTuningJobStatus(str, enum.Enum):
+  cancelled = "cancelled"
+  failed = "failed"
+  queued = "queued"
+  running = "running"
+  succeeded = "succeeded"
+  validating_files = "validating_files"
+
+class FineTuningJobSQLModel(FineTuningJob, SQLModel, table=True):
+  __tablename__: str = "fine_tuning_jobs"
+  object: str = "fine_tuning.job"
+  id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+  # id: uuid.uuid4 = Field(default_factory=uuid.uuid4, primary_key=True)
+
+  error: Optional[dict] = Field(sa_column=Column(JSON), default=JSON.NULL)
+  integrations: Optional[List[dict]] = Field(sa_column=Column(JSON), default=JSON.NULL)
+  hyperparameters: dict = Field(sa_column=Column(JSON), default={})
+  result_files: List[str] = Field(sa_column=Column(JSON), default=[])
+  status: FineTuningJobStatus = Field(sa_column=Column(Enum(FineTuningJobStatus)), default=FineTuningJobStatus.queued)
+
+
+engine = create_engine("sqlite:///database.db")
+
+SQLModel.metadata.create_all(engine)
 
 class InstanceStoreSingleton(object):
   _shared_instance_state = {
@@ -42,18 +58,55 @@ class InstanceStoreSingleton(object):
       "messages": {},
       "runs": {},
       "file_objects": {},
-      "fine_tuning_jobs": {},
+      # "fine_tuning_jobs": {},
       "fine_tuning_job_events": {},
       "models": {},
       "threads": {},
   }
-   
+
   def __new__(cls, *args, **kwargs):
     obj = super(InstanceStoreSingleton, cls).__new__(cls, *args, **kwargs)
     obj.__dict__ = cls._shared_instance_state
 
     return obj
-   
+
+  def insert(self, base_model: BaseModel):
+    if type(base_model) is FineTuningJob:
+      print('=== insert ===')
+      print('id: ', base_model.id)
+      print('base_model.model_dump()["id"]', base_model.model_dump()["id"])
+      fine_tuning_job = FineTuningJobSQLModel.model_validate(base_model.model_dump())
+      print('fine_tuning_job.id: ', fine_tuning_job.id)
+
+      with Session(engine) as session:
+        session.add(fine_tuning_job)
+        session.commit()
+
+    else:
+      raise NotImplementedError(f"Type {type(base_model)} is not yet implemented")
+
+  def select(self, base_model_class, id: str):
+    print("=== select ===")
+    print('id: ', id)
+
+    if issubclass(base_model_class, FineTuningJob):
+      with Session(engine) as session:
+        fine_tuning_job = session.get(FineTuningJobSQLModel, ident=uuid.UUID(id, version=4))
+        print('fine_tuning_job.id: ', fine_tuning_job.id)
+
+        assert type(fine_tuning_job.id) == uuid.UUID, f"{type(fine_tuning_job.id)} != uuid.UUID"
+
+        # m = base_model_class.model_validate(fine_tuning_job, strict=True)
+        # print('type(m): ', type(m))
+        # 
+
+        return FineTuningJob(**fine_tuning_job.model_dump(mode="json"))
+
+        # raise NotImplementedError
+
+    else:
+      raise NotImplementedError(f"Type {base_model_class} is not yet implemented")
+
 instance_store = InstanceStoreSingleton()
 instance_store.shared_variable = "Shared Variable"
 
@@ -75,14 +128,16 @@ mmproj_model_repo_id = None
 # model_alias = "MobileVLM_V2-1.7B"
 # model_alias = "moondream2"
 # model_alias = "nanoLLaVA"
+model_alias = "OpenLLaMA-3Bv2"
 # model_alias = "Polaris-Small" # https://ollama.com/starfleetai/polaris-small
 # model_alias = "Phi-3-Mini-4K-Instruct"
 # model_alias = "Replit-Code-V-1.5-3B"
 # model_alias = "SmolLM-?" # https://huggingface.co/collections/HuggingFaceTB/smollm-6695016cad7167254ce15966
 # model_alias = "TinyLlama-1.1B"
-model_alias = "TinySolar-248m-4k-py"
+# model_alias = "TinySolar-248m-4k-py"
 # n_ctx = 2048
 n_ctx = 4096
+# n_ctx = 8192
 # n_ctx = 16192
 n_gpu_layers = -1
 num_pred_tokens = 2 if n_gpu_layers == 0 else 10 # num_pred_tokens is the number of tokens to predict 10 is the default and generally good for gpu, 2 performs better for cpu-only machines.
@@ -168,6 +223,10 @@ elif model_alias == "nanoLLaVA":
       repo_id=mmproj_model_repo_id,
       filename=mmproj_model_filename,
     )
+
+elif model_alias == "OpenLLaMA-3Bv2":
+  text_model_filename = "open_llama_3b_v2-q8_0.gguf"
+  text_model_repo_id = "mjschock/open_llama_3b_v2-Q8_0-GGUF"
 
 elif model_alias == "Phi-3-Mini-4K-Instruct":
   text_model_filename = "Phi-3-mini-4k-instruct-q4.gguf"

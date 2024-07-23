@@ -1,3 +1,4 @@
+import os
 import time
 import uuid
 from openai.types.file_object import FileObject
@@ -5,6 +6,7 @@ from starlette.datastructures import UploadFile
 
 from timestep.database import InstanceStoreSingleton
 
+instance_store = InstanceStoreSingleton()
 
 # async def create_file(file, purpose):  # noqa: E501
 async def create_file(body, file: UploadFile):
@@ -33,7 +35,13 @@ async def create_file(body, file: UploadFile):
             status="uploaded",
         )
 
-        instance_store = InstanceStoreSingleton()
+        os.makedirs(f"data/{file_object.id}", exist_ok=True)
+
+        contents = file.file.read()
+
+        with open(f"data/{file_object.id}/{file_object.filename}", "w") as f:
+            f.write(contents.decode("utf-8"))
+
         instance_store._shared_instance_state["file_objects"][file_object.id] = file_object
 
         return file_object.model_dump(mode="json")
@@ -81,7 +89,9 @@ async def list_files(purpose=None):  # noqa: E501
     raise NotImplementedError
 
 
-async def retrieve_file(file_id):  # noqa: E501
+# async def retrieve_file(file_id):  # noqa: E501
+# async def retrieve_file(*args, **kwargs):
+async def retrieve_file(file_id: str, token_info: dict, user: str):
     """Returns information about a specific file.
 
      # noqa: E501
@@ -91,4 +101,6 @@ async def retrieve_file(file_id):  # noqa: E501
 
     :rtype: Union[OpenAIFile, Tuple[OpenAIFile, int], Tuple[OpenAIFile, int, Dict[str, str]]
     """
-    raise NotImplementedError
+    file_object: FileObject = instance_store._shared_instance_state["file_objects"][file_id]
+
+    return file_object.model_dump(mode="json")

@@ -1,4 +1,5 @@
 build
+data
 dist
 .env
 *.log
@@ -6,3 +7,4 @@ models
 __pycache__
 *.py[cod]
 .venv
+work

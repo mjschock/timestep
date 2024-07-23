@@ -1,12 +1,12 @@
 {
     "github.copilot.advanced": {
         "debug.overrideCapiUrl": "http://localhost:8000",
-        // "debug.overrideEngine": "engine",
+        "debug.overrideEngine": "copilot-codex",
         "debug.overrideProxyUrl": "http://localhost:8000",
         "debug.testOverrideProxyUrl": "http://localhost:8000",
     },
     "github.copilot.enable": {
         "*": false,
-        "python": true,
+        "python": false,
     },
 }
