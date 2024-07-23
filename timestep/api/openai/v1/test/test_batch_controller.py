@@ -3,8 +3,10 @@ import unittest
 from flask import json
 
 from timestep.api.openai.v1.models.batch import Batch  # noqa: E501
-from timestep.api.openai.v1.models.create_batch_request import CreateBatchRequest  # noqa: E501
-from timestep.api.openai.v1.models.list_batches_response import ListBatchesResponse  # noqa: E501
+from timestep.api.openai.v1.models.create_batch_request import \
+    CreateBatchRequest  # noqa: E501
+from timestep.api.openai.v1.models.list_batches_response import \
+    ListBatchesResponse  # noqa: E501
 from timestep.api.openai.v1.test import BaseTestCase
 
 

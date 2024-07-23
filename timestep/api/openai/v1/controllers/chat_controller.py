@@ -4,20 +4,27 @@ import json
 import pprint
 import time
 from typing import Iterator
+
+from langchain.chains.base import Chain
 # from langchain_community.llms import LlamaCpp
 from langchain_community.llms.llamacpp import LlamaCpp
-from langchain_core.callbacks import CallbackManager, StreamingStdOutCallbackHandler
+from langchain_core.callbacks import (CallbackManager,
+                                      StreamingStdOutCallbackHandler)
 from langchain_core.messages import HumanMessage
-from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser, PydanticToolsParser
-from langchain_core.prompts import PromptTemplate
-from langchain_core.prompt_values import ChatPromptValue, PromptValue, StringPromptValue
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.chains.base import Chain
+from langchain_core.output_parsers import (PydanticOutputParser,
+                                           PydanticToolsParser,
+                                           StrOutputParser)
+from langchain_core.prompt_values import (ChatPromptValue, PromptValue,
+                                          StringPromptValue)
+from langchain_core.prompts import (ChatPromptTemplate, MessagesPlaceholder,
+                                    PromptTemplate)
 from llama_cpp import CreateChatCompletionStreamResponse, Llama
 from llama_cpp.server.types import CreateChatCompletionRequest
-from openai.types.chat.completion_create_params import CompletionCreateParams, CompletionCreateParamsNonStreaming, CompletionCreateParamsStreaming
 from openai.types.chat.chat_completion import ChatCompletion
 from openai.types.chat.chat_completion_chunk import ChatCompletionChunk
+from openai.types.chat.completion_create_params import (
+    CompletionCreateParams, CompletionCreateParamsNonStreaming,
+    CompletionCreateParamsStreaming)
 from sse_starlette import EventSourceResponse
 
 from timestep.database import InstanceStoreSingleton

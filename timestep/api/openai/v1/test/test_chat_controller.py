@@ -2,8 +2,10 @@ import unittest
 
 from flask import json
 
-from timestep.api.openai.v1.models.create_chat_completion_request import CreateChatCompletionRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_chat_completion_response import CreateChatCompletionResponse  # noqa: E501
+from timestep.api.openai.v1.models.create_chat_completion_request import \
+    CreateChatCompletionRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_chat_completion_response import \
+    CreateChatCompletionResponse  # noqa: E501
 from timestep.api.openai.v1.test import BaseTestCase
 
 

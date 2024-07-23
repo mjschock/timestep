@@ -2,17 +2,28 @@ import unittest
 
 from flask import json
 
-from timestep.api.openai.v1.models.create_vector_store_file_batch_request import CreateVectorStoreFileBatchRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_vector_store_file_request import CreateVectorStoreFileRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_vector_store_request import CreateVectorStoreRequest  # noqa: E501
-from timestep.api.openai.v1.models.delete_vector_store_file_response import DeleteVectorStoreFileResponse  # noqa: E501
-from timestep.api.openai.v1.models.delete_vector_store_response import DeleteVectorStoreResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_vector_store_files_response import ListVectorStoreFilesResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_vector_stores_response import ListVectorStoresResponse  # noqa: E501
-from timestep.api.openai.v1.models.update_vector_store_request import UpdateVectorStoreRequest  # noqa: E501
-from timestep.api.openai.v1.models.vector_store_file_batch_object import VectorStoreFileBatchObject  # noqa: E501
-from timestep.api.openai.v1.models.vector_store_file_object import VectorStoreFileObject  # noqa: E501
-from timestep.api.openai.v1.models.vector_store_object import VectorStoreObject  # noqa: E501
+from timestep.api.openai.v1.models.create_vector_store_file_batch_request import \
+    CreateVectorStoreFileBatchRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_vector_store_file_request import \
+    CreateVectorStoreFileRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_vector_store_request import \
+    CreateVectorStoreRequest  # noqa: E501
+from timestep.api.openai.v1.models.delete_vector_store_file_response import \
+    DeleteVectorStoreFileResponse  # noqa: E501
+from timestep.api.openai.v1.models.delete_vector_store_response import \
+    DeleteVectorStoreResponse  # noqa: E501
+from timestep.api.openai.v1.models.list_vector_store_files_response import \
+    ListVectorStoreFilesResponse  # noqa: E501
+from timestep.api.openai.v1.models.list_vector_stores_response import \
+    ListVectorStoresResponse  # noqa: E501
+from timestep.api.openai.v1.models.update_vector_store_request import \
+    UpdateVectorStoreRequest  # noqa: E501
+from timestep.api.openai.v1.models.vector_store_file_batch_object import \
+    VectorStoreFileBatchObject  # noqa: E501
+from timestep.api.openai.v1.models.vector_store_file_object import \
+    VectorStoreFileObject  # noqa: E501
+from timestep.api.openai.v1.models.vector_store_object import \
+    VectorStoreObject  # noqa: E501
 from timestep.api.openai.v1.test import BaseTestCase
 
 

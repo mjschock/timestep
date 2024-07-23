@@ -2,10 +2,14 @@ import unittest
 
 from flask import json
 
-from timestep.api.openai.v1.models.create_speech_request import CreateSpeechRequest  # noqa: E501
-from timestep.api.openai.v1.models.create_transcription200_response import CreateTranscription200Response  # noqa: E501
-from timestep.api.openai.v1.models.create_transcription_request_model import CreateTranscriptionRequestModel  # noqa: E501
-from timestep.api.openai.v1.models.create_translation200_response import CreateTranslation200Response  # noqa: E501
+from timestep.api.openai.v1.models.create_speech_request import \
+    CreateSpeechRequest  # noqa: E501
+from timestep.api.openai.v1.models.create_transcription200_response import \
+    CreateTranscription200Response  # noqa: E501
+from timestep.api.openai.v1.models.create_transcription_request_model import \
+    CreateTranscriptionRequestModel  # noqa: E501
+from timestep.api.openai.v1.models.create_translation200_response import \
+    CreateTranslation200Response  # noqa: E501
 from timestep.api.openai.v1.test import BaseTestCase
 
 

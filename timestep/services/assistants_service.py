@@ -1,6 +1,6 @@
 import time
-from typing import List, Optional
 import uuid
+from typing import List, Optional
 
 from openai.types.beta.thread import Thread
 from openai.types.beta.threads.message import Message, MessageContent
