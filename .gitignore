@@ -1,10 +1,10 @@
-build
-data
-dist
-.env
+/build
+/data
+/dist
+/.env
 *.log
-models
+/models
 __pycache__
 *.py[cod]
-.venv
-work
+/.venv
+/work
