@@ -48,8 +48,7 @@ apis:
 	mv build/openai/python-flask/timestep/api/openai/v1 timestep/api/openai/v1
 
 clean:
-	# rm -rf **/*/__pycache__ .venv 3rdparty build data dist models work database.db
-	rm -rf .venv 3rdparty build data dist models work database.db
+	rm -rf **/*/__pycache__ .venv 3rdparty build data dist models work database.db
 
 publish:
 	poetry install
