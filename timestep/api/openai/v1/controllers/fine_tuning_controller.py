@@ -15,7 +15,7 @@ from prefect.deployments.flow_runs import FlowRun
 from timestep.api.openai.v1.models.create_fine_tuning_job_request import \
     CreateFineTuningJobRequest
 from timestep.database import InstanceStoreSingleton  # noqa: E501
-from timestep.worker import train_model
+# from timestep.worker import train_model
 
 instance_store = InstanceStoreSingleton()
 
@@ -45,7 +45,8 @@ async def create_fine_tuning_job(body, token_info, user):
     :rtype: Union[FineTuningJob, Tuple[FineTuningJob, int], Tuple[FineTuningJob, int, Dict[str, str]]
     """
     hyperparameters = Hyperparameters(
-        n_epochs="auto",
+        # n_epochs="auto",
+        n_epochs=1,
     )
     suffix = body.get("suffix")
 
@@ -94,7 +95,8 @@ async def create_fine_tuning_job(body, token_info, user):
             "inputs": {
                 "fine_tuning_job_id": fine_tuning_job.id,
                 "suffix": suffix,
-            }
+            },
+            "work_type": "train_agent",
         },
         # job_variables={"env": {"MY_ENV_VAR": "staging"}},
         timeout=0, # don't wait for the run to finish
