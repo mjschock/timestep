@@ -298,3 +298,4 @@ instance_store._shared_instance_state["models"]["gpt-4-1106-preview"] = model
 instance_store._shared_instance_state["models"]["gpt-4o"] = model
 instance_store._shared_instance_state["models"]["gpt-4-vision-preview"] = model
 instance_store._shared_instance_state["models"]["LLaMA_CPP"] = model
+instance_store._shared_instance_state["models"][model_alias] = model

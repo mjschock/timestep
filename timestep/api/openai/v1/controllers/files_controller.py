@@ -4,9 +4,11 @@ import uuid
 
 from openai.types.file_object import FileObject
 from starlette.datastructures import UploadFile
+import typer
 
 from timestep.database import InstanceStoreSingleton
 
+app_dir = typer.get_app_dir("timestep")
 instance_store = InstanceStoreSingleton()
 
 # async def create_file(file, purpose):  # noqa: E501
@@ -36,11 +38,11 @@ async def create_file(body, file: UploadFile):
             status="uploaded",
         )
 
-        os.makedirs(f"data/{file_object.id}", exist_ok=True)
+        os.makedirs(f"{app_dir}/data/{file_object.id}", exist_ok=True)
 
-        contents = file.file.read()
+        contents = file.file.read() # TODO: stream directly to file instead of loading fully in memory first
 
-        with open(f"data/{file_object.id}/{file_object.filename}", "w") as f:
+        with open(f"{app_dir}/data/{file_object.id}/{file_object.filename}", "w") as f:
             f.write(contents.decode("utf-8"))
 
         instance_store._shared_instance_state["file_objects"][file_object.id] = file_object

@@ -6,12 +6,13 @@ apis:
 	rm -rf build && mkdir -p build
 	rm -rf timestep/api/ap/v1 && mkdir -p timestep/api/ap
 	rm -rf timestep/api/openai/v1 && mkdir -p timestep/api/openai
+	echo '{\n  "allowUnicodeIdentifiers": true,\n  "ensureUniqueParams": false,\n  "flattenSpec": false,\n  "sortParamsByRequiredFlag": false\n}' > build/openapi-yaml.json
 
 	docker run --rm \
 		-v ${PWD}:/local \
 		swaggerapi/swagger-codegen-cli-v3 \
 		generate \
-		--config /local/openapi-yaml.json \
+		--config /local/build/openapi-yaml.json \
 		--input-spec https://raw.githubusercontent.com/AI-Engineer-Foundation/agent-protocol/main/schemas/openapi.yml \
 		--lang openapi-yaml \
 		-o /local/build/ap/openapi-yaml
@@ -31,7 +32,7 @@ apis:
 		-v ${PWD}:/local \
 		swaggerapi/swagger-codegen-cli-v3 \
 		generate \
-		--config /local/openapi-yaml.json \
+		--config /local/build/openapi-yaml.json \
 		--input-spec https://raw.githubusercontent.com/openai/openai-openapi/master/openapi.yaml \
 		--lang openapi-yaml \
 		-o /local/build/openai/openapi-yaml

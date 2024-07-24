@@ -6,7 +6,7 @@ Timestep AI CLI - free, local-first, open-source AI
 
 ```console
 $ prefect server start
-$ prefect worker start --pool "default"
+$ prefect worker start --pool "default" --work-queue "default"
 $ timestep serve
 ```
 
