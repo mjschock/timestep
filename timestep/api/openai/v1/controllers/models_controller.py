@@ -9,7 +9,7 @@ from timestep.api.openai.v1.models.delete_model_response import \
 from timestep.api.openai.v1.models.list_models_response import \
     ListModelsResponse  # noqa: E501
 from timestep.api.openai.v1.models.model import Model  # noqa: E501
-from timestep.services import models_service
+from timestep.services import model_service
 
 
 def delete_model(model):  # noqa: E501
@@ -49,7 +49,7 @@ def retrieve_model(model: str, token_info: dict, user: str):
     # print('args: ', args)
     # print('kwargs: ', kwargs)
 
-    model_info = models_service.retrieve_model(model_id=model)
+    model_info = model_service.retrieve_model(model_id=model)
 
     print('model_info: ', model_info)
 

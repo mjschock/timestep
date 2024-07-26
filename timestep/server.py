@@ -11,7 +11,7 @@ def main():
     from timestep.api.openai.v1.controllers.completions_controller import (
         create_completion,
     )
-    from timestep.services import models_service
+    # from timestep.services import model_service
 
     connexion_app.add_api(
         "api/ap/v1/openapi/openapi.yaml",
@@ -42,14 +42,14 @@ def main():
         else:
             raise NotImplementedError("Not implemented")
 
-    @fastapi_app.get("/v2/models/{model_id}")
-    async def create_code_completion(model_id: str, request: Request):
-        # model_info = models_service.retrieve_model(model_id, token_info, user)
-        model_info = models_service.retrieve_model(model_id)
+    # @fastapi_app.get("/v2/models/{model_id}")
+    # async def create_code_completion(model_id: str, request: Request):
+    #     # model_info = models_service.retrieve_model(model_id, token_info, user)
+    #     model_info = model_service.retrieve_model(model_id)
 
-        print("model_info: ", model_info)
+    #     print("model_info: ", model_info)
 
-        return model_info
+    #     return model_info
 
     uvicorn.run(
         f"{__name__}:fastapi_app",

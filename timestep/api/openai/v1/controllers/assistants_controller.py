@@ -3,44 +3,23 @@ import json
 import os
 import time
 import uuid
-from typing import Iterator, List, Optional
+from typing import List, Optional
 
-import controlflow as cf
-from langchain_openai import ChatOpenAI
-from openai.pagination import AsyncCursorPage, SyncCursorPage
+from openai.pagination import AsyncCursorPage
 from openai.types.beta.assistant import Assistant
 from openai.types.beta.assistant_deleted import AssistantDeleted
 from openai.types.beta.assistant_update_params import AssistantUpdateParams
-from openai.types.beta.thread import (Thread, ToolResourcesCodeInterpreter,
-                                      ToolResourcesFileSearch)
+from openai.types.beta.thread import (Thread)
 from openai.types.beta.threads.message import Message, MessageContent
-from openai.types.beta.threads.run import Run, RunStatus
-from openai.types.beta.threads.runs import RunStep
+from openai.types.beta.threads.run import Run
 from openai.types.beta.threads.text import Text
 from openai.types.beta.threads.text_content_block import TextContentBlock
-from openai.types.chat.chat_completion import ChatCompletion
-from openai.types.chat.chat_completion_chunk import ChatCompletionChunk
-from openai.types.chat.completion_create_params import (
-    CompletionCreateParams, CompletionCreateParamsNonStreaming,
-    CompletionCreateParamsStreaming)
-from prefect import flow
 from prefect.deployments import run_deployment
 from prefect.deployments.flow_runs import FlowRun
 from sse_starlette import EventSourceResponse
-from starlette.background import BackgroundTask
-from starlette.responses import JSONResponse
 
-from timestep.api.openai.v1.controllers.chat_controller import \
-    create_chat_completion
 from timestep.database import InstanceStoreSingleton
 from timestep.worker import step
-
-# set the default model
-cf.default_model = ChatOpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY"),
-    base_url=os.environ.get("OPENAI_BASE_URL"),
-    temperature=0.0,
-)
 
 # def cancel_run(thread_id, run_id):  # noqa: E501
 async def cancel_run(*args, **kwargs):

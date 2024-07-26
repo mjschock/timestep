@@ -4,3 +4,6 @@
 [submodule "3rdparty/llama-cpp-python"]
 	path = 3rdparty/llama-cpp-python
 	url = https://github.com/Timestep-AI/llama-cpp-python.git
+[submodule "3rdparty/llamafile"]
+	path = 3rdparty/llamafile
+	url = https://github.com/Mozilla-Ocho/llamafile.git

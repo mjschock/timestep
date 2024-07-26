@@ -1,5 +1,5 @@
 default:
-	# git submodule update --recursive
+	git submodule update --init --recursive
 	poetry install
 
 apis:

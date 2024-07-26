@@ -1,17 +1,15 @@
-from typing import Dict, Tuple, Union
+import base64
+from io import BytesIO
+import time
+from typing import List
 
+import PIL.Image
 import connexion
 
-from timestep.api.openai.v1 import util
-from timestep.api.openai.v1.models.create_image_edit_request_model import \
-    CreateImageEditRequestModel  # noqa: E501
-from timestep.api.openai.v1.models.create_image_request import \
-    CreateImageRequest  # noqa: E501
-from timestep.api.openai.v1.models.images_response import \
-    ImagesResponse  # noqa: E501
+from openai.types.image import Image
+from openai.types.images_response import ImagesResponse
 
-
-def create_image(create_image_request):  # noqa: E501
+def create_image(body: dict, token_info: dict, user: str):
     """Creates an image given a prompt.
 
      # noqa: E501
@@ -21,9 +19,48 @@ def create_image(create_image_request):  # noqa: E501
 
     :rtype: Union[ImagesResponse, Tuple[ImagesResponse, int], Tuple[ImagesResponse, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        create_image_request = CreateImageRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    raise NotImplementedError
+    # if connexion.request.is_json:
+    #     create_image_request = CreateImageRequest.from_dict(connexion.request.get_json())  # noqa: E501
+    # raise NotImplementedErrora
+
+    # print('args: ', args)
+    # kwargs:  {'body': {'prompt': 'a white siamese cat', 'model': 'dall-e-3', 'n': 1, 'quality': 'standard', 'size': '1024x1024'}, 'user': 'user_id', 'token_info': {'uid': 'user_id'}}
+    # print('kwargs: ', kwargs)
+
+    assert body.get("user") == user
+
+    width, height = map(int, body.get("size", "512x512").split("x"))
+
+    output: List[PIL.Image.Image] = stable_diffusion.txt_to_img(
+        body.get("prompt"),
+        height=height,
+        # sample_steps=5, # default is 20
+        width=width,
+    )
+
+    image: PIL.Image.Image = output[0]
+
+    # buffered = BytesIO()
+    # image.save(buffered, format="PNG")
+    # image.save(buffered, format="JSON")
+    # b64_json = str(base64.b64encode(buffered.getvalue()))
+
+    # s: ReadableBuffer
+    # base64.urlsafe_b64encode(s)
+    b64_json: str = base64.b64encode(image._repr_png_()).decode('utf-8')
+
+    images: List[Image] = [
+        Image(
+            b64_json=b64_json,
+            revised_prompt=body.get("prompt"),
+            url=None,
+        )
+    ]
+
+    return ImagesResponse(
+        created=int(time.time()),
+        data=images,
+    ).model_dump(mode="json")
 
 
 def create_image_edit(image, prompt, mask=None, model=None, n=None, size=None, response_format=None, user=None):  # noqa: E501
