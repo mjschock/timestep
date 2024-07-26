@@ -3,11 +3,12 @@ import time
 import uuid
 
 from openai.types.file_object import FileObject
+from prefect import flow, task
+from prefect.artifacts import create_link_artifact
 from starlette.datastructures import UploadFile
 import typer
 
 app_dir = typer.get_app_dir("timestep")
-instance_store = InstanceStoreSingleton()
 
 # async def create_file(file, purpose):  # noqa: E501
 async def create_file(body, file: UploadFile):
@@ -26,8 +27,45 @@ async def create_file(body, file: UploadFile):
     purpose = body.get('purpose')
 
     if purpose == "fine-tune":
+        # file_object = FileObject(
+        #     id=str(uuid.uuid4()),
+        #     bytes=file.size,
+        #     created_at=int(time.time()),
+        #     filename=file.filename,
+        #     object="file",
+        #     purpose="fine-tune",
+        #     status="uploaded",
+        # )
+
+        # os.makedirs(f"{app_dir}/data/{file_object.id}", exist_ok=True)
+
+        # contents = file.file.read() # TODO: stream directly to file instead of loading fully in memory first
+
+        # with open(f"{app_dir}/data/{file_object.id}/{file_object.filename}", "w") as f:
+        #     f.write(contents.decode("utf-8"))
+
+        # instance_store._shared_instance_state["file_objects"][file_object.id] = file_object
+
+        artifact_id: uuid.UUID = create_link_artifact(
+            description=f"## Fine-tuning file upload of {file.filename}",
+            # key="irregular-data",
+            key=file.filename,
+            # link="https://nyc3.digitaloceanspaces.com/my-bucket-name/highly_variable_data.csv",
+            link=f"file://{app_dir}/data/{file.filename}",
+            # link_text
+            # description="## Highly variable data",
+        )
+
+        # os.makedirs(f"{app_dir}/data/{file.filename}", exist_ok=True)
+
+        contents = file.file.read() # TODO: stream directly to file instead of loading fully in memory first
+
+        with open(f"{app_dir}/data/{file.filename}", "w") as f:
+            f.write(contents.decode("utf-8"))
+
         file_object = FileObject(
-            id=str(uuid.uuid4()),
+            # id=str(uuid.uuid4()),
+            id=str(artifact_id),
             bytes=file.size,
             created_at=int(time.time()),
             filename=file.filename,
@@ -35,15 +73,6 @@ async def create_file(body, file: UploadFile):
             purpose="fine-tune",
             status="uploaded",
         )
-
-        os.makedirs(f"{app_dir}/data/{file_object.id}", exist_ok=True)
-
-        contents = file.file.read() # TODO: stream directly to file instead of loading fully in memory first
-
-        with open(f"{app_dir}/data/{file_object.id}/{file_object.filename}", "w") as f:
-            f.write(contents.decode("utf-8"))
-
-        instance_store._shared_instance_state["file_objects"][file_object.id] = file_object
 
         return file_object.model_dump(mode="json")
 

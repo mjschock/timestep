@@ -44,6 +44,7 @@ class FineTuningJobStatus(str, enum.Enum):
     validating_files = "validating_files"
 
 
+# TODO: can i just use the flow run plus artifacts for this?
 class FineTuningJobSQLModel(FineTuningJob, SQLModel, table=True):
     __tablename__: str = "fine_tuning_jobs"
     object: str = "fine_tuning.job"
