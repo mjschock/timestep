@@ -1,6 +1,4 @@
-import json
 import os
-import uuid
 from typing import Optional
 
 import controlflow as cf
@@ -14,20 +12,18 @@ from openai.types.beta.threads.run import Run
 from openai.types.chat.chat_completion import ChatCompletion
 from openai.types.file_object import FileObject
 from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparameters
-from prefect import flow, get_run_logger, task
-from prefect.deployments import run_deployment
-from prefect.deployments.flow_runs import FlowRun
+from prefect import flow, get_run_logger
 from prefect_shell import ShellOperation
-from prefect_sqlalchemy import AsyncDriver, ConnectionComponents, SqlAlchemyConnector
+# from prefect_sqlalchemy import AsyncDriver, ConnectionComponents, SqlAlchemyConnector
 
 
 app_dir = typer.get_app_dir("timestep")
-block_name = "timestep-ai-sql-alchemy-connector-block"
-connector = SqlAlchemyConnector(
-    connection_info=ConnectionComponents(
-        driver=AsyncDriver.SQLITE_AIOSQLITE, database=f"{app_dir}/database.db"
-    )
-)
+# block_name = "timestep-ai-sql-alchemy-connector-block"
+# connector = SqlAlchemyConnector(
+#     connection_info=ConnectionComponents(
+#         driver=AsyncDriver.SQLITE_AIOSQLITE, database=f"{app_dir}/database.db"
+#     )
+# )
 
 cf.default_model = ChatOpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),

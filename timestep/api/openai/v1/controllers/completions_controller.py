@@ -1,21 +1,16 @@
 import asyncio
 import json
-import pprint
-from typing import Dict, Iterator, Tuple, Union
+from typing import Iterator
 
-import connexion
 from llama_cpp import Llama
 from llama_cpp.llama_types import CreateCompletionStreamResponse
 from llama_cpp.server.types import CreateCompletionRequest
 from openai.types.completion import Completion
-from prefect import flow, task
 from sse_starlette import EventSourceResponse
 
-# from timestep.api.openai.v1.models.create_completion_request import CreateCompletionRequest  # noqa: E501
-# from timestep.api.openai.v1.models.create_completion_response import CreateCompletionResponse  # noqa: E501
-# from timestep.api.openai.v1 import util
-from timestep.database import InstanceStoreSingleton
+from timestep.services import agent_service
 
+model_instance_store = agent_service.ModelInstanceStoreSingleton()
 
 # @flow(log_prints=True)
 async def create_completion(body, token_info: dict, user: str):  # noqa: E501
@@ -51,8 +46,10 @@ async def create_completion(body, token_info: dict, user: str):  # noqa: E501
             'user',
         ]
     )
-    instance_store = InstanceStoreSingleton()
-    model: Llama = instance_store._shared_instance_state["models"][create_completion_request.model]
+    # instance_store = InstanceStoreSingleton()
+    # model: Llama = instance_store._shared_instance_state["models"][create_completion_request.model]
+    # model: Llama = agent_service.get_default_agent().get_model(create_completion_request.model)
+    model: Llama = model_instance_store._shared_model_instances[create_completion_request.model]
 
     if create_completion_request.stream:
         async def event_publisher():

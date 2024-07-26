@@ -6,8 +6,6 @@ from openai.types.file_object import FileObject
 from starlette.datastructures import UploadFile
 import typer
 
-from timestep.database import InstanceStoreSingleton
-
 app_dir = typer.get_app_dir("timestep")
 instance_store = InstanceStoreSingleton()
 

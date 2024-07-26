@@ -19,10 +19,10 @@ langchain-community = "^0.2.7"
 llama-cpp-python = "^0.2.82"
 marvin = "^2.3.6"
 prefect-shell = {allow-prereleases = true, version = "^0.3.0rc1"}
-prefect-sqlalchemy = {allow-prereleases = true, version = "^0.5.0rc2"}
 python = "^3.10"
 sqlmodel = "^0.0.21"
 sse-starlette = "^2.1.2"
+stable-diffusion-cpp-python = "^0.1.6"
 starlette-context = "^0.3.6"
 transformers = "^4.42.4"
 typer = {extras = ["all"], version = "^0.12.3"}

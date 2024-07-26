@@ -4,13 +4,23 @@ from pathlib import Path
 
 import typer
 
-from prefect import deploy, flow
+from sqlmodel import SQLModel, create_engine
 from timestep.server import main as timestep_serve
 from timestep.worker import agent_flow, main as timestep_train
 
 app_dir = typer.get_app_dir(__package__)
+
 os.makedirs(f"{app_dir}/data", exist_ok=True)
+os.makedirs(f"{app_dir}/models", exist_ok=True)
 os.makedirs(f"{app_dir}/work", exist_ok=True)
+
+engine = create_engine(f"sqlite:///{app_dir}/database.db")
+SQLModel.metadata.create_all(
+    bind=engine,
+    checkfirst=True,
+    tables=None,
+)
+
 
 def get_help_message():
     is_readme_context = inspect.getmodule(inspect.stack()[1][0]) is None
@@ -22,9 +32,12 @@ Timestep AI CLI - free, local-first, open-source AI
 **Setup**:
 
 ```console
-$ prefect server start
-$ prefect worker start --pool "default" --work-queue "default"
-$ timestep serve
+$ cp .env.example .env # Customize as desired
+$ direnv allow # See https://direnv.net/#getting-started to install direnv on your platform
+$ poetry install # See https://python-poetry.org/docs/#installation to install Poetry on your platform
+$ poetry run prefect server start
+$ poetry run prefect worker start --pool "default"
+$ poetry run timestep serve
 ```
 """
         if is_readme_context

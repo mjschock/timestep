@@ -27,7 +27,9 @@ from openai.types.chat.completion_create_params import (
     CompletionCreateParamsStreaming)
 from sse_starlette import EventSourceResponse
 
-from timestep.database import InstanceStoreSingleton
+from timestep.services.agent_service import ModelInstanceStoreSingleton
+
+model_instance_store = ModelInstanceStoreSingleton()
 
 
 async def create_chat_completion(body: CompletionCreateParams, token_info: dict, user: str):
@@ -122,8 +124,8 @@ async def create_chat_completion(body: CompletionCreateParams, token_info: dict,
     )
     # messages = create_chat_completion_request.messages
 
-    instance_store = InstanceStoreSingleton()
-    model: Llama = instance_store._shared_instance_state["models"][create_chat_completion_request.model]
+    # instance_store = InstanceStoreSingleton()
+    model: Llama = model_instance_store._shared_model_instances[create_chat_completion_request.model]
 
     if create_chat_completion_request.stream:
         async def event_publisher():
