@@ -206,6 +206,25 @@ test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypo
 trio = ["trio (>=0.23)"]
 
 [[package]]
+name = "apache-libcloud"
+version = "3.8.0"
+description = "A standard Python library that abstracts away differences among multiple cloud provider APIs. For more information and documentation, please see https://libcloud.apache.org"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "apache-libcloud-3.8.0.tar.gz", hash = "sha256:75bf4c0b123bc225e24ca95fca1c35be30b19e6bb85feea781404d43c4276c91"},
+    {file = "apache_libcloud-3.8.0-py2.py3-none-any.whl", hash = "sha256:de65a8bd946f6532830f20a83f2eae2fa056f05a674fad30afe877cb78df6050"},
+]
+
+[package.dependencies]
+requests = ">=2.26.0"
+
+[package.extras]
+build = ["build (==0.10.0)"]
+publish = ["twine (==4.0.2)"]
+test = ["pytest", "requests-mock"]
+
+[[package]]
 name = "appnope"
 version = "0.1.4"
 description = "Disable App Nap on macOS >= 10.9"
@@ -1110,6 +1129,17 @@ dev = ["coverage (==7.2.7)", "pytest (==7.4.2)", "pytest-cov (==4.1.0)", "pytest
 docs = ["myst-parser (==0.18.0)", "sphinx (==5.1.1)"]
 ssh = ["paramiko (>=2.4.3)"]
 websockets = ["websocket-client (>=1.3.0)"]
+
+[[package]]
+name = "einops"
+version = "0.8.0"
+description = "A new flavour of deep learning operations"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "einops-0.8.0-py3-none-any.whl", hash = "sha256:9572fb63046264a862693b0a87088af3bdc8c068fde03de63453cbbde245465f"},
+    {file = "einops-0.8.0.tar.gz", hash = "sha256:63486517fed345712a8385c100cb279108d9d47e6ae59099b07657e983deae85"},
+]
 
 [[package]]
 name = "email-validator"
@@ -5834,4 +5864,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "af9695a953522fbbd96b8602748552ede50f710d8fc8ad3db37423c11e6b3439"
+content-hash = "e2e2d77e1d3837f4693f4cc3fbf664133b3853be6adce213deb08b497f8de081"
