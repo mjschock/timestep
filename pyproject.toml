@@ -26,6 +26,7 @@ stable-diffusion-cpp-python = "^0.1.6"
 starlette-context = "^0.3.6"
 transformers = "^4.42.4"
 typer = {extras = ["all"], version = "^0.12.3"}
+diffusers = "^0.29.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
