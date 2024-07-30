@@ -131,7 +131,7 @@ class ModelInstanceStoreSingleton(object):
                 )
 
         elif model_name == "LLaVA-Phi-3-Mini":
-            mmproj_model_filename = " llava-phi-3-mini-int4.gguf"
+            mmproj_model_filename = "llava-phi-3-mini-int4.gguf"
             mmproj_model_repo_id = "xtuner/llava-phi-3-mini-gguf"
             text_model_filename = "llava-phi-3-mini-mmproj-f16.gguf"
             text_model_repo_id = mmproj_model_repo_id

@@ -3,9 +3,11 @@
 database.db
 /dist
 /.env
+/.env.*
 *.log
 /models
 __pycache__
 *.py[cod]
 /.venv
 /work
+results.tx
