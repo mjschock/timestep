@@ -17,6 +17,7 @@ controlflow = "^0.8.2"
 diffusers = "^0.29.2"
 einops = "^0.8.0"
 fastapi = "^0.111.1"
+gorilla-cli = "^0.0.10"
 huggingface-hub = "^0.23.5"
 langchain-community = "^0.2.7"
 llama-cpp-python = "^0.2.82"
@@ -29,6 +30,8 @@ stable-diffusion-cpp-python = "^0.1.6"
 starlette-context = "^0.3.6"
 transformers = "^4.42.4"
 typer = {extras = ["all"], version = "^0.12.3"}
+kedro = {extras = ["viz"], version = "^0.19.6"}
+pyspark = {extras = ["pandas"], version = "^3.5.1"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
@@ -43,3 +46,10 @@ toml-sort = "^0.23.1"
 timestep = 'timestep.main:typer_app'
 timestep_serve = 'timestep.server:main'
 timestep_train = 'timestep.worker:main'
+
+[tool.pytest.ini_options]
+addopts = "-ra -q"
+minversion = "8.2.2"
+testpaths = [
+  "tests"
+]
