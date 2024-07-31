@@ -17,6 +17,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - name: Prepare environment
+      env:
+        SECRETS_CONTEXT: ${{ toJson(secrets) }}
+        VARS_CONTEXT: ${{ toJson(vars) }}
+      run: |
+        secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
+        var_keys=$(echo "$VARS_CONTEXT" | jq -r 'keys[]')
+
+        for key in $secret_keys; do
+          if [ "$key" != "github_token" ]; then
+            lowercase_key=$(echo "$key" | tr '[:upper:]' '[:lower:]')
+            secret_value=$(echo "$SECRETS_CONTEXT" | jq -r ".$key")
+            echo "$secret_value" > "secrets/$lowercase_key"
+          fi
+        done
+
+        for key in $var_keys; do
+          var_value=$(echo "$VARS_CONTEXT" | jq -r ".$key")
+          echo "$key=$var_value" >> .env
+        done
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
@@ -28,13 +48,15 @@ jobs:
         python3 -m pipx ensurepath
         pipx install poetry==1.8.3 # TODO: Put the version in the environment
         cp .env.example .env
-        sudo apt-get update -y
-        sudo apt-get install direnv -y
-        direnv allow
-        echo $POETRY_VIRTUALENVS_IN_PROJECT
-        echo $POETRY_VIRTUALENVS_IN_PROJECT_TEST
-        # make
-        # make up
+        ./scripts/build.sh
+    #     sudo apt-get update -y
+    #     sudo apt-get install direnv -y
+    #     eval "$(direnv hook bash)"
+    #     direnv allow
+    #     echo $POETRY_VIRTUALENVS_IN_PROJECT
+    #     echo $POETRY_VIRTUALENVS_IN_PROJECT_TEST
+    #     # make
+    #     # make up
     - name: Test with pytest
       run: |
         pytest
