@@ -47,7 +47,7 @@ jobs:
         python3 -m pip install --user pipx
         python3 -m pipx ensurepath
         pipx install poetry==1.8.3 # TODO: Put the version in the environment
-        cp .env.example .env
+        # cp .env.example .env
         ./scripts/build.sh
         poetry run pytest
         poetry config repositories.testpypi https://test.pypi.org/legacy/
