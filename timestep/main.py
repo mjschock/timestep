@@ -31,13 +31,26 @@ Timestep AI CLI - free, local-first, open-source AI
         """
 **Setup**:
 
+### Development
+
 ```console
-$ cp .env.example .env # Customize as desired
+$ python3 -m pip install --upgrade pip
+$ python3 -m pip install --user pipx
+$ python3 -m pipx ensurepath
+$ pipx install poetry==1.8.3
+$ cp .env.example .env
 $ direnv allow # See https://direnv.net/#getting-started to install direnv on your platform
-$ poetry install # See https://python-poetry.org/docs/#installation to install Poetry on your platform
-$ prefect server start
-$ prefect worker start --pool "default"
-$ timestep serve
+$ make
+$ make up
+```
+
+### Library
+
+```console
+$ python3 -m pip install --upgrade pip
+$ python3 -m pip install --user pipx
+$ python3 -m pipx ensurepath
+$ pipx install timestep==12.0.1
 ```
 """
         if is_readme_context

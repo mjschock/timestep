@@ -10,7 +10,7 @@ Timestep AI CLI - free, local-first, open-source AI
 $ python3 -m pip install --upgrade pip
 $ python3 -m pip install --user pipx
 $ python3 -m pipx ensurepath
-$ pipx install poetry==1.8.3 # TODO: Put the version in the environment
+$ pipx install poetry==1.8.3
 $ cp .env.example .env
 $ direnv allow # See https://direnv.net/#getting-started to install direnv on your platform
 $ make
@@ -18,6 +18,13 @@ $ make up
 ```
 
 ### Library
+
+```console
+$ python3 -m pip install --upgrade pip
+$ python3 -m pip install --user pipx
+$ python3 -m pipx ensurepath
+$ pipx install timestep==12.0.1
+```
 
 **Usage**:
 
