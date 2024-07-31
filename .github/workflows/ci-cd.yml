@@ -49,7 +49,8 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
-    - name: Install dependencies
+    - id: build
+      name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
         python3 -m pip install --user pipx
@@ -59,7 +60,7 @@ jobs:
         echo "TIMESTEP_VERSION=$(poetry version | awk '{print $2}')" >> $GITHUB_OUTPUT
   verify:
     env:
-      TIMESTEP_VERSION: ${{ needs.build.outputs.TIMESTEP_VERSION }}
+      TIMESTEP_VERSION: ${{ steps.build.outputs.TIMESTEP_VERSION }}
     needs: build
     runs-on: ${{ matrix.runs-on }}
     strategy:
