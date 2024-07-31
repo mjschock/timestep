@@ -11,7 +11,9 @@ class Artifact(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, artifact_id=None, agent_created=None, file_name=None, relative_path=None):  # noqa: E501
+    def __init__(
+        self, artifact_id=None, agent_created=None, file_name=None, relative_path=None
+    ):  # noqa: E501
         """Artifact - a model defined in OpenAPI
 
         :param artifact_id: The artifact_id of this Artifact.  # noqa: E501
@@ -24,17 +26,17 @@ class Artifact(Model):
         :type relative_path: str
         """
         self.openapi_types = {
-            'artifact_id': str,
-            'agent_created': bool,
-            'file_name': str,
-            'relative_path': str
+            "artifact_id": str,
+            "agent_created": bool,
+            "file_name": str,
+            "relative_path": str,
         }
 
         self.attribute_map = {
-            'artifact_id': 'artifact_id',
-            'agent_created': 'agent_created',
-            'file_name': 'file_name',
-            'relative_path': 'relative_path'
+            "artifact_id": "artifact_id",
+            "agent_created": "agent_created",
+            "file_name": "file_name",
+            "relative_path": "relative_path",
         }
 
         self._artifact_id = artifact_id
@@ -43,7 +45,7 @@ class Artifact(Model):
         self._relative_path = relative_path
 
     @classmethod
-    def from_dict(cls, dikt) -> 'Artifact':
+    def from_dict(cls, dikt) -> "Artifact":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -74,7 +76,9 @@ class Artifact(Model):
         :type artifact_id: str
         """
         if artifact_id is None:
-            raise ValueError("Invalid value for `artifact_id`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `artifact_id`, must not be `None`"
+            )  # noqa: E501
 
         self._artifact_id = artifact_id
 
@@ -99,7 +103,9 @@ class Artifact(Model):
         :type agent_created: bool
         """
         if agent_created is None:
-            raise ValueError("Invalid value for `agent_created`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `agent_created`, must not be `None`"
+            )  # noqa: E501
 
         self._agent_created = agent_created
 
@@ -124,7 +130,9 @@ class Artifact(Model):
         :type file_name: str
         """
         if file_name is None:
-            raise ValueError("Invalid value for `file_name`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `file_name`, must not be `None`"
+            )  # noqa: E501
 
         self._file_name = file_name
 

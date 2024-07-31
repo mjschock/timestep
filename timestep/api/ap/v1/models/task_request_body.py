@@ -19,21 +19,15 @@ class TaskRequestBody(Model):
         :param additional_input: The additional_input of this TaskRequestBody.  # noqa: E501
         :type additional_input: object
         """
-        self.openapi_types = {
-            'input': str,
-            'additional_input': object
-        }
+        self.openapi_types = {"input": str, "additional_input": object}
 
-        self.attribute_map = {
-            'input': 'input',
-            'additional_input': 'additional_input'
-        }
+        self.attribute_map = {"input": "input", "additional_input": "additional_input"}
 
         self._input = input
         self._additional_input = additional_input
 
     @classmethod
-    def from_dict(cls, dikt) -> 'TaskRequestBody':
+    def from_dict(cls, dikt) -> "TaskRequestBody":
         """Returns the dict as a model
 
         :param dikt: A dict.

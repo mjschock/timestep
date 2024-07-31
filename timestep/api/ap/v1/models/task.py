@@ -12,7 +12,9 @@ class Task(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, input=None, additional_input=None, task_id=None, artifacts=[]):  # noqa: E501
+    def __init__(
+        self, input=None, additional_input=None, task_id=None, artifacts=[]
+    ):  # noqa: E501
         """Task - a model defined in OpenAPI
 
         :param input: The input of this Task.  # noqa: E501
@@ -25,17 +27,17 @@ class Task(Model):
         :type artifacts: List[Artifact]
         """
         self.openapi_types = {
-            'input': str,
-            'additional_input': object,
-            'task_id': str,
-            'artifacts': List[Artifact]
+            "input": str,
+            "additional_input": object,
+            "task_id": str,
+            "artifacts": List[Artifact],
         }
 
         self.attribute_map = {
-            'input': 'input',
-            'additional_input': 'additional_input',
-            'task_id': 'task_id',
-            'artifacts': 'artifacts'
+            "input": "input",
+            "additional_input": "additional_input",
+            "task_id": "task_id",
+            "artifacts": "artifacts",
         }
 
         self._input = input
@@ -44,7 +46,7 @@ class Task(Model):
         self._artifacts = artifacts
 
     @classmethod
-    def from_dict(cls, dikt) -> 'Task':
+    def from_dict(cls, dikt) -> "Task":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -121,7 +123,9 @@ class Task(Model):
         :type task_id: str
         """
         if task_id is None:
-            raise ValueError("Invalid value for `task_id`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `task_id`, must not be `None`"
+            )  # noqa: E501
 
         self._task_id = task_id
 
@@ -146,6 +150,8 @@ class Task(Model):
         :type artifacts: List[Artifact]
         """
         if artifacts is None:
-            raise ValueError("Invalid value for `artifacts`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `artifacts`, must not be `None`"
+            )  # noqa: E501
 
         self._artifacts = artifacts

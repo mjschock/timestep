@@ -5,6 +5,7 @@ from typing import Optional
 import httpx
 import openai
 import typer
+
 # from langchain_openai import ChatOpenAI
 from openai.types.beta.assistant import Assistant
 from openai.types.beta.thread import Thread
@@ -14,6 +15,7 @@ from openai.types.file_object import FileObject
 from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparameters
 from prefect import flow, get_run_logger
 from prefect_shell import ShellOperation
+
 # from prefect_sqlalchemy import AsyncDriver, ConnectionComponents, SqlAlchemyConnector
 
 
@@ -30,6 +32,7 @@ app_dir = typer.get_app_dir("timestep")
 #     base_url=os.environ.get("OPENAI_BASE_URL"),
 #     temperature=0.0,
 # )
+
 
 @flow
 async def agent_flow(inputs: dict, work_type: str):
@@ -170,7 +173,7 @@ async def run_agent_flow(run_id: str):
 #     async with await SqlAlchemyConnector.load(block_name) as connector:
 #         # results = await connector.fetch_one(f"SELECT * FROM fine_tuning_jobs WHERE id = '{unhyphenated_id}';") # TODO: use prepared statement equivalent
 #         results = await connector.fetch_one(
-#             f"""SELECT 
+#             f"""SELECT
 #                     created_at,
 #                     error,
 #                     estimated_finish,
@@ -238,8 +241,10 @@ async def train_agent_flow(fine_tuning_job_id: str, suffix: Optional[str] = None
         base_url=os.environ.get("OPENAI_BASE_URL"),
     )
 
-    fine_tuning_job: FineTuningJob = openai_client.fine_tuning.jobs.retrieve( # TODO: is there an async version?
-        fine_tuning_job_id=fine_tuning_job_id,
+    fine_tuning_job: FineTuningJob = (
+        openai_client.fine_tuning.jobs.retrieve(  # TODO: is there an async version?
+            fine_tuning_job_id=fine_tuning_job_id,
+        )
     )
 
     print("fine_tuning_job: ", fine_tuning_job)
@@ -328,7 +333,7 @@ async def train_agent_flow(fine_tuning_job_id: str, suffix: Optional[str] = None
         commands=[
             # TODO: https://github.com/ggerganov/llama.cpp/blob/master/docs/backend/SYCL.md
             f"git clone https://github.com/ggerganov/llama.cpp {app_dir}/3rdparty/llama.cpp",
-            f"make -C {app_dir}/3rdparty/llama.cpp", # TODO: handle windows, termux, etc.
+            f"make -C {app_dir}/3rdparty/llama.cpp",  # TODO: handle windows, termux, etc.
             f"""{app_dir}/3rdparty/llama.cpp/llama-finetune \
 --adam-iter 30 \
 --batch 8 \
@@ -344,7 +349,7 @@ async def train_agent_flow(fine_tuning_job_id: str, suffix: Optional[str] = None
 --threads 6 \
 --train-data "{app_dir}/data/{training_file_object.id}/{training_file_object.filename}" \
 --use-checkpointing
-            """
+            """,
         ],
         env={
             "CMAKE_ARGS": os.getenv("CMAKE_ARGS", ""),

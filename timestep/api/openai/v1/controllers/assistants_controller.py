@@ -9,7 +9,7 @@ from openai.pagination import AsyncCursorPage
 from openai.types.beta.assistant import Assistant
 from openai.types.beta.assistant_deleted import AssistantDeleted
 from openai.types.beta.assistant_update_params import AssistantUpdateParams
-from openai.types.beta.thread import (Thread)
+from openai.types.beta.thread import Thread
 from openai.types.beta.threads.message import Message, MessageContent
 from openai.types.beta.threads.run import Run
 from openai.types.beta.threads.text import Text
@@ -20,6 +20,7 @@ from sse_starlette import EventSourceResponse
 
 from timestep.database import InstanceStoreSingleton
 from timestep.worker import step
+
 
 # def cancel_run(thread_id, run_id):  # noqa: E501
 async def cancel_run(*args, **kwargs):
@@ -34,9 +35,9 @@ async def cancel_run(*args, **kwargs):
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
     """
-    print('=== cancel_run ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== cancel_run ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
@@ -47,7 +48,7 @@ async def create_assistant(body, token_info: dict, user: str):
 
      # noqa: E501
 
-    :param create_assistant_request: 
+    :param create_assistant_request:
     :type create_assistant_request: dict | bytes
 
     :rtype: Union[AssistantObject, Tuple[AssistantObject, int], Tuple[AssistantObject, int, Dict[str, str]]
@@ -55,7 +56,7 @@ async def create_assistant(body, token_info: dict, user: str):
     # if connexion.request.is_json:
     #     create_assistant_request = CreateAssistantRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print('=== create_assistant ===')
+    print("=== create_assistant ===")
 
     assistant = Assistant(
         id=str(uuid.uuid4()),
@@ -65,10 +66,10 @@ async def create_assistant(body, token_info: dict, user: str):
         model=body.get("model"),
         name=body.get("name"),
         object="assistant",
-        tools=body.get("tools", [])
+        tools=body.get("tools", []),
     )
 
-    print('assistant: ', assistant)
+    print("assistant: ", assistant)
 
     instance_store = InstanceStoreSingleton()
     instance_store._shared_instance_state["assistants"][assistant.id] = assistant
@@ -84,7 +85,7 @@ async def create_message(body, token_info, thread_id, user):
 
     :param thread_id: The ID of the [thread](/docs/api-reference/threads) to create a message for.
     :type thread_id: str
-    :param create_message_request: 
+    :param create_message_request:
     :type create_message_request: dict | bytes
 
     :rtype: Union[MessageObject, Tuple[MessageObject, int], Tuple[MessageObject, int, Dict[str, str]]
@@ -92,21 +93,29 @@ async def create_message(body, token_info, thread_id, user):
     # if connexion.request.is_json:
     #     create_message_request = CreateMessageRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print('=== create_message ===')
+    print("=== create_message ===")
 
     # thread = instance_store._shared_instance_state["threads"][thread_id]
-    thread: Thread = Thread(**await get_thread(token_info=token_info, thread_id=thread_id, user=user))
+    thread: Thread = Thread(
+        **await get_thread(token_info=token_info, thread_id=thread_id, user=user)
+    )
 
     content: List[MessageContent] = []
 
     if body.get("content"):
-        content.append(TextContentBlock(
-            text=Text(
-                annotations=[],
-                value=body.get("content") if type(body.get("content")) == str else body.get("content")[0].get("text"),
-            ),
-            type="text",
-        ))
+        content.append(
+            TextContentBlock(
+                text=Text(
+                    annotations=[],
+                    value=(
+                        body.get("content")
+                        if type(body.get("content")) == str
+                        else body.get("content")[0].get("text")
+                    ),
+                ),
+                type="text",
+            )
+        )
 
     message = Message(
         id=str(uuid.uuid4()),
@@ -242,6 +251,7 @@ async def create_message(body, token_info, thread_id, user):
 
 #     # return run
 
+
 # def create_run(thread_id, create_run_request):  # noqa: E501
 # def create_run(body, token_info, user, thread_id):
 async def create_run(body, token_info, thread_id, user):
@@ -251,7 +261,7 @@ async def create_run(body, token_info, thread_id, user):
 
     :param thread_id: The ID of the thread to run.
     :type thread_id: str
-    :param create_run_request: 
+    :param create_run_request:
     :type create_run_request: dict | bytes
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
@@ -259,14 +269,20 @@ async def create_run(body, token_info, thread_id, user):
     # if connexion.request.is_json:
     #     create_run_request = CreateRunRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print('=== create_run ===')
-    print('body: ', body)
+    print("=== create_run ===")
+    print("body: ", body)
 
     stream = body.get("stream", False)
     assistant_id = body.get("assistant_id")
 
-    assistant: Assistant = Assistant(**await get_assistant(assistant_id=assistant_id, token_info=token_info, user=user))
-    thread: Thread = Thread(**await get_thread(token_info=token_info, thread_id=thread_id, user=user))
+    assistant: Assistant = Assistant(
+        **await get_assistant(
+            assistant_id=assistant_id, token_info=token_info, user=user
+        )
+    )
+    thread: Thread = Thread(
+        **await get_thread(token_info=token_info, thread_id=thread_id, user=user)
+    )
 
     run = Run(
         id=str(uuid.uuid4()),
@@ -296,21 +312,32 @@ async def create_run(body, token_info, thread_id, user):
             }
         },
         # job_variables={"env": {"MY_ENV_VAR": "staging"}},
-        timeout=0, # don't wait for the run to finish
+        timeout=0,  # don't wait for the run to finish
     )
 
-    print('flow_run: ', flow_run)
+    print("flow_run: ", flow_run)
 
     if stream:
+
         async def run_event_publisher():
-            run: Run = Run(**await get_run(run_id=run_id, token_info=token_info, thread_id=thread_id, user=user))
+            run: Run = Run(
+                **await get_run(
+                    run_id=run_id, token_info=token_info, thread_id=thread_id, user=user
+                )
+            )
 
             # response: Iterator[CreateChatCompletionStreamResponse] = model.create_chat_completion(**create_chat_completion_kwargs)
             # response: Generator[ChatCompletionChunk] = model.create_chat_completion_openai_v1(**create_chat_completion_kwargs)
             # response: Stream[ChatCompletionChunk] = model.astream(input=messages)
-            await step(run_id=run.id, token_info=token_info, thread_id=run.thread_id, user=user)
+            await step(
+                run_id=run.id, token_info=token_info, thread_id=run.thread_id, user=user
+            )
 
-            run: Run = Run(**await get_run(run_id=run.id, token_info=token_info, thread_id=thread_id, user=user))
+            run: Run = Run(
+                **await get_run(
+                    run_id=run.id, token_info=token_info, thread_id=thread_id, user=user
+                )
+            )
 
             try:
                 yield json.dumps(run.model_dump(mode="json"))
@@ -345,7 +372,7 @@ async def create_thread(*args, **kwargs):
 
      # noqa: E501
 
-    :param create_thread_request: 
+    :param create_thread_request:
     :type create_thread_request: dict | bytes
 
     :rtype: Union[ThreadObject, Tuple[ThreadObject, int], Tuple[ThreadObject, int, Dict[str, str]]
@@ -353,9 +380,9 @@ async def create_thread(*args, **kwargs):
     # if connexion.request.is_json:
     #     create_thread_request = CreateThreadRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print('=== create_thread ===')
+    print("=== create_thread ===")
     print("args: ", args)
-    print('kwargs: ', kwargs)
+    print("kwargs: ", kwargs)
 
     thread = Thread(
         id=str(uuid.uuid4()),
@@ -364,7 +391,7 @@ async def create_thread(*args, **kwargs):
         # tool_resources
     )
 
-    print('thread: ', thread)
+    print("thread: ", thread)
 
     instance_store = InstanceStoreSingleton()
     instance_store._shared_instance_state["threads"][thread.id] = thread
@@ -378,7 +405,7 @@ async def create_thread_and_run(*args, **kwargs):
 
      # noqa: E501
 
-    :param create_thread_and_run_request: 
+    :param create_thread_and_run_request:
     :type create_thread_and_run_request: dict | bytes
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
@@ -386,9 +413,9 @@ async def create_thread_and_run(*args, **kwargs):
     # if connexion.request.is_json:
     #     create_thread_and_run_request = CreateThreadAndRunRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print('=== create_thread_and_run ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== create_thread_and_run ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
@@ -404,7 +431,7 @@ async def delete_assistant(assistant_id: str, token_info: dict, user: str):
 
     :rtype: Union[DeleteAssistantResponse, Tuple[DeleteAssistantResponse, int], Tuple[DeleteAssistantResponse, int, Dict[str, str]]
     """
-    print('=== delete_assistant ===')
+    print("=== delete_assistant ===")
     # print('args: ', args)
     # print('kwargs: ', kwargs)
 
@@ -433,9 +460,9 @@ async def delete_message(*args, **kwargs):
 
     :rtype: Union[DeleteMessageResponse, Tuple[DeleteMessageResponse, int], Tuple[DeleteMessageResponse, int, Dict[str, str]]
     """
-    print('=== delete_message ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== delete_message ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
@@ -451,9 +478,9 @@ async def delete_thread(*args, **kwargs):
 
     :rtype: Union[DeleteThreadResponse, Tuple[DeleteThreadResponse, int], Tuple[DeleteThreadResponse, int, Dict[str, str]]
     """
-    print('=== delete_thread ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== delete_thread ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
@@ -469,9 +496,14 @@ async def get_assistant(assistant_id, token_info, user):
 
     :rtype: Union[AssistantObject, Tuple[AssistantObject, int], Tuple[AssistantObject, int, Dict[str, str]]
     """
-    print('=== get_assistant ===')
+    print("=== get_assistant ===")
 
-    return InstanceStoreSingleton()._shared_instance_state["assistants"].get(assistant_id).model_dump(mode="json")
+    return (
+        InstanceStoreSingleton()
+        ._shared_instance_state["assistants"]
+        .get(assistant_id)
+        .model_dump(mode="json")
+    )
 
 
 # def get_message(thread_id, message_id):  # noqa: E501
@@ -487,9 +519,9 @@ async def get_message(*args, **kwargs):
 
     :rtype: Union[MessageObject, Tuple[MessageObject, int], Tuple[MessageObject, int, Dict[str, str]]
     """
-    print('=== get_message ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== get_message ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
@@ -507,9 +539,14 @@ async def get_run(run_id, thread_id, token_info, user):
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
     """
-    print('=== get_run ===')
+    print("=== get_run ===")
 
-    return InstanceStoreSingleton()._shared_instance_state["runs"].get(run_id).model_dump(mode="json")
+    return (
+        InstanceStoreSingleton()
+        ._shared_instance_state["runs"]
+        .get(run_id)
+        .model_dump(mode="json")
+    )
 
 
 # def get_run_step(thread_id, run_id, step_id):  # noqa: E501
@@ -527,9 +564,9 @@ async def get_run_step(*args, **kwargs):
 
     :rtype: Union[RunStepObject, Tuple[RunStepObject, int], Tuple[RunStepObject, int, Dict[str, str]]
     """
-    print('=== get_run_step ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== get_run_step ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
@@ -545,7 +582,7 @@ async def get_thread(token_info, thread_id, user):
 
     :rtype: Union[ThreadObject, Tuple[ThreadObject, int], Tuple[ThreadObject, int, Dict[str, str]]
     """
-    print('=== get_thread ===')
+    print("=== get_thread ===")
     instance_store = InstanceStoreSingleton()
     thread = instance_store._shared_instance_state["threads"][thread_id]
 
@@ -558,66 +595,74 @@ async def list_assistants(*args, **kwargs):
 
      # noqa: E501
 
-    :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20. 
+    :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
     :type limit: int
-    :param order: Sort order by the &#x60;created_at&#x60; timestamp of the objects. &#x60;asc&#x60; for ascending order and &#x60;desc&#x60; for descending order. 
+    :param order: Sort order by the &#x60;created_at&#x60; timestamp of the objects. &#x60;asc&#x60; for ascending order and &#x60;desc&#x60; for descending order.
     :type order: str
-    :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list. 
+    :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list.
     :type after: str
-    :param before: A cursor for use in pagination. &#x60;before&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before&#x3D;obj_foo in order to fetch the previous page of the list. 
+    :param before: A cursor for use in pagination. &#x60;before&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before&#x3D;obj_foo in order to fetch the previous page of the list.
     :type before: str
 
     :rtype: Union[ListAssistantsResponse, Tuple[ListAssistantsResponse, int], Tuple[ListAssistantsResponse, int, Dict[str, str]]
     """
-    print('=== list_assistants ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== list_assistants ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
 
 # def list_messages(thread_id, limit=None, order=None, after=None, before=None, run_id=None):  # noqa: E501
 async def list_messages(
-        token_info: dict,
-        thread_id: str,
-        user: str,
-        after: Optional[str] = None,
-        before: Optional[str] = None,
-        limit: int = 20,
-        order: str = 'desc',
-    ):
+    token_info: dict,
+    thread_id: str,
+    user: str,
+    after: Optional[str] = None,
+    before: Optional[str] = None,
+    limit: int = 20,
+    order: str = "desc",
+):
     """Returns a list of messages for a given thread.
 
      # noqa: E501
 
     :param thread_id: The ID of the [thread](/docs/api-reference/threads) the messages belong to.
     :type thread_id: str
-    :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20. 
+    :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
     :type limit: int
-    :param order: Sort order by the &#x60;created_at&#x60; timestamp of the objects. &#x60;asc&#x60; for ascending order and &#x60;desc&#x60; for descending order. 
+    :param order: Sort order by the &#x60;created_at&#x60; timestamp of the objects. &#x60;asc&#x60; for ascending order and &#x60;desc&#x60; for descending order.
     :type order: str
-    :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list. 
+    :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list.
     :type after: str
-    :param before: A cursor for use in pagination. &#x60;before&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before&#x3D;obj_foo in order to fetch the previous page of the list. 
+    :param before: A cursor for use in pagination. &#x60;before&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before&#x3D;obj_foo in order to fetch the previous page of the list.
     :type before: str
-    :param run_id: Filter messages by the run ID that generated them. 
+    :param run_id: Filter messages by the run ID that generated them.
     :type run_id: str
 
     :rtype: Union[ListMessagesResponse, Tuple[ListMessagesResponse, int], Tuple[ListMessagesResponse, int, Dict[str, str]]
     """
-    print('=== list_messages ===')
-    print('after: ', after)
-    print('before: ', before)
-    print('limit: ', limit)
-    print('order: ', order)
-    print('token_info: ', token_info)
-    print('thread_id: ', thread_id)
-    print('user: ', user)
+    print("=== list_messages ===")
+    print("after: ", after)
+    print("before: ", before)
+    print("limit: ", limit)
+    print("order: ", order)
+    print("token_info: ", token_info)
+    print("thread_id: ", thread_id)
+    print("user: ", user)
 
     # thread: Thread = Thread(**await get_thread(token_info=token_info, thread_id=thread_id, user=user))
 
-    after_created_at = InstanceStoreSingleton()._shared_instance_state["messages"][after].created_at if after else 0
-    before_created_at = InstanceStoreSingleton()._shared_instance_state["messages"][before].created_at if before else int(time.time())
+    after_created_at = (
+        InstanceStoreSingleton()._shared_instance_state["messages"][after].created_at
+        if after
+        else 0
+    )
+    before_created_at = (
+        InstanceStoreSingleton()._shared_instance_state["messages"][before].created_at
+        if before
+        else int(time.time())
+    )
     limit = None if limit == -1 else limit
 
     # def message_filter(message: Message):
@@ -628,23 +673,29 @@ async def list_messages(
     #     iterable=InstanceStoreSingleton()._shared_instance_state["messages"].values(),
     # ))
 
-    # filtered_messages = 
+    # filtered_messages =
 
     messages: List[Message] = sorted(
-        [ 
-            message for message in InstanceStoreSingleton()._shared_instance_state["messages"].values() 
-            if message.created_at > after_created_at and message.created_at < before_created_at and message.thread_id == thread_id 
+        [
+            message
+            for message in InstanceStoreSingleton()
+            ._shared_instance_state["messages"]
+            .values()
+            if message.created_at > after_created_at
+            and message.created_at < before_created_at
+            and message.thread_id == thread_id
         ],
         key=lambda message: message.created_at,
-        reverse=True if order == 'desc' else False,
+        reverse=True if order == "desc" else False,
     )[0:limit]
 
     # TODO: handle AsyncCursoPage as well
 
     return AsyncCursorPage(
-    # return SyncCursorPage(
+        # return SyncCursorPage(
         data=messages,
     ).model_dump(mode="json")
+
 
 # def list_run_steps(thread_id, run_id, limit=None, order=None, after=None, before=None):  # noqa: E501
 async def list_run_steps(*args, **kwargs):
@@ -656,20 +707,20 @@ async def list_run_steps(*args, **kwargs):
     :type thread_id: str
     :param run_id: The ID of the run the run steps belong to.
     :type run_id: str
-    :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20. 
+    :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
     :type limit: int
-    :param order: Sort order by the &#x60;created_at&#x60; timestamp of the objects. &#x60;asc&#x60; for ascending order and &#x60;desc&#x60; for descending order. 
+    :param order: Sort order by the &#x60;created_at&#x60; timestamp of the objects. &#x60;asc&#x60; for ascending order and &#x60;desc&#x60; for descending order.
     :type order: str
-    :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list. 
+    :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list.
     :type after: str
-    :param before: A cursor for use in pagination. &#x60;before&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before&#x3D;obj_foo in order to fetch the previous page of the list. 
+    :param before: A cursor for use in pagination. &#x60;before&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before&#x3D;obj_foo in order to fetch the previous page of the list.
     :type before: str
 
     :rtype: Union[ListRunStepsResponse, Tuple[ListRunStepsResponse, int], Tuple[ListRunStepsResponse, int, Dict[str, str]]
     """
-    print('=== list_run_steps ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== list_run_steps ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
@@ -682,33 +733,35 @@ async def list_runs(*args, **kwargs):
 
     :param thread_id: The ID of the thread the run belongs to.
     :type thread_id: str
-    :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20. 
+    :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
     :type limit: int
-    :param order: Sort order by the &#x60;created_at&#x60; timestamp of the objects. &#x60;asc&#x60; for ascending order and &#x60;desc&#x60; for descending order. 
+    :param order: Sort order by the &#x60;created_at&#x60; timestamp of the objects. &#x60;asc&#x60; for ascending order and &#x60;desc&#x60; for descending order.
     :type order: str
-    :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list. 
+    :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list.
     :type after: str
-    :param before: A cursor for use in pagination. &#x60;before&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before&#x3D;obj_foo in order to fetch the previous page of the list. 
+    :param before: A cursor for use in pagination. &#x60;before&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include before&#x3D;obj_foo in order to fetch the previous page of the list.
     :type before: str
 
     :rtype: Union[ListRunsResponse, Tuple[ListRunsResponse, int], Tuple[ListRunsResponse, int, Dict[str, str]]
     """
-    print('=== list_runs ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== list_runs ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
 
 # def modify_assistant(assistant_id, modify_assistant_request):  # noqa: E501
-async def modify_assistant(assistant_id: str, body: AssistantUpdateParams, token_info, user):
+async def modify_assistant(
+    assistant_id: str, body: AssistantUpdateParams, token_info, user
+):
     """Modifies an assistant.
 
      # noqa: E501
 
     :param assistant_id: The ID of the assistant to modify.
     :type assistant_id: str
-    :param modify_assistant_request: 
+    :param modify_assistant_request:
     :type modify_assistant_request: dict | bytes
 
     :rtype: Union[AssistantObject, Tuple[AssistantObject, int], Tuple[AssistantObject, int, Dict[str, str]]
@@ -716,11 +769,15 @@ async def modify_assistant(assistant_id: str, body: AssistantUpdateParams, token
     # if connexion.request.is_json:
     #     modify_assistant_request = ModifyAssistantRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print('=== modify_assistant ===')
-    print('assistant_id: ', assistant_id)
-    print('body: ', body)
+    print("=== modify_assistant ===")
+    print("assistant_id: ", assistant_id)
+    print("body: ", body)
 
-    assistant: Assistant = Assistant(**await get_assistant(assistant_id=assistant_id, token_info=token_info, user=user))
+    assistant: Assistant = Assistant(
+        **await get_assistant(
+            assistant_id=assistant_id, token_info=token_info, user=user
+        )
+    )
 
     # assistant = Assistant(
     #     id=str(uuid.uuid4()),
@@ -733,7 +790,7 @@ async def modify_assistant(assistant_id: str, body: AssistantUpdateParams, token
     #     tools=body.get("tools", [])
     # )
 
-    print('assistant [before]: ', assistant)
+    print("assistant [before]: ", assistant)
 
     assistant.description = body.get("description", assistant.description)
     assistant.instructions = body.get("instructions", assistant.instructions)
@@ -741,12 +798,14 @@ async def modify_assistant(assistant_id: str, body: AssistantUpdateParams, token
     assistant.name = body.get("name", assistant.name)
     assistant.tools = body.get("tools", assistant.tools)
 
-    print('assistant [after]: ', assistant)
+    print("assistant [after]: ", assistant)
 
     instance_store = InstanceStoreSingleton()
     instance_store._shared_instance_state["assistants"][assistant.id] = assistant
 
-    return await get_assistant(assistant_id=assistant_id, token_info=token_info, user=user)
+    return await get_assistant(
+        assistant_id=assistant_id, token_info=token_info, user=user
+    )
 
 
 # def modify_message(thread_id, message_id, modify_message_request):  # noqa: E501
@@ -759,7 +818,7 @@ async def modify_message(*args, **kwargs):
     :type thread_id: str
     :param message_id: The ID of the message to modify.
     :type message_id: str
-    :param modify_message_request: 
+    :param modify_message_request:
     :type modify_message_request: dict | bytes
 
     :rtype: Union[MessageObject, Tuple[MessageObject, int], Tuple[MessageObject, int, Dict[str, str]]
@@ -767,9 +826,9 @@ async def modify_message(*args, **kwargs):
     # if connexion.request.is_json:
     #     modify_message_request = ModifyMessageRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print('=== modify_message ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== modify_message ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
@@ -784,7 +843,7 @@ async def modify_run(modify_run_request, run_id, token_info, thread_id, user, **
     :type thread_id: str
     :param run_id: The ID of the run to modify.
     :type run_id: str
-    :param modify_run_request: 
+    :param modify_run_request:
     :type modify_run_request: dict | bytes
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
@@ -792,12 +851,16 @@ async def modify_run(modify_run_request, run_id, token_info, thread_id, user, **
     # if connexion.request.is_json:
     #     modify_run_request = ModifyRunRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print('=== modify_run ===')
-    print('modify_run_request: ', modify_run_request)
+    print("=== modify_run ===")
+    print("modify_run_request: ", modify_run_request)
     # print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("kwargs: ", kwargs)
 
-    run: Run = Run(**await get_run(run_id=run_id, token_info=token_info, thread_id=thread_id, user=user))
+    run: Run = Run(
+        **await get_run(
+            run_id=run_id, token_info=token_info, thread_id=thread_id, user=user
+        )
+    )
 
     run.status = modify_run_request.get("status")
 
@@ -814,7 +877,7 @@ async def modify_thread(*args, **kwargs):
 
     :param thread_id: The ID of the thread to modify. Only the &#x60;metadata&#x60; can be modified.
     :type thread_id: str
-    :param modify_thread_request: 
+    :param modify_thread_request:
     :type modify_thread_request: dict | bytes
 
     :rtype: Union[ThreadObject, Tuple[ThreadObject, int], Tuple[ThreadObject, int, Dict[str, str]]
@@ -822,16 +885,16 @@ async def modify_thread(*args, **kwargs):
     # if connexion.request.is_json:
     #     modify_thread_request = ModifyThreadRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print('=== modify_thread ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== modify_thread ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
 
 
 # def submit_tool_ouputs_to_run(thread_id, run_id, submit_tool_outputs_run_request):  # noqa: E501
 async def submit_tool_outputs_to_run(*args, **kwargs):
-    """When a run has the &#x60;status: \&quot;requires_action\&quot;&#x60; and &#x60;required_action.type&#x60; is &#x60;submit_tool_outputs&#x60;, this endpoint can be used to submit the outputs from the tool calls once they&#39;re all completed. All outputs must be submitted in a single request. 
+    """When a run has the &#x60;status: \&quot;requires_action\&quot;&#x60; and &#x60;required_action.type&#x60; is &#x60;submit_tool_outputs&#x60;, this endpoint can be used to submit the outputs from the tool calls once they&#39;re all completed. All outputs must be submitted in a single request.
 
      # noqa: E501
 
@@ -839,7 +902,7 @@ async def submit_tool_outputs_to_run(*args, **kwargs):
     :type thread_id: str
     :param run_id: The ID of the run that requires the tool output submission.
     :type run_id: str
-    :param submit_tool_outputs_run_request: 
+    :param submit_tool_outputs_run_request:
     :type submit_tool_outputs_run_request: dict | bytes
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
@@ -847,8 +910,8 @@ async def submit_tool_outputs_to_run(*args, **kwargs):
     # if connexion.request.is_json:
     #     submit_tool_outputs_run_request = SubmitToolOutputsRunRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print('=== submit_tool_outputs_to_run ===')
-    print('args: ', args)
-    print('kwargs: ', kwargs)
+    print("=== submit_tool_outputs_to_run ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
 
     raise NotImplementedError
