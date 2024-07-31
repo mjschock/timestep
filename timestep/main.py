@@ -52,7 +52,7 @@ $ make up
 $ python3 -m pip install --upgrade pip
 $ python3 -m pip install --user pipx
 $ python3 -m pipx ensurepath
-$ pipx install timestep==12.0.1
+$ pipx install timestep
 ```
 """
         if is_readme_context
