@@ -3,12 +3,13 @@ import os
 from pathlib import Path
 
 import typer
-
 from sqlmodel import SQLModel, create_engine
+
+from timestep.llamafile import typer_app as llamafile_typer_app
 from timestep.server import main as timestep_serve
 from timestep.utils import start_shell_script
-from timestep.worker import agent_flow, main as timestep_train
-from timestep.llamafile import typer_app as llamafile_typer_app
+from timestep.worker import agent_flow
+from timestep.worker import main as timestep_train
 
 app_dir = typer.get_app_dir(__package__)
 

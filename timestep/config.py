@@ -3,6 +3,7 @@ from typing import Optional
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
     # openai_api_key: SecretStr = Field(default=None)
     # poetry_pypi_token_testpypi: SecretStr = Field(default=None)
@@ -16,6 +17,6 @@ class Settings(BaseSettings):
     # version: str = Field()
 
     class Config:
-        env_file = (".env")
+        env_file = ".env"
         env_file_encoding = "utf-8"
         secrets_dir = "./secrets"

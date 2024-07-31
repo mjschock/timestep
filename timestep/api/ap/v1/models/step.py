@@ -12,7 +12,19 @@ class Step(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, input=None, additional_input=None, task_id=None, step_id=None, name=None, status=None, output=None, additional_output=None, artifacts=[], is_last=False):  # noqa: E501
+    def __init__(
+        self,
+        input=None,
+        additional_input=None,
+        task_id=None,
+        step_id=None,
+        name=None,
+        status=None,
+        output=None,
+        additional_output=None,
+        artifacts=[],
+        is_last=False,
+    ):  # noqa: E501
         """Step - a model defined in OpenAPI
 
         :param input: The input of this Step.  # noqa: E501
@@ -37,29 +49,29 @@ class Step(Model):
         :type is_last: bool
         """
         self.openapi_types = {
-            'input': str,
-            'additional_input': object,
-            'task_id': str,
-            'step_id': str,
-            'name': str,
-            'status': str,
-            'output': str,
-            'additional_output': object,
-            'artifacts': List[Artifact],
-            'is_last': bool
+            "input": str,
+            "additional_input": object,
+            "task_id": str,
+            "step_id": str,
+            "name": str,
+            "status": str,
+            "output": str,
+            "additional_output": object,
+            "artifacts": List[Artifact],
+            "is_last": bool,
         }
 
         self.attribute_map = {
-            'input': 'input',
-            'additional_input': 'additional_input',
-            'task_id': 'task_id',
-            'step_id': 'step_id',
-            'name': 'name',
-            'status': 'status',
-            'output': 'output',
-            'additional_output': 'additional_output',
-            'artifacts': 'artifacts',
-            'is_last': 'is_last'
+            "input": "input",
+            "additional_input": "additional_input",
+            "task_id": "task_id",
+            "step_id": "step_id",
+            "name": "name",
+            "status": "status",
+            "output": "output",
+            "additional_output": "additional_output",
+            "artifacts": "artifacts",
+            "is_last": "is_last",
         }
 
         self._input = input
@@ -74,7 +86,7 @@ class Step(Model):
         self._is_last = is_last
 
     @classmethod
-    def from_dict(cls, dikt) -> 'Step':
+    def from_dict(cls, dikt) -> "Step":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -151,7 +163,9 @@ class Step(Model):
         :type task_id: str
         """
         if task_id is None:
-            raise ValueError("Invalid value for `task_id`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `task_id`, must not be `None`"
+            )  # noqa: E501
 
         self._task_id = task_id
 
@@ -176,7 +190,9 @@ class Step(Model):
         :type step_id: str
         """
         if step_id is None:
-            raise ValueError("Invalid value for `step_id`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `step_id`, must not be `None`"
+            )  # noqa: E501
 
         self._step_id = step_id
 
@@ -226,8 +242,9 @@ class Step(Model):
         allowed_values = ["created", "running", "completed"]  # noqa: E501
         if status not in allowed_values:
             raise ValueError(
-                "Invalid value for `status` ({0}), must be one of {1}"
-                .format(status, allowed_values)
+                "Invalid value for `status` ({0}), must be one of {1}".format(
+                    status, allowed_values
+                )
             )
 
         self._status = status
@@ -299,7 +316,9 @@ class Step(Model):
         :type artifacts: List[Artifact]
         """
         if artifacts is None:
-            raise ValueError("Invalid value for `artifacts`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `artifacts`, must not be `None`"
+            )  # noqa: E501
 
         self._artifacts = artifacts
 
@@ -324,6 +343,8 @@ class Step(Model):
         :type is_last: bool
         """
         if is_last is None:
-            raise ValueError("Invalid value for `is_last`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `is_last`, must not be `None`"
+            )  # noqa: E501
 
         self._is_last = is_last

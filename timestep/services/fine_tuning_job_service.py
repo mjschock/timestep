@@ -1,23 +1,9 @@
 import enum
 import uuid
-
-from openai.types.fine_tuning.fine_tuning_job import (
-    FineTuningJob,
-)
-from pydantic import BaseModel
-from sqlmodel import SQLModel, Session
-
-# from timestep.database import InstanceStoreSingleton
-
-from sqlalchemy import Column, Enum
-
-import enum
-import uuid
 from typing import List, Optional
 
-from openai.types.fine_tuning.fine_tuning_job import (
-    FineTuningJob,
-)
+from openai.types.fine_tuning.fine_tuning_job import FineTuningJob
+from pydantic import BaseModel
 
 # from sqlalchemy import JSON
 # import sqlalchemy
@@ -25,7 +11,9 @@ from sqlalchemy import Column, Enum
 
 # from sqlalchemy.dialects.sqlite.json import JSON
 from sqlalchemy.types import JSON
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Session, SQLModel
+
+# from timestep.database import InstanceStoreSingleton
 
 
 # class FineTuningJobErrorSQLModel(Error, Column(JSON)):
@@ -116,6 +104,7 @@ class ModelInstanceStoreSingleton(object):
 
         else:
             raise NotImplementedError(f"Type {base_model_class} is not yet implemented")
+
 
 model_instance_store = InstanceStoreSingleton()
 model_instance_store.shared_variable = "Shared Variable"

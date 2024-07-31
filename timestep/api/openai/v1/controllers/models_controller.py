@@ -4,10 +4,12 @@ import connexion
 from openai.types.model import Model
 
 from timestep.api.openai.v1 import util
-from timestep.api.openai.v1.models.delete_model_response import \
-    DeleteModelResponse  # noqa: E501
-from timestep.api.openai.v1.models.list_models_response import \
-    ListModelsResponse  # noqa: E501
+from timestep.api.openai.v1.models.delete_model_response import (  # noqa: E501
+    DeleteModelResponse,
+)
+from timestep.api.openai.v1.models.list_models_response import (  # noqa: E501
+    ListModelsResponse,
+)
 from timestep.api.openai.v1.models.model import Model  # noqa: E501
 from timestep.services import model_service
 
@@ -51,7 +53,7 @@ def retrieve_model(model: str, token_info: dict, user: str):
 
     model_info = model_service.retrieve_model(model_id=model)
 
-    print('model_info: ', model_info)
+    print("model_info: ", model_info)
 
     return Model(
         id=model,

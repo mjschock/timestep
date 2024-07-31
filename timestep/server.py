@@ -11,6 +11,7 @@ def main():
     from timestep.api.openai.v1.controllers.completions_controller import (
         create_completion,
     )
+
     # from timestep.services import model_service
 
     connexion_app.add_api(

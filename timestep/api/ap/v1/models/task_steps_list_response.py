@@ -21,21 +21,15 @@ class TaskStepsListResponse(Model):
         :param pagination: The pagination of this TaskStepsListResponse.  # noqa: E501
         :type pagination: Pagination
         """
-        self.openapi_types = {
-            'steps': List[Step],
-            'pagination': Pagination
-        }
+        self.openapi_types = {"steps": List[Step], "pagination": Pagination}
 
-        self.attribute_map = {
-            'steps': 'steps',
-            'pagination': 'pagination'
-        }
+        self.attribute_map = {"steps": "steps", "pagination": "pagination"}
 
         self._steps = steps
         self._pagination = pagination
 
     @classmethod
-    def from_dict(cls, dikt) -> 'TaskStepsListResponse':
+    def from_dict(cls, dikt) -> "TaskStepsListResponse":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -64,7 +58,9 @@ class TaskStepsListResponse(Model):
         :type steps: List[Step]
         """
         if steps is None:
-            raise ValueError("Invalid value for `steps`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `steps`, must not be `None`"
+            )  # noqa: E501
 
         self._steps = steps
 
@@ -87,6 +83,8 @@ class TaskStepsListResponse(Model):
         :type pagination: Pagination
         """
         if pagination is None:
-            raise ValueError("Invalid value for `pagination`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `pagination`, must not be `None`"
+            )  # noqa: E501
 
         self._pagination = pagination

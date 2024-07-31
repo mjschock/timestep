@@ -2,7 +2,11 @@ import os
 
 import typer
 
-from timestep.utils import download_with_progress_bar, start_shell_script, stop_shell_script
+from timestep.utils import (
+    download_with_progress_bar,
+    start_shell_script,
+    stop_shell_script,
+)
 
 typer_app = typer.Typer()
 
@@ -14,7 +18,7 @@ default_llamafile_url = f"https://huggingface.co/Mozilla/TinyLlama-1.1B-Chat-v1.
 def load(
     # llamafile_path=f"{os.getcwd()}/models/{default_llamafile_filename}",
     llamafile_path=f"./models/{default_llamafile_filename}",
-    host='0.0.0.0',
+    host="0.0.0.0",
     port=8080,
 ):
     """
@@ -22,7 +26,9 @@ def load(
     """
     typer.echo(f"Loading model...")
 
-    if os.path.basename(llamafile_path) == default_llamafile_filename and not os.path.exists(llamafile_path):
+    if os.path.basename(
+        llamafile_path
+    ) == default_llamafile_filename and not os.path.exists(llamafile_path):
         os.makedirs(os.path.dirname(llamafile_path), exist_ok=True)
         download_with_progress_bar(default_llamafile_url, llamafile_path)
 
@@ -30,9 +36,12 @@ def load(
 
     process = start_shell_script(
         llamafile_path,
-        '--host', host,
-        '--path', '/zip/llama.cpp/server/public',
-        '--port', f'{port}',
+        "--host",
+        host,
+        "--path",
+        "/zip/llama.cpp/server/public",
+        "--port",
+        f"{port}",
     )
 
     typer.echo(f"... loaded model with PID: {process.pid}.")

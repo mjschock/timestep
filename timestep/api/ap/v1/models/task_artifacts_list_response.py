@@ -21,21 +21,15 @@ class TaskArtifactsListResponse(Model):
         :param pagination: The pagination of this TaskArtifactsListResponse.  # noqa: E501
         :type pagination: Pagination
         """
-        self.openapi_types = {
-            'artifacts': List[Artifact],
-            'pagination': Pagination
-        }
+        self.openapi_types = {"artifacts": List[Artifact], "pagination": Pagination}
 
-        self.attribute_map = {
-            'artifacts': 'artifacts',
-            'pagination': 'pagination'
-        }
+        self.attribute_map = {"artifacts": "artifacts", "pagination": "pagination"}
 
         self._artifacts = artifacts
         self._pagination = pagination
 
     @classmethod
-    def from_dict(cls, dikt) -> 'TaskArtifactsListResponse':
+    def from_dict(cls, dikt) -> "TaskArtifactsListResponse":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -64,7 +58,9 @@ class TaskArtifactsListResponse(Model):
         :type artifacts: List[Artifact]
         """
         if artifacts is None:
-            raise ValueError("Invalid value for `artifacts`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `artifacts`, must not be `None`"
+            )  # noqa: E501
 
         self._artifacts = artifacts
 
@@ -87,6 +83,8 @@ class TaskArtifactsListResponse(Model):
         :type pagination: Pagination
         """
         if pagination is None:
-            raise ValueError("Invalid value for `pagination`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `pagination`, must not be `None`"
+            )  # noqa: E501
 
         self._pagination = pagination

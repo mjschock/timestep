@@ -6,25 +6,31 @@ import time
 from typing import Iterator
 
 from langchain.chains.base import Chain
+
 # from langchain_community.llms import LlamaCpp
 from langchain_community.llms.llamacpp import LlamaCpp
-from langchain_core.callbacks import (CallbackManager,
-                                      StreamingStdOutCallbackHandler)
+from langchain_core.callbacks import CallbackManager, StreamingStdOutCallbackHandler
 from langchain_core.messages import HumanMessage
-from langchain_core.output_parsers import (PydanticOutputParser,
-                                           PydanticToolsParser,
-                                           StrOutputParser)
-from langchain_core.prompt_values import (ChatPromptValue, PromptValue,
-                                          StringPromptValue)
-from langchain_core.prompts import (ChatPromptTemplate, MessagesPlaceholder,
-                                    PromptTemplate)
+from langchain_core.output_parsers import (
+    PydanticOutputParser,
+    PydanticToolsParser,
+    StrOutputParser,
+)
+from langchain_core.prompt_values import ChatPromptValue, PromptValue, StringPromptValue
+from langchain_core.prompts import (
+    ChatPromptTemplate,
+    MessagesPlaceholder,
+    PromptTemplate,
+)
 from llama_cpp import CreateChatCompletionStreamResponse, Llama
 from llama_cpp.server.types import CreateChatCompletionRequest
 from openai.types.chat.chat_completion import ChatCompletion
 from openai.types.chat.chat_completion_chunk import ChatCompletionChunk
 from openai.types.chat.completion_create_params import (
-    CompletionCreateParams, CompletionCreateParamsNonStreaming,
-    CompletionCreateParamsStreaming)
+    CompletionCreateParams,
+    CompletionCreateParamsNonStreaming,
+    CompletionCreateParamsStreaming,
+)
 from sse_starlette import EventSourceResponse
 
 from timestep.services.agent_service import ModelInstanceStoreSingleton
@@ -32,24 +38,32 @@ from timestep.services.agent_service import ModelInstanceStoreSingleton
 model_instance_store = ModelInstanceStoreSingleton()
 
 
-async def create_chat_completion(body: CompletionCreateParams, token_info: dict, user: str):
+async def create_chat_completion(
+    body: CompletionCreateParams, token_info: dict, user: str
+):
     """Creates a model response for the given chat conversation.
 
      # noqa: E501
 
-    :param create_chat_completion_request: 
+    :param create_chat_completion_request:
     :type create_chat_completion_request: dict | bytes
 
     :rtype: Union[CreateChatCompletionResponse, Tuple[CreateChatCompletionResponse, int], Tuple[CreateChatCompletionResponse, int, Dict[str, str]]
     """
     # if connexion.request.is_json:
-        # create_chat_completion_request = CreateChatCompletionRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    print(f'=== ENTER: {__name__}.create_chat_completion(body: CompletionCreateParams, token_info: dict, user: str)) ===')
-    pprint.pp({
-        "body": body,
-        "token_info": token_info,
-        "user": user,
-    }, compact=True, width=160)
+    # create_chat_completion_request = CreateChatCompletionRequest.from_dict(connexion.request.get_json())  # noqa: E501
+    print(
+        f"=== ENTER: {__name__}.create_chat_completion(body: CompletionCreateParams, token_info: dict, user: str)) ==="
+    )
+    pprint.pp(
+        {
+            "body": body,
+            "token_info": token_info,
+            "user": user,
+        },
+        compact=True,
+        width=160,
+    )
 
     # completion_create_params = CompletionCreateParams(**body)
     # print('completion_create_params:', completion_create_params)
@@ -116,26 +130,31 @@ async def create_chat_completion(body: CompletionCreateParams, token_info: dict,
     create_chat_completion_request = CreateChatCompletionRequest(**body)
     create_chat_completion_kwargs = create_chat_completion_request.model_dump(
         exclude=[
-            'logit_bias_type',
-            'min_tokens',
-            'n',
-            'user',
+            "logit_bias_type",
+            "min_tokens",
+            "n",
+            "user",
         ]
     )
     # messages = create_chat_completion_request.messages
 
     # instance_store = InstanceStoreSingleton()
-    model: Llama = model_instance_store._shared_model_instances[create_chat_completion_request.model]
+    model: Llama = model_instance_store._shared_model_instances[
+        create_chat_completion_request.model
+    ]
 
     if create_chat_completion_request.stream:
+
         async def event_publisher():
-            response: Iterator[CreateChatCompletionStreamResponse] = model.create_chat_completion(**create_chat_completion_kwargs)
+            response: Iterator[CreateChatCompletionStreamResponse] = (
+                model.create_chat_completion(**create_chat_completion_kwargs)
+            )
             # response: Generator[ChatCompletionChunk] = model.create_chat_completion_openai_v1(**create_chat_completion_kwargs)
             # response: Stream[ChatCompletionChunk] = model.astream(input=messages)
 
             try:
                 for chunk in response:
-                # async for chunk in response:
+                    # async for chunk in response:
                     chunk = ChatCompletionChunk(**chunk)
                     # yield json.dumps(chunk)
                     yield json.dumps(chunk.model_dump(mode="json"))
@@ -153,7 +172,9 @@ async def create_chat_completion(body: CompletionCreateParams, token_info: dict,
 
     else:
         # response: CreateChatCompletionResponse = model.create_chat_completion(**create_chat_completion_kwargs)
-        response: ChatCompletion = model.create_chat_completion_openai_v1(**create_chat_completion_kwargs)
+        response: ChatCompletion = model.create_chat_completion_openai_v1(
+            **create_chat_completion_kwargs
+        )
 
         # print(f'=== RETURN: {__name__}.create_chat_completion(body: CompletionCreateParams, token_info: dict, user: str)) ===')
         return response.model_dump(mode="json")

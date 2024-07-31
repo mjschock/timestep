@@ -1,20 +1,7 @@
 import time
 import uuid
 
-from llama_cpp import Llama
-from llama_cpp import Llama
-from llama_cpp.llama_chat_format import (
-    Llama3VisionAlpha,
-    Llava15ChatHandler,
-    Llava16ChatHandler,
-    MoondreamChatHandler,
-    NanoLlavaChatHandler,
-)
-from llama_cpp.llama_tokenizer import LlamaHFTokenizer
-import time
-import uuid
-
-from llama_cpp import Llama
+import typer
 from llama_cpp import Llama
 from llama_cpp.llama_chat_format import (
     Llama3VisionAlpha,
@@ -27,13 +14,14 @@ from llama_cpp.llama_tokenizer import LlamaHFTokenizer
 from openai.types.model import Model
 from sqlmodel import Field, SQLModel
 from stable_diffusion_cpp import StableDiffusion
-import typer
 
 app_dir = typer.get_app_dir("timestep")
 # from timestep.database import InstanceStoreSingleton
 
+
 async def get_default_agent():
     return None
+
 
 # class AgentService(object):
 #     # models: dict[uuid.UUID] = {}
@@ -46,6 +34,7 @@ async def get_default_agent():
 #         obj.__dict__ = cls._shared_instance_state
 
 #         return obj
+
 
 class ModelSQLModel(Model, SQLModel, table=True):
     __tablename__: str = "models"
@@ -175,7 +164,9 @@ class ModelInstanceStoreSingleton(object):
         elif model_name == "Phi-3-Mini-4K-Instruct":
             text_model_filename = "Phi-3-mini-4k-instruct-q4.gguf"
             text_model_repo_id = "microsoft/Phi-3-mini-4k-instruct-gguf"
-            tokenizer = LlamaHFTokenizer.from_pretrained("microsoft/Phi-3-mini-4k-instruct")
+            tokenizer = LlamaHFTokenizer.from_pretrained(
+                "microsoft/Phi-3-mini-4k-instruct"
+            )
 
         elif model_name == "Replit-Code-V-1.5-3B":
             n_ctx = 16192
@@ -189,7 +180,7 @@ class ModelInstanceStoreSingleton(object):
         elif model_name == "Stable-Diffusion-v1-5":
             model_instance = StableDiffusion(
                 model_path=f"{app_dir}/models/runwayml/stable-diffusion-v1-5/v1-5-pruned-emaonly.safetensors",
-                wtype="default", # Weight type (options: default, f32, f16, q4_0, q4_1, q5_0, q5_1, q8_0)
+                wtype="default",  # Weight type (options: default, f32, f16, q4_0, q4_1, q5_0, q5_1, q8_0)
                 # seed=1337, # Uncomment to set a specific seed
             )
 
@@ -204,7 +195,7 @@ class ModelInstanceStoreSingleton(object):
         else:
             raise NotImplementedError(model_name)
 
-        model_id = str(uuid.uuid4) # TODO: insert model in db and get id
+        model_id = str(uuid.uuid4)  # TODO: insert model in db and get id
 
         # model = Llama( # TODO: switch to LangChain LL?
         model_instance = model_instance or Llama.from_pretrained(
@@ -225,7 +216,6 @@ class ModelInstanceStoreSingleton(object):
         for model_id in [model_id] + model_aliases + [model_name]:
             self._shared_model_instances[model_id] = model_instance
 
-
     def delete_model(self, model):  # noqa: E501
         """Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
 
@@ -238,7 +228,6 @@ class ModelInstanceStoreSingleton(object):
         """
         raise NotImplementedError
 
-
     def list_models(self):  # noqa: E501
         """Lists the currently available models, and provides basic information about each one such as the owner and availability.
 
@@ -248,7 +237,6 @@ class ModelInstanceStoreSingleton(object):
         :rtype: Union[ListModelsResponse, Tuple[ListModelsResponse, int], Tuple[ListModelsResponse, int, Dict[str, str]]
         """
         raise NotImplementedError
-
 
     def retrieve_model(self, model_id: str):
         """Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
@@ -271,6 +259,7 @@ class ModelInstanceStoreSingleton(object):
             "lora_path": model.lora_path,
             "lora_scale": model.lora_scale,
         }
+
 
 model_instance_store = ModelInstanceStoreSingleton()
 model_instance_store.created_at = time.time()

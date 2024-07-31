@@ -4,10 +4,12 @@ import connexion
 
 from timestep.api.openai.v1 import util
 from timestep.api.openai.v1.models.batch import Batch  # noqa: E501
-from timestep.api.openai.v1.models.create_batch_request import \
-    CreateBatchRequest  # noqa: E501
-from timestep.api.openai.v1.models.list_batches_response import \
-    ListBatchesResponse  # noqa: E501
+from timestep.api.openai.v1.models.create_batch_request import (  # noqa: E501
+    CreateBatchRequest,
+)
+from timestep.api.openai.v1.models.list_batches_response import (  # noqa: E501
+    ListBatchesResponse,
+)
 
 
 def cancel_batch(batch_id):  # noqa: E501
@@ -28,13 +30,15 @@ def create_batch(create_batch_request):  # noqa: E501
 
      # noqa: E501
 
-    :param create_batch_request: 
+    :param create_batch_request:
     :type create_batch_request: dict | bytes
 
     :rtype: Union[Batch, Tuple[Batch, int], Tuple[Batch, int, Dict[str, str]]
     """
     if connexion.request.is_json:
-        create_batch_request = CreateBatchRequest.from_dict(connexion.request.get_json())  # noqa: E501
+        create_batch_request = CreateBatchRequest.from_dict(
+            connexion.request.get_json()
+        )  # noqa: E501
     raise NotImplementedError
 
 
@@ -43,9 +47,9 @@ def list_batches(after=None, limit=None):  # noqa: E501
 
      # noqa: E501
 
-    :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list. 
+    :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list.
     :type after: str
-    :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20. 
+    :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 20.
     :type limit: int
 
     :rtype: Union[ListBatchesResponse, Tuple[ListBatchesResponse, int], Tuple[ListBatchesResponse, int, Dict[str, str]]

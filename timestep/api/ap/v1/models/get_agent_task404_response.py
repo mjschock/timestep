@@ -17,18 +17,14 @@ class GetAgentTask404Response(Model):
         :param message: The message of this GetAgentTask404Response.  # noqa: E501
         :type message: str
         """
-        self.openapi_types = {
-            'message': str
-        }
+        self.openapi_types = {"message": str}
 
-        self.attribute_map = {
-            'message': 'message'
-        }
+        self.attribute_map = {"message": "message"}
 
         self._message = message
 
     @classmethod
-    def from_dict(cls, dikt) -> 'GetAgentTask404Response':
+    def from_dict(cls, dikt) -> "GetAgentTask404Response":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -59,6 +55,8 @@ class GetAgentTask404Response(Model):
         :type message: str
         """
         if message is None:
-            raise ValueError("Invalid value for `message`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `message`, must not be `None`"
+            )  # noqa: E501
 
         self._message = message
