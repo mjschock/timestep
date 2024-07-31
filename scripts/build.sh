@@ -24,9 +24,10 @@ make
 
 poetry run pytest
 
-poetry config repositories.testpypi https://test.pypi.org/legacy/
-poetry config -- http-basic.testpypi __token__ $(cat ./secrets/poetry_pypi_token_testpypi)
-poetry config -- pypi-token.testpypi $(cat ./secrets/poetry_pypi_token_testpypi)
+poetry config repositories.testpypi $POETRY_REPOSITORIES_TESTPYPI_URL
+poetry config repositories
+# poetry config -- http-basic.testpypi __token__ $(cat ./secrets/poetry_pypi_token_testpypi)
+# poetry config -- pypi-token.testpypi $(cat ./secrets/poetry_pypi_token_testpypi)
 poetry publish --build --no-interaction --password=$(cat ./secrets/poetry_pypi_token_testpypi) --repository=testpypi --username=__token__
 
 # make up
