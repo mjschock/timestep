@@ -278,10 +278,8 @@ model_instance_store.created_at = time.time()
 model_instance_store.create_model(
     model_aliases=[
         "gpt-3.5-turbo",
-        "gpt-3.5-turbo-0613",
         "gpt-3.5-turbo-1106",
         "gpt-4-1106-preview",
-        "gpt-4-vision-preview",
         "gpt-4-turbo",
         "gpt-4o",
         "gpt-4o-mini",

@@ -56,3 +56,6 @@ publish:
 	poetry run toml-sort -ai pyproject.toml
 	poetry run typer timestep.main utils docs --name timestep --output README.md --title "Timestep AI"
 	poetry publish --build
+
+up:
+	timestep up

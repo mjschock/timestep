@@ -7,3 +7,6 @@
 [submodule "3rdparty/llamafile"]
 	path = 3rdparty/llamafile
 	url = https://github.com/Mozilla-Ocho/llamafile.git
+[submodule "3rdparty/tinygrad"]
+	path = 3rdparty/tinygrad
+	url = https://github.com/tinygrad/tinygrad.git

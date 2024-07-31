@@ -35,9 +35,9 @@ Timestep AI CLI - free, local-first, open-source AI
 $ cp .env.example .env # Customize as desired
 $ direnv allow # See https://direnv.net/#getting-started to install direnv on your platform
 $ poetry install # See https://python-poetry.org/docs/#installation to install Poetry on your platform
-$ poetry run prefect server start
-$ poetry run prefect worker start --pool "default"
-$ poetry run timestep serve
+$ prefect server start
+$ prefect worker start --pool "default"
+$ timestep serve
 ```
 """
         if is_readme_context
