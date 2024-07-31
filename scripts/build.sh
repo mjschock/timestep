@@ -14,13 +14,18 @@ eval "$(direnv dotenv bash .env)"
 # sudo apt-get install direnv -y
 # eval "$(direnv hook bash)"
 # direnv allow
+echo "POETRY_REPOSITORIES_TESTPYPI_URL = $POETRY_REPOSITORIES_TESTPYPI_URL"
 echo "POETRY_VIRTUALENVS_IN_PROJECT = $POETRY_VIRTUALENVS_IN_PROJECT"
-echo "POETRY_VIRTUALENVS_IN_PROJECT_TEST = $POETRY_VIRTUALENVS_IN_PROJECT_TEST"
 echo "POETRY_VIRTUALENVS_PREFER_ACTIVE_PYTHON = $POETRY_VIRTUALENVS_PREFER_ACTIVE_PYTHON"
+
+ls -al ./secrets
 
 make
 
 poetry run pytest
+
+echo "after pytest"
+
 # POETRY_PYPI_TOKEN_TESTPYPI
 poetry config pypi-token.testpypi $(cat ./secrets/poetry_pypi_token_testpypi)
 poetry publish --build --no-interaction --repository=testpypi -vvv

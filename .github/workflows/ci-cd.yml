@@ -22,12 +22,10 @@ jobs:
         SECRETS_CONTEXT: ${{ toJson(secrets) }}
         VARS_CONTEXT: ${{ toJson(vars) }}
       run: |
-        secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
-
-        if [ -n "$VARS_CONTEXT" ] && [ "$(echo "$VARS_CONTEXT" | jq -e . > /dev/null 2>&1; echo $?)" -eq 0 ]; then
-          var_keys=$(echo "$VARS_CONTEXT" | jq -r 'keys[]')
+        if [ -n "$SECRETS_CONTEXT" ] && [ "$(echo "$SECRETS_CONTEXT" | jq -e . > /dev/null 2>&1; echo $?)" -eq 0 ]; then
+          secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
         else
-          var_keys=""
+          secret_keys=""
         fi
 
         for key in $secret_keys; do
@@ -37,6 +35,12 @@ jobs:
             echo "$secret_value" > "secrets/$lowercase_key"
           fi
         done
+
+        if [ -n "$VARS_CONTEXT" ] && [ "$(echo "$VARS_CONTEXT" | jq -e . > /dev/null 2>&1; echo $?)" -eq 0 ]; then
+          var_keys=$(echo "$VARS_CONTEXT" | jq -r 'keys[]')
+        else
+          var_keys=""
+        fi
 
         cp .env.example .env
 
