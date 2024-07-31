@@ -32,8 +32,9 @@ jobs:
         sudo apt-get install direnv -y
         direnv allow
         echo $POETRY_VIRTUALENVS_IN_PROJECT
-        make
-        make up
+        echo $POETRY_VIRTUALENVS_IN_PROJECT_TEST
+        # make
+        # make up
     - name: Test with pytest
       run: |
         pytest
