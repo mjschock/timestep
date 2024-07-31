@@ -33,6 +33,7 @@ jobs:
         direnv allow
         echo $POETRY_VIRTUALENVS_IN_PROJECT
         make
+        make up
     - name: Test with pytest
       run: |
         pytest
@@ -61,3 +62,4 @@ jobs:
       - name: Verify
         run: |
           python -c "import timestep; print(timestep.__version__)"
+          timestep up
