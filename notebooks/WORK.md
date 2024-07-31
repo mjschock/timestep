@@ -6,7 +6,7 @@ Copied and modified from https://github.com/mjschock/timestep/pull/85#issue-2438
 - [ ] Migrate mjschock/timestep to Timestep-AI/timestep
   - [x] Delete Timestep-AI/timestep
   - [x] Transfer mjschock/timestep to Timestep-AI/timestep
-  - [ ] Verify that GitLab is still mirroring correctly (and make sure it's open)
+  - [x] Verify that GitLab is still mirroring correctly (and make sure it's open)
  
 - [ ] Add GitHub workflows for lightest Linux/Mac/Windows that have at least the following jobs:
   - CLI test:
