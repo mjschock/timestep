@@ -28,8 +28,8 @@ jobs:
         python3 -m pipx ensurepath
         pipx install poetry==1.8.3 # TODO: Put the version in the environment
         cp .env.example .env
-        sudo apt update
-        sudo apt install direnv
+        sudo apt-get update -y
+        sudo apt-get install direnv -y
         direnv allow
         echo $POETRY_VIRTUALENVS_IN_PROJECT
         make
