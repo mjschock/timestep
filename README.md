@@ -1,5 +1,31 @@
 # Timestep AI
 
+Timestep AI CLI - free, local-first, open-source AI
+
+**Setup**:
+
+### Development
+
+```console
+$ python3 -m pip install --upgrade pip
+$ python3 -m pip install --user pipx
+$ python3 -m pipx ensurepath
+$ pipx install poetry==1.8.3
+$ cp .env.example .env
+$ direnv allow # See https://direnv.net/#getting-started to install direnv on your platform
+$ make
+$ make up
+```
+
+### Library
+
+```console
+$ python3 -m pip install --upgrade pip
+$ python3 -m pip install --user pipx
+$ python3 -m pipx ensurepath
+$ pipx install timestep
+```
+
 **Usage**:
 
 ```console
@@ -8,43 +34,68 @@ $ timestep [OPTIONS] COMMAND [ARGS]...
 
 **Options**:
 
+* `--install-completion`: Install completion for the current shell.
+* `--show-completion`: Show completion for the current shell, to copy it or customize the installation.
 * `--help`: Show this message and exit.
 
 **Commands**:
 
-* `load`: Load a model
-* `unload`: Unload a model by PID
+* `evals`: Run evaluations.
+* `serve`: Run serving.
+* `train`: Run training.
+* `up`: Up.
 
-## `timestep load`
+## `timestep evals`
 
-Load a model
+Run evaluations.
 
 **Usage**:
 
 ```console
-$ timestep load [OPTIONS]
+$ timestep evals [OPTIONS]
 ```
 
 **Options**:
 
-* `--llamafile-path TEXT`: [default: ./models/TinyLlama-1.1B-Chat-v1.0.F16.llamafile]
-* `--host TEXT`: [default: 0.0.0.0]
-* `--port TEXT`: [default: 8080]
 * `--help`: Show this message and exit.
 
-## `timestep unload`
+## `timestep serve`
 
-Unload a model by PID
+Run serving.
 
 **Usage**:
 
 ```console
-$ timestep unload [OPTIONS] PID
+$ timestep serve [OPTIONS]
 ```
 
-**Arguments**:
+**Options**:
 
-* `PID`: [required]
+* `--help`: Show this message and exit.
+
+## `timestep train`
+
+Run training.
+
+**Usage**:
+
+```console
+$ timestep train [OPTIONS]
+```
+
+**Options**:
+
+* `--help`: Show this message and exit.
+
+## `timestep up`
+
+Up.
+
+**Usage**:
+
+```console
+$ timestep up [OPTIONS]
+```
 
 **Options**:
 
