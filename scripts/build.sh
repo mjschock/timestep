@@ -21,6 +21,8 @@ echo "POETRY_VIRTUALENVS_PREFER_ACTIVE_PYTHON = $POETRY_VIRTUALENVS_PREFER_ACTIV
 make
 
 poetry run pytest
+# POETRY_PYPI_TOKEN_TESTPYPI
+poetry config pypi-token.testpypi $(cat ./secrets/poetry_pypi_token_testpypi)
 poetry publish --build --no-interaction --repository=testpypi -vvv
 
 # make up
