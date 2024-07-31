@@ -19,10 +19,12 @@ einops = "^0.8.0"
 fastapi = "^0.111.1"
 gorilla-cli = "^0.0.10"
 huggingface-hub = "^0.23.5"
+kedro = {extras = ["viz"], version = "^0.19.6"}
 langchain-community = "^0.2.7"
 llama-cpp-python = "^0.2.82"
 marvin = "^2.3.6"
 prefect-shell = {allow-prereleases = true, version = "^0.3.0rc1"}
+pyspark = {extras = ["pandas"], version = "^3.5.1"}
 python = "^3.10"
 sqlmodel = "^0.0.21"
 sse-starlette = "^2.1.2"
@@ -30,8 +32,6 @@ stable-diffusion-cpp-python = "^0.1.6"
 starlette-context = "^0.3.6"
 transformers = "^4.42.4"
 typer = {extras = ["all"], version = "^0.12.3"}
-kedro = {extras = ["viz"], version = "^0.19.6"}
-pyspark = {extras = ["pandas"], version = "^3.5.1"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
