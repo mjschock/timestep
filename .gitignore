@@ -8,5 +8,6 @@ database.db
 /models
 __pycache__
 *.py[cod]
+/secrets
 /.venv
 /work
