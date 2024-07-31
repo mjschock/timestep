@@ -149,6 +149,8 @@ def up():
     """
     process = start_shell_script(
         # llamafile_path,
+        # "make",
+        # "up",
         "prefect",
         "server",
         "start",
