@@ -51,11 +51,11 @@ apis:
 clean:
 	rm -rf .venv 3rdparty build data dist models work database.db
 
-publish:
+pre-commit:
 	poetry install
 	poetry run toml-sort -ai pyproject.toml
 	poetry run typer timestep.main utils docs --name timestep --output README.md --title "Timestep AI"
-	poetry publish --build
+	# poetry publish --build
 
 up:
 	prefect server start &
