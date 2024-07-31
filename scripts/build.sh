@@ -16,5 +16,7 @@ eval "$(direnv dotenv bash .env)"
 # direnv allow
 echo $POETRY_VIRTUALENVS_IN_PROJECT
 echo $POETRY_VIRTUALENVS_IN_PROJECT_TEST
-# make
+echo $POETRY_VIRTUALENVS_PREFER_ACTIVE_PYTHON
+
+make
 # make up
