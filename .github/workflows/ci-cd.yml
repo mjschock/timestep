@@ -11,6 +11,8 @@ permissions:
 
 jobs:
   build:
+    outputs:
+      TIMESTEP_VERSION: ${{ steps.build_step.outputs.TIMESTEP_VERSION }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -49,7 +51,7 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
-    - id: build
+    - id: build_step
       name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
@@ -60,7 +62,7 @@ jobs:
         echo "TIMESTEP_VERSION=$(poetry version | awk '{print $2}')" >> $GITHUB_OUTPUT
   verify:
     env:
-      TIMESTEP_VERSION: ${{ steps.build.outputs.TIMESTEP_VERSION }}
+      TIMESTEP_VERSION: ${{ needs.build.outputs.TIMESTEP_VERSION }}
     needs: build
     runs-on: ${{ matrix.runs-on }}
     strategy:
