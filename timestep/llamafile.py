@@ -23,7 +23,7 @@ def load(
     typer.echo(f"Loading model...")
 
     if os.path.basename(llamafile_path) == default_llamafile_filename and not os.path.exists(llamafile_path):
-        os.makedirs(os.path.dirname(llamafile_path))
+        os.makedirs(os.path.dirname(llamafile_path), exist_ok=True)
         download_with_progress_bar(default_llamafile_url, llamafile_path)
 
     assert os.path.exists(llamafile_path)

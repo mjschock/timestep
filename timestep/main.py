@@ -7,6 +7,7 @@ import typer
 from sqlmodel import SQLModel, create_engine
 from timestep.server import main as timestep_serve
 from timestep.worker import agent_flow, main as timestep_train
+from timestep.llamafile import typer_app as llamafile_typer_app
 
 app_dir = typer.get_app_dir(__package__)
 
@@ -62,6 +63,8 @@ typer_app = typer.Typer(
     help=get_help_message(),
     no_args_is_help=True,
 )
+
+typer_app.add_typer(llamafile_typer_app, name="up")
 
 
 @typer_app.callback()
