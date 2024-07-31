@@ -23,7 +23,12 @@ jobs:
         VARS_CONTEXT: ${{ toJson(vars) }}
       run: |
         secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
-        var_keys=$(echo "$VARS_CONTEXT" | jq -r 'keys[]')
+
+        if [ -n "$VARS_CONTEXT" ] && [ "$(echo "$VARS_CONTEXT" | jq -e . > /dev/null 2>&1; echo $?)" -eq 0 ]; then
+          var_keys=$(echo "$VARS_CONTEXT" | jq -r 'keys[]')
+        else
+          var_keys=""
+        fi
 
         for key in $secret_keys; do
           if [ "$key" != "github_token" ]; then
