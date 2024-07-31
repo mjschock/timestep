@@ -14,9 +14,7 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.10
@@ -37,3 +35,25 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+    - name: Publish to PyPI
+      uses: JRubics/poetry-publish@v2.0
+      with:
+        pypi_token: ${{ secrets.PYPI_TOKEN }}
+
+  verify:
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      matrix:
+        runs-on: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install timestep
+      - name: Verify
+        run: |
+          python -c "import timestep; print(timestep.__version__)"
