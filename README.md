@@ -5,6 +5,7 @@ Timestep AI CLI - free, local-first, open-source AI
 **Setup**:
 
 ```console
+$ git submodule update --init --recursive
 $ cp .env.example .env # Customize as desired
 $ direnv allow # See https://direnv.net/#getting-started to install direnv on your platform
 $ poetry install # See https://python-poetry.org/docs/#installation to install Poetry on your platform
