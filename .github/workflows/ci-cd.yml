@@ -65,12 +65,13 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
+        python-version: [3.10, 3.11, 3.12]
         runs-on: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - name: Set up Python 3.10
+      - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: "3.10"
+          python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
@@ -82,7 +83,7 @@ jobs:
           command: pipx install --index-url https://test.pypi.org/simple/ --pip-args="--extra-index-url https://pypi.org/simple/" timestep==${{ needs.build.outputs.TIMESTEP_VERSION }}
           max_attempts: 3
           retry_on: error
-          timeout_seconds: 30
+          timeout_minutes: 10
       - name: Verify
         run: |
           # python -c "import timestep; print(timestep.__version__)"
