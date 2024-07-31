@@ -58,4 +58,7 @@ publish:
 	poetry publish --build
 
 up:
-	timestep up
+	prefect server start &
+	prefect worker start --pool "default" &
+	timestep serve &
+	# timestep up
