@@ -4,6 +4,8 @@ Timestep AI CLI - free, local-first, open-source AI
 
 **Setup**:
 
+### Development
+
 ```console
 $ git submodule update --init --recursive
 $ cp .env.example .env # Customize as desired
@@ -13,6 +15,8 @@ $ prefect server start
 $ prefect worker start --pool "default"
 $ timestep serve
 ```
+
+### Library
 
 **Usage**:
 

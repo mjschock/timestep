@@ -23,11 +23,15 @@ jobs:
         python-version: "3.10"
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        cp .env.example .env
-        sudo apt-get install direnv
-        direnv allow
+        python3 -m pip install --upgrade pip
+        python3 -m pip install --user pipx
+        python3 -m pipx ensurepath
         pipx install poetry==1.8.3 # TODO: Put the version in the environment
+        cp .env.example .env
+        sudo apt update
+        sudo apt install direnv
+        direnv allow
+        echo $POETRY_VIRTUALENVS_IN_PROJECT
         make
     - name: Test with pytest
       run: |
@@ -50,8 +54,10 @@ jobs:
           python-version: "3.10"
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install timestep
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --user pipx
+          python3 -m pipx ensurepath
+          pipx install timestep==12.0.1
       - name: Verify
         run: |
           python -c "import timestep; print(timestep.__version__)"
