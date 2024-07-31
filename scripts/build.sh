@@ -23,6 +23,8 @@ ls -al ./secrets
 make
 
 poetry run pytest
+
+poetry config repositories.testpypi https://test.pypi.org/legacy/
 poetry config -- http-basic.testpypi __token__ $(cat ./secrets/poetry_pypi_token_testpypi)
 poetry config -- pypi-token.testpypi $(cat ./secrets/poetry_pypi_token_testpypi)
 poetry publish --build --no-interaction --repository=testpypi -vvv
