@@ -8,7 +8,7 @@ description = ""
 license = "MIT"
 name = "timestep"
 readme = "README.md"
-version = "12.0.0"
+version = "12.0.1"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
