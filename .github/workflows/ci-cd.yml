@@ -56,8 +56,10 @@ jobs:
         python3 -m pipx ensurepath
         pipx install poetry==1.8.3 # TODO: Put the version in the environment
         ./scripts/build.sh
-
+        echo "TIMESTEP_VERSION=$(poetry version | awk '{print $2}')" >> $GITHUB_OUTPUT
   verify:
+    env:
+      TIMESTEP_VERSION: ${{ needs.build.outputs.TIMESTEP_VERSION }}
     needs: build
     runs-on: ${{ matrix.runs-on }}
     strategy:
@@ -73,7 +75,7 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install --user pipx
           python3 -m pipx ensurepath
-          pipx install --index-url https://test.pypi.org/simple/ --pip-args="--extra-index-url https://pypi.org/simple/" timestep==12.0.3
+          pipx install --index-url https://test.pypi.org/simple/ --pip-args="--extra-index-url https://pypi.org/simple/" timestep==$TIMESTEP_VERSION
       - name: Verify
         run: |
           # python -c "import timestep; print(timestep.__version__)"
