@@ -1,11 +1,11 @@
 import os
 from typing import Optional
 
-import controlflow as cf
+# import controlflow as cf
 import httpx
 import openai
 import typer
-from langchain_openai import ChatOpenAI
+# from langchain_openai import ChatOpenAI
 from openai.types.beta.assistant import Assistant
 from openai.types.beta.thread import Thread
 from openai.types.beta.threads.run import Run
@@ -25,17 +25,11 @@ app_dir = typer.get_app_dir("timestep")
 #     )
 # )
 
-cf.default_model = ChatOpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY"),
-    base_url=os.environ.get("OPENAI_BASE_URL"),
-    temperature=0.0,
-)
-
-openai_client = openai.OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY"),
-    base_url=os.environ.get("OPENAI_BASE_URL"),
-)
-
+# cf.default_model = ChatOpenAI(
+#     api_key=os.environ.get("OPENAI_API_KEY"),
+#     base_url=os.environ.get("OPENAI_BASE_URL"),
+#     temperature=0.0,
+# )
 
 @flow
 async def agent_flow(inputs: dict, work_type: str):
@@ -238,6 +232,12 @@ async def train_agent_flow(fine_tuning_job_id: str, suffix: Optional[str] = None
     # fine_tuning_job: FineTuningJob = await select_fine_tuning_job_by_id(
     #     fine_tuning_job_id
     # )
+
+    openai_client = openai.OpenAI(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+        base_url=os.environ.get("OPENAI_BASE_URL"),
+    )
+
     fine_tuning_job: FineTuningJob = openai_client.fine_tuning.jobs.retrieve( # TODO: is there an async version?
         fine_tuning_job_id=fine_tuning_job_id,
     )
@@ -441,6 +441,11 @@ def main(training_file_id):
     #     # job_variables={"env": {"MY_ENV_VAR": "staging"}},
     #     timeout=0,
     # )
+
+    openai_client = openai.OpenAI(
+        api_key=os.environ.get("OPENAI_API_KEY"),
+        base_url=os.environ.get("OPENAI_BASE_URL"),
+    )
 
     # print("flow_run: ", flow_run)
     fine_tuning_job: FineTuningJob = openai_client.fine_tuning.jobs.create(
