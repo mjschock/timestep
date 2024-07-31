@@ -6,6 +6,7 @@ import typer
 
 from sqlmodel import SQLModel, create_engine
 from timestep.server import main as timestep_serve
+from timestep.utils import start_shell_script
 from timestep.worker import agent_flow, main as timestep_train
 from timestep.llamafile import typer_app as llamafile_typer_app
 
@@ -64,7 +65,7 @@ typer_app = typer.Typer(
     no_args_is_help=True,
 )
 
-typer_app.add_typer(llamafile_typer_app, name="up")
+# typer_app.add_typer(llamafile_typer_app, name="up")
 
 
 @typer_app.callback()
@@ -139,6 +140,24 @@ def train():
     typer.echo("Running training...")
 
     timestep_train()
+
+
+@typer_app.command()
+def up():
+    """
+    Up.
+    """
+    process = start_shell_script(
+        # llamafile_path,
+        "prefect",
+        "server",
+        "start",
+        # '--host', host,
+        # '--path', '/zip/llama.cpp/server/public',
+        # '--port', f'{port}',
+    )
+
+    typer.echo(f"... loaded model with PID: {process.pid}.")
 
 
 if __name__ == "__main__":
