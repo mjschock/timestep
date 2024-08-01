@@ -18,7 +18,7 @@ from prefect.deployments import run_deployment
 from prefect.deployments.flow_runs import FlowRun
 from sse_starlette import EventSourceResponse
 
-from timestep.database import InstanceStoreSingleton
+# from timestep.database import InstanceStoreSingleton
 from timestep.worker import step
 
 

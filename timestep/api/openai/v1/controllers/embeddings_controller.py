@@ -1,13 +1,7 @@
-from typing import Dict, Tuple, Union
-
 import connexion
 
-from timestep.api.openai.v1 import util
 from timestep.api.openai.v1.models.create_embedding_request import (  # noqa: E501
     CreateEmbeddingRequest,
-)
-from timestep.api.openai.v1.models.create_embedding_response import (  # noqa: E501
-    CreateEmbeddingResponse,
 )
 
 

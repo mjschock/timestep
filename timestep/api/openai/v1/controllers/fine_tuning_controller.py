@@ -2,24 +2,17 @@ import time
 import uuid
 from typing import List
 
-import connexion
 from openai.pagination import SyncCursorPage
 from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparameters
 from openai.types.fine_tuning.fine_tuning_job_event import FineTuningJobEvent
-from openai.types.fine_tuning.fine_tuning_job_integration import (
-    FineTuningJobIntegration,
-)
 from prefect.deployments import run_deployment
 from prefect.deployments.flow_runs import FlowRun
 
-from timestep.api.openai.v1.models.create_fine_tuning_job_request import (
-    CreateFineTuningJobRequest,
-)
-from timestep.database import InstanceStoreSingleton  # noqa: E501
+# from timestep.database import InstanceStoreSingleton  # noqa: E501
 
 # from timestep.worker import train_model
 
-instance_store = InstanceStoreSingleton()
+# instance_store = InstanceStoreSingleton()
 
 
 def cancel_fine_tuning_job(fine_tuning_job_id):  # noqa: E501

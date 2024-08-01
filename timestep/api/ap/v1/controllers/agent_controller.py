@@ -20,7 +20,8 @@ from timestep.api.ap.v1.models.task_steps_list_response import (  # noqa: E501
 )
 
 
-def create_agent_task(task_request_body=None):  # noqa: E501
+# def create_agent_task(task_request_body=None):  # noqa: E501
+def create_agent_task(*args, **kwargs):
     """Creates a task for the agent.
 
      # noqa: E501
@@ -30,11 +31,18 @@ def create_agent_task(task_request_body=None):  # noqa: E501
 
     :rtype: Union[Task, Tuple[Task, int], Tuple[Task, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        task_request_body = TaskRequestBody.from_dict(
-            connexion.request.get_json()
-        )  # noqa: E501
-    raise NotImplementedError
+    # if connexion.request.is_json:
+    #     task_request_body = TaskRequestBody.from_dict(
+    #         connexion.request.get_json()
+    #     )  # noqa: E501
+    # raise NotImplementedError
+
+    print(f"args: {args}")
+    print(f"kwargs: {kwargs}")
+
+    return {
+        "ok": True,
+    }
 
 
 def download_agent_task_artifact(task_id, artifact_id):  # noqa: E501

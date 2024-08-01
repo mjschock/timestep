@@ -50,4 +50,4 @@ build:
 	./scripts/build.sh
 
 clean:
-	rm -rf .venv 3rdparty build data dist models work database.db
+	./scripts/clean.sh
