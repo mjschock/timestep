@@ -83,7 +83,7 @@ jobs:
       - name: Install timestep
         uses: nick-fields/retry@v3
         with:
-          command: pipx install --index-url https://test.pypi.org/simple/ --pip-args="--extra-index-url https://pypi.org/simple/" -vvv timestep==${{ needs.build.outputs.TIMESTEP_VERSION }}
+          command: pipx install --index-url https://test.pypi.org/simple/ --pip-args="--extra-index-url https://pypi.org/simple/" -vvv timestep==${{ needs.build-publish-testpypi.outputs.TIMESTEP_VERSION }}
           max_attempts: 3
           retry_on: error
           timeout_minutes: 15
