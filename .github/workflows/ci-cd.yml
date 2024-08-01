@@ -94,6 +94,7 @@ jobs:
           # timestep up
           timestep serve --help
   build-publish-pypi:
+    needs: build-publish-testpypi-verify
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
