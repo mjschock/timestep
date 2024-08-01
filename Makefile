@@ -1,6 +1,7 @@
 default:
 	echo 'TODO: Move the `make pre-commit` commands to a pre-commit hook'
 	git submodule update --init --recursive
+	poetry config repositories.testpypi $POETRY_REPOSITORIES_TESTPYPI_URL
 	poetry install
 	poetry run black timestep
 	poetry run isort timestep # https://pycqa.github.io/isort/docs/configuration/black_compatibility.html#integration-with-pre-commit
