@@ -184,16 +184,6 @@ bedrock = ["boto3 (>=1.28.57)", "botocore (>=1.31.57)"]
 vertex = ["google-auth (>=2,<3)"]
 
 [[package]]
-name = "antlr4-python3-runtime"
-version = "4.9.3"
-description = "ANTLR 4.9.3 runtime for Python 3.7"
-optional = false
-python-versions = "*"
-files = [
-    {file = "antlr4-python3-runtime-4.9.3.tar.gz", hash = "sha256:f224469b4168294902bb1efa80a8bf7855f24c99aef99cbefc1bcd3cce77881b"},
-]
-
-[[package]]
 name = "anyio"
 version = "4.4.0"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
@@ -263,25 +253,6 @@ markdown = "*"
 PyYAML = "*"
 requests = "*"
 requests-oauthlib = "*"
-
-[[package]]
-name = "arrow"
-version = "1.3.0"
-description = "Better dates & times for Python"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "arrow-1.3.0-py3-none-any.whl", hash = "sha256:c728b120ebc00eb84e01882a6f5e7927a53960aa990ce7dd2b10f39005a67f80"},
-    {file = "arrow-1.3.0.tar.gz", hash = "sha256:d4540617648cb5f895730f1ad8c82a65f2dad0166f57b75f3ca54759c4d67a85"},
-]
-
-[package.dependencies]
-python-dateutil = ">=2.7.0"
-types-python-dateutil = ">=2.8.10"
-
-[package.extras]
-doc = ["doc8", "sphinx (>=7.0.0)", "sphinx-autobuild", "sphinx-autodoc-typehints", "sphinx_rtd_theme (>=1.3.0)"]
-test = ["dateparser (==1.*)", "pre-commit", "pytest", "pytest-cov", "pytest-mock", "pytz (==2021.1)", "simplejson (==3.*)"]
 
 [[package]]
 name = "asgi-lifespan"
@@ -441,20 +412,6 @@ html5lib = ["html5lib"]
 lxml = ["lxml"]
 
 [[package]]
-name = "binaryornot"
-version = "0.4.4"
-description = "Ultra-lightweight pure Python package to check if a file is binary or text."
-optional = false
-python-versions = "*"
-files = [
-    {file = "binaryornot-0.4.4-py2.py3-none-any.whl", hash = "sha256:b8b71173c917bddcd2c16070412e369c3ed7f0528926f70cac18a6c97fd563e4"},
-    {file = "binaryornot-0.4.4.tar.gz", hash = "sha256:359501dfc9d40632edc9fac890e19542db1a287bbcfa58175b66658392018061"},
-]
-
-[package.dependencies]
-chardet = ">=3.0.2"
-
-[[package]]
 name = "black"
 version = "24.4.2"
 description = "The uncompromising code formatter."
@@ -604,31 +561,6 @@ files = [
 ]
 
 [[package]]
-name = "build"
-version = "1.2.1"
-description = "A simple, correct Python build frontend"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "build-1.2.1-py3-none-any.whl", hash = "sha256:75e10f767a433d9a86e50d83f418e83efc18ede923ee5ff7df93b6cb0306c5d4"},
-    {file = "build-1.2.1.tar.gz", hash = "sha256:526263f4870c26f26c433545579475377b2b7588b6f1eac76a001e873ae3e19d"},
-]
-
-[package.dependencies]
-colorama = {version = "*", markers = "os_name == \"nt\""}
-importlib-metadata = {version = ">=4.6", markers = "python_full_version < \"3.10.2\""}
-packaging = ">=19.1"
-pyproject_hooks = "*"
-tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
-
-[package.extras]
-docs = ["furo (>=2023.08.17)", "sphinx (>=7.0,<8.0)", "sphinx-argparse-cli (>=1.5)", "sphinx-autodoc-typehints (>=1.10)", "sphinx-issues (>=3.0.0)"]
-test = ["build[uv,virtualenv]", "filelock (>=3)", "pytest (>=6.2.4)", "pytest-cov (>=2.12)", "pytest-mock (>=2)", "pytest-rerunfailures (>=9.1)", "pytest-xdist (>=1.34)", "setuptools (>=42.0.0)", "setuptools (>=56.0.0)", "setuptools (>=56.0.0)", "setuptools (>=67.8.0)", "wheel (>=0.36.0)"]
-typing = ["build[uv]", "importlib-metadata (>=5.1)", "mypy (>=1.9.0,<1.10.0)", "tomli", "typing-extensions (>=3.7.4.3)"]
-uv = ["uv (>=0.1.18)"]
-virtualenv = ["virtualenv (>=20.0.35)"]
-
-[[package]]
 name = "cachetools"
 version = "5.4.0"
 description = "Extensible memoizing collections and decorators"
@@ -713,17 +645,6 @@ files = [
 
 [package.dependencies]
 pycparser = "*"
-
-[[package]]
-name = "chardet"
-version = "5.2.0"
-description = "Universal encoding detector for Python 3"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "chardet-5.2.0-py3-none-any.whl", hash = "sha256:e1cf59446890a00105fe7b7912492ea04b6e6f06d4b742b2c788469e34c82970"},
-    {file = "chardet-5.2.0.tar.gz", hash = "sha256:1b3b6ff479a8c414bc3fa2c0852995695c4a026dcd6d0633b2dd092ca39c1cf7"},
-]
 
 [[package]]
 name = "charset-normalizer"
@@ -949,27 +870,6 @@ tiktoken = ">=0.7.0"
 [package.extras]
 dev = ["controlflow[tests]", "ipython", "mypy", "pdbpp", "pre-commit", "ruff (>=0.3.4)", "textual-dev"]
 tests = ["pytest (>=7.0)", "pytest-asyncio (>=0.18.2,!=0.22.0,<0.23.0)", "pytest-env (>=0.8,<2.0)", "pytest-rerunfailures (>=10,<14)", "pytest-sugar (>=0.9,<2.0)", "pytest-timeout", "pytest-xdist"]
-
-[[package]]
-name = "cookiecutter"
-version = "2.6.0"
-description = "A command-line utility that creates projects from project templates, e.g. creating a Python package project from a Python package project template."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "cookiecutter-2.6.0-py3-none-any.whl", hash = "sha256:a54a8e37995e4ed963b3e82831072d1ad4b005af736bb17b99c2cbd9d41b6e2d"},
-    {file = "cookiecutter-2.6.0.tar.gz", hash = "sha256:db21f8169ea4f4fdc2408d48ca44859349de2647fbe494a9d6c3edfc0542c21c"},
-]
-
-[package.dependencies]
-arrow = "*"
-binaryornot = ">=0.4.4"
-click = ">=7.0,<9.0.0"
-Jinja2 = ">=2.7,<4.0.0"
-python-slugify = ">=4.0.0"
-pyyaml = ">=5.3.1"
-requests = ">=2.23.0"
-rich = "*"
 
 [[package]]
 name = "coolname"
@@ -1296,27 +1196,6 @@ dev = ["coverage (==7.2.7)", "pytest (==7.4.2)", "pytest-cov (==4.1.0)", "pytest
 docs = ["myst-parser (==0.18.0)", "sphinx (==5.1.1)"]
 ssh = ["paramiko (>=2.4.3)"]
 websockets = ["websocket-client (>=1.3.0)"]
-
-[[package]]
-name = "dynaconf"
-version = "3.2.6"
-description = "The dynamic configurator for your Python Project"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "dynaconf-3.2.6-py2.py3-none-any.whl", hash = "sha256:3911c740d717df4576ed55f616c7cbad6e06bc8ef23ffca444b6e2a12fb1c34c"},
-    {file = "dynaconf-3.2.6.tar.gz", hash = "sha256:74cc1897396380bb957730eb341cc0976ee9c38bbcb53d3307c50caed0aedfb8"},
-]
-
-[package.extras]
-all = ["configobj", "hvac", "redis", "ruamel.yaml"]
-configobj = ["configobj"]
-ini = ["configobj"]
-redis = ["redis"]
-test = ["configobj", "django", "flask (>=0.12)", "hvac (>=1.1.0)", "pytest", "pytest-cov", "pytest-mock", "pytest-xdist", "python-dotenv", "radon", "redis", "toml"]
-toml = ["toml"]
-vault = ["hvac"]
-yaml = ["ruamel.yaml"]
 
 [[package]]
 name = "einops"
@@ -1768,38 +1647,6 @@ urllib3 = "*"
 benchmarks = ["httplib2", "httpx", "requests", "urllib3"]
 dev = ["dpkt", "pytest", "requests"]
 examples = ["oauth2"]
-
-[[package]]
-name = "gitdb"
-version = "4.0.11"
-description = "Git Object Database"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "gitdb-4.0.11-py3-none-any.whl", hash = "sha256:81a3407ddd2ee8df444cbacea00e2d038e40150acfa3001696fe0dcf1d3adfa4"},
-    {file = "gitdb-4.0.11.tar.gz", hash = "sha256:bf5421126136d6d0af55bc1e7c1af1c397a34f5b7bd79e776cd3e89785c2b04b"},
-]
-
-[package.dependencies]
-smmap = ">=3.0.1,<6"
-
-[[package]]
-name = "gitpython"
-version = "3.1.43"
-description = "GitPython is a Python library used to interact with Git repositories"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "GitPython-3.1.43-py3-none-any.whl", hash = "sha256:eec7ec56b92aad751f9912a73404bc02ba212a23adb2c7098ee668417051a1ff"},
-    {file = "GitPython-3.1.43.tar.gz", hash = "sha256:35f314a9f878467f5453cc1fee295c3e18e52f1b99f10f6cf5b1682e968a9e7c"},
-]
-
-[package.dependencies]
-gitdb = ">=4.0.1,<5"
-
-[package.extras]
-doc = ["sphinx (==4.3.2)", "sphinx-autodoc-typehints", "sphinx-rtd-theme", "sphinxcontrib-applehelp (>=1.0.2,<=1.0.4)", "sphinxcontrib-devhelp (==1.0.2)", "sphinxcontrib-htmlhelp (>=2.0.0,<=2.0.1)", "sphinxcontrib-qthelp (==1.0.3)", "sphinxcontrib-serializinghtml (==1.1.5)"]
-test = ["coverage[toml]", "ddt (>=1.1.1,!=1.4.3)", "mock", "mypy", "pre-commit", "pytest (>=7.3.1)", "pytest-cov", "pytest-instafail", "pytest-mock", "pytest-sugar", "typing-extensions"]
 
 [[package]]
 name = "gorilla-cli"
@@ -2548,44 +2395,6 @@ files = [
 ]
 
 [[package]]
-name = "kedro"
-version = "0.19.6"
-description = "Kedro helps you build production-ready data and analytics pipelines"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "kedro-0.19.6-py3-none-any.whl", hash = "sha256:cbda4c25144bf4d56e73dd839309ddd7597718db8ff635783518f1abe72ceabd"},
-    {file = "kedro-0.19.6.tar.gz", hash = "sha256:cd4128fe8a9716ae83cf2f88ce2b76305d66af99a497207e3e4294afd3d96e15"},
-]
-
-[package.dependencies]
-attrs = ">=21.3"
-build = ">=0.7.0"
-cachetools = ">=4.1"
-click = ">=4.0"
-cookiecutter = ">=2.1.1,<3.0"
-dynaconf = ">=3.1.2,<4.0"
-fsspec = ">=2021.4"
-gitpython = ">=3.0"
-importlib-metadata = {version = ">=3.6,<8.0", markers = "python_version >= \"3.8\""}
-importlib-resources = ">=1.3,<7.0"
-more-itertools = ">=8.14.0"
-omegaconf = ">=2.1.1"
-parse = ">=1.19.0"
-pluggy = ">=1.0"
-pre-commit-hooks = "*"
-PyYAML = ">=4.2,<7.0"
-rich = ">=12.0,<14.0"
-rope = ">=0.21,<2.0"
-toml = ">=0.10.0"
-
-[package.extras]
-all = ["kedro[docs,jupyter,test]"]
-docs = ["Jinja2 (<3.2.0)", "ipykernel (>=5.3,<7.0)", "kedro-sphinx-theme (==2024.4.0)"]
-jupyter = ["ipylab (>=1.0.0)", "notebook (>=7.0.0)"]
-test = ["behave (==1.2.6)", "coverage[toml]", "import-linter (==2.0)", "ipylab (>=1.0.0)", "ipython (>=7.31.1,<8.0)", "ipython (>=8.10,<9.0)", "jupyter (>=1.0,<2.0)", "jupyterlab (>=3,<5)", "jupyterlab-server (>=2.11.1)", "kedro-datasets", "kedro-datasets (<2.0.0)", "mypy (>=1.0,<2.0)", "pandas (>=2.0,<3.0)", "pandas-stubs", "pluggy (>=1.0)", "pre-commit (>=2.9.2,<4.0)", "pytest (>=7.2,<9.0)", "pytest-cov (>=3.0,<4.0)", "pytest-mock (>=1.7.1,<4.0)", "pytest-xdist[psutil] (>=2.2.1,<2.3.0)", "s3fs (>=2021.4,<2024.6)", "trufflehog (>=2.1,<3.0)", "types-PyYAML", "types-cachetools", "types-toml"]
-
-[[package]]
 name = "langchain"
 version = "0.2.11"
 description = "Building applications with LLMs through composability"
@@ -3058,17 +2867,6 @@ files = [
 ]
 
 [[package]]
-name = "more-itertools"
-version = "10.3.0"
-description = "More routines for operating on iterables, beyond itertools"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "more-itertools-10.3.0.tar.gz", hash = "sha256:e5d93ef411224fbcef366a6e8ddc4c5781bc6359d43412a65dd5964e46111463"},
-    {file = "more_itertools-10.3.0-py3-none-any.whl", hash = "sha256:ea6a02e24a9161e51faad17a8782b92a0df82c12c1c8886fec7f0c3fa1a1b320"},
-]
-
-[[package]]
 name = "msgpack"
 version = "1.0.8"
 description = "MessagePack serializer"
@@ -3316,21 +3114,6 @@ signals = ["blinker (>=1.4.0)"]
 signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
 
 [[package]]
-name = "omegaconf"
-version = "2.3.0"
-description = "A flexible configuration library"
-optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "omegaconf-2.3.0-py3-none-any.whl", hash = "sha256:7b4df175cdb08ba400f45cae3bdcae7ba8365db4d165fc65fd04b050ab63b46b"},
-    {file = "omegaconf-2.3.0.tar.gz", hash = "sha256:d5d4b6d29955cc50ad50c46dc269bcd92c6e00f5f90d23ab5fee7bfca4ba4cc7"},
-]
-
-[package.dependencies]
-antlr4-python3-runtime = "==4.9.*"
-PyYAML = ">=5.1.0"
-
-[[package]]
 name = "openai"
 version = "1.37.1"
 description = "The official Python library for the openai API"
@@ -3422,17 +3205,6 @@ python-versions = ">=3.8"
 files = [
     {file = "packaging-24.1-py3-none-any.whl", hash = "sha256:5b8f2217dbdbd2f7f384c41c628544e6d52f2d0f53c6d0c3ea61aa5d1d7ff124"},
     {file = "packaging-24.1.tar.gz", hash = "sha256:026ed72c8ed3fcce5bf8950572258698927fd1dbda10a5e981cdf0ac37f4f002"},
-]
-
-[[package]]
-name = "parse"
-version = "1.20.2"
-description = "parse() is the opposite of format()"
-optional = false
-python-versions = "*"
-files = [
-    {file = "parse-1.20.2-py2.py3-none-any.whl", hash = "sha256:967095588cb802add9177d0c0b6133b5ba33b1ea9007ca800e526f42a85af558"},
-    {file = "parse-1.20.2.tar.gz", hash = "sha256:b41d604d16503c79d81af5165155c0b20f6c8d6c559efa66b4b695c3e5a0a0ce"},
 ]
 
 [[package]]
@@ -3714,21 +3486,6 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
-name = "pre-commit-hooks"
-version = "4.6.0"
-description = "Some out-of-the-box hooks for pre-commit."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pre_commit_hooks-4.6.0-py2.py3-none-any.whl", hash = "sha256:a69199e6a2d45ec59c1020a81ca1549abddc2afb798276d9a0d951752d6abbfe"},
-    {file = "pre_commit_hooks-4.6.0.tar.gz", hash = "sha256:eb1f43ee67869cd41b4c59017fad4a0f9d4d61201d163f2135535aaf65035a2b"},
-]
-
-[package.dependencies]
-"ruamel.yaml" = ">=0.15"
-tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
-
-[[package]]
 name = "prefect"
 version = "3.0.0rc12"
 description = "Workflow orchestration and management."
@@ -3898,17 +3655,6 @@ files = [
 
 [package.extras]
 tests = ["pytest"]
-
-[[package]]
-name = "py4j"
-version = "0.10.9.7"
-description = "Enables Python programs to dynamically access arbitrary Java objects"
-optional = false
-python-versions = "*"
-files = [
-    {file = "py4j-0.10.9.7-py2.py3-none-any.whl", hash = "sha256:85defdfd2b2376eb3abf5ca6474b51ab7e0de341c75a02f46dc9b5976f5a5c1b"},
-    {file = "py4j-0.10.9.7.tar.gz", hash = "sha256:0b6e5315bb3ada5cf62ac651d107bb2ebc02def3dee9d9548e3baac644ea8dbb"},
-]
 
 [[package]]
 name = "pycparser"
@@ -4100,37 +3846,6 @@ files = [
 windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
-name = "pyproject-hooks"
-version = "1.1.0"
-description = "Wrappers to call pyproject.toml-based build backend hooks."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "pyproject_hooks-1.1.0-py3-none-any.whl", hash = "sha256:7ceeefe9aec63a1064c18d939bdc3adf2d8aa1988a510afec15151578b232aa2"},
-    {file = "pyproject_hooks-1.1.0.tar.gz", hash = "sha256:4b37730834edbd6bd37f26ece6b44802fb1c1ee2ece0e54ddff8bfc06db86965"},
-]
-
-[[package]]
-name = "pyspark"
-version = "3.5.1"
-description = "Apache Spark Python API"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pyspark-3.5.1.tar.gz", hash = "sha256:dd6569e547365eadc4f887bf57f153e4d582a68c4b490de475d55b9981664910"},
-]
-
-[package.dependencies]
-py4j = "0.10.9.7"
-
-[package.extras]
-connect = ["googleapis-common-protos (>=1.56.4)", "grpcio (>=1.56.0)", "grpcio-status (>=1.56.0)", "numpy (>=1.15)", "pandas (>=1.0.5)", "pyarrow (>=4.0.0)"]
-ml = ["numpy (>=1.15)"]
-mllib = ["numpy (>=1.15)"]
-pandas-on-spark = ["numpy (>=1.15)", "pandas (>=1.0.5)", "pyarrow (>=4.0.0)"]
-sql = ["numpy (>=1.15)", "pandas (>=1.0.5)", "pyarrow (>=4.0.0)"]
-
-[[package]]
 name = "pytest"
 version = "8.3.2"
 description = "pytest: simple powerful testing with Python"
@@ -4248,28 +3963,6 @@ text-unidecode = ">=1.3"
 
 [package.extras]
 unidecode = ["Unidecode (>=1.1.1)"]
-
-[[package]]
-name = "pytoolconfig"
-version = "1.3.1"
-description = "Python tool configuration"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pytoolconfig-1.3.1-py3-none-any.whl", hash = "sha256:5d8cea8ae1996938ec3eaf44567bbc5ef1bc900742190c439a44a704d6e1b62b"},
-    {file = "pytoolconfig-1.3.1.tar.gz", hash = "sha256:51e6bd1a6f108238ae6aab6a65e5eed5e75d456be1c2bf29b04e5c1e7d7adbae"},
-]
-
-[package.dependencies]
-packaging = ">=23.2"
-platformdirs = {version = ">=3.11.0", optional = true, markers = "extra == \"global\""}
-tomli = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
-
-[package.extras]
-doc = ["sphinx (>=7.1.2)", "tabulate (>=0.9.0)"]
-gendocs = ["pytoolconfig[doc]", "sphinx (>=7.1.2)", "sphinx-autodoc-typehints (>=1.25.2)", "sphinx-rtd-theme (>=2.0.0)"]
-global = ["platformdirs (>=3.11.0)"]
-validation = ["pydantic (>=2.5.3)"]
 
 [[package]]
 name = "pytz"
@@ -4651,25 +4344,6 @@ pygments = ">=2.13.0,<3.0.0"
 jupyter = ["ipywidgets (>=7.5.1,<9)"]
 
 [[package]]
-name = "rope"
-version = "1.13.0"
-description = "a python refactoring library..."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "rope-1.13.0-py3-none-any.whl", hash = "sha256:b435a0c0971244fdcd8741676a9fae697ae614c20cc36003678a7782f25c0d6c"},
-    {file = "rope-1.13.0.tar.gz", hash = "sha256:51437d2decc8806cd5e9dd1fd9c1306a6d9075ecaf78d191af85fc1dfface880"},
-]
-
-[package.dependencies]
-pytoolconfig = {version = ">=1.2.2", extras = ["global"]}
-
-[package.extras]
-dev = ["build (>=0.7.0)", "pre-commit (>=2.20.0)", "pytest (>=7.0.1)", "pytest-cov (>=4.1.0)", "pytest-timeout (>=2.1.0)"]
-doc = ["pytoolconfig[doc]", "sphinx (>=4.5.0)", "sphinx-autodoc-typehints (>=1.18.1)", "sphinx-rtd-theme (>=1.0.0)"]
-release = ["pip-tools (>=6.12.1)", "toml (>=0.10.2)", "twine (>=4.0.2)"]
-
-[[package]]
 name = "rpds-py"
 version = "0.19.1"
 description = "Python bindings to Rust's persistent data structures (rpds)"
@@ -5016,17 +4690,6 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
-]
-
-[[package]]
-name = "smmap"
-version = "5.0.1"
-description = "A pure Python implementation of a sliding window memory map manager"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "smmap-5.0.1-py3-none-any.whl", hash = "sha256:e6d8668fa5f93e706934a62d7b4db19c8d9eb8cf2adbb75ef1b675aa332b69da"},
-    {file = "smmap-5.0.1.tar.gz", hash = "sha256:dceeb6c0028fdb6734471eb07c0cd2aae706ccaecab45965ee83f11c8d3b1f62"},
 ]
 
 [[package]]
@@ -5675,17 +5338,6 @@ click = ">=8.0.0"
 rich = ">=10.11.0"
 shellingham = ">=1.3.0"
 typing-extensions = ">=3.7.4.3"
-
-[[package]]
-name = "types-python-dateutil"
-version = "2.9.0.20240316"
-description = "Typing stubs for python-dateutil"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "types-python-dateutil-2.9.0.20240316.tar.gz", hash = "sha256:5d2f2e240b86905e40944dd787db6da9263f0deabef1076ddaed797351ec0202"},
-    {file = "types_python_dateutil-2.9.0.20240316-py3-none-any.whl", hash = "sha256:6b8cb66d960771ce5ff974e9dd45e38facb81718cc1e208b10b1baccbfdbee3b"},
-]
 
 [[package]]
 name = "typing-extensions"
@@ -6407,4 +6059,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b321486eae40ccc98afe31b3ff5bec9cf2e3fe4b1e4719506e398b9441ec96b5"
+content-hash = "2fb495e152c0a4a13ac1ea43f3bef7b62d0c73e3fb968ac96d2e3bbd2afc6671"

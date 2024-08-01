@@ -2,6 +2,7 @@ import time
 import uuid
 
 import typer
+from langchain_community.llms.llamafile import Llamafile
 from llama_cpp import Llama
 from llama_cpp.llama_chat_format import (
     Llama3VisionAlpha,
@@ -106,6 +107,9 @@ class ModelInstanceStoreSingleton(object):
                     repo_id=mmproj_model_repo_id,
                     filename=mmproj_model_filename,
                 )
+
+        elif model_name == "llamafile":
+            model_instance = Llamafile()
 
         elif model_name == "LLaVA-NeXT-Vicuna-7B":
             mmproj_model_filename = "mmproj-vicuna7b-f16-q6_k.gguf"
@@ -275,7 +279,8 @@ model_instance_store.create_model(
         "LLaMA_CPP",
     ],
     # model_name="SmolLM-135M",
-    model_name="TinySolar-248m-4k-py",
+    # model_name="TinySolar-248m-4k-py",
+    model_name="llamafile",
 )
 
 # model_instance_store.create_model(

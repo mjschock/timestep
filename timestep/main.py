@@ -1,13 +1,10 @@
 import inspect
 import os
-from pathlib import Path
 
 import typer
 from sqlmodel import SQLModel, create_engine
 
 from timestep.server import main as timestep_serve
-from timestep.utils import download_with_progress_bar, start_shell_script
-from timestep.worker import agent_flow
 from timestep.worker import main as timestep_train
 
 # TODO: move these to the config/env
@@ -63,7 +60,6 @@ $ pipx install timestep
 $ prefect server start
 $ prefect worker start --pool "default"
 ```
-
 """
         if is_readme_context
         else ""
@@ -97,46 +93,20 @@ def evals():
 
 @typer_app.command()
 def serve(
-    llamafile_path=f"./models/{default_llamafile_filename}",
-    host="0.0.0.0",
-    port=8080,
+    # host="0.0.0.0",
+    # llamafile_path=f"./models/{default_llamafile_filename}", # TODO: namespace under llamafile, include port, etc.
+    # port=8080,
 ):
     """
     Run serving.
     """
     typer.echo("Running serving...")
 
-    if os.path.basename(
-        llamafile_path
-    ) == default_llamafile_filename and not os.path.exists(llamafile_path):
-        os.makedirs(os.path.dirname(llamafile_path), exist_ok=True)
-        download_with_progress_bar(default_llamafile_url, llamafile_path)
-
-    assert os.path.exists(llamafile_path)
-
-    process = start_shell_script(
-        llamafile_path,
-        "--host",
-        host,
-        "--path",
-        "/zip/llama.cpp/server/public",
-        "--port",
-        f"{port}",
+    timestep_serve(
+        # host=host,
+        # llamafile_path=llamafile_path,
+        # port=port,
     )
-
-    typer.echo(f"... loaded llamafile with PID: {process.pid}.")
-
-    agent_flow.from_source(
-        source=str(Path(__file__).parent),
-        entrypoint="worker.py:agent_flow",
-    ).deploy(
-        name="agent-flow-deployment",
-        # parameters=dict(name="Marvin"),
-        # work_pool_name="local",
-        work_pool_name="default",
-    )
-
-    timestep_serve()
 
 
 @typer_app.command()

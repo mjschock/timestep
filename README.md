@@ -76,9 +76,6 @@ $ timestep serve [OPTIONS]
 
 **Options**:
 
-* `--llamafile-path TEXT`: [default: ./models/TinyLlama-1.1B-Chat-v1.0.F16.llamafile]
-* `--host TEXT`: [default: 0.0.0.0]
-* `--port TEXT`: [default: 8080]
 * `--help`: Show this message and exit.
 
 ## `timestep train`

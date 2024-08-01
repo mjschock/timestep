@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 set -e # exit on first error
 
-curl -sfL https://direnv.net/install.sh | bash
-
+# if direnv is not installed, install it
+command -v direnv >/dev/null 2>&1 || curl -sfL https://direnv.net/install.sh | bash
 eval "$(direnv dotenv bash .env)"
+
+# if in Termux, install packages
+if [ -n "$TERMUX_VERSION" ]; then
+  ./scripts/build_termux.sh
+fi
 
 echo 'TODO: Move the `make pre-commit` commands to a pre-commit hook'
 git submodule update --init --recursive
