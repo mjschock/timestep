@@ -58,7 +58,7 @@ jobs:
         python3 -m pip install --user pipx
         python3 -m pipx ensurepath
         pipx install poetry==1.8.3 # TODO: Put the version in the environment
-        ./scripts/build.sh
+        make
         poetry publish --build --no-interaction --password=$(cat ./secrets/poetry_pypi_token_testpypi) --repository=testpypi --username=__token__
         echo "TIMESTEP_VERSION=$(poetry version | awk '{print $2}')" >> $GITHUB_OUTPUT
   build-publish-testpypi-verify:
@@ -138,5 +138,5 @@ jobs:
         python3 -m pip install --user pipx
         python3 -m pipx ensurepath
         pipx install poetry==1.8.3 # TODO: Put the version in the environment
-        ./scripts/build.sh
+        make
         poetry publish --build --no-interaction --password=$(cat ./secrets/poetry_pypi_token_pypi) --username=__token__

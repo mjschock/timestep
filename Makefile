@@ -1,13 +1,4 @@
-default:
-	echo 'TODO: Move the `make pre-commit` commands to a pre-commit hook'
-	git submodule update --init --recursive
-	poetry config repositories.testpypi $POETRY_REPOSITORIES_TESTPYPI_URL
-	poetry install
-	poetry run black timestep
-	poetry run isort timestep # https://pycqa.github.io/isort/docs/configuration/black_compatibility.html#integration-with-pre-commit
-	poetry run pytest
-	poetry run toml-sort -ai pyproject.toml
-	poetry run typer timestep.main utils docs --name timestep --output README.md --title "Timestep AI"
+default: build
 
 apis:
 	rm -rf build && mkdir -p build
@@ -54,6 +45,9 @@ apis:
 		--additional-properties packageName=timestep.api.openai.v1
 
 	mv build/openai/python-flask/timestep/api/openai/v1 timestep/api/openai/v1
+
+build:
+	./scripts/build.sh
 
 clean:
 	rm -rf .venv 3rdparty build data dist models work database.db
