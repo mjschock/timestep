@@ -5,13 +5,15 @@ from pathlib import Path
 import typer
 from sqlmodel import SQLModel, create_engine
 
-from timestep.llamafile import typer_app as llamafile_typer_app
 from timestep.server import main as timestep_serve
-from timestep.utils import start_shell_script
+from timestep.utils import download_with_progress_bar, start_shell_script
 from timestep.worker import agent_flow
 from timestep.worker import main as timestep_train
 
+# TODO: move these to the config/env
 app_dir = typer.get_app_dir(__package__)
+default_llamafile_filename = "TinyLlama-1.1B-Chat-v1.0.F16.llamafile"
+default_llamafile_url = f"https://huggingface.co/Mozilla/TinyLlama-1.1B-Chat-v1.0-llamafile/resolve/main/{default_llamafile_filename}?download=true"
 
 os.makedirs(f"{app_dir}/data", exist_ok=True)
 os.makedirs(f"{app_dir}/models", exist_ok=True)
@@ -44,7 +46,6 @@ $ pipx install poetry==1.8.3
 $ cp .env.example .env
 $ direnv allow # See https://direnv.net/#getting-started to install direnv on your platform
 $ make
-$ make up
 ```
 
 ### Library
@@ -55,6 +56,14 @@ $ python3 -m pip install --user pipx
 $ python3 -m pipx ensurepath
 $ pipx install timestep
 ```
+
+**Pre-requisites**:
+
+```console
+$ prefect server start
+$ prefect worker start --pool "default"
+```
+
 """
         if is_readme_context
         else ""
@@ -73,12 +82,6 @@ typer_app = typer.Typer(
 def main():
     f"""
     Timestep AI CLI
-
-    **Prefect setup**:
-
-    ```console
-    $ timestep [OPTIONS] COMMAND [ARGS]...
-    ```
     """
 
 
@@ -93,32 +96,35 @@ def evals():
 
 
 @typer_app.command()
-def serve():
+def serve(
+    llamafile_path=f"./models/{default_llamafile_filename}",
+    host="0.0.0.0",
+    port=8080,
+):
     """
     Run serving.
     """
     typer.echo("Running serving...")
 
-    # deploy(
-    #     agent_flow.to_deployment(
-    #         # entrypoint_type=
-    #         name="agent-flow-deployment",
-    #     ),
-    #     # image=None,
-    #     build=False,
-    #     push=False,
-    #     work_pool_name="default",
-    # )
-    # agent_flow.deploy(
-    #     name="agent-flow-deployment",
-    #     work_pool_name="default",
-    # )
-    # flow.from_source(
-    #     # source="https://github.com/org/repo.git",
-    #     entrypoint="timestep/worker.py:agent_flow",
-    # ).to_deployment(
-    #     name="agent-flow-deployment",
-    # )
+    if os.path.basename(
+        llamafile_path
+    ) == default_llamafile_filename and not os.path.exists(llamafile_path):
+        os.makedirs(os.path.dirname(llamafile_path), exist_ok=True)
+        download_with_progress_bar(default_llamafile_url, llamafile_path)
+
+    assert os.path.exists(llamafile_path)
+
+    process = start_shell_script(
+        llamafile_path,
+        "--host",
+        host,
+        "--path",
+        "/zip/llama.cpp/server/public",
+        "--port",
+        f"{port}",
+    )
+
+    typer.echo(f"... loaded llamafile with PID: {process.pid}.")
 
     agent_flow.from_source(
         source=str(Path(__file__).parent),
@@ -141,26 +147,6 @@ def train():
     typer.echo("Running training...")
 
     timestep_train()
-
-
-@typer_app.command()
-def up():
-    """
-    Up.
-    """
-    process = start_shell_script(
-        # llamafile_path,
-        # "make",
-        # "up",
-        "prefect",
-        "server",
-        "start",
-        # '--host', host,
-        # '--path', '/zip/llama.cpp/server/public',
-        # '--port', f'{port}',
-    )
-
-    typer.echo(f"... loaded model with PID: {process.pid}.")
 
 
 if __name__ == "__main__":

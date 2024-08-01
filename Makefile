@@ -1,6 +1,12 @@
 default:
+	echo 'TODO: Move the `make pre-commit` commands to a pre-commit hook'
 	git submodule update --init --recursive
 	poetry install
+	poetry run black timestep
+	poetry run isort timestep # https://pycqa.github.io/isort/docs/configuration/black_compatibility.html#integration-with-pre-commit
+	poetry run pytest
+	poetry run toml-sort -ai pyproject.toml
+	poetry run typer timestep.main utils docs --name timestep --output README.md --title "Timestep AI"
 
 apis:
 	rm -rf build && mkdir -p build
@@ -50,18 +56,3 @@ apis:
 
 clean:
 	rm -rf .venv 3rdparty build data dist models work database.db
-
-pre-commit:
-	echo 'TODO: Move the `make pre-commit` commands to a pre-commit hook'
-	poetry install
-	poetry run black timestep
-	poetry run isort timestep # https://pycqa.github.io/isort/docs/configuration/black_compatibility.html#integration-with-pre-commit
-	poetry run pytest
-	poetry run toml-sort -ai pyproject.toml
-	poetry run typer timestep.main utils docs --name timestep --output README.md --title "Timestep AI"
-
-up:
-	prefect server start &
-	prefect worker start --pool "default" &
-	timestep serve &
-	# timestep up
