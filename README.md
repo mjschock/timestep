@@ -14,7 +14,6 @@ $ pipx install poetry==1.8.3
 $ cp .env.example .env
 $ direnv allow # See https://direnv.net/#getting-started to install direnv on your platform
 $ make
-$ make up
 ```
 
 ### Library
@@ -24,6 +23,13 @@ $ python3 -m pip install --upgrade pip
 $ python3 -m pip install --user pipx
 $ python3 -m pipx ensurepath
 $ pipx install timestep
+```
+
+**Pre-requisites**:
+
+```console
+$ prefect server start
+$ prefect worker start --pool "default"
 ```
 
 **Usage**:
@@ -43,7 +49,6 @@ $ timestep [OPTIONS] COMMAND [ARGS]...
 * `evals`: Run evaluations.
 * `serve`: Run serving.
 * `train`: Run training.
-* `up`: Up.
 
 ## `timestep evals`
 
@@ -71,6 +76,9 @@ $ timestep serve [OPTIONS]
 
 **Options**:
 
+* `--llamafile-path TEXT`: [default: ./models/TinyLlama-1.1B-Chat-v1.0.F16.llamafile]
+* `--host TEXT`: [default: 0.0.0.0]
+* `--port TEXT`: [default: 8080]
 * `--help`: Show this message and exit.
 
 ## `timestep train`
@@ -81,20 +89,6 @@ Run training.
 
 ```console
 $ timestep train [OPTIONS]
-```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-## `timestep up`
-
-Up.
-
-**Usage**:
-
-```console
-$ timestep up [OPTIONS]
 ```
 
 **Options**:
