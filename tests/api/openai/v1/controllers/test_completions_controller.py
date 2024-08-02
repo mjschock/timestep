@@ -1,7 +1,7 @@
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
-def test_create_completion(client: TestClient):
-    response = client.post(
+async def test_create_completion(client: AsyncClient):
+    response = await client.post(
         "/api/openai/v1/completions",
     )
 

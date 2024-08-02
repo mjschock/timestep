@@ -21,6 +21,18 @@ from timestep.services import agent_service
 
 # from timestep.worker import step
 
+# TODO: I see this OpenAI-Beta header in the openai spec, e.g.:
+# curl https://api.openai.com/v1/assistants/asst_abc123 \
+# -H "Content-Type: application/json" \
+# -H "Authorization: Bearer $OPENAI_API_KEY" \
+# -H "OpenAI-Beta: assistants=v2" \
+# -d '{
+#     "instructions": "You are an HR bot, and you have access to files to answer employee questions about company policies. Always response with info from either of the files.",
+#     "tools": [{"type": "file_search"}],
+#     "model": "gpt-4-turbo"
+#     }'
+# do I need to handle this in the API?
+
 
 async def cancel_run(*args, **kwargs):
     """Cancels a run that is &#x60;in_progress&#x60;.

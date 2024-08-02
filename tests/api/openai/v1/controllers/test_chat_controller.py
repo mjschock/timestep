@@ -1,7 +1,7 @@
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
-def test_create_chat_completion(client: TestClient):
-    response = client.post(
+async def test_create_chat_completion(client: AsyncClient):
+    response = await client.post(
         "/api/openai/v1/chat/completions",
     )
 
@@ -9,7 +9,7 @@ def test_create_chat_completion(client: TestClient):
 
     token = "sk-no-key-required"
 
-    response = client.post(
+    response = await client.post(
         "/api/openai/v1/chat/completions",
         headers={
             "Authorization": f"Bearer {token}",
@@ -18,7 +18,7 @@ def test_create_chat_completion(client: TestClient):
 
     assert response.status_code == 400
 
-    response = client.post(
+    response = await client.post(
         "/api/openai/v1/chat/completions",
         headers={
             "Authorization": f"Bearer {token}",

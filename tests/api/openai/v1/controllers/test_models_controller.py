@@ -1,21 +1,21 @@
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
-def test_delete_model(client: TestClient):
-    response = client.delete(
+async def test_delete_model(client: AsyncClient):
+    response = await client.delete(
         "/api/openai/v1/models/ft:gpt-3.5-turbo:acemeco:suffix:abc123",
     )
 
     assert response.status_code == 401
 
-def test_list_models(client: TestClient):
-    response = client.get(
+async def test_list_models(client: AsyncClient):
+    response = await client.get(
         "/api/openai/v1/models",
     )
 
     assert response.status_code == 401
 
-def test_retrieve_model(client: TestClient):
-    response = client.get(
+async def test_retrieve_model(client: AsyncClient):
+    response = await client.get(
         "/api/openai/v1/models/gpt-3.5-turbo",
     )
 
