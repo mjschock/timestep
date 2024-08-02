@@ -28,7 +28,7 @@ async def client(app, monkeypatch):
     base_url = settings.openai_base_url.replace("/api/openai/v1", "") # TODO: create a new setting for the base_url
     assert base_url == "http://localhost:8000", f"Unexpected base_url: {base_url}"
 
-    monkeypatch.setenv("OPENAI_API_KEY", settings.openai_api_key)
+    monkeypatch.setenv("OPENAI_API_KEY", settings.openai_api_key.get_secret_value())
     # monkeypatch.setenv("OPENAI_API_KEY", "test-test-test-test")
     monkeypatch.setenv("OPENAI_BASE_URL", settings.openai_base_url)
     # monkeypatch.setenv("OPENAI_BASE_URL", "test-test-test-test")
