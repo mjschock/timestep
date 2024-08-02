@@ -1,10 +1,10 @@
 from fastapi.testclient import TestClient
 
-from timestep.server import fastapi_app
+default_artifact_id = "default_artifact_id"
+default_step_id = "default_step_id"
+default_task_id = "default_task_id"
 
-client = TestClient(fastapi_app)
-
-def test_create_agent_task(client: TestClient):
+async def test_create_agent_task(client: TestClient):
     response = client.post(
         "/api/ap/v1/agent/tasks",
     )
@@ -13,56 +13,56 @@ def test_create_agent_task(client: TestClient):
 
 def test_download_agent_task_artifact(client: TestClient):
     response = client.get(
-        "/api/ap/v1/agent/tasks/50da533e-3904-4401-8a07-c49adf88b5eb/artifacts/1e41533e-3904-4401-8a07-c49adf8893de",
+        f"/api/ap/v1/agent/tasks/{default_task_id}/artifacts/{default_artifact_id}",
     )
 
     assert response.status_code == 500
 
 def test_execute_agent_task_step(client: TestClient):
     response = client.post(
-        "/api/ap/v1/agent/tasks/50da533e-3904-4401-8a07-c49adf88b5eb/steps",
+        f"/api/ap/v1/agent/tasks/{default_task_id}/steps",
     )
 
     assert response.status_code == 400
 
 def test_get_agent_task(client: TestClient):
     response = client.get(
-        "/api/ap/v1/agent/tasks/1d5a533e-3904-4401-8a07-c49adf88b981",
+        f"/api/ap/v1/agent/tasks/{default_task_id}",
     )
 
     assert response.status_code == 500
 
 def test_get_agent_task_step(client: TestClient):
     response = client.get(
-        "/api/ap/v1/agent/tasks/50da533e-3904-4401-8a07-c49adf88b5eb/steps/28ca533e-3904-4401-8a07-c49adf8891c2",
+        f"/api/ap/v1/agent/tasks/{default_task_id}/steps/{default_step_id}",
     )
 
     assert response.status_code == 500
 
 def test_list_agent_task_artifacts(client: TestClient):
     response = client.get(
-        "/api/ap/v1/agent/tasks/50da533e-3904-4401-8a07-c49adf88b5eb/artifacts?current_page=1&page_size=10",
+        f"/api/ap/v1/agent/tasks/{default_task_id}/artifacts?current_page=1&page_size=10",
     )
 
     assert response.status_code == 500
 
 def test_list_agent_task_steps(client: TestClient):
     response = client.get(
-        "/api/ap/v1/agent/tasks/50da533e-3904-4401-8a07-c49adf88b5eb/steps?current_page=1&page_size=10",
+        f"/api/ap/v1/agent/tasks/{default_task_id}/steps?current_page=1&page_size=10",
     )
 
     assert response.status_code == 500
 
 def test_list_agent_tasks(client: TestClient):
     response = client.get(
-        "/api/ap/v1/agent/tasks?current_page=1&page_size=10",
+        f"/api/ap/v1/agent/tasks?current_page=1&page_size=10",
     )
 
     assert response.status_code == 500
 
 def test_upload_agent_task_artifacts(client: TestClient):
     response = client.post(
-        "/api/ap/v1/agent/tasks/50da533e-3904-4401-8a07-c49adf88b5eb/artifacts",
+        f"/api/ap/v1/agent/tasks/{default_task_id}/artifacts",
     )
 
     assert response.status_code == 500
