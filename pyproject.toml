@@ -11,7 +11,7 @@ description = ""
 license = "MIT"
 name = "timestep"
 readme = "README.md"
-version = "12.0.20"
+version = "12.0.21"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
@@ -26,6 +26,7 @@ langchain-community = "^0.2.7"
 llama-cpp-python = "^0.2.82"
 marvin = "^2.3.6"
 prefect-shell = {allow-prereleases = true, version = "^0.3.0rc1"}
+pytest-notebook = "^0.10.0"
 python = "^3.10"
 sqlmodel = "^0.0.21"
 sse-starlette = "^2.1.2"
@@ -52,7 +53,7 @@ timestep_serve = 'timestep.server:main'
 timestep_train = 'timestep.worker:main'
 
 [tool.pytest.ini_options]
-addopts = "--cov=timestep --cov-fail-under=33 -q -ra"
+addopts = "--cov=timestep --cov-fail-under=34 -q -ra"
 minversion = "8.2.2"
 testpaths = [
   "tests"

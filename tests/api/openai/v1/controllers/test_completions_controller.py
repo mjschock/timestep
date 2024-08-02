@@ -1,10 +1,6 @@
 from fastapi.testclient import TestClient
 
-from timestep.server import fastapi_app
-
-client = TestClient(fastapi_app)
-
-def test_create_completion():
+def test_create_completion(client: TestClient):
     response = client.post(
         "/api/openai/v1/completions",
     )

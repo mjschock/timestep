@@ -1,27 +1,12 @@
-import connexion
-
-from timestep.api.openai.v1.models.create_speech_request import (  # noqa: E501
-    CreateSpeechRequest,
-)
-from timestep.api.openai.v1.models.create_transcription_request_model import (  # noqa: E501
-    CreateTranscriptionRequestModel,
-)
-
-
-def create_speech(create_speech_request):  # noqa: E501
+# def create_speech(create_speech_request):  # noqa: E501
+def create_speech(*args, **kwargs):
     """Generates audio from the input text.
-
-     # noqa: E501
 
     :param create_speech_request:
     :type create_speech_request: dict | bytes
 
     :rtype: Union[file, Tuple[file, int], Tuple[file, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        create_speech_request = CreateSpeechRequest.from_dict(
-            connexion.request.get_json()
-        )  # noqa: E501
     raise NotImplementedError
 
 
@@ -55,10 +40,6 @@ def create_transcription(
 
     :rtype: Union[CreateTranscription200Response, Tuple[CreateTranscription200Response, int], Tuple[CreateTranscription200Response, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        model = CreateTranscriptionRequestModel.from_dict(
-            connexion.request.get_json()
-        )  # noqa: E501
     raise NotImplementedError
 
 
@@ -82,8 +63,4 @@ def create_translation(
 
     :rtype: Union[CreateTranslation200Response, Tuple[CreateTranslation200Response, int], Tuple[CreateTranslation200Response, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        model = CreateTranscriptionRequestModel.from_dict(
-            connexion.request.get_json()
-        )  # noqa: E501
     raise NotImplementedError

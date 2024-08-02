@@ -1,6 +1,3 @@
-from typing import List
-
-
 def info_from_ApiKeyAuth(token):
     """
     Check and retrieve authentication information from custom bearer token.

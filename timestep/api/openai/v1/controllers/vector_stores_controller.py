@@ -1,43 +1,3 @@
-from typing import Dict, Tuple, Union
-
-import connexion
-
-from timestep.api.openai.v1 import util
-from timestep.api.openai.v1.models.create_vector_store_file_batch_request import (  # noqa: E501
-    CreateVectorStoreFileBatchRequest,
-)
-from timestep.api.openai.v1.models.create_vector_store_file_request import (  # noqa: E501
-    CreateVectorStoreFileRequest,
-)
-from timestep.api.openai.v1.models.create_vector_store_request import (  # noqa: E501
-    CreateVectorStoreRequest,
-)
-from timestep.api.openai.v1.models.delete_vector_store_file_response import (  # noqa: E501
-    DeleteVectorStoreFileResponse,
-)
-from timestep.api.openai.v1.models.delete_vector_store_response import (  # noqa: E501
-    DeleteVectorStoreResponse,
-)
-from timestep.api.openai.v1.models.list_vector_store_files_response import (  # noqa: E501
-    ListVectorStoreFilesResponse,
-)
-from timestep.api.openai.v1.models.list_vector_stores_response import (  # noqa: E501
-    ListVectorStoresResponse,
-)
-from timestep.api.openai.v1.models.update_vector_store_request import (  # noqa: E501
-    UpdateVectorStoreRequest,
-)
-from timestep.api.openai.v1.models.vector_store_file_batch_object import (  # noqa: E501
-    VectorStoreFileBatchObject,
-)
-from timestep.api.openai.v1.models.vector_store_file_object import (  # noqa: E501
-    VectorStoreFileObject,
-)
-from timestep.api.openai.v1.models.vector_store_object import (  # noqa: E501
-    VectorStoreObject,
-)
-
-
 def cancel_vector_store_file_batch(vector_store_id, batch_id):  # noqa: E501
     """Cancel a vector store file batch. This attempts to cancel the processing of files in this batch as soon as possible.
 
@@ -63,10 +23,6 @@ def create_vector_store(create_vector_store_request):  # noqa: E501
 
     :rtype: Union[VectorStoreObject, Tuple[VectorStoreObject, int], Tuple[VectorStoreObject, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        create_vector_store_request = CreateVectorStoreRequest.from_dict(
-            connexion.request.get_json()
-        )  # noqa: E501
     raise NotImplementedError
 
 
@@ -84,10 +40,6 @@ def create_vector_store_file(
 
     :rtype: Union[VectorStoreFileObject, Tuple[VectorStoreFileObject, int], Tuple[VectorStoreFileObject, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        create_vector_store_file_request = CreateVectorStoreFileRequest.from_dict(
-            connexion.request.get_json()
-        )  # noqa: E501
     raise NotImplementedError
 
 
@@ -105,10 +57,6 @@ def create_vector_store_file_batch(
 
     :rtype: Union[VectorStoreFileBatchObject, Tuple[VectorStoreFileBatchObject, int], Tuple[VectorStoreFileBatchObject, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        create_vector_store_file_batch_request = (
-            CreateVectorStoreFileBatchRequest.from_dict(connexion.request.get_json())
-        )  # noqa: E501
     raise NotImplementedError
 
 
@@ -272,8 +220,4 @@ def modify_vector_store(vector_store_id, update_vector_store_request):  # noqa: 
 
     :rtype: Union[VectorStoreObject, Tuple[VectorStoreObject, int], Tuple[VectorStoreObject, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        update_vector_store_request = UpdateVectorStoreRequest.from_dict(
-            connexion.request.get_json()
-        )  # noqa: E501
     raise NotImplementedError

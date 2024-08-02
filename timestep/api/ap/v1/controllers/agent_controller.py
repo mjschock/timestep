@@ -1,7 +1,5 @@
 from typing import Dict, Tuple, Union
 
-import connexion
-
 from timestep.api.ap.v1 import util
 from timestep.api.ap.v1.models.artifact import Artifact  # noqa: E501
 from timestep.api.ap.v1.models.get_agent_task404_response import (  # noqa: E501
@@ -72,10 +70,6 @@ def execute_agent_task_step(task_id, step_request_body=None):  # noqa: E501
 
     :rtype: Union[Step, Tuple[Step, int], Tuple[Step, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        step_request_body = StepRequestBody.from_dict(
-            connexion.request.get_json()
-        )  # noqa: E501
     raise NotImplementedError
 
 
