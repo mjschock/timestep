@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     bearerinfo_func: str = Field(default="timestep.api.decode_token")
-    openai_api_key: SecretStr = Field(default=None)
+    openai_api_key: SecretStr = Field(default="openai_api_key")
     openai_base_url: str = Field(default="http://localhost:8000/api/openai/v1")
     openai_org_id: str = Field(default="organization_id")
     openai_project_id: str = Field(default="project_id")
