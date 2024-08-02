@@ -1,10 +1,6 @@
-from fastapi.testclient import TestClient
+from timestep.config import Settings
 
-def test_settings(client):
-    assert type(client) == TestClient
-
-    from timestep.config import Settings
-
+def test_settings():
     settings = Settings()
-    # assert settings.openai_api
-    assert True
+
+    assert settings.openai_api_key == "openai_api_key"

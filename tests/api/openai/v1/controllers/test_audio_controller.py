@@ -1,21 +1,21 @@
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
-def test_create_speech(client: TestClient):
-    response = client.post(
+async def test_create_speech(client: AsyncClient):
+    response = await client.post(
         "/api/openai/v1/audio/speech",
     )
 
     assert response.status_code == 401
 
-def test_create_transcription(client: TestClient):
-    response = client.post(
+async def test_create_transcription(client: AsyncClient):
+    response = await client.post(
         "/api/openai/v1/audio/transcriptions",
     )
 
     assert response.status_code == 401
 
-def test_create_translation(client: TestClient):
-    response = client.post(
+async def test_create_translation(client: AsyncClient):
+    response = await client.post(
         "/api/openai/v1/audio/translations",
     )
 

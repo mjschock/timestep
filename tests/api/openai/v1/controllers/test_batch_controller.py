@@ -1,28 +1,28 @@
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
-def test_cancel_batch(client: TestClient):
-    response = client.post(
+async def test_cancel_batch(client: AsyncClient):
+    response = await client.post(
         "/api/openai/v1/batches/batch_id_example/cancel",
     )
 
     assert response.status_code == 401
 
-def test_create_batch(client: TestClient):
-    response = client.post(
+async def test_create_batch(client: AsyncClient):
+    response = await client.post(
         "/api/openai/v1/batches",
     )
 
     assert response.status_code == 401
 
-def test_list_batches(client: TestClient):
-    response = client.get(
+async def test_list_batches(client: AsyncClient):
+    response = await client.get(
         "/api/openai/v1/batches?after=after_example&limit=20",
     )
 
     assert response.status_code == 401
 
-def test_retrieve_batch(client: TestClient):
-    response = client.get(
+async def test_retrieve_batch(client: AsyncClient):
+    response = await client.get(
         "/api/openai/v1/batches/batch_id_example",
     )
 

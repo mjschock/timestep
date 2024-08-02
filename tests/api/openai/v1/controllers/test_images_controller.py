@@ -1,21 +1,21 @@
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
-def test_create_image(client: TestClient):
-    response = client.post(
+async def test_create_image(client: AsyncClient):
+    response = await client.post(
         "/api/openai/v1/images/generations",
     )
 
     assert response.status_code == 401
 
-def test_create_image_edit(client: TestClient):
-    response = client.post(
+async def test_create_image_edit(client: AsyncClient):
+    response = await client.post(
         "/api/openai/v1/images/edits",
     )
 
     assert response.status_code == 401
 
-def test_create_image_variation(client: TestClient):
-    response = client.post(
+async def test_create_image_variation(client: AsyncClient):
+    response = await client.post(
         "/api/openai/v1/images/variations",
     )
 
