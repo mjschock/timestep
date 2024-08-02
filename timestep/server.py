@@ -70,6 +70,7 @@ async def lifespan(app: FastAPI):
 
 fastapi_app = FastAPI(
     lifespan=lifespan,
+    # servers= # TODO: add server for testing?
 )
 
 connexion_app.add_api(
