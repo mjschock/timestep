@@ -1,19 +1,3 @@
-from typing import Dict, Tuple, Union
-
-import connexion
-from openai.types.model import Model
-
-from timestep.api.openai.v1 import util
-from timestep.api.openai.v1.models.delete_model_response import (  # noqa: E501
-    DeleteModelResponse,
-)
-from timestep.api.openai.v1.models.list_models_response import (  # noqa: E501
-    ListModelsResponse,
-)
-from timestep.api.openai.v1.models.model import Model  # noqa: E501
-from timestep.services import model_service
-
-
 def delete_model(model):  # noqa: E501
     """Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
 
@@ -51,13 +35,15 @@ def retrieve_model(model: str, token_info: dict, user: str):
     # print('args: ', args)
     # print('kwargs: ', kwargs)
 
-    model_info = model_service.retrieve_model(model_id=model)
+    # model_info = model_service.retrieve_model(model_id=model)
 
-    print("model_info: ", model_info)
+    # print("model_info: ", model_info)
 
-    return Model(
-        id=model,
-        created=0,
-        object="model",
-        owned_by=user,
-    ).model_dump(mode="json")
+    # return Model(
+    #     id=model,
+    #     created=0,
+    #     object="model",
+    #     owned_by=user,
+    # ).model_dump(mode="json")
+
+    raise NotImplementedError

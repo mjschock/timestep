@@ -24,6 +24,10 @@ async def get_default_agent():
     return None
 
 
+async def insert_agent(agent):
+    return None
+
+
 # class AgentService(object):
 #     # models: dict[uuid.UUID] = {}
 #     _shared_instance_state = {

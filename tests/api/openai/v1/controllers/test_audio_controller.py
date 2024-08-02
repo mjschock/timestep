@@ -1,26 +1,22 @@
 from fastapi.testclient import TestClient
 
-from timestep.server import fastapi_app
-
-client = TestClient(fastapi_app)
-
-def test_create_speech():
+def test_create_speech(client: TestClient):
     response = client.post(
         "/api/openai/v1/audio/speech",
     )
 
-    assert response.status_code == 501
+    assert response.status_code == 401
 
-def test_create_transcription():
+def test_create_transcription(client: TestClient):
     response = client.post(
         "/api/openai/v1/audio/transcriptions",
     )
 
-    assert response.status_code == 501
+    assert response.status_code == 401
 
-def test_create_translation():
+def test_create_translation(client: TestClient):
     response = client.post(
         "/api/openai/v1/audio/translations",
     )
 
-    assert response.status_code == 501
+    assert response.status_code == 401

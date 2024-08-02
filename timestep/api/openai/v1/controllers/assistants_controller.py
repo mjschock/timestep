@@ -1,6 +1,5 @@
 import asyncio
 import json
-import os
 import time
 import uuid
 from typing import List, Optional
@@ -18,15 +17,13 @@ from prefect.deployments import run_deployment
 from prefect.deployments.flow_runs import FlowRun
 from sse_starlette import EventSourceResponse
 
-# from timestep.database import InstanceStoreSingleton
-from timestep.worker import step
+from timestep.services import agent_service
+
+# from timestep.worker import step
 
 
-# def cancel_run(thread_id, run_id):  # noqa: E501
 async def cancel_run(*args, **kwargs):
     """Cancels a run that is &#x60;in_progress&#x60;.
-
-     # noqa: E501
 
     :param thread_id: The ID of the thread to which this run belongs.
     :type thread_id: str
@@ -71,8 +68,7 @@ async def create_assistant(body, token_info: dict, user: str):
 
     print("assistant: ", assistant)
 
-    instance_store = InstanceStoreSingleton()
-    instance_store._shared_instance_state["assistants"][assistant.id] = assistant
+    await agent_service.insert_agent(agent=assistant)
 
     return assistant.model_dump(mode="json")
 
@@ -892,11 +888,10 @@ async def modify_thread(*args, **kwargs):
     raise NotImplementedError
 
 
-# def submit_tool_ouputs_to_run(thread_id, run_id, submit_tool_outputs_run_request):  # noqa: E501
-async def submit_tool_outputs_to_run(*args, **kwargs):
+async def submit_tool_ouputs_to_run(
+    *args, **kwargs
+):  # NOTE: the typo in outputs is b/c the auto-generated openai-openapi spec has that typo
     """When a run has the &#x60;status: \&quot;requires_action\&quot;&#x60; and &#x60;required_action.type&#x60; is &#x60;submit_tool_outputs&#x60;, this endpoint can be used to submit the outputs from the tool calls once they&#39;re all completed. All outputs must be submitted in a single request.
-
-     # noqa: E501
 
     :param thread_id: The ID of the [thread](/docs/api-reference/threads) to which this run belongs.
     :type thread_id: str
