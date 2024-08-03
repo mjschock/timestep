@@ -11,7 +11,7 @@ description = ""
 license = "MIT"
 name = "timestep"
 readme = "README.md"
-version = "12.0.26"
+version = "12.0.27"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
@@ -22,14 +22,16 @@ einops = "^0.8.0"
 fastapi = "^0.111.1"
 gorilla-cli = "^0.0.10"
 huggingface-hub = "^0.23.5"
+kedro = "^0.19.7"
 langchain-community = "^0.2.7"
-llama-cpp-python = "^0.2.82"
 marvin = "^2.3.6"
+papermill = "^2.6.0"
+prefect-dask = {allow-prereleases = true, version = "^0.3.0rc2"}
 prefect-shell = {allow-prereleases = true, version = "^0.3.0rc1"}
+pyspark = "^3.5.1"
 python = "^3.10"
 sqlmodel = "^0.0.21"
 sse-starlette = "^2.1.2"
-stable-diffusion-cpp-python = "^0.1.6"
 starlette-context = "^0.3.6"
 transformers = "^4.42.4"
 typer = {extras = ["all"], version = "^0.12.3"}
@@ -45,8 +47,7 @@ locust = "^2.29.1"
 pytest = "^8.2.2"
 pytest-asyncio = "^0.23.8"
 pytest-cov = "^5.0.0"
-pytest-notebook = "^0.10.0"
-pytest-xdist = "^3.6.1"
+pytest-xdist = {extras = ["psutil"], version = "^3.6.1"}
 toml-sort = "^0.23.1"
 
 [tool.poetry.scripts]

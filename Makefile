@@ -47,7 +47,7 @@ apis:
 	mv build/openai/python-flask/timestep/api/openai/v1 timestep/api/openai/v1
 
 build:
-	./scripts/build.sh
+	. ./scripts/build.sh
 
 clean:
-	./scripts/clean.sh
+	. ./scripts/clean.sh

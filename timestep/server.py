@@ -60,6 +60,8 @@ async def lifespan(app: FastAPI):
         "/zip/llama.cpp/server/public",
         "--port",
         f"{port}",
+        "--temp",
+        "0.0",
     )
 
     yield
