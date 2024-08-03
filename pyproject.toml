@@ -11,7 +11,7 @@ description = ""
 license = "MIT"
 name = "timestep"
 readme = "README.md"
-version = "12.0.28"
+version = "12.0.29"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
@@ -30,6 +30,7 @@ prefect-dask = {allow-prereleases = true, version = "^0.3.0rc2"}
 prefect-shell = {allow-prereleases = true, version = "^0.3.0rc1"}
 pyspark = "^3.5.1"
 python = "^3.10"
+respx = "^0.21.1"
 sqlmodel = "^0.0.21"
 sse-starlette = "^2.1.2"
 starlette-context = "^0.3.6"
@@ -47,6 +48,7 @@ locust = "^2.29.1"
 pytest = "^8.2.2"
 pytest-asyncio = "^0.23.8"
 pytest-cov = "^5.0.0"
+pytest-httpx = "^0.30.0"
 pytest-xdist = {extras = ["psutil"], version = "^3.6.1"}
 toml-sort = "^0.23.1"
 
@@ -56,9 +58,12 @@ timestep_serve = 'timestep.server:main'
 timestep_train = 'timestep.worker:main'
 
 [tool.pytest.ini_options]
-addopts = "--cov=timestep --cov-fail-under=33 -q -ra -x"
+addopts = "--cov=timestep --cov-fail-under=33 -n logical -q -ra -x"
 asyncio_mode = "auto"
 minversion = "8.2.2"
 testpaths = [
   "tests"
+]
+usefixtures = [
+  "client"
 ]

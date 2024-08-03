@@ -1,5 +1,5 @@
 # def create_speech(create_speech_request):  # noqa: E501
-def create_speech(*args, **kwargs):
+async def create_speech(*args, **kwargs):
     """Generates audio from the input text.
 
     :param create_speech_request:
@@ -10,7 +10,7 @@ def create_speech(*args, **kwargs):
     raise NotImplementedError
 
 
-def create_transcription(
+async def create_transcription(
     file,
     model,
     language=None,
@@ -43,7 +43,7 @@ def create_transcription(
     raise NotImplementedError
 
 
-def create_translation(
+async def create_translation(
     file, model, prompt=None, response_format=None, temperature=None
 ):  # noqa: E501
     """Translates audio into English.

@@ -1,4 +1,4 @@
-def delete_model(model):  # noqa: E501
+async def delete_model(model):  # noqa: E501
     """Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
 
      # noqa: E501
@@ -11,7 +11,7 @@ def delete_model(model):  # noqa: E501
     raise NotImplementedError
 
 
-def list_models():  # noqa: E501
+async def list_models():  # noqa: E501
     """Lists the currently available models, and provides basic information about each one such as the owner and availability.
 
      # noqa: E501
@@ -22,7 +22,7 @@ def list_models():  # noqa: E501
     raise NotImplementedError
 
 
-def retrieve_model(model: str, token_info: dict, user: str):
+async def retrieve_model(model: str, token_info: dict, user: str):
     """Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
 
      # noqa: E501

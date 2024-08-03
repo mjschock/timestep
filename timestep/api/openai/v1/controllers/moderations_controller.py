@@ -1,4 +1,4 @@
-def create_moderation(create_moderation_request):  # noqa: E501
+async def create_moderation(create_moderation_request):  # noqa: E501
     """Classifies if text is potentially harmful.
 
      # noqa: E501

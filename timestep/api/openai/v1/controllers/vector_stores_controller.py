@@ -1,4 +1,4 @@
-def cancel_vector_store_file_batch(vector_store_id, batch_id):  # noqa: E501
+async def cancel_vector_store_file_batch(vector_store_id, batch_id):  # noqa: E501
     """Cancel a vector store file batch. This attempts to cancel the processing of files in this batch as soon as possible.
 
      # noqa: E501
@@ -13,7 +13,7 @@ def cancel_vector_store_file_batch(vector_store_id, batch_id):  # noqa: E501
     raise NotImplementedError
 
 
-def create_vector_store(create_vector_store_request):  # noqa: E501
+async def create_vector_store(create_vector_store_request):  # noqa: E501
     """Create a vector store.
 
      # noqa: E501
@@ -26,7 +26,7 @@ def create_vector_store(create_vector_store_request):  # noqa: E501
     raise NotImplementedError
 
 
-def create_vector_store_file(
+async def create_vector_store_file(
     vector_store_id, create_vector_store_file_request
 ):  # noqa: E501
     """Create a vector store file by attaching a [File](/docs/api-reference/files) to a [vector store](/docs/api-reference/vector-stores/object).
@@ -43,7 +43,7 @@ def create_vector_store_file(
     raise NotImplementedError
 
 
-def create_vector_store_file_batch(
+async def create_vector_store_file_batch(
     vector_store_id, create_vector_store_file_batch_request
 ):  # noqa: E501
     """Create a vector store file batch.
@@ -60,7 +60,7 @@ def create_vector_store_file_batch(
     raise NotImplementedError
 
 
-def delete_vector_store(vector_store_id):  # noqa: E501
+async def delete_vector_store(vector_store_id):  # noqa: E501
     """Delete a vector store.
 
      # noqa: E501
@@ -73,7 +73,7 @@ def delete_vector_store(vector_store_id):  # noqa: E501
     raise NotImplementedError
 
 
-def delete_vector_store_file(vector_store_id, file_id):  # noqa: E501
+async def delete_vector_store_file(vector_store_id, file_id):  # noqa: E501
     """Delete a vector store file. This will remove the file from the vector store but the file itself will not be deleted. To delete the file, use the [delete file](/docs/api-reference/files/delete) endpoint.
 
      # noqa: E501
@@ -88,7 +88,7 @@ def delete_vector_store_file(vector_store_id, file_id):  # noqa: E501
     raise NotImplementedError
 
 
-def get_vector_store(vector_store_id):  # noqa: E501
+async def get_vector_store(vector_store_id):  # noqa: E501
     """Retrieves a vector store.
 
      # noqa: E501
@@ -101,7 +101,7 @@ def get_vector_store(vector_store_id):  # noqa: E501
     raise NotImplementedError
 
 
-def get_vector_store_file(vector_store_id, file_id):  # noqa: E501
+async def get_vector_store_file(vector_store_id, file_id):  # noqa: E501
     """Retrieves a vector store file.
 
      # noqa: E501
@@ -116,7 +116,7 @@ def get_vector_store_file(vector_store_id, file_id):  # noqa: E501
     raise NotImplementedError
 
 
-def get_vector_store_file_batch(vector_store_id, batch_id):  # noqa: E501
+async def get_vector_store_file_batch(vector_store_id, batch_id):  # noqa: E501
     """Retrieves a vector store file batch.
 
      # noqa: E501
@@ -131,7 +131,7 @@ def get_vector_store_file_batch(vector_store_id, batch_id):  # noqa: E501
     raise NotImplementedError
 
 
-def list_files_in_vector_store_batch(
+async def list_files_in_vector_store_batch(
     vector_store_id,
     batch_id,
     limit=None,
@@ -164,7 +164,7 @@ def list_files_in_vector_store_batch(
     raise NotImplementedError
 
 
-def list_vector_store_files(
+async def list_vector_store_files(
     vector_store_id, limit=None, order=None, after=None, before=None, filter=None
 ):  # noqa: E501
     """Returns a list of vector store files.
@@ -189,7 +189,9 @@ def list_vector_store_files(
     raise NotImplementedError
 
 
-def list_vector_stores(limit=None, order=None, after=None, before=None):  # noqa: E501
+async def list_vector_stores(
+    limit=None, order=None, after=None, before=None
+):  # noqa: E501
     """Returns a list of vector stores.
 
      # noqa: E501
@@ -208,7 +210,9 @@ def list_vector_stores(limit=None, order=None, after=None, before=None):  # noqa
     raise NotImplementedError
 
 
-def modify_vector_store(vector_store_id, update_vector_store_request):  # noqa: E501
+async def modify_vector_store(
+    vector_store_id, update_vector_store_request
+):  # noqa: E501
     """Modifies a vector store.
 
      # noqa: E501

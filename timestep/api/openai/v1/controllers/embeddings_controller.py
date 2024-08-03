@@ -1,4 +1,4 @@
-def create_embedding(create_embedding_request):  # noqa: E501
+async def create_embedding(create_embedding_request):  # noqa: E501
     """Creates an embedding vector representing the input text.
 
      # noqa: E501
