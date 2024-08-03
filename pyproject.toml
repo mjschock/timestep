@@ -11,7 +11,7 @@ description = ""
 license = "MIT"
 name = "timestep"
 readme = "README.md"
-version = "12.0.29"
+version = "12.0.30"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
@@ -25,7 +25,6 @@ huggingface-hub = "^0.23.5"
 kedro = "^0.19.7"
 langchain-community = "^0.2.7"
 marvin = "^2.3.6"
-papermill = "^2.6.0"
 prefect-dask = {allow-prereleases = true, version = "^0.3.0rc2"}
 prefect-shell = {allow-prereleases = true, version = "^0.3.0rc1"}
 pyspark = "^3.5.1"
