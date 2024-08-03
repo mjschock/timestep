@@ -1,6 +1,12 @@
+import os
+import httpx
 from httpx import AsyncClient
+import papermill as pm
+import pytest
+import respx
 
-async def test_create_chat_completion(client: AsyncClient):
+# @pytest.mark.respx(base_url="http://openai.local")
+async def test_create_chat_completion(client: AsyncClient, httpx_mock, monkeypatch):
     response = await client.post(
         "/api/openai/v1/chat/completions",
     )
@@ -40,18 +46,45 @@ async def test_create_chat_completion(client: AsyncClient):
 
     assert response.status_code == 200
 
-#    from importlib.resources import files
-    # from pytest_notebook import example_nbs
-#    from pytest_notebook.nb_regression import NBRegressionFixture
+    # httpx_mock.add_response(url="http://openai.local/v1/engines")
 
-#    fixture = NBRegressionFixture(exec_timeout=50)
-#    fixture.diff_color_words = False
+    # with httpx.Client():
+    #     # pm.execute_notebook(
+    #     #     "tests/ipynb/Scratch.ipynb",
+    #     #     "tests/ipynb/Scratch_output.ipynb",
+    #     #     # parameters=dict(response=response.json())
+    #     # )
 
-    # with files(example_nbs) as example_nbs_path:
-    #     nb_regression = NBRegressionFixture(example_nbs_path)
-    #     nb_regression.check_notebook("openai_chat_completion.ipynb", response.json())
+    #     base_url = os.getenv("OPENAI_BASE_URL").replace("/api/openai/v1", "")
 
-    # with files("3rdparty/openai-cookbook").joinpath("notebooks/Scratch.ipynb") as path:
-        # fixture.check(str(path))
-    # fixture.check("3rdparty/openai-cookbook/examples/gpt4o/introduction_to_gpt4o.ipynb", response.json())
-    # fixture.check("notebooks/Scratch.ipynb", response.json())
+    #     # assert base_url == "http://localhost:8000", f"Unexpected base_url: {base_url}"
+    #     assert base_url == "http://openai.local", f"Unexpected base_url: {base_url}"
+
+    #     client = httpx.Client(base_url=base_url, headers={"Authorization": f"Bearer {token}"})
+
+    #     response = client.get("/v1/engines")
+
+    #     # print(response.json())
+    #     print(response)
+
+    #     # assert response.status_code == 200
+    #     # assert response.json()["data"][0]["id"] == "copilot-codex"
+
+    #     # monkeypatch.setattr(
+    #     #     # httpx.HTTPTransport,
+    #     #     httpx.Client,
+    #     #     "__"
+    #     #     # "handle_request",
+    #     #     # mocked_handle_request,
+    #     # )
+
+    #     with monkeypatch.context() as m:
+    #         # m.setattr(httpx, "Client", lambda: "/")
+
+
+    #         with respx.mock:
+    #             pm.execute_notebook(
+    #                 "tests/ipynb/Scratch.ipynb",
+    #                 "tests/ipynb/Scratch_output.ipynb",
+    #                 # parameters=dict(response=response.json())
+    #             )

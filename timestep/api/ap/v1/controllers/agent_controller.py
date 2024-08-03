@@ -1,4 +1,4 @@
-def create_agent_task(*args, **kwargs):
+async def create_agent_task(*args, **kwargs):
     """Creates a task for the agent.
 
      # noqa: E501
@@ -22,7 +22,7 @@ def create_agent_task(*args, **kwargs):
     }
 
 
-def download_agent_task_artifact(task_id, artifact_id):  # noqa: E501
+async def download_agent_task_artifact(task_id, artifact_id):  # noqa: E501
     """Download a specified artifact.
 
      # noqa: E501
@@ -37,7 +37,7 @@ def download_agent_task_artifact(task_id, artifact_id):  # noqa: E501
     raise NotImplementedError
 
 
-def execute_agent_task_step(task_id, step_request_body=None):  # noqa: E501
+async def execute_agent_task_step(task_id, step_request_body=None):  # noqa: E501
     """Execute a step in the specified agent task.
 
      # noqa: E501
@@ -52,7 +52,7 @@ def execute_agent_task_step(task_id, step_request_body=None):  # noqa: E501
     raise NotImplementedError
 
 
-def get_agent_task(task_id):  # noqa: E501
+async def get_agent_task(task_id):  # noqa: E501
     """Get details about a specified agent task.
 
      # noqa: E501
@@ -65,7 +65,7 @@ def get_agent_task(task_id):  # noqa: E501
     raise NotImplementedError
 
 
-def get_agent_task_step(task_id, step_id):  # noqa: E501
+async def get_agent_task_step(task_id, step_id):  # noqa: E501
     """Get details about a specified task step.
 
      # noqa: E501
@@ -80,7 +80,9 @@ def get_agent_task_step(task_id, step_id):  # noqa: E501
     raise NotImplementedError
 
 
-def list_agent_task_artifacts(task_id, current_page=None, page_size=None):  # noqa: E501
+async def list_agent_task_artifacts(
+    task_id, current_page=None, page_size=None
+):  # noqa: E501
     """List all artifacts that have been created for the given task.
 
      # noqa: E501
@@ -97,7 +99,9 @@ def list_agent_task_artifacts(task_id, current_page=None, page_size=None):  # no
     raise NotImplementedError
 
 
-def list_agent_task_steps(task_id, current_page=None, page_size=None):  # noqa: E501
+async def list_agent_task_steps(
+    task_id, current_page=None, page_size=None
+):  # noqa: E501
     """List all steps for the specified task.
 
      # noqa: E501
@@ -115,7 +119,7 @@ def list_agent_task_steps(task_id, current_page=None, page_size=None):  # noqa: 
 
 
 # def list_agent_tasks(current_page=None, page_size=None):  # noqa: E501
-def list_agent_tasks(*args, **kwargs):
+async def list_agent_tasks(*args, **kwargs):
     """List all tasks that have been created for the agent.
 
      # noqa: E501
@@ -133,7 +137,7 @@ def list_agent_tasks(*args, **kwargs):
     raise NotImplementedError
 
 
-def upload_agent_task_artifacts(task_id, file, relative_path=None):  # noqa: E501
+async def upload_agent_task_artifacts(task_id, file, relative_path=None):  # noqa: E501
     """Upload an artifact for the specified task.
 
      # noqa: E501

@@ -1,4 +1,4 @@
-def cancel_batch(batch_id):
+async def cancel_batch(batch_id):
     """Cancels an in-progress batch. The batch will be in status &#x60;cancelling&#x60; for up to 10 minutes, before changing to &#x60;cancelled&#x60;, where it will have partial results (if any) available in the output file.
 
     :param batch_id: The ID of the batch to cancel.
@@ -9,7 +9,7 @@ def cancel_batch(batch_id):
     raise NotImplementedError
 
 
-def create_batch(create_batch_request):
+async def create_batch(create_batch_request):
     """Creates and executes a batch from an uploaded file of requests
 
     :param create_batch_request:
@@ -20,7 +20,7 @@ def create_batch(create_batch_request):
     raise NotImplementedError
 
 
-def list_batches(after=None, limit=None):
+async def list_batches(after=None, limit=None):
     """List your organization&#39;s batches.
 
     :param after: A cursor for use in pagination. &#x60;after&#x60; is an object ID that defines your place in the list. For instance, if you make a list request and receive 100 objects, ending with obj_foo, your subsequent call can include after&#x3D;obj_foo in order to fetch the next page of the list.
@@ -33,7 +33,7 @@ def list_batches(after=None, limit=None):
     raise NotImplementedError
 
 
-def retrieve_batch(batch_id):
+async def retrieve_batch(batch_id):
     """Retrieves a batch.
 
     :param batch_id: The ID of the batch to retrieve.

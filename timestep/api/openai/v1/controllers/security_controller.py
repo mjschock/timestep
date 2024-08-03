@@ -1,4 +1,4 @@
-def info_from_ApiKeyAuth(token):
+async def info_from_ApiKeyAuth(token):
     """
     Check and retrieve authentication information from custom bearer token.
     Returned value will be passed in 'token_info' parameter of your operation function, if there is one.

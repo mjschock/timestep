@@ -15,7 +15,7 @@ from prefect.deployments.flow_runs import FlowRun
 # instance_store = InstanceStoreSingleton()
 
 
-def cancel_fine_tuning_job(fine_tuning_job_id):  # noqa: E501
+async def cancel_fine_tuning_job(fine_tuning_job_id):  # noqa: E501
     """Immediately cancel a fine-tune job.
 
      # noqa: E501
@@ -105,7 +105,7 @@ async def create_fine_tuning_job(body, token_info, user):
 
 
 # def list_fine_tuning_events(fine_tuning_job_id, after=None, limit=None):  # noqa: E501
-def list_fine_tuning_events(fine_tuning_job_id, limit, token_info, user):
+async def list_fine_tuning_events(fine_tuning_job_id, limit, token_info, user):
     """Get status updates for a fine-tuning job.
 
      # noqa: E501
@@ -133,7 +133,7 @@ def list_fine_tuning_events(fine_tuning_job_id, limit, token_info, user):
     return sync_cursor_page.model_dump(mode="json")
 
 
-def list_fine_tuning_job_checkpoints(
+async def list_fine_tuning_job_checkpoints(
     fine_tuning_job_id, after=None, limit=None
 ):  # noqa: E501
     """List checkpoints for a fine-tuning job.
@@ -152,7 +152,7 @@ def list_fine_tuning_job_checkpoints(
     raise NotImplementedError
 
 
-def list_paginated_fine_tuning_jobs(after=None, limit=None):  # noqa: E501
+async def list_paginated_fine_tuning_jobs(after=None, limit=None):  # noqa: E501
     """List your organization&#39;s fine-tuning jobs
 
      # noqa: E501
@@ -168,7 +168,9 @@ def list_paginated_fine_tuning_jobs(after=None, limit=None):  # noqa: E501
 
 
 # def retrieve_fine_tuning_job(fine_tuning_job_id):  # noqa: E501
-def retrieve_fine_tuning_job(fine_tuning_job_id: str, token_info: dict, user: str):
+async def retrieve_fine_tuning_job(
+    fine_tuning_job_id: str, token_info: dict, user: str
+):
     """Get info about a fine-tuning job.  [Learn more about fine-tuning](/docs/guides/fine-tuning)
 
      # noqa: E501

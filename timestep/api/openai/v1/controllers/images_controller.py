@@ -1,4 +1,4 @@
-def create_image(body: dict, token_info: dict, user: str):
+async def create_image(body: dict, token_info: dict, user: str):
     """Creates an image given a prompt.
 
      # noqa: E501
@@ -54,7 +54,7 @@ def create_image(body: dict, token_info: dict, user: str):
     raise NotImplementedError
 
 
-def create_image_edit(
+async def create_image_edit(
     image,
     prompt,
     mask=None,
@@ -90,7 +90,7 @@ def create_image_edit(
     raise NotImplementedError
 
 
-def create_image_variation(
+async def create_image_variation(
     image, model=None, n=None, response_format=None, size=None, user=None
 ):  # noqa: E501
     """Creates a variation of a given image.
