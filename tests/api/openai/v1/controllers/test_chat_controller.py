@@ -40,12 +40,12 @@ async def test_create_chat_completion(client: AsyncClient):
 
     assert response.status_code == 200
 
-    from importlib.resources import files
+#    from importlib.resources import files
     # from pytest_notebook import example_nbs
-    from pytest_notebook.nb_regression import NBRegressionFixture
+#    from pytest_notebook.nb_regression import NBRegressionFixture
 
-    fixture = NBRegressionFixture(exec_timeout=50)
-    fixture.diff_color_words = False
+#    fixture = NBRegressionFixture(exec_timeout=50)
+#    fixture.diff_color_words = False
 
     # with files(example_nbs) as example_nbs_path:
     #     nb_regression = NBRegressionFixture(example_nbs_path)

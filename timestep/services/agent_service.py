@@ -3,18 +3,20 @@ import uuid
 
 import typer
 from langchain_community.llms.llamafile import Llamafile
-from llama_cpp import Llama
-from llama_cpp.llama_chat_format import (
-    Llama3VisionAlpha,
-    Llava15ChatHandler,
-    Llava16ChatHandler,
-    MoondreamChatHandler,
-    NanoLlavaChatHandler,
-)
-from llama_cpp.llama_tokenizer import LlamaHFTokenizer
+
+# from llama_cpp import Llama
+# from llama_cpp.llama_chat_format import (
+#    Llama3VisionAlpha,
+#    Llava15ChatHandler,
+#    Llava16ChatHandler,
+#    MoondreamChatHandler,
+#    NanoLlavaChatHandler,
+# )
+# from llama_cpp.llama_tokenizer import LlamaHFTokenizer
 from openai.types.model import Model
 from sqlmodel import Field, SQLModel
-from stable_diffusion_cpp import StableDiffusion
+
+# from stable_diffusion_cpp import StableDiffusion
 
 app_dir = typer.get_app_dir("timestep")
 # from timestep.database import InstanceStoreSingleton
@@ -90,27 +92,27 @@ class ModelInstanceStoreSingleton(object):
             text_model_filename = "ggml-model-q4_k.gguf"
             text_model_repo_id = mmproj_model_repo_id
 
-            chat_handler = Llava15ChatHandler.from_pretrained(
-                repo_id=mmproj_model_repo_id,
-                filename=mmproj_model_filename,
-            )
+        #           chat_handler = Llava15ChatHandler.from_pretrained(
+        #               repo_id=mmproj_model_repo_id,
+        #               filename=mmproj_model_filename,
+        #           )
 
         elif model_name == "Functionary-V2.5":
             chat_format = chat_format if chat_format else "functionary-v2"
             text_model_repo_id = "meetkai/functionary-small-v2.5-GGUF"
             text_model_filename = "functionary-small-v2.5.Q4_0.gguf"
-            tokenizer = LlamaHFTokenizer.from_pretrained(text_model_repo_id)
+        #            tokenizer = LlamaHFTokenizer.from_pretrained(text_model_repo_id)
 
         elif model_name == "Llama-3-Vision-Alpha":
             mmproj_model_repo_id = "abetlen/llama-3-vision-alpha-gguf"
             text_model_filename = "Meta-Llama-3-8B.Q4_K_M.gguf"
             text_model_repo_id = "QuantFactory/Meta-Llama-3-8B-GGUF"
 
-            if chat_format is None:
-                chat_handler = Llama3VisionAlpha.from_pretrained(
-                    repo_id=mmproj_model_repo_id,
-                    filename=mmproj_model_filename,
-                )
+        #            if chat_format is None:
+        #                chat_handler = Llama3VisionAlpha.from_pretrained(
+        #                    repo_id=mmproj_model_repo_id,
+        #                    filename=mmproj_model_filename,
+        #                )
 
         elif model_name == "llamafile":
             model_instance = Llamafile()
@@ -121,11 +123,11 @@ class ModelInstanceStoreSingleton(object):
             text_model_filename = "vicuna-7b-q5_k.gguf"
             text_model_repo_id = mmproj_model_repo_id
 
-            if chat_format is None:
-                chat_handler = Llava16ChatHandler.from_pretrained(
-                    repo_id=mmproj_model_repo_id,
-                    filename=mmproj_model_filename,
-                )
+        #            if chat_format is None:
+        #                chat_handler = Llava16ChatHandler.from_pretrained(
+        #                    repo_id=mmproj_model_repo_id,
+        #                    filename=mmproj_model_filename,
+        #                )
 
         elif model_name == "LLaVA-Phi-3-Mini":
             mmproj_model_filename = "llava-phi-3-mini-int4.gguf"
@@ -149,21 +151,21 @@ class ModelInstanceStoreSingleton(object):
             mmproj_model_repo_id = "vikhyatk/moondream2"
             text_model_repo_id = mmproj_model_repo_id
 
-            if chat_format is None:
-                chat_handler = MoondreamChatHandler.from_pretrained(
-                    repo_id=mmproj_model_repo_id,
-                    filename=mmproj_model_filename,
-                )
+        #            if chat_format is None:
+        #                chat_handler = MoondreamChatHandler.from_pretrained(
+        #                    repo_id=mmproj_model_repo_id,
+        #                    filename=mmproj_model_filename,
+        #                )
 
         elif model_name == "nanoLLaVA":
             mmproj_model_repo_id = "abetlen/nanollava-gguf"
             text_model_repo_id = mmproj_model_repo_id
 
-            if chat_format is None:
-                chat_handler = NanoLlavaChatHandler.from_pretrained(
-                    repo_id=mmproj_model_repo_id,
-                    filename=mmproj_model_filename,
-                )
+        #            if chat_format is None:
+        #                chat_handler = NanoLlavaChatHandler.from_pretrained(
+        #                    repo_id=mmproj_model_repo_id,
+        #                    filename=mmproj_model_filename,
+        #                )
 
         elif model_name == "OpenLLaMA-3Bv2":
             text_model_filename = "open_llama_3b_v2-q8_0.gguf"
@@ -172,9 +174,9 @@ class ModelInstanceStoreSingleton(object):
         elif model_name == "Phi-3-Mini-4K-Instruct":
             text_model_filename = "Phi-3-mini-4k-instruct-q4.gguf"
             text_model_repo_id = "microsoft/Phi-3-mini-4k-instruct-gguf"
-            tokenizer = LlamaHFTokenizer.from_pretrained(
-                "microsoft/Phi-3-mini-4k-instruct"
-            )
+        #            tokenizer = LlamaHFTokenizer.from_pretrained(
+        #                "microsoft/Phi-3-mini-4k-instruct"
+        #            )
 
         elif model_name == "Replit-Code-V-1.5-3B":
             n_ctx = 16192
@@ -185,12 +187,12 @@ class ModelInstanceStoreSingleton(object):
             text_model_filename = "SmolLM-135M-F16.gguf"
             text_model_repo_id = "stillerman/SmolLM-135M-Llamafile"
 
-        elif model_name == "Stable-Diffusion-v1-5":
-            model_instance = StableDiffusion(
-                model_path=f"{app_dir}/models/runwayml/stable-diffusion-v1-5/v1-5-pruned-emaonly.safetensors",
-                wtype="default",  # Weight type (options: default, f32, f16, q4_0, q4_1, q5_0, q5_1, q8_0)
-                # seed=1337, # Uncomment to set a specific seed
-            )
+        #        elif model_name == "Stable-Diffusion-v1-5":
+        #            model_instance = StableDiffusion(
+        #                model_path=f"{app_dir}/models/runwayml/stable-diffusion-v1-5/v1-5-pruned-emaonly.safetensors",
+        #                wtype="default",  # Weight type (options: default, f32, f16, q4_0, q4_1, q5_0, q5_1, q8_0)
+        #                # seed=1337, # Uncomment to set a specific seed
+        #            )
 
         elif model_name == "TinyLlama-1.1B":
             text_model_filename = "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf"
@@ -205,21 +207,24 @@ class ModelInstanceStoreSingleton(object):
 
         model_id = str(uuid.uuid4)  # TODO: insert model in db and get id
 
+        if not model_instance:
+            raise NotImplementedError(model_name)
+
         # model = Llama( # TODO: switch to LangChain LL?
-        model_instance = model_instance or Llama.from_pretrained(
-            chat_format=chat_format,
-            chat_handler=chat_handler,
-            echo=echo,
-            # draft_model=LlamaPromptLookupDecoding(num_pred_tokens=num_pred_tokens),
-            embedding=embedding,
-            filename=text_model_filename,
-            model_alias=model_id,
-            n_ctx=n_ctx,
-            n_gpu_layers=n_gpu_layers,
-            repo_id=text_model_repo_id,
-            tokenizer=tokenizer,
-            verbose=verbose,
-        )
+        #        model_instance = model_instance # or Llama.from_pretrained(
+        #            chat_format=chat_format,
+        #            chat_handler=chat_handler,
+        #            echo=echo,
+        #            # draft_model=LlamaPromptLookupDecoding(num_pred_tokens=num_pred_tokens),
+        #            embedding=embedding,
+        #            filename=text_model_filename,
+        #            model_alias=model_id,
+        #            n_ctx=n_ctx,
+        #            n_gpu_layers=n_gpu_layers,
+        #            repo_id=text_model_repo_id,
+        #            tokenizer=tokenizer,
+        #            verbose=verbose,
+        #        )
 
         for model_id in [model_id] + model_aliases + [model_name]:
             self._shared_model_instances[model_id] = model_instance
