@@ -11,7 +11,7 @@ description = ""
 license = "MIT"
 name = "timestep"
 readme = "README.md"
-version = "12.0.30"
+version = "12.0.31"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
@@ -57,7 +57,7 @@ timestep_serve = 'timestep.server:main'
 timestep_train = 'timestep.worker:main'
 
 [tool.pytest.ini_options]
-addopts = "--cov=timestep --cov-fail-under=33 -n logical -q -ra -x"
+addopts = "--cov=timestep --cov-fail-under=40 -n logical -q -ra -x"
 asyncio_mode = "auto"
 minversion = "8.2.2"
 testpaths = [

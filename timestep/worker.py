@@ -1,10 +1,13 @@
 import os
 from typing import Optional
 
+import controlflow as cf
+
 # import controlflow as cf
 import httpx
 import openai
 import typer
+from langchain_openai import ChatOpenAI
 
 # from langchain_openai import ChatOpenAI
 from openai.types.beta.assistant import Assistant
@@ -15,6 +18,10 @@ from openai.types.file_object import FileObject
 from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparameters
 from prefect import flow, get_run_logger
 from prefect_shell import ShellOperation
+
+from timestep.config import Settings
+
+settings = Settings()
 
 # from prefect_sqlalchemy import AsyncDriver, ConnectionComponents, SqlAlchemyConnector
 
@@ -34,26 +41,105 @@ app_dir = typer.get_app_dir("timestep")
 # )
 
 
-@flow
-async def agent_flow(inputs: dict, work_type: str):
+@cf.task(timeout_seconds=60)
+def divide_numbers(a: int, b: int) -> float:
+    """Divide two numbers."""
+    pass
+
+
+# @flow
+@cf.flow(timeout_seconds=300)
+# async def agent_flow(inputs: dict, work_type: str):
+async def agent_flow(inputs: dict):
     logger = get_run_logger()
     logger.info(f"inputs: {inputs}")
 
-    work_type = inputs.get("work_type", "train_agent")
+    agent_id = inputs.get("agent_id")
+    logger.info(f"agent_id: {agent_id}")
 
-    # await connector.save(block_name, overwrite=True)
+    thread_id = inputs.get("thread_id")
+    logger.info(f"thread_id: {thread_id}")
 
-    if work_type == "run_agent":
-        await run_agent_flow(run_id=inputs.get("run_id"))
+    openai_client = openai.OpenAI(
+        api_key=settings.openai_api_key.get_secret_value(),
+        base_url=settings.openai_base_url,
+    )
 
-    elif work_type == "train_agent":
-        await train_agent_flow(
-            fine_tuning_job_id=inputs.get("fine_tuning_job_id"),
-            suffix=inputs.get("suffix"),
-        )
+    openai_async_client = openai.AsyncOpenAI(
+        api_key=settings.openai_api_key.get_secret_value(),
+        base_url=settings.openai_base_url,
+    )
 
-    else:
-        raise NotImplementedError
+    assistant = openai_client.beta.assistants.retrieve(assistant_id=agent_id)
+    logger.info(f"assistant: {assistant}")
+
+    model = ChatOpenAI(
+        api_key=openai_client.api_key,
+        base_url=os.environ.get("OPENAI_BASE_URL", settings.openai_base_url),
+        # client=openai_client,
+        # async_client=openai_async_client,
+        model=assistant.model,
+        temperature=0.0,
+    )
+    logger.info(f"model: {model}")
+
+    cf.default_model = model
+
+    agent = cf.default_agent
+
+    # agent = cf.Agent(
+    #     name=assistant.name,
+    #     description=assistant.description,
+    #     instructions=assistant.instructions,
+    #     model=model,
+    #     # tools=assistant.tools,
+    #     # user_access=True,
+    # )
+    # logger.info(f"agent: {agent}")
+
+    # task = cf.Task(
+    #     # context={
+    #     #     "messages": inputs.get("messages"),
+    #     # }
+    #     objective="chat",
+    #     result_type=str,
+    # )
+    # logger.info(f"task: {task}")
+
+    # while task.is_incomplete():
+    #     await agent.run_once(task)
+
+    # await task.run_once_async(agents=[agent])
+
+    # logger.info(f"task.result: {task.result}")
+
+    # work_type = inputs.get("work_type", "train_agent")
+
+    # # await connector.save(block_name, overwrite=True)
+
+    # if work_type == "run_agent":
+    #     await run_agent_flow(
+    #         run_id=inputs.get("run_id"),
+    #     )
+
+    # elif work_type == "train_agent":
+    #     await train_agent_flow(
+    #         fine_tuning_job_id=inputs.get("fine_tuning_job_id"),
+    #         suffix=inputs.get("suffix"),
+    #     )
+
+    # else:
+    #     raise NotImplementedError
+
+    try:
+        result = divide_numbers(10, 0)
+        logger.info(f"result: {result}")
+
+    except ValueError as e:
+        logger.error(f"An error occurred: {e}")
+
+    # return task
+    return result
 
 
 @flow(log_prints=True)

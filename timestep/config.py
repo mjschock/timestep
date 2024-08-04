@@ -1,10 +1,12 @@
 # from typing import Optional
 
+import typer
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    app_dir: str = Field(default=typer.get_app_dir(__package__))
     bearerinfo_func: str = Field(default="timestep.api.decode_token")
     openai_api_key: SecretStr = Field(default="openai_api_key")
     openai_base_url: str = Field(default="http://localhost:8000/api/openai/v1")
