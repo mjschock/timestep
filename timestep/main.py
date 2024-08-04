@@ -2,26 +2,34 @@ import inspect
 import os
 
 import typer
-from sqlmodel import SQLModel, create_engine
 
+from timestep.config import Settings
 from timestep.server import main as timestep_serve
 from timestep.worker import main as timestep_train
 
+# from sqlmodel import SQLModel, create_engine
+
+
 # TODO: move these to the config/env
-app_dir = typer.get_app_dir(__package__)
-default_llamafile_filename = "TinyLlama-1.1B-Chat-v1.0.F16.llamafile"
-default_llamafile_url = f"https://huggingface.co/Mozilla/TinyLlama-1.1B-Chat-v1.0-llamafile/resolve/main/{default_llamafile_filename}?download=true"
+# app_dir = typer.get_app_dir(__package__)
+# default_llamafile_filename = "TinyLlama-1.1B-Chat-v1.0.F16.llamafile"
+# default_llamafile_url = f"https://huggingface.co/Mozilla/TinyLlama-1.1B-Chat-v1.0-llamafile/resolve/main/{default_llamafile_filename}?download=true"
+
+
+settings = Settings()
+
+app_dir = settings.app_dir
 
 os.makedirs(f"{app_dir}/data", exist_ok=True)
 os.makedirs(f"{app_dir}/models", exist_ok=True)
 os.makedirs(f"{app_dir}/work", exist_ok=True)
 
-engine = create_engine(f"sqlite:///{app_dir}/database.db")
-SQLModel.metadata.create_all(
-    bind=engine,
-    checkfirst=True,
-    tables=None,
-)
+# engine = create_engine(f"sqlite:///{app_dir}/database.db")
+# SQLModel.metadata.create_all(
+#     bind=engine,
+#     checkfirst=True,
+#     tables=None,
+# )
 
 
 def get_help_message():

@@ -8,7 +8,11 @@ from openai.types.beta.threads.run import Run
 from openai.types.beta.threads.text import Text
 from openai.types.beta.threads.text_content_block import TextContentBlock
 
-from timestep.database import InstanceStoreSingleton
+# from timestep.database import InstanceStoreSingleton
+
+
+async def cancel_run(*args, **kwargs):
+    raise NotImplementedError
 
 
 # def get_run(thread_id, run_id):  # noqa: E501

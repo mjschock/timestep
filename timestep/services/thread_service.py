@@ -6,6 +6,68 @@ from openai.types.beta.thread import Thread
 from openai.types.beta.threads.message import Message, MessageContent
 from openai.types.beta.threads.text import Text
 from openai.types.beta.threads.text_content_block import TextContentBlock
+from openai.types.model import Model
+from sqlmodel import Field, Session, SQLModel, select
+
+from timestep.config import Settings
+from timestep.database import MessageSQLModel, ThreadSQLModel, engine
+
+
+async def insert_thread(*args, **kwargs):
+    thread = ThreadSQLModel()
+
+    with Session(engine) as session:
+
+        session.add(thread)
+        session.commit()
+        session.refresh(thread)
+
+    return thread
+
+
+async def insert_message(*args, **kwargs):
+    print("=== insert_message ===")
+    print("args: ", args)
+    print("kwargs: ", kwargs)
+
+    attachments = kwargs.get("attachments", [])
+
+    body_content = kwargs.get("body", {}).get("content")
+    # content: List[MessageContent] = []
+    content: List[dict] = []
+
+    if body_content:
+        content.append(
+            # TextContentBlock(
+            dict(
+                # text=Text(
+                text=dict(
+                    annotations=[],
+                    value=(
+                        body_content
+                        if type(body_content) == str
+                        else body_content[0].get("text")
+                    ),
+                ),
+                type="text",
+            )
+        )
+
+    message = MessageSQLModel(
+        attachments=attachments,
+        content=content,
+        role=kwargs.get("body", {}).get("role"),
+        status="incomplete",
+        thread_id=uuid.UUID(kwargs.get("thread_id")),
+    )
+
+    with Session(engine) as session:
+
+        session.add(message)
+        session.commit()
+        session.refresh(message)
+
+    return message
 
 
 # def create_message(thread_id, create_message_request):  # noqa: E501
@@ -24,48 +86,8 @@ async def create_thread_message(body, token_info, thread_id, user):
     # if connexion.request.is_json:
     #     create_message_request = CreateMessageRequest.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print("=== create_message ===")
-
-    # thread = instance_store._shared_instance_state["threads"][thread_id]
-    thread: Thread = Thread(
-        **await get_thread(token_info=token_info, thread_id=thread_id, user=user)
-    )
-
-    content: List[MessageContent] = []
-
-    if body.get("content"):
-        content.append(
-            TextContentBlock(
-                text=Text(
-                    annotations=[],
-                    value=(
-                        body.get("content")
-                        if type(body.get("content")) == str
-                        else body.get("content")[0].get("text")
-                    ),
-                ),
-                type="text",
-            )
-        )
-
-    message = Message(
-        id=str(uuid.uuid4()),
-        attachments=[],
-        content=content,
-        created_at=int(time.time()),
-        object="thread.message",
-        role=body.get("role"),
-        thread_id=thread.id,
-        status="incomplete",
-    )
-
-    print("message: ", message)
-
-    instance_store = InstanceStoreSingleton()
-    instance_store._shared_instance_state["messages"][message.id] = message
-
-    # return message.model_dump(mode="json")
-    return message
+    print("=== create_thread_message ===")
+    raise NotImplementedError
 
 
 # def get_thread(thread_id):  # noqa: E501
@@ -80,11 +102,7 @@ async def get_thread(token_info, thread_id, user):
     :rtype: Union[ThreadObject, Tuple[ThreadObject, int], Tuple[ThreadObject, int, Dict[str, str]]
     """
     print("=== get_thread ===")
-    instance_store = InstanceStoreSingleton()
-    thread = instance_store._shared_instance_state["threads"][thread_id]
-
-    # return thread.model_dump(mode="json")
-    return thread
+    raise NotImplementedError
 
 
 async def get_thread_messages(
@@ -115,59 +133,43 @@ async def get_thread_messages(
 
     :rtype: Union[ListMessagesResponse, Tuple[ListMessagesResponse, int], Tuple[ListMessagesResponse, int, Dict[str, str]]
     """
-    print("=== list_messages ===")
-    print("after: ", after)
-    print("before: ", before)
-    print("limit: ", limit)
-    print("order: ", order)
-    print("token_info: ", token_info)
-    print("thread_id: ", thread_id)
-    print("user: ", user)
+    messages: List[Message] = []
 
-    # thread: Thread = Thread(**await get_thread(token_info=token_info, thread_id=thread_id, user=user))
+    with Session(engine) as session:
+        if after:
+            after_message = session.exec(
+                select(MessageSQLModel).where(MessageSQLModel.id == uuid.UUID(after))
+            ).first()
 
-    after_created_at = (
-        InstanceStoreSingleton()._shared_instance_state["messages"][after].created_at
-        if after
-        else 0
-    )
-    before_created_at = (
-        InstanceStoreSingleton()._shared_instance_state["messages"][before].created_at
-        if before
-        else int(time.time())
-    )
-    limit = None if limit == -1 else limit
+        after_created_at = after_message.created_at if after else 0
 
-    # def message_filter(message: Message):
-    #     return message.created_at > after_created_at and message.created_at < before_created_at and message.thread_id == thread_id
+        before_created_at = (
+            session.exec(
+                select(MessageSQLModel).where(MessageSQLModel.id == uuid.UUID(before))
+            )
+            .first()
+            .created_at
+            if before
+            else int(time.time())
+        )
 
-    # filtered_messages = list(filter(
-    #     function=message_filter,
-    #     iterable=InstanceStoreSingleton()._shared_instance_state["messages"].values(),
-    # ))
+        statement = (
+            select(MessageSQLModel)
+            .where(
+                MessageSQLModel.thread_id == uuid.UUID(thread_id),
+                MessageSQLModel.created_at > after_created_at,
+                MessageSQLModel.created_at < before_created_at,
+            )
+            .order_by(
+                MessageSQLModel.created_at.desc()
+                if order == "desc"
+                else MessageSQLModel.created_at.asc()
+            )
+            .limit(limit)
+        )
 
-    # filtered_messages =
-
-    messages: List[Message] = sorted(
-        [
-            message
-            for message in InstanceStoreSingleton()
-            ._shared_instance_state["messages"]
-            .values()
-            if message.created_at > after_created_at
-            and message.created_at < before_created_at
-            and message.thread_id == thread_id
-        ],
-        key=lambda message: message.created_at,
-        reverse=True if order == "desc" else False,
-    )[0:limit]
-
-    # TODO: handle AsyncCursoPage as well
-
-    # return AsyncCursorPage(
-    # # return SyncCursorPage(
-    #     data=messages,
-    # ).model_dump(mode="json")
+        results = session.exec(statement)
+        messages = results.all()
 
     return messages
 

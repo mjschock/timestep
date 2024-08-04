@@ -1,8 +1,13 @@
 import asyncio
+import os
 
 from openai import AsyncOpenAI, AsyncStream
 from openai.types.completion import Completion
 from sse_starlette import EventSourceResponse
+
+from timestep.config import Settings
+
+settings = Settings()
 
 
 async def create_completion(body, token_info: dict, user: str):
@@ -14,13 +19,13 @@ async def create_completion(body, token_info: dict, user: str):
     :rtype: Union[CreateCompletionResponse, Tuple[CreateCompletionResponse, int], Tuple[CreateCompletionResponse, int, Dict[str, str]]
     """
     client = AsyncOpenAI(
-        api_key="sk-no-key-required",
+        api_key=settings.openai_api_key.get_secret_value(),
         base_url="http://localhost:8080/v1",
     )
 
     completion: Completion | AsyncStream[Completion] = await client.completions.create(
         **body,
-        user=user,
+        # user=user,
     )
 
     if type(completion) == AsyncStream:

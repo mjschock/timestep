@@ -9,15 +9,54 @@ from openai.types.beta.assistant import Assistant
 from openai.types.beta.assistant_deleted import AssistantDeleted
 from openai.types.beta.assistant_update_params import AssistantUpdateParams
 from openai.types.beta.thread import Thread
-from openai.types.beta.threads.message import Message, MessageContent
+from openai.types.beta.threads.message import Attachment, Message, MessageContent
 from openai.types.beta.threads.run import Run
 from openai.types.beta.threads.text import Text
 from openai.types.beta.threads.text_content_block import TextContentBlock
+from prefect.client.orchestration import get_client
 from prefect.deployments import run_deployment
 from prefect.deployments.flow_runs import FlowRun
+from prefect.flow_runs import wait_for_flow_run
 from sse_starlette import EventSourceResponse
 
-from timestep.services import agent_service
+from timestep.services import agent_service, run_service, thread_service
+
+# class StateType(AutoEnum):
+#     """Enumeration of state types."""
+
+#     SCHEDULED = AutoEnum.auto()
+#     PENDING = AutoEnum.auto()
+#     RUNNING = AutoEnum.auto()
+#     COMPLETED = AutoEnum.auto()
+#     FAILED = AutoEnum.auto()
+#     CANCELLED = AutoEnum.auto()
+#     CRASHED = AutoEnum.auto()
+#     PAUSED = AutoEnum.auto()
+#     CANCELLING = AutoEnum.auto()
+
+# RunStatus = Literal[
+#     "queued",
+#     "in_progress",
+#     "requires_action",
+#     "cancelling",
+#     "cancelled",
+#     "failed",
+#     "completed",
+#     "incomplete",
+#     "expired",
+# ]
+
+state_type_to_run_status = {
+    "SCHEDULED": "queued",
+    "PENDING": "queued",
+    "RUNNING": "in_progress",
+    "COMPLETED": "completed",
+    "FAILED": "failed",
+    "CANCELLED": "cancelled",
+    "CRASHED": "failed",
+    "PAUSED": "incomplete",
+    "CANCELLING": "cancelling",
+}
 
 # from timestep.worker import step
 
@@ -48,7 +87,7 @@ async def cancel_run(*args, **kwargs):
     print("args: ", args)
     print("kwargs: ", kwargs)
 
-    raise NotImplementedError
+    return await run_service.cancel_run(*args, **kwargs)
 
 
 # def create_assistant(create_assistant_request):  # noqa: E501
@@ -62,13 +101,12 @@ async def create_assistant(body, token_info: dict, user: str):
 
     :rtype: Union[AssistantObject, Tuple[AssistantObject, int], Tuple[AssistantObject, int, Dict[str, str]]
     """
-    # if connexion.request.is_json:
-    #     create_assistant_request = CreateAssistantRequest.from_dict(connexion.request.get_json())  # noqa: E501
-
-    print("=== create_assistant ===")
+    agent = await agent_service.insert_agent(
+        body=body,
+    )
 
     assistant = Assistant(
-        id=str(uuid.uuid4()),
+        id=str(agent.id),
         created_at=int(time.time()),
         description=body.get("description"),
         instructions=body.get("instructions"),
@@ -79,8 +117,6 @@ async def create_assistant(body, token_info: dict, user: str):
     )
 
     print("assistant: ", assistant)
-
-    await agent_service.insert_agent(agent=assistant)
 
     return assistant.model_dump(mode="json")
 
@@ -98,170 +134,29 @@ async def create_message(body, token_info, thread_id, user):
 
     :rtype: Union[MessageObject, Tuple[MessageObject, int], Tuple[MessageObject, int, Dict[str, str]]
     """
-    # if connexion.request.is_json:
-    #     create_message_request = CreateMessageRequest.from_dict(connexion.request.get_json())  # noqa: E501
-
-    print("=== create_message ===")
-
-    # thread = instance_store._shared_instance_state["threads"][thread_id]
-    thread: Thread = Thread(
-        **await get_thread(token_info=token_info, thread_id=thread_id, user=user)
+    message = await thread_service.insert_message(
+        body=body,
+        token_info=token_info,
+        thread_id=thread_id,
+        user=user,
     )
-
-    content: List[MessageContent] = []
-
-    if body.get("content"):
-        content.append(
-            TextContentBlock(
-                text=Text(
-                    annotations=[],
-                    value=(
-                        body.get("content")
-                        if type(body.get("content")) == str
-                        else body.get("content")[0].get("text")
-                    ),
-                ),
-                type="text",
-            )
-        )
 
     message = Message(
-        id=str(uuid.uuid4()),
-        attachments=[],
-        content=content,
-        created_at=int(time.time()),
+        id=str(message.id),
+        attachments=[Attachment(**attachment) for attachment in message.attachments],
+        content=[
+            TextContentBlock(**content) for content in message.content
+        ],  # TODO: handle other content types
+        created_at=message.created_at.timestamp(),
         object="thread.message",
-        role=body.get("role"),
-        thread_id=thread.id,
-        status="incomplete",
+        role=message.role,
+        status=message.status,
+        thread_id=str(message.thread_id),
     )
-
-    print("message: ", message)
-
-    instance_store = InstanceStoreSingleton()
-    instance_store._shared_instance_state["messages"][message.id] = message
 
     return message.model_dump(mode="json")
 
 
-# TODO: move this somewhere more appropriate
-# maybe get rid of BackgroundTask and just trigger a run deployment
-# @flow(log_prints=True)
-# @cf.flow
-# async def run_run(run_id: str, token_info: dict, thread_id: str, user: str):
-#     print('=== run_run ===')
-#     run: Run = Run(**await get_run(run_id=run_id, token_info=token_info, thread_id=thread_id, user=user))
-#     assistant: Assistant = Assistant(**await get_assistant(assistant_id=run.assistant_id, token_info=token_info, user=user))
-#     thread: Thread = Thread(**await get_thread(token_info=token_info, thread_id=thread_id, user=user))
-
-#     # # TODO: use ControlFlow to run_once...
-#     # @cf.flow
-#     # def run_run_flow():
-#     #     agent = cf.Agent(
-#     #         name=assistant.name,
-#     #         description=assistant.description,
-#     #         instructions=assistant.instructions,
-#     #         # memory
-#     #         # tools=,
-#     #         # ...
-#     #     )
-
-#     #     task = cf.Task(
-#     #         "Tell me something I don't know",
-#     #         # objective=
-#     #         # instructions=
-#     #         agents=[agent]
-#     #     )
-
-#     #     return task
-
-#     # result = run_run_flow()
-
-#     # print('result: ', result)
-
-#     # messages: List[Message] = list_messages(
-#     # SyncCursorPage[Message] = await list_messages(
-#     list_messages_response = await list_messages(
-#         limit=-1,
-#         order='asc',
-#         token_info=token_info,
-#         thread_id=thread_id,
-#         user=user,
-#     )
-
-#     messages = list_messages_response.get("data")
-
-#     system_message = {
-#         "content": "You are a helpful assistant with access to tools. Please be honest and do not hallucinate.",
-#         "role": "system",
-#     }
-
-#     messages = [system_message] + messages
-#     print('messages: ', messages)
-
-#     def get_message_content(message):
-#         content = message.get("content")
-
-#         if type(content) == list:
-#             if message.get("role") == "user":
-#                 return [{
-#                     "text": _content.get("text").get("value"),
-#                     "type": _content.get("type"),
-#                 } for _content in content]
-
-#             else:
-#                 assert len(content) == 1
-#                 return content[0].get("text").get("value")
-
-#         else:
-#             return content
-
-#     body = { # CompletionCreateParamsNonStreaming
-#         "messages": [ {
-#             "content": get_message_content(message),
-#             "role": message.get("role"),
-#         } for message in messages ],
-#         "model": assistant.model,
-#         "tools": assistant.tools,
-#     }
-#     print('body: ', body)
-
-#     chat_completion: ChatCompletion = ChatCompletion(**await create_chat_completion(body=body, token_info=token_info, user=user)) # TODO: handle streaming use case
-#     print('chat_completion: ', chat_completion)
-
-#     choice = chat_completion.choices[0]
-#     print('choice: ', choice)
-
-#     finish_reason = choice.finish_reason
-#     print('finish_reason: ', finish_reason) # "stop", "length", "tool_calls", "content_filter", "function_call"
-
-#     response_message = chat_completion.choices[0].message
-
-#     tool_calls = response_message.tool_calls
-
-#     if tool_calls:
-#         raise NotImplementedError
-
-#     await create_message(body={
-#         "content": response_message.content,
-#         "role": response_message.role,
-#     }, token_info=token_info, thread_id=thread_id, user=user)
-
-#     # time.sleep(1)  # wait for the process to finish
-
-#     modify_run_request = {
-#         "status": "completed",
-#     }
-
-#     await modify_run(modify_run_request=modify_run_request, run_id=run_id, token_info=token_info, thread_id=thread_id, user=user)
-
-#     # run: Run = Run(**await get_run(run_id=run_id, token_info=token_info, thread_id=thread_id, user=user))
-
-#     # return run
-
-
-# def create_run(thread_id, create_run_request):  # noqa: E501
-# def create_run(body, token_info, user, thread_id):
 async def create_run(body, token_info, thread_id, user):
     """Create a run.
 
@@ -274,49 +169,16 @@ async def create_run(body, token_info, thread_id, user):
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
     """
-    # if connexion.request.is_json:
-    #     create_run_request = CreateRunRequest.from_dict(connexion.request.get_json())  # noqa: E501
-
-    print("=== create_run ===")
-    print("body: ", body)
-
     stream = body.get("stream", False)
     assistant_id = body.get("assistant_id")
 
-    assistant: Assistant = Assistant(
-        **await get_assistant(
-            assistant_id=assistant_id, token_info=token_info, user=user
-        )
-    )
-    thread: Thread = Thread(
-        **await get_thread(token_info=token_info, thread_id=thread_id, user=user)
-    )
-
-    run = Run(
-        id=str(uuid.uuid4()),
-        assistant_id=assistant.id,
-        created_at=int(time.time()),
-        instructions=assistant.instructions,
-        model=assistant.model,
-        object="thread.run",
-        parallel_tool_calls=False,
-        status="queued",
-        thread_id=thread.id,
-        tools=assistant.tools,
-    )
-
-    print("run: ", run)
-    run_id = run.id
-
-    instance_store = InstanceStoreSingleton()
-    instance_store._shared_instance_state["runs"][run.id] = run
-
     flow_run: FlowRun = await run_deployment(
-        idempotency_key=run.id,
+        # idempotency_key=run.id,
         name="agent-flow/agent-flow-deployment",
         parameters={
             "inputs": {
-                "run_id": run_id,
+                "agent_id": assistant_id,
+                "thread_id": thread_id,
             }
         },
         # job_variables={"env": {"MY_ENV_VAR": "staging"}},
@@ -326,56 +188,49 @@ async def create_run(body, token_info, thread_id, user):
     print("flow_run: ", flow_run)
 
     if stream:
+        raise NotImplementedError
 
-        async def run_event_publisher():
-            run: Run = Run(
-                **await get_run(
-                    run_id=run_id, token_info=token_info, thread_id=thread_id, user=user
-                )
-            )
+        # async def run_event_publisher():
+        #     wait_for_flow_run(flow_run.id)
 
-            # response: Iterator[CreateChatCompletionStreamResponse] = model.create_chat_completion(**create_chat_completion_kwargs)
-            # response: Generator[ChatCompletionChunk] = model.create_chat_completion_openai_v1(**create_chat_completion_kwargs)
-            # response: Stream[ChatCompletionChunk] = model.astream(input=messages)
-            await step(
-                run_id=run.id, token_info=token_info, thread_id=run.thread_id, user=user
-            )
+        #     try:
+        #         # for chunk in response:
+        #         # # async for chunk in response:
+        #         #     chunk = ChatCompletionChunk(**chunk)
+        #         #     # yield json.dumps(chunk)
+        #         #     yield json.dumps(chunk.model_dump(mode="json"))
+        #         #     # yield ChatCompletionChunk(**chunk).model_dump(mode="json")
+        #         #     # yield chunk.model_dump(mode="json")
 
-            run: Run = Run(
-                **await get_run(
-                    run_id=run.id, token_info=token_info, thread_id=thread_id, user=user
-                )
-            )
+        #     except asyncio.CancelledError as e:
+        #         # print(f"Disconnected from client (via refresh/close) {req.client}")
+        #         print(f"Disconnected from client (via refresh/close)")
+        #         # Do any other cleanup, if any
+        #         raise e
 
-            try:
-                yield json.dumps(run.model_dump(mode="json"))
-
-                # for chunk in response:
-                # # async for chunk in response:
-                #     chunk = ChatCompletionChunk(**chunk)
-                #     # yield json.dumps(chunk)
-                #     yield json.dumps(chunk.model_dump(mode="json"))
-                #     # yield ChatCompletionChunk(**chunk).model_dump(mode="json")
-                #     # yield chunk.model_dump(mode="json")
-
-            except asyncio.CancelledError as e:
-                # print(f"Disconnected from client (via refresh/close) {req.client}")
-                print(f"Disconnected from client (via refresh/close)")
-                # Do any other cleanup, if any
-                raise e
-
-        # print(f'=== RETURN: {__name__}.create_chat_completion(body: CompletionCreateParams, token_info: dict, user: str)) ===')
-        return EventSourceResponse(run_event_publisher())
+        # # print(f'=== RETURN: {__name__}.create_chat_completion(body: CompletionCreateParams, token_info: dict, user: str)) ===')
+        # return EventSourceResponse(run_event_publisher())
 
     else:
-        # task = BackgroundTask(step, run_id=run.id, token_info=token_info, thread_id=run.thread_id, user=user)
+        agent = await agent_service.get_agent(id=assistant_id)
 
-        # return JSONResponse(run.model_dump(mode="json"), background=task)
+        run = Run(
+            id=str(flow_run.id),
+            assistant_id=str(agent.id),
+            created_at=int(flow_run.created.timestamp()),
+            instructions=agent.instructions,
+            model=agent.model,
+            object="thread.run",
+            parallel_tool_calls=False,
+            status="queued",
+            thread_id=thread_id,
+            tools=agent.tools,
+        )
+
         return run.model_dump(mode="json")
 
 
-# def create_thread(create_thread_request=None):  # noqa: E501
-async def create_thread(*args, **kwargs):
+async def create_thread(body, token_info, user):
     """Create a thread.
 
      # noqa: E501
@@ -385,24 +240,14 @@ async def create_thread(*args, **kwargs):
 
     :rtype: Union[ThreadObject, Tuple[ThreadObject, int], Tuple[ThreadObject, int, Dict[str, str]]
     """
-    # if connexion.request.is_json:
-    #     create_thread_request = CreateThreadRequest.from_dict(connexion.request.get_json())  # noqa: E501
-
-    print("=== create_thread ===")
-    print("args: ", args)
-    print("kwargs: ", kwargs)
+    thread = await thread_service.insert_thread(body, token_info, user)
 
     thread = Thread(
-        id=str(uuid.uuid4()),
+        id=str(thread.id),
         created_at=int(time.time()),
         object="thread",
         # tool_resources
     )
-
-    print("thread: ", thread)
-
-    instance_store = InstanceStoreSingleton()
-    instance_store._shared_instance_state["threads"][thread.id] = thread
 
     return thread.model_dump(mode="json")
 
@@ -425,6 +270,10 @@ async def create_thread_and_run(*args, **kwargs):
     print("args: ", args)
     print("kwargs: ", kwargs)
 
+    # thread = client.beta.threads.create()
+    # run = submit_message(MATH_ASSISTANT_ID, thread, user_input)
+    # return thread, run
+
     raise NotImplementedError
 
 
@@ -439,17 +288,10 @@ async def delete_assistant(assistant_id: str, token_info: dict, user: str):
 
     :rtype: Union[DeleteAssistantResponse, Tuple[DeleteAssistantResponse, int], Tuple[DeleteAssistantResponse, int, Dict[str, str]]
     """
-    print("=== delete_assistant ===")
-    # print('args: ', args)
-    # print('kwargs: ', kwargs)
-
-    # raise NotImplementedError
-
-    instance_store = InstanceStoreSingleton()
-    del instance_store._shared_instance_state["assistants"][assistant_id]
+    agent = await agent_service.delete_agent(id=assistant_id)
 
     return AssistantDeleted(
-        id=assistant_id,
+        id=str(agent.id),
         deleted=True,
         object="assistant.deleted",
     ).model_dump(mode="json")
@@ -504,14 +346,21 @@ async def get_assistant(assistant_id, token_info, user):
 
     :rtype: Union[AssistantObject, Tuple[AssistantObject, int], Tuple[AssistantObject, int, Dict[str, str]]
     """
-    print("=== get_assistant ===")
+    agent = await agent_service.get_agent(id=assistant_id)
 
-    return (
-        InstanceStoreSingleton()
-        ._shared_instance_state["assistants"]
-        .get(assistant_id)
-        .model_dump(mode="json")
+    assistant = Assistant(
+        id=str(agent.id),
+        created_at=agent.created_at.timestamp(),
+        instructions=agent.instructions,
+        model=agent.model,
+        name=agent.name,
+        object="assistant",
+        tools=agent.tools,
     )
+
+    print("assistant: ", assistant)
+
+    return assistant.model_dump(mode="json")
 
 
 # def get_message(thread_id, message_id):  # noqa: E501
@@ -547,14 +396,26 @@ async def get_run(run_id, thread_id, token_info, user):
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
     """
-    print("=== get_run ===")
+    client = get_client()
+    flow_run: FlowRun = await client.read_flow_run(flow_run_id=uuid.UUID(run_id))
+    assistant_id = flow_run.parameters["inputs"]["agent_id"]
 
-    return (
-        InstanceStoreSingleton()
-        ._shared_instance_state["runs"]
-        .get(run_id)
-        .model_dump(mode="json")
+    agent = await agent_service.get_agent(id=assistant_id)
+
+    run = Run(
+        id=str(flow_run.id),
+        assistant_id=str(agent.id),
+        created_at=int(flow_run.created.timestamp()),
+        instructions=agent.instructions,
+        model=agent.model,
+        object="thread.run",
+        parallel_tool_calls=False,
+        status=state_type_to_run_status[flow_run.state.type],
+        thread_id=thread_id,
+        tools=agent.tools,
     )
+
+    return run.model_dump(mode="json")
 
 
 # def get_run_step(thread_id, run_id, step_id):  # noqa: E501
@@ -591,10 +452,7 @@ async def get_thread(token_info, thread_id, user):
     :rtype: Union[ThreadObject, Tuple[ThreadObject, int], Tuple[ThreadObject, int, Dict[str, str]]
     """
     print("=== get_thread ===")
-    instance_store = InstanceStoreSingleton()
-    thread = instance_store._shared_instance_state["threads"][thread_id]
-
-    return thread.model_dump(mode="json")
+    raise NotImplementedError
 
 
 # def list_assistants(limit=None, order=None, after=None, before=None):  # noqa: E501
@@ -650,55 +508,17 @@ async def list_messages(
 
     :rtype: Union[ListMessagesResponse, Tuple[ListMessagesResponse, int], Tuple[ListMessagesResponse, int, Dict[str, str]]
     """
-    print("=== list_messages ===")
-    print("after: ", after)
-    print("before: ", before)
-    print("limit: ", limit)
-    print("order: ", order)
-    print("token_info: ", token_info)
-    print("thread_id: ", thread_id)
-    print("user: ", user)
-
-    # thread: Thread = Thread(**await get_thread(token_info=token_info, thread_id=thread_id, user=user))
-
-    after_created_at = (
-        InstanceStoreSingleton()._shared_instance_state["messages"][after].created_at
-        if after
-        else 0
+    messages = await thread_service.get_thread_messages(
+        token_info=token_info,
+        thread_id=thread_id,
+        user=user,
+        after=after,
+        before=before,
+        limit=limit,
+        order=order,
     )
-    before_created_at = (
-        InstanceStoreSingleton()._shared_instance_state["messages"][before].created_at
-        if before
-        else int(time.time())
-    )
-    limit = None if limit == -1 else limit
-
-    # def message_filter(message: Message):
-    #     return message.created_at > after_created_at and message.created_at < before_created_at and message.thread_id == thread_id
-
-    # filtered_messages = list(filter(
-    #     function=message_filter,
-    #     iterable=InstanceStoreSingleton()._shared_instance_state["messages"].values(),
-    # ))
-
-    # filtered_messages =
-
-    messages: List[Message] = sorted(
-        [
-            message
-            for message in InstanceStoreSingleton()
-            ._shared_instance_state["messages"]
-            .values()
-            if message.created_at > after_created_at
-            and message.created_at < before_created_at
-            and message.thread_id == thread_id
-        ],
-        key=lambda message: message.created_at,
-        reverse=True if order == "desc" else False,
-    )[0:limit]
 
     # TODO: handle AsyncCursoPage as well
-
     return AsyncCursorPage(
         # return SyncCursorPage(
         data=messages,
@@ -774,46 +594,23 @@ async def modify_assistant(
 
     :rtype: Union[AssistantObject, Tuple[AssistantObject, int], Tuple[AssistantObject, int, Dict[str, str]]
     """
-    # if connexion.request.is_json:
-    #     modify_assistant_request = ModifyAssistantRequest.from_dict(connexion.request.get_json())  # noqa: E501
-
-    print("=== modify_assistant ===")
-    print("assistant_id: ", assistant_id)
-    print("body: ", body)
-
-    assistant: Assistant = Assistant(
-        **await get_assistant(
-            assistant_id=assistant_id, token_info=token_info, user=user
-        )
+    agent = await agent_service.update_agent(
+        id=assistant_id,
+        body=body,
     )
 
-    # assistant = Assistant(
-    #     id=str(uuid.uuid4()),
-    #     created_at=int(time.time()),
-    #     description=body.get("description"),
-    #     instructions=body.get("instructions"),
-    #     model=body.get("model"),
-    #     name=body.get("name"),
-    #     object="assistant",
-    #     tools=body.get("tools", [])
-    # )
-
-    print("assistant [before]: ", assistant)
-
-    assistant.description = body.get("description", assistant.description)
-    assistant.instructions = body.get("instructions", assistant.instructions)
-    assistant.model = body.get("model", assistant.model)
-    assistant.name = body.get("name", assistant.name)
-    assistant.tools = body.get("tools", assistant.tools)
-
-    print("assistant [after]: ", assistant)
-
-    instance_store = InstanceStoreSingleton()
-    instance_store._shared_instance_state["assistants"][assistant.id] = assistant
-
-    return await get_assistant(
-        assistant_id=assistant_id, token_info=token_info, user=user
+    assistant = Assistant(
+        id=str(agent.id),
+        created_at=agent.created_at.timestamp(),
+        # description=agent.description,
+        instructions=agent.instructions,
+        model=agent.model,
+        name=agent.name,
+        object="assistant",
+        tools=agent.tools,
     )
+
+    return assistant.model_dump(mode="json")
 
 
 # def modify_message(thread_id, message_id, modify_message_request):  # noqa: E501
@@ -856,28 +653,10 @@ async def modify_run(modify_run_request, run_id, token_info, thread_id, user, **
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
     """
-    # if connexion.request.is_json:
-    #     modify_run_request = ModifyRunRequest.from_dict(connexion.request.get_json())  # noqa: E501
-
     print("=== modify_run ===")
-    print("modify_run_request: ", modify_run_request)
-    # print('args: ', args)
-    print("kwargs: ", kwargs)
-
-    run: Run = Run(
-        **await get_run(
-            run_id=run_id, token_info=token_info, thread_id=thread_id, user=user
-        )
-    )
-
-    run.status = modify_run_request.get("status")
-
-    InstanceStoreSingleton()._shared_instance_state["runs"][run_id] = run
-
-    return run.model_dump(mode="json")
+    raise NotImplementedError
 
 
-# def modify_thread(thread_id, modify_thread_request):  # noqa: E501
 async def modify_thread(*args, **kwargs):
     """Modifies a thread.
 

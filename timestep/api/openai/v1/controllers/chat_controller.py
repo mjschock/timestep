@@ -1,10 +1,15 @@
 import asyncio
+import os
 
 from openai import AsyncOpenAI, AsyncStream
 from openai.types.chat.chat_completion import ChatCompletion
 from openai.types.chat.chat_completion_chunk import ChatCompletionChunk
 from openai.types.chat.completion_create_params import CompletionCreateParams
 from sse_starlette import EventSourceResponse
+
+from timestep.config import Settings
+
+settings = Settings()
 
 
 async def create_chat_completion(
@@ -20,14 +25,14 @@ async def create_chat_completion(
     :rtype: Union[CreateChatCompletionResponse, Tuple[CreateChatCompletionResponse, int], Tuple[CreateChatCompletionResponse, int, Dict[str, str]]
     """
     client = AsyncOpenAI(
-        api_key="sk-no-key-required",
+        api_key=settings.openai_api_key.get_secret_value(),
         base_url="http://localhost:8080/v1",
     )
 
     chat_completion: ChatCompletion | AsyncStream[ChatCompletionChunk] = (
         await client.chat.completions.create(
             **body,
-            user=user,
+            # user=user,
         )
     )
 

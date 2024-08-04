@@ -1,33 +1,83 @@
 import time
 import uuid
 
-import typer
 from langchain_community.llms.llamafile import Llamafile
-
-# from llama_cpp import Llama
-# from llama_cpp.llama_chat_format import (
-#    Llama3VisionAlpha,
-#    Llava15ChatHandler,
-#    Llava16ChatHandler,
-#    MoondreamChatHandler,
-#    NanoLlavaChatHandler,
-# )
-# from llama_cpp.llama_tokenizer import LlamaHFTokenizer
 from openai.types.model import Model
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Session, SQLModel
 
-# from stable_diffusion_cpp import StableDiffusion
+from timestep.config import Settings
+from timestep.database import AgentSQLModel, engine
 
-app_dir = typer.get_app_dir("timestep")
-# from timestep.database import InstanceStoreSingleton
+settings = Settings()
+
+app_dir = settings.app_dir
+default_tools = []
+
+
+async def delete_agent(id):
+    with Session(engine) as session:
+        agent = session.get(AgentSQLModel, uuid.UUID(id))
+
+        session.delete(agent)
+        session.commit()
+
+    return agent
 
 
 async def get_default_agent():
     return None
 
 
-async def insert_agent(agent):
-    return None
+async def get_agent(id):
+    with Session(engine) as session:
+        agent = session.get(AgentSQLModel, uuid.UUID(id))
+
+    return agent
+
+
+async def insert_agent(body):
+    print("=== insert_agent ===")
+    print("body: ", body)
+
+    instructions = body.get("instructions")
+    model = body.get("model")
+    name = body.get("name")
+    tools = body.get("tools", default_tools)
+
+    agent = AgentSQLModel(
+        instructions=instructions,
+        model=model,
+        name=name,
+        tools=tools,
+    )
+
+    with Session(engine) as session:
+
+        session.add(agent)
+        session.commit()
+        session.refresh(agent)
+
+    return agent
+
+
+async def update_agent(id, body):
+    print("=== update_agent ===")
+    print("id: ", id)
+    print("body: ", body)
+
+    with Session(engine) as session:
+        agent = session.get(AgentSQLModel, uuid.UUID(id))
+
+        agent.instructions = body.get("instructions", agent.instructions)
+        agent.model = body.get("model", agent.model)
+        agent.name = body.get("name", agent.name)
+        agent.tools = body.get("tools", agent.tools)
+
+        session.add(agent)
+        session.commit()
+        session.refresh(agent)
+
+    return agent
 
 
 # class AgentService(object):
