@@ -35,7 +35,7 @@ connexion_app = AsyncApp(import_name=__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    create_db_and_tables()
+    # create_db_and_tables()
 
     agent_flow = await flow.from_source(
         source=str(Path(__file__).parent),
@@ -219,6 +219,8 @@ def main(*args, **kwargs):
 
     cwd = os.getcwd()
     print(f"cwd: {cwd}")
+
+    create_db_and_tables()
 
     uvicorn.run(
         f"{__name__}:fastapi_app",
