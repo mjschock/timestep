@@ -1,3 +1,4 @@
+import os
 import uuid
 from typing import List
 
@@ -6,8 +7,15 @@ from sqlmodel import Field, SQLModel, create_engine
 
 from timestep.config import Settings
 
+settings = Settings()
+app_dir = settings.app_dir
+os.makedirs(app_dir, exist_ok=True)
+engine = create_engine(f"sqlite:///{app_dir}/database.db")
+
 
 class TimestampMixin(object):
+    __table_args__ = {"extend_existing": True}
+
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
@@ -38,11 +46,6 @@ class MessageSQLModel(SQLModel, TimestampMixin, table=True):
     role: str = Field()
     status: str = Field()  # status: Literal['in_progress', 'incomplete', 'completed']
     thread_id: uuid.UUID = Field(foreign_key="threads.id")
-
-
-settings = Settings()
-app_dir = settings.app_dir
-engine = create_engine(f"sqlite:///{app_dir}/database.db")
 
 
 # def create_db_and_tables():
