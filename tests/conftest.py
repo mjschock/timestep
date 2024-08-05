@@ -5,7 +5,7 @@ import pytest
 import pytest_asyncio
 from asgi_lifespan import LifespanManager
 
-from timestep.database import create_db_and_tables
+# from timestep.database import create_db_and_tables
 from timestep.server import fastapi_app
 from timestep.config import Settings
 
@@ -15,9 +15,6 @@ settings = Settings()
     scope="session",
 )
 async def app(tmp_path_factory, worker_id):
-    if worker_id == "master":
-        create_db_and_tables()
-
     async with LifespanManager(app=fastapi_app) as manager:
         print("App is ready")
         yield manager.app
