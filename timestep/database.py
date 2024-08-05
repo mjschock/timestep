@@ -45,13 +45,12 @@ app_dir = settings.app_dir
 engine = create_engine(f"sqlite:///{app_dir}/database.db")
 
 
-def create_db_and_tables():
-    SQLModel.metadata.create_all(
-        bind=engine,
-        checkfirst=True,
-        tables=None,
-    )
+# def create_db_and_tables():
+SQLModel.metadata.create_all(
+    bind=engine,
+    checkfirst=True,
+    tables=None,
+)
 
-
-if __name__ == "__main__":
-    create_db_and_tables()
+# if __name__ == "__main__":
+#     create_db_and_tables()

@@ -15,7 +15,8 @@ from prefect import flow
 from tqdm import tqdm
 
 from timestep.api.openai.v1.controllers.completions_controller import create_completion
-from timestep.database import create_db_and_tables
+
+# from timestep.database import create_db_and_tables
 
 # from timestep.utils import download_with_progress_bar, start_shell_script
 
@@ -219,8 +220,6 @@ def main(*args, **kwargs):
 
     cwd = os.getcwd()
     print(f"cwd: {cwd}")
-
-    create_db_and_tables()
 
     uvicorn.run(
         f"{__name__}:fastapi_app",
