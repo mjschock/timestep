@@ -10,3 +10,6 @@
 [submodule "3rdparty/tinygrad"]
 	path = 3rdparty/tinygrad
 	url = https://github.com/tinygrad/tinygrad.git
+[submodule "3rdparty/sqlite-vec"]
+	path = 3rdparty/sqlite-vec
+	url = https://github.com/asg017/sqlite-vec.git
