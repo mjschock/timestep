@@ -7,15 +7,6 @@ from timestep.config import Settings
 from timestep.server import main as timestep_serve
 from timestep.worker import main as timestep_train
 
-# from sqlmodel import SQLModel, create_engine
-
-
-# TODO: move these to the config/env
-# app_dir = typer.get_app_dir(__package__)
-# default_llamafile_filename = "TinyLlama-1.1B-Chat-v1.0.F16.llamafile"
-# default_llamafile_url = f"https://huggingface.co/Mozilla/TinyLlama-1.1B-Chat-v1.0-llamafile/resolve/main/{default_llamafile_filename}?download=true"
-
-
 settings = Settings()
 
 app_dir = settings.app_dir
