@@ -15,7 +15,7 @@ settings = Settings()
     scope="session",
 )
 async def app(tmp_path_factory, worker_id):
-    async with LifespanManager(app=fastapi_app) as manager:
+    async with LifespanManager(app=fastapi_app, startup_timeout=30) as manager:
         print("App is ready")
         yield manager.app
         print('App is closing')

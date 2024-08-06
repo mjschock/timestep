@@ -3,82 +3,21 @@ import uuid
 
 from langchain_community.llms.llamafile import Llamafile
 from openai.types.model import Model
-from sqlmodel import Field, Session, SQLModel
+from sqlmodel import Field, Session, SQLModel, select
 
 from timestep.config import Settings
-from timestep.database import AgentSQLModel, engine
+from timestep.database import (
+    AgentSQLModel,
+    ModelAliasSQLModel,
+    ModelSQLModel,
+    create_db_and_tables,
+    engine,
+)
 
 settings = Settings()
 
 app_dir = settings.app_dir
 default_tools = []
-
-
-async def delete_agent(id):
-    with Session(engine) as session:
-        agent = session.get(AgentSQLModel, uuid.UUID(id))
-
-        session.delete(agent)
-        session.commit()
-
-    return agent
-
-
-async def get_default_agent():
-    return None
-
-
-async def get_agent(id):
-    with Session(engine) as session:
-        agent = session.get(AgentSQLModel, uuid.UUID(id))
-
-    return agent
-
-
-async def insert_agent(body):
-    print("=== insert_agent ===")
-    print("body: ", body)
-
-    instructions = body.get("instructions")
-    model = body.get("model")
-    name = body.get("name")
-    tools = body.get("tools", default_tools)
-
-    agent = AgentSQLModel(
-        instructions=instructions,
-        model=model,
-        name=name,
-        tools=tools,
-    )
-
-    with Session(engine) as session:
-
-        session.add(agent)
-        session.commit()
-        session.refresh(agent)
-
-    return agent
-
-
-async def update_agent(id, body):
-    print("=== update_agent ===")
-    print("id: ", id)
-    print("body: ", body)
-
-    with Session(engine) as session:
-        agent = session.get(AgentSQLModel, uuid.UUID(id))
-
-        agent.instructions = body.get("instructions", agent.instructions)
-        agent.model = body.get("model", agent.model)
-        agent.name = body.get("name", agent.name)
-        agent.tools = body.get("tools", agent.tools)
-
-        session.add(agent)
-        session.commit()
-        session.refresh(agent)
-
-    return agent
-
 
 # class AgentService(object):
 #     # models: dict[uuid.UUID] = {}
@@ -93,17 +32,6 @@ async def update_agent(id, body):
 #         return obj
 
 
-class ModelSQLModel(Model, SQLModel, table=True):
-    __tablename__: str = "models"
-    # object: str = "model"
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    # id: uuid.uuid4 = Field(default_factory=uuid.uuid4, primary_key=True)
-
-    # group_id: uuid.UUID = Field(foreign_key=groups.id)
-    object: str = "model"
-    # organization_id: uuid.UUID = Field(foreign_key=organizations.id)
-
-
 class ModelInstanceStoreSingleton(object):
     _shared_model_instances: dict[str] = {}
 
@@ -111,262 +39,193 @@ class ModelInstanceStoreSingleton(object):
         obj = super(ModelInstanceStoreSingleton, cls).__new__(cls, *args, **kwargs)
         obj.__dict__ = cls._shared_model_instances
 
+        create_db_and_tables()
+
+        try:
+            obj.create_model(
+                model_aliases=[
+                    "gpt-3.5-turbo",
+                    "gpt-3.5-turbo-1106",
+                    "gpt-4-1106-preview",
+                    "gpt-4-turbo",
+                    "gpt-4o",
+                    "gpt-4o-mini",
+                    "llamafile",
+                    "LLaMA_CPP",
+                ],
+            )
+
+        except Exception as e:
+            print(f"Error creating model: {e}")
+
         return obj
 
-    def create_model(self, model_aliases=[], model_name=None):
-        # chat_format = None
-        chat_format = "chatml-function-calling"
-        chat_handler = None
-        echo = True
-        embedding = False
-        filename = None
-        mmproj_model_filename = "*mmproj*"
-        mmproj_model_repo_id = None
-        model_instance = None
-        # n_ctx = 2048
-        n_ctx = 4096
-        # n_ctx = 8192
-        # n_ctx = 16192
-        n_gpu_layers = -1
-        num_pred_tokens = (
-            2 if n_gpu_layers == 0 else 10
-        )  # num_pred_tokens is the number of tokens to predict 10 is the default and generally good for gpu, 2 performs better for cpu-only machines.
-        text_model_filename = "*text-model*"
-        text_model_repo_id = None
-        tokenizer = None
-        verbose = True
+    def create_model(self, model_aliases=[]):
+        with Session(engine) as session:
+            model = ModelSQLModel()
 
-        if model_name == "BakLLaVA-1":
-            mmproj_model_filename = "mmproj-model-f16.gguf"
-            mmproj_model_repo_id = "mys/ggml_bakllava-1"
-            text_model_filename = "ggml-model-q4_k.gguf"
-            text_model_repo_id = mmproj_model_repo_id
+            session.add(model)
 
-        #           chat_handler = Llava15ChatHandler.from_pretrained(
-        #               repo_id=mmproj_model_repo_id,
-        #               filename=mmproj_model_filename,
-        #           )
+            for model_alias in model_aliases:
+                model_alias = ModelAliasSQLModel(alias=model_alias, model_id=model.id)
 
-        elif model_name == "Functionary-V2.5":
-            chat_format = chat_format if chat_format else "functionary-v2"
-            text_model_repo_id = "meetkai/functionary-small-v2.5-GGUF"
-            text_model_filename = "functionary-small-v2.5.Q4_0.gguf"
-        #            tokenizer = LlamaHFTokenizer.from_pretrained(text_model_repo_id)
+                session.add(model_alias)
 
-        elif model_name == "Llama-3-Vision-Alpha":
-            mmproj_model_repo_id = "abetlen/llama-3-vision-alpha-gguf"
-            text_model_filename = "Meta-Llama-3-8B.Q4_K_M.gguf"
-            text_model_repo_id = "QuantFactory/Meta-Llama-3-8B-GGUF"
+            session.commit()
+            session.refresh(model)
 
-        #            if chat_format is None:
-        #                chat_handler = Llama3VisionAlpha.from_pretrained(
-        #                    repo_id=mmproj_model_repo_id,
-        #                    filename=mmproj_model_filename,
-        #                )
+        model_id = str(model.id)
+        model_instance = Llamafile()
 
-        elif model_name == "llamafile":
-            model_instance = Llamafile()
-
-        elif model_name == "LLaVA-NeXT-Vicuna-7B":
-            mmproj_model_filename = "mmproj-vicuna7b-f16-q6_k.gguf"
-            mmproj_model_repo_id = "cmp-nct/llava-1.6-gguf"
-            text_model_filename = "vicuna-7b-q5_k.gguf"
-            text_model_repo_id = mmproj_model_repo_id
-
-        #            if chat_format is None:
-        #                chat_handler = Llava16ChatHandler.from_pretrained(
-        #                    repo_id=mmproj_model_repo_id,
-        #                    filename=mmproj_model_filename,
-        #                )
-
-        elif model_name == "LLaVA-Phi-3-Mini":
-            mmproj_model_filename = "llava-phi-3-mini-int4.gguf"
-            mmproj_model_repo_id = "xtuner/llava-phi-3-mini-gguf"
-            text_model_filename = "llava-phi-3-mini-mmproj-f16.gguf"
-            text_model_repo_id = mmproj_model_repo_id
-
-        elif model_name == "MobileVLM-1.7B":
-            mmproj_model_filename = "MobileVLM-1.7B-mmproj-f16.gguf"
-            mmproj_model_repo_id = "guinmoon/MobileVLM-1.7B-GGUF"
-            text_model_filename = "MobileVLM-1.7B-Q4_K.gguf"
-            text_model_repo_id = mmproj_model_repo_id
-
-        elif model_name == "MobileVLM_V2-1.7B":
-            mmproj_model_filename = "mmproj-model-f16.gguf"
-            mmproj_model_repo_id = "ZiangWu/MobileVLM_V2-1.7B-GGUF"
-            text_model_filename = "ggml-model-q4_k.gguf"
-            text_model_repo_id = mmproj_model_repo_id
-
-        elif model_name == "moondream2":
-            mmproj_model_repo_id = "vikhyatk/moondream2"
-            text_model_repo_id = mmproj_model_repo_id
-
-        #            if chat_format is None:
-        #                chat_handler = MoondreamChatHandler.from_pretrained(
-        #                    repo_id=mmproj_model_repo_id,
-        #                    filename=mmproj_model_filename,
-        #                )
-
-        elif model_name == "nanoLLaVA":
-            mmproj_model_repo_id = "abetlen/nanollava-gguf"
-            text_model_repo_id = mmproj_model_repo_id
-
-        #            if chat_format is None:
-        #                chat_handler = NanoLlavaChatHandler.from_pretrained(
-        #                    repo_id=mmproj_model_repo_id,
-        #                    filename=mmproj_model_filename,
-        #                )
-
-        elif model_name == "OpenLLaMA-3Bv2":
-            text_model_filename = "open_llama_3b_v2-q8_0.gguf"
-            text_model_repo_id = "mjschock/open_llama_3b_v2-Q8_0-GGUF"
-
-        elif model_name == "Phi-3-Mini-4K-Instruct":
-            text_model_filename = "Phi-3-mini-4k-instruct-q4.gguf"
-            text_model_repo_id = "microsoft/Phi-3-mini-4k-instruct-gguf"
-        #            tokenizer = LlamaHFTokenizer.from_pretrained(
-        #                "microsoft/Phi-3-mini-4k-instruct"
-        #            )
-
-        elif model_name == "Replit-Code-V-1.5-3B":
-            n_ctx = 16192
-            text_model_filename = "replit-code-v1_5-3b.Q4_0.gguf"
-            text_model_repo_id = "abetlen/replit-code-v1_5-3b-GGUF"
-
-        elif model_name == "SmolLM-135M":
-            text_model_filename = "SmolLM-135M-F16.gguf"
-            text_model_repo_id = "stillerman/SmolLM-135M-Llamafile"
-
-        #        elif model_name == "Stable-Diffusion-v1-5":
-        #            model_instance = StableDiffusion(
-        #                model_path=f"{app_dir}/models/runwayml/stable-diffusion-v1-5/v1-5-pruned-emaonly.safetensors",
-        #                wtype="default",  # Weight type (options: default, f32, f16, q4_0, q4_1, q5_0, q5_1, q8_0)
-        #                # seed=1337, # Uncomment to set a specific seed
-        #            )
-
-        elif model_name == "TinyLlama-1.1B":
-            text_model_filename = "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf"
-            text_model_repo_id = "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF"
-
-        elif model_name == "TinySolar-248m-4k-py":
-            text_model_filename = "tinysolar-248m-4k-py-q4_k_m.gguf"
-            text_model_repo_id = "mjschock/TinySolar-248m-4k-py-Q4_K_M-GGUF"
-
-        else:
-            raise NotImplementedError(model_name)
-
-        model_id = str(uuid.uuid4)  # TODO: insert model in db and get id
-
-        if not model_instance:
-            raise NotImplementedError(model_name)
-
-        # model = Llama( # TODO: switch to LangChain LL?
-        #        model_instance = model_instance # or Llama.from_pretrained(
-        #            chat_format=chat_format,
-        #            chat_handler=chat_handler,
-        #            echo=echo,
-        #            # draft_model=LlamaPromptLookupDecoding(num_pred_tokens=num_pred_tokens),
-        #            embedding=embedding,
-        #            filename=text_model_filename,
-        #            model_alias=model_id,
-        #            n_ctx=n_ctx,
-        #            n_gpu_layers=n_gpu_layers,
-        #            repo_id=text_model_repo_id,
-        #            tokenizer=tokenizer,
-        #            verbose=verbose,
-        #        )
-
-        for model_id in [model_id] + model_aliases + [model_name]:
+        for model_id in [model_id] + model_aliases:
             self._shared_model_instances[model_id] = model_instance
 
-    def delete_model(self, model):  # noqa: E501
-        """Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
+        return model
 
-        # noqa: E501
+    def delete_model(self, model_id):
+        with Session(engine) as session:
+            model = session.get(ModelSQLModel, uuid.UUID(model_id))
 
-        :param model: The model to delete
-        :type model: str
+            session.delete(model)
+            session.commit()
 
-        :rtype: Union[DeleteModelResponse, Tuple[DeleteModelResponse, int], Tuple[DeleteModelResponse, int, Dict[str, str]]
-        """
-        raise NotImplementedError
+        for model_id in [model_id] + model.aliases:
+            self._shared_model_instances.pop(model_id)
 
-    def list_models(self):  # noqa: E501
-        """Lists the currently available models, and provides basic information about each one such as the owner and availability.
+        return model_id
 
-        # noqa: E501
+    def get_model(self, model_id_or_alias):
+        model_id = None
 
+        try:
+            model_id = uuid.UUID(model_id_or_alias)
 
-        :rtype: Union[ListModelsResponse, Tuple[ListModelsResponse, int], Tuple[ListModelsResponse, int, Dict[str, str]]
-        """
-        raise NotImplementedError
+        except ValueError:
+            model_alias = model_id_or_alias
 
-    def retrieve_model(self, model_id: str):
-        """Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
+        with Session(engine) as session:
+            if model_id:
+                model = session.get(ModelSQLModel, model_id)
 
-        # noqa: E501
+            else:
+                model_alias = session.get(ModelAliasSQLModel, model_alias)
 
-        :param model: The ID of the model to use for this request
-        :type model: str
+                if model_alias:
+                    model = session.get(ModelSQLModel, model_alias.model_id)
 
-        :rtype: Union[Model, Tuple[Model, int], Tuple[Model, int, Dict[str, str]]
-        """
+                else:
+                    raise ValueError(f"Model not found: {model_id_or_alias}")
 
-        model: Llama = model_instance_store._shared_instance_state["models"][model_id]
+        return model
 
-        return {
-            "chat_format": model.chat_format,
-            "model_path": model.model_path,
-            "n_ctx": model.n_ctx(),
-            "lora_base": model.lora_base,
-            "lora_path": model.lora_path,
-            "lora_scale": model.lora_scale,
-        }
+    def get_model_instance(self, model_id):
+        return self._shared_model_instances.get(model_id)
+
+    def get_models(self):
+        with Session(engine) as session:
+            models = session.exec(select(ModelSQLModel)).all()
+
+        return models
 
 
 model_instance_store = ModelInstanceStoreSingleton()
 model_instance_store.created_at = time.time()
 
-model_instance_store.create_model(
-    model_aliases=[
-        "gpt-3.5-turbo",
-        "gpt-3.5-turbo-1106",
-        "gpt-4-1106-preview",
-        "gpt-4-turbo",
-        "gpt-4o",
-        "gpt-4o-mini",
-        "LLaMA_CPP",
-    ],
-    # model_name="SmolLM-135M",
-    # model_name="TinySolar-248m-4k-py",
-    model_name="llamafile",
-)
-
 # model_instance_store.create_model(
 #     model_aliases=[
-#         "dall-e-2",
-#         "dall-e-3",
-#     ],
-#     model_name="Stable-Diffusion-v1-5",
-# )
-
-# model_instance_store.create_model(
-#     model_aliases=[
-#         "text-embedding-3-small",
-#         "text-embedding-3-large",
-#         "text-embedding-ada-002",
+#         "gpt-3.5-turbo",
+#         "gpt-3.5-turbo-1106",
+#         "gpt-4-1106-preview",
+#         "gpt-4-turbo",
+#         "gpt-4o",
+#         "gpt-4o-mini",
+#         "llamafile",
+#         "LLaMA_CPP",
 #     ],
 # )
 
-# model_instance_store.create_model(
-#     model_aliases=[
-#         "tts-1",
-#         "tts-1-hd",
-#     ],
-# )
 
-# model_instance_store.create_model(
-#     model_aliases=[
-#         "whisper-1",
-#     ],
-# )
+async def delete_agent(id):
+    with Session(engine) as session:
+        agent = session.get(AgentSQLModel, uuid.UUID(id))
+
+        session.delete(agent)
+        session.commit()
+
+    return agent
+
+
+async def delete_model(model_id):
+    try:
+        model_instance_store.delete_model(model_id)
+
+    except ValueError as e:
+        print(f"Error deleting model: {e}")
+
+    return model_id
+
+
+async def get_agent(id):
+    with Session(engine) as session:
+        agent = session.get(AgentSQLModel, uuid.UUID(id))
+
+    return agent
+
+
+async def get_default_agent():
+    raise NotImplementedError
+
+
+async def insert_agent(body):
+    instructions = body.get("instructions")
+    model_alias = body.get("model")
+    name = body.get("name")
+    tools = body.get("tools", default_tools)
+
+    model = await retrieve_model(model_alias)
+
+    agent = AgentSQLModel(
+        instructions=instructions,
+        # models=[{"id": model_id} for model_id in [model.id] + model.aliases],
+        model_id=model.id,
+        name=name,
+        tools=tools,
+    )
+
+    with Session(engine) as session:
+        session.add(agent)
+        session.commit()
+        session.refresh(agent)
+
+    return agent
+
+
+async def list_models():
+    models = model_instance_store.get_models()
+
+    return models
+
+
+async def update_agent(id, body):
+    with Session(engine) as session:
+        agent = session.get(AgentSQLModel, uuid.UUID(id))
+
+        if "model" in body:
+            model = await retrieve_model(body.get("model"))
+            agent.models = [{"id": model_id} for model_id in [model.id] + model.aliases]
+
+        agent.instructions = body.get("instructions", agent.instructions)
+        agent.name = body.get("name", agent.name)
+        agent.tools = body.get("tools", agent.tools)
+
+        session.add(agent)
+        session.commit()
+        session.refresh(agent)
+
+    return agent
+
+
+async def retrieve_model(model_id):
+    model = model_instance_store.get_model(model_id)
+
+    return model
