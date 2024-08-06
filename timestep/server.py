@@ -15,29 +15,23 @@ from prefect import flow
 from tqdm import tqdm
 
 from timestep.api.openai.v1.controllers.completions_controller import create_completion
+from timestep.config import Settings
 
-# from timestep.database import create_db_and_tables
-
-# from timestep.utils import download_with_progress_bar, start_shell_script
-
-default_llamafile_filename = "TinyLlama-1.1B-Chat-v1.0.F16.llamafile"
-default_llamafile_url = f"https://huggingface.co/Mozilla/TinyLlama-1.1B-Chat-v1.0-llamafile/resolve/main/{default_llamafile_filename}?download=true"
-# https://huggingface.co/jartine/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/TinyLlama-1.1B-Chat-v1.0.Q5_K_M.llamafile?download=true
-# https://huggingface.co/jartine/rocket-3B-llamafile/resolve/main/rocket-3b.Q5_K_M.llamafile?download=true
-# https://huggingface.co/jartine/phi-2-llamafile/resolve/main/phi-2.Q5_K_M.llamafile?download=true
-# https://huggingface.co/jartine/Meta-Llama-3-8B-Instruct-llamafile/resolve/main/Meta-Llama-3-8B-Instruct.Q5_K_M.llamafile?download=true
-
-host = "0.0.0.0"  # TODO: move to config
-llamafile_path = f"./models/{default_llamafile_filename}"  # TODO: namespace under llamafile, include port, etc.
-port = 8080
+settings = Settings()
 
 connexion_app = AsyncApp(import_name=__name__)
+default_hf_repo_id = settings.default_hf_repo_id
+default_llamafile_filename = settings.default_llamafile_filename
+default_llamafile_host = settings.default_llamafile_host
+default_llamafile_port = settings.default_llamafile_port
+default_llamafile_url = f"https://huggingface.co/{default_hf_repo_id}/resolve/main/{default_llamafile_filename}?download=true"
+local_llamafile_path = (
+    f"{settings.app_dir}/models/{default_hf_repo_id}/{default_llamafile_filename}"
+)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # create_db_and_tables()
-
     agent_flow = await flow.from_source(
         source=str(Path(__file__).parent),
         entrypoint="worker.py:agent_flow",
@@ -57,22 +51,26 @@ async def lifespan(app: FastAPI):
         )
 
     if os.path.basename(
-        llamafile_path
-    ) == default_llamafile_filename and not os.path.exists(llamafile_path):
-        os.makedirs(os.path.dirname(llamafile_path), exist_ok=True)
-        download_with_progress_bar(default_llamafile_url, llamafile_path)
+        local_llamafile_path
+    ) == default_llamafile_filename and not os.path.exists(local_llamafile_path):
+        os.makedirs(os.path.dirname(local_llamafile_path), exist_ok=True)
+        download_with_progress_bar(default_llamafile_url, local_llamafile_path)
 
-    assert os.path.exists(llamafile_path)
+    assert os.path.exists(local_llamafile_path)
+
+    # if local_llamafile_path is not executable, make it executable
+    if not os.access(local_llamafile_path, os.X_OK):
+        os.chmod(local_llamafile_path, 0o755)
 
     process = start_shell_script(
-        llamafile_path,
+        local_llamafile_path,
         "--host",
-        host,
+        f"{default_llamafile_host}",
         "--nobrowser",
         "--path",
         "/zip/llama.cpp/server/public",
         "--port",
-        f"{port}",
+        f"{default_llamafile_port}",
         "--temp",
         "0.0",
     )
@@ -159,7 +157,9 @@ async def create_code_completion(engine: Engine, request: Request):
     #     return model_info
 
 
-def download_with_progress_bar(url, filename):
+def download_with_progress_bar(
+    url, filename
+):  # TODO: just use from huggingface_hub import hf_hub_download and hf_hub_upload
     # Extract the basename of the file
     base_filename = os.path.basename(filename)
 

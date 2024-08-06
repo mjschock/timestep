@@ -75,7 +75,9 @@ class ModelInstanceStoreSingleton(object):
             session.refresh(model)
 
         model_id = str(model.id)
-        model_instance = Llamafile()
+        model_instance = Llamafile(
+            base_url=f"http://{settings.default_llamafile_host}:{settings.default_llamafile_port}",
+        )
 
         for model_id in [model_id] + model_aliases:
             self._shared_model_instances[model_id] = model_instance
