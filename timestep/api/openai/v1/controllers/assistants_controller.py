@@ -107,7 +107,7 @@ async def create_assistant(body, token_info: dict, user: str):
 
     assistant = Assistant(
         id=str(agent.id),
-        created_at=int(time.time()),
+        created_at=agent.created_at.timestamp(),
         description=body.get("description"),
         instructions=body.get("instructions"),
         model=body.get("model"),

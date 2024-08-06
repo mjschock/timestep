@@ -5,6 +5,11 @@ from httpx import AsyncClient
 import pytest
 import respx
 
+from timestep.config import Settings
+
+settings = Settings()
+token = settings.openai_api_key.get_secret_value()
+
 # @pytest.mark.respx(base_url="http://openai.local")
 async def test_create_chat_completion(client: AsyncClient, httpx_mock, monkeypatch):
     response = await client.post(
@@ -12,8 +17,6 @@ async def test_create_chat_completion(client: AsyncClient, httpx_mock, monkeypat
     )
 
     assert response.status_code == 401
-
-    token = "sk-no-key-required"
 
     response = await client.post(
         "/api/openai/v1/chat/completions",
