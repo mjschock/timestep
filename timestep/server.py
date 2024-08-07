@@ -62,7 +62,7 @@ async def lifespan(app: FastAPI):
         # print("Started Prefect worker.")
 
     prefect_worker = ShellScriptRunner(
-        get_sys_executable(),
+        "prefect",
         "worker",
         "start",
         "--pool",
