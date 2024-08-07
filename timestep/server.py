@@ -61,8 +61,10 @@ async def lifespan(app: FastAPI):
         # await prefect_worker.start()
         # print("Started Prefect worker.")
 
+    worker_id = os.environ.get("PYTEST_XDIST_WORKER")
+
     prefect_worker = ShellScriptRunner(
-        script_name="prefect_worker",
+        script_name=f"prefect_worker_{worker_id}",
         args=[
             "sh",
             "-c",
@@ -104,7 +106,7 @@ async def lifespan(app: FastAPI):
 
     #    process = start_shell_script(
     runner = ShellScriptRunner(
-        script_name="llamafile",
+        script_name=f"llamafile_{worker_id}",
         args=[
             "sh",
             local_llamafile_path,
