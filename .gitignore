@@ -1,6 +1,6 @@
 *.log
 *.py[cod]
-.coverage
+.coverage*
 /.env
 /.env.*
 /.venv

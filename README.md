@@ -44,11 +44,11 @@ $ timestep [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
-* `up`: Start up the Timestep AI platform at...
+* `up`: Start up the Timestep AI platform.
 
 ## `timestep up`
 
-Start up the Timestep AI platform at http://{host}:{port}.
+Start up the Timestep AI platform.
 
 **Usage**:
 
