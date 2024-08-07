@@ -223,10 +223,12 @@ def main(*args, **kwargs):
 
     uvicorn.run(
         f"{__name__}:fastapi_app",
-        host="0.0.0.0",
+        # host="0.0.0.0",
+        host=kwargs.get("host", "0.0.0.0"),
         log_level="info",
         loop="asyncio",
-        port=8000,
+        # port=8000,
+        port=kwargs.get("port", 8000),
         reload=True,
         reload_dirs=[
             f"{os.getcwd()}/timestep",

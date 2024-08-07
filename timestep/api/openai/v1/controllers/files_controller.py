@@ -1,18 +1,29 @@
 import os
 import time
 import uuid
+from datetime import datetime
 
+import libcloud
 import typer
+
+# from libcloud.compute.types import Provider
+from libcloud.storage.providers import get_driver
+
+# from libcloud.compute.providers import get_driver
+from libcloud.storage.types import Provider
+from openai.types.file_deleted import FileDeleted
 from openai.types.file_object import FileObject
 from prefect import flow, task
 from prefect.artifacts import create_link_artifact
 from starlette.datastructures import UploadFile
 
+from timestep.config import Settings
+
+settings = Settings()
 app_dir = typer.get_app_dir("timestep")
 
 
-# async def create_file(file, purpose):  # noqa: E501
-async def create_file(body, file: UploadFile):
+async def create_file(body, file: UploadFile, token_info: dict, user: str):
     """Upload a file that can be used across various endpoints. Individual files can be up to 512 MB, and the size of all files uploaded by one organization can be up to 100 GB.  The Assistants API supports files up to 2 million tokens and of specific file types. See the [Assistants Tools guide](/docs/assistants/tools) for details.  The Fine-tuning API only supports &#x60;.jsonl&#x60; files. The input also has certain required formats for fine-tuning [chat](/docs/api-reference/fine-tuning/chat-input) or [completions](/docs/api-reference/fine-tuning/completions-input) models.  The Batch API only supports &#x60;.jsonl&#x60; files up to 100 MB in size. The input also has a specific required [format](/docs/api-reference/batch/request-input).  Please [contact us](https://help.openai.com/) if you need to increase these storage limits.
 
      # noqa: E501
@@ -24,63 +35,74 @@ async def create_file(body, file: UploadFile):
 
     :rtype: Union[OpenAIFile, Tuple[OpenAIFile, int], Tuple[OpenAIFile, int, Dict[str, str]]
     """
-
     purpose = body.get("purpose")
 
-    if purpose == "fine-tune":
-        # file_object = FileObject(
-        #     id=str(uuid.uuid4()),
-        #     bytes=file.size,
-        #     created_at=int(time.time()),
-        #     filename=file.filename,
-        #     object="file",
-        #     purpose="fine-tune",
-        #     status="uploaded",
-        # )
+    file_name = file.filename
+    file_uuid = uuid.uuid4()
 
-        # os.makedirs(f"{app_dir}/data/{file_object.id}", exist_ok=True)
+    cls = get_driver(Provider.LOCAL)
+    # driver = cls("api key", "api secret key")
+    # driver = cls(key=f"{app_dir}/data")
+    driver = cls(key=f"{app_dir}")
 
-        # contents = file.file.read() # TODO: stream directly to file instead of loading fully in memory first
+    # container = driver.get_container(container_name=settings.openai_org_id)
+    container = driver.get_container(container_name="data")
+    # extra = {"meta_data": {"owner": user, "created": "2014-02-2"}}
+    extra = {
+        "meta_data": {
+            # "artifact_id": artifact_id,
+            # "file_object": file_object.model_dump_json(),
+            # "created_at": file_object.created_at,
+            # "filename": file_object.filename,
+            # "purpose": file_object.purpose,
+            # "owner": user,
+            # "owner": settings.openai_org_id,
+            # "created": datetime.today().strftime("%Y-%m-%d"),
+            "created_at": int(time.time()),
+            "user": user,
+            # "organization_id": settings.openai_org_id,
+        }
+    }
 
-        # with open(f"{app_dir}/data/{file_object.id}/{file_object.filename}", "w") as f:
-        #     f.write(contents.decode("utf-8"))
-
-        # instance_store._shared_instance_state["file_objects"][file_object.id] = file_object
-
-        artifact_id: uuid.UUID = create_link_artifact(
-            description=f"## Fine-tuning file upload of {file.filename}",
-            # key="irregular-data",
-            key=file.filename,
-            # link="https://nyc3.digitaloceanspaces.com/my-bucket-name/highly_variable_data.csv",
-            link=f"file://{app_dir}/data/{file.filename}",
-            # link_text
-            # description="## Highly variable data",
+    with file.file as iterator:
+        obj: libcloud.storage.base.Object = driver.upload_object_via_stream(
+            iterator=iterator,
+            container=container,
+            object_name=file_name,
+            # object_name=str(file_uuid),
+            # object_name=str(artifact_id),
+            extra=extra,
         )
 
-        # os.makedirs(f"{app_dir}/data/{file.filename}", exist_ok=True)
+    artifact_id: uuid.UUID = await create_link_artifact(
+        description=f"""
+        ## File upload of {file_name}.
 
-        contents = (
-            file.file.read()
-        )  # TODO: stream directly to file instead of loading fully in memory first
+        Organization: {settings.openai_org_id}
+        Purpose: {purpose}
+        """,
+        # key="irregular-data",
+        # key=file_name,
+        key=str(file_uuid),
+        # link="https://nyc3.digitaloceanspaces.com/my-bucket-name/highly_variable_data.csv",
+        # link=f"file://{app_dir}/data/{settings.openai_org_id}/{file_name}",
+        link=f"file://{app_dir}/data/{file_name}",
+        # link_text
+        # description="## Highly variable data",
+    )
 
-        with open(f"{app_dir}/data/{file.filename}", "w") as f:
-            f.write(contents.decode("utf-8"))
+    file_object = FileObject(
+        id=str(artifact_id),
+        bytes=file.size,
+        # created_at=int(time.time()),
+        created_at=extra["meta_data"]["created_at"],
+        filename=file_name,
+        object="file",
+        purpose=purpose,
+        status="uploaded",
+    )
 
-        file_object = FileObject(
-            # id=str(uuid.uuid4()),
-            id=str(artifact_id),
-            bytes=file.size,
-            created_at=int(time.time()),
-            filename=file.filename,
-            object="file",
-            purpose="fine-tune",
-            status="uploaded",
-        )
-
-        return file_object.model_dump(mode="json")
-
-    else:
-        raise NotImplementedError
+    return file_object.model_dump(mode="json")
 
 
 async def delete_file(file_id):  # noqa: E501
@@ -93,7 +115,30 @@ async def delete_file(file_id):  # noqa: E501
 
     :rtype: Union[DeleteFileResponse, Tuple[DeleteFileResponse, int], Tuple[DeleteFileResponse, int, Dict[str, str]]
     """
+    cls = get_driver(Provider.LOCAL)
+    # driver = cls("api key", "api secret key")
+    driver = cls(key=f"{app_dir}")
+    container = driver.get_container(container_name="data")
+
+    artifact_id = uuid.UUID(file_id)
+
     raise NotImplementedError
+
+    # artifact = # TODO: Get the artifact from Prefect
+
+    artifact_link = artifact.link
+    file_name = Path.from_uri(artifact_link).name
+
+    obj: libcloud.storage.base.Object = driver.delete_object(
+        # obj=container.get_object(str(artifact_id))
+        obj=container.get_object(file_name)
+    )
+
+    # TODO: Delete the Prefect artifact as well
+
+    file_deleted = FileDeleted(id=file_id, deleted=True, object="file")
+
+    return file_deleted.model_dump(mode="json")
 
 
 async def download_file(file_id):  # noqa: E501

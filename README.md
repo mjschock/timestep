@@ -2,9 +2,7 @@
 
 Timestep AI CLI - free, local-first, open-source AI
 
-**Setup**:
-
-### Development
+**Development Setup**:
 
 ```console
 $ python3 -m pip install --upgrade pip
@@ -12,11 +10,11 @@ $ python3 -m pip install --user pipx
 $ python3 -m pipx ensurepath
 $ pipx install poetry==1.8.3
 $ cp .env.example .env
-$ direnv allow # See https://direnv.net/#getting-started to install direnv on your platform
+$ direnv allow # See https://direnv.net/#getting-started
 $ make
 ```
 
-### Library
+**Library Setup**:
 
 ```console
 $ python3 -m pip install --upgrade pip
@@ -25,7 +23,7 @@ $ python3 -m pipx ensurepath
 $ pipx install timestep
 ```
 
-**Pre-requisites**:
+**Usage Prerequisites**:
 
 ```console
 $ prefect server start
@@ -46,48 +44,18 @@ $ timestep [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
-* `evals`: Run evaluations.
-* `serve`: Run serving.
-* `train`: Run training.
+* `up`
 
-## `timestep evals`
-
-Run evaluations.
+## `timestep up`
 
 **Usage**:
 
 ```console
-$ timestep evals [OPTIONS]
+$ timestep up [OPTIONS]
 ```
 
 **Options**:
 
-* `--help`: Show this message and exit.
-
-## `timestep serve`
-
-Run serving.
-
-**Usage**:
-
-```console
-$ timestep serve [OPTIONS]
-```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-## `timestep train`
-
-Run training.
-
-**Usage**:
-
-```console
-$ timestep train [OPTIONS]
-```
-
-**Options**:
-
+* `--host TEXT`: [default: 0.0.0.0]
+* `--port TEXT`: [default: 8000]
 * `--help`: Show this message and exit.

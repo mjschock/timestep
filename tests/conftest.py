@@ -4,6 +4,7 @@ import httpx
 import pytest
 import pytest_asyncio
 from asgi_lifespan import LifespanManager
+from prefect.testing.utilities import prefect_test_harness
 
 # from timestep.database import create_db_and_tables
 from timestep.server import fastapi_app
@@ -55,3 +56,8 @@ async def client(app, current_loop, monkeypatch):
 @pytest.fixture
 def non_mocked_hosts() -> list:
     return ["localhost"]
+
+@pytest.fixture(autouse=True, scope="session")
+def prefect_test_fixture():
+    with prefect_test_harness():
+        yield

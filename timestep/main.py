@@ -30,9 +30,7 @@ def get_help_message():
 Timestep AI CLI - free, local-first, open-source AI
 """ + (
         """
-**Setup**:
-
-### Development
+**Development Setup**:
 
 ```console
 $ python3 -m pip install --upgrade pip
@@ -40,11 +38,11 @@ $ python3 -m pip install --user pipx
 $ python3 -m pipx ensurepath
 $ pipx install poetry==1.8.3
 $ cp .env.example .env
-$ direnv allow # See https://direnv.net/#getting-started to install direnv on your platform
+$ direnv allow # See https://direnv.net/#getting-started
 $ make
 ```
 
-### Library
+**Library Setup**:
 
 ```console
 $ python3 -m pip install --upgrade pip
@@ -53,7 +51,7 @@ $ python3 -m pipx ensurepath
 $ pipx install timestep
 ```
 
-**Pre-requisites**:
+**Usage Prerequisites**:
 
 ```console
 $ prefect server start
@@ -80,42 +78,48 @@ def main():
     """
 
 
+# @typer_app.command()
+# def evals():
+#     """
+#     Run evaluations.
+#     """
+#     typer.echo("Running evaluations...")
+
+#     raise NotImplementedError
+
+
 @typer_app.command()
-def evals():
-    """
-    Run evaluations.
-    """
-    typer.echo("Running evaluations...")
-
-    raise NotImplementedError
-
-
-@typer_app.command()
-def serve(
-    # host="0.0.0.0",
+# def serve(
+def up(
+    host="0.0.0.0",
     # llamafile_path=f"./models/{default_llamafile_filename}", # TODO: namespace under llamafile, include port, etc.
-    # port=8080,
+    port=8000,
 ):
+    # """
+    # Run serving.
+    # """
+    # typer.echo("Running serving...")
+    f"""
+    Start up the Timestep AI platform at http://{host}:{port}.
     """
-    Run serving.
-    """
-    typer.echo("Running serving...")
+
+    typer.echo(f"Starting up the Timestep AI platform at http://{host}:{port}...")
 
     timestep_serve(
-        # host=host,
+        host=host,
         # llamafile_path=llamafile_path,
-        # port=port,
+        port=port,
     )
 
 
-@typer_app.command()
-def train():
-    """
-    Run training.
-    """
-    typer.echo("Running training...")
+# @typer_app.command()
+# def train():
+#     """
+#     Run training.
+#     """
+#     typer.echo("Running training...")
 
-    timestep_train()
+#     timestep_train()
 
 
 if __name__ == "__main__":
