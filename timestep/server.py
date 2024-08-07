@@ -229,7 +229,8 @@ def main(*args, **kwargs):
         loop="asyncio",
         # port=8000,
         port=kwargs.get("port", 8000),
-        reload=True,
+        # reload=True,
+        reload=kwargs.get("dev", False),
         reload_dirs=[
             f"{os.getcwd()}/timestep",
         ],
