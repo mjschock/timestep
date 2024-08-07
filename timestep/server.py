@@ -11,7 +11,9 @@ import uvicorn
 from connexion import AsyncApp, ConnexionMiddleware
 from connexion.options import SwaggerUIOptions
 from fastapi import FastAPI, Request
+from filelock import SoftFileLock, Timeout
 from prefect import flow
+from prefect.server.api.server import SubprocessASGIServer
 from tqdm import tqdm
 
 from timestep.api.openai.v1.controllers.completions_controller import create_completion
@@ -20,11 +22,6 @@ from timestep.config import Settings
 settings = Settings()
 
 app_dir = settings.app_dir
-
-os.makedirs(f"{app_dir}/data", exist_ok=True)
-os.makedirs(f"{app_dir}/models", exist_ok=True)
-os.makedirs(f"{app_dir}/work", exist_ok=True)
-
 connexion_app = AsyncApp(import_name=__name__)
 default_hf_repo_id = settings.default_hf_repo_id
 default_llamafile_filename = settings.default_llamafile_filename
@@ -38,23 +35,41 @@ local_llamafile_path = (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    os.makedirs(f"{app_dir}/data", exist_ok=True)
+    os.makedirs(f"{app_dir}/models", exist_ok=True)
+    os.makedirs(f"{app_dir}/work", exist_ok=True)
+
+    soft_lock = SoftFileLock(
+        f"{app_dir}/data/database.lock",
+        is_singleton=True,
+        thread_local=False,
+        timeout=120,
+    )
+
+    with soft_lock.acquire():
+        print("Starting Prefect server...")
+        prefect_server = SubprocessASGIServer(port=4200)
+        prefect_server.start(timeout=30)
+
+        # TODO: Start the default Prefect worker
+
     agent_flow = await flow.from_source(
         source=str(Path(__file__).parent),
         entrypoint="worker.py:agent_flow",
     )
 
-    try:
-        await agent_flow.deploy(
-            name="agent-flow-deployment",
-            # parameters=dict(name="Marvin"),
-            # work_pool_name="local",
-            work_pool_name="default",
-        )
+    # try:
+    await agent_flow.deploy(
+        name="agent-flow-deployment",
+        # parameters=dict(name="Marvin"),
+        # work_pool_name="local",
+        work_pool_name="default",
+    )
 
-    except Exception as e:
-        print(
-            f"{e} - Recommendation: `prefect server start` and `prefect worker start --pool default`"
-        )
+    # except Exception as e:
+    #     print(
+    #         f"{e} - Recommendation: `prefect server start` and `prefect worker start --pool default`"
+    #     )
 
     if os.path.basename(
         local_llamafile_path
@@ -85,6 +100,9 @@ async def lifespan(app: FastAPI):
 
     print(f"Terminating llamafile with PID: {process.pid}")
     process.terminate()
+
+    print("Stopping Prefect server...")
+    # prefect_server.stop()
 
 
 fastapi_app = FastAPI(
