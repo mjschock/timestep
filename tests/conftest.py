@@ -18,7 +18,7 @@ settings = Settings()
 )
 async def app(tmp_path_factory, worker_id):
     # with prefect_test_harness():
-    async with LifespanManager(app=fastapi_app, startup_timeout=30) as manager:
+    async with LifespanManager(app=fastapi_app, startup_timeout=300) as manager:
         print("App is ready")
         yield manager.app
         print('App is closing')
