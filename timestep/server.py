@@ -15,6 +15,7 @@ from fastapi import FastAPI, Request
 from filelock import SoftFileLock, Timeout
 from prefect import flow
 from prefect.server.api.server import SubprocessASGIServer
+from prefect.utilities.processutils import get_sys_executable
 from prefect.workers.process import ProcessWorker
 from tqdm import tqdm
 
@@ -53,12 +54,22 @@ async def lifespan(app: FastAPI):
         prefect_server = SubprocessASGIServer(port=4200)
         prefect_server.start(timeout=30)
 
-        print("Starting Prefect worker...")
-        prefect_worker = ProcessWorker(
-            work_pool_name="default",
-        )
+        # print("Starting Prefect worker...")
+        # prefect_worker = ProcessWorker(
+        #     work_pool_name="default",
+        # )
         # await prefect_worker.start()
         # print("Started Prefect worker.")
+
+    prefect_worker = ShellScriptRunner(
+        get_sys_executable(),
+        "worker",
+        "start",
+        "--pool",
+        "default",
+    )
+
+    prefect_worker.start()
 
     agent_flow = await flow.from_source(
         source=str(Path(__file__).parent),
