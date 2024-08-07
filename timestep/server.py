@@ -62,11 +62,12 @@ async def lifespan(app: FastAPI):
         # print("Started Prefect worker.")
 
     prefect_worker = ShellScriptRunner(
-        "prefect",
-        "worker",
-        "start",
-        "--pool",
-        "default",
+        script_name="prefect_worker",
+        args=[
+            "sh",
+            "-c",
+            "prefect worker start --pool default",
+        ],
     )
 
     prefect_worker.start()
@@ -103,17 +104,20 @@ async def lifespan(app: FastAPI):
 
     #    process = start_shell_script(
     runner = ShellScriptRunner(
-        "sh",
-        local_llamafile_path,
-        "--host",
-        f"{default_llamafile_host}",
-        "--nobrowser",
-        "--path",
-        "/zip/llama.cpp/server/public",
-        "--port",
-        f"{default_llamafile_port}",
-        "--temp",
-        "0.0",
+        script_name="llamafile",
+        args=[
+            "sh",
+            local_llamafile_path,
+            "--host",
+            f"{default_llamafile_host}",
+            "--nobrowser",
+            "--path",
+            "/zip/llama.cpp/server/public",
+            "--port",
+            f"{default_llamafile_port}",
+            "--temp",
+            "0.0",
+        ],
     )
 
     runner.start()
@@ -233,19 +237,20 @@ def download_with_progress_bar(
 
 
 class ShellScriptRunner:
-    def __init__(self, file_path, *args):
-        self.file_path = file_path
+    def __init__(self, script_name, args):
+        # self.file_path = file_path
         self.args = args
         self.process = None
+        self.script_name = script_name
 
     def start(self):
         try:
             # Construct the command with the script and the additional arguments
-            command = [self.file_path] + list(self.args)
+            command = self.args
 
             # Open the script and redirect its stdout and stderr to log files for debugging
-            with open("script_output.log", "w") as out, open(
-                "script_error.log", "w"
+            with open(f"script_output.{self.script_name}.log", "w") as out, open(
+                f"script_error.{self.script_name}.log", "w"
             ) as err:
                 self.process = subprocess.Popen(
                     command,
@@ -254,13 +259,13 @@ class ShellScriptRunner:
                     preexec_fn=os.setpgrp,  # Start the process in a new process group
                 )
 
-            print(f"Started the file: {self.file_path} with PID: {self.process.pid}")
+            print(f"Started the file: {self.script_name} with PID: {self.process.pid}")
 
             # Register the stop method to be called at exit
             atexit.register(self.stop)
 
         except FileNotFoundError:
-            print(f"File not found: {self.file_path}")
+            print(f"File not found: {self.script_name}")
 
         except Exception as e:
             print(f"An error occurred: {e}")
@@ -298,4 +303,34 @@ def main(*args, **kwargs):
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+
+    # prefect_worker = ShellScriptRunner(
+    #     script_name="prefect_worker",
+    #     args=[
+    #         "sh",
+    #         "-c",
+    #         "prefect worker start --pool default",
+    #     ],
+    # )
+
+    # prefect_worker.start()
+
+    runner = ShellScriptRunner(
+        script_name="llamafile",
+        args=[
+            "sh",
+            local_llamafile_path,
+            "--host",
+            f"{default_llamafile_host}",
+            "--nobrowser",
+            "--path",
+            "/zip/llama.cpp/server/public",
+            "--port",
+            f"{default_llamafile_port}",
+            "--temp",
+            "0.0",
+        ],
+    )
+
+    runner.start()
