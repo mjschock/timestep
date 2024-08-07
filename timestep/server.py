@@ -1,3 +1,4 @@
+import atexit
 import json
 import os
 import signal
@@ -14,6 +15,7 @@ from fastapi import FastAPI, Request
 from filelock import SoftFileLock, Timeout
 from prefect import flow
 from prefect.server.api.server import SubprocessASGIServer
+from prefect.workers.process import ProcessWorker
 from tqdm import tqdm
 
 from timestep.api.openai.v1.controllers.completions_controller import create_completion
@@ -51,7 +53,12 @@ async def lifespan(app: FastAPI):
         prefect_server = SubprocessASGIServer(port=4200)
         prefect_server.start(timeout=30)
 
-        # TODO: Start the default Prefect worker
+        print("Starting Prefect worker...")
+        prefect_worker = ProcessWorker(
+            work_pool_name="default",
+        )
+        # await prefect_worker.start()
+        # print("Started Prefect worker.")
 
     agent_flow = await flow.from_source(
         source=str(Path(__file__).parent),
@@ -83,7 +90,8 @@ async def lifespan(app: FastAPI):
     if not os.access(local_llamafile_path, os.X_OK):
         os.chmod(local_llamafile_path, 0o755)
 
-    process = start_shell_script(
+    #    process = start_shell_script(
+    runner = ShellScriptRunner(
         local_llamafile_path,
         "--host",
         f"{default_llamafile_host}",
@@ -96,12 +104,14 @@ async def lifespan(app: FastAPI):
         "0.0",
     )
 
+    runner.start()
+
     yield
 
-    print(f"Terminating llamafile with PID: {process.pid}")
-    process.terminate()
+    # print(f"Terminating llamafile with PID: {process.pid}")
+    # process.terminate()
 
-    print("Stopping Prefect server...")
+    # print("Stopping Prefect server...")
     # prefect_server.stop()
 
 
@@ -235,6 +245,46 @@ def start_shell_script(file_path, *args):
 
     except Exception as e:
         print(f"An error occurred: {e}")
+
+
+class ShellScriptRunner:
+    def __init__(self, file_path, *args):
+        self.file_path = file_path
+        self.args = args
+        self.process = None
+
+    def start(self):
+        try:
+            # Construct the command with the script and the additional arguments
+            command = ["sh", self.file_path] + list(self.args)
+
+            # Open the script and redirect its stdout and stderr to log files for debugging
+            with open("script_output.log", "w") as out, open(
+                "script_error.log", "w"
+            ) as err:
+                self.process = subprocess.Popen(
+                    command,
+                    stdout=out,
+                    stderr=err,
+                    preexec_fn=os.setpgrp,  # Start the process in a new process group
+                )
+
+            print(f"Started the file: {self.file_path} with PID: {self.process.pid}")
+
+            # Register the stop method to be called at exit
+            atexit.register(self.stop)
+
+        except FileNotFoundError:
+            print(f"File not found: {self.file_path}")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+    def stop(self):
+        if self.process and self.process.poll() is None:
+            print("Terminating process")
+            self.process.terminate()
+            self.process.wait()
 
 
 def main(*args, **kwargs):
