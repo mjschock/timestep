@@ -13,9 +13,11 @@ from timestep.config import Settings
 settings = Settings()
 
 @pytest_asyncio.fixture(
+    autouse=True,
     scope="session",
 )
 async def app(tmp_path_factory, worker_id):
+    # with prefect_test_harness():
     async with LifespanManager(app=fastapi_app, startup_timeout=30) as manager:
         print("App is ready")
         yield manager.app
@@ -56,8 +58,3 @@ async def client(app, current_loop, monkeypatch):
 @pytest.fixture
 def non_mocked_hosts() -> list:
     return ["localhost"]
-
-@pytest.fixture(autouse=True, scope="session")
-def prefect_test_fixture():
-    with prefect_test_harness():
-        yield
