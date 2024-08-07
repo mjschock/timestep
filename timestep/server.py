@@ -103,6 +103,7 @@ async def lifespan(app: FastAPI):
 
     #    process = start_shell_script(
     runner = ShellScriptRunner(
+        "sh",
         local_llamafile_path,
         "--host",
         f"{default_llamafile_host}",
@@ -231,33 +232,6 @@ def download_with_progress_bar(
     pbar.close()
 
 
-def start_shell_script(file_path, *args):
-    try:
-        # Construct the command with the script and the additional arguments
-        command = ["sh", file_path] + list(args)
-
-        # Open the script and redirect its stdout and stderr to log files for debugging
-        with open("script_output.log", "w") as out, open(
-            "script_error.log", "w"
-        ) as err:
-            process = subprocess.Popen(
-                command,
-                stdout=out,
-                stderr=err,
-                preexec_fn=os.setpgrp,  # Start the process in a new process group
-            )
-
-        print(f"Started the file: {file_path} with PID: {process.pid}")
-
-        return process
-
-    except FileNotFoundError:
-        print(f"File not found: {file_path}")
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-
 class ShellScriptRunner:
     def __init__(self, file_path, *args):
         self.file_path = file_path
@@ -267,7 +241,7 @@ class ShellScriptRunner:
     def start(self):
         try:
             # Construct the command with the script and the additional arguments
-            command = ["sh", self.file_path] + list(self.args)
+            command = [self.file_path] + list(self.args)
 
             # Open the script and redirect its stdout and stderr to log files for debugging
             with open("script_output.log", "w") as out, open(
