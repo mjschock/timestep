@@ -91,6 +91,7 @@ def main():
 @typer_app.command()
 # def serve(
 def up(
+    dev=False,
     host="0.0.0.0",
     # llamafile_path=f"./models/{default_llamafile_filename}", # TODO: namespace under llamafile, include port, etc.
     port=8000,
@@ -99,16 +100,18 @@ def up(
     # Run serving.
     # """
     # typer.echo("Running serving...")
-    f"""
+    """
     Start up the Timestep AI platform at http://{host}:{port}.
     """
 
     typer.echo(f"Starting up the Timestep AI platform at http://{host}:{port}...")
 
     timestep_serve(
+        dev=dev,
         host=host,
         # llamafile_path=llamafile_path,
         port=port,
+        reload=dev,
     )
 
 

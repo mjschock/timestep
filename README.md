@@ -44,9 +44,11 @@ $ timestep [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
-* `up`
+* `up`: Start up the Timestep AI platform at...
 
 ## `timestep up`
+
+Start up the Timestep AI platform at http://{host}:{port}.
 
 **Usage**:
 
@@ -56,6 +58,7 @@ $ timestep up [OPTIONS]
 
 **Options**:
 
+* `--dev TEXT`: [default: False]
 * `--host TEXT`: [default: 0.0.0.0]
 * `--port TEXT`: [default: 8000]
 * `--help`: Show this message and exit.
