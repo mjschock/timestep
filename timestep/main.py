@@ -9,19 +9,6 @@ from timestep.worker import main as timestep_train
 
 settings = Settings()
 
-app_dir = settings.app_dir
-
-os.makedirs(f"{app_dir}/data", exist_ok=True)
-os.makedirs(f"{app_dir}/models", exist_ok=True)
-os.makedirs(f"{app_dir}/work", exist_ok=True)
-
-# engine = create_engine(f"sqlite:///{app_dir}/database.db")
-# SQLModel.metadata.create_all(
-#     bind=engine,
-#     checkfirst=True,
-#     tables=None,
-# )
-
 
 def get_help_message():
     is_readme_context = inspect.getmodule(inspect.stack()[1][0]) is None
@@ -101,7 +88,7 @@ def up(
     # """
     # typer.echo("Running serving...")
     """
-    Start up the Timestep AI platform at http://{host}:{port}.
+    Start up the Timestep AI platform.
     """
 
     typer.echo(f"Starting up the Timestep AI platform at http://{host}:{port}...")

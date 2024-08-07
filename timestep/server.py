@@ -19,6 +19,12 @@ from timestep.config import Settings
 
 settings = Settings()
 
+app_dir = settings.app_dir
+
+os.makedirs(f"{app_dir}/data", exist_ok=True)
+os.makedirs(f"{app_dir}/models", exist_ok=True)
+os.makedirs(f"{app_dir}/work", exist_ok=True)
+
 connexion_app = AsyncApp(import_name=__name__)
 default_hf_repo_id = settings.default_hf_repo_id
 default_llamafile_filename = settings.default_llamafile_filename
@@ -26,7 +32,7 @@ default_llamafile_host = settings.default_llamafile_host
 default_llamafile_port = settings.default_llamafile_port
 default_llamafile_url = f"https://huggingface.co/{default_hf_repo_id}/resolve/main/{default_llamafile_filename}?download=true"
 local_llamafile_path = (
-    f"{settings.app_dir}/models/{default_hf_repo_id}/{default_llamafile_filename}"
+    f"{app_dir}/models/{default_hf_repo_id}/{default_llamafile_filename}"
 )
 
 
