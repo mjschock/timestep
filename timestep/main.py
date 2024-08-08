@@ -1,11 +1,9 @@
 import inspect
-import os
 
 import typer
 
 from timestep.config import Settings
 from timestep.server import main as timestep_serve
-from timestep.worker import main as timestep_train
 
 settings = Settings()
 
@@ -27,6 +25,7 @@ $ pipx install poetry==1.8.3
 $ cp .env.example .env
 $ direnv allow # See https://direnv.net/#getting-started
 $ make
+$ timestep up --dev
 ```
 
 **Library Setup**:
@@ -36,13 +35,7 @@ $ python3 -m pip install --upgrade pip
 $ python3 -m pip install --user pipx
 $ python3 -m pipx ensurepath
 $ pipx install timestep
-```
-
-**Usage Prerequisites**:
-
-```console
-$ prefect server start
-$ prefect worker start --pool "default"
+$ timestep up
 ```
 """
         if is_readme_context
@@ -55,8 +48,6 @@ typer_app = typer.Typer(
     no_args_is_help=True,
 )
 
-# typer_app.add_typer(llamafile_typer_app, name="up")
-
 
 @typer_app.callback()
 def main():
@@ -65,28 +56,13 @@ def main():
     """
 
 
-# @typer_app.command()
-# def evals():
-#     """
-#     Run evaluations.
-#     """
-#     typer.echo("Running evaluations...")
-
-#     raise NotImplementedError
-
-
 @typer_app.command()
-# def serve(
 def up(
     dev=False,
     host="0.0.0.0",
     # llamafile_path=f"./models/{default_llamafile_filename}", # TODO: namespace under llamafile, include port, etc.
     port=8000,
 ):
-    # """
-    # Run serving.
-    # """
-    # typer.echo("Running serving...")
     """
     Start up the Timestep AI platform.
     """
@@ -100,16 +76,6 @@ def up(
         port=port,
         reload=dev,
     )
-
-
-# @typer_app.command()
-# def train():
-#     """
-#     Run training.
-#     """
-#     typer.echo("Running training...")
-
-#     timestep_train()
 
 
 if __name__ == "__main__":
