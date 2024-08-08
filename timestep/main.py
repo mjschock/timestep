@@ -58,10 +58,10 @@ def main():
 
 @typer_app.command()
 def up(
-    dev=False,
-    host="0.0.0.0",
+    dev: bool = False,
+    host: str = "0.0.0.0",
     # llamafile_path=f"./models/{default_llamafile_filename}", # TODO: namespace under llamafile, include port, etc.
-    port=8000,
+    port: int = 8000,
 ):
     """
     Start up the Timestep AI platform.
@@ -74,7 +74,6 @@ def up(
         host=host,
         # llamafile_path=llamafile_path,
         port=port,
-        reload=dev,
     )
 
 
