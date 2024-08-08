@@ -3,6 +3,7 @@ import json
 import os
 import signal
 import subprocess
+import time
 import urllib.request
 from contextlib import asynccontextmanager
 from enum import Enum
@@ -15,6 +16,7 @@ from fastapi import FastAPI, Request
 from filelock import SoftFileLock, Timeout
 from prefect import flow
 from prefect.server.api.server import SubprocessASGIServer
+from prefect.settings import PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS
 from prefect.utilities.processutils import get_sys_executable
 from prefect.workers.process import ProcessWorker
 from tqdm import tqdm
@@ -42,95 +44,168 @@ async def lifespan(app: FastAPI):
     os.makedirs(f"{app_dir}/models", exist_ok=True)
     os.makedirs(f"{app_dir}/work", exist_ok=True)
 
+    fn = Path(f"{app_dir}/data/data.json")
+
     soft_lock = SoftFileLock(
-        f"{app_dir}/data/database.lock",
+        f"{str(fn)}.lock",
         is_singleton=True,
         thread_local=False,
         timeout=120,
     )
 
+    subprocess_manager = SubprocessManager()
+
+    worker_count = int(os.getenv("PYTEST_XDIST_WORKER_COUNT", 1))
+    worker_name = os.getenv("PYTEST_XDIST_WORKER", "master")
+    worker_pid = os.getpid()
+
     with soft_lock.acquire():
-        print("Starting Prefect server...")
-        prefect_server = SubprocessASGIServer(port=4200)
-        prefect_server.start(timeout=30)
+        if fn.is_file():
+            data = json.loads(fn.read_text())
 
-        # print("Starting Prefect worker...")
-        # prefect_worker = ProcessWorker(
-        #     work_pool_name="default",
-        # )
-        # await prefect_worker.start()
-        # print("Started Prefect worker.")
+            data["timestep"][worker_name] = {
+                "pid": worker_pid,
+                "status": "running",
+            }
 
-    worker_id = os.environ.get("PYTEST_XDIST_WORKER")
+            fn.write_text(json.dumps(data))
 
-    prefect_worker = ShellScriptRunner(
-        script_name=f"prefect_worker_{worker_id}",
-        args=[
-            "sh",
-            "-c",
-            "prefect worker start --pool default",
-        ],
-    )
+        else:
+            if os.path.basename(
+                local_llamafile_path
+            ) == default_llamafile_filename and not os.path.exists(
+                local_llamafile_path
+            ):
+                os.makedirs(os.path.dirname(local_llamafile_path), exist_ok=True)
+                download_with_progress_bar(default_llamafile_url, local_llamafile_path)
 
-    prefect_worker.start()
+            assert os.path.exists(local_llamafile_path)
 
-    agent_flow = await flow.from_source(
-        source=str(Path(__file__).parent),
-        entrypoint="worker.py:agent_flow",
-    )
+            # if local_llamafile_path is not executable, make it executable
+            if not os.access(local_llamafile_path, os.X_OK):
+                os.chmod(local_llamafile_path, 0o755)
 
-    # try:
-    await agent_flow.deploy(
-        name="agent-flow-deployment",
-        # parameters=dict(name="Marvin"),
-        # work_pool_name="local",
-        work_pool_name="default",
-    )
+            llamafile_pid = subprocess_manager.start(
+                args=[
+                    "sh",
+                    local_llamafile_path,
+                    "--host",
+                    f"{default_llamafile_host}",
+                    "--nobrowser",
+                    "--path",
+                    "/zip/llama.cpp/server/public",
+                    "--port",
+                    f"{default_llamafile_port}",
+                    "--temp",
+                    "0.0",
+                ],
+                name=f"llamafiles.default",
+            )
 
-    # except Exception as e:
-    #     print(
-    #         f"{e} - Recommendation: `prefect server start` and `prefect worker start --pool default`"
-    #     )
+            prefect_server_pid = subprocess_manager.start(
+                args=[
+                    "sh",
+                    "-c",
+                    "prefect server start",
+                ],
+                name=f"prefect.server",
+            )
 
-    if os.path.basename(
-        local_llamafile_path
-    ) == default_llamafile_filename and not os.path.exists(local_llamafile_path):
-        os.makedirs(os.path.dirname(local_llamafile_path), exist_ok=True)
-        download_with_progress_bar(default_llamafile_url, local_llamafile_path)
+            # prefect_server = SubprocessASGIServer(port=4200)
+            # prefect_server.start(timeout=30)
+            # prefect_server_pid = prefect_server.server_process.pid
 
-    assert os.path.exists(local_llamafile_path)
+            # print(
+            #     f"Waiting {PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value()} seconds for Prefect server to start..."
+            # )
+            # time.sleep(PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value())
+            print(f"Sleeping for 30 seconds...")
+            time.sleep(30)
 
-    # if local_llamafile_path is not executable, make it executable
-    if not os.access(local_llamafile_path, os.X_OK):
-        os.chmod(local_llamafile_path, 0o755)
+            prefect_worker_pid = subprocess_manager.start(
+                args=[
+                    "sh",
+                    "-c",
+                    'prefect worker start --pool "default"',
+                ],
+                name=f"prefect.worker.default",
+            )
 
-    #    process = start_shell_script(
-    runner = ShellScriptRunner(
-        script_name=f"llamafile_{worker_id}",
-        args=[
-            "sh",
-            local_llamafile_path,
-            "--host",
-            f"{default_llamafile_host}",
-            "--nobrowser",
-            "--path",
-            "/zip/llama.cpp/server/public",
-            "--port",
-            f"{default_llamafile_port}",
-            "--temp",
-            "0.0",
-        ],
-    )
+            agent_flow = await flow.from_source(
+                source=str(Path(__file__).parent),
+                entrypoint="worker.py:agent_flow",
+            )
 
-    runner.start()
+            await agent_flow.deploy(
+                name="agent-flow-deployment",
+                work_pool_name="default",
+            )
+
+            data = {
+                "llamafiles": {
+                    "default": {
+                        "pid": llamafile_pid,
+                        "status": "running",
+                    }
+                },
+                "prefect": {
+                    "server": {
+                        "pid": prefect_server_pid,
+                        "status": "running",
+                    },
+                    "workers": {
+                        "default": {
+                            "pid": prefect_worker_pid,
+                            "status": "running",
+                        }
+                    },
+                },
+                "timestep": {
+                    worker_name: {
+                        "pid": worker_pid,
+                        "status": "running",
+                    }
+                },
+            }
+
+            fn.write_text(json.dumps(data))
 
     yield
 
-    # print(f"Terminating llamafile with PID: {process.pid}")
-    # process.terminate()
+    with soft_lock.acquire():
+        data = json.loads(fn.read_text())
 
-    # print("Stopping Prefect server...")
-    # prefect_server.stop()
+        print(f"Stopping {worker_name} worker process with PID: {worker_pid}")
+        data["timestep"][worker_name]["status"] = "stopped"
+
+        stopped_workers = [
+            worker
+            for worker in data["timestep"].values()
+            if worker["status"] == "stopped"
+        ]
+
+        if len(stopped_workers) >= worker_count:
+            for llamafile_id, llamafile in data["llamafiles"].items():
+                print(
+                    f"Stopping llamafile {llamafile_id} process with PID: {llamafile['pid']}"
+                )
+                subprocess_manager.stop(llamafile["pid"])
+
+            print(
+                f"Stopping Prefect server process with PID: {data['prefect']['server']['pid']}"
+            )
+            subprocess_manager.stop(data["prefect"]["server"]["pid"])
+
+            for prefect_worker_id, prefect_worker in data["prefect"]["workers"].items():
+                print(
+                    f"Stopping Prefect worker {prefect_worker_id} process with PID: {prefect_worker['pid']}"
+                )
+                subprocess_manager.stop(prefect_worker["pid"])
+
+            fn.unlink()
+
+        else:
+            fn.write_text(json.dumps(data))
 
 
 fastapi_app = FastAPI(
@@ -238,45 +313,36 @@ def download_with_progress_bar(
     pbar.close()
 
 
-class ShellScriptRunner:
-    def __init__(self, script_name, args):
-        # self.file_path = file_path
-        self.args = args
-        self.process = None
-        self.script_name = script_name
-
-    def start(self):
+class SubprocessManager:
+    def start(self, args, name):
         try:
-            # Construct the command with the script and the additional arguments
-            command = self.args
+            stdout_log_path = f"stdout.{name}.log"
+            stderr_log_path = f"stderr.{name}.log"
 
-            # Open the script and redirect its stdout and stderr to log files for debugging
-            with open(f"script_output.{self.script_name}.log", "w") as out, open(
-                f"script_error.{self.script_name}.log", "w"
-            ) as err:
+            with open(stderr_log_path, "w") as stderr, open(
+                stdout_log_path, "w"
+            ) as stdout:
                 self.process = subprocess.Popen(
-                    command,
-                    stdout=out,
-                    stderr=err,
+                    args,
                     preexec_fn=os.setpgrp,  # Start the process in a new process group
+                    stderr=stderr,
+                    stdout=stdout,
                 )
 
-            print(f"Started the file: {self.script_name} with PID: {self.process.pid}")
+            print(f"Started {name} process with PID: {self.process.pid}")
 
-            # Register the stop method to be called at exit
-            atexit.register(self.stop)
-
-        except FileNotFoundError:
-            print(f"File not found: {self.script_name}")
+            return self.process.pid
 
         except Exception as e:
             print(f"An error occurred: {e}")
 
-    def stop(self):
-        if self.process and self.process.poll() is None:
-            print("Terminating process")
-            self.process.terminate()
-            self.process.wait()
+    def stop(self, pid=None):
+        if pid:
+            print(f"Terminating process with PID: {pid}")
+            os.killpg(os.getpgid(pid), signal.SIGTERM)
+
+        else:
+            print("No process to terminate")
 
 
 def main(*args, **kwargs):
@@ -305,34 +371,4 @@ def main(*args, **kwargs):
 
 
 if __name__ == "__main__":
-    # main()
-
-    # prefect_worker = ShellScriptRunner(
-    #     script_name="prefect_worker",
-    #     args=[
-    #         "sh",
-    #         "-c",
-    #         "prefect worker start --pool default",
-    #     ],
-    # )
-
-    # prefect_worker.start()
-
-    runner = ShellScriptRunner(
-        script_name="llamafile",
-        args=[
-            "sh",
-            local_llamafile_path,
-            "--host",
-            f"{default_llamafile_host}",
-            "--nobrowser",
-            "--path",
-            "/zip/llama.cpp/server/public",
-            "--port",
-            f"{default_llamafile_port}",
-            "--temp",
-            "0.0",
-        ],
-    )
-
-    runner.start()
+    main()
