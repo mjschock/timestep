@@ -53,7 +53,7 @@ $ timestep up [OPTIONS]
 
 **Options**:
 
-* `--dev TEXT`: [default: False]
+* `--dev / --no-dev`: [default: no-dev]
 * `--host TEXT`: [default: 0.0.0.0]
-* `--port TEXT`: [default: 8000]
+* `--port INTEGER`: [default: 8000]
 * `--help`: Show this message and exit.

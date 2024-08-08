@@ -91,7 +91,7 @@ jobs:
         run: |
           # python -c "import timestep; print(timestep.__version__)"
           # timestep up
-          timestep serve --help
+          timestep up --help
   build-publish-pypi:
     needs: build-publish-testpypi-verify
     runs-on: ubuntu-latest
