@@ -188,22 +188,22 @@ async def lifespan(app: FastAPI):
         ]
 
         if len(stopped_workers) >= worker_count:
-            for llamafile_id, llamafile in data["llamafiles"].items():
+            for prefect_worker_id, prefect_worker in data["prefect"]["workers"].items():
                 print(
-                    f"Stopping llamafile {llamafile_id} process with PID: {llamafile['pid']}"
+                    f"Stopping Prefect worker {prefect_worker_id} process with PID: {prefect_worker['pid']}"
                 )
-                subprocess_manager.stop(llamafile["pid"])
+                subprocess_manager.stop(prefect_worker["pid"])
 
             print(
                 f"Stopping Prefect server process with PID: {data['prefect']['server']['pid']}"
             )
             subprocess_manager.stop(data["prefect"]["server"]["pid"])
 
-            for prefect_worker_id, prefect_worker in data["prefect"]["workers"].items():
+            for llamafile_id, llamafile in data["llamafiles"].items():
                 print(
-                    f"Stopping Prefect worker {prefect_worker_id} process with PID: {prefect_worker['pid']}"
+                    f"Stopping llamafile {llamafile_id} process with PID: {llamafile['pid']}"
                 )
-                subprocess_manager.stop(prefect_worker["pid"])
+                subprocess_manager.stop(llamafile["pid"])
 
             fn.unlink()
 
@@ -341,7 +341,6 @@ class SubprocessManager:
 
     def stop(self, pid=None):
         if pid:
-            print(f"Terminating process with PID: {pid}")
             os.killpg(os.getpgid(pid), signal.SIGTERM)
 
         else:
