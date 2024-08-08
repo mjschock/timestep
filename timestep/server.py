@@ -134,15 +134,16 @@ async def lifespan(app: FastAPI):
                 name="prefect.worker.default",
             )
 
-            agent_flow = await flow.from_source(
-                source=str(Path(__file__).parent),
-                entrypoint="worker.py:agent_flow",
-            )
-
-            await agent_flow.deploy(
-                name="agent-flow-deployment",
-                work_pool_name="default",
-            )
+# TODO: Filelock doesnt support async, try https://py-filelock.readthedocs.io/en/latest/_modules/filelock/asyncio.html
+#            agent_flow = await flow.from_source(
+#                source=str(Path(__file__).parent),
+#                entrypoint="worker.py:agent_flow",
+#            )
+#
+#            await agent_flow.deploy(
+#                name="agent-flow-deployment",
+#                work_pool_name="default",
+#            )
 
             data = {
                 "llamafiles": {
