@@ -198,25 +198,33 @@ async def get_agents(
     #     agents = session.exec(select(AgentSQLModel)).all()
 
     with Session(engine) as session:
-        after_created_at = (
-            session.exec(
+        if after:
+            after_agent = session.exec(
                 select(AgentSQLModel).where(AgentSQLModel.id == uuid.UUID(after))
-            )
-            .first()
-            .created_at
-            if after
-            else 0
-        )
+            ).first()
 
-        before_created_at = (
-            session.exec(
+            if after_agent:
+                after_created_at = after_agent.created_at
+
+            else:
+                after_created_at = 0
+
+        else:
+            after_created_at = 0
+
+        if before:
+            before_agent = session.exec(
                 select(AgentSQLModel).where(AgentSQLModel.id == uuid.UUID(before))
-            )
-            .first()
-            .created_at
-            if before
-            else func.now()
-        )
+            ).first()
+
+            if before_agent:
+                before_created_at = before_agent.created_at
+
+            else:
+                before_created_at = func.now()
+
+        else:
+            before_created_at = func.now()
 
         statement = (
             select(AgentSQLModel)

@@ -86,7 +86,7 @@ async def create_fine_tuning_job(body, token_info, user):
     # await train_model(fine_tuning_job_id=fine_tuning_job.id, suffix=suffix)
     flow_run: FlowRun = await run_deployment(
         idempotency_key=fine_tuning_job.id,
-        name="agent-flow/agent-flow-deployment",
+        name="agent-step-flow/agent-step-flow-deployment",
         # parameters={"names": ["Alice", "Bob"]},
         parameters={
             "inputs": {

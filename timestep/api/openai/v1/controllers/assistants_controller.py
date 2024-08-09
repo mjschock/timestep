@@ -13,7 +13,9 @@ from openai.types.beta.threads.message import Attachment, Message, MessageConten
 from openai.types.beta.threads.run import Run
 from openai.types.beta.threads.text import Text
 from openai.types.beta.threads.text_content_block import TextContentBlock
-from prefect.client.orchestration import get_client
+
+# from prefect.client.orchestration import get_client
+from prefect import get_client
 from prefect.deployments import run_deployment
 from prefect.deployments.flow_runs import FlowRun
 from prefect.flow_runs import wait_for_flow_run
@@ -177,17 +179,24 @@ async def create_run(body, token_info, thread_id, user):
     """
     stream = body.get("stream", False)
     assistant_id = body.get("assistant_id")
+    tag = f"thread-{thread_id}"
+
+    async with get_client() as client:
+        limit_id = await client.create_concurrency_limit(
+            concurrency_limit=1, tag=tag,
+        )  # TODO: store this limit_id in the threads table and delete the limit when the thread is deleted
 
     flow_run: FlowRun = await run_deployment(
-        idempotency_key=thread_id,
-        name="agent-flow/agent-flow-deployment",
+        # idempotency_key=thread_id,
+        name="agent-step-flow/agent-step-flow-deployment",
         parameters={
-            "inputs": {
+            "step_input": {
                 "agent_id": assistant_id,
                 "thread_id": thread_id,
             }
         },
         # job_variables={"env": {"MY_ENV_VAR": "staging"}},
+        tags=[tag],
         timeout=0,  # don't wait for the run to finish
     )
 
@@ -404,7 +413,7 @@ async def get_run(run_id, thread_id, token_info, user):
     """
     client = get_client()
     flow_run: FlowRun = await client.read_flow_run(flow_run_id=uuid.UUID(run_id))
-    assistant_id = flow_run.parameters["inputs"]["agent_id"]
+    assistant_id = flow_run.parameters["step_input"]["agent_id"]
 
     agent = await agent_service.get_agent(id=assistant_id)
 

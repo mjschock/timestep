@@ -172,13 +172,13 @@ async def lifespan(app: FastAPI):
             fn.write_text(json.dumps(data))
 
     # TODO: Filelock doesnt support async, try https://py-filelock.readthedocs.io/en/latest/_modules/filelock/asyncio.html
-    agent_flow = await flow.from_source(
+    agent_step_flow = await flow.from_source(
         source=str(Path(__file__).parent),
-        entrypoint="worker.py:agent_flow",
+        entrypoint="worker.py:agent_step_flow",
     )
 
-    await agent_flow.deploy(
-        name="agent-flow-deployment",
+    await agent_step_flow.deploy(
+        name="agent-step-flow-deployment",
         work_pool_name="default",
     )
 

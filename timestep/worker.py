@@ -51,6 +51,7 @@ from openai.types.file_object import FileObject
 from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparameters
 from prefect import flow, get_run_logger
 from prefect_shell import ShellOperation
+from pydantic import BaseModel
 
 from timestep.config import Settings
 
@@ -80,32 +81,28 @@ app_dir = typer.get_app_dir("timestep")
 #     pass
 
 
-class StepInput(dict):
+class StepInput(BaseModel):
+    agent_id: str
+    thread_id: str
+
+
+class StepOutput(BaseModel):
     pass
 
 
 @flow
 # @cf.flow(timeout_seconds=300)
-# async def agent_flow(inputs: dict, work_type: str):
-async def agent_flow(inputs: StepInput):
+async def agent_step_flow(step_input: StepInput) -> StepOutput:
     # See https://platform.openai.com/docs/assistants/deep-dive/managing-threads-and-messages
-
-    # TODO: We should manage the thread here, where we care most about it.
-    # Ideas: Add thread lock field to ThreadSQLModel? - Way external, in the database.
-    # Or, can we use this flow's idempotency_key to "lock" the thread? -- Right beside the deployment trigger, but then we have to manage the lock on various conditions.
-    # What if we use a Prefect Artifact to "lock the thread"? That is:
-    # Get the thread_id from the step_input.
-    # Get or create a Prefect Artifact with the thread_id as the key.
-    # Set a value on the Prefect Artifact to "lock" the thread.
-    # The simple way is to just use the thread_id as the idempotency_key, so that prefect allows only one run of the thread at a time.
+    # for more information on managing threads and messages
 
     logger = get_run_logger()
-    logger.info(f"inputs: {inputs}")
+    logger.info(f"step_input: {step_input}")
 
-    agent_id = inputs.get("agent_id")
+    agent_id = step_input.agent_id
     logger.info(f"agent_id: {agent_id}")
 
-    thread_id = inputs.get("thread_id")
+    thread_id = step_input.thread_id  # TODO: introduce a lock on the thread_id
     logger.info(f"thread_id: {thread_id}")
 
     openai_async_client = openai.AsyncOpenAI(
@@ -119,7 +116,9 @@ async def agent_flow(inputs: StepInput):
     logger.info(f"assistant: {assistant}")
 
     async_cursor_page: AsyncCursorPage[Message] = (
-        await openai_async_client.beta.threads.messages.list(thread_id=thread_id)
+        await openai_async_client.beta.threads.messages.list(
+            order="asc", thread_id=thread_id
+        )
     )
     logger.info(f"async_cursor_page: {async_cursor_page}")
 
@@ -130,11 +129,8 @@ async def agent_flow(inputs: StepInput):
 
     for message in messages:
         content: List[MessageContent] = message.content
-        logger.info(f"content: {content}")
 
         for _content in content:
-            logger.info(f"_content: {_content}")
-
             if type(_content) == TextContentBlock:
                 chat_completion_message_params.append(
                     ChatCompletionUserMessageParam(
@@ -144,6 +140,8 @@ async def agent_flow(inputs: StepInput):
                 )
 
             else:
+                logger.info(f"_content: {_content}")
+
                 raise NotImplementedError(f"Unsupported content type: {type(_content)}")
 
     logger.info(f"chat_completion_message_params: {chat_completion_message_params}")
@@ -212,6 +210,10 @@ async def agent_flow(inputs: StepInput):
 
     # TODO: optionally, allow the agent to learn from this thread
 
+    step_output = StepOutput()
+
+    return step_output
+
 
 # @task
 # async def select_fine_tuning_job_by_id(id: str):
@@ -266,7 +268,7 @@ async def agent_flow(inputs: StepInput):
 
 
 @flow(log_prints=True)
-async def train_agent_flow(fine_tuning_job_id: str, suffix: Optional[str] = None):
+async def agent_train_step_flow(fine_tuning_job_id: str, suffix: Optional[str] = None):
     logger = get_run_logger()
     logger.info("INFO level log message.")
 
@@ -481,7 +483,7 @@ def main(thread_id):
 
     # flow_run: FlowRun = await run_deployment(
     #     idempotency_key=thread_id,
-    #     name="agent-flow/agent-flow-deployment",
+    #     name="agent-step-flow/agent-step-flow-deployment",
     #     parameters={
     #         "inputs": {
     #             "agent_id": assistant_id,

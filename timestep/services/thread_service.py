@@ -137,25 +137,33 @@ async def get_thread_messages(
     messages: List[Message] = []
 
     with Session(engine) as session:
-        after_created_at = (
-            session.exec(
+        if after:
+            after_message = session.exec(
                 select(MessageSQLModel).where(MessageSQLModel.id == uuid.UUID(after))
-            )
-            .first()
-            .created_at
-            if after
-            else 0
-        )
+            ).first()
 
-        before_created_at = (
-            session.exec(
+            if after_message:
+                after_created_at = after_message.created_at
+
+            else:
+                after_created_at = 0
+
+        else:
+            after_created_at = 0
+
+        if before:
+            before_message = session.exec(
                 select(MessageSQLModel).where(MessageSQLModel.id == uuid.UUID(before))
-            )
-            .first()
-            .created_at
-            if before
-            else func.now()
-        )
+            ).first()
+
+            if before_message:
+                before_created_at = before_message.created_at
+
+            else:
+                before_created_at = func.now()
+
+        else:
+            before_created_at = func.now()
 
         statement = (
             select(MessageSQLModel)
