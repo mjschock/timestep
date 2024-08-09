@@ -7,6 +7,7 @@ from openai.types.beta.threads.message import Message, MessageContent
 from openai.types.beta.threads.text import Text
 from openai.types.beta.threads.text_content_block import TextContentBlock
 from openai.types.model import Model
+from sqlalchemy import func
 from sqlmodel import Field, Session, SQLModel, select
 
 from timestep.config import Settings
@@ -136,12 +137,15 @@ async def get_thread_messages(
     messages: List[Message] = []
 
     with Session(engine) as session:
-        if after:
-            after_message = session.exec(
+        after_created_at = (
+            session.exec(
                 select(MessageSQLModel).where(MessageSQLModel.id == uuid.UUID(after))
-            ).first()
-
-        after_created_at = after_message.created_at if after else 0
+            )
+            .first()
+            .created_at
+            if after
+            else 0
+        )
 
         before_created_at = (
             session.exec(
@@ -150,15 +154,14 @@ async def get_thread_messages(
             .first()
             .created_at
             if before
-            else int(time.time())
+            else func.now()
         )
 
         statement = (
             select(MessageSQLModel)
             .where(
                 MessageSQLModel.thread_id == uuid.UUID(thread_id),
-                MessageSQLModel.created_at > after_created_at,
-                MessageSQLModel.created_at < before_created_at,
+                MessageSQLModel.created_at.between(after_created_at, before_created_at),
             )
             .order_by(
                 MessageSQLModel.created_at.desc()

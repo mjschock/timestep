@@ -19,6 +19,7 @@ from prefect.deployments.flow_runs import FlowRun
 from prefect.flow_runs import wait_for_flow_run
 from sse_starlette import EventSourceResponse
 
+from timestep.database import AgentSQLModel
 from timestep.services import agent_service, run_service, thread_service
 
 # class StateType(AutoEnum):
@@ -70,7 +71,7 @@ state_type_to_run_status = {
 #     "tools": [{"type": "file_search"}],
 #     "model": "gpt-4-turbo"
 #     }'
-# do I need to handle this in the API?
+# do I need to handle this in the API? -> yes, see: https://platform.openai.com/docs/assistants/migration
 
 
 async def cancel_run(*args, **kwargs):
@@ -101,19 +102,24 @@ async def create_assistant(body, token_info: dict, user: str):
 
     :rtype: Union[AssistantObject, Tuple[AssistantObject, int], Tuple[AssistantObject, int, Dict[str, str]]
     """
-    agent = await agent_service.insert_agent(
+    agent: AgentSQLModel = await agent_service.insert_agent(
         body=body,
     )
 
     assistant = Assistant(
         id=str(agent.id),
         created_at=agent.created_at.timestamp(),
-        description=body.get("description"),
-        instructions=body.get("instructions"),
-        model=body.get("model"),
-        name=body.get("name"),
+        # description=body.get("description"),
+        description=agent.description,
+        # instructions=body.get("instructions"),
+        instructions=agent.instructions,
+        # model=body.get("model"),
+        model=agent.model,
+        # name=body.get("name"),
+        name=agent.name,
         object="assistant",
-        tools=body.get("tools", []),
+        # tools=body.get("tools", []),
+        tools=agent.tools,
     )
 
     print("assistant: ", assistant)
@@ -173,7 +179,7 @@ async def create_run(body, token_info, thread_id, user):
     assistant_id = body.get("assistant_id")
 
     flow_run: FlowRun = await run_deployment(
-        # idempotency_key=run.id,
+        idempotency_key=thread_id,
         name="agent-flow/agent-flow-deployment",
         parameters={
             "inputs": {
@@ -346,7 +352,7 @@ async def get_assistant(assistant_id, token_info, user):
 
     :rtype: Union[AssistantObject, Tuple[AssistantObject, int], Tuple[AssistantObject, int, Dict[str, str]]
     """
-    agent = await agent_service.get_agent(id=assistant_id)
+    agent: AgentSQLModel = await agent_service.get_agent(id=assistant_id)
 
     assistant = Assistant(
         id=str(agent.id),
@@ -456,7 +462,15 @@ async def get_thread(token_info, thread_id, user):
 
 
 # def list_assistants(limit=None, order=None, after=None, before=None):  # noqa: E501
-async def list_assistants(*args, **kwargs):
+# async def list_assistants(*args, **kwargs):
+async def list_assistants(
+    token_info: dict,
+    user: str,
+    after: Optional[str] = None,
+    before: Optional[str] = None,
+    limit: int = 20,
+    order: str = "desc",
+):
     """Returns a list of assistants.
 
      # noqa: E501
@@ -472,11 +486,33 @@ async def list_assistants(*args, **kwargs):
 
     :rtype: Union[ListAssistantsResponse, Tuple[ListAssistantsResponse, int], Tuple[ListAssistantsResponse, int, Dict[str, str]]
     """
-    print("=== list_assistants ===")
-    print("args: ", args)
-    print("kwargs: ", kwargs)
+    agents = await agent_service.get_agents(
+        after=after,
+        before=before,
+        limit=limit,
+        order=order,
+        token_info=token_info,
+        user=user,
+    )
 
-    raise NotImplementedError
+    assistants: List[Assistant] = [
+        Assistant(
+            id=str(agent.id),
+            created_at=agent.created_at.timestamp(),
+            description=agent.description,
+            instructions=agent.instructions,
+            model=agent.model,
+            name=agent.name,
+            object="assistant",
+            tools=agent.tools,
+        )
+        for agent in agents
+    ]
+
+    return AsyncCursorPage(
+        # return SyncCursorPage(
+        data=assistants,
+    ).model_dump(mode="json")
 
 
 # def list_messages(thread_id, limit=None, order=None, after=None, before=None, run_id=None):  # noqa: E501
@@ -602,7 +638,7 @@ async def modify_assistant(
     assistant = Assistant(
         id=str(agent.id),
         created_at=agent.created_at.timestamp(),
-        # description=agent.description,
+        description=agent.description,
         instructions=agent.instructions,
         model=agent.model,
         name=agent.name,

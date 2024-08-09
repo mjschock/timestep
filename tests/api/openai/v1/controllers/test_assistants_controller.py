@@ -1,4 +1,10 @@
 from httpx import AsyncClient
+from openai.types.beta import Assistant
+
+from timestep.config import Settings
+
+settings = Settings()
+token = settings.openai_api_key.get_secret_value()
 
 assistant_id = "default_assistant_id"
 message_id = "default_message_id"
@@ -14,11 +20,61 @@ async def test_cancel_run(client: AsyncClient):
     assert response.status_code == 401
 
 async def test_create_assistant(client: AsyncClient):
+    model_id = "test-create-assistant"
+
+    response = await client.get(
+        "/api/openai/v1/assistants",
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
+    )
+
+    assert response.status_code == 200
+
+    assistants_response = response.json()
+    assistants: list[Assistant] = [Assistant(**assistant) for assistant in assistants_response["data"]]
+
+    for assistant in assistants:
+        if assistant.model == model_id:
+            response = await client.delete(
+                f"/api/openai/v1/assistants/{assistant.id}",
+                headers={
+                    "Authorization": f"Bearer {token}",
+                },
+            )
+
+            assert response.status_code == 200
+
     response = await client.post(
         "/api/openai/v1/assistants",
     )
 
     assert response.status_code == 401
+
+    response = await client.post(
+        "/api/openai/v1/assistants",
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
+        json={
+            "model": model_id,
+        },
+    )
+
+    assert response.status_code == 200
+
+    assistant: Assistant = Assistant(**response.json())
+
+    assert assistant.model == model_id
+
+    response = await client.delete(
+        f"/api/openai/v1/assistants/{assistant.id}",
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
+    )
+
+    assert response.status_code == 200
 
 async def test_create_message(client: AsyncClient):
     response = await client.post(
@@ -49,11 +105,60 @@ async def test_create_thread_and_run(client: AsyncClient):
     assert response.status_code == 401
 
 async def test_delete_assistant(client: AsyncClient):
+    model_id = "test-delete-assistant"
+
+    response = await client.get(
+        "/api/openai/v1/assistants",
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
+    )
+
+    assert response.status_code == 200
+
+    assistants_response = response.json()
+
+    assistants: list[Assistant] = [Assistant(**assistant) for assistant in assistants_response["data"]]
+
+    for assistant in assistants:
+        if assistant.model == model_id:
+            response = await client.delete(
+                f"/api/openai/v1/assistants/{assistant.id}",
+                headers={
+                    "Authorization": f"Bearer {token}",
+                },
+            )
+
+            assert response.status_code == 200
+
+    response = await client.post(
+        "/api/openai/v1/assistants",
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
+        json={
+            "model": model_id,
+        },
+    )
+
+    assert response.status_code == 200
+
+    assistant: Assistant = Assistant(**response.json())
+
     response = await client.delete(
-        f"/api/openai/v1/assistants/{assistant_id}",
+        f"/api/openai/v1/assistants/{assistant.id}",
     )
 
     assert response.status_code == 401
+
+    response = await client.delete(
+        f"/api/openai/v1/assistants/{assistant.id}",
+        headers={
+            "Authorization": f"Bearer {token}",
+        },
+    )
+
+    assert response.status_code == 200
 
 async def test_delete_message(client: AsyncClient):
     response = await client.delete(

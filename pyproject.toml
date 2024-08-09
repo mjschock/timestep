@@ -11,7 +11,7 @@ description = "Timestep AI CLI - free, local-first, open-source AI"
 license = "MIT"
 name = "timestep"
 readme = "README.md"
-version = "12.0.55"
+version = "12.0.56"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
@@ -35,6 +35,7 @@ respx = "^0.21.1"
 sqlmodel = "^0.0.21"
 sse-starlette = "^2.1.2"
 starlette-context = "^0.3.6"
+tinygrad = "^0.9.1"
 transformers = "^4.42.4"
 typer = {extras = ["all"], version = "^0.12.3"}
 
@@ -58,7 +59,7 @@ toml-sort = "^0.23.1"
 timestep = 'timestep.main:typer_app'
 
 [tool.pytest.ini_options]
-addopts = "--cov=timestep --cov-fail-under=47 -n logical -q -ra -x"
+addopts = "--cov=timestep --cov-fail-under=50 -n logical -q -ra -x"
 asyncio_mode = "auto"
 minversion = "8.2.2"
 testpaths = [

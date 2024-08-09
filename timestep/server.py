@@ -26,6 +26,7 @@ from tqdm import tqdm
 
 from timestep.api.openai.v1.controllers.completions_controller import create_completion
 from timestep.config import Settings
+from timestep.database import create_db_and_tables
 
 settings = Settings()
 
@@ -63,6 +64,8 @@ async def lifespan(app: FastAPI):
     worker_pid = os.getpid()
 
     with soft_lock.acquire():
+        create_db_and_tables()
+
         if fn.is_file():
             data = json.loads(fn.read_text())
 
@@ -74,6 +77,8 @@ async def lifespan(app: FastAPI):
             fn.write_text(json.dumps(data))
 
         else:
+            # create_db_and_tables()
+
             if os.path.basename(
                 local_llamafile_path
             ) == default_llamafile_filename and not os.path.exists(
@@ -137,17 +142,6 @@ async def lifespan(app: FastAPI):
             print(f"Sleeping for 30 seconds...")
             time.sleep(30)
 
-            # TODO: Filelock doesnt support async, try https://py-filelock.readthedocs.io/en/latest/_modules/filelock/asyncio.html
-            #            agent_flow = await flow.from_source(
-            #                source=str(Path(__file__).parent),
-            #                entrypoint="worker.py:agent_flow",
-            #            )
-            #
-            #            await agent_flow.deploy(
-            #                name="agent-flow-deployment",
-            #                work_pool_name="default",
-            #            )
-
             data = {
                 "llamafiles": {
                     "default": {
@@ -176,6 +170,17 @@ async def lifespan(app: FastAPI):
             }
 
             fn.write_text(json.dumps(data))
+
+    # TODO: Filelock doesnt support async, try https://py-filelock.readthedocs.io/en/latest/_modules/filelock/asyncio.html
+    agent_flow = await flow.from_source(
+        source=str(Path(__file__).parent),
+        entrypoint="worker.py:agent_flow",
+    )
+
+    await agent_flow.deploy(
+        name="agent-flow-deployment",
+        work_pool_name="default",
+    )
 
     yield
 
