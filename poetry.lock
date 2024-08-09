@@ -4264,6 +4264,82 @@ files = [
 windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
+name = "pyobjc-core"
+version = "10.3.1"
+description = "Python<->ObjC Interoperability Module"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyobjc_core-10.3.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:ea46d2cda17921e417085ac6286d43ae448113158afcf39e0abe484c58fb3d78"},
+    {file = "pyobjc_core-10.3.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:899d3c84d2933d292c808f385dc881a140cf08632907845043a333a9d7c899f9"},
+    {file = "pyobjc_core-10.3.1-cp312-cp312-macosx_10_9_universal2.whl", hash = "sha256:6ff5823d13d0a534cdc17fa4ad47cf5bee4846ce0fd27fc40012e12b46db571b"},
+    {file = "pyobjc_core-10.3.1-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:2581e8e68885bcb0e11ec619e81ef28e08ee3fac4de20d8cc83bc5af5bcf4a90"},
+    {file = "pyobjc_core-10.3.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:ea98d4c2ec39ca29e62e0327db21418696161fb138ee6278daf2acbedf7ce504"},
+    {file = "pyobjc_core-10.3.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:4c179c26ee2123d0aabffb9dbc60324b62b6f8614fb2c2328b09386ef59ef6d8"},
+    {file = "pyobjc_core-10.3.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:cb901fce65c9be420c40d8a6ee6fff5ff27c6945f44fd7191989b982baa66dea"},
+    {file = "pyobjc_core-10.3.1.tar.gz", hash = "sha256:b204a80ccc070f9ab3f8af423a3a25a6fd787e228508d00c4c30f8ac538ba720"},
+]
+
+[[package]]
+name = "pyobjc-framework-cocoa"
+version = "10.3.1"
+description = "Wrappers for the Cocoa frameworks on macOS"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyobjc_framework_Cocoa-10.3.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:4cb4f8491ab4d9b59f5187e42383f819f7a46306a4fa25b84f126776305291d1"},
+    {file = "pyobjc_framework_Cocoa-10.3.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:5f31021f4f8fdf873b57a97ee1f3c1620dbe285e0b4eaed73dd0005eb72fd773"},
+    {file = "pyobjc_framework_Cocoa-10.3.1-cp312-cp312-macosx_10_9_universal2.whl", hash = "sha256:11b4e0bad4bbb44a4edda128612f03cdeab38644bbf174de0c13129715497296"},
+    {file = "pyobjc_framework_Cocoa-10.3.1-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:de5e62e5ccf2871a94acf3bf79646b20ea893cc9db78afa8d1fe1b0d0f7cbdb0"},
+    {file = "pyobjc_framework_Cocoa-10.3.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:6c5af24610ab639bd1f521ce4500484b40787f898f691b7a23da3339e6bc8b90"},
+    {file = "pyobjc_framework_Cocoa-10.3.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:a7151186bb7805deea434fae9a4423335e6371d105f29e73cc2036c6779a9dbc"},
+    {file = "pyobjc_framework_Cocoa-10.3.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:743d2a1ac08027fd09eab65814c79002a1d0421d7c0074ffd1217b6560889744"},
+    {file = "pyobjc_framework_cocoa-10.3.1.tar.gz", hash = "sha256:1cf20714daaa986b488fb62d69713049f635c9d41a60c8da97d835710445281a"},
+]
+
+[package.dependencies]
+pyobjc-core = ">=10.3.1"
+
+[[package]]
+name = "pyobjc-framework-libdispatch"
+version = "10.3.1"
+description = "Wrappers for libdispatch on macOS"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyobjc_framework_libdispatch-10.3.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:5543aea8acd53fb02bcf962b003a2a9c2bdacf28dc290c31a3d2de7543ef8392"},
+    {file = "pyobjc_framework_libdispatch-10.3.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:3e0db3138aae333f0b87b42586bc016430a76638af169aab9cef6afee4e5f887"},
+    {file = "pyobjc_framework_libdispatch-10.3.1-cp312-cp312-macosx_10_9_universal2.whl", hash = "sha256:b209dbc9338cd87e053ede4d782b8c445bcc0b9a3d0365a6ffa1f9cd5143c301"},
+    {file = "pyobjc_framework_libdispatch-10.3.1-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:a74e62314376dc2d34bc5d4a86cedaf5795786178ebccd0553c58e8fa73400a3"},
+    {file = "pyobjc_framework_libdispatch-10.3.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:8e8fb27ac86d48605eb2107ac408ed8de281751df81f5430fe66c8228d7626b8"},
+    {file = "pyobjc_framework_libdispatch-10.3.1-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:0a7a19afef70c98b3b527fb2c9adb025444bcb50f65c8d7b949f1efb51bde577"},
+    {file = "pyobjc_framework_libdispatch-10.3.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:109044cddecb3332cbb75f14819cd01b98aacfefe91204c776b491eccc58a112"},
+    {file = "pyobjc_framework_libdispatch-10.3.1.tar.gz", hash = "sha256:f5c3475498cb32f54d75e21952670e4a32c8517fb2db2e90869f634edc942446"},
+]
+
+[package.dependencies]
+pyobjc-core = ">=10.3.1"
+pyobjc-framework-Cocoa = ">=10.3.1"
+
+[[package]]
+name = "pyobjc-framework-metal"
+version = "10.3.1"
+description = "Wrappers for the framework Metal on macOS"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyobjc_framework_Metal-10.3.1-cp36-abi3-macosx_10_13_universal2.whl", hash = "sha256:4a42f3aa47eb5e0d3f29bf07f239c2ba33725701546ea6d3c5d019133e0fbce1"},
+    {file = "pyobjc_framework_Metal-10.3.1-cp36-abi3-macosx_10_9_universal2.whl", hash = "sha256:cc33d05e376d3a2f42da24b397f6353d9cb8e5990c79c9255a82637b7b8f256c"},
+    {file = "pyobjc_framework_Metal-10.3.1-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:22762ba170d0fc4538dd7f582da1fd7673160e369eca74efe3d6d35bfdd50522"},
+    {file = "pyobjc_framework_Metal-10.3.1-cp36-abi3-macosx_11_0_universal2.whl", hash = "sha256:7fef3ebfd6cfbd7cbfe45aaa86dd32034303d933871d8450f4c990dbdefda176"},
+    {file = "pyobjc_framework_metal-10.3.1.tar.gz", hash = "sha256:495307db0bfd2063f28b7c8fa350af71afcfbf5f5f2186a6a751b4cb2ef46a1a"},
+]
+
+[package.dependencies]
+pyobjc-core = ">=10.3.1"
+pyobjc-framework-Cocoa = ">=10.3.1"
+
+[[package]]
 name = "pyproject-hooks"
 version = "1.1.0"
 description = "Wrappers to call pyproject.toml-based build backend hooks."
@@ -5641,6 +5717,31 @@ requests = ">=2.26.0"
 blobfile = ["blobfile (>=2)"]
 
 [[package]]
+name = "tinygrad"
+version = "0.9.1"
+description = "You like pytorch? You like micrograd? You love tinygrad! <3"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "tinygrad-0.9.1-py3-none-any.whl", hash = "sha256:b4a2b1a588d31b8cd19429110977393499db0b561059306dd90141c407eec884"},
+    {file = "tinygrad-0.9.1.tar.gz", hash = "sha256:8b75ab6dd35647642392adde00efbce370d36f1b71e593fbb948deb7a4249f7e"},
+]
+
+[package.dependencies]
+numpy = "*"
+pyobjc-framework-libdispatch = {version = "*", markers = "platform_system == \"Darwin\""}
+pyobjc-framework-Metal = {version = "*", markers = "platform_system == \"Darwin\""}
+
+[package.extras]
+arm = ["unicorn"]
+docs = ["black", "markdown-callouts", "markdown-exec[ansi]", "mkdocs-material", "mkdocstrings[python]"]
+linting = ["mypy", "pre-commit", "pylint", "ruff", "types-tqdm", "typing-extensions"]
+llvm = ["llvmlite"]
+testing = ["bottle", "hypothesis", "librosa", "networkx", "nibabel", "onnx (==1.16.0)", "onnx2torch", "opencv-python", "pillow", "pytest", "pytest-xdist", "safetensors", "sentencepiece", "tabulate", "tiktoken", "torch", "tqdm", "transformers"]
+testing-tf = ["tensorflow (==2.15.1)", "tensorflow-addons"]
+triton = ["triton-nightly (>=2.1.0.dev20231014192330)"]
+
+[[package]]
 name = "tokenizers"
 version = "0.19.1"
 description = ""
@@ -6697,4 +6798,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "181a10f88729a9b5d7a163d0edb68391c3350aa4f5a0d5bd6276609208c03fd8"
+content-hash = "d237124d85b3517dfb5f89691f68c9bcbf354a8da7c52aa234427a56f82410d1"

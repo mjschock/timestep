@@ -1,6 +1,8 @@
 import asyncio
 import os
+from typing import Dict, Union
 import httpx
+import openai
 import pytest
 import pytest_asyncio
 from asgi_lifespan import LifespanManager
@@ -50,10 +52,21 @@ async def client(app, current_loop, monkeypatch):
     #     mocked_handle_request,
     # )
 
-    async with httpx.AsyncClient(base_url=base_url, transport=httpx.ASGITransport(app=app)) as client:
-        print("Client is ready")
-        yield client
-        print('Client is closing')
+    async with httpx.AsyncClient(base_url=base_url, transport=httpx.ASGITransport(app=app)) as client, openai.AsyncOpenAI(
+        api_key=settings.openai_api_key.get_secret_value(),
+        base_url=os.getenv("OPENAI_BASE_URL"),
+    ) as openai_client:
+        print("Clients are ready")
+        # yield client
+        # yield client, openai_client
+        clients: Dict[str, Union[httpx.AsyncClient, openai.AsyncOpenAI]] = {
+            # "httpx": client,
+            "async_httpx": client,
+            "async_openai": openai_client,
+        }
+
+        yield clients["async_httpx"] # TODO: return both clients
+        print('Clients are closing')
 
 @pytest.fixture
 def non_mocked_hosts() -> list:

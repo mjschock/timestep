@@ -4,21 +4,24 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from pydantic import ConfigDict
-from sqlalchemy import JSON, Column, DateTime, func
+from sqlalchemy import JSON, Column, DateTime, func, text
 from sqlmodel import Field, SQLModel, create_engine
 
 from timestep.config import Settings
 
 settings = Settings()
 app_dir = settings.app_dir
-os.makedirs(app_dir, exist_ok=True)
-engine = create_engine(f"sqlite:///{app_dir}/database.db", echo=True, echo_pool=True)
+os.makedirs(f"{app_dir}/data", exist_ok=True)
+engine = create_engine(
+    f"sqlite:///{app_dir}/data/database.db", echo=True, echo_pool=True
+)
 
 
 class SQLModelMixin(object):
     ## TODO: Investigate inheritance and use cases of TableArtifact from Prefect
     __table_args__ = {"extend_existing": True}
 
+    # created_at = Column(DateTime, server_default=text('NOW()'))
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
@@ -26,12 +29,13 @@ class SQLModelMixin(object):
 class AgentSQLModel(SQLModel, SQLModelMixin, table=True):
     __tablename__: str = "agents"
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    instructions: str = Field()
-    # model: str = Field()
+    description: str | None = None
+    instructions: str | None = None
+    model: str = Field()
     # models: List[str] = Field(sa_column=Column(JSON), default=[])
-    model_config = ConfigDict(protected_namespaces=())
-    model_id: uuid.UUID = Field(foreign_key="models.id")
-    name: str = Field()
+    # model_config = ConfigDict(protected_namespaces=())
+    # model_id: uuid.UUID = Field(foreign_key="models.id")
+    name: str | None = None
     tools: List[dict] = Field(sa_column=Column(JSON), default=[])
 
 
@@ -45,16 +49,16 @@ class MessageSQLModel(SQLModel, SQLModelMixin, table=True):
     thread_id: uuid.UUID = Field(foreign_key="threads.id")
 
 
-class ModelSQLModel(SQLModel, SQLModelMixin, table=True):
-    __tablename__: str = "models"
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+# class ModelSQLModel(SQLModel, SQLModelMixin, table=True):
+#     __tablename__: str = "models"
+#     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
 
 
-class ModelAliasSQLModel(SQLModel, SQLModelMixin, table=True):
-    __tablename__: str = "model_aliases"
-    alias: str = Field(default=None, primary_key=True)
-    model_config = ConfigDict(protected_namespaces=())
-    model_id: uuid.UUID = Field(foreign_key="models.id", ondelete="CASCADE")
+# class ModelAliasSQLModel(SQLModel, SQLModelMixin, table=True):
+#     __tablename__: str = "model_aliases"
+#     alias: str = Field(default=None, primary_key=True)
+#     model_config = ConfigDict(protected_namespaces=())
+#     model_id: uuid.UUID = Field(foreign_key="models.id", ondelete="CASCADE")
 
 
 class ThreadSQLModel(SQLModel, SQLModelMixin, table=True):
@@ -63,15 +67,15 @@ class ThreadSQLModel(SQLModel, SQLModelMixin, table=True):
 
 
 def create_db_and_tables():
-    try:
-        SQLModel.metadata.create_all(
-            bind=engine,
-            checkfirst=True,
-            tables=None,
-        )
+    # try:
+    SQLModel.metadata.create_all(
+        bind=engine,
+        checkfirst=True,
+        tables=None,
+    )
 
-    except Exception as e:
-        print(f"Error creating tables: {e}")
+    # except Exception as e:
+    #     print(f"Error creating tables: {e}")
 
 
 if __name__ == "__main__":
