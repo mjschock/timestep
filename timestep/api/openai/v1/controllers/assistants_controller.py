@@ -183,7 +183,8 @@ async def create_run(body, token_info, thread_id, user):
 
     async with get_client() as client:
         limit_id = await client.create_concurrency_limit(
-            concurrency_limit=1, tag=tag,
+            concurrency_limit=1,
+            tag=tag,
         )  # TODO: store this limit_id in the threads table and delete the limit when the thread is deleted
 
     flow_run: FlowRun = await run_deployment(
