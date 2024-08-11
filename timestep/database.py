@@ -11,7 +11,7 @@ from timestep.config import Settings
 
 settings = Settings()
 app_dir = settings.app_dir
-os.makedirs(f"{app_dir}/data", exist_ok=True)
+
 engine = create_engine(
     f"sqlite:///{app_dir}/data/database.db", echo=True, echo_pool=True
 )

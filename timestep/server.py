@@ -44,10 +44,6 @@ local_llamafile_path = (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    os.makedirs(f"{app_dir}/data", exist_ok=True)
-    os.makedirs(f"{app_dir}/models", exist_ok=True)
-    os.makedirs(f"{app_dir}/work", exist_ok=True)
-
     fn = Path(f"{app_dir}/data/data.json")
 
     soft_lock = SoftFileLock(

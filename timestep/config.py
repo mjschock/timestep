@@ -1,12 +1,21 @@
+import os
 # from typing import Optional
 
 import typer
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings
 
+app_dir = typer.get_app_dir(__package__)
+
+os.makedirs(f"{app_dir}/3rdparty", exist_ok=True)
+os.makedirs(f"{app_dir}/data", exist_ok=True)
+os.makedirs(f"{app_dir}/models", exist_ok=True)
+os.makedirs(f"{app_dir}/secrets", exist_ok=True)
+os.makedirs(f"{app_dir}/work", exist_ok=True)
+
 
 class Settings(BaseSettings):
-    app_dir: str = Field(default=typer.get_app_dir(__package__))
+    app_dir: str = Field(default=app_dir)
     bearerinfo_func: str = Field(default="timestep.api.decode_token")
     default_hf_repo_id: str = Field(
         default="Mozilla/TinyLlama-1.1B-Chat-v1.0-llamafile"
@@ -44,9 +53,11 @@ class Settings(BaseSettings):
     #     default="http://prefect-server.default.svc.cluster.local:4200/api"
     # )
     # pyenv_version: str = Field()
+    verbose: bool = Field(default=True)
     # version: str = Field()
 
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
-        secrets_dir = "./secrets"  # TODO: Change to f"{app_dir}/secrets" when ready
+        # secrets_dir = "./secrets"  # TODO: Change to f"{app_dir}/secrets" when ready
+        secrets_dir = f"{app_dir}/secrets"
