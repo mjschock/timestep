@@ -45,6 +45,8 @@ from openai.types.chat.chat_completion_user_message_param import (
 )
 from openai.types.file_object import FileObject
 from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparameters
+from openai.types.shared_params.function_definition import FunctionDefinition
+from openai.types.shared_params.function_parameters import FunctionParameters
 from prefect import flow, get_run_logger
 from prefect_shell import ShellOperation
 from pydantic import BaseModel
@@ -150,10 +152,34 @@ async def agent_step_flow(step_input: StepInput) -> StepOutput:
 
     logger.info(f"chat_completion_message_params: {chat_completion_message_params}")
 
+    chat_completion_tool_params: List[ChatCompletionToolParam] = []
+
+    for tool in assistant.tools:
+        assert tool.type in [
+            "code-interpreter",
+            "file-search",
+            "function",
+        ], f"Unsupported tool type: {tool.type}"
+
+        function_description: str = tool.type
+        function_name: str = tool.type
+        function_parameters: FunctionParameters = FunctionParameters()
+
+        chat_completion_tool_params.append(
+            ChatCompletionToolParam(
+                function=FunctionDefinition(
+                    description=function_description,
+                    name=function_name,
+                    parameters=function_parameters,
+                ),
+                type="function",
+            )
+        )
+
     chat_completion: ChatCompletion = await openai_async_client.chat.completions.create(
         messages=chat_completion_message_params,
         model=assistant.model,
-        tools=assistant.tools,
+        tools=chat_completion_tool_params,
     )
 
     logger.info(f"chat_completion: {chat_completion}")

@@ -203,29 +203,37 @@ async def create_run(body, token_info, thread_id, user):
 
     print("flow_run: ", flow_run)
 
+    flow_run_id = flow_run.id
+
     if stream:
-        raise NotImplementedError
 
-        # async def run_event_publisher():
-        #     wait_for_flow_run(flow_run.id)
+        async def run_event_publisher():
+            try:
+                flow_run = await wait_for_flow_run(flow_run_id=flow_run_id)
 
-        #     try:
-        #         # for chunk in response:
-        #         # # async for chunk in response:
-        #         #     chunk = ChatCompletionChunk(**chunk)
-        #         #     # yield json.dumps(chunk)
-        #         #     yield json.dumps(chunk.model_dump(mode="json"))
-        #         #     # yield ChatCompletionChunk(**chunk).model_dump(mode="json")
-        #         #     # yield chunk.model_dump(mode="json")
+                agent = await agent_service.get_agent(id=assistant_id)
 
-        #     except asyncio.CancelledError as e:
-        #         # print(f"Disconnected from client (via refresh/close) {req.client}")
-        #         print(f"Disconnected from client (via refresh/close)")
-        #         # Do any other cleanup, if any
-        #         raise e
+                run = Run(
+                    id=str(flow_run.id),
+                    assistant_id=str(agent.id),
+                    created_at=int(flow_run.created.timestamp()),
+                    instructions=agent.instructions,
+                    model=agent.model,
+                    object="thread.run",
+                    parallel_tool_calls=False,
+                    status="queued",
+                    thread_id=thread_id,
+                    tools=agent.tools,
+                )
 
-        # # print(f'=== RETURN: {__name__}.create_chat_completion(body: CompletionCreateParams, token_info: dict, user: str)) ===')
-        # return EventSourceResponse(run_event_publisher())
+                yield run.model_dump_json()
+
+            except asyncio.CancelledError as e:
+                print(f"Disconnected from client (via refresh/close)")
+                # Do any other cleanup, if any
+                raise e
+
+        return EventSourceResponse(run_event_publisher())
 
     else:
         agent = await agent_service.get_agent(id=assistant_id)
