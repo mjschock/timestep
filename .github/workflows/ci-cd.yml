@@ -21,8 +21,6 @@ jobs:
         SECRETS_CONTEXT: ${{ toJson(secrets) }}
         VARS_CONTEXT: ${{ toJson(vars) }}
       run: |
-        mkdir -m 777 -p ~/.config/timestep/secrets
-
         if [ -n "$SECRETS_CONTEXT" ] && [ "$(echo "$SECRETS_CONTEXT" | jq -e . > /dev/null 2>&1; echo $?)" -eq 0 ]; then
           secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
         else
@@ -33,7 +31,7 @@ jobs:
           if [ "$key" != "github_token" ]; then
             lowercase_key=$(echo "$key" | tr '[:upper:]' '[:lower:]')
             secret_value=$(echo "$SECRETS_CONTEXT" | jq -r ".$key")
-            echo "$secret_value" > "~/.config/timestep/secrets/$lowercase_key"
+            mkdir -p ~/.config/timestep/secrets && echo "$secret_value" > ~/.config/timestep/secrets/$lowercase_key
           fi
         done
 
@@ -102,8 +100,6 @@ jobs:
         SECRETS_CONTEXT: ${{ toJson(secrets) }}
         VARS_CONTEXT: ${{ toJson(vars) }}
       run: |
-        mkdir -m 777 -p ~/.config/timestep/secrets
-
         if [ -n "$SECRETS_CONTEXT" ] && [ "$(echo "$SECRETS_CONTEXT" | jq -e . > /dev/null 2>&1; echo $?)" -eq 0 ]; then
           secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
         else
@@ -114,7 +110,7 @@ jobs:
           if [ "$key" != "github_token" ]; then
             lowercase_key=$(echo "$key" | tr '[:upper:]' '[:lower:]')
             secret_value=$(echo "$SECRETS_CONTEXT" | jq -r ".$key")
-            echo "$secret_value" > "~/.config/timestep/secrets/$lowercase_key"
+            mkdir -p ~/.config/timestep/secrets && echo "$secret_value" > ~/.config/timestep/secrets/$lowercase_key
           fi
         done
 
