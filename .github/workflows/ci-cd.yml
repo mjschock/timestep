@@ -21,7 +21,7 @@ jobs:
         SECRETS_CONTEXT: ${{ toJson(secrets) }}
         VARS_CONTEXT: ${{ toJson(vars) }}
       run: |
-        mkdir -p ~/.config/timestep/secrets
+        mkdir -m 777 -p ~/.config/timestep/secrets
 
         if [ -n "$SECRETS_CONTEXT" ] && [ "$(echo "$SECRETS_CONTEXT" | jq -e . > /dev/null 2>&1; echo $?)" -eq 0 ]; then
           secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
@@ -102,7 +102,7 @@ jobs:
         SECRETS_CONTEXT: ${{ toJson(secrets) }}
         VARS_CONTEXT: ${{ toJson(vars) }}
       run: |
-        mkdir -p ~/.config/timestep/secrets
+        mkdir -m 777 -p ~/.config/timestep/secrets
 
         if [ -n "$SECRETS_CONTEXT" ] && [ "$(echo "$SECRETS_CONTEXT" | jq -e . > /dev/null 2>&1; echo $?)" -eq 0 ]; then
           secret_keys=$(echo "$SECRETS_CONTEXT" | jq -r 'keys[]')
