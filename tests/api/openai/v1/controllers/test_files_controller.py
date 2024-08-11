@@ -6,11 +6,11 @@ from timestep.config import Settings
 
 settings = Settings()
 
-fine_tuning_dataset_file_path = "3rdparty/openai-cookbook/examples/data/drone_training.jsonl"
+fine_tuning_dataset_file_path = "data/drone_training.jsonl"
 fine_tuning_dataset = open(fine_tuning_dataset_file_path, "rb")
 fine_tuning_dataset_file_name = Path(fine_tuning_dataset_file_path).name
 fine_tuning_dataset_size = Path(fine_tuning_dataset_file_path).stat().st_size
-lyft_2021_pdf_file_path = "3rdparty/openai-cookbook/examples/data/10k/lyft_2021.pdf"
+lyft_2021_pdf_file_path = "data/10k/lyft_2021.pdf"
 lyft_2021_pdf = open(lyft_2021_pdf_file_path, "rb")
 lyft_2021_pdf_file_name = Path(lyft_2021_pdf_file_path).name
 lyft_2021_pdf_size = Path(lyft_2021_pdf_file_path).stat().st_size

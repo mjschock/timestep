@@ -2,15 +2,11 @@ import os
 from typing import List, Optional
 
 import controlflow as cf
-
-# import controlflow as cf
 import httpx
 import openai
 import typer
 from langchain_openai import ChatOpenAI
 from openai.pagination import AsyncCursorPage, SyncCursorPage
-
-# from langchain_openai import ChatOpenAI
 from openai.types.beta.assistant import Assistant
 from openai.types.beta.thread import Thread
 from openai.types.beta.threads.image_file_content_block import ImageFileContentBlock
@@ -67,6 +63,14 @@ app_dir = typer.get_app_dir("timestep")
 #         driver=AsyncDriver.SQLITE_AIOSQLITE, database=f"{app_dir}/database.db"
 #     )
 # )
+
+model = ChatOpenAI(
+    api_key=settings.openai_api_key.get_secret_value(),
+    base_url=settings.openai_base_url,
+    temperature=0.0,
+)
+
+cf.default_model = model
 
 # cf.default_model = ChatOpenAI(
 #     api_key=os.environ.get("OPENAI_API_KEY"),

@@ -14,7 +14,7 @@ if [ -n "$TERMUX_VERSION" ]; then
   LDFLAGS="-lpython3.11" pip3 install --no-build-isolation --no-cache-dir pandas==2.2.2
 fi
 
-git submodule update --init --recursive
+# git submodule update --init --recursive
 
 if [ -n "$POETRY_REPOSITORIES_TESTPYPI_URL" ]; then
   poetry config repositories.testpypi "$POETRY_REPOSITORIES_TESTPYPI_URL"

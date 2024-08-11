@@ -7,8 +7,4 @@
 /build
 /data
 /dist
-/models
-/secrets
-/work
 __pycache__
-database.db

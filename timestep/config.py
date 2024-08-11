@@ -1,5 +1,4 @@
 import os
-# from typing import Optional
 
 import typer
 from pydantic import Field, SecretStr
@@ -7,11 +6,9 @@ from pydantic_settings import BaseSettings
 
 app_dir = typer.get_app_dir(__package__)
 
-os.makedirs(f"{app_dir}/3rdparty", exist_ok=True)
 os.makedirs(f"{app_dir}/data", exist_ok=True)
 os.makedirs(f"{app_dir}/models", exist_ok=True)
 os.makedirs(f"{app_dir}/secrets", exist_ok=True)
-os.makedirs(f"{app_dir}/work", exist_ok=True)
 
 
 class Settings(BaseSettings):

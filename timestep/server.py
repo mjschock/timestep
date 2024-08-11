@@ -44,176 +44,189 @@ local_llamafile_path = (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    fn = Path(f"{app_dir}/data/data.json")
+    try:
+        fn = Path(f"{app_dir}/data/data.json")
 
-    soft_lock = SoftFileLock(
-        f"{str(fn)}.lock",
-        is_singleton=True,
-        thread_local=False,
-        timeout=120,
-    )
+        soft_lock = SoftFileLock(
+            f"{str(fn)}.lock",
+            is_singleton=True,
+            thread_local=False,
+            timeout=120,
+        )
 
-    subprocess_manager = SubprocessManager()
+        subprocess_manager = SubprocessManager()
 
-    worker_count = int(os.getenv("PYTEST_XDIST_WORKER_COUNT", 1))
-    worker_name = os.getenv("PYTEST_XDIST_WORKER", "master")
-    worker_pid = os.getpid()
+        worker_count = int(os.getenv("PYTEST_XDIST_WORKER_COUNT", 1))
+        worker_name = os.getenv("PYTEST_XDIST_WORKER", "master")
+        worker_pid = os.getpid()
 
-    with soft_lock.acquire():
-        create_db_and_tables()
+        with soft_lock.acquire():
+            create_db_and_tables()
 
-        if fn.is_file():
-            data = json.loads(fn.read_text())
+            if fn.is_file():
+                data = json.loads(fn.read_text())
 
-            data["timestep"][worker_name] = {
-                "pid": worker_pid,
-                "status": "running",
-            }
+                data["timestep"][worker_name] = {
+                    "pid": worker_pid,
+                    "status": "running",
+                }
 
-            fn.write_text(json.dumps(data))
+                fn.write_text(json.dumps(data))
 
-        else:
-            # create_db_and_tables()
+            else:
+                # create_db_and_tables()
 
-            if os.path.basename(
-                local_llamafile_path
-            ) == default_llamafile_filename and not os.path.exists(
-                local_llamafile_path
-            ):
-                os.makedirs(os.path.dirname(local_llamafile_path), exist_ok=True)
-                download_with_progress_bar(default_llamafile_url, local_llamafile_path)
+                if os.path.basename(
+                    local_llamafile_path
+                ) == default_llamafile_filename and not os.path.exists(
+                    local_llamafile_path
+                ):
+                    os.makedirs(os.path.dirname(local_llamafile_path), exist_ok=True)
+                    download_with_progress_bar(
+                        default_llamafile_url, local_llamafile_path
+                    )
 
-            assert os.path.exists(local_llamafile_path)
+                assert os.path.exists(local_llamafile_path)
 
-            # if local_llamafile_path is not executable, make it executable
-            if not os.access(local_llamafile_path, os.X_OK):
-                os.chmod(local_llamafile_path, 0o755)
+                # if local_llamafile_path is not executable, make it executable
+                if not os.access(local_llamafile_path, os.X_OK):
+                    os.chmod(local_llamafile_path, 0o755)
 
-            llamafile_pid = subprocess_manager.start(
-                args=[
-                    "sh",
-                    local_llamafile_path,
-                    "--host",
-                    f"{default_llamafile_host}",
-                    "--nobrowser",
-                    "--path",
-                    "/zip/llama.cpp/server/public",
-                    "--port",
-                    f"{default_llamafile_port}",
-                    "--temp",
-                    "0.0",
-                ],
-                name="llamafiles.default",
-            )
+                llamafile_pid = subprocess_manager.start(
+                    args=[
+                        "sh",
+                        local_llamafile_path,
+                        "--host",
+                        f"{default_llamafile_host}",
+                        "--nobrowser",
+                        "--path",
+                        "/zip/llama.cpp/server/public",
+                        "--port",
+                        f"{default_llamafile_port}",
+                        "--temp",
+                        "0.0",
+                    ],
+                    name="llamafiles.default",
+                )
 
-            prefect_server_pid = subprocess_manager.start(
-                args=[
-                    "sh",
-                    "-c",
-                    "prefect server start",
-                ],
-                name="prefect.server",
-            )
+                prefect_server_pid = subprocess_manager.start(
+                    args=[
+                        "sh",
+                        "-c",
+                        "prefect server start",
+                    ],
+                    name="prefect.server",
+                )
 
-            # prefect_server = SubprocessASGIServer(port=4200)
-            # prefect_server.start(timeout=30)
-            # prefect_server_pid = prefect_server.server_process.pid
+                # prefect_server = SubprocessASGIServer(port=4200)
+                # prefect_server.start(timeout=30)
+                # prefect_server_pid = prefect_server.server_process.pid
 
-            # print(
-            #     f"Waiting {PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value()} seconds for Prefect server to start..."
-            # )
-            # time.sleep(PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value())
-            print(f"Sleeping for 30 seconds...")
-            time.sleep(30)
+                # print(
+                #     f"Waiting {PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value()} seconds for Prefect server to start..."
+                # )
+                # time.sleep(PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value())
+                print(f"Sleeping for 30 seconds...")
+                time.sleep(30)
 
-            prefect_worker_pid = subprocess_manager.start(
-                args=[
-                    "sh",
-                    "-c",
-                    "prefect worker start --pool 'default' --type 'process'",
-                ],
-                name="prefect.worker.default",
-            )
+                prefect_worker_pid = subprocess_manager.start(
+                    args=[
+                        "sh",
+                        "-c",
+                        "prefect worker start --pool 'default' --type 'process'",
+                    ],
+                    name="prefect.worker.default",
+                )
 
-            print(f"Sleeping for 30 seconds...")
-            time.sleep(30)
+                print(f"Sleeping for 30 seconds...")
+                time.sleep(30)
 
-            data = {
-                "llamafiles": {
-                    "default": {
-                        "pid": llamafile_pid,
-                        "status": "running",
-                    }
-                },
-                "prefect": {
-                    "server": {
-                        "pid": prefect_server_pid,
-                        "status": "running",
-                    },
-                    "workers": {
+                data = {
+                    "llamafiles": {
                         "default": {
-                            "pid": prefect_worker_pid,
+                            "pid": llamafile_pid,
                             "status": "running",
                         }
                     },
-                },
-                "timestep": {
-                    worker_name: {
-                        "pid": worker_pid,
-                        "status": "running",
-                    }
-                },
-            }
+                    "prefect": {
+                        "server": {
+                            "pid": prefect_server_pid,
+                            "status": "running",
+                        },
+                        "workers": {
+                            "default": {
+                                "pid": prefect_worker_pid,
+                                "status": "running",
+                            }
+                        },
+                    },
+                    "timestep": {
+                        worker_name: {
+                            "pid": worker_pid,
+                            "status": "running",
+                        }
+                    },
+                }
 
-            fn.write_text(json.dumps(data))
+                fn.write_text(json.dumps(data))
 
-    # TODO: Filelock doesnt support async, try https://py-filelock.readthedocs.io/en/latest/_modules/filelock/asyncio.html
-    agent_step_flow = await flow.from_source(
-        source=str(Path(__file__).parent),
-        entrypoint="worker.py:agent_step_flow",
-    )
+        # TODO: Filelock doesnt support async, try https://py-filelock.readthedocs.io/en/latest/_modules/filelock/asyncio.html
+        agent_step_flow = await flow.from_source(
+            source=str(Path(__file__).parent),
+            entrypoint="worker.py:agent_step_flow",
+        )
 
-    await agent_step_flow.deploy(
-        name="agent-step-flow-deployment",
-        work_pool_name="default",
-    )
+        # await agent_step_flow.deploy(
+        #     name="agent-step-flow-deployment",
+        #     work_pool_name="default",
+        # )
 
-    yield
+        yield
 
-    with soft_lock.acquire():
-        data = json.loads(fn.read_text())
+        with soft_lock.acquire():
+            data = json.loads(fn.read_text())
 
-        print(f"Stopping {worker_name} worker process with PID: {worker_pid}")
-        data["timestep"][worker_name]["status"] = "stopped"
+            print(f"Stopping {worker_name} worker process with PID: {worker_pid}")
+            data["timestep"][worker_name]["status"] = "stopped"
 
-        stopped_workers = [
-            worker
-            for worker in data["timestep"].values()
-            if worker["status"] == "stopped"
-        ]
+            stopped_workers = [
+                worker
+                for worker in data["timestep"].values()
+                if worker["status"] == "stopped"
+            ]
 
-        if len(stopped_workers) >= worker_count:
-            for prefect_worker_id, prefect_worker in data["prefect"]["workers"].items():
+            if len(stopped_workers) >= worker_count:
+                for prefect_worker_id, prefect_worker in data["prefect"][
+                    "workers"
+                ].items():
+                    print(
+                        f"Stopping Prefect worker {prefect_worker_id} process with PID: {prefect_worker['pid']}"
+                    )
+                    subprocess_manager.stop(prefect_worker["pid"])
+
                 print(
-                    f"Stopping Prefect worker {prefect_worker_id} process with PID: {prefect_worker['pid']}"
+                    f"Stopping Prefect server process with PID: {data['prefect']['server']['pid']}"
                 )
-                subprocess_manager.stop(prefect_worker["pid"])
+                subprocess_manager.stop(data["prefect"]["server"]["pid"])
 
-            print(
-                f"Stopping Prefect server process with PID: {data['prefect']['server']['pid']}"
-            )
-            subprocess_manager.stop(data["prefect"]["server"]["pid"])
+                for llamafile_id, llamafile in data["llamafiles"].items():
+                    print(
+                        f"Stopping llamafile {llamafile_id} process with PID: {llamafile['pid']}"
+                    )
+                    subprocess_manager.stop(llamafile["pid"])
 
-            for llamafile_id, llamafile in data["llamafiles"].items():
-                print(
-                    f"Stopping llamafile {llamafile_id} process with PID: {llamafile['pid']}"
-                )
-                subprocess_manager.stop(llamafile["pid"])
+                fn.unlink()
 
-            fn.unlink()
+            else:
+                fn.write_text(json.dumps(data))
 
-        else:
-            fn.write_text(json.dumps(data))
+    except Exception as e:
+        print(f"An error occurred: {e}; attempting to clean up...")
+
+        # TODO: stop all subprocesses, alternatively, use finally block to stop all subprocesses unlink the file
+        fn.unlink()
+
+        raise e
 
 
 fastapi_app = FastAPI(
