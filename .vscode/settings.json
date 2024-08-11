@@ -9,7 +9,7 @@
         "*": false,
         "python": true,
     },
-    "python.analysis.extraPaths": [
-        "./3rdparty/tinygrad"
-    ],
+    // "python.analysis.extraPaths": [
+    //     "./3rdparty/tinygrad"
+    // ],
 }
