@@ -1,2 +1,0 @@
-cdktf~=0.15.5
-pytest
