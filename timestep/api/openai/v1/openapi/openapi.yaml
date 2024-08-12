@@ -12263,7 +12263,7 @@ components:
           $ref: '#/components/schemas/AssistantsApiResponseFormatOption'
       required:
       - assistant_id
-      - thread_id
+      # - thread_id
       title: CreateThreadAndRunRequest
       type: object
     ThreadObject:

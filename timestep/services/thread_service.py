@@ -1,16 +1,10 @@
-import time
 import uuid
 from typing import List, Optional
 
-from openai.types.beta.thread import Thread
-from openai.types.beta.threads.message import Message, MessageContent
-from openai.types.beta.threads.text import Text
-from openai.types.beta.threads.text_content_block import TextContentBlock
-from openai.types.model import Model
+from openai.types.beta.threads.message import Message
 from sqlalchemy import func
-from sqlmodel import Field, Session, SQLModel, select
+from sqlmodel import Session, select
 
-from timestep.config import Settings
 from timestep.database import MessageSQLModel, ThreadSQLModel, engine
 
 
@@ -27,10 +21,6 @@ async def insert_thread(*args, **kwargs):
 
 
 async def insert_message(*args, **kwargs):
-    print("=== insert_message ===")
-    print("args: ", args)
-    print("kwargs: ", kwargs)
-
     attachments = kwargs.get("attachments", [])
 
     body_content = kwargs.get("body", {}).get("content")
@@ -71,27 +61,6 @@ async def insert_message(*args, **kwargs):
     return message
 
 
-# def create_message(thread_id, create_message_request):  # noqa: E501
-async def create_thread_message(body, token_info, thread_id, user):
-    """Create a message.
-
-     # noqa: E501
-
-    :param thread_id: The ID of the [thread](/docs/api-reference/threads) to create a message for.
-    :type thread_id: str
-    :param create_message_request:
-    :type create_message_request: dict | bytes
-
-    :rtype: Union[MessageObject, Tuple[MessageObject, int], Tuple[MessageObject, int, Dict[str, str]]
-    """
-    # if connexion.request.is_json:
-    #     create_message_request = CreateMessageRequest.from_dict(connexion.request.get_json())  # noqa: E501
-
-    print("=== create_thread_message ===")
-    raise NotImplementedError
-
-
-# def get_thread(thread_id):  # noqa: E501
 async def get_thread(token_info, thread_id, user):
     """Retrieves a thread.
 
@@ -134,8 +103,6 @@ async def get_thread_messages(
 
     :rtype: Union[ListMessagesResponse, Tuple[ListMessagesResponse, int], Tuple[ListMessagesResponse, int, Dict[str, str]]
     """
-    messages: List[Message] = []
-
     with Session(engine) as session:
         if after:
             after_message = session.exec(
@@ -180,14 +147,20 @@ async def get_thread_messages(
         )
 
         results = session.exec(statement)
-        messages = results.all()
 
-    return messages
+        messages: List[Message] = [
+            Message(
+                id=str(result.id),
+                attachments=result.attachments,
+                content=result.content,
+                created_at=result.created_at.timestamp(),
+                object="thread.message",
+                role=result.role,
+                status=result.status,
+                thread_id=str(result.thread_id),
+                updated_at=result.updated_at.timestamp(),
+            )
+            for result in results.all()
+        ]
 
-
-async def mutate_thread(*args, **kwargs):
-    raise NotImplementedError
-
-
-async def query_thread(*args, **kwargs):
-    raise NotImplementedError
+        return messages

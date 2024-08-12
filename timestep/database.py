@@ -13,7 +13,8 @@ settings = Settings()
 app_dir = settings.app_dir
 
 engine = create_engine(
-    f"sqlite:///{app_dir}/data/database.db", echo=True, echo_pool=True
+    # f"sqlite:///{app_dir}/data/database.db", echo=True, echo_pool=True
+    f"sqlite:///{app_dir}/data/database.db"
 )
 
 

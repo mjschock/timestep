@@ -4,9 +4,27 @@ import time
 import uuid
 from typing import List, Optional
 
+from openai import Stream
 from openai.pagination import AsyncCursorPage
 from openai.types.beta.assistant import Assistant
 from openai.types.beta.assistant_deleted import AssistantDeleted
+from openai.types.beta.assistant_stream_event import (
+    AssistantStreamEvent,
+    ThreadCreated,
+    ThreadRunCancelled,
+    ThreadRunCancelling,
+    ThreadRunCompleted,
+    ThreadRunCreated,
+    ThreadRunExpired,
+    ThreadRunFailed,
+    ThreadRunIncomplete,
+    ThreadRunInProgress,
+    ThreadRunQueued,
+    ThreadRunRequiresAction,
+    ThreadRunStepCreated,
+    ThreadRunStepDelta,
+    ThreadRunStepInProgress,
+)
 from openai.types.beta.assistant_update_params import AssistantUpdateParams
 from openai.types.beta.thread import Thread
 from openai.types.beta.threads.message import Attachment, Message, MessageContent
@@ -124,7 +142,7 @@ async def create_assistant(body, token_info: dict, user: str):
         tools=agent.tools,
     )
 
-    print("assistant: ", assistant)
+    # print("assistant: ", assistant)
 
     return assistant.model_dump(mode="json")
 
@@ -193,6 +211,8 @@ async def create_run(body, token_info, thread_id, user):
         parameters={
             "step_input": {
                 "agent_id": assistant_id,
+                "instructions": body.get("instructions", ""),
+                "tools": body.get("tools", []),
                 "thread_id": thread_id,
             }
         },
@@ -201,32 +221,85 @@ async def create_run(body, token_info, thread_id, user):
         timeout=0,  # don't wait for the run to finish
     )
 
-    print("flow_run: ", flow_run)
-
-    flow_run_id = flow_run.id
+    flow_run_id = str(flow_run.id)
 
     if stream:
 
         async def run_event_publisher():
             try:
-                flow_run = await wait_for_flow_run(flow_run_id=flow_run_id)
-
-                agent = await agent_service.get_agent(id=assistant_id)
-
-                run = Run(
-                    id=str(flow_run.id),
-                    assistant_id=str(agent.id),
-                    created_at=int(flow_run.created.timestamp()),
-                    instructions=agent.instructions,
-                    model=agent.model,
-                    object="thread.run",
-                    parallel_tool_calls=False,
-                    status="queued",
-                    thread_id=thread_id,
-                    tools=agent.tools,
+                run: Run = Run(
+                    **await get_run(flow_run_id, thread_id, token_info, user)
                 )
 
-                yield run.model_dump_json()
+                # TODO: yield ThreadCreated event if this was created vai create_thread_and_run
+
+                yield ThreadRunCreated(  # TODO: do this right after the run is created
+                    data=run,
+                    event="thread.run.created",
+                ).model_dump_json()
+
+                while True:
+                    run: Run = Run(
+                        **await get_run(flow_run_id, thread_id, token_info, user)
+                    )
+                    # The status of the run, which can be either `queued`, `in_progress`,
+                    #     `requires_action`, `cancelling`, `cancelled`, `failed`, `completed`,
+                    #     `incomplete`, or `expired`.
+
+                    if run.status == "cancelling":
+                        yield ThreadRunCancelling(
+                            data=run,
+                            event="thread.run.cancelling",
+                        ).model_dump_json()
+
+                    elif run.status == "cancelled":
+                        yield ThreadRunCancelled(
+                            data=run,
+                            event="thread.run.cancelled",
+                        ).model_dump_json()
+
+                        break
+
+                    elif run.status == "completed":
+                        yield ThreadRunCompleted(
+                            data=run,
+                            event="thread.run.completed",
+                        ).model_dump_json()
+
+                        break
+
+                    elif run.status == "failed":
+                        yield ThreadRunFailed(
+                            data=run,
+                            event="thread.run.failed",
+                        ).model_dump_json()
+
+                        break
+
+                    elif run.status == "in_progress":
+                        yield ThreadRunInProgress(
+                            data=run,
+                            event="thread.run.in_progress",
+                        ).model_dump_json()
+
+                    elif run.status == "queued":
+                        yield ThreadRunQueued(
+                            data=run,
+                            event="thread.run.queued",
+                        ).model_dump_json()
+
+                    elif run.status == "requires_action":
+                        yield ThreadRunRequiresAction(
+                            data=run,
+                            event="thread.run.requires_action",
+                        ).model_dump_json()
+
+                    else:
+                        raise NotImplementedError(
+                            f"Run status {run.status} not implemented"
+                        )
+
+                    await asyncio.sleep(1)
 
             except asyncio.CancelledError as e:
                 print(f"Disconnected from client (via refresh/close)")
@@ -236,20 +309,22 @@ async def create_run(body, token_info, thread_id, user):
         return EventSourceResponse(run_event_publisher())
 
     else:
-        agent = await agent_service.get_agent(id=assistant_id)
+        # agent = await agent_service.get_agent(id=assistant_id)
 
-        run = Run(
-            id=str(flow_run.id),
-            assistant_id=str(agent.id),
-            created_at=int(flow_run.created.timestamp()),
-            instructions=agent.instructions,
-            model=agent.model,
-            object="thread.run",
-            parallel_tool_calls=False,
-            status="queued",
-            thread_id=thread_id,
-            tools=agent.tools,
-        )
+        # run = Run(
+        #     id=str(flow_run.id),
+        #     assistant_id=str(agent.id),
+        #     created_at=int(flow_run.created.timestamp()),
+        #     instructions=agent.instructions,
+        #     model=agent.model,
+        #     object="thread.run",
+        #     parallel_tool_calls=False,
+        #     status="queued",
+        #     thread_id=thread_id,
+        #     tools=agent.tools,
+        # )
+
+        run: Run = Run(**await get_run(flow_run_id, thread_id, token_info, user))
 
         return run.model_dump(mode="json")
 
@@ -264,7 +339,17 @@ async def create_thread(body, token_info, user):
 
     :rtype: Union[ThreadObject, Tuple[ThreadObject, int], Tuple[ThreadObject, int, Dict[str, str]]
     """
+    # stream = body.get("stream", False)
     thread = await thread_service.insert_thread(body, token_info, user)
+
+    if body.get("messages"):
+        for message in body.get("messages"):
+            await create_message(
+                body=message,
+                token_info=token_info,
+                thread_id=str(thread.id),
+                user=user,
+            )
 
     thread = Thread(
         id=str(thread.id),
@@ -273,11 +358,25 @@ async def create_thread(body, token_info, user):
         # tool_resources
     )
 
+    # if stream:
+    #     async def run_event_publisher():
+    #         try:
+    #             yield ThreadCreated(
+    #                 data=thread,
+    #                 event="thread.created",
+    #             ).model_dump_json()
+
+    #         except asyncio.CancelledError as e:
+    #             print(f"Disconnected from client (via refresh/close)")
+    #             # Do any other cleanup, if any
+    #             raise e
+
+    #     return EventSourceResponse(run_event_publisher())
+
     return thread.model_dump(mode="json")
 
 
-# def create_thread_and_run(create_thread_and_run_request):  # noqa: E501
-async def create_thread_and_run(*args, **kwargs):
+async def create_thread_and_run(body, token_info, user):
     """Create a thread and run it in one request.
 
      # noqa: E501
@@ -287,18 +386,28 @@ async def create_thread_and_run(*args, **kwargs):
 
     :rtype: Union[RunObject, Tuple[RunObject, int], Tuple[RunObject, int, Dict[str, str]]
     """
-    # if connexion.request.is_json:
-    #     create_thread_and_run_request = CreateThreadAndRunRequest.from_dict(connexion.request.get_json())  # noqa: E501
-
-    print("=== create_thread_and_run ===")
-    print("args: ", args)
-    print("kwargs: ", kwargs)
-
     # thread = client.beta.threads.create()
     # run = submit_message(MATH_ASSISTANT_ID, thread, user_input)
     # return thread, run
 
-    raise NotImplementedError
+    thread_body = body.get("thread")
+    thread_body["stream"] = body.get("stream", False)
+
+    thread: Thread = Thread(
+        **await create_thread(
+            body=body.get("thread"),
+            token_info=token_info,
+            user=user,
+        )
+    )
+
+    thread_id = str(thread.id)
+
+    # run = await create_run(*args, **kwargs)
+
+    # raise NotImplementedError
+
+    return await create_run(body, token_info, thread_id, user)
 
 
 # def delete_assistant(assistant_id):  # noqa: E501
@@ -370,7 +479,10 @@ async def get_assistant(assistant_id, token_info, user):
 
     :rtype: Union[AssistantObject, Tuple[AssistantObject, int], Tuple[AssistantObject, int, Dict[str, str]]
     """
-    agent: AgentSQLModel = await agent_service.get_agent(id=assistant_id)
+    agent: AgentSQLModel | None = await agent_service.get_agent(id=assistant_id)
+
+    if not agent:
+        return None
 
     assistant = Assistant(
         id=str(agent.id),
@@ -382,7 +494,7 @@ async def get_assistant(assistant_id, token_info, user):
         tools=agent.tools,
     )
 
-    print("assistant: ", assistant)
+    # print("assistant: ", assistant)
 
     return assistant.model_dump(mode="json")
 
@@ -422,21 +534,25 @@ async def get_run(run_id, thread_id, token_info, user):
     """
     client = get_client()
     flow_run: FlowRun = await client.read_flow_run(flow_run_id=uuid.UUID(run_id))
-    assistant_id = flow_run.parameters["step_input"]["agent_id"]
+    agent_id = flow_run.parameters["step_input"]["agent_id"]
+    agent = await agent_service.get_agent(id=agent_id)
 
-    agent = await agent_service.get_agent(id=assistant_id)
+    if not agent:
+        return None
 
     run = Run(
         id=str(flow_run.id),
         assistant_id=str(agent.id),
         created_at=int(flow_run.created.timestamp()),
-        instructions=agent.instructions,
+        # instructions=agent.instructions,
+        instructions=flow_run.parameters["step_input"]["instructions"],
         model=agent.model,
         object="thread.run",
         parallel_tool_calls=False,
         status=state_type_to_run_status[flow_run.state.type],
         thread_id=thread_id,
-        tools=agent.tools,
+        # tools=agent.tools,
+        tools=flow_run.parameters["step_input"]["tools"],
     )
 
     return run.model_dump(mode="json")
@@ -562,14 +678,16 @@ async def list_messages(
 
     :rtype: Union[ListMessagesResponse, Tuple[ListMessagesResponse, int], Tuple[ListMessagesResponse, int, Dict[str, str]]
     """
-    messages = await thread_service.get_thread_messages(
-        token_info=token_info,
-        thread_id=thread_id,
-        user=user,
-        after=after,
-        before=before,
-        limit=limit,
-        order=order,
+    messages: List[Message] = (
+        await thread_service.get_thread_messages(  # TODO: move other controllers to do send/get OpenAI types from service calls
+            token_info=token_info,
+            thread_id=thread_id,
+            user=user,
+            after=after,
+            before=before,
+            limit=limit,
+            order=order,
+        )
     )
 
     # TODO: handle AsyncCursoPage as well

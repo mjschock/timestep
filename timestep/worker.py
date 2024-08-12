@@ -12,7 +12,7 @@ from openai.types.beta.thread import Thread
 from openai.types.beta.threads.image_file_content_block import ImageFileContentBlock
 from openai.types.beta.threads.image_url_content_block import ImageURLContentBlock
 from openai.types.beta.threads.message import Attachment, Message, MessageContent
-from openai.types.beta.threads.run import Run
+from openai.types.beta.threads.run import AssistantTool, Run
 from openai.types.beta.threads.text_content_block import TextContentBlock
 from openai.types.chat.chat_completion import ChatCompletion, Choice
 from openai.types.chat.chat_completion_assistant_message_param import (
@@ -89,7 +89,9 @@ cf.default_model = model
 
 class StepInput(BaseModel):
     agent_id: str
+    instructions: str = ""
     thread_id: str
+    tools: List[AssistantTool] = []
 
 
 class StepOutput(BaseModel):
@@ -154,7 +156,10 @@ async def agent_step_flow(step_input: StepInput) -> StepOutput:
 
     chat_completion_tool_params: List[ChatCompletionToolParam] = []
 
-    for tool in assistant.tools:
+    logger.info(f"chat_completion_tool_params: {chat_completion_tool_params}")
+
+    # for tool in assistant.tools:
+    for tool in step_input.tools:
         assert tool.type in [
             "code-interpreter",
             "file-search",
@@ -163,7 +168,7 @@ async def agent_step_flow(step_input: StepInput) -> StepOutput:
 
         function_description: str = tool.type
         function_name: str = tool.type
-        function_parameters: FunctionParameters = FunctionParameters()
+        function_parameters: FunctionParameters = dict()
 
         chat_completion_tool_params.append(
             ChatCompletionToolParam(
