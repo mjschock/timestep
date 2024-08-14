@@ -1,4 +1,5 @@
 import os
+import time
 from typing import List, Optional
 
 import controlflow as cf
@@ -13,6 +14,16 @@ from openai.types.beta.threads.image_file_content_block import ImageFileContentB
 from openai.types.beta.threads.image_url_content_block import ImageURLContentBlock
 from openai.types.beta.threads.message import Attachment, Message, MessageContent
 from openai.types.beta.threads.run import AssistantTool, Run
+from openai.types.beta.threads.runs import (
+    MessageCreationStepDetails,
+    RunStep,
+    ToolCallsStepDetails,
+)
+from openai.types.beta.threads.runs.message_creation_step_details import MessageCreation
+from openai.types.beta.threads.runs.tool_calls_step_details import (
+    ToolCall,
+    ToolCallsStepDetails,
+)
 from openai.types.beta.threads.text_content_block import TextContentBlock
 from openai.types.chat.chat_completion import ChatCompletion, Choice
 from openai.types.chat.chat_completion_assistant_message_param import (
@@ -47,7 +58,10 @@ from openai.types.file_object import FileObject
 from openai.types.fine_tuning.fine_tuning_job import FineTuningJob, Hyperparameters
 from openai.types.shared_params.function_definition import FunctionDefinition
 from openai.types.shared_params.function_parameters import FunctionParameters
-from prefect import flow, get_run_logger
+from prefect import flow, get_run_logger, task
+from prefect.context import get_run_context
+from prefect.engine import pause_flow_run
+from prefect.variables import Variable
 from prefect_shell import ShellOperation
 from pydantic import BaseModel
 
@@ -55,199 +69,278 @@ from timestep.config import Settings
 
 settings = Settings()
 
-# from prefect_sqlalchemy import AsyncDriver, ConnectionComponents, SqlAlchemyConnector
-
-
 app_dir = typer.get_app_dir("timestep")
-# block_name = "timestep-ai-sql-alchemy-connector-block"
-# connector = SqlAlchemyConnector(
-#     connection_info=ConnectionComponents(
-#         driver=AsyncDriver.SQLITE_AIOSQLITE, database=f"{app_dir}/database.db"
-#     )
-# )
-
-model = ChatOpenAI(
+cf.default_model = ChatOpenAI(
     api_key=settings.openai_api_key.get_secret_value(),
     base_url=settings.openai_base_url,
     temperature=0.0,
 )
-
-cf.default_model = model
-
-# cf.default_model = ChatOpenAI(
-#     api_key=os.environ.get("OPENAI_API_KEY"),
-#     base_url=os.environ.get("OPENAI_BASE_URL"),
-#     temperature=0.0,
-# )
+openai_async_client = openai.AsyncOpenAI(
+    api_key=settings.openai_api_key.get_secret_value(),
+    base_url=settings.openai_base_url,
+)
 
 
-# @cf.task(timeout_seconds=60)
-# def divide_numbers(a: int, b: int) -> float:
-#     """Divide two numbers."""
-#     pass
-
-
-class StepInput(BaseModel):
+class RunInput(BaseModel):
     agent_id: str
-    instructions: str = ""
+    instructions: str
     thread_id: str
     tools: List[AssistantTool] = []
 
 
-class StepOutput(BaseModel):
-    pass
+class RunOutput(BaseModel):
+    steps: List[RunStep] = []
+
+
+# class RunStepInput(RunInput):  # TODO: StepInput?
+#     pass
+#     # agent_id: str
+#     # instructions: str = ""
+#     # thread_id: str
+#     # tools: List[AssistantTool] = []
+
+
+# class RunStepOutput(BaseModel):  # TODO: StepOutput?
+#     chat_completion: ChatCompletion
+#     finish_reason: str
+#     step_details: dict
 
 
 @flow
 # @cf.flow(timeout_seconds=300)
-async def agent_step_flow(step_input: StepInput) -> StepOutput:
+async def agent_flow(run_input: RunInput) -> RunOutput:
     # See https://platform.openai.com/docs/assistants/deep-dive/managing-threads-and-messages
     # for more information on managing threads and messages
 
     logger = get_run_logger()
-    logger.info(f"step_input: {step_input}")
+    logger.info(f"run_input: {run_input}")
 
-    agent_id = step_input.agent_id
+    agent_id = run_input.agent_id
     logger.info(f"agent_id: {agent_id}")
 
-    thread_id = step_input.thread_id  # TODO: introduce a lock on the thread_id
+    thread_id = run_input.thread_id  # TODO: introduce a lock on the thread_id
     logger.info(f"thread_id: {thread_id}")
-
-    openai_async_client = openai.AsyncOpenAI(
-        api_key=settings.openai_api_key.get_secret_value(),
-        base_url=settings.openai_base_url,
-    )
 
     assistant: Assistant = await openai_async_client.beta.assistants.retrieve(
         assistant_id=agent_id
     )
     logger.info(f"assistant: {assistant}")
 
-    async_cursor_page: AsyncCursorPage[Message] = (
-        await openai_async_client.beta.threads.messages.list(
-            order="asc", thread_id=thread_id
+    # flow_run_id = cf.context.get("flow_run_id")
+    flow_run_id = get_run_context().flow_run.id
+    run_id = str(flow_run_id).replace("-", "")
+
+    run_output = RunOutput(
+        **await Variable.get(
+            f"run_{run_id}", default=RunOutput().model_dump(mode="json")
         )
     )
-    logger.info(f"async_cursor_page: {async_cursor_page}")
 
-    messages: List[Message] = async_cursor_page.data
-    logger.info(f"messages: {messages}")
+    step_count = 0
 
-    chat_completion_message_params: List[ChatCompletionMessageParam] = []
+    while step_count < 10:
+        # run_step_input = RunStepInput(
+        #     agent_id=agent_id,
+        #     instructions=run_input.instructions,
+        #     thread_id=thread_id,
+        #     tools=run_input.tools,
+        # )
 
-    for message in messages:
-        content: List[MessageContent] = message.content
+        # TODO: optionally, allow the agent to learn from this thread
+        # run_step_output: RunStepOutput = await agent_step_task(run_step_input)
+        # run_step: RunStep = await agent_step_task(run_input)
 
-        for _content in content:
-            if type(_content) == TextContentBlock:
-                chat_completion_message_params.append(
-                    ChatCompletionUserMessageParam(
-                        content=_content.text.value,
-                        role=message.role,
+        async_cursor_page: AsyncCursorPage[Message] = (
+            await openai_async_client.beta.threads.messages.list(
+                order="asc", thread_id=thread_id
+            )
+        )
+        logger.info(f"async_cursor_page: {async_cursor_page}")
+
+        messages: List[Message] = async_cursor_page.data
+        logger.info(f"messages: {messages}")
+
+        chat_completion_message_params: List[ChatCompletionMessageParam] = []
+
+        for message in messages:
+            content: List[MessageContent] = message.content
+
+            for _content in content:
+                if type(_content) == TextContentBlock:
+                    chat_completion_message_params.append(
+                        ChatCompletionUserMessageParam(
+                            content=_content.text.value,
+                            role=message.role,
+                        )
                     )
+
+                else:
+                    logger.info(f"_content: {_content}")
+
+                    raise NotImplementedError(
+                        f"Unsupported content type: {type(_content)}"
+                    )
+
+        logger.info(f"chat_completion_message_params: {chat_completion_message_params}")
+
+        chat_completion_tool_params: List[ChatCompletionToolParam] = []
+
+        # for tool in run_step_input.tools or assistant.tools:
+        for tool in run_input.tools or assistant.tools:
+            assert tool.type in [
+                "code_interpreter",
+                "file_search",
+                "function",
+            ], f"Unsupported tool type: {tool.type}"
+
+            function_description: str = tool.type
+            function_name: str = tool.type
+            function_parameters: FunctionParameters = dict()
+
+            chat_completion_tool_params.append(
+                ChatCompletionToolParam(
+                    function=FunctionDefinition(
+                        description=function_description,
+                        name=function_name,
+                        parameters=function_parameters,
+                    ),
+                    type="function",
                 )
+            )
 
-            else:
-                logger.info(f"_content: {_content}")
+        logger.info(f"chat_completion_tool_params: {chat_completion_tool_params}")
 
-                raise NotImplementedError(f"Unsupported content type: {type(_content)}")
-
-    logger.info(f"chat_completion_message_params: {chat_completion_message_params}")
-
-    chat_completion_tool_params: List[ChatCompletionToolParam] = []
-
-    logger.info(f"chat_completion_tool_params: {chat_completion_tool_params}")
-
-    # for tool in assistant.tools:
-    for tool in step_input.tools:
-        assert tool.type in [
-            "code-interpreter",
-            "file-search",
-            "function",
-        ], f"Unsupported tool type: {tool.type}"
-
-        function_description: str = tool.type
-        function_name: str = tool.type
-        function_parameters: FunctionParameters = dict()
-
-        chat_completion_tool_params.append(
-            ChatCompletionToolParam(
-                function=FunctionDefinition(
-                    description=function_description,
-                    name=function_name,
-                    parameters=function_parameters,
-                ),
-                type="function",
+        chat_completion: ChatCompletion = (
+            await openai_async_client.chat.completions.create(
+                messages=chat_completion_message_params,
+                model=assistant.model,
+                tools=chat_completion_tool_params,
             )
         )
 
-    chat_completion: ChatCompletion = await openai_async_client.chat.completions.create(
-        messages=chat_completion_message_params,
-        model=assistant.model,
-        tools=chat_completion_tool_params,
-    )
+        logger.info(f"chat_completion: {chat_completion}")
 
-    logger.info(f"chat_completion: {chat_completion}")
+        choices: List[Choice] = chat_completion.choices
+        logger.info(f"choices: {choices}")
 
-    choices: List[Choice] = chat_completion.choices
-    logger.info(f"choices: {choices}")
+        if len(choices) > 1:
+            raise NotImplementedError("Multiple choices not yet supported")
 
-    first_choice: Choice = choices[
-        0
-    ]  # TODO: check out Choice.logprobs for picking the best choice
-    logger.info(f"first_choice: {first_choice}")
+        first_choice: Choice = choices[
+            0
+        ]  # TODO: check out Choice.logprobs for picking the best choice
+        logger.info(f"first_choice: {first_choice}")
 
-    finish_reason: str = first_choice.finish_reason
-    logger.info(f"finish_reason: {finish_reason}")
+        # finish_reason: Literal["stop", "length", "tool_calls", "content_filter", "function_call"]
+        # """The reason the model stopped generating tokens.
 
-    chat_completion_message: ChatCompletionMessage = first_choice.message
-    logger.info(f"chat_completion_message: {chat_completion_message}")
+        # This will be `stop` if the model hit a natural stop point or a provided stop
+        # sequence, `length` if the maximum number of tokens specified in the request was
+        # reached, `content_filter` if content was omitted due to a flag from our content
+        # filters, `tool_calls` if the model called a tool, or `function_call`
+        # (deprecated) if the model called a function.
+        # """
+        finish_reason: str = first_choice.finish_reason
+        logger.info(f"finish_reason: {finish_reason}")
 
-    tool_calls: List[ChatCompletionMessageToolCall] | None = (
-        chat_completion_message.tool_calls
-    )
-    logger.info(f"tool_calls: {tool_calls}")
+        chat_completion_message: ChatCompletionMessage = first_choice.message
+        logger.info(f"chat_completion_message: {chat_completion_message}")
 
-    if tool_calls:
-        raise NotImplementedError
+        tool_calls: List[ChatCompletionMessageToolCall] | None = (
+            chat_completion_message.tool_calls
+        )
+        logger.info(f"tool_calls: {tool_calls}")
 
-    await openai_async_client.beta.threads.messages.create(
-        thread_id=thread_id,
-        # content: str | Iterable[MessageContentPartParam],
-        content=chat_completion_message.content,
-        # role: Literal['user', 'assistant'],
-        role=chat_completion_message.role,
-        # attachments: Iterable[Attachment] | NotGiven | None = NOT_GIVEN,
-        # metadata: object | NotGiven | None = NOT_GIVEN,
-        # extra_headers: Headers | None = None,
-        # extra_query: Query | None = None,
-        # extra_body: Body | None = None,
-        # timeout: float | Timeout | NotGiven | None = NOT_GIVEN
-    )
+        # Step Details: https://platform.openai.com/docs/api-reference/run-steps/step-object#run-steps/step-object-step_details
+        if tool_calls:
+            # Set the run status to "requires_action" and "required_action.type" to "submit_tool_outputs"
+            # Pause this flow run until the required action is completed (e.g. label = await pause_flow_run(wait_for_input=Animal, timeout=60 * 60))
+            step_details = ToolCallsStepDetails(
+                tool_calls=tool_calls,
+                type="tool_calls",
+            )
 
-    # time.sleep(1)  # wait for the process to finish
+            raise NotImplementedError
 
-    # modify_run_request = {
-    #     "status": "completed",
-    # }
+        else:
+            # Message Creation Run Step
+            message: Message = await openai_async_client.beta.threads.messages.create(
+                thread_id=thread_id,
+                # content: str | Iterable[MessageContentPartParam],
+                content=chat_completion_message.content,
+                # role: Literal['user', 'assistant'],
+                role=chat_completion_message.role,
+                # run_id=run_id, # TODO: add run_id to the message created here
+                # attachments: Iterable[Attachment] | NotGiven | None = NOT_GIVEN,
+                # metadata: object | NotGiven | None = NOT_GIVEN,
+                # extra_headers: Headers | None = None,
+                # extra_query: Query | None = None,
+                # extra_body: Body | None = None,
+                # timeout: float | Timeout | NotGiven | None = NOT_GIVEN
+            )
 
-    # await modify_run(
-    #     modify_run_request=modify_run_request,
-    #     run_id=run_id,
-    #     token_info=token_info,
-    #     thread_id=thread_id,
-    #     user=user,
-    # )
+            step_details = MessageCreationStepDetails(
+                message_creation=MessageCreation(
+                    message_id=message.id,
+                ),
+                type="message_creation",
+            )
 
-    # run: Run = Run(**await get_run(run_id=run_id, token_info=token_info, thread_id=thread_id, user=user))
+        # run_step_output = RunStepOutput(
+        #     chat_completion=chat_completion,
+        #     finish_reason=finish_reason,
+        #     step_details=step_details,
+        # )
 
-    # return run
+        # return run_step_output
 
-    # TODO: optionally, allow the agent to learn from this thread
+        run_step = RunStep(
+            id=f"step-{step_count}",
+            created_at=int(time.time()),
+            assistant_id=agent_id,
+            object="thread.run.step",
+            run_id=run_id,
+            status="completed",
+            step_details=step_details,
+            thread_id=thread_id,
+            type=step_details.type,
+        )
 
-    step_output = StepOutput()
+        # run_output["steps"].append(run_step_output)
+        # run_output.steps.append(run_step_output)
+        run_output.steps.append(run_step)
+        await Variable.set(f"run_{run_id}", run_output.model_dump(mode="json"))
+        # await Variable.set("run_output", run_output)
 
-    return step_output
+        step_count += 1
+
+        # if run_step_output.finish_reason == "stop":
+        # if True:
+        if finish_reason == "stop":
+            break
+
+        else:
+            raise NotImplementedError(
+                # f"Unsupported finish_reason: {run_step_output.finish_reason}"
+                f"Unsupported finish_reason: {finish_reason}"
+            )
+
+    return run_output
+
+
+# @task
+# # @cf.task(timeout_seconds=60)
+# # async def agent_step_task(run_step_input: RunStepInput):
+# # async def agent_step_task(run_step_input: Run) -> RunStep:
+# async def agent_step_task(run_step_input: RunInput) -> RunStep:
+#     logger = get_run_logger()
+#     logger.info(f"run_step_input: {run_step_input}")
+
+#     agent_id = run_step_input.agent_id
+#     logger.info(f"agent_id: {agent_id}")
+
+#     thread_id = run_step_input.thread_id
+#     logger.info(f"thread_id: {thread_id}")
 
 
 # @task
@@ -518,7 +611,7 @@ def main(thread_id):
 
     # flow_run: FlowRun = await run_deployment(
     #     idempotency_key=thread_id,
-    #     name="agent-step-flow/agent-step-flow-deployment",
+    #     name="agent-flow/agent-flow-deployment",
     #     parameters={
     #         "inputs": {
     #             "agent_id": assistant_id,

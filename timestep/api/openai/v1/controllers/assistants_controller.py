@@ -21,22 +21,36 @@ from openai.types.beta.assistant_stream_event import (
     ThreadRunInProgress,
     ThreadRunQueued,
     ThreadRunRequiresAction,
+    ThreadRunStepCancelled,
+    ThreadRunStepCompleted,
     ThreadRunStepCreated,
     ThreadRunStepDelta,
+    ThreadRunStepExpired,
+    ThreadRunStepFailed,
     ThreadRunStepInProgress,
 )
 from openai.types.beta.assistant_update_params import AssistantUpdateParams
 from openai.types.beta.thread import Thread
+from openai.types.beta.thread_create_and_run_params import ThreadCreateAndRunParams
 from openai.types.beta.threads.message import Attachment, Message, MessageContent
 from openai.types.beta.threads.run import Run
+from openai.types.beta.threads.runs import RunStep
+from openai.types.beta.threads.runs.run_step import (
+    MessageCreationStepDetails,
+    StepDetails,
+    ToolCallsStepDetails,
+)
 from openai.types.beta.threads.text import Text
 from openai.types.beta.threads.text_content_block import TextContentBlock
 
 # from prefect.client.orchestration import get_client
 from prefect import get_client
+from prefect.client.schemas import FlowRun, OrchestrationResult, TaskRun, sorting
+from prefect.client.schemas.filters import TaskRunFilter, TaskRunFilterFlowRunId
 from prefect.deployments import run_deployment
 from prefect.deployments.flow_runs import FlowRun
 from prefect.flow_runs import wait_for_flow_run
+from prefect.variables import Variable
 from sse_starlette import EventSourceResponse
 
 from timestep.database import AgentSQLModel
@@ -197,7 +211,7 @@ async def create_run(body, token_info, thread_id, user):
     """
     stream = body.get("stream", False)
     assistant_id = body.get("assistant_id")
-    tag = f"thread-{thread_id}"
+    tag = f"thread_{thread_id}".replace("-", "")
 
     async with get_client() as client:
         limit_id = await client.create_concurrency_limit(
@@ -207,9 +221,9 @@ async def create_run(body, token_info, thread_id, user):
 
     flow_run: FlowRun = await run_deployment(
         # idempotency_key=thread_id,
-        name="agent-step-flow/agent-step-flow-deployment",
+        name="agent-flow/agent-flow-deployment",
         parameters={
-            "step_input": {
+            "run_input": {
                 "agent_id": assistant_id,
                 "instructions": body.get("instructions", ""),
                 "tools": body.get("tools", []),
@@ -227,21 +241,86 @@ async def create_run(body, token_info, thread_id, user):
 
         async def run_event_publisher():
             try:
-                run: Run = Run(
-                    **await get_run(flow_run_id, thread_id, token_info, user)
-                )
-
+                thread_run_created = False
                 # TODO: yield ThreadCreated event if this was created vai create_thread_and_run
-
-                yield ThreadRunCreated(  # TODO: do this right after the run is created
-                    data=run,
-                    event="thread.run.created",
-                ).model_dump_json()
 
                 while True:
                     run: Run = Run(
                         **await get_run(flow_run_id, thread_id, token_info, user)
                     )
+
+                    assert run.id == flow_run_id, f"{run.id} != {flow_run_id}"
+
+                    if not thread_run_created:
+                        yield ThreadRunCreated(
+                            data=run,
+                            event="thread.run.created",
+                        ).model_dump_json()
+
+                        thread_run_created = True
+
+                    list_run_steps_response = await list_run_steps(
+                        limit=1,
+                        order="desc",
+                        thread_id=thread_id,
+                        run_id=run.id,
+                    )  # TODO: Make sure to yield all run_steps in the right order, not just the latest one
+
+                    run_steps: List[RunStep] = list_run_steps_response["data"]
+
+                    if run_steps:
+                        assert len(run_steps) == 1, f"{len(run_steps)} != 1"
+                        # run_step: RunStep = run_steps[0]
+                        run_step: RunStep = RunStep(**run_steps[0])
+
+                        yield ThreadRunStepCreated(
+                            data=run_step,
+                            event="thread.run.step.created",
+                        ).model_dump_json()
+
+                        if run_step.status == "in_progress":
+                            yield ThreadRunStepInProgress(
+                                data=run_step,
+                                event="thread.run.step.in_progress",
+                            ).model_dump_json()
+
+                        elif run_step.status == "cancelled":
+                            # yield ThreadRunStepDelta(
+                            yield ThreadRunStepCancelled(
+                                data=run_step,
+                                # event="thread.run.step.delta",
+                                event="thread.run.step.cancelled",
+                            ).model_dump_json()
+
+                        elif run_step.status == "failed":
+                            # yield ThreadRunStepDelta
+                            yield ThreadRunStepFailed(
+                                data=run_step,
+                                # event="thread.run.step.delta",
+                                event="thread.run.step.failed",
+                            ).model_dump_json()
+
+                        elif run_step.status == "completed":
+                            # yield ThreadRunStepDelta(
+                            yield ThreadRunStepCompleted(
+                                data=run_step,
+                                # event="thread.run.step.delta",
+                                event="thread.run.step.completed",
+                            ).model_dump_json()
+
+                        elif run_step.status == "expired":
+                            # yield ThreadRunStepDelta(
+                            yield ThreadRunStepExpired(
+                                data=run_step,
+                                # event="thread.run.step.delta",
+                                event="thread.run.step.expired",
+                            ).model_dump_json()
+
+                        else:
+                            raise NotImplementedError(
+                                f"Run step status {run_step.status} not implemented"
+                            )
+
                     # The status of the run, which can be either `queued`, `in_progress`,
                     #     `requires_action`, `cancelling`, `cancelled`, `failed`, `completed`,
                     #     `incomplete`, or `expired`.
@@ -534,8 +613,12 @@ async def get_run(run_id, thread_id, token_info, user):
     """
     client = get_client()
     flow_run: FlowRun = await client.read_flow_run(flow_run_id=uuid.UUID(run_id))
-    agent_id = flow_run.parameters["step_input"]["agent_id"]
+    agent_id = flow_run.parameters["run_input"]["agent_id"]
     agent = await agent_service.get_agent(id=agent_id)
+
+    print("run_id: ", run_id)
+    print("thread_id: ", thread_id)
+    print("agent_id: ", agent_id)
 
     if not agent:
         return None
@@ -545,14 +628,14 @@ async def get_run(run_id, thread_id, token_info, user):
         assistant_id=str(agent.id),
         created_at=int(flow_run.created.timestamp()),
         # instructions=agent.instructions,
-        instructions=flow_run.parameters["step_input"]["instructions"],
+        instructions=flow_run.parameters["run_input"]["instructions"],
         model=agent.model,
         object="thread.run",
         parallel_tool_calls=False,
         status=state_type_to_run_status[flow_run.state.type],
         thread_id=thread_id,
         # tools=agent.tools,
-        tools=flow_run.parameters["step_input"]["tools"],
+        tools=flow_run.parameters["run_input"]["tools"],
     )
 
     return run.model_dump(mode="json")
@@ -722,7 +805,73 @@ async def list_run_steps(*args, **kwargs):
     print("args: ", args)
     print("kwargs: ", kwargs)
 
-    raise NotImplementedError
+    async with get_client() as client:
+        # task_run_filter: TaskRunFilter = TaskRunFilter(
+        #     flow_run_id=TaskRunFilterFlowRunId(
+        #         any_=[uuid.UUID(kwargs["run_id"])]
+        #     )
+        # )
+
+        # task_runs: List[TaskRun] = await client.read_task_runs(
+        #     task_run_filter=task_run_filter,
+        # )
+        # print("task_runs: ", task_runs)
+
+        # run: Run = Run(**await get_run(kwargs["run_id"], kwargs["thread_id"], kwargs["token_info"], kwargs["user"]))
+        # print("run: ", run)
+
+        flow_run: FlowRun = await client.read_flow_run(
+            flow_run_id=uuid.UUID(kwargs["run_id"])
+        )
+        print("flow_run: ", flow_run)
+
+        run_id = kwargs["run_id"].replace("-", "")
+        # run_output = await Variable.get("run_output", default={
+        run_output = await Variable.get(
+            f"run_{run_id}",
+            default={
+                "steps": [],
+            },
+        )
+
+        # run:
+
+        # run_steps: List[RunStep] = [
+        #     RunStep(
+        #         id=str(task_run.id),
+        #         created_at=task_run.created.timestamp(),
+        #         details=MessageCreationStepDetails() if task_run.name == "create_message" else ToolCallsStepDetails(),
+        #         object="run.step",
+        #         status=state_type_to_run_status[task_run.state.type],
+        #     )
+        #     for task_run in task_runs
+        # ]
+
+        # run_steps: List[RunStep] = [
+        #     RunStep(
+        #         id=str(step["id"]),
+        #         created_at=step["created_at"],
+        #         # details=MessageCreationStepDetails() if step["name"] == "create_message" else ToolCallsStepDetails(),
+        #         step_details=step["step_details"],
+        #         object="run.step",
+        #         status=step["status"],
+        #     )
+        #     for step in run_output["steps"]
+        # ]
+
+        run_steps: List[RunStep] = [RunStep(**step) for step in run_output["steps"]]
+
+    # return run_steps.model_dump(mode="json")
+    # return ListRunStepsResponse(
+    # data=run_steps,
+    # )
+
+    # return run_steps
+
+    return AsyncCursorPage(
+        # return SyncCursorPage(
+        data=run_steps,
+    ).model_dump(mode="json")
 
 
 # def list_runs(thread_id, limit=None, order=None, after=None, before=None):  # noqa: E501
@@ -753,7 +902,11 @@ async def list_runs(*args, **kwargs):
 
 # def modify_assistant(assistant_id, modify_assistant_request):  # noqa: E501
 async def modify_assistant(
-    assistant_id: str, body: AssistantUpdateParams, token_info, user
+    assistant_id: str,
+    body: AssistantUpdateParams,
+    file_ids=None,
+    token_inf=dict,
+    user=str,
 ):
     """Modifies an assistant.
 
@@ -770,6 +923,9 @@ async def modify_assistant(
         id=assistant_id,
         body=body,
     )
+
+    if file_ids:
+        print("file_ids: ", file_ids)
 
     assistant = Assistant(
         id=str(agent.id),

@@ -44,17 +44,16 @@ local_llamafile_path = (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    try:
-        fn = Path(f"{app_dir}/data/data.json")
+    lock_file = Path(f"{app_dir}/data/data.json")
+    subprocess_manager = SubprocessManager()
 
+    try:
         soft_lock = SoftFileLock(
-            f"{str(fn)}.lock",
+            f"{str(lock_file)}.lock",
             is_singleton=True,
             thread_local=False,
             timeout=120,
         )
-
-        subprocess_manager = SubprocessManager()
 
         worker_count = int(os.getenv("PYTEST_XDIST_WORKER_COUNT", 1))
         worker_name = os.getenv("PYTEST_XDIST_WORKER", "master")
@@ -63,15 +62,15 @@ async def lifespan(app: FastAPI):
         with soft_lock.acquire():
             create_db_and_tables()
 
-            if fn.is_file():
-                data = json.loads(fn.read_text())
+            if lock_file.is_file():
+                data = json.loads(lock_file.read_text())
 
                 data["timestep"][worker_name] = {
                     "pid": worker_pid,
                     "status": "running",
                 }
 
-                fn.write_text(json.dumps(data))
+                lock_file.write_text(json.dumps(data))
 
             else:
                 # create_db_and_tables()
@@ -126,8 +125,8 @@ async def lifespan(app: FastAPI):
                 #     f"Waiting {PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value()} seconds for Prefect server to start..."
                 # )
                 # time.sleep(PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value())
-                print(f"Sleeping for 30 seconds...")
-                time.sleep(30)
+                print(f"Sleeping for 15 seconds...")
+                time.sleep(15)
 
                 prefect_worker_pid = subprocess_manager.start(
                     args=[
@@ -138,8 +137,8 @@ async def lifespan(app: FastAPI):
                     name="prefect.worker.default",
                 )
 
-                print(f"Sleeping for 30 seconds...")
-                time.sleep(30)
+                print(f"Sleeping for 15 seconds...")
+                time.sleep(15)
 
                 data = {
                     "llamafiles": {
@@ -168,65 +167,89 @@ async def lifespan(app: FastAPI):
                     },
                 }
 
-                fn.write_text(json.dumps(data))
+                lock_file.write_text(json.dumps(data))
 
         # TODO: Filelock doesnt support async, try https://py-filelock.readthedocs.io/en/latest/_modules/filelock/asyncio.html
-        agent_step_flow = await flow.from_source(
+        agent_flow = await flow.from_source(
             source=str(Path(__file__).parent),
-            entrypoint="worker.py:agent_step_flow",
+            entrypoint="worker.py:agent_flow",
         )
 
-        # await agent_step_flow.deploy(
-        #     name="agent-step-flow-deployment",
-        #     work_pool_name="default",
-        # )
+        await agent_flow.deploy(
+            name="agent-flow-deployment",
+            work_pool_name="default",
+        )
 
         yield
 
-        with soft_lock.acquire():
-            data = json.loads(fn.read_text())
-
-            print(f"Stopping {worker_name} worker process with PID: {worker_pid}")
-            data["timestep"][worker_name]["status"] = "stopped"
-
-            stopped_workers = [
-                worker
-                for worker in data["timestep"].values()
-                if worker["status"] == "stopped"
-            ]
-
-            if len(stopped_workers) >= worker_count:
-                for prefect_worker_id, prefect_worker in data["prefect"][
-                    "workers"
-                ].items():
-                    print(
-                        f"Stopping Prefect worker {prefect_worker_id} process with PID: {prefect_worker['pid']}"
-                    )
-                    subprocess_manager.stop(prefect_worker["pid"])
-
-                print(
-                    f"Stopping Prefect server process with PID: {data['prefect']['server']['pid']}"
-                )
-                subprocess_manager.stop(data["prefect"]["server"]["pid"])
-
-                for llamafile_id, llamafile in data["llamafiles"].items():
-                    print(
-                        f"Stopping llamafile {llamafile_id} process with PID: {llamafile['pid']}"
-                    )
-                    subprocess_manager.stop(llamafile["pid"])
-
-                fn.unlink()
-
-            else:
-                fn.write_text(json.dumps(data))
+        print(f"Exiting {worker_name} worker process with PID: {worker_pid}")
 
     except Exception as e:
         print(f"An error occurred: {e}; attempting to clean up...")
 
-        # TODO: stop all subprocesses, alternatively, use finally block to stop all subprocesses unlink the file
-        fn.unlink()
+    finally:
+        try:
+            with soft_lock.acquire():
+                data = json.loads(lock_file.read_text())
 
-        raise e
+                print(f"Stopping {worker_name} worker process with PID: {worker_pid}")
+                data["timestep"][worker_name]["status"] = "stopped"
+
+                stopped_workers = [
+                    worker
+                    for worker in data["timestep"].values()
+                    if worker["status"] == "stopped"
+                ]
+
+                if len(stopped_workers) >= worker_count:
+                    print("stopped_workers: ", stopped_workers)
+                    print("worker_count: ", worker_count)
+
+                    for prefect_worker_id, prefect_worker in data["prefect"][
+                        "workers"
+                    ].items():
+                        if prefect_worker["status"] != "stopped":
+                            print(
+                                f"Stopping Prefect worker {prefect_worker_id} process with PID: {prefect_worker['pid']}"
+                            )
+                            subprocess_manager.stop(prefect_worker["pid"])
+
+                        else:
+                            print(
+                                f"Prefect worker {prefect_worker_id} process with PID: {prefect_worker['pid']} already stopped"
+                            )
+
+                    if data["prefect"]["server"]["status"] != "stopped":
+                        print(
+                            f"Stopping Prefect server process with PID: {data['prefect']['server']['pid']}"
+                        )
+                        subprocess_manager.stop(data["prefect"]["server"]["pid"])
+
+                    else:
+                        print(
+                            f"Prefect server process with PID: {data['prefect']['server']['pid']} already stopped"
+                        )
+
+                    for llamafile_id, llamafile in data["llamafiles"].items():
+                        if llamafile["status"] != "stopped":
+                            print(
+                                f"Stopping llamafile {llamafile_id} process with PID: {llamafile['pid']}"
+                            )
+                            subprocess_manager.stop(llamafile["pid"])
+
+                        else:
+                            print(
+                                f"llamafile {llamafile_id} process with PID: {llamafile['pid']} already stopped"
+                            )
+
+                    lock_file.unlink()
+
+                else:
+                    lock_file.write_text(json.dumps(data))
+
+        except Exception as e:
+            print(f"An error occurred in the finally block: {e}")
+            raise RuntimeWarning(f"An error occurred in the finally block: {e}")
 
 
 fastapi_app = FastAPI(
