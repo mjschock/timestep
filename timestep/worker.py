@@ -106,7 +106,32 @@ class RunOutput(BaseModel):
 #     step_details: dict
 
 
-@flow
+async def lock_thread(flow, flow_run, state):
+    logger = get_run_logger()
+    logger.info("lock_thread")
+
+    thread_id = get_run_context().parameters["thread_id"]
+    logger.info(f"thread_id: {thread_id}")
+
+    # lock the thread_id
+    await Variable.set(f"lock_{thread_id}", "locked")
+
+
+async def unlock_thread(flow, flow_run, state):
+    logger = get_run_logger()
+    logger.info("unlock_thread")
+
+    thread_id = get_run_context().parameters["thread_id"]
+    logger.info(f"thread_id: {thread_id}")
+
+    # unlock the thread_id
+    await Variable.set(f"lock_{thread_id}", "unlocked")
+
+
+@flow(
+    on_completion=[unlock_thread],
+    on_running=[lock_thread],
+)
 # @cf.flow(timeout_seconds=300)
 async def agent_flow(run_input: RunInput) -> RunOutput:
     # See https://platform.openai.com/docs/assistants/deep-dive/managing-threads-and-messages
@@ -184,6 +209,12 @@ async def agent_flow(run_input: RunInput) -> RunOutput:
         logger.info(f"chat_completion_message_params: {chat_completion_message_params}")
 
         chat_completion_tool_params: List[ChatCompletionToolParam] = []
+        # chat_completion_tool_params: [
+        #     {'function': {'description': 'code_interpreter', 'name': 'code_interpreter', 'parameters': {}}, 'type': 'function'},
+        #     {'function': {'description': 'file_search', 'name': 'file_search', 'parameters': {}}, 'type': 'function'},
+        #     {'function': {'description': 'function', 'name': 'function', 'parameters': {}}, 'type': 'function'}]
+        # See https://platform.openai.com/docs/assistants/tools/code-interpreter; TODO: use default input: str, outputs: list, etc for code_interpreter tool
+        # See https://platform.openai.com/docs/assistants/tools/file-search: TODO index the files as documents if not already done using pypdf plust lightweight OCR model for blank pages, get good set of default function signature (like above)
 
         # for tool in run_step_input.tools or assistant.tools:
         for tool in run_input.tools or assistant.tools:

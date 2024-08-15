@@ -4,7 +4,22 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from pydantic import ConfigDict
-from sqlalchemy import JSON, Column, DateTime, func, text
+from sqlalchemy import (
+    DDL,
+    JSON,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    MetaData,
+    Table,
+    create_engine,
+    event,
+    func,
+    text,
+)
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlmodel import Field, SQLModel, create_engine
 
 from timestep.config import Settings
@@ -29,6 +44,7 @@ class SQLModelMixin(object):
 
 class AgentSQLModel(SQLModel, SQLModelMixin, table=True):
     __tablename__: str = "agents"
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     description: str | None = None
     instructions: str | None = None
@@ -42,12 +58,16 @@ class AgentSQLModel(SQLModel, SQLModelMixin, table=True):
 
 class MessageSQLModel(SQLModel, SQLModelMixin, table=True):
     __tablename__: str = "messages"
+    __table_args__ = {"extend_existing": True}
+    # __sqlmodel_relationships__: dict = {"thread": relationship}
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     attachments: List[dict] = Field(sa_column=Column(JSON), default=[])
     content: List[dict] = Field(sa_column=Column(JSON), default=[])
     role: str = Field()
     status: str = Field()  # status: Literal['in_progress', 'incomplete', 'completed']
     thread_id: uuid.UUID = Field(foreign_key="threads.id")
+    # thread: "ThreadSQLModel" = relationship("ThreadSQLModel", back_populates="messages")
 
 
 # class ModelSQLModel(SQLModel, SQLModelMixin, table=True):
@@ -64,15 +84,51 @@ class MessageSQLModel(SQLModel, SQLModelMixin, table=True):
 
 class ThreadSQLModel(SQLModel, SQLModelMixin, table=True):
     __tablename__: str = "threads"
+    __table_args__ = {"extend_existing": True}
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    is_locked: bool = Field(default=False)
+    # is_locked = Column(Integer, default=0)
+    # is_locked: bool = Field(default=False)
+
+    # messages: List[MessageSQLModel] = relationship("MessageSQLModel", back_populates="thread")
+
+
+trigger_ddl = DDL(
+    """
+CREATE TRIGGER prevent_writes_on_locked_rows
+# BEFORE INSERT OR UPDATE OR DELETE ON messages
+BEFORE INSERT ON messages
+FOR EACH ROW
+WHEN EXISTS (
+    SELECT 1
+    FROM threads
+    WHERE threads.id = NEW.thread_id AND threads.is_locked = 1
+)
+BEGIN
+    SELECT RAISE(ABORT, 'Operation not allowed: thread is locked');
+END;
+"""
+)
+
+# Attach the trigger to the table creation event
+event.listen(MessageSQLModel.__table__, "after_create", trigger_ddl)
 
 
 def create_db_and_tables():
     # try:
     SQLModel.metadata.create_all(
         bind=engine,
+        # checkfirst=False,
         checkfirst=True,
         tables=None,
+        # tables=[
+        #     AgentSQLModel,
+        #     # ModelSQLModel,
+        #     # ModelAliasSQLModel,
+        #     MessageSQLModel,
+        #     ThreadSQLModel,
+        # ],
     )
 
     # except Exception as e:

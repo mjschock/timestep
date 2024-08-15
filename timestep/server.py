@@ -125,8 +125,10 @@ async def lifespan(app: FastAPI):
                 #     f"Waiting {PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value()} seconds for Prefect server to start..."
                 # )
                 # time.sleep(PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value())
-                print(f"Sleeping for 15 seconds...")
-                time.sleep(15)
+                print(
+                    f"Sleeping for {PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value()} seconds..."
+                )
+                time.sleep(PREFECT_SERVER_EPHEMERAL_STARTUP_TIMEOUT_SECONDS.value())
 
                 prefect_worker_pid = subprocess_manager.start(
                     args=[
@@ -246,6 +248,9 @@ async def lifespan(app: FastAPI):
 
                 else:
                     lock_file.write_text(json.dumps(data))
+
+        except FileNotFoundError as e:
+            print(f"An error occurred: {e}")
 
         except Exception as e:
             print(f"An error occurred in the finally block: {e}")
