@@ -26,10 +26,8 @@ from prefect.workers.process import ProcessWorker
 from tqdm import tqdm
 
 from timestep.api.openai.v1.controllers.completions_controller import create_completion
-from timestep.config import Settings
+from timestep.config import settings
 from timestep.database import create_db_and_tables
-
-settings = Settings()
 
 app_dir = settings.app_dir
 connexion_app = AsyncApp(import_name=__name__)

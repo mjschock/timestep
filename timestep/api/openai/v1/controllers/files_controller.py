@@ -17,9 +17,8 @@ from prefect import flow, get_client, task
 from prefect.artifacts import create_link_artifact
 from starlette.datastructures import UploadFile
 
-from timestep.config import Settings
+from timestep.config import settings
 
-settings = Settings()
 app_dir = typer.get_app_dir("timestep")
 
 

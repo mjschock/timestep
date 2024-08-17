@@ -2,11 +2,9 @@ from typing import List
 
 from openai.types import Model, ModelDeleted
 
-from timestep.config import Settings
+from timestep.config import settings
 from timestep.database import AgentSQLModel
 from timestep.services import agent_service
-
-settings = Settings()
 
 
 # async def delete_model(*args, **kwargs):

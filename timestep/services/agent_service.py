@@ -7,13 +7,11 @@ from openai.types.model import Model
 from sqlalchemy import func
 from sqlmodel import Field, Session, SQLModel, select
 
-from timestep.config import Settings
+from timestep.config import settings
 from timestep.database import (  # ModelAliasSQLModel,; ModelSQLModel,; create_db_and_tables,
     AgentSQLModel,
     engine,
 )
-
-settings = Settings()
 
 app_dir = settings.app_dir
 default_tools = []

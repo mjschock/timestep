@@ -2,9 +2,9 @@ from pathlib import Path
 from httpx import AsyncClient
 import pytest
 
-from timestep.config import Settings
+from timestep.config import settings
 
-settings = Settings()
+
 
 fine_tuning_dataset_file_path = "data/drone_training.jsonl"
 fine_tuning_dataset = open(fine_tuning_dataset_file_path, "rb")

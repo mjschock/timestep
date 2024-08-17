@@ -23,9 +23,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlmodel import Field, SQLModel, create_engine
 
-from timestep.config import Settings
+from timestep.config import settings
 
-settings = Settings()
 app_dir = settings.app_dir
 
 engine = create_engine(

@@ -3,9 +3,9 @@ from openai import AsyncOpenAI
 from openai.types import Model, ModelDeleted
 from openai.types.beta import Assistant
 
-from timestep.config import Settings
+from timestep.config import settings
 
-settings = Settings()
+
 token = settings.openai_api_key.get_secret_value()
 
 async def test_delete_model(client: AsyncClient):

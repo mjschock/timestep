@@ -65,9 +65,7 @@ from prefect.variables import Variable
 from prefect_shell import ShellOperation
 from pydantic import BaseModel
 
-from timestep.config import Settings
-
-settings = Settings()
+from timestep.config import settings
 
 app_dir = typer.get_app_dir("timestep")
 cf.default_model = ChatOpenAI(

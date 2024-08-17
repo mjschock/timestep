@@ -2,10 +2,8 @@ import inspect
 
 import typer
 
-from timestep.config import Settings
+from timestep.config import settings
 from timestep.server import main as timestep_serve
-
-settings = Settings()
 
 
 def get_help_message():

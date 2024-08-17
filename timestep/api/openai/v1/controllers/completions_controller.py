@@ -5,9 +5,7 @@ from openai import AsyncOpenAI, AsyncStream
 from openai.types.completion import Completion
 from sse_starlette import EventSourceResponse
 
-from timestep.config import Settings
-
-settings = Settings()
+from timestep.config import settings
 
 
 async def create_completion(body, token_info: dict, user: str):

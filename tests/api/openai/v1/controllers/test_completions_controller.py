@@ -1,8 +1,8 @@
 from httpx import AsyncClient
 
-from timestep.config import Settings
+from timestep.config import settings
 
-settings = Settings()
+
 token = settings.openai_api_key.get_secret_value()
 
 

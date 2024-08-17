@@ -1,9 +1,9 @@
 from httpx import AsyncClient
 from openai.types.beta import Assistant
 
-from timestep.config import Settings
+from timestep.config import settings
 
-settings = Settings()
+
 token = settings.openai_api_key.get_secret_value()
 
 assistant_id = "default_assistant_id"

@@ -8,9 +8,9 @@ import pytest_asyncio
 from asgi_lifespan import LifespanManager
 
 from timestep.server import fastapi_app
-from timestep.config import Settings
+from timestep.config import settings
 
-settings = Settings()
+
 
 @pytest_asyncio.fixture(
     autouse=True,

@@ -5,9 +5,9 @@ from httpx import AsyncClient
 import pytest
 import respx
 
-from timestep.config import Settings
+from timestep.config import settings
 
-settings = Settings()
+
 token = settings.openai_api_key.get_secret_value()
 
 # @pytest.mark.respx(base_url="http://openai.local")

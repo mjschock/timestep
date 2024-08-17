@@ -8,13 +8,10 @@ from openai.types.chat.chat_completion_chunk import ChatCompletionChunk
 from openai.types.chat.completion_create_params import CompletionCreateParams
 from sse_starlette import EventSourceResponse
 
-from timestep.config import Settings
+from timestep.config import settings
 
 # import pprint
 # from pprint import pprint
-
-
-settings = Settings()
 
 
 async def create_chat_completion(
