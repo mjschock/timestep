@@ -60,7 +60,7 @@ from openai.types.shared_params.function_definition import FunctionDefinition
 from openai.types.shared_params.function_parameters import FunctionParameters
 from prefect import flow, get_run_logger, task
 from prefect.context import get_run_context
-from prefect.engine import pause_flow_run
+from prefect.flow_runs import pause_flow_run
 from prefect.variables import Variable
 from prefect_shell import ShellOperation
 from pydantic import BaseModel

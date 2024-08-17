@@ -13,7 +13,7 @@ from libcloud.storage.providers import get_driver
 from libcloud.storage.types import Provider
 from openai.types.file_deleted import FileDeleted
 from openai.types.file_object import FileObject
-from prefect import flow, task
+from prefect import flow, get_client, task
 from prefect.artifacts import create_link_artifact
 from starlette.datastructures import UploadFile
 
@@ -74,22 +74,24 @@ async def create_file(body, file: UploadFile, token_info: dict, user: str):
             extra=extra,
         )
 
-    artifact_id: uuid.UUID = await create_link_artifact(
-        description=f"""
-        ## File upload of {file_name}.
-
-        Organization: {settings.openai_org_id}
-        Purpose: {purpose}
-        """,
-        # key="irregular-data",
-        # key=file_name,
-        key=str(file_uuid),
-        # link="https://nyc3.digitaloceanspaces.com/my-bucket-name/highly_variable_data.csv",
-        # link=f"file://{app_dir}/data/{settings.openai_org_id}/{file_name}",
-        link=f"file://{app_dir}/data/{file_name}",
-        # link_text
-        # description="## Highly variable data",
-    )
+    async with get_client() as client:
+        artifact_id: uuid.UUID = await create_link_artifact(
+            client=client,
+            description=f"""
+            ## File upload of {file_name}.
+            
+            Organization: {settings.openai_org_id}
+            Purpose: {purpose}
+            """,
+            # key="irregular-data",
+            # key=file_name,
+            key=str(file_uuid),
+            # link="https://nyc3.digitaloceanspaces.com/my-bucket-name/highly_variable_data.csv",
+            # link=f"file://{app_dir}/data/{settings.openai_org_id}/{file_name}",
+            link=f"file://{app_dir}/data/{file_name}",
+            # link_text
+            # description="## Highly variable data",
+        )
 
     file_object = FileObject(
         id=str(artifact_id),

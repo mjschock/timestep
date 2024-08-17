@@ -88,7 +88,7 @@ async def lifespan(app: FastAPI):
                     args=[
                         "sh",
                         "-c",
-                        "prefect server start",
+                        f"PREFECT_API_URL={settings.prefect_api_url} prefect server start",
                     ],
                     name="prefect.server",
                 )
@@ -110,7 +110,7 @@ async def lifespan(app: FastAPI):
                     args=[
                         "sh",
                         "-c",
-                        "prefect worker start --pool 'default' --type 'process'",
+                        f"PREFECT_API_URL={settings.prefect_api_url} prefect worker start --pool 'default' --type 'process'",
                     ],
                     name="prefect.worker.default",
                 )
@@ -148,15 +148,19 @@ async def lifespan(app: FastAPI):
                 lock_file.write_text(json.dumps(data))
 
         # TODO: Filelock doesnt support async, try https://py-filelock.readthedocs.io/en/latest/_modules/filelock/asyncio.html
-        agent_flow = await flow.from_source(
-            source=str(Path(__file__).parent),
-            entrypoint="worker.py:agent_flow",
-        )
+        try:
+            agent_flow = await flow.from_source(
+                source=str(Path(__file__).parent),
+                entrypoint="worker.py:agent_flow",
+            )
 
-        await agent_flow.deploy(
-            name="agent-flow-deployment",
-            work_pool_name="default",
-        )
+            await agent_flow.deploy(
+                name="agent-flow-deployment",
+                work_pool_name="default",
+            )
+
+        except Exception as e:
+            print(e)
 
         yield
 
@@ -171,7 +175,11 @@ async def lifespan(app: FastAPI):
                 data = json.loads(lock_file.read_text())
 
                 print(f"Stopping {worker_name} worker process with PID: {worker_pid}")
-                data["timestep"][worker_name]["status"] = "stopped"
+                try:
+                    data["timestep"][worker_name]["status"] = "stopped"
+
+                except Exception as e:
+                    print(e)
 
                 stopped_workers = [
                     worker

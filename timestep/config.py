@@ -81,3 +81,10 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
         # secrets_dir = "./secrets"  # TODO: Change to f"{app_dir}/secrets" when ready
         secrets_dir = f"{app_dir}/secrets"
+
+
+settings = Settings()
+
+# os.environ["OPENAI_API_KEY"] = settings.openai_api_key.value()
+if "PREFECT_API_URL" not in os.environ:
+    os.environ["PREFECT_API_URL"] = settings.prefect_api_url
