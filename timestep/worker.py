@@ -116,6 +116,8 @@ async def lock_thread(flow, flow_run, state):
     # lock the thread_id
     await Variable.set(f"lock_{thread_id}", "locked")
 
+    raise NotImplementedError("Need to implement a lock mechanism")
+
 
 async def unlock_thread(flow, flow_run, state):
     logger = get_run_logger()
@@ -127,8 +129,11 @@ async def unlock_thread(flow, flow_run, state):
     # unlock the thread_id
     await Variable.set(f"lock_{thread_id}", "unlocked")
 
+    raise NotImplementedError("Need to implement an unlock mechanism")
+
 
 @flow(
+    log_prints=True,
     on_completion=[unlock_thread],
     on_running=[lock_thread],
 )
@@ -208,36 +213,9 @@ async def agent_flow(run_input: RunInput) -> RunOutput:
 
         logger.info(f"chat_completion_message_params: {chat_completion_message_params}")
 
-        chat_completion_tool_params: List[ChatCompletionToolParam] = []
-        # chat_completion_tool_params: [
-        #     {'function': {'description': 'code_interpreter', 'name': 'code_interpreter', 'parameters': {}}, 'type': 'function'},
-        #     {'function': {'description': 'file_search', 'name': 'file_search', 'parameters': {}}, 'type': 'function'},
-        #     {'function': {'description': 'function', 'name': 'function', 'parameters': {}}, 'type': 'function'}]
-        # See https://platform.openai.com/docs/assistants/tools/code-interpreter; TODO: use default input: str, outputs: list, etc for code_interpreter tool
-        # See https://platform.openai.com/docs/assistants/tools/file-search: TODO index the files as documents if not already done using pypdf plust lightweight OCR model for blank pages, get good set of default function signature (like above)
-
-        # for tool in run_step_input.tools or assistant.tools:
-        for tool in run_input.tools or assistant.tools:
-            assert tool.type in [
-                "code_interpreter",
-                "file_search",
-                "function",
-            ], f"Unsupported tool type: {tool.type}"
-
-            function_description: str = tool.type
-            function_name: str = tool.type
-            function_parameters: FunctionParameters = dict()
-
-            chat_completion_tool_params.append(
-                ChatCompletionToolParam(
-                    function=FunctionDefinition(
-                        description=function_description,
-                        name=function_name,
-                        parameters=function_parameters,
-                    ),
-                    type="function",
-                )
-            )
+        chat_completion_tool_params = build_chat_completion_tool_params(
+            run_input, assistant
+        )
 
         logger.info(f"chat_completion_tool_params: {chat_completion_tool_params}")
 
@@ -357,6 +335,70 @@ async def agent_flow(run_input: RunInput) -> RunOutput:
             )
 
     return run_output
+
+
+def build_chat_completion_tool_params(run_input, assistant):
+    chat_completion_tool_params: List[ChatCompletionToolParam] = []
+    # chat_completion_tool_params: [
+    #     {'function': {'description': 'code_interpreter', 'name': 'code_interpreter', 'parameters': {}}, 'type': 'function'},
+    #     {'function': {'description': 'file_search', 'name': 'file_search', 'parameters': {}}, 'type': 'function'},
+    #     {'function': {'description': 'function', 'name': 'function', 'parameters': {}}, 'type': 'function'}]
+    # See https://platform.openai.com/docs/assistants/tools/code-interpreter; TODO: use default input: str, outputs: list, etc for code_interpreter tool
+    # See https://platform.openai.com/docs/assistants/tools/file-search: TODO index the files as documents if not already done using pypdf plust lightweight OCR model for blank pages, get good set of default function signature (like above)
+
+    # Function tool example:
+    #   "name": "get_current_weather",
+    #   "description": "Get the current weather in a given location",
+    #   "parameters": {
+    #     "type": "object",
+    #     "properties": {
+    #       "location": {
+    #         "type": "string",
+    #         "description": "The city and state, e.g. San Francisco, CA",
+    #       },
+    #       "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+    #     },
+    #     "required": ["location"],
+    #   },
+
+    # for tool in run_step_input.tools or assistant.tools:
+    tools = run_input.tools or assistant.tools
+
+    print("run_input.tools: ", run_input.tools)
+
+    for tool in run_input.tools:
+        print("tool: ", tool)
+        print("type(tool): ", type(tool))
+
+    print("assistant.tools: ", assistant.tools)
+
+    for tool in assistant.tools:
+        print("tool: ", tool)
+        print("type(tool): ", type(tool))
+
+    for tool in tools:
+        assert tool.type in [
+            "code_interpreter",
+            "file_search",
+            "function",
+        ], f"Unsupported tool type: {tool.type}"
+
+        function_description: str = tool.type
+        function_name: str = tool.type
+        function_parameters: FunctionParameters = dict()
+
+        chat_completion_tool_params.append(
+            ChatCompletionToolParam(
+                function=FunctionDefinition(
+                    description=function_description,
+                    name=function_name,
+                    parameters=function_parameters,
+                ),
+                type="function",
+            )
+        )
+
+    return chat_completion_tool_params
 
 
 # @task
@@ -637,7 +679,7 @@ async def agent_train_step_flow(fine_tuning_job_id: str, suffix: Optional[str] =
 
 # async def main():
 # def main(work_type="train_agent"):
-def main(thread_id):
+def main(thread_id=None):
     raise NotImplementedError
 
     # flow_run: FlowRun = await run_deployment(

@@ -5,6 +5,7 @@ from typing import List
 
 from pydantic import ConfigDict
 from sqlalchemy import (
+    ARRAY,
     DDL,
     JSON,
     Column,
@@ -69,6 +70,9 @@ class MessageSQLModel(SQLModel, SQLModelMixin, table=True):
     thread_id: uuid.UUID = Field(foreign_key="threads.id")
     # thread: "ThreadSQLModel" = relationship("ThreadSQLModel", back_populates="messages")
 
+    # Relationship back to the thread
+    # thread = relationship("ThreadSQLModel", back_populates="messages")
+
 
 # class ModelSQLModel(SQLModel, SQLModelMixin, table=True):
 #     __tablename__: str = "models"
@@ -93,11 +97,23 @@ class ThreadSQLModel(SQLModel, SQLModelMixin, table=True):
 
     # messages: List[MessageSQLModel] = relationship("MessageSQLModel", back_populates="thread")
 
+    # Relationship to messages
+    # messages = relationship("MessageSQLModel", back_populates="thread")
 
-trigger_ddl = DDL(
+
+class VectorSQLModel(SQLModel, SQLModelMixin, table=True):
+    __tablename__: str = "vectors"
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    # distance_to_center: float = Field()
+    # metadata: dict = Field(sa_column=Column(JSON), default={})
+    vector: List[float] = Field(sa_column=Column(JSON), default=[])
+
+
+# DDL statements for triggers
+trigger_insert_ddl = DDL(
     """
-CREATE TRIGGER prevent_writes_on_locked_rows
-# BEFORE INSERT OR UPDATE OR DELETE ON messages
+CREATE TRIGGER prevent_insert_on_locked_threads
 BEFORE INSERT ON messages
 FOR EACH ROW
 WHEN EXISTS (
@@ -106,13 +122,47 @@ WHEN EXISTS (
     WHERE threads.id = NEW.thread_id AND threads.is_locked = 1
 )
 BEGIN
-    SELECT RAISE(ABORT, 'Operation not allowed: thread is locked');
+    SELECT RAISE(ABORT, 'Operation not allowed: the thread is locked');
 END;
 """
 )
 
-# Attach the trigger to the table creation event
-event.listen(MessageSQLModel.__table__, "after_create", trigger_ddl)
+trigger_update_ddl = DDL(
+    """
+CREATE TRIGGER prevent_update_on_locked_threads
+BEFORE UPDATE ON messages
+FOR EACH ROW
+WHEN EXISTS (
+    SELECT 1
+    FROM threads
+    WHERE threads.id = NEW.thread_id AND threads.is_locked = 1
+)
+BEGIN
+    SELECT RAISE(ABORT, 'Operation not allowed: the thread is locked');
+END;
+"""
+)
+
+trigger_delete_ddl = DDL(
+    """
+CREATE TRIGGER prevent_delete_on_locked_threads
+BEFORE DELETE ON messages
+FOR EACH ROW
+WHEN EXISTS (
+    SELECT 1
+    FROM threads
+    WHERE threads.id = OLD.thread_id AND threads.is_locked = 1
+)
+BEGIN
+    SELECT RAISE(ABORT, 'Operation not allowed: the thread is locked');
+END;
+"""
+)
+
+# Attach triggers to the table creation event
+event.listen(MessageSQLModel.__table__, "after_create", trigger_insert_ddl)
+event.listen(MessageSQLModel.__table__, "after_create", trigger_update_ddl)
+event.listen(MessageSQLModel.__table__, "after_create", trigger_delete_ddl)
 
 
 def create_db_and_tables():

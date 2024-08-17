@@ -14,6 +14,7 @@ from connexion import AsyncApp, ConnexionMiddleware
 from connexion.options import SwaggerUIOptions
 from fastapi import FastAPI, Request
 from filelock import SoftFileLock, Timeout
+from huggingface_hub import hf_hub_download
 from prefect import flow
 from prefect.server.api.server import SubprocessASGIServer
 from prefect.settings import (
@@ -33,13 +34,19 @@ settings = Settings()
 app_dir = settings.app_dir
 connexion_app = AsyncApp(import_name=__name__)
 default_hf_repo_id = settings.default_hf_repo_id
-default_llamafile_filename = settings.default_llamafile_filename
+# default_llamafile_filename = settings.default_llamafile_filename
 default_llamafile_host = settings.default_llamafile_host
 default_llamafile_port = settings.default_llamafile_port
-default_llamafile_url = f"https://huggingface.co/{default_hf_repo_id}/resolve/main/{default_llamafile_filename}?download=true"
-local_llamafile_path = (
-    f"{app_dir}/models/{default_hf_repo_id}/{default_llamafile_filename}"
+# default_llamafile_url = f"https://huggingface.co/{default_hf_repo_id}/resolve/main/{default_llamafile_filename}?download=true"
+default_model_filename = settings.default_model_filename
+default_multimodal_model_projector_filename = (
+    settings.default_multimodal_model_projector_filename
 )
+# local_llamafile_path = (
+#     f"{app_dir}/models/{default_hf_repo_id}/{default_llamafile_filename}"
+# )
+local_model_path = f"{app_dir}/models/{default_hf_repo_id}/{default_model_filename}"
+local_multimodal_model_projector_path = f"{app_dir}/models/{default_hf_repo_id}/{default_multimodal_model_projector_filename}"
 
 
 @asynccontextmanager
@@ -75,38 +82,7 @@ async def lifespan(app: FastAPI):
             else:
                 # create_db_and_tables()
 
-                if os.path.basename(
-                    local_llamafile_path
-                ) == default_llamafile_filename and not os.path.exists(
-                    local_llamafile_path
-                ):
-                    os.makedirs(os.path.dirname(local_llamafile_path), exist_ok=True)
-                    download_with_progress_bar(
-                        default_llamafile_url, local_llamafile_path
-                    )
-
-                assert os.path.exists(local_llamafile_path)
-
-                # if local_llamafile_path is not executable, make it executable
-                if not os.access(local_llamafile_path, os.X_OK):
-                    os.chmod(local_llamafile_path, 0o755)
-
-                llamafile_pid = subprocess_manager.start(
-                    args=[
-                        "sh",
-                        local_llamafile_path,
-                        "--host",
-                        f"{default_llamafile_host}",
-                        "--nobrowser",
-                        "--path",
-                        "/zip/llama.cpp/server/public",
-                        "--port",
-                        f"{default_llamafile_port}",
-                        "--temp",
-                        "0.0",
-                    ],
-                    name="llamafiles.default",
-                )
+                llamafile_pid = start_llamafile(subprocess_manager)
 
                 prefect_server_pid = subprocess_manager.start(
                     args=[
@@ -257,6 +233,100 @@ async def lifespan(app: FastAPI):
             raise RuntimeWarning(f"An error occurred in the finally block: {e}")
 
 
+def start_llamafile(subprocess_manager):
+    # if os.path.basename(
+    #                 local_llamafile_path
+    #             ) == default_llamafile_filename and not os.path.exists(
+    #                 local_llamafile_path
+    #             ):
+    # os.makedirs(os.path.dirname(local_llamafile_path), exist_ok=True)
+    # os.makedirs(f"{app_dir}/models/{default_hf_repo_id}", exist_ok=True)
+    os.makedirs(os.path.dirname(local_model_path), exist_ok=True)
+    # download_with_progress_bar(
+    #                 default_llamafile_url, local_llamafile_path
+    #             )
+    hf_hub_download(
+        # cache_dir=f"{app_dir}/models",
+        # filename=default_llamafile_filename,
+        filename=settings.default_model_filename,
+        # local_dir=os.path.dirname(local_llamafile_path),
+        local_dir=f"{app_dir}/models/{default_hf_repo_id}",
+        # local_files_only=True,
+        repo_id=default_hf_repo_id,
+        repo_type="model",
+    )
+
+    # assert os.path.exists(local_llamafile_path)
+    # assert os.path.exists(f"{app_dir}/models/{default_hf_repo_id}/{default_model_filename}")
+    assert os.path.exists(local_model_path)
+
+    if default_multimodal_model_projector_filename:
+        os.makedirs(
+            os.path.dirname(local_multimodal_model_projector_path), exist_ok=True
+        )
+        hf_hub_download(
+            filename=default_multimodal_model_projector_filename,
+            local_dir=f"{app_dir}/models/{default_hf_repo_id}",
+            # local_files_only=True,
+            repo_id=default_hf_repo_id,
+            repo_type="model",
+        )
+
+        assert os.path.exists(local_multimodal_model_projector_path)
+
+    args = ["sh"]
+
+    if default_model_filename.endswith(".gguf"):
+        args += [
+            "bin/llamafile",
+            "--model",
+            local_model_path,
+        ]
+
+        if default_multimodal_model_projector_filename:
+            args += [
+                "--mmproj",
+                f"{local_multimodal_model_projector_path}",
+            ]
+
+    elif default_model_filename.endswith(".llamafile"):
+        # if local_model_path is not executable, make it executable
+        if not os.access(local_model_path, os.X_OK):
+            os.chmod(local_model_path, 0o755)
+
+        args += [
+            local_model_path,
+        ]
+
+    else:
+        raise NotImplementedError(
+            f"Unsupported model file type: {default_model_filename}"
+        )
+
+    args += [
+        "--host",
+        f"{default_llamafile_host}",
+        # "--model‐draft", # TODO: Draft model for speculative decoding
+        "--nobrowser",
+        "--path",
+        "/zip/llama.cpp/server/public",
+        "--port",
+        f"{default_llamafile_port}",
+        "--server",
+        "--temp",
+        "0.0",
+    ]
+
+    # TODO: add support for LoRA adapters
+
+    llamafile_pid = subprocess_manager.start(
+        args=args,
+        name="llamafiles.default",
+    )
+
+    return llamafile_pid
+
+
 fastapi_app = FastAPI(
     lifespan=lifespan,
     # servers= # TODO: add server for testing?
@@ -387,7 +457,11 @@ class SubprocessManager:
 
     def stop(self, pid=None):
         if pid:
-            os.killpg(os.getpgid(pid), signal.SIGTERM)
+            try:
+                os.killpg(os.getpgid(pid), signal.SIGTERM)
+
+            except ProcessLookupError as e:
+                print(f"An error occurred: {e}")
 
         else:
             print("No process to terminate")
