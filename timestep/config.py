@@ -85,6 +85,11 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-# os.environ["OPENAI_API_KEY"] = settings.openai_api_key.value()
+if "OPENAI_API_KEY" not in os.environ:
+    os.environ["OPENAI_API_KEY"] = settings.openai_api_key.get_secret_value()
+
+if "OPENAI_BASE_URL" not in os.environ:
+    os.environ["OPENAI_BASE_URL"] = settings.openai_base_url
+
 if "PREFECT_API_URL" not in os.environ:
     os.environ["PREFECT_API_URL"] = settings.prefect_api_url
