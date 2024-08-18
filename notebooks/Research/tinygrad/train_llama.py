@@ -403,31 +403,88 @@ if __name__ == "__main__":
   if args.size is None: args.size = list(MODEL_PARAMS[args.gen].items())[0][0]
   chatbot = args.prompt == None
 
+  config = AutoConfig.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v1.0")
+
+  params = MODEL_PARAMS[args.gen][args.size]
+  assert config.hidden_size == params["args"]["dim"]
+  assert config.intermediate_size == params["args"]["hidden_dim"]
+  assert config.num_attention_heads == params["args"]["n_heads"]
+  assert config.num_hidden_layers == params["args"]["n_layers"]
+  assert config.num_key_value_heads == params["args"]["n_kv_heads"]
+  assert config.rms_norm_eps == params["args"]["norm_eps"]
+  assert config.vocab_size == params["args"]["vocab_size"]
+
+  set_custom_chat_template = False
+
   # hf_tokenizer = AutoTokenizer.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v1.0")
   # hf_tokenizer = AutoTokenizer.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v1.0", eos_token="<|im_end|>")
   # hf_tokenizer = AutoTokenizer.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v1.0", eos_token="</s>")
   # hf_tokenizer.chat_template = function_calling_template
 
+  # bos_token = llama.tokenizer.decode([llama.tokenizer.bos_id()])
+  # eos_token = llama.tokenizer.decode([llama.tokenizer.eos_id()])
+  # print('bos_token:', bos_token)
+  # print('eos_token:', eos_token)
+
+  hf_tokenizer = AutoTokenizer.from_pretrained(
+    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    # bos_token=llama.tokenizer.decode([llama.tokenizer.bos_id()]),
+    # eos_token=llama.tokenizer.decode([llama.tokenizer.eos_id()]),
+    # pad_token_id=-1,
+    # pad_token="<|im_end|>",
+    # pad_token=None,
+  )
+
+  if set_custom_chat_template:
+    hf_tokenizer.chat_template = function_calling_template
+  # hf_tokenizer.pad_token = None
+  # hf_tokenizer.pad_token_id = -1
+
   # *** prompt engineers work here ****
   if args.personality.lower() == "assistant":
-    pre_prompt = f"""Consider that the following is conversation between an AI assistant and User
-You are an AI assistant!
-You are trying to help the User with their questions.
-You are verbose, honest, and accurate when you answer questions.
-After you are done speaking, output [EOS]. You are not the User.
+#     pre_prompt = f"""Consider that the following is conversation between an AI assistant and User
+# You are an AI assistant!
+# You are trying to help the User with their questions.
+# You are verbose, honest, and accurate when you answer questions.
+# After you are done speaking, output [EOS]. You are not the User.
 
-<CHAT LOG>
-"""
-    examples = {
-      "What is your name?": "I am an AI assistant.",
-      "What is the capital of France?": "The capital of France is Paris.",
-      "What is the square root of 16?": "The square root of 16 is 4.",
-    }
+# <CHAT LOG>
+# """
+    # examples = {
+    #   "What is your name?": "I am an AI assistant.",
+    #   "What is the capital of France?": "The capital of France is Paris.",
+    #   "What is the square root of 16?": "The square root of 16 is 4.",
+    # }
 
-    user_delim = "\nUser: "
-    resp_delim = "Assistant: "
-    end_delim = " [EOS]\n"
-    pre_prompt += ''.join(f"{user_delim}{k}\n{resp_delim}{v}{end_delim}" for k,v in examples.items())
+    # user_delim = "\nUser: "
+    # resp_delim = "Assistant: "
+    # end_delim = " [EOS]\n"
+    # pre_prompt += ''.join(f"{user_delim}{k}\n{resp_delim}{v}{end_delim}" for k,v in examples.items())
+
+    # end_delim = hf_tokenizer.eos_token # TODO: <|im_end|> or </s>? what about [EOS]? what about bos and padding token?
+    # end_delim = "<|im_end|>" # "<|im_end|>\n"
+    end_delim = "</s>" # "</s>\n"
+    print('end_delim:', end_delim)
+
+    messages = [
+      {
+        "role": "system",
+        "content": "You are an AI assistant!",
+      },
+      {"role": "user", "content": "What is your name?"},
+      {"role": "assistant", "content": "I am an AI assistant."},
+      {"role": "user", "content": "What is the capital of France?"},
+      {"role": "assistant", "content": "The capital of France is Paris."},
+      {"role": "user", "content": "What is the square root of 16?"},
+      {"role": "assistant", "content": "The square root of 16 is 4."},
+    ]
+
+    pre_prompt = hf_tokenizer.apply_chat_template(
+      add_generation_prompt=False,
+      conversation=messages,
+      tokenize=False,
+    )
+
   elif args.personality.lower() == "stacy":
     pre_prompt = f"""Consider that the following is conversation between an AI assistant named Stacy and User
 You are Stacy!
@@ -542,21 +599,8 @@ After you are done speaking, output [EOS]. You are not Chad.
     {"role": "user", "content": "How many helicopters can a human eat in one sitting?"},
   ]
 
-  # bos_token = llama.tokenizer.decode([llama.tokenizer.bos_id()])
-  # eos_token = llama.tokenizer.decode([llama.tokenizer.eos_id()])
-  # print('bos_token:', bos_token)
-  # print('eos_token:', eos_token)
-
-  hf_tokenizer = AutoTokenizer.from_pretrained(
-    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    # bos_token=llama.tokenizer.decode([llama.tokenizer.bos_id()]),
-    # eos_token=llama.tokenizer.decode([llama.tokenizer.eos_id()]),
-  )
-
-  hf_tokenizer.chat_template = function_calling_template
-
   prompt = hf_tokenizer.apply_chat_template(
-      # add_generation_prompt=True,
+      add_generation_prompt=True,
       # add_special_tokens=False,
       conversation=messages,
       # padding="max_length",
@@ -572,9 +616,12 @@ After you are done speaking, output [EOS]. You are not Chad.
   print(encoded_prompt, end='\n\n')
 
   hf_encoded_prompt = hf_tokenizer.encode(prompt, add_special_tokens=False)
-  # print('hf_encoded_prompt:\n', hf_encoded_prompt)
   print('hf_encoded_prompt:', end='\n\n')
   print(hf_encoded_prompt, end='\n\n')
+
+  hf_encoded_prompt_with_special_tokens = hf_tokenizer.encode(prompt, add_special_tokens=True)
+  print('hf_encoded_prompt_with_special_tokens:', end='\n\n')
+  print(hf_encoded_prompt_with_special_tokens, end='\n\n')
 
   # assert [llama.tokenizer.bos_id()] + encoded_prompt == hf_encoded_prompt, f"\n{[llama.tokenizer.bos_id()] + encoded_prompt}\n!=\n{hf_encoded_prompt}"
   assert encoded_prompt == hf_encoded_prompt, f"\n{encoded_prompt}\n!=\n{hf_encoded_prompt}"
@@ -591,17 +638,51 @@ After you are done speaking, output [EOS]. You are not Chad.
 
   assert decoded_encoded_prompt == hf_decoded_encoded_prompt, f"\n{decoded_encoded_prompt}\n!=\n{hf_decoded_encoded_prompt}"
 
+  print(f"decoded 5299: {llama.tokenizer.decode(5299)}")
+  print(f"hf_decoded 5299: {hf_tokenizer.decode(5299)}")
+  print(f"decoded 29958: {llama.tokenizer.decode(29958)}")
+  print(f"hf_decoded 29958: {hf_tokenizer.decode(29958)}")
+
+  print(f"tokenizer.bos_id(): {llama.tokenizer.bos_id()}")
+  print(f"tokenizer.eos_id(): {llama.tokenizer.eos_id()}")
+  print(f"tokenizer.pad_id(): {llama.tokenizer.pad_id()}")
+  print(f"tokenizer.unk_id(): {llama.tokenizer.unk_id()}")
+
+  print(f"hf_tokenizer.bos_token_id: {hf_tokenizer.bos_token_id}")
+  print(f"hf_tokenizer.eos_token_id: {hf_tokenizer.eos_token_id}")
+  print(f"hf_tokenizer.pad_token_id: {hf_tokenizer.pad_token_id}")
+  print(f"hf_tokenizer.unk_token_id: {hf_tokenizer.unk_token_id}")
+
+  assert llama.tokenizer.bos_id() == hf_tokenizer.bos_token_id, f"{llama.tokenizer.bos_id()} != {hf_tokenizer.bos_token_id}"
+  assert llama.tokenizer.eos_id() == hf_tokenizer.eos_token_id, f"{llama.tokenizer.eos_id()} != {hf_tokenizer.eos_token_id}"
+  assert llama.tokenizer.pad_id() == hf_tokenizer.pad_token_id, f"{llama.tokenizer.pad_id()} != {hf_tokenizer.pad_token_id}"
+  assert llama.tokenizer.unk_id() == hf_tokenizer.unk_token_id, f"{llama.tokenizer.unk_id()} != {hf_tokenizer.unk_token_id}"
+
   print('=== tokenizer testing [end] ===')
 
   # chatbot loop
   while 1:
     # add tokens from user in chatbot mode
     if chatbot:
-      user_prompt = user_delim + input(user_delim) + "\n"
+      # user_prompt = user_delim + input(user_delim) + "\n"
+      user_message = {
+        "role": "user",
+        "content": input("\nUser: "),
+      }
+      user_prompt = hf_tokenizer.apply_chat_template(
+        add_generation_prompt=True,
+        conversation=[user_message],
+        tokenize=False,
+      )
+      print('\nuser_prompt:', end='\n\n')
+      print(user_prompt)
       outputted += user_prompt
+      print('outputted:', end='\n\n')
+      print(outputted)
 
     new_toks = [llama.tokenizer.bos_id()] + llama.tokenizer.encode(outputted)
-    assert toks == new_toks[:len(toks)] or args.gen == "3"
+    assert toks[:-1] == new_toks[:len(toks)-1], f"\n{toks[:-1]}\n!=\n{new_toks[:len(toks)-1]}"
+    assert toks == new_toks[:len(toks)], f"\n{toks}\n!=\n{new_toks[:len(toks)]}"
     toks = new_toks
     assert outputted == llama.tokenizer.decode(toks)
 
