@@ -11,7 +11,7 @@ description = "Timestep AI CLI - free, local-first, open-source AI"
 license = "MIT"
 name = "timestep"
 readme = "README.md"
-version = "12.0.75"
+version = "12.0.76"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
@@ -29,6 +29,8 @@ kedro = "^0.19.7"
 langchain-community = "^0.2.12"
 langchain-core = "^0.2.33"
 marvin = "^2.3.6"
+numpy = "^1.26.4"
+pandas = "^2.2.2"
 prefect-dask = {allow-prereleases = true, version = "^0.3.0rc2"}
 prefect-shell = {allow-prereleases = true, version = "^0.3.0rc1"}
 pypdf = "^4.3.1"
