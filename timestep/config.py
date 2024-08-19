@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     )
     poetry_virtualenvs_in_project: bool = Field(default=True)
     poetry_virtualenvs_prefer_active_python: bool = Field(default=True)
-    prefect_api_url: str = Field(default="http://localhost:4200/api")
+    prefect_api_url: str = Field(default="http://127.0.0.1:4200/api")
     prefect_logging_level: str = Field(default="INFO")
     prefect_logging_log_prints: bool = Field(default=True)
     pyenv_version: str = Field(default="3.10.14")
