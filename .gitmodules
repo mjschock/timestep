@@ -1,0 +1,3 @@
+[submodule "notebooks/Research/lib/transformers"]
+	path = notebooks/Research/lib/transformers
+	url = https://github.com/huggingface/transformers.git
