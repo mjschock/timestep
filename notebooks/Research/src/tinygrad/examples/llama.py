@@ -4,167 +4,165 @@
 #typeguard.importhook.install_import_hook('tinygrad')
 
 from pathlib import Path
-import sys
 from typing import List, Optional
 import argparse, json
 import numpy as np
 np.set_printoptions(linewidth=200)
 from tinygrad import Tensor, Device, GlobalCounters, nn
 from tinygrad.helpers import Context, Timing, Profiling, DEBUG, JIT, getenv, colored
-from tinygrad.nn.state import get_state_dict, safe_load, torch_load, load_state_dict, get_parameters, safe_save
-from llama import Transformer, convert_from_huggingface, fix_bf16
+from tinygrad.nn.state import safe_load, torch_load, load_state_dict, get_parameters
+from extra.models.llama import Transformer, convert_from_huggingface, fix_bf16
 from sentencepiece import SentencePieceProcessor
-# import tiktoken, sys
-# from tiktoken.load import load_tiktoken_bpe
-from transformers import AutoConfig, AutoTokenizer
+import tiktoken, sys
+from tiktoken.load import load_tiktoken_bpe
 
 MAX_CONTEXT = getenv("MAX_CONTEXT", 4096)
 
-# class TikToken:
-#   num_reserved_special_tokens: int = 256
-#   pat_str: str =  r"(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+"  # noqa: E501
+class TikToken:
+  num_reserved_special_tokens: int = 256
+  pat_str: str =  r"(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+"  # noqa: E501
 
-#   def __init__(self, model_file):
-#     mergeable_ranks = load_tiktoken_bpe(model_file)
-#     self.num_base_tokens = len(mergeable_ranks)
+  def __init__(self, model_file):
+    mergeable_ranks = load_tiktoken_bpe(model_file)
+    self.num_base_tokens = len(mergeable_ranks)
 
-#     special_tokens = [
-#         "<|begin_of_text|>",
-#         "<|end_of_text|>",
-#         "<|reserved_special_token_0|>",
-#         "<|reserved_special_token_1|>",
-#         "<|reserved_special_token_2|>",
-#         "<|reserved_special_token_3|>",
-#         "<|start_header_id|>",
-#         "<|end_header_id|>",
-#         "<|reserved_special_token_4|>",
-#         "<|eot_id|>",  # end of turn
-#       ] + [
-#         f"<|reserved_special_token_{i}|>"
-#         for i in range(5, self.num_reserved_special_tokens - 5)
-#       ]
-#     self.special_tokens = {
-#         token: self.num_base_tokens + i for i, token in enumerate(special_tokens)
-#     }
+    special_tokens = [
+        "<|begin_of_text|>",
+        "<|end_of_text|>",
+        "<|reserved_special_token_0|>",
+        "<|reserved_special_token_1|>",
+        "<|reserved_special_token_2|>",
+        "<|reserved_special_token_3|>",
+        "<|start_header_id|>",
+        "<|end_header_id|>",
+        "<|reserved_special_token_4|>",
+        "<|eot_id|>",  # end of turn
+      ] + [
+        f"<|reserved_special_token_{i}|>"
+        for i in range(5, self.num_reserved_special_tokens - 5)
+      ]
+    self.special_tokens = {
+        token: self.num_base_tokens + i for i, token in enumerate(special_tokens)
+    }
 
-#     self.model = tiktoken.Encoding(
-#       name=model_file,
-#       pat_str=self.pat_str,
-#       mergeable_ranks=mergeable_ranks,
-#       special_tokens=self.special_tokens,
-#     )
+    self.model = tiktoken.Encoding(
+      name=model_file,
+      pat_str=self.pat_str,
+      mergeable_ranks=mergeable_ranks,
+      special_tokens=self.special_tokens,
+    )
 
-#   def decode(self, toks): return self.model.decode([t for t in toks if t < self.num_base_tokens])
-#   def encode(self, s): return self.model.encode(s)
+  def decode(self, toks): return self.model.decode([t for t in toks if t < self.num_base_tokens])
+  def encode(self, s): return self.model.encode(s)
 
-#   def bos_id(self): return self.special_tokens["<|begin_of_text|>"]
-#   def eos_id(self): return self.special_tokens["<|end_of_text|>"]
-#   def vocab_size(self): return self.model.n_vocab
+  def bos_id(self): return self.special_tokens["<|begin_of_text|>"]
+  def eos_id(self): return self.special_tokens["<|end_of_text|>"]
+  def vocab_size(self): return self.model.n_vocab
 
 # calculating params:
 # traditionally, the MLP in the transformer architecture has hidden_dim = dim*4 [arxiv/1706.03762, 3.3]
 # however, Llama uses SwiGLU. in order to preserve param count to original transformer arch, hidden_dim must be = 2/3 * (dim*4) [arxiv/2002.05202]
 # for models using MQA (n_kv_heads != n_heads), preserving param count means hidden dim must be further multiplied by 1.3 [arxiv/2307.09288, A.2.1]
 MODEL_PARAMS = {
-  # "1": {
-  #   "7B": {
-  #     "args": {"dim": 4096, "n_heads": 32, "n_layers": 32, "norm_eps": 1e-06, "vocab_size": 32000, "hidden_dim": 11008},
-  #     "files": 1,
-  #   },
-  #   "13B": {
-  #     "args": {"dim": 5120, "n_heads": 40, "n_layers": 40, "norm_eps": 1e-06, "vocab_size": 32000, "hidden_dim": 13824},
-  #     "files": 2,
-  #   },
-  #   "30B": {
-  #     "args": {"dim": 6656, "n_heads": 52, "n_layers": 60, "norm_eps": 1e-06, "vocab_size": 32000, "hidden_dim": 17920},
-  #     "files": 4,
-  #   },
-  #   "65B": {
-  #     "args": {"dim": 8192, "n_heads": 64, "n_layers": 80, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 22016},
-  #     "files": 8,
-  #   },
-  #   "tokenizer": SentencePieceProcessor,
-  # },
-  # "2": {
-  #   "7B": {
-  #     "args": {"dim": 4096, "n_heads": 32, "n_layers": 32, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 11008},
-  #     "files": 1,
-  #   },
-  #   "13B": {
-  #     "args": {"dim": 5120, "n_heads": 40, "n_layers": 40, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 13824},
-  #     "files": 2,
-  #   },
-  #   "70B": {
-  #     "args": {"dim": 8192, "n_heads": 64, "n_kv_heads": 8, "n_layers": 80, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 28672},
-  #     "files": 8,
-  #   },
-  #   "tokenizer": SentencePieceProcessor,
-  # },
-  # "3": {
-  #   "8B": {
-  #     "args": {"dim": 4096, "n_heads": 32, "n_kv_heads": 8, "n_layers": 32, "norm_eps": 1e-05, "rope_theta": 500000, "vocab_size": 128256,  "hidden_dim": 14336},
-  #     "files": 1,
-  #   },
-  #   "8B-Chat": {
-  #     "args": {"dim": 4096, "n_heads": 32, "n_kv_heads": 8, "n_layers": 32, "norm_eps": 1e-05, "rope_theta": 500000, "vocab_size": 128256,  "hidden_dim": 14336},
-  #     "files": 1,
-  #   },
-  #   "70B": {
-  #     "args": {"dim": 8192, "n_heads": 64, "n_kv_heads": 8, "n_layers": 80, "norm_eps": 1e-05, "rope_theta": 500000, "vocab_size": 128256,  "hidden_dim": 28672},
-  #     "files": 8,
-  #   },
-  #   "70B-Chat": {
-  #     "args": {"dim": 8192, "n_heads": 64, "n_kv_heads": 8, "n_layers": 80, "norm_eps": 1e-05, "rope_theta": 500000, "vocab_size": 128256,  "hidden_dim": 28672},
-  #     "files": 8,
-  #   },
-  #   "tokenizer": TikToken,
-  # },
-  # "code": {
-  #   "7B": {
-  #     "args": {"dim": 4096, "n_layers": 32, "n_heads": 32, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32016, "hidden_dim": 11008},
-  #     "files": 1,
-  #   },
-  #   "7B-Python": {
-  #     "args": {"dim": 4096, "n_layers": 32, "n_heads": 32, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32000, "hidden_dim": 11008},
-  #     "files": 1,
-  #   },
-  #   "7B-Instruct": {
-  #     "args": {"dim": 4096, "n_layers": 32, "n_heads": 32, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32016, "hidden_dim": 11008},
-  #     "files": 1,
-  #   },
-  #   "13B": {
-  #     "args": {"dim": 5120, "n_layers": 40, "n_heads": 40, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32016, "hidden_dim": 13824},
-  #     "files": 2,
-  #   },
-  #   "13B-Python": {
-  #     "args": {"dim": 5120, "n_layers": 40, "n_heads": 40, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32000, "hidden_dim": 13824},
-  #     "files": 2,
-  #   },
-  #   "13B-Instruct": {
-  #     "args": {"dim": 5120, "n_layers": 40, "n_heads": 40, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32016, "hidden_dim": 13824},
-  #     "files": 2,
-  #   },
-  #   "34B": {
-  #     "args": {"dim": 8192, "n_layers": 48, "n_heads": 64, "n_kv_heads": 8, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32000, "hidden_dim": 22016},
-  #     "files": 4,
-  #   },
-  #   "34B-Python": {
-  #     "args": {"dim": 8192, "n_layers": 48, "n_heads": 64, "n_kv_heads": 8, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32000, "hidden_dim": 22016},
-  #     "files": 4,
-  #   },
-  #   "34B-Instruct": {
-  #     "args": {"dim": 8192, "n_layers": 48, "n_heads": 64, "n_kv_heads": 8, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32000, "hidden_dim": 22016},
-  #     "files": 4,
-  #   },
-  #   "tokenizer": SentencePieceProcessor,
-  # },
+  "1": {
+    "7B": {
+      "args": {"dim": 4096, "n_heads": 32, "n_layers": 32, "norm_eps": 1e-06, "vocab_size": 32000, "hidden_dim": 11008},
+      "files": 1,
+    },
+    "13B": {
+      "args": {"dim": 5120, "n_heads": 40, "n_layers": 40, "norm_eps": 1e-06, "vocab_size": 32000, "hidden_dim": 13824},
+      "files": 2,
+    },
+    "30B": {
+      "args": {"dim": 6656, "n_heads": 52, "n_layers": 60, "norm_eps": 1e-06, "vocab_size": 32000, "hidden_dim": 17920},
+      "files": 4,
+    },
+    "65B": {
+      "args": {"dim": 8192, "n_heads": 64, "n_layers": 80, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 22016},
+      "files": 8,
+    },
+    "tokenizer": SentencePieceProcessor,
+  },
+  "2": {
+    "7B": {
+      "args": {"dim": 4096, "n_heads": 32, "n_layers": 32, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 11008},
+      "files": 1,
+    },
+    "13B": {
+      "args": {"dim": 5120, "n_heads": 40, "n_layers": 40, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 13824},
+      "files": 2,
+    },
+    "70B": {
+      "args": {"dim": 8192, "n_heads": 64, "n_kv_heads": 8, "n_layers": 80, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 28672},
+      "files": 8,
+    },
+    "tokenizer": SentencePieceProcessor,
+  },
+  "3": {
+    "8B": {
+      "args": {"dim": 4096, "n_heads": 32, "n_kv_heads": 8, "n_layers": 32, "norm_eps": 1e-05, "rope_theta": 500000, "vocab_size": 128256,  "hidden_dim": 14336},
+      "files": 1,
+    },
+    "8B-Chat": {
+      "args": {"dim": 4096, "n_heads": 32, "n_kv_heads": 8, "n_layers": 32, "norm_eps": 1e-05, "rope_theta": 500000, "vocab_size": 128256,  "hidden_dim": 14336},
+      "files": 1,
+    },
+    "70B": {
+      "args": {"dim": 8192, "n_heads": 64, "n_kv_heads": 8, "n_layers": 80, "norm_eps": 1e-05, "rope_theta": 500000, "vocab_size": 128256,  "hidden_dim": 28672},
+      "files": 8,
+    },
+    "70B-Chat": {
+      "args": {"dim": 8192, "n_heads": 64, "n_kv_heads": 8, "n_layers": 80, "norm_eps": 1e-05, "rope_theta": 500000, "vocab_size": 128256,  "hidden_dim": 28672},
+      "files": 8,
+    },
+    "tokenizer": TikToken,
+  },
+  "code": {
+    "7B": {
+      "args": {"dim": 4096, "n_layers": 32, "n_heads": 32, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32016, "hidden_dim": 11008},
+      "files": 1,
+    },
+    "7B-Python": {
+      "args": {"dim": 4096, "n_layers": 32, "n_heads": 32, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32000, "hidden_dim": 11008},
+      "files": 1,
+    },
+    "7B-Instruct": {
+      "args": {"dim": 4096, "n_layers": 32, "n_heads": 32, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32016, "hidden_dim": 11008},
+      "files": 1,
+    },
+    "13B": {
+      "args": {"dim": 5120, "n_layers": 40, "n_heads": 40, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32016, "hidden_dim": 13824},
+      "files": 2,
+    },
+    "13B-Python": {
+      "args": {"dim": 5120, "n_layers": 40, "n_heads": 40, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32000, "hidden_dim": 13824},
+      "files": 2,
+    },
+    "13B-Instruct": {
+      "args": {"dim": 5120, "n_layers": 40, "n_heads": 40, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32016, "hidden_dim": 13824},
+      "files": 2,
+    },
+    "34B": {
+      "args": {"dim": 8192, "n_layers": 48, "n_heads": 64, "n_kv_heads": 8, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32000, "hidden_dim": 22016},
+      "files": 4,
+    },
+    "34B-Python": {
+      "args": {"dim": 8192, "n_layers": 48, "n_heads": 64, "n_kv_heads": 8, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32000, "hidden_dim": 22016},
+      "files": 4,
+    },
+    "34B-Instruct": {
+      "args": {"dim": 8192, "n_layers": 48, "n_heads": 64, "n_kv_heads": 8, "norm_eps": 1e-05, "rope_theta": 1000000, "vocab_size": 32000, "hidden_dim": 22016},
+      "files": 4,
+    },
+    "tokenizer": SentencePieceProcessor,
+  },
   "tiny": {
     "1B": {
       "args": {"dim": 2048, "n_layers": 22, "n_heads": 32, "n_kv_heads": 4, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 5632},
       "files": 1,
     },
     "1B-Chat": {
-      "args": {"dim": 2048, "n_layers": 22, "n_heads": 32, "n_kv_heads": 4, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 5632},
+      "args": {"dim": 2048, "n_layers": 22, "n_heads": 32, "n_kv_heads": 4, "norm_eps": 1e-05, "vocab_size": 32003, "hidden_dim": 5632},
       "files": 1,
     },
     "tokenizer": SentencePieceProcessor,
@@ -267,59 +265,6 @@ class LLaMa:
         if output.endswith(s): return output[0:-len(s)]
     return output
 
-# https://github.com/abetlen/llama-cpp-python/blob/658b244c5aa924fc6f4d04f92445dd8f724b6017/llama_cpp/llama_chat_format.py#L3345
-function_calling_template = (
-  "{% for message in messages %}"
-  "<|im_start|>{{ message.role }}\n"
-  # System message
-  "{% if message.role == 'system' %}"
-  "{{ message.content }}"
-  "{% if tool_calls %}"
-  "\n\nYou have access to the following functions:\n"
-  "{% for tool in tools %}"
-  "\nfunctions.{{ tool.function.name }}:\n"
-  "{{ tool.function.parameters | tojson }}"
-  "\n{% endfor %}"
-  "\n\nYou can respond to users messages with either a single message or one or more function calls."
-  "\n\nTo respond with a message begin the message with 'message:', use the following format:"
-  "\n\nmessage:"
-  "\n<message>"
-  "\n\nTo respond with one or more function calls begin the message with 'functions.<function_name>:', use the following format:"
-  "\n\nfunctions.<function_name>:"
-  '\n{ "arg1": "value1", "arg2": "value2" }'
-  "\nfunctions.<function_name>:"
-  '\n{ "arg1": "value1", "arg2": "value2" }'
-  "{% endif %}"
-  "<|im_end|>\n"
-  "{% endif %}"
-  # User message
-  "{% if message.role == 'user' %}"
-  "{{ message.content }}"
-  "<|im_end|>\n"
-  "{% endif %}"
-  # Assistant message
-  "{% if message.role == 'assistant' %}"
-  ## Reglar message
-  "{% if message.content and message.content | length > 0 %}"
-  "{% if tool_calls %}"
-  "message:\n"
-  "{% endif %}"
-  "{{ message.content }}"
-  "<|im_end|>\n"
-  "{% endif %}"
-  ## Function calls
-  "{% if 'tool_calls' in message %}"
-  "{% for tool_call in message.tool_calls %}"
-  "functions.{{ tool_call.function.name }}:\n"
-  "{{ tool_call.function.arguments }}"
-  "{% endfor %}"
-  "<|im_end|>\n"
-  "{% endif %}"
-  "{% endif %}"
-  "{% endfor %}"
-  "{% if add_generation_prompt %}<|im_start|>assistant\n{% endif %}"
-)
-
 # **** main code ****
 r"""
 test:
@@ -388,7 +333,7 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser(description="Run LLaMA in tinygrad", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
   parser.add_argument("--prompt", type=str, default=None, help="Phrase to start with. Without this, it goes into chatbot mode")
   parser.add_argument("--count", type=int, default=1000, help="Max number of tokens to generate")
-  parser.add_argument("--personality", type=str, default="Assistant", help="Personality, can be Assistant, Stacy, George, Gary, or Lexie")
+  parser.add_argument("--personality", type=str, default="Stacy", help="Personality, can be Stacy, George, Gary, or Lexie")
   parser.add_argument("--temperature", type=float, default=0.7, help="Temperature in the softmax")
   parser.add_argument("--timing", action="store_true", help="Print timing per token")
   parser.add_argument("--profile", action="store_true", help="Output profile data to out.prof")
@@ -403,89 +348,9 @@ if __name__ == "__main__":
   if args.size is None: args.size = list(MODEL_PARAMS[args.gen].items())[0][0]
   chatbot = args.prompt == None
 
-  config = AutoConfig.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v1.0")
-
-  params = MODEL_PARAMS[args.gen][args.size]
-  assert config.hidden_size == params["args"]["dim"]
-  assert config.intermediate_size == params["args"]["hidden_dim"]
-  assert config.num_attention_heads == params["args"]["n_heads"]
-  assert config.num_hidden_layers == params["args"]["n_layers"]
-  assert config.num_key_value_heads == params["args"]["n_kv_heads"]
-  assert config.rms_norm_eps == params["args"]["norm_eps"]
-  assert config.vocab_size == params["args"]["vocab_size"]
-
-  set_custom_chat_template = False
-
-  # hf_tokenizer = AutoTokenizer.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v1.0")
-  # hf_tokenizer = AutoTokenizer.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v1.0", eos_token="<|im_end|>")
-  # hf_tokenizer = AutoTokenizer.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v1.0", eos_token="</s>")
-  # hf_tokenizer.chat_template = function_calling_template
-
-  # bos_token = llama.tokenizer.decode([llama.tokenizer.bos_id()])
-  # eos_token = llama.tokenizer.decode([llama.tokenizer.eos_id()])
-  # print('bos_token:', bos_token)
-  # print('eos_token:', eos_token)
-
-  hf_tokenizer = AutoTokenizer.from_pretrained(
-    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    # bos_token=llama.tokenizer.decode([llama.tokenizer.bos_id()]),
-    # eos_token=llama.tokenizer.decode([llama.tokenizer.eos_id()]),
-    # pad_token_id=-1,
-    # pad_token="<|im_end|>",
-    # pad_token=None,
-  )
-
-  if set_custom_chat_template:
-    hf_tokenizer.chat_template = function_calling_template
-  # hf_tokenizer.pad_token = None
-  # hf_tokenizer.pad_token_id = -1
-
   # *** prompt engineers work here ****
-  if args.personality.lower() == "assistant":
-#     pre_prompt = f"""Consider that the following is conversation between an AI assistant and User
-# You are an AI assistant!
-# You are trying to help the User with their questions.
-# You are verbose, honest, and accurate when you answer questions.
-# After you are done speaking, output [EOS]. You are not the User.
 
-# <CHAT LOG>
-# """
-    # examples = {
-    #   "What is your name?": "I am an AI assistant.",
-    #   "What is the capital of France?": "The capital of France is Paris.",
-    #   "What is the square root of 16?": "The square root of 16 is 4.",
-    # }
-
-    # user_delim = "\nUser: "
-    # resp_delim = "Assistant: "
-    # end_delim = " [EOS]\n"
-    # pre_prompt += ''.join(f"{user_delim}{k}\n{resp_delim}{v}{end_delim}" for k,v in examples.items())
-
-    # end_delim = hf_tokenizer.eos_token # TODO: <|im_end|> or </s>? what about [EOS]? what about bos and padding token?
-    # end_delim = "<|im_end|>" # "<|im_end|>\n"
-    end_delim = "</s>" # "</s>\n"
-    print('end_delim:', end_delim)
-
-    messages = [
-      {
-        "role": "system",
-        "content": "You are an AI assistant!",
-      },
-      {"role": "user", "content": "What is your name?"},
-      {"role": "assistant", "content": "I am an AI assistant."},
-      {"role": "user", "content": "What is the capital of France?"},
-      {"role": "assistant", "content": "The capital of France is Paris."},
-      {"role": "user", "content": "What is the square root of 16?"},
-      {"role": "assistant", "content": "The square root of 16 is 4."},
-    ]
-
-    pre_prompt = hf_tokenizer.apply_chat_template(
-      add_generation_prompt=False,
-      conversation=messages,
-      tokenize=False,
-    )
-
-  elif args.personality.lower() == "stacy":
+  if args.personality.lower() == "stacy":
     pre_prompt = f"""Consider that the following is conversation between an AI assistant named Stacy and User
 You are Stacy!
 You have been a rapper your whole life who struggled with bipolar disorder. You called yourself lil stacy.
@@ -589,100 +454,15 @@ After you are done speaking, output [EOS]. You are not Chad.
       llama.model(Tensor([toks], device=device), 0, args.temperature).realize()  # NOTE: outputs are not used
   print(outputted, end='', flush=True)
 
-  print('\n=== tokenizer testing [begin] ===')
-
-  messages = [
-    {
-        "role": "system",
-        "content": "You are a friendly chatbot who always responds in the style of a pirate",
-    },
-    {"role": "user", "content": "How many helicopters can a human eat in one sitting?"},
-  ]
-
-  prompt = hf_tokenizer.apply_chat_template(
-      add_generation_prompt=True,
-      # add_special_tokens=False,
-      conversation=messages,
-      # padding="max_length",
-      # tools=conversation["tools"],
-      tokenize=False,
-      # truncation=True,
-  )
-  print('prompt:', end='\n\n')
-  print(prompt)
-
-  encoded_prompt = llama.tokenizer.encode(prompt)
-  print('encoded_prompt:', end='\n\n')
-  print(encoded_prompt, end='\n\n')
-
-  hf_encoded_prompt = hf_tokenizer.encode(prompt, add_special_tokens=False)
-  print('hf_encoded_prompt:', end='\n\n')
-  print(hf_encoded_prompt, end='\n\n')
-
-  hf_encoded_prompt_with_special_tokens = hf_tokenizer.encode(prompt, add_special_tokens=True)
-  print('hf_encoded_prompt_with_special_tokens:', end='\n\n')
-  print(hf_encoded_prompt_with_special_tokens, end='\n\n')
-
-  # assert [llama.tokenizer.bos_id()] + encoded_prompt == hf_encoded_prompt, f"\n{[llama.tokenizer.bos_id()] + encoded_prompt}\n!=\n{hf_encoded_prompt}"
-  assert encoded_prompt == hf_encoded_prompt, f"\n{encoded_prompt}\n!=\n{hf_encoded_prompt}"
-
-  decoded_encoded_prompt = llama.tokenizer.decode(encoded_prompt)
-  # print('decoded_encoded_prompt:\n', decoded_encoded_prompt)
-  print('decoded_encoded_prompt:', end='\n\n')
-  print(decoded_encoded_prompt)
-
-  hf_decoded_encoded_prompt = hf_tokenizer.decode(hf_encoded_prompt)
-  # print('hf_decoded_encoded_prompt:\n', hf_decoded_encoded_prompt)
-  print('hf_decoded_encoded_prompt:', end='\n\n')
-  print(hf_decoded_encoded_prompt)
-
-  assert decoded_encoded_prompt == hf_decoded_encoded_prompt, f"\n{decoded_encoded_prompt}\n!=\n{hf_decoded_encoded_prompt}"
-
-  print(f"decoded 5299: {llama.tokenizer.decode(5299)}")
-  print(f"hf_decoded 5299: {hf_tokenizer.decode(5299)}")
-  print(f"decoded 29958: {llama.tokenizer.decode(29958)}")
-  print(f"hf_decoded 29958: {hf_tokenizer.decode(29958)}")
-
-  print(f"tokenizer.bos_id(): {llama.tokenizer.bos_id()}")
-  print(f"tokenizer.eos_id(): {llama.tokenizer.eos_id()}")
-  print(f"tokenizer.pad_id(): {llama.tokenizer.pad_id()}")
-  print(f"tokenizer.unk_id(): {llama.tokenizer.unk_id()}")
-
-  print(f"hf_tokenizer.bos_token_id: {hf_tokenizer.bos_token_id}")
-  print(f"hf_tokenizer.eos_token_id: {hf_tokenizer.eos_token_id}")
-  print(f"hf_tokenizer.pad_token_id: {hf_tokenizer.pad_token_id}")
-  print(f"hf_tokenizer.unk_token_id: {hf_tokenizer.unk_token_id}")
-
-  assert llama.tokenizer.bos_id() == hf_tokenizer.bos_token_id, f"{llama.tokenizer.bos_id()} != {hf_tokenizer.bos_token_id}"
-  assert llama.tokenizer.eos_id() == hf_tokenizer.eos_token_id, f"{llama.tokenizer.eos_id()} != {hf_tokenizer.eos_token_id}"
-  assert llama.tokenizer.pad_id() == hf_tokenizer.pad_token_id, f"{llama.tokenizer.pad_id()} != {hf_tokenizer.pad_token_id}"
-  assert llama.tokenizer.unk_id() == hf_tokenizer.unk_token_id, f"{llama.tokenizer.unk_id()} != {hf_tokenizer.unk_token_id}"
-
-  print('=== tokenizer testing [end] ===')
-
   # chatbot loop
   while 1:
     # add tokens from user in chatbot mode
     if chatbot:
-      # user_prompt = user_delim + input(user_delim) + "\n"
-      user_message = {
-        "role": "user",
-        "content": input("\nUser: "),
-      }
-      user_prompt = hf_tokenizer.apply_chat_template(
-        add_generation_prompt=True,
-        conversation=[user_message],
-        tokenize=False,
-      )
-      print('\nuser_prompt:', end='\n\n')
-      print(user_prompt)
+      user_prompt = user_delim + input(user_delim) + "\n"
       outputted += user_prompt
-      print('outputted:', end='\n\n')
-      print(outputted)
 
     new_toks = [llama.tokenizer.bos_id()] + llama.tokenizer.encode(outputted)
-    assert toks[:-1] == new_toks[:len(toks)-1], f"\n{toks[:-1]}\n!=\n{new_toks[:len(toks)-1]}"
-    assert toks == new_toks[:len(toks)], f"\n{toks}\n!=\n{new_toks[:len(toks)]}"
+    assert toks == new_toks[:len(toks)] or args.gen == "3"
     toks = new_toks
     assert outputted == llama.tokenizer.decode(toks)
 
@@ -732,20 +512,3 @@ After you are done speaking, output [EOS]. You are not Chad.
       print("\n" + colored("output validated", "green"))  # NOTE: "\n" iside colored does not render the color in github action
     except KeyError:
       pass
-
-  # TODO: try safe_load_metadata
-
-  # file_path = "model.safetensors"
-  # state_dict = get_state_dict(llama.model)
-
-  # for k, v in state_dict.items():
-  #   if k == 'freqs_cis':
-  #     print(k)
-
-  #   if 'tok' in k:
-  #     print(k)
-
-  #   if 'cache' in k:
-  #     print(k)
-
-  # safe_save(state_dict, file_path)

@@ -476,6 +476,23 @@ After you are done speaking, output [EOS]. You are not Chad.
               },
           }
       },
+      {
+          "type": "function",
+          "function": {
+              "name": "talk_to_user",
+              "description": "Ask the user for more information",
+              "parameters": {
+                  "type": "object",
+                  "properties": {
+                      "message": {
+                          "type": "string",
+                          "description": "The message to show the user",
+                      },
+                  },
+                  "required": ["message"],
+              },
+          }
+      }
   ]
 
   functions = [tool["function"] for tool in tools]
@@ -487,17 +504,52 @@ After you are done speaking, output [EOS]. You are not Chad.
 
 # """
 
-  SYSTEM_PROMPT_FOR_CHAT_MODEL = """You are an expert in composing functions. You are given a question and a set of possible functions.
-Based on the question, you will need to make one or more function/tool calls to achieve the purpose.
-If none of the function can be used, point it out. If the given question lacks the parameters required by the function, also point it out. You should only return the function call in tools call sections."""
+#   SYSTEM_PROMPT_FOR_CHAT_MODEL = """You are an expert in composing functions. You are given a question and a set of possible functions.
+# Based on the question, you will need to make one or more function/tool calls to achieve the purpose.
+# If none of the function can be used, point it out. If the given question lacks the parameters required by the function, also point it out. You should only return the function call in tools call sections.
+# After you are done speaking, output '</s>'. You are not the User."""
 
-  USER_MESSAGE_FOR_CHAT_MODEL = "Questions:{user_prompt}\nHere is a list of functions in JSON format that you can invoke:\n{functions}. Should you decide to return the function call(s), NO other text MUST be included."
+#   USER_MESSAGE_FOR_CHAT_MODEL = "Questions:{user_prompt}\nHere is a list of functions in JSON format that you can invoke:\n{functions}. Should you decide to return the function call(s), NO other text MUST be included."
+
+  documents = []
+
+  system_message = """You are an AI agent acting as a user assistant. Please use the documents and tools below when responding to the user.
+
+```json
+docs={documents}
+```
+
+```json
+tools={tools}
+```
+
+If you would like to suggest a tool, please return only a JSON array of the tool calls in the following format:
+
+```json
+tool_calls={example}
+```
+
+Otherwise, please return your response to the user. In any case, please end your response with `</s>`."""
+
+  example = [{
+    "name": "talk_to_user",
+    "parameters": {
+      "message": "Could you please clarify the question?"
+    }
+  }]
 
   # outputted = pre_prompt if chatbot else args.prompt
   outputted = pre_prompt if chatbot else template.format(
-    system_message=SYSTEM_PROMPT_FOR_CHAT_MODEL,
+    # system_message=SYSTEM_PROMPT_FOR_CHAT_MODEL,
+    system_message=system_message.format(
+      documents=json.dumps(documents, indent=2),
+      example=json.dumps(example, indent=2),
+      # tools=json.dumps(tools, indent=2),
+      tools=json.dumps(functions, indent=2),
+    ),
     # prompt=args.prompt,
-    prompt=USER_MESSAGE_FOR_CHAT_MODEL.format(user_prompt=args.prompt, functions=functions)
+    # prompt=USER_MESSAGE_FOR_CHAT_MODEL.format(user_prompt=args.prompt, functions=functions)
+    prompt=args.prompt,
   )
   start_pos, toks = 0, [llama.tokenizer.bos_id()] + llama.tokenizer.encode(outputted)
   if chatbot:

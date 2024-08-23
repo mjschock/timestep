@@ -11,7 +11,7 @@ description = "Timestep AI CLI - free, local-first, open-source AI"
 license = "MIT"
 name = "timestep"
 readme = "README.md"
-version = "12.0.83"
+version = "12.0.84"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
