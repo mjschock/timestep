@@ -162,7 +162,8 @@ MODEL_PARAMS = {
       "files": 1,
     },
     "1B-Chat": {
-      "args": {"dim": 2048, "n_layers": 22, "n_heads": 32, "n_kv_heads": 4, "norm_eps": 1e-05, "vocab_size": 32003, "hidden_dim": 5632},
+      # "args": {"dim": 2048, "n_layers": 22, "n_heads": 32, "n_kv_heads": 4, "norm_eps": 1e-05, "vocab_size": 32003, "hidden_dim": 5632},
+      "args": {"dim": 2048, "n_layers": 22, "n_heads": 32, "n_kv_heads": 4, "norm_eps": 1e-05, "vocab_size": 32000, "hidden_dim": 5632},
       "files": 1,
     },
     "tokenizer": SentencePieceProcessor,
@@ -439,19 +440,127 @@ After you are done speaking, output [EOS]. You are not Chad.
 
   LLAMA_SUFFIX = {"1": "", "2": "-2", "3": "-3", "code": "-code", "tiny": "-tiny"}[args.gen]
   MODEL_PATH = args.model or Path(__file__).parents[1] / f"weights/LLaMA{LLAMA_SUFFIX}/{args.size}"
+  print('MODEL_PATH:', MODEL_PATH)
   TOKENIZER_PATH = (MODEL_PATH if MODEL_PATH.is_dir() else MODEL_PATH.parent) / "tokenizer.model"
+  print('TOKENIZER_PATH:', TOKENIZER_PATH)
   print(f"using LLaMA{LLAMA_SUFFIX}-{args.size} model")
   device = tuple(f"{Device.DEFAULT}:{i}" for i in range(args.shard)) if args.shard > 1 else Device.DEFAULT
   llama = LLaMa.build(MODEL_PATH, TOKENIZER_PATH, model_gen=args.gen, model_size=args.size, quantize=args.quantize, device=device)
   param_bytes = sum(x.lazydata.size * x.dtype.itemsize for x in get_parameters(llama.model))
 
-  outputted = pre_prompt if chatbot else args.prompt
+  template = """<|system|>
+{system_message}</s>
+<|user|>
+{prompt}</s>
+<|assistant|>
+"""
+
+  tools = [
+      {
+          "type": "function",
+          "function": {
+              "name": "get_current_weather",
+              "description": "Get the current weather in a given location",
+              "parameters": {
+                  "type": "object",
+                  "properties": {
+                      "location": {
+                          "type": "string",
+                          "description": "The city and state, e.g. San Francisco, CA",
+                      },
+                      "format": {
+                          "type": "string",
+                          "enum": ["celsius", "fahrenheit"],
+                          "description": "The temperature unit to use. Infer this from the users location.",
+                      },
+                  },
+                  "required": ["location", "format"],
+              },
+          }
+      },
+      {
+          "type": "function",
+          "function": {
+              "name": "talk_to_user",
+              "description": "Ask the user for more information",
+              "parameters": {
+                  "type": "object",
+                  "properties": {
+                      "message": {
+                          "type": "string",
+                          "description": "The message to show the user",
+                      },
+                  },
+                  "required": ["message"],
+              },
+          }
+      }
+  ]
+
+  functions = [tool["function"] for tool in tools]
+
+#   system_prompt = f"""I am an AI assistant. I can help you with a variety of tasks. Here are some tools I can use:
+
+# {json.dumps(functions, indent=2)}
+
+
+# """
+
+#   SYSTEM_PROMPT_FOR_CHAT_MODEL = """You are an expert in composing functions. You are given a question and a set of possible functions.
+# Based on the question, you will need to make one or more function/tool calls to achieve the purpose.
+# If none of the function can be used, point it out. If the given question lacks the parameters required by the function, also point it out. You should only return the function call in tools call sections.
+# After you are done speaking, output '</s>'. You are not the User."""
+
+#   USER_MESSAGE_FOR_CHAT_MODEL = "Questions:{user_prompt}\nHere is a list of functions in JSON format that you can invoke:\n{functions}. Should you decide to return the function call(s), NO other text MUST be included."
+
+  documents = []
+
+  system_message = """You are an AI agent acting as a user assistant. Please use the documents and tools below when responding to the user.
+
+```json
+docs={documents}
+```
+
+```json
+tools={tools}
+```
+
+If you would like to suggest a tool, please return only a JSON array of the tool calls in the following format:
+
+```json
+tool_calls={example}
+```
+
+Otherwise, please return your response to the user. In any case, please end your response with `</s>`."""
+
+  example = [{
+    "name": "talk_to_user",
+    "parameters": {
+      "message": "Could you please clarify the question?"
+    }
+  }]
+
+  # outputted = pre_prompt if chatbot else args.prompt
+  outputted = pre_prompt if chatbot else template.format(
+    # system_message=SYSTEM_PROMPT_FOR_CHAT_MODEL,
+    system_message=system_message.format(
+      documents=json.dumps(documents, indent=2),
+      example=json.dumps(example, indent=2),
+      # tools=json.dumps(tools, indent=2),
+      tools=json.dumps(functions, indent=2),
+    ),
+    # prompt=args.prompt,
+    # prompt=USER_MESSAGE_FOR_CHAT_MODEL.format(user_prompt=args.prompt, functions=functions)
+    prompt=args.prompt,
+  )
   start_pos, toks = 0, [llama.tokenizer.bos_id()] + llama.tokenizer.encode(outputted)
   if chatbot:
     print(f"Preparing KV cache for chatbot with personality {args.personality}...")
     start_pos = len(toks)
     with Timing():
       llama.model(Tensor([toks], device=device), 0, args.temperature).realize()  # NOTE: outputs are not used
+  else:
+    end_delim = "</s>"
   print(outputted, end='', flush=True)
 
   # chatbot loop
@@ -494,21 +603,22 @@ After you are done speaking, output [EOS]. You are not Chad.
       outputted = cur
 
       # stop after you have your answer
-      if chatbot and end_delim in outputted[-10:]: break
+      # if chatbot and end_delim in outputted[-10:]: break
+      if end_delim in outputted[-10:]: break
     if not chatbot: break
 
-  # validate output!
-  if args.temperature == 0 and args.count == 10 and args.prompt == "Hello." and not args.quantize:
-    text = llama.tokenizer.decode(toks)
-    key = (args.gen, args.size)
-    expected = {
-      ("1", "7B"): "Hello. I'm a 20 year old male",
-      ("2", "7B"): "Hello. I'm a 20 year old girl",
-      ("2", "70B"): "Hello. I am a 20 year old female.",
-      ("3", "8B"): "Hello. I am a 20 year old female. I",
-    }
-    try:
-      assert text == expected[key], f"invalid output: `{colored(text, 'red')}` != `{expected[key]}`"
-      print("\n" + colored("output validated", "green"))  # NOTE: "\n" iside colored does not render the color in github action
-    except KeyError:
-      pass
+  # # validate output!
+  # if args.temperature == 0 and args.count == 10 and args.prompt == "Hello." and not args.quantize:
+  #   text = llama.tokenizer.decode(toks)
+  #   key = (args.gen, args.size)
+  #   expected = {
+  #     ("1", "7B"): "Hello. I'm a 20 year old male",
+  #     ("2", "7B"): "Hello. I'm a 20 year old girl",
+  #     ("2", "70B"): "Hello. I am a 20 year old female.",
+  #     ("3", "8B"): "Hello. I am a 20 year old female. I",
+  #   }
+  #   try:
+  #     assert text == expected[key], f"invalid output: `{colored(text, 'red')}` != `{expected[key]}`"
+  #     print("\n" + colored("output validated", "green"))  # NOTE: "\n" iside colored does not render the color in github action
+  #   except KeyError:
+  #     pass
