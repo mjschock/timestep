@@ -1,3 +1,6 @@
 [submodule "notebooks/Research/lib/transformers"]
 	path = notebooks/Research/lib/transformers
 	url = https://github.com/huggingface/transformers.git
+[submodule "notebooks/Research/lib/tinygrad"]
+	path = notebooks/Research/lib/tinygrad
+	url = https://github.com/tinygrad/tinygrad.git
