@@ -40,7 +40,7 @@ class ModifiedTransformer(Transformer):
             return self.forward_jit(tokens, Variable("start_pos", 0, self.max_context).bind(start_pos), temperature, top_k, top_p, alpha_f, alpha_p)
 
         # return self.forward(tokens, start_pos, temperature, top_k, top_p, alpha_f, alpha_p)
-        raise Exception("Forward should always be jitted but was not")
+        # raise Exception("Forward should always be jitted but was not")
 
 # class CausalLMOutputWithPast:
 #     def __init__(self, attentions: Optional[Tuple[Tensor]] = None, hidden_states: Optional[Tuple[Tensor]] = None, logits: Optional[Tensor] = None, loss: Optional[Tensor] = None, past_key_values: Optional[Tuple[Tuple[Tensor]]] = None):
@@ -160,21 +160,29 @@ class TinygradLlamaForCausalLM(PreTrainedModel):
         # negative_prompt_attention_mask: Optional[torch.Tensor] = None,
         **kwargs,
     ) -> Tensor:
+        if input_ids is None:
+            input_ids = Tensor([[self.config.bos_token_id]], device=self.device)
+
+        if max_new_tokens is None:
+            max_new_tokens = 100
+
         batch_size, sequence_length = input_ids.shape
-        do_sample: bool = kwargs.get("do_sample", False)
-        logits: Tensor = None
-        start_pos: int = 0
-        stop_pos: int = start_pos + 1
-        token_ids = input_ids.numpy()
 
-        assert token_ids.shape == (batch_size, sequence_length)
+        assert input_ids.shape == (batch_size, sequence_length), f"{input_ids.shape} != ({batch_size}, {sequence_length})"
 
-        start = datetime.now()
+        new_token_ids = Tensor.zeros(batch_size, max_new_tokens, device=self.device)
+        assert new_token_ids.shape == (batch_size, max_new_tokens), f"{new_token_ids.shape} != ({batch_size}, {max_new_tokens})"
 
-        for i in range(sequence_length-1):
-            # start_i = datetime.now()
+        # input_ids = input_ids.cat(Tensor.zeros(batch_size, max_new_tokens, device=self.device))
+        output_ids = input_ids.cat(new_token_ids, dim=-1)
+        assert output_ids.shape == (batch_size, sequence_length + max_new_tokens), f"{output_ids.shape} != ({batch_size}, {sequence_length + max_new_tokens})"
 
-            tokens = Tensor(token_ids[:, start_pos:stop_pos])
+        for start_pos in range(sequence_length + max_new_tokens):
+            print('start_pos:', start_pos)
+
+            tokens = output_ids[:, start_pos:start_pos+1]
+            assert type(tokens) == Tensor, f"{type(tokens)} != {Tensor}"
+            assert tokens.shape == (batch_size, 1), f"{tokens.shape} != ({batch_size}, 1)"
 
             logits = self.model(
                 start_pos=start_pos,
@@ -182,73 +190,151 @@ class TinygradLlamaForCausalLM(PreTrainedModel):
                 tokens=tokens,
             )
 
-            assert logits.shape == (batch_size, self.config.vocab_size)
+        return output_ids
+        # return [
+        #     output_ids,
+        # ]
 
-            start_pos += 1
-            stop_pos += 1
+        # timings = {
+        #     "logits": [],
+        #     "sample": [],
+        #     "reshape": [],
+        #     "assign": [],
+        #     "all": [],
+        # }
 
-            # print(f"Elapsed: {datetime.now() - start_i}")
+        # # assert input_ids[:, 0].all() == self.config.bos_token_id, f"{input_ids[:, 0]} != {self.config.bos_token_id}"
 
-        assert start_pos == sequence_length-1, f"{start_pos} != {sequence_length-1}"
+        # batch_size, sequence_length = input_ids.shape
+        # do_sample: bool = kwargs.get("do_sample", False)
+        # logits: Tensor = None
+        # start_pos: int = 0
+        # stop_pos: int = start_pos + 1
 
-        print(f"Warmup: {datetime.now() - start}")
+        # maximum_sequence_length = sequence_length + max_new_tokens
+        # # placeholder = np.full((batch_size, maximum_sequence_length), self.config.pad_token_id, dtype=np.int32)
+        # # placeholder = np.full((batch_size, maximum_sequence_length), self.config.eos_token_id, dtype=np.int32)
+        # # token_ids = np.copy(placeholder)
+        # # token_ids[:, :sequence_length] = input_ids.numpy()
+        # # token_ids = np.concatenate((input_ids.numpy(), np.full((batch_size, max_new_tokens), self.config.pad_token_id, dtype=np.int32)), axis=1)
+        # token_ids = np.concatenate((input_ids.numpy(), np.full((batch_size, max_new_tokens), self.config.eos_token_id, dtype=np.int32)), axis=1)
+        # assert token_ids.shape == (batch_size, maximum_sequence_length), f"{token_ids.shape} != ({batch_size}, {maximum_sequence_length})"
 
-        start = datetime.now()
+        # assert token_ids[:, 0].all() == self.config.bos_token_id, f"{token_ids[:, 0]} != {self.config.bos_token_id}"
 
-        for i in range(max_new_tokens):
-            # start_i = datetime.now()
+        # # token_ids = np.concatenate((input_ids.numpy())
 
-            tokens = Tensor(token_ids[:, start_pos:])
+        # # assert token_ids.shape == (batch_size, sequence_length)
+        # # assert token_ids.shape == (batch_size, sequence_length), f"{token_ids.shape} != ({batch_size}, {sequence_length})
 
-            logits = self.model(
-               start_pos=start_pos,
-               temperature=temperature,
-               tokens=tokens,
-            )
-            # ).realize()
+        # start = datetime.now()
 
-            assert logits.shape == (batch_size, self.config.vocab_size)
+        # for i in range(sequence_length-1):
+        #     # start_i = datetime.now()
 
-            if do_sample:
-                # top_k:int=0, top_p:float=0.8, alpha_f:float=0.0, alpha_p:float=0.0
-                output_ids = sample(
-                    logits.flatten(),
-                    temperature,
-                    k=0,
-                    p=0.8,
-                    af=0.0,
-                    ap=0.0,
-                ).realize()
+        #     tokens = Tensor(token_ids[:, start_pos:stop_pos])
 
-            else:
-                # output_ids = logits.argmax(dim=-1)
-                # output_ids = logits.flatten().argmax().realize()
-                raise NotImplementedError
+        #     logits = self.model(
+        #         start_pos=start_pos,
+        #         temperature=temperature,
+        #         tokens=tokens,
+        #     )
 
-            output_ids = output_ids.numpy().reshape(batch_size, 1)
-            assert output_ids.shape == (batch_size, 1), f"{output_ids.shape} != ({batch_size}, 1)"
+        #     assert logits.shape == (batch_size, self.config.vocab_size)
 
-            start_pos = token_ids.shape[1]
-            token_ids = np.concatenate((token_ids, output_ids), axis=1)
+        #     start_pos += 1
+        #     stop_pos += 1
 
-            assert token_ids.shape == (batch_size, sequence_length + i + 1), f"{token_ids.shape} != ({batch_size}, {sequence_length + i + 1})"
+        #     # print(f"Elapsed: {datetime.now() - start_i}")
 
-            # print(f"Elapsed: {datetime.now() - start_i}")
+        # assert start_pos == sequence_length-1, f"{start_pos} != {sequence_length-1}"
 
-            # if np.any(token_ids[:, -1] == self.config.eos_token_id):
-            #     break
-            if np.all(token_ids[:, -1] == self.config.eos_token_id): # TODO: should be "<|im_end|>"
-                break
+        # print(f"Warmup: {datetime.now() - start}")
 
-        # return outputs
-        # return CausalLMOutputWithPast(
-        #     attentions=attentions,
-        #     hidden_states=hidden_states,
-        #     logits=logits,
-        #     loss=loss,
-        #     past_key_values=past_key_values,
-        # )
+        # # start = datetime.now()
 
-        print(f"Elapsed: {datetime.now() - start}")
+        # for i in range(max_new_tokens):
+        #     start_i = datetime.now()
 
-        return token_ids
+        #     tokens = Tensor(token_ids[:, start_pos:start_pos+1])
+
+        #     logits = self.model(
+        #        start_pos=start_pos,
+        #        temperature=temperature,
+        #        tokens=tokens,
+        #     )
+        #     # ).realize()
+
+        #     timings["logits"].append(datetime.now() - start_i)
+        #     start_i = datetime.now()
+
+        #     assert logits.shape == (batch_size, self.config.vocab_size)
+
+        #     if do_sample:
+        #         # top_k:int=0, top_p:float=0.8, alpha_f:float=0.0, alpha_p:float=0.0
+        #         # output_ids = sample(
+        #         #     logits.flatten(),
+        #         #     temperature,
+        #         #     k=0,
+        #         #     p=0.8,
+        #         #     af=0.0,
+        #         #     ap=0.0,
+        #         # )
+        #         # ).realize()
+        #         output_ids = logits.argmax(axis=-1, keepdim=True)
+
+        #     else:
+        #         # output_ids = logits.argmax(dim=-1)
+        #         # output_ids = logits.flatten().argmax().realize()
+        #         raise NotImplementedError
+
+        #     timings["sample"].append(datetime.now() - start_i)
+        #     start_i = datetime.now()
+
+        #     # output_ids = output_ids.numpy().reshape(batch_size, 1)
+        #     # output_ids = output_ids.reshape(batch_size, 1)
+        #     # output_ids = output_ids.reshape(batch_size, 1).numpy()
+        #     output_ids = output_ids.numpy()
+        #     assert output_ids.shape == (batch_size, 1), f"{output_ids.shape} != ({batch_size}, 1)"
+
+        #     timings["reshape"].append(datetime.now() - start_i)
+        #     start_i = datetime.now()
+
+        #     # start_pos = token_ids.shape[1]
+        #     start_pos += 1
+        #     # token_ids = np.concatenate((token_ids, output_ids), axis=1)
+        #     token_ids[:, start_pos:start_pos+1] = output_ids
+        #     # token_ids = np.hstack((token_ids, output_ids))
+
+        #     timings["assign"].append(datetime.now() - start_i)
+        #     start_i = datetime.now()
+
+        #     # assert token_ids.shape == (batch_size, sequence_length + i + 1), f"{token_ids.shape} != ({batch_size}, {sequence_length + i + 1})"
+
+        #     # print(f"Elapsed: {datetime.now() - start_i}")
+
+        #     # if np.any(token_ids[:, -1] == self.config.eos_token_id):
+        #     #     break
+        #     # if np.all(token_ids[:, -1] == self.config.eos_token_id): # TODO: should be "<|im_end|>"
+        #     if np.all(output_ids[:, 0] == self.config.eos_token_id): # TODO: should be "<|im_end|>"
+        #         break
+
+        #     timings["all"].append(datetime.now() - start_i)
+
+        # # return outputs
+        # # return CausalLMOutputWithPast(
+        # #     attentions=attentions,
+        # #     hidden_states=hidden_states,
+        # #     logits=logits,
+        # #     loss=loss,
+        # #     past_key_values=past_key_values,
+        # # )
+
+        # # print(f"Elapsed: {datetime.now() - start}")
+
+        # print(f"Timings: {timings}")
+
+        # for k,v in timings.items():
+        #     print(f"{k}: {np.mean(v)}")
+
+        # return token_ids
