@@ -1,0 +1,78 @@
+envs:
+  # CUDA_VISIBLE_DEVICES: 0
+  # DTYPE: bfloat16
+  HF_TOKEN: <your-huggingface-token>  # Change to your own huggingface token, or use --env to pass.
+  # MODEL_ID: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+  # NUM_SHARD: 1
+  # REVISION: fe8a4ea1ffedaf415f4da2f062534de366a451e6
+  TARGET: llamafile
+  # TARGET: ollama # https://ollama.com/library/tinyllama
+  # TARGET: tgi
+  # TARGET: vllm
+  # TARGET: ray-serve
+
+resources:
+  accelerators: GTX-1050-TI:1
+  cloud: kubernetes
+  cpus: 2+
+  image_id: docker:ros:jazzy-ros-base-noble
+  memory: 2+
+  ports: 8080
+
+run: |
+  set -ex # Fail on first error and echo commands
+
+  nvcc -V
+  nvidia-smi
+
+  if [ "$TARGET" = "llamafile" ]; then
+    echo "Running llamafile"
+
+    ./llamafile-0.8.17 \
+      --host 0.0.0.0 \
+      --model tinyllama-1.1b-chat-v1.0-q4_k_m.gguf \
+      -ngl 9999 \
+      --port 8080 \
+      --nobrowser \
+      --server
+
+  else
+    echo "Unknown TARGET: $TARGET"
+    exit 1
+
+  fi
+
+
+service:
+  replicas: 1
+  readiness_probe:
+    initial_delay_seconds: 3600 # 60 minutes
+    path: /v1/chat/completions
+    post_data:
+      model: $MODEL_ID
+      messages:
+        - role: user
+          content: Hello! What is your name?
+      max_tokens: 1
+
+setup: |
+  set -ex # Fail on first error and echo commands
+
+  # rm /etc/fuse.conf /etc/systemd/system.conf
+  sudo apt-get update && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y nvidia-cuda-toolkit nvidia-modprobe
+
+  wget https://huggingface.co/mjschock/TinyLlama-1.1B-Chat-v1.0-Q4_K_M-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0-q4_k_m.gguf
+
+  if [ "$TARGET" = "llamafile" ]; then
+    echo "Setting up llamafile"
+
+    wget https://github.com/Mozilla-Ocho/llamafile/releases/download/0.8.17/llamafile-0.8.17
+    chmod +x llamafile-0.8.17
+
+    ./llamafile-0.8.17 --version
+
+  else
+    echo "Unknown TARGET: $TARGET"
+    exit 1
+
+  fi

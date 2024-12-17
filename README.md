@@ -53,7 +53,16 @@ $ timestep up [OPTIONS]
 
 **Options**:
 
-* `--dev / --no-dev`: [default: no-dev]
-* `--host TEXT`: [default: 0.0.0.0]
-* `--port INTEGER`: [default: 8000]
+* `--allowed-image-ids TEXT`: Allowed image IDs to filter by  [default: ami-0e7c4f6b17a66658a]
+* `--allowed-image-names TEXT`: Allowed image names to filter by  [default: 24.04 (LTS) x64, Ubuntu 24.04 LTS]
+* `--clean / --no-clean`: Clean up  [default: no-clean]
+* `--dev / --no-dev`: Development mode  [default: no-dev]
+* `--gpu / --no-gpu`: Require GPU  [default: no-gpu]
+* `--host TEXT`: Host  [default: 0.0.0.0]
+* `--min-bandwidth INTEGER`: Minimum bandwidth in GB
+* `--min-disk INTEGER`: Minimum disk size in GB  [default: 10]
+* `--min-ram INTEGER`: Minimum RAM in MB  [default: 2000]
+* `--port INTEGER`: Port  [default: 8000]
+* `--python-k3s-cluster-deployer-feature-is-enabled / --no-python-k3s-cluster-deployer-feature-is-enabled`: Enable the Python K3s cluster deployer feature  [default: no-python-k3s-cluster-deployer-feature-is-enabled]
+* `--ssh-key TEXT`: Path to the SSH key  [default: /home/mjschock/.ssh/id_ed25519]
 * `--help`: Show this message and exit.
