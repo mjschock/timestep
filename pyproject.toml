@@ -27,7 +27,7 @@ license = "MIT"
 name = "timestep"
 packages = [{from = "src", include = "timestep"}]
 readme = "README.md"
-version = "13.0.0a2"
+version = "13.0.0a3"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
@@ -41,8 +41,8 @@ paramiko = "^3.5.0"
 pydantic-settings = "^2.7.0"
 python = "^3.10"
 respx = "^0.21.1"
-skypilot-nightly = {extras = ["aws", "kubernetes", "paperspace"], version = "^1.0.0.dev20241214"}
-sqlmodel = "^0.0.21"
+skypilot-nightly = {extras = ["aws", "kubernetes", "paperspace"], version = "^1.0.0.dev20241216"}
+sqlmodel = "^0.0.22"
 sse-starlette = "^2.1.2"
 starlette-context = "^0.3.6"
 typer = {extras = ["all"], version = "^0.15.1"}
@@ -56,9 +56,9 @@ flet = {extras = ["all"], version = "0.25.2"}
 isort = "^5.13.2"
 locust = "^2.29.1"
 pytest = "^8.2.2"
-pytest-asyncio = "^0.23.8"
-pytest-cov = "^5.0.0"
-pytest-httpx = "^0.30.0"
+pytest-asyncio = "^0.25.0"
+pytest-cov = "^6.0.0"
+pytest-httpx = "^0.35.0"
 pytest-order = "^1.2.1"
 pytest-xdist = {extras = ["psutil"], version = "^3.6.1"}
 toml-sort = "^0.24.2"
