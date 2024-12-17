@@ -142,7 +142,7 @@ typer_app = typer.Typer(
 
 @typer_app.callback()
 def main():
-    f"""
+    """
     Timestep AI CLI
     """
 
@@ -264,7 +264,13 @@ def up(
         value_proc=value_proc,
     )
 
-    image = next(image for image in cheapest_node["images"] if image.id == image_id)
+    try:
+        image = next(image for image in cheapest_node["images"] if image.id == image_id)
+
+    except StopIteration:
+        typer.echo(f"\nFailed to find the node image for {image_id}")
+
+        return
 
     location_id = typer.prompt(
         "\nSelect a node location id",
@@ -276,11 +282,17 @@ def up(
         value_proc=value_proc,
     )
 
-    location = next(
-        location
-        for location in cheapest_node["locations"]
-        if location.id == location_id
-    )
+    try:
+        location = next(
+            location
+            for location in cheapest_node["locations"]
+            if location.id == location_id
+        )
+
+    except StopIteration:
+        typer.echo(f"\nFailed to find the node location for {location_id}")
+
+        return
 
     size_id = typer.prompt(
         "\nSelect a node size id",
@@ -290,9 +302,15 @@ def up(
         value_proc=value_proc,
     )
 
-    size = next(size for size in [cheapest_node["size"]] if size.id == size_id)
+    try:
+        size = next(size for size in [cheapest_node["size"]] if size.id == size_id)
 
-    typer.echo(f"\nSelected node configuration:")
+    except StopIteration:
+        typer.echo(f"\nFailed to find the node size for {size_id}")
+
+        return
+
+    typer.echo("\nSelected node configuration:")
     typer.echo(f"Image: {image}")
     typer.echo(f"Location: {location}")
     typer.echo(f"Provider: {provider}")
@@ -304,9 +322,15 @@ def up(
 
     name: str = typer.prompt("\nEnter a name for the node", default="libcloud")
 
-    node_driver = next(
-        node_driver for node_driver in node_drivers if node_driver.name == provider
-    )
+    try:
+        node_driver = next(
+            node_driver for node_driver in node_drivers if node_driver.name == provider
+        )
+
+    except StopIteration:
+        typer.echo(f"\nFailed to find the node driver for {provider}")
+
+        return
 
     if create:
         nodes: List[Node] = node_driver.list_nodes()
@@ -373,7 +397,7 @@ def up(
         for node, ip_addresses in nodes_to_ip_addresses:
             typer.echo(f"\nNode {node.name} is running at {ip_addresses}")
 
-        ip = ip_addresses[0]
+        ip = nodes_to_ip_addresses[0][1][0]
 
     def ssh_connect(
         ip_address: str, script: str = None, username: str = "root"
