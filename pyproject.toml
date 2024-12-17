@@ -35,12 +35,10 @@ asgi-lifespan = "^2.1.0"
 connexion = {extras = ["swagger-ui", "uvicorn"], version = "^3.1.0"}
 fastapi = "^0.115.6"
 flet = {version = "0.25.2"}
-llama-stack = "^0.0.61"
-llama-stack-client = "^0.0.61"
 openai = "^1.57.4"
 paramiko = "^3.5.0"
 pydantic-settings = "^2.7.0"
-python = "^3.12"
+python = "^3.10"
 respx = "^0.21.1"
 skypilot-nightly = {extras = ["aws", "kubernetes", "paperspace"], version = "^1.0.0.dev20241214"}
 sqlmodel = "^0.0.21"
