@@ -27,7 +27,7 @@ license = "MIT"
 name = "timestep"
 packages = [{from = "src", include = "timestep"}]
 readme = "README.md"
-version = "13.0.0a1"
+version = "13.0.0a2"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
