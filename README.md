@@ -63,6 +63,5 @@ $ timestep up [OPTIONS]
 * `--min-disk INTEGER`: Minimum disk size in GB  [default: 10]
 * `--min-ram INTEGER`: Minimum RAM in MB  [default: 2000]
 * `--port INTEGER`: Port  [default: 8000]
-* `--python-k3s-cluster-deployer-feature-is-enabled / --no-python-k3s-cluster-deployer-feature-is-enabled`: Enable the Python K3s cluster deployer feature  [default: no-python-k3s-cluster-deployer-feature-is-enabled]
-* `--ssh-key TEXT`: Path to the SSH key  [default: /home/mjschock/.ssh/id_ed25519]
+* `--ssh-key TEXT`: Path to the SSH key  [default: ~/.ssh/id_ed25519]
 * `--help`: Show this message and exit.

@@ -5,7 +5,6 @@ import time
 from typing import List, Optional, Tuple
 
 import paramiko
-import sky.check
 import typer
 from click import Choice
 from libcloud.compute.base import (
@@ -22,7 +21,6 @@ from paramiko import SSHClient
 from rich.progress import track
 
 from timestep.config import settings
-from timestep.kubernetes_cluster_deployer import KubernetesClusterDeployer
 from timestep.server import main as timestep_serve
 
 CREDENTIALS = {
@@ -173,12 +171,8 @@ def up(
         help="Minimum RAM in MB",
     ),  # TODO: Need to check or convert to proper unit
     port: int = typer.Option(default=8000, help="Port"),
-    python_k3s_cluster_deployer_feature_is_enabled: bool = typer.Option(
-        default=False,
-        help="Enable the Python K3s cluster deployer feature",
-    ),
     ssh_key: str = typer.Option(
-        default=os.path.expanduser("~/.ssh/id_ed25519"),
+        default="~/.ssh/id_ed25519",
         help="Path to the SSH key",
     ),
 ):
@@ -199,7 +193,6 @@ def up(
 
     cheapest_nodes_by_provider = {}
 
-    # for node_driver in node_drivers:
     for node_driver in track(
         node_drivers, description="Finding cheapest nodes across all providers"
     ):
@@ -337,7 +330,7 @@ def up(
                 typer.echo(f"\nNode destroyed: {destroyed}")
 
         # Path to the public key you would like to install
-        KEY_PATH = os.path.expanduser("~/.ssh/id_ed25519.pub")
+        KEY_PATH = os.path.expanduser(ssh_key)
 
         with open(KEY_PATH) as fp:
             # https://docs.libcloud.apache.org/en/stable/compute/key_pair_management.html
@@ -394,7 +387,7 @@ def up(
                 client.connect(
                     hostname=ip_address,
                     username=username,
-                    key_filename=os.path.expanduser("~/.ssh/id_ed25519"),
+                    key_filename=os.path.expanduser(ssh_key),
                     timeout=10,
                 )
 
@@ -438,29 +431,33 @@ def up(
     typer.echo("\nWaiting for 15 seconds...")
     time.sleep(15)
 
-    # ssh_key_path = os.path.expanduser("~/.ssh/id_ed25519")
-
     ips_file = "ips.txt"
     username = "sky"
-    # ssh_key = ssh_key_path
 
-    if python_k3s_cluster_deployer_feature_is_enabled:
-        deployer = KubernetesClusterDeployer(ips_file, username, ssh_key, clean)
-        deployer.deploy_cluster()
+    completed_process: subprocess.CompletedProcess[bytes] = subprocess.run(
+        [
+            "./scripts/deploy_remote_cluster.sh",
+            ips_file,
+            username,
+            os.path.expanduser(ssh_key),
+        ]
+    )
 
-    else:
-        completed_process: subprocess.CompletedProcess[bytes] = subprocess.run(
-            # ["./deploy_remote_cluster.sh", "ips.txt", "sky", ssh_key_path]
-            ["./scripts/deploy_remote_cluster.sh", ips_file, username, ssh_key]
+    typer.echo(f"\nCompleted process: {completed_process}")
+
+    try:
+        import sky.check
+
+        sky.check.check(
+            clouds=["kubernetes"],
+            quiet=False,
+            verbose=True,
         )
 
-        typer.echo(f"\nCompleted process: {completed_process}")
+    except ModuleNotFoundError as e:
+        typer.echo(f"Failed to import sky.check: {e}")
 
-    sky.check.check(
-        clouds=["kubernetes"],
-        quiet=False,
-        verbose=True,
-    )
+        subprocess.run(["sky", "check", "k8s"])
 
     subprocess.run(["sky", "show-gpus", "--cloud", "k8s"])
 
