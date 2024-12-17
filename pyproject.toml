@@ -42,7 +42,7 @@ pydantic-settings = "^2.7.0"
 python = "^3.10"
 respx = "^0.21.1"
 skypilot-nightly = {extras = ["aws", "kubernetes", "paperspace"], version = "^1.0.0.dev20241214"}
-sqlmodel = "^0.0.21"
+sqlmodel = ">=0.0.21,<0.0.23"
 sse-starlette = "^2.1.2"
 starlette-context = "^0.3.6"
 typer = {extras = ["all"], version = "^0.15.1"}
