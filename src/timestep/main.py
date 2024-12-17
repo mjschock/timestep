@@ -4,7 +4,6 @@ import subprocess
 import time
 from typing import List, Optional, Tuple
 
-import paramiko
 import typer
 from click import Choice
 from libcloud.compute.base import (
@@ -17,11 +16,11 @@ from libcloud.compute.base import (
 )
 from libcloud.compute.providers import DRIVERS
 from libcloud.compute.types import Provider
-from paramiko import SSHClient
 from rich.progress import track
 
 from timestep.config import settings
 from timestep.server import main as timestep_serve
+from timestep.utils import get_or_create_key_pair, ssh_connect
 
 CREDENTIALS = {
     # Provider.AZURE: {
@@ -142,9 +141,7 @@ typer_app = typer.Typer(
 
 @typer_app.callback()
 def main():
-    """
-    Timestep AI CLI
-    """
+    "Timestep AI CLI"
 
 
 @typer_app.command()
@@ -353,28 +350,11 @@ def up(
                 destroyed: bool = node_driver.destroy_node(node)
                 typer.echo(f"\nNode destroyed: {destroyed}")
 
-        # Path to the public key you would like to install
-        KEY_PATH = os.path.expanduser(ssh_key)
-
-        with open(KEY_PATH) as fp:
+        with open(os.path.expanduser(ssh_key), "r") as fp:
             # https://docs.libcloud.apache.org/en/stable/compute/key_pair_management.html
             content = (
                 fp.read()
             )  # instead, waht about import_key_pair_from_file or import_key_pair_from_string?
-
-        def get_or_create_key_pair(
-            node_driver: NodeDriver, name: str, content: str
-        ) -> KeyPair:
-            # TODO: what about we want to delete the key pair? delete_key_pair
-
-            key_pair: KeyPair | None = node_driver.get_key_pair(name=name)
-
-            if not key_pair:
-                key_pair: KeyPair = node_driver.create_key_pair(
-                    name=name, public_key=content
-                )
-
-            return key_pair
 
         key_pair: KeyPair = get_or_create_key_pair(node_driver, name, content)
 
@@ -399,38 +379,6 @@ def up(
 
         ip = nodes_to_ip_addresses[0][1][0]
 
-    def ssh_connect(
-        ip_address: str, script: str = None, username: str = "root"
-    ) -> SSHClient:
-        client = paramiko.SSHClient()
-        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-
-        max_attempts = 5
-        for attempt in range(max_attempts):
-            try:
-                client.connect(
-                    hostname=ip_address,
-                    username=username,
-                    key_filename=os.path.expanduser(ssh_key),
-                    timeout=10,
-                )
-
-                stdin, stdout, stderr = client.exec_command(script)
-
-                print("stdout:")
-                print(stdout.read().decode())
-
-                print("stderr:")
-                print(stderr.read().decode())
-
-                return client
-
-            except Exception as e:
-                print(f"Attempt {attempt + 1} failed: {e}")
-                time.sleep(10)
-
-        raise Exception("Failed to connect after multiple attempts")
-
     SCRIPT = """#!/usr/bin/env bash
     adduser --disabled-password --gecos "" sky
     usermod -aG sudo sky
@@ -445,7 +393,7 @@ def up(
     passwd -d root
     """
 
-    ssh_client = ssh_connect(ip, script=SCRIPT)
+    ssh_client = ssh_connect(ip, script=SCRIPT, username="root", ssh_key=ssh_key)
 
     with open("ips.txt", "w") as f:
         f.write(ip)
@@ -489,7 +437,7 @@ def up(
     helm install mlflow oci://registry-1.docker.io/bitnamicharts/mlflow --atomic --create-namespace --namespace mlflow
     """
 
-    ssh_client = ssh_connect(ip, script=SCRIPT, username="sky")
+    ssh_client = ssh_connect(ip, script=SCRIPT, username="sky", ssh_key=ssh_key)
 
     # typer.echo(f"Starting up the Timestep AI platform at http://{host}:{port}...")
 
