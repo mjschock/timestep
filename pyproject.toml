@@ -34,7 +34,8 @@ apache-libcloud = "^3.8.0"
 asgi-lifespan = "^2.1.0"
 connexion = {extras = ["swagger-ui", "uvicorn"], version = "^3.1.0"}
 fastapi = "^0.115.6"
-flet = {version = "0.25.2"}
+flet = "^0.25.2"
+flet-web = "^0.25.2"
 openai = "^1.57.4"
 paramiko = "^3.5.0"
 pydantic-settings = "^2.7.0"

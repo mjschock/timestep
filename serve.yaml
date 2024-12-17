@@ -42,7 +42,6 @@ run: |
 
   fi
 
-
 service:
   replicas: 1
   readiness_probe:
