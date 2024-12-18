@@ -12,6 +12,9 @@ from libcloud.compute.base import Node
 from timestep.infra.cloud_management.cloud_instance_controller import (
     CloudInstanceController,
 )
+from timestep.infra.cluster_management.k3s_cluster_controller import (
+    K3sClusterController,
+)
 from timestep.utils import ssh_connect
 
 # https://cloud-images.ubuntu.com/locator/
@@ -56,22 +59,13 @@ src/timestep/
 │
 └── pipelines/              # Data and ML pipeline components
     ├── data_engineering/   # Data preparation stage
-    │   └── nodes.py
-    │       - Load raw data
-    │       - Clean and preprocess data
-    │       - Generate features
+    │   └── task.yaml
     │
     ├── machine_learning/   # Model development stage
-    │   └── nodes.py
-    │       - Split data into train/test sets
-    │       - Train machine learning models
-    │       - Evaluate model performance
+    │   └── task.yaml
     │
     └── model_deployment/   # Model deployment and monitoring
-        └── nodes.py
-            - Package trained models
-            - Deploy models to target environments
-            - Monitor model performance
+        └── task.yaml
 ```
 
 **Development Setup**:
@@ -325,7 +319,9 @@ def up(
 
         ssh_connect(ip, script=SCRIPT, username="root", ssh_key=ssh_key)
 
-        with open("ips.txt", "w") as f:
+        ips_file = "ips.txt"
+
+        with open(ips_file, "w") as f:
             f.write(ip)
             f.write("\n")
             f.write("127.0.0.1")
@@ -336,41 +332,22 @@ def up(
     typer.echo("\nWaiting for 15 seconds...")
     time.sleep(15)
 
-    ips_file = "ips.txt"
     username = "sky"
 
-    completed_process: subprocess.CompletedProcess[bytes] = subprocess.run(
-        [
-            "./scripts/deploy_remote_cluster.sh",
-            ips_file,
-            username,
-            os.path.expanduser(ssh_key),
-        ]
+    controller = K3sClusterController(
+        cluster_config={
+            "ip": ip,
+            "ips_file": ips_file,
+            "ssh_key": ssh_key,
+            "username": username,
+        }
     )
 
-    typer.echo(f"\nCompleted process: {completed_process}")
-
     try:
-        import sky.check
+        controller.create_cluster()
 
-        sky.check.check(
-            clouds=["kubernetes"],
-            quiet=False,
-            verbose=True,
-        )
-
-    except ModuleNotFoundError as e:
-        typer.echo(f"Failed to import sky.check: {e}")
-
-        subprocess.run(["sky", "check", "k8s"])
-
-    subprocess.run(["sky", "show-gpus", "--cloud", "k8s"])
-
-    SCRIPT = """#!/usr/bin/env bash
-    helm install mlflow oci://registry-1.docker.io/bitnamicharts/mlflow --atomic --create-namespace --namespace mlflow
-    """
-
-    ssh_connect(ip, script=SCRIPT, username="sky", ssh_key=ssh_key)
+    except Exception as e:
+        print(f"Error: {e}")
 
     # typer.echo(f"Starting up the Timestep AI platform at http://{host}:{port}...")
 
