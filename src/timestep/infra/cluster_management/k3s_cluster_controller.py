@@ -1,10 +1,5 @@
-import subprocess
-
-
 class K3sClusterController:
-    """
-    Manages K3s Kubernetes cluster operations.
-    """
+    """Manages K3s Kubernetes cluster operations."""
 
     def __init__(self, cluster_config):
         """
@@ -13,7 +8,7 @@ class K3sClusterController:
         Args:
             cluster_config (dict): Cluster configuration parameters
         """
-        pass
+        raise NotImplementedError()
 
     def create_cluster(self):
         """
@@ -22,7 +17,7 @@ class K3sClusterController:
         Returns:
             bool: Cluster creation status
         """
-        pass
+        raise NotImplementedError()
 
     def delete_cluster(self):
         """
@@ -31,4 +26,4 @@ class K3sClusterController:
         Returns:
             bool: Cluster deletion status
         """
-        pass
+        raise NotImplementedError()

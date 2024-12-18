@@ -2,14 +2,10 @@
 
 Timestep AI CLI - free, local-first, open-source AI
 
-## Overview
-
-This project provides a modular infrastructure for data engineering, machine learning, and deployment pipelines.
-
 ## Project Structure
 
 ```
-project_root/
+src/timestep/
 │
 ├── infra/                  # Infrastructure management
 │   ├── cloud_management/   # Cloud instance operations

@@ -36,14 +36,10 @@ def get_help_message():
 Timestep AI CLI - free, local-first, open-source AI
 """ + (
         """
-## Overview
-
-This project provides a modular infrastructure for data engineering, machine learning, and deployment pipelines.
-
 ## Project Structure
 
 ```
-project_root/
+src/timestep/
 │
 ├── infra/                  # Infrastructure management
 │   ├── cloud_management/   # Cloud instance operations
@@ -327,7 +323,7 @@ def up(
         passwd -d root
         """
 
-        ssh_client = ssh_connect(ip, script=SCRIPT, username="root", ssh_key=ssh_key)
+        ssh_connect(ip, script=SCRIPT, username="root", ssh_key=ssh_key)
 
         with open("ips.txt", "w") as f:
             f.write(ip)

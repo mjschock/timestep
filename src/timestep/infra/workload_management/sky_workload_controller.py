@@ -1,10 +1,5 @@
-import sky
-
-
 class SkyWorkloadController:
-    """
-    Manages workloads using SkyPilot.
-    """
+    """Manages workloads using SkyPilot."""
 
     def __init__(self, project_config):
         """
@@ -13,7 +8,7 @@ class SkyWorkloadController:
         Args:
             project_config (dict): Project-specific workload configuration
         """
-        pass
+        raise NotImplementedError()
 
     def launch_task(self, task_spec):
         """
@@ -25,7 +20,7 @@ class SkyWorkloadController:
         Returns:
             Task execution result
         """
-        pass
+        raise NotImplementedError()
 
     def monitor_tasks(self):
         """
@@ -34,4 +29,4 @@ class SkyWorkloadController:
         Returns:
             List of active task statuses
         """
-        pass
+        raise NotImplementedError()

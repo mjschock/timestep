@@ -1,8 +1,7 @@
 import logging
 import os
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
-import libcloud
 from libcloud.compute.base import (
     KeyPair,
     Node,
@@ -31,7 +30,7 @@ class CloudInstanceController:
             credentials (Dict[str, Dict]): A dictionary of cloud provider credentials
                 Example: {
                     'aws': {'key': 'aws_access_key', 'secret': 'aws_secret_key'},
-                    'azure': {'key': 'azure_client_id', 'secret': 'azure_client_secret'},
+                    'digital_ocean': {'key': 'do_access_key'},
                     'gcp': {'key': 'gcp_service_account_key'}
                 }
         """
@@ -59,7 +58,6 @@ class CloudInstanceController:
             except Exception as e:
                 self.logger.error(f"Failed to initialize {provider} driver: {e}")
 
-    # def create_instance(self, specs: Dict, duration_hours: int = 1) -> Dict:
     def create_instance(
         self,
         driver: NodeDriver,
@@ -73,11 +71,15 @@ class CloudInstanceController:
         Create the most cost-effective cloud instance matching specified requirements.
 
         Args:
-            specs (Dict): Instance specifications
-            duration_hours (int): Expected instance usage duration
+            driver (NodeDriver): Cloud provider driver
+            image (NodeImage): Image to use for the instance
+            location (NodeLocation): Location to deploy the instance
+            name (str): Name of the instance
+            ssh_key (str): SSH key to use for the instance
+            size (NodeSize): Instance size specifications
 
         Returns:
-            Dict: Details of created instance
+            Node: Created instance object
         """
         try:
             key_file_path = os.path.expanduser(f"{ssh_key}.pub")
@@ -87,10 +89,11 @@ class CloudInstanceController:
 
             key_pair: KeyPair = get_or_create_key_pair(driver, name, key_material)
 
+            # TODO: Add options to the confirguration b/c this is provider specific
             options = {"ssh_keys": [key_pair.fingerprint]}
 
             node = driver.create_node(
-                ex_create_attr=options,  # TODO: Add options to the credentials or other confirguration b/c this is provider specific
+                ex_create_attr=options,
                 name=name,
                 image=image,
                 location=location,
@@ -115,11 +118,12 @@ class CloudInstanceController:
         Find images across providers that match allowed IDs or names.
 
         Args:
+            driver (NodeDriver): Cloud provider driver
             allowed_image_ids (List[str], optional): Specific image IDs to match
             allowed_image_names (List[str], optional): Name patterns to match
 
         Returns:
-            List of matching images with provider information
+            List[NodeImage]: List of matching images
         """
         matching_images = []
 
@@ -160,10 +164,13 @@ class CloudInstanceController:
         Find locations across providers, optionally filtering by preferred regions.
 
         Args:
-            preferred_regions (List[str], optional): List of preferred region names or patterns
+            driver (NodeDriver): Cloud provider driver
+            allowed_location_countries (List[str], optional): Country names to match
+            allowed_location_ids (List[str], optional): Specific location IDs to match
+            allowed_location_names (List[str], optional): Name patterns to match
 
         Returns:
-            List of matching locations with provider information
+            List[NodeLocation]: List of matching locations
         """
         matching_locations = []
 
@@ -207,21 +214,19 @@ class CloudInstanceController:
         Args:
             specs (Dict): Desired instance specifications
                 {
-                    'cpu': int,        # number of CPUs
-                    'ram': int,        # RAM in GB
-                    'storage': int,    # Storage in GB
-                    'gpu': bool,       # GPU requirement
+                    'min_bandwidth': int,  # Minimum bandwidth in Mbps
+                    'min_disk': int,  # Minimum disk size in GB
+                    'min_ram': int,  # Minimum RAM in MB
                 }
 
         Returns:
-            List[Dict]: Sorted list of available instances with pricing
+            List[NodeSize]: List of matching instance sizes
         """
         available_instances = []
 
         for provider_name, driver in self.providers.items():
             try:
                 # Fetch available nodes matching specifications
-                nodes = driver.list_nodes()
                 sizes = driver.list_sizes()
 
                 for size in sizes:
