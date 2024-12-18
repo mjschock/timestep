@@ -2,18 +2,6 @@ import os
 import time
 
 import paramiko
-from libcloud.compute.base import KeyPair, NodeDriver
-
-
-def get_or_create_key_pair(node_driver: NodeDriver, name: str, content: str) -> KeyPair:
-    # TODO: what about we want to delete the key pair? delete_key_pair
-
-    key_pair: KeyPair | None = node_driver.get_key_pair(name=name)
-
-    if not key_pair:
-        key_pair: KeyPair = node_driver.create_key_pair(name=name, public_key=content)
-
-    return key_pair
 
 
 def ssh_connect(
@@ -32,7 +20,7 @@ def ssh_connect(
                 timeout=10,
             )
 
-            stdin, stdout, stderr = client.exec_command(script)
+            _, stdout, stderr = client.exec_command(script)
 
             print("stdout:")
             print(stdout.read().decode())

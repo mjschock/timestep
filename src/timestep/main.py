@@ -1,4 +1,5 @@
 import inspect
+import logging
 import os
 import subprocess
 import time
@@ -6,42 +7,12 @@ from typing import List, Optional, Tuple
 
 import typer
 from click import Choice
-from libcloud.compute.base import (
-    KeyPair,
-    Node,
-    NodeDriver,
-    NodeImage,
-    NodeLocation,
-    NodeSize,
+from libcloud.compute.base import Node
+
+from timestep.infra.cloud_management.cloud_instance_controller import (
+    CloudInstanceController,
 )
-from libcloud.compute.providers import DRIVERS
-from libcloud.compute.types import Provider
-from rich.progress import track
-
-from timestep.config import settings
-from timestep.server import main as timestep_serve
-from timestep.utils import get_or_create_key_pair, ssh_connect
-
-CREDENTIALS = {
-    # Provider.AZURE: {
-    #     'key_file': os.getenv('AZURE_KEY_FILE'),
-    #     'subscription_id': os.getenv('AZURE_SUBSCRIPTION_ID'),
-    # },
-    Provider.DIGITAL_OCEAN: {"key": os.getenv("DIGITAL_OCEAN_API_KEY")},
-    # Provider.DUMMY: {
-    #     'creds': os.getenv('DUMMY_CREDS')
-    # },
-    # Provider.EC2: {
-    #     'key': os.getenv('AWS_ACCESS_KEY_ID'),
-    #     'secret': os.getenv('AWS_SECRET_ACCESS_KEY')
-    # },
-    # Provider.GCE: {
-    #     'project': os.getenv('GCE_PROJECT'),
-    #     'user_id': os.getenv('GCE_USER_ID'),
-    # },
-    Provider.LINODE: {"key": os.getenv("LINODE_API_KEY")},
-    # ... add more providers here
-}
+from timestep.utils import ssh_connect
 
 # https://cloud-images.ubuntu.com/locator/
 DEFAULT_ALLOWED_IMAGES_IDS = [
@@ -54,48 +25,8 @@ DEFAULT_ALLOWED_IMAGE_NAMES = [
     "Ubuntu 24.04 LTS",  # Linode
 ]
 
-
-def initialize_node_drivers() -> List[NodeDriver]:
-    provider_node_drivers: List[NodeDriver] = []
-
-    for provider, driver_class in DRIVERS.items():
-        if provider in CREDENTIALS:
-            try:
-                driver_class_package, driver_class_name = driver_class
-                driver_module = __import__(
-                    driver_class_package, fromlist=[driver_class_name]
-                )
-                provider_node_driver = getattr(driver_module, driver_class_name)(
-                    **CREDENTIALS[provider]
-                )
-                provider_node_drivers.append(provider_node_driver)
-
-                typer.echo(
-                    f"Successfully initialized the provider node driver for {provider}"
-                )
-
-            except Exception as e:
-                typer.echo(
-                    f"Failed to initialize the provider node driver for {provider}: {str(e)}"
-                )
-
-    return provider_node_drivers
-
-
-def has_gpu(size):
-    if "gpu" in size.extra:
-        return size.extra["gpu"] > 0
-
-    if "gpus" in size.extra:
-        return size.extra["gpus"] > 0
-
-    if size.id.startswith(("p2", "p3", "p4", "g3", "g4")):
-        return True
-
-    if "accelerator_type" in size.extra and size.extra["accelerator_type"]:
-        return True
-
-    return False
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 
 def get_help_message():
@@ -105,6 +36,48 @@ def get_help_message():
 Timestep AI CLI - free, local-first, open-source AI
 """ + (
         """
+## Overview
+
+This project provides a modular infrastructure for data engineering, machine learning, and deployment pipelines.
+
+## Project Structure
+
+```
+project_root/
+│
+├── infra/                  # Infrastructure management
+│   ├── cloud_management/   # Cloud instance operations
+│   │   └── cloud_instance_controller.py
+│   │       - Manages cloud instances using Apache Libcloud
+│   │
+│   ├── cluster_management/ # Kubernetes cluster management
+│   │   └── k3s_cluster_controller.py
+│   │       - Manages K3s Kubernetes clusters
+│   │
+│   └── workload_management/ # Workload orchestration
+│       └── sky_workload_controller.py
+│           - Manages computational workloads using SkyPilot
+│
+└── pipelines/              # Data and ML pipeline components
+    ├── data_engineering/   # Data preparation stage
+    │   └── nodes.py
+    │       - Load raw data
+    │       - Clean and preprocess data
+    │       - Generate features
+    │
+    ├── machine_learning/   # Model development stage
+    │   └── nodes.py
+    │       - Split data into train/test sets
+    │       - Train machine learning models
+    │       - Evaluate model performance
+    │
+    └── model_deployment/   # Model deployment and monitoring
+        └── nodes.py
+            - Package trained models
+            - Deploy models to target environments
+            - Monitor model performance
+```
+
 **Development Setup**:
 
 ```console
@@ -152,9 +125,17 @@ def up(
     allowed_image_names: Optional[List[str]] = typer.Option(
         default=DEFAULT_ALLOWED_IMAGE_NAMES, help="Allowed image names to filter by"
     ),
+    allowed_location_countries: Optional[List[str]] = typer.Option(
+        default=None, help="Allowed location countries to filter by"
+    ),
+    allowed_location_ids: Optional[List[str]] = typer.Option(
+        default=None, help="Allowed location IDs to filter by"
+    ),
+    allowed_location_names: Optional[List[str]] = typer.Option(
+        default=None, help="Allowed location names to filter by"
+    ),
     clean: bool = typer.Option(default=False, help="Clean up"),
     dev: bool = typer.Option(default=False, help="Development mode"),
-    gpu: bool = typer.Option(default=False, help="Require GPU"),
     host: str = typer.Option(default="0.0.0.0", help="Host"),
     min_bandwidth: Optional[int] = typer.Option(
         default=None, help="Minimum bandwidth in GB"
@@ -167,6 +148,7 @@ def up(
         default=2000,
         help="Minimum RAM in MB",
     ),  # TODO: Need to check or convert to proper unit
+    name: str = typer.Option(default="timestep", help="Name"),
     port: int = typer.Option(default=8000, help="Port"),
     ssh_key: str = typer.Option(
         default="~/.ssh/id_ed25519",
@@ -186,192 +168,142 @@ def up(
 
         typer.echo(f"\nCompleted process: {completed_process}")
 
-    node_drivers: List[NodeDriver] = initialize_node_drivers()
+    # Example credentials (these would be securely stored)
+    credentials = {
+        # "aws": {
+        #     'key': os.getenv('AWS_ACCESS_KEY_ID'),
+        #     'secret': os.getenv('AWS_SECRET_ACCESS_KEY')
+        # },
+        # "azure": {
+        #     'key_file': os.getenv('AZURE_KEY_FILE'),
+        #     'subscription_id': os.getenv('AZURE_SUBSCRIPTION_ID'),
+        # },
+        "digital_ocean": {"key": os.getenv("DIGITAL_OCEAN_API_KEY")},
+        # "dummy": {
+        #     'creds': os.getenv('DUMMY_CREDS')
+        # },
+        # "gcp": {
+        #     'project': os.getenv('GCE_PROJECT'),
+        #     'user_id': os.getenv('GCE_USER_ID'),
+        # },
+        "linode": {"key": os.getenv("LINODE_API_KEY")},
+        # ... add more providers here
+    }
 
-    cheapest_nodes_by_provider = {}
+    # Initialize the controller
+    controller = CloudInstanceController(credentials)
 
-    for node_driver in track(
-        node_drivers, description="Finding cheapest nodes across all providers"
-    ):
-        node_images: List[NodeImage] = node_driver.list_images()
-        node_locations: List[NodeLocation] = node_driver.list_locations()
-        node_sizes: List[NodeSize] = node_driver.list_sizes()
-
-        def node_image_filter(node_image):
-            return any(
-                image_id == node_image.id for image_id in allowed_image_ids
-            ) or any(
-                image_name == node_image.name for image_name in allowed_image_names
-            )
-
-        node_images = list(filter(node_image_filter, node_images))
-
-        def node_size_filter(node_size):
-            return (
-                (min_bandwidth is None or node_size.bandwidth >= min_bandwidth)
-                and (min_disk is None or node_size.disk >= min_disk)
-                and node_size.price > 0
-                and (min_ram is None or node_size.ram >= min_ram)
-            )
-
-        node_sizes = list(filter(node_size_filter, node_sizes))
-
-        node_sizes_sorted_by_price_asc = sorted(
-            node_sizes, key=lambda node_size: node_size.price
-        )
-
-        cheapest_nodes_by_provider[node_driver.name] = {
-            "images": node_images,
-            "locations": node_locations,
-            "sizes": node_sizes_sorted_by_price_asc[0:3],
+    try:
+        # Specify instance requirements
+        instance_specs = {
+            "min_bandwidth": min_bandwidth,
+            "min_disk": min_disk,
+            "min_ram": min_ram,
         }
 
-    for provider, cheapest_nodes in cheapest_nodes_by_provider.items():
-        typer.echo(f"\n{provider}:")
+        # Find matching sizes
+        sizes = controller.find_matching_sizes(instance_specs)
 
-        for node_size in cheapest_nodes["sizes"]:
-            typer.echo(f"  - {node_size}")
+        if not sizes:
+            raise typer.BadParameter("No matching instance sizes found")
 
-    cheapest_node = None
+        def choice(item):
+            return f"\n{item}"
 
-    for provider, cheapest_nodes in cheapest_nodes_by_provider.items():
-        for node_size in cheapest_nodes["sizes"]:
-            if cheapest_node is None or node_size.price < cheapest_node["size"].price:
-                cheapest_node = {
-                    "images": cheapest_nodes["images"],
-                    "locations": cheapest_nodes["locations"],
-                    "provider": provider,
-                    "size": node_size,
-                }
+        def value_proc(value):
+            return value
 
-    provider = cheapest_node["provider"]
-
-    def choice(item):
-        return f"\n{item}"
-
-    def value_proc(value):
-        return value
-
-    image_id = typer.prompt(
-        "\nSelect a node image id",
-        default=cheapest_node["images"][0].id,
-        prompt_suffix=":",
-        show_choices=True,
-        type=Choice(sorted([choice(image) for image in cheapest_node["images"]])),
-        value_proc=value_proc,
-    )
-
-    try:
-        image = next(image for image in cheapest_node["images"] if image.id == image_id)
-
-    except StopIteration:
-        typer.echo(f"\nFailed to find the node image for {image_id}")
-
-        return
-
-    location_id = typer.prompt(
-        "\nSelect a node location id",
-        default="sfo3",
-        show_choices=True,
-        type=Choice(
-            sorted([choice(location) for location in cheapest_node["locations"]])
-        ),
-        value_proc=value_proc,
-    )
-
-    try:
-        location = next(
-            location
-            for location in cheapest_node["locations"]
-            if location.id == location_id
+        size_id = typer.prompt(
+            "\nSelect a node size id",
+            default=sizes[0].id,
+            show_choices=True,
+            type=Choice([choice(size) for size in sizes]),
+            value_proc=value_proc,
         )
 
-    except StopIteration:
-        typer.echo(f"\nFailed to find the node location for {location_id}")
+        selected_driver = [size.driver for size in sizes if size.id == size_id][0]
+        selected_size = [size for size in sizes if size.id == size_id][0]
 
-        return
-
-    size_id = typer.prompt(
-        "\nSelect a node size id",
-        default=cheapest_node["size"].id,
-        show_choices=True,
-        type=Choice(sorted([choice(size) for size in [cheapest_node["size"]]])),
-        value_proc=value_proc,
-    )
-
-    try:
-        size = next(size for size in [cheapest_node["size"]] if size.id == size_id)
-
-    except StopIteration:
-        typer.echo(f"\nFailed to find the node size for {size_id}")
-
-        return
-
-    typer.echo("\nSelected node configuration:")
-    typer.echo(f"Image: {image}")
-    typer.echo(f"Location: {location}")
-    typer.echo(f"Provider: {provider}")
-    typer.echo(f"Size: {size}")
-
-    create = typer.confirm(
-        "\nDo you want to create this node?", abort=True, default=True
-    )
-
-    name: str = typer.prompt("\nEnter a name for the node", default="libcloud")
-
-    try:
-        node_driver = next(
-            node_driver for node_driver in node_drivers if node_driver.name == provider
+        # Find matching images
+        images = controller.find_matching_images(
+            selected_driver,
+            allowed_image_ids,
+            allowed_image_names,
         )
 
-    except StopIteration:
-        typer.echo(f"\nFailed to find the node driver for {provider}")
+        if not images:
+            raise typer.BadParameter("No matching images found")
 
-        return
+        image_id = typer.prompt(
+            "\nSelect a node image id",
+            default=images[0].id,
+            prompt_suffix=":",
+            show_choices=True,
+            type=Choice(sorted([choice(image) for image in images])),
+            value_proc=value_proc,
+        )
 
-    if create:
-        nodes: List[Node] = node_driver.list_nodes()
-        node: Node | None
+        selected_image = [image for image in images if image.id == image_id][0]
 
-        try:
-            node = next(node for node in nodes if node.name == name)
+        # Find matching locations
+        locations = controller.find_matching_locations(
+            selected_driver,
+            allowed_location_countries,
+            allowed_location_ids,
+            allowed_location_names,
+        )
 
-        except StopIteration:
-            node = None
+        if not locations:
+            raise typer.BadParameter("No matching locations found")
 
-        if node:
-            delete = typer.confirm(
-                "\nNode already exists, do you want to delete it?",
-                abort=True,
-                default=True,
+        location_id = typer.prompt(
+            "\nSelect a node location id",
+            default="sfo3",
+            show_choices=True,
+            type=Choice(sorted([choice(location) for location in locations])),
+            value_proc=value_proc,
+        )
+
+        selected_location = [
+            location for location in locations if location.id == location_id
+        ][0]
+
+        # Confirm selection
+        typer.echo("\nSelected Cloud Instance Details:\n")
+        typer.echo(f"Image: {selected_image}")
+        typer.echo(f"Location: {selected_location}")
+        typer.echo(f"Size: {selected_size}")
+
+        if not typer.confirm("\nConfirm these details?"):
+            raise typer.Abort()
+
+        instance = controller.get_instance_by_name(
+            driver=selected_driver,
+            name=name,
+        )
+
+        if instance:
+            terminate = typer.confirm(
+                f"\nInstance {name} already exists. Do you want to terminate it?"
             )
 
-            if delete:
-                destroyed: bool = node_driver.destroy_node(node)
-                typer.echo(f"\nNode destroyed: {destroyed}")
+            if terminate:
+                controller.terminate_instance(instance.id)
+                typer.echo(f"Terminated instance: {instance}")
 
-        with open(os.path.expanduser(ssh_key), "r") as fp:
-            # https://docs.libcloud.apache.org/en/stable/compute/key_pair_management.html
-            content = (
-                fp.read()
-            )  # instead, waht about import_key_pair_from_file or import_key_pair_from_string?
-
-        key_pair: KeyPair = get_or_create_key_pair(node_driver, name, content)
-
-        options = {"ssh_keys": [key_pair.fingerprint]}
-
-        node: Node = node_driver.create_node(
-            ex_create_attr=options,
-            image=image,
-            location=location,
+        # Create a cost-optimized instance
+        node = controller.create_instance(
+            driver=selected_driver,
+            image=selected_image,
+            location=selected_location,
             name=name,
-            size=size,
+            ssh_key=ssh_key,
+            size=selected_size,
         )
-
-        typer.echo(f"\nNode created: {node}")
+        print(f"Created instance: {node}")
 
         nodes_to_ip_addresses: List[Tuple[Node, List[str]]] = (
-            node_driver.wait_until_running([node])
+            selected_driver.wait_until_running([node])
         )
 
         for node, ip_addresses in nodes_to_ip_addresses:
@@ -379,26 +311,31 @@ def up(
 
         ip = nodes_to_ip_addresses[0][1][0]
 
-    SCRIPT = """#!/usr/bin/env bash
-    adduser --disabled-password --gecos "" sky
-    usermod -aG sudo sky
-    echo "sky ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/sky
-    mkdir -p /home/sky/.ssh
-    cp /root/.ssh/authorized_keys /home/sky/.ssh/authorized_keys
-    chown -R sky:sky /home/sky/.ssh
-    chmod 700 /home/sky/.ssh
-    chmod 600 /home/sky/.ssh/authorized_keys
-    usermod -s /bin/bash sky
-    usermod -d /home/sky sky
-    passwd -d root
-    """
+        print(f"ip: {ip}")
 
-    ssh_client = ssh_connect(ip, script=SCRIPT, username="root", ssh_key=ssh_key)
+        SCRIPT = """#!/usr/bin/env bash
+        adduser --disabled-password --gecos "" sky
+        usermod -aG sudo sky
+        echo "sky ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/sky
+        mkdir -p /home/sky/.ssh
+        cp /root/.ssh/authorized_keys /home/sky/.ssh/authorized_keys
+        chown -R sky:sky /home/sky/.ssh
+        chmod 700 /home/sky/.ssh
+        chmod 600 /home/sky/.ssh/authorized_keys
+        usermod -s /bin/bash sky
+        usermod -d /home/sky sky
+        passwd -d root
+        """
 
-    with open("ips.txt", "w") as f:
-        f.write(ip)
-        f.write("\n")
-        f.write("127.0.0.1")
+        ssh_client = ssh_connect(ip, script=SCRIPT, username="root", ssh_key=ssh_key)
+
+        with open("ips.txt", "w") as f:
+            f.write(ip)
+            f.write("\n")
+            f.write("127.0.0.1")
+
+    except Exception as e:
+        print(f"Error: {e}")
 
     typer.echo("\nWaiting for 15 seconds...")
     time.sleep(15)

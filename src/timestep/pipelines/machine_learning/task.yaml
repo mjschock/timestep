@@ -1,0 +1,43 @@
+envs:
+  GGML_CUDA_ENABLE_UNIFIED_MEMORY: 1
+  MLFLOW_TRACKING_URI: http://mlflow-tracking.mlflow.svc.cluster.local:80
+  MLFLOW_TRACKING_USERNAME: user
+  MLFLOW_TRACKING_PASSWORD: pass
+
+file_mounts:
+  /root/sky_workdir/models: ./models
+
+resources:
+  accelerators: GTX-1050-TI:1
+  cloud: kubernetes
+  cpus: 2+
+  image_id: docker:ros:jazzy-ros-base-noble
+  memory: 2+
+
+run: |
+  set -ex # Fail on first error and echo commands
+
+  # Since SkyPilot tasks are run inside a fresh conda "(base)" environment,
+  # deactivate first to access what the Docker image has already installed.
+  conda deactivate
+  source .venv/bin/activate
+  python train.py --output-dir /outputs
+  # python llama.cpp/convert_hf_to_gguf.py models/merged_model/ --outtype f16
+
+setup: |
+  set -ex # Fail on first error and echo commands
+
+  sudo apt-get update && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y build-essential cmake git make nvidia-cuda-toolkit nvidia-modprobe
+
+  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential cmake git make nvidia-cuda-toolkit python3.12-venv python3.12-dev
+  python3 -m venv .venv
+  source .venv/bin/activate
+  pip install --upgrade pip
+  pip install -r requirements.txt
+  git clone https://github.com/ggerganov/llama.cpp || true
+  cd llama.cpp
+  cmake -B build -DGGML_CUDA=ON
+  cmake --build build --config Release
+  cd ..
+
+workdir: src/timestep/pipelines/machine_learning

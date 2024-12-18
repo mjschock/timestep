@@ -1,10 +1,8 @@
 envs:
-  # CUDA_VISIBLE_DEVICES: 0
-  # DTYPE: bfloat16
   HF_TOKEN: <your-huggingface-token>  # Change to your own huggingface token, or use --env to pass.
-  # MODEL_ID: TinyLlama/TinyLlama-1.1B-Chat-v1.0
-  # NUM_SHARD: 1
-  # REVISION: fe8a4ea1ffedaf415f4da2f062534de366a451e6
+  MLFLOW_TRACKING_URI: http://mlflow-tracking.mlflow.svc.cluster.local:80
+  MLFLOW_TRACKING_USERNAME: user
+  MLFLOW_TRACKING_PASSWORD: pass
   TARGET: llamafile
   # TARGET: ollama # https://ollama.com/library/tinyllama
   # TARGET: tgi
@@ -57,7 +55,6 @@ service:
 setup: |
   set -ex # Fail on first error and echo commands
 
-  # rm /etc/fuse.conf /etc/systemd/system.conf
   sudo apt-get update && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y nvidia-cuda-toolkit nvidia-modprobe
 
   wget https://huggingface.co/mjschock/TinyLlama-1.1B-Chat-v1.0-Q4_K_M-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0-q4_k_m.gguf
