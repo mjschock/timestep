@@ -370,7 +370,7 @@ def up(
     helm install mlflow oci://registry-1.docker.io/bitnamicharts/mlflow --atomic --create-namespace --namespace mlflow
     """
 
-    ssh_client = ssh_connect(ip, script=SCRIPT, username="sky", ssh_key=ssh_key)
+    ssh_connect(ip, script=SCRIPT, username="sky", ssh_key=ssh_key)
 
     # typer.echo(f"Starting up the Timestep AI platform at http://{host}:{port}...")
 

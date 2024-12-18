@@ -89,11 +89,8 @@ class CloudInstanceController:
 
             key_pair: KeyPair = get_or_create_key_pair(driver, name, key_material)
 
-            # TODO: Add options to the confirguration b/c this is provider specific
-            options = {"ssh_keys": [key_pair.fingerprint]}
-
             node = driver.create_node(
-                ex_create_attr=options,
+                ex_create_attr={"ssh_keys": [key_pair.fingerprint]},
                 name=name,
                 image=image,
                 location=location,
