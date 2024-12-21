@@ -10,4 +10,4 @@ pynvml
 ray[serve]
 torchvision
 unsloth
-# vllm
+vllm

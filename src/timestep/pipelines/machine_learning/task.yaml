@@ -7,6 +7,8 @@ envs:
   MLFLOW_TRACKING_USERNAME: user
   MLFLOW_TRACKING_PASSWORD: null
   PYENV_VERSION: 3.10.13
+  TORCH_LOGS: +dynamo
+  TORCHDYNAMO_VERBOSE: 1
 
 # export MLFLOW_TRACKING_PASSWORD=$(kubectl get secret --namespace mlflow mlflow-tracking -o jsonpath="{.data.admin-password }" | base64 -d)
 # sky launch -c ml --env MLFLOW_TRACKING_PASSWORD src/timestep/pipelines/machine_learning/task.yaml
@@ -33,11 +35,10 @@ run: |
 
   # python train.py --output-dir outputs
   # python deploy.py
-  # CUDA_VISIBLE_DEVICES=0 serve run serve:app
-  serve build serve:app -o config.yaml
-  cat config.yaml
-  serve run serve:app
-  # CUDA_VISIBLE_DEVICES=0 serve run config.yaml
+  # serve build serve:app -o config.yaml
+  # cat config.yaml
+  # serve run serve:app
+  RAY_PICKLE_VERBOSE_DEBUG='2' serve run llm:build_app model_name="HuggingFaceTB/SmolVLM-Instruct"
 
 setup: |
   set -ex # Echo commands and exit on first error
