@@ -2,29 +2,8 @@ default: build
 
 apis:
 	rm -rf build && mkdir -p build
-	rm -rf timestep/api/ap/v1 && mkdir -p timestep/api/ap
-	rm -rf timestep/api/openai/v1 && mkdir -p timestep/api/openai
+	rm -rf src/timestep/api/openai/v1 && mkdir -p src/timestep/api/openai
 	echo '{\n  "allowUnicodeIdentifiers": true,\n  "ensureUniqueParams": false,\n  "flattenSpec": false,\n  "sortParamsByRequiredFlag": false\n}' > build/openapi-yaml.json
-
-	docker run --rm \
-		-v ${PWD}:/local \
-		swaggerapi/swagger-codegen-cli-v3 \
-		generate \
-		--config /local/build/openapi-yaml.json \
-		--input-spec https://raw.githubusercontent.com/AI-Engineer-Foundation/agent-protocol/main/schemas/openapi.yml \
-		--lang openapi-yaml \
-		-o /local/build/ap/openapi-yaml
-
-	docker run --rm \
-		-v ${PWD}:/local \
-		openapitools/openapi-generator-cli \
-		generate \
-		--generator-name python-flask \
-		--input-spec /local/build/ap/openapi-yaml/openapi.yaml \
-		-o /local/build/ap/python-flask \
-		--additional-properties packageName=timestep.api.ap.v1
-
-	mv build/ap/python-flask/timestep/api/ap/v1 timestep/api/ap/v1
 
 	docker run --rm \
 		-v ${PWD}:/local \
@@ -39,12 +18,12 @@ apis:
 		-v ${PWD}:/local \
 		openapitools/openapi-generator-cli \
 		generate \
-		--generator-name python-flask \
+		--generator-name python-fastapi \
 		--input-spec /local/build/openai/openapi-yaml/openapi.yaml \
-		-o /local/build/openai/python-flask \
+		-o /local/build/openai/python-fastapi \
 		--additional-properties packageName=timestep.api.openai.v1
 
-	mv build/openai/python-flask/timestep/api/openai/v1 timestep/api/openai/v1
+	mv build/openai/python-fastapi/src/timestep/api/openai/v1 src/timestep/api/openai/v1
 
 build:
 	$$SHELL ./scripts/build.sh

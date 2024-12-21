@@ -1,0 +1,13 @@
+datachain
+# gguf
+mlflow
+nvidia-ml-py
+protobuf<4.0.0
+psutil
+pynvml
+# ray[serve]==2.9.3
+# ray[serve]==2.40.0
+ray[serve]
+torchvision
+unsloth
+# vllm

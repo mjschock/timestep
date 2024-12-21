@@ -22,22 +22,13 @@ src/timestep/
 │
 └── pipelines/              # Data and ML pipeline components
     ├── data_engineering/   # Data preparation stage
-    │   └── nodes.py
-    │       - Load raw data
-    │       - Clean and preprocess data
-    │       - Generate features
+    │   └── task.yaml
     │
     ├── machine_learning/   # Model development stage
-    │   └── nodes.py
-    │       - Split data into train/test sets
-    │       - Train machine learning models
-    │       - Evaluate model performance
+    │   └── task.yaml
     │
     └── model_deployment/   # Model deployment and monitoring
-        └── nodes.py
-            - Package trained models
-            - Deploy models to target environments
-            - Monitor model performance
+        └── task.yaml
 ```
 
 **Development Setup**:
