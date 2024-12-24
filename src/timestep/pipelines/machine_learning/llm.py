@@ -1,47 +1,30 @@
-import os
-from typing import Dict, Optional, List
+import asyncio
+import json
 import logging
+import os
+import time
+from pprint import pprint
+from threading import Thread
+from typing import Any, Dict, List
 
-from fastapi import FastAPI
-from starlette.requests import Request
-from starlette.responses import StreamingResponse, JSONResponse
-
-from ray import serve
-from transformers.image_utils import load_image
-
-from vllm.engine.arg_utils import AsyncEngineArgs
-from vllm.engine.async_llm_engine import AsyncLLMEngine
-from vllm.entrypoints.openai.cli_args import make_arg_parser
-from vllm.entrypoints.openai.protocol import (
-    # ChatCompletionRequest,
-    # ChatCompletionResponse,
-    ErrorResponse,
-)
-from vllm.entrypoints.openai.serving_chat import OpenAIServingChat
-from vllm.entrypoints.openai.serving_engine import LoRAModulePath, PromptAdapterPath
-from vllm.utils import FlexibleArgumentParser
-from vllm.entrypoints.logger import RequestLogger
 import torch
-from fastapi import FastAPI
-from ray import serve
-from unsloth import FastVisionModel
-from transformers import TextStreamer
-# from mlflow.types.llm import (
-#     ChatChoice,
-#     ChatCompletionRequest,
-#     ChatCompletionResponse,
-#     ChatMessage,
-#     ChatParams,
-#     FunctionToolCallArguments,
-#     FunctionToolDefinition,
-#     ParamProperty,
-#     ToolCall,
-#     ToolParamsSchema,
-# )
+from fastapi import FastAPI, Request
+from openai.types.chat.chat_completion import ChatCompletion
+from openai.types.chat.chat_completion import Choice as ChatCompletionChoice
+from openai.types.chat.chat_completion_chunk import ChatCompletionChunk
+from openai.types.chat.chat_completion_chunk import Choice as ChatCompletionChunkChoice
+from openai.types.chat.chat_completion_chunk import ChoiceDelta
+from openai.types.chat.chat_completion_message import ChatCompletionMessage
 from openai.types.chat.completion_create_params import CompletionCreateParams
-from pydantic import ConfigDict, TypeAdapter, ValidationError
+from pydantic import TypeAdapter
+from ray import serve
+from sse_starlette import EventSourceResponse
+from starlette.responses import JSONResponse
+from transformers import TextIteratorStreamer
 
-# torch._dynamo.config.disable = True
+# from transformers.generation.streamers import AsyncTextIteratorStreamer
+from transformers.image_utils import load_image
+from unsloth import FastVisionModel
 
 dtype = (
     None  # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
@@ -57,47 +40,56 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 app = FastAPI()
 
+# middlewares = [
+#     middleware
+#     for middleware in ConnexionMiddleware.default_middlewares
+#     if middleware is not SecurityMiddleware
+# ]
+
+# connexion_app = AsyncApp(import_name=__name__, middlewares=middlewares)
+
+# connexion_app.add_api(
+#     # "api/openai/v1/openapi/openapi.yaml",
+#     "api/v1/openapi/openapi.yaml",
+#     # base_path="/openai/v1",
+#     base_path="/v1",
+#     pythonic_params=True,
+#     resolver_error=501,
+# )
+
+# # fastapi_app.mount("/api", ConnexionMiddleware(app=connexion_app, import_name=__name__))
+# # app.mount("/api", ConnexionMiddleware(app=connexion_app, import_name=__name__))
+# app.mount(
+#     "/",
+#     ConnexionMiddleware(
+#         app=connexion_app,
+#         import_name=__name__,
+#         # middlewares=middlewares,
+#     ),
+# )
+
 
 @serve.deployment(
     autoscaling_config={
-        "min_replicas": 1,
-        # "max_replicas": 10,
+        # https://docs.ray.io/en/latest/serve/advanced-guides/advanced-autoscaling.html#required-define-upper-and-lower-autoscaling-limits
         "max_replicas": 1,
-        "target_ongoing_requests": 5,
+        "min_replicas": 1,  # TOOD: set to 0
+        "target_ongoing_requests": 2,  # https://docs.ray.io/en/latest/serve/advanced-guides/advanced-autoscaling.html#target-ongoing-requests-default-2
     },
+    max_ongoing_requests=5,  # https://docs.ray.io/en/latest/serve/advanced-guides/advanced-autoscaling.html#max-ongoing-requests-default-5
     ray_actor_options={"num_gpus": 1},
-    max_ongoing_requests=10,
 )
 @serve.ingress(app)
 class VLLMDeployment:
     def __init__(
         self,
         model_name: str,
-        # engine_args: AsyncEngineArgs,
-        # response_role: str,
-        # lora_modules: Optional[List[LoRAModulePath]] = None,
-        # prompt_adapters: Optional[List[PromptAdapterPath]] = None,
-        request_logger: Optional[RequestLogger] = None,
-        # chat_template: Optional[str] = None,
     ):
-        # logger.info(f"Starting with engine args: {engine_args}")
-        # self.openai_serving_chat = None
-        # self.engine_args = engine_args
-        # self.response_role = response_role
-        # self.lora_modules = lora_modules
-        # self.prompt_adapters = prompt_adapters
-        # self.request_logger = request_logger
-        # self.chat_template = chat_template
-        # self.engine = AsyncLLMEngine.from_engine_args(engine_args)
-
         self.model_name = model_name
-        # self.model = None
-        # self.processor = None
 
         model, processor = FastVisionModel.from_pretrained(
             load_in_4bit=load_in_4bit,
             max_seq_length=max_seq_length,
-            # model_name=model_path,
             model_name=self.model_name,
         )
 
@@ -106,282 +98,272 @@ class VLLMDeployment:
         self.model = model
         self.processor = processor
 
+    def reconfigure(self, config: Dict[str, Any]):
+        print("=== reconfigure ===")
+        print("config:")
+        print(config)
+        # https://docs.ray.io/en/latest/serve/production-guide/config.html#dynamically-change-parameters-without-restarting-replicas-user-config
+
     @app.post("/v1/chat/completions")
-    async def create_chat_completion(
-        # self, request: ChatCompletionRequest, raw_request: Request
-        # self, request: CompletionCreateParams, raw_request: Request
-        self, request: dict, raw_request: Request
-    ):
-        """OpenAI-compatible HTTP endpoint.
+    async def create_chat_completion(self, body: dict, raw_request: Request):
+        """Creates a model response for the given chat conversation. Learn more in the [text generation](/docs/guides/text-generation), [vision](/docs/guides/vision), and [audio](/docs/guides/audio) guides.  Parameter support can differ depending on the model used to generate the response, particularly for newer reasoning models. Parameters that are only supported for reasoning models are noted below. For the current state of  unsupported parameters in reasoning models,  [refer to the reasoning guide](/docs/guides/reasoning).
 
-        API reference:
-            - https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html
+        # noqa: E501
+
+        :param create_chat_completion_request:
+        :type create_chat_completion_request: dict | bytes
+
+        :rtype: Union[CreateChatCompletionResponse, Tuple[CreateChatCompletionResponse, int], Tuple[CreateChatCompletionResponse, int, Dict[str, str]]
         """
-        # if not self.openai_serving_chat:
-        #     model_config = await self.engine.get_model_config()
-        #     # Determine the name of the served model for the OpenAI client.
-        #     if self.engine_args.served_model_name is not None:
-        #         served_model_names = self.engine_args.served_model_name
-        #     else:
-        #         served_model_names = [self.engine_args.model]
-        #     self.openai_serving_chat = OpenAIServingChat(
-        #         self.engine,
-        #         model_config,
-        #         served_model_names,
-        #         self.response_role,
-        #         lora_modules=self.lora_modules,
-        #         prompt_adapters=self.prompt_adapters,
-        #         request_logger=self.request_logger,
-        #         chat_template=self.chat_template,
-        #     )
-        # logger.info(f"Request: {request}")
-        # generator = await self.openai_serving_chat.create_chat_completion(
-        #     request, raw_request
-        # )
+        print("=== create_chat_completion ===")
 
-        print('request:')
-        print(request)
-
-        print('raw_request:')
-        print(raw_request)
+        print("body:")
+        pprint(body)
 
         ta = TypeAdapter(CompletionCreateParams)
 
-        print('ta.validate_python...')
-        print(ta.validate_python(request))
+        print("ta.validate_python...")
+        pprint(ta.validate_python(body))
 
-        # add_generation_prompt = request.add_generation_prompt
-        # documents = request.documents
-        # messages = request.messages
-        messages = request.get('messages')
-        # max_completion_tokens = request.max_completion_tokens
-        # max_tokens = request.max_tokens
-        max_tokens = request.get('max_tokens')
-        # model = request.model
-        model = request.get('model')
-        # temperature = request.temperature
-        temperature = request.get('temperature')
-        # tools = request.tools
-        tools = request.get('tools')
-
-        # print('add_generation_prompt:')
-        # print(add_generation_prompt)
-
-        print('messages:')
-        print(messages)
-
-        # print('max_completion_tokens:')
-        # print(max_completion_tokens)
-
-        print('max_tokens:')
-        print(max_tokens)
-
-        print('model:')
-        print(model)
-
-        print('temperature:')
-        print(temperature)
-
-        print('tools:')
-        print(tools)
-
-        # if not self.model:
-        #     print('=== Loading model ===')
-        #     # model_path = "/root/sky_workdir/lora_model"
-
-        #     model, processor = FastVisionModel.from_pretrained(
-        #         load_in_4bit=load_in_4bit,
-        #         max_seq_length=max_seq_length,
-        #         # model_name=model_path,
-        #         model_name=self.model_name,
-        #     )
-
-        #     FastVisionModel.for_inference(model)  # Enable native 2x faster inference
-
-        #     self.model = model
-        #     self.processor = processor
-
-        if model != self.model_name:
-            return JSONResponse(
-                content={"error": "Model not found"}, status_code=404
-            )
+        max_new_tokens = body.get("max_completion_tokens", body.get("max_tokens"))
+        messages = body.get("messages")
+        model_name = body.get("model")
+        stream = body.get("stream", False)
+        temperature = body.get("temperature")
+        tools = body.get("tools")
 
         images = []
 
         for message in messages:
-            for content in message['content']:
-                if content['type'] == 'image_url':
-                    image_url = content['image_url']['url']
+            for content in message["content"]:
+                if content["type"] == "image_url":
+                    image_url = content["image_url"]["url"]
                     image = load_image(image_url)
                     images.append(image)
 
-                    content['type'] = 'image'
-                    del content['image_url']
+                    content["type"] = "image"
+                    del content["image_url"]
 
-        print('images:')
-        print(images)
-
-        print('messages:')
-        print(messages)
+        if model_name != self.model_name:
+            return JSONResponse(content={"error": "Model not found"}, status_code=404)
 
         prompt = self.processor.apply_chat_template(
             add_generation_prompt=True,
-            # add_generation_prompt=add_generation_prompt,
             conversation=messages,
             # documents=documents,
             # return_tensors="pt",
             # tokenize=True,
             # tokenize=False,
             # tools=tools,
-            # ).to(device)
-        # ).to(self.model.device)
+            # ).to(self.model.device)
         )
 
-        print('prompt:')
+        print("prompt:")
         print(prompt)
-
-        print('=== Processing inputs ===')
-
-        # inputs = self.processor.apply_chat_template(
-        #     add_generation_prompt=True,
-        #     # add_generation_prompt=add_generation_prompt,
-        #     conversation=messages,
-        #     # documents=documents,
-        #     return_tensors="pt",
-        #     tokenize=True,
-        #     tools=tools,
-        #     # ).to(device)
-        # ).to(self.model.device)
 
         inputs = self.processor(text=prompt, images=images, return_tensors="pt")
         inputs = inputs.to(self.model.device)
+        input_ids = inputs.input_ids
 
-        print('inputs:')
-        print(inputs)
+        class GeneratorThread(Thread):
+            def __init__(self, model, **generation_kwargs):
+                super().__init__()
 
-        # torch._dynamo.config.disable = True
+                self.chat_completion = None
+                self.generation_kwargs = generation_kwargs
+                self.model = model
 
-        # text_streamer = TextStreamer(tokenizer, skip_prompt = True)
-        # text_streamer = TextStreamer(self.processor, skip_prompt = True)
+            def run(self):
+                import torch
+                import torch._dynamo.config
 
-        print('=== Generating outputs ===')
+                try:
+                    try:
+                        self.generated_ids = self.model.generate(
+                            **self.generation_kwargs
+                        )
 
-        import torch
+                    except torch._dynamo.exc.BackendCompilerFailed as e:
+                        print(e)
+                        print("Disabling dynamo...")
 
-        try:
-            generated_ids = self.model.generate(
-                **inputs,
-                # do_sample=False,
-                # input_ids=inputs,
-                # max_new_tokens=256,
-                max_new_tokens=max_tokens,
-                # use_cache=True,
-                # temperature=temperature,
+                        # TODO: Use CompileConfig to disable dynamo?
+                        # https://huggingface.co/docs/transformers/v4.47.1/en/internal/generation_utils#transformers.CompileConfig
+                        # compile_config = CompileConfig(dynamic=True)
+                        # If this works, I can skip this GeneratorThread class and just call thread = Thread(target=model.generate, kwargs=generation_kwargs)
+                        torch._dynamo.config.disable = True
+
+                        self.generated_ids = self.model.generate(
+                            **self.generation_kwargs
+                        )
+
+                except Exception as e:
+                    print(e)
+                    print("Warning: Exception in GeneratorThread")
+                    self.generated_ids = []
+
+            def join(self):
+                super().join()
+
+                return self.generated_ids
+
+        streamer = (
+            TextIteratorStreamer(  # TODO: Switch TextIteratorStreamer to AsyncTextIteratorStreamer
+                # AsyncTextIteratorStreamer(
+                self.processor,
+                # decode_kwargs=dict(skip_special_tokens=True), # TODO: Why isn't this working?
+                decode_kwargs={
+                    "skip_special_tokens": True,
+                },
+                skip_prompt=True,
             )
-
-        except torch._dynamo.exc.BackendCompilerFailed as e:
-            print('=== BackendCompilerFailed ===')
-            print(e)
-
-            print('=== Disabling dynamo ===')
-
-            import torch._dynamo.config
-            torch._dynamo.config.disable = True
-
-            generated_ids = self.model.generate(
-                **inputs,
-                # do_sample=False,
-                # input_ids=inputs,
-                # max_new_tokens=256,
-                max_new_tokens=max_tokens,
-                # use_cache=True,
-                # temperature=temperature,
-            )
-
-        print('generated_ids:')
-        print(generated_ids)
-
-        batch_decoded_outputs = self.processor.batch_decode(
-            generated_ids,
-            skip_special_tokens=True,
+            if stream
+            else None
         )
 
-        print('batch_decoded_outputs:')
-        print(batch_decoded_outputs)
+        generation_kwargs = dict(
+            # inputs, max_new_tokens=max_new_tokens, streamer=streamer, use_cache=True
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            streamer=streamer,
+            use_cache=True,
+        )
 
-        # if isinstance(generator, ErrorResponse):
-        #     return JSONResponse(
-        #         content=generator.model_dump(), status_code=generator.code
-        #     )
+        thread = GeneratorThread(self.model, **generation_kwargs)
+        thread.start()
 
-        # if request.stream:
-        #     return StreamingResponse(content=generator, media_type="text/event-stream")
+        if stream:
 
-        # else:
-        #     assert isinstance(generator, ChatCompletionResponse)
-        #     return JSONResponse(content=generator.model_dump())
+            async def event_publisher():
+                i = 0
 
+                try:
+                    for new_text in streamer:
+                        # async for new_text in streamer:
+                        choices: List[ChatCompletionChunkChoice] = [
+                            ChatCompletionChunkChoice(
+                                _request_id=None,
+                                delta=ChoiceDelta(
+                                    _request_id=None,
+                                    content=new_text,
+                                    function_call=None,
+                                    refusal=None,
+                                    role="assistant",
+                                    tool_calls=None,
+                                ),
+                                finish_reason=None,
+                                index=0,
+                                logprobs=None,
+                            )
+                        ]
 
-def parse_vllm_args(cli_args: Dict[str, str]):
-    """Parses vLLM args based on CLI inputs.
+                        chat_completion_chunk = ChatCompletionChunk(
+                            _request_id=None,
+                            choices=choices,
+                            created=int(time.time()),
+                            id=str(i),
+                            model=model_name,
+                            object="chat.completion.chunk",
+                            service_tier=None,
+                            system_fingerprint=None,
+                            usage=None,
+                        )
 
-    Currently uses argparse because vLLM doesn't expose Python models for all of the
-    config options we want to support.
-    """
-    arg_parser = FlexibleArgumentParser(
-        description="vLLM OpenAI-Compatible RESTful API server."
-    )
+                        yield chat_completion_chunk.model_dump_json()
 
-    parser = make_arg_parser(arg_parser)
-    arg_strings = []
-    for key, value in cli_args.items():
-        arg_strings.extend([f"--{key}", str(value)])
-    logger.info(arg_strings)
-    parsed_args = parser.parse_args(args=arg_strings)
-    return parsed_args
+                        i += 1
+
+                except asyncio.CancelledError as e:
+                    print(f"Disconnected from client (via refresh/close)")
+                    # Do any other cleanup, if any
+                    raise e
+                except Exception as e:
+                    print(f"Exception: {e}")
+                    raise e
+
+            return EventSourceResponse(event_publisher())
+
+        else:
+            generated_ids = thread.join()
+            # input_length = inputs.shape[1]
+            input_length = input_ids.shape[1]
+
+            batch_decoded_outputs = self.processor.batch_decode(
+                # generated_ids,
+                generated_ids[:, input_length:],
+                skip_special_tokens=True,
+            )
+
+            choices: List[ChatCompletionChoice] = []
+
+            for i in range(len(batch_decoded_outputs)):
+                response = batch_decoded_outputs[i]
+
+                # try:
+                # response = json.loads(response)
+
+                #         finish_reason: str = response.get("finish_reason")
+                #         tool_calls_json = response.get("tool_calls")
+                #         tool_calls: List[ToolCall] = []
+
+                #         for tool_call_json in tool_calls_json:
+                #             tool_call = ToolCall(
+                #                 function=FunctionToolCallArguments(
+                #                     arguments=tool_call_json.get("arguments"),
+                #                     name=tool_call_json.get("name"),
+                #                 ),
+                #                 id=tool_call_json.get("id"),
+                #                 type="function",
+                #             )
+
+                #             tool_calls.append(tool_call)
+
+                #         message: ChatMessage = ChatMessage(
+                #             role="assistant",
+                #             tool_calls=tool_calls,
+                #         )
+
+                #     except json.JSONDecodeError:
+                #         finish_reason: str = "stop"
+                #         message: ChatMessage = ChatMessage(
+                #             role="assistant",
+                #             content=response,
+                #         )
+
+                message = ChatCompletionMessage(
+                    audio=None,
+                    content=response,
+                    refusal=None,
+                    role="assistant",
+                    tool_calls=None,
+                )
+
+                choices.append(
+                    ChatCompletionChoice(
+                        index=i,
+                        finish_reason="stop",
+                        logprobs=None,
+                        message=message,
+                    )
+                )
+
+            chat_completion = ChatCompletion(
+                choices=choices,
+                created=int(time.time()),
+                id="1",
+                model=model_name,
+                object="chat.completion",
+                service_tier=None,
+                system_fingerprint=None,
+                usage=None,
+            )
+
+            return chat_completion.model_dump(mode="json")
 
 
 def build_app(cli_args: Dict[str, str]) -> serve.Application:
-    """Builds the Serve app based on CLI arguments.
+    "Builds the Serve app based on CLI arguments."
 
-    See https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html#command-line-arguments-for-the-server
-    for the complete set of arguments.
-
-    Supported engine arguments: https://docs.vllm.ai/en/latest/models/engine_args.html.
-    """  # noqa: E501
-    # if "accelerator" in cli_args.keys():
-    #     accelerator = cli_args.pop("accelerator")
-    # else:
-    #     accelerator = "GPU"
-    # parsed_args = parse_vllm_args(cli_args)
-    # engine_args = AsyncEngineArgs.from_cli_args(parsed_args)
-    # engine_args.worker_use_ray = True
-
-    # tp = engine_args.tensor_parallel_size
-    # logger.info(f"Tensor parallelism = {tp}")
-    # pg_resources = []
-    # pg_resources.append({"CPU": 1})  # for the deployment replica
-    # for i in range(tp):
-    #     pg_resources.append({"CPU": 1, accelerator: 1})  # for the vLLM actors
-
-    # print('pg_resources:')
-    # print(pg_resources)
-    # print('parsed_args:')
-    # print(parsed_args)
-
-    print('cli_args:')
-    print(cli_args)
-
-    # We use the "STRICT_PACK" strategy below to ensure all vLLM actors are placed on
-    # the same Ray node.
-    return VLLMDeployment.options(
-        # placement_group_bundles=pg_resources, placement_group_strategy="STRICT_PACK"
-    ).bind(
-        # engine_args,
+    return VLLMDeployment.options().bind(
         cli_args.get("model_name"),
-        # parsed_args.response_role,
-        # parsed_args.lora_modules,
-        # parsed_args.prompt_adapters,
-        cli_args.get("request_logger"),
-        # parsed_args.chat_template,
     )

@@ -2,7 +2,6 @@ default: build
 
 apis:
 	rm -rf build && mkdir -p build
-	rm -rf src/timestep/api/openai/v1 && mkdir -p src/timestep/api/openai
 	echo '{\n  "allowUnicodeIdentifiers": true,\n  "ensureUniqueParams": false,\n  "flattenSpec": false,\n  "sortParamsByRequiredFlag": false\n}' > build/openapi-yaml.json
 
 	docker run --rm \
@@ -18,12 +17,12 @@ apis:
 		-v ${PWD}:/local \
 		openapitools/openapi-generator-cli \
 		generate \
-		--generator-name python-fastapi \
+		--generator-name python-flask \
 		--input-spec /local/build/openai/openapi-yaml/openapi.yaml \
-		-o /local/build/openai/python-fastapi \
-		--additional-properties packageName=timestep.api.openai.v1
+		-o /local/build/openai/python-flask \
+		--additional-properties packageName=api.v1
 
-	mv build/openai/python-fastapi/src/timestep/api/openai/v1 src/timestep/api/openai/v1
+	mv build/openai/python-flask/api/v1 src/timestep/pipelines/machine_learning/api/v1
 
 build:
 	$$SHELL ./scripts/build.sh

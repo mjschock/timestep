@@ -1,7 +1,5 @@
 envs:
   # GGML_CUDA_ENABLE_UNIFIED_MEMORY: 1
-  # HF_FILE: qwen2-vl-2b-instruct-q4_k_m.gguf
-  # HF_REPO: mjschock/Qwen2-VL-2B-Instruct-Q4_K_M-GGUF
   MLFLOW_ENABLE_SYSTEM_METRICS_LOGGING: true
   MLFLOW_TRACKING_URI: http://mlflow-tracking.mlflow.svc.cluster.local:80
   MLFLOW_TRACKING_USERNAME: user
@@ -17,6 +15,7 @@ resources:
   accelerators: GTX-1050-TI:1
   cloud: kubernetes
   cpus: 2+
+  # disk_size: 10 # _DEFAULT_DISK_SIZE_GB = 256
   image_id: docker:ros:jazzy-ros-base-noble
   memory: 2+
   ports: 8000
@@ -34,11 +33,8 @@ run: |
   nvidia-smi
 
   # python train.py --output-dir outputs
-  # python deploy.py
-  # serve build serve:app -o config.yaml
-  # cat config.yaml
-  # serve run serve:app
   RAY_PICKLE_VERBOSE_DEBUG='2' serve run llm:build_app model_name="HuggingFaceTB/SmolVLM-Instruct"
+  # serve run llm:build_app model_name="/root/sky_workdir/lora_model"
 
 setup: |
   set -ex # Echo commands and exit on first error

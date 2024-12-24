@@ -1,23 +1,11 @@
-from openai import OpenAI
+from openai import OpenAI, Stream
+from openai.types.chat.chat_completion import ChatCompletion
+from openai.types.chat.chat_completion_chunk import ChatCompletionChunk
 
-# Note: Ray Serve doesn't support all OpenAI client arguments and may ignore some.
 client = OpenAI(
-    # Replace the URL if deploying your app remotely
-    # (e.g., on Anyscale or KubeRay).
-    base_url="http://localhost:8000/v1",
     api_key="NOT A REAL KEY",
+    base_url="http://localhost:8000/v1",
 )
-
-# messages = [
-#     {
-#         "role": "user",
-#         "content": [
-#             {"type": "image"},
-#             {"type": "image"},
-#             {"type": "text", "text": "Can you describe the two images?"}
-#         ]
-#     },
-# ]
 
 messages=[
     {
@@ -34,21 +22,37 @@ messages=[
     }
 ]
 
-chat_completion = client.chat.completions.create(
-    model="HuggingFaceTB/SmolVLM-Instruct",
-    # messages=[
-    #     {"role": "system", "content": "You are a helpful assistant."},
-    #     {
-    #         "role": "user",
-    #         "content": "What are some highly rated restaurants in San Francisco?'",
-    #     },
-    # ],
-    messages=messages,
-    # temperature=0.01,
-    stream=True,
-    max_tokens=500,
-)
+def create_chat_completion(messages, stream=False) -> ChatCompletion | Stream[ChatCompletionChunk]:
+    chat_completion: ChatCompletion | Stream[ChatCompletionChunk] = client.chat.completions.create(
+        max_completion_tokens=20,
+        messages=messages,
+        model="HuggingFaceTB/SmolVLM-Instruct",
+        stream=stream,
+    )
 
-for chat in chat_completion:
-    if chat.choices[0].delta.content is not None:
-        print(chat.choices[0].delta.content, end="")
+    return chat_completion
+
+# print('chat_completion:')
+# print(chat_completion)
+
+# if isinstance(chat_completion, Stream):
+#     for chunk in chat_completion:
+#         if chunk.choices[0].delta.content is not None:
+#             print(chunk.choices[0].delta.content, end="")
+
+# else:
+#     print(chat_completion.choices[0].message.content)
+
+for stream in [False, True]:
+    print(f"stream={stream}")
+    chat_completion = create_chat_completion(messages, stream=stream)
+
+    if isinstance(chat_completion, Stream):
+        for chunk in chat_completion:
+            if chunk.choices[0].delta.content is not None:
+                print(chunk.choices[0].delta.content, end="")
+
+    else:
+        print(chat_completion.choices[0].message.content)
+
+    print()

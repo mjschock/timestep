@@ -1,33 +1,12 @@
 import argparse
-import gc
-import json
 import os
-import subprocess
-import time
-from typing import List
 
-# from openai import OpenAI
 import mlflow
 import torch
-from datachain import Column, DataChain
 from datasets import load_dataset
 from mlflow import MlflowClient
-from mlflow.entities.span import SpanType
-from mlflow.types.llm import (
-    ChatChoice,
-    ChatCompletionRequest,
-    ChatCompletionResponse,
-    ChatMessage,
-    ChatParams,
-    FunctionToolCallArguments,
-    FunctionToolDefinition,
-    ParamProperty,
-    ToolCall,
-    ToolParamsSchema,
-)
-from transformers import TrainingArguments
 from trl import SFTConfig, SFTTrainer
-from unsloth import FastLanguageModel, FastVisionModel, is_bfloat16_supported
+from unsloth import FastVisionModel, is_bfloat16_supported
 from unsloth.trainer import UnslothVisionDataCollator
 
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
@@ -37,9 +16,6 @@ print(f"MLFLOW_TRACKING_URI: {MLFLOW_TRACKING_URI}")
 # PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
-# def main():
-# mlflow.set_tracking_uri("sqlite:///mlruns.db")
-# mlflow.set_tracking_uri("mlflow-release-tracking.default.svc.cluster.local:80")
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 # mlflow.transformers.autolog()
 mlflow.autolog(
