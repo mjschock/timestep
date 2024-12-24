@@ -294,10 +294,7 @@ class VLLMDeployment:
 
         choices: List[ChatCompletionChoice] = []
 
-        # for i in range(len(batch_decoded_outputs)):
         for i, response in enumerate(batch_decoded_outputs):
-            # response = batch_decoded_outputs[i]
-
             # try:
             # response = json.loads(response)
 
