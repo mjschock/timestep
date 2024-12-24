@@ -22,37 +22,31 @@ messages=[
     }
 ]
 
-def create_chat_completion(messages, stream=False) -> ChatCompletion | Stream[ChatCompletionChunk]:
-    chat_completion: ChatCompletion | Stream[ChatCompletionChunk] = client.chat.completions.create(
-        max_completion_tokens=20,
-        messages=messages,
-        model="HuggingFaceTB/SmolVLM-Instruct",
-        stream=stream,
-    )
+max_completion_tokens=20
+model="HuggingFaceTB/SmolVLM-Instruct"
 
-    return chat_completion
+print('stream=False')
 
-# print('chat_completion:')
-# print(chat_completion)
+chat_completion: ChatCompletion = client.chat.completions.create(
+    max_completion_tokens=max_completion_tokens,
+    messages=messages,
+    model=model,
+    stream=False,
+)
 
-# if isinstance(chat_completion, Stream):
-#     for chunk in chat_completion:
-#         if chunk.choices[0].delta.content is not None:
-#             print(chunk.choices[0].delta.content, end="")
+print(chat_completion.choices[0].message.content)
 
-# else:
-#     print(chat_completion.choices[0].message.content)
+print('stream=True')
 
-for stream in [False, True]:
-    print(f"stream={stream}")
-    chat_completion = create_chat_completion(messages, stream=stream)
+chat_completion_chunks: Stream[ChatCompletionChunk] = client.chat.completions.create(
+    max_completion_tokens=max_completion_tokens,
+    messages=messages,
+    model=model,
+    stream=True,
+)
 
-    if isinstance(chat_completion, Stream):
-        for chunk in chat_completion:
-            if chunk.choices[0].delta.content is not None:
-                print(chunk.choices[0].delta.content, end="")
+for chunk in chat_completion_chunks:
+    if chunk.choices[0].delta.content is not None:
+        print(chunk.choices[0].delta.content, end="")
 
-    else:
-        print(chat_completion.choices[0].message.content)
-
-    print()
+print()

@@ -151,11 +151,8 @@ class VLLMDeployment:
             add_generation_prompt=True,
             conversation=messages,
             # documents=documents,
-            # return_tensors="pt",
-            # tokenize=True,
-            # tokenize=False,
-            # tools=tools,
-            # ).to(self.model.device)
+            temperature=temperature,
+            tools=tools,
         )
 
         print("prompt:")
@@ -166,6 +163,7 @@ class VLLMDeployment:
         input_ids = inputs.input_ids
 
         class GeneratorThread(Thread):
+            "Thread to generate completions in the background."
             def __init__(self, model, **generation_kwargs):
                 super().__init__()
 
@@ -202,7 +200,7 @@ class VLLMDeployment:
                     print("Warning: Exception in GeneratorThread")
                     self.generated_ids = []
 
-            def join(self):
+            def join(self, timeout=None):
                 super().join()
 
                 return self.generated_ids
@@ -274,7 +272,7 @@ class VLLMDeployment:
                         i += 1
 
                 except asyncio.CancelledError as e:
-                    print(f"Disconnected from client (via refresh/close)")
+                    print("Disconnected from client (via refresh/close)")
                     # Do any other cleanup, if any
                     raise e
                 except Exception as e:
@@ -283,87 +281,85 @@ class VLLMDeployment:
 
             return EventSourceResponse(event_publisher())
 
-        else:
-            generated_ids = thread.join()
-            # input_length = inputs.shape[1]
-            input_length = input_ids.shape[1]
+        generated_ids = thread.join()
+        # input_length = inputs.shape[1]
+        input_length = input_ids.shape[1]
 
-            batch_decoded_outputs = self.processor.batch_decode(
-                # generated_ids,
-                generated_ids[:, input_length:],
-                skip_special_tokens=True,
+        batch_decoded_outputs = self.processor.batch_decode(
+            # generated_ids,
+            generated_ids[:, input_length:],
+            skip_special_tokens=True,
+        )
+
+        choices: List[ChatCompletionChoice] = []
+
+        for i in range(len(batch_decoded_outputs)):
+            response = batch_decoded_outputs[i]
+
+            # try:
+            # response = json.loads(response)
+
+            #         finish_reason: str = response.get("finish_reason")
+            #         tool_calls_json = response.get("tool_calls")
+            #         tool_calls: List[ToolCall] = []
+
+            #         for tool_call_json in tool_calls_json:
+            #             tool_call = ToolCall(
+            #                 function=FunctionToolCallArguments(
+            #                     arguments=tool_call_json.get("arguments"),
+            #                     name=tool_call_json.get("name"),
+            #                 ),
+            #                 id=tool_call_json.get("id"),
+            #                 type="function",
+            #             )
+
+            #             tool_calls.append(tool_call)
+
+            #         message: ChatMessage = ChatMessage(
+            #             role="assistant",
+            #             tool_calls=tool_calls,
+            #         )
+
+            #     except json.JSONDecodeError:
+            #         finish_reason: str = "stop"
+            #         message: ChatMessage = ChatMessage(
+            #             role="assistant",
+            #             content=response,
+            #         )
+
+            message = ChatCompletionMessage(
+                audio=None,
+                content=response,
+                refusal=None,
+                role="assistant",
+                tool_calls=None,
             )
 
-            choices: List[ChatCompletionChoice] = []
-
-            for i in range(len(batch_decoded_outputs)):
-                response = batch_decoded_outputs[i]
-
-                # try:
-                # response = json.loads(response)
-
-                #         finish_reason: str = response.get("finish_reason")
-                #         tool_calls_json = response.get("tool_calls")
-                #         tool_calls: List[ToolCall] = []
-
-                #         for tool_call_json in tool_calls_json:
-                #             tool_call = ToolCall(
-                #                 function=FunctionToolCallArguments(
-                #                     arguments=tool_call_json.get("arguments"),
-                #                     name=tool_call_json.get("name"),
-                #                 ),
-                #                 id=tool_call_json.get("id"),
-                #                 type="function",
-                #             )
-
-                #             tool_calls.append(tool_call)
-
-                #         message: ChatMessage = ChatMessage(
-                #             role="assistant",
-                #             tool_calls=tool_calls,
-                #         )
-
-                #     except json.JSONDecodeError:
-                #         finish_reason: str = "stop"
-                #         message: ChatMessage = ChatMessage(
-                #             role="assistant",
-                #             content=response,
-                #         )
-
-                message = ChatCompletionMessage(
-                    audio=None,
-                    content=response,
-                    refusal=None,
-                    role="assistant",
-                    tool_calls=None,
+            choices.append(
+                ChatCompletionChoice(
+                    index=i,
+                    finish_reason="stop",
+                    logprobs=None,
+                    message=message,
                 )
-
-                choices.append(
-                    ChatCompletionChoice(
-                        index=i,
-                        finish_reason="stop",
-                        logprobs=None,
-                        message=message,
-                    )
-                )
-
-            chat_completion = ChatCompletion(
-                choices=choices,
-                created=int(time.time()),
-                id="1",
-                model=model_name,
-                object="chat.completion",
-                service_tier=None,
-                system_fingerprint=None,
-                usage=None,
             )
 
-            return chat_completion.model_dump(mode="json")
+        chat_completion = ChatCompletion(
+            choices=choices,
+            created=int(time.time()),
+            id="1",
+            model=model_name,
+            object="chat.completion",
+            service_tier=None,
+            system_fingerprint=None,
+            usage=None,
+        )
+
+        return chat_completion.model_dump(mode="json")
 
 
 def build_app(cli_args: Dict[str, str]) -> serve.Application:
     "Builds the Serve app based on CLI arguments."
-
     return VLLMDeployment.options().bind(
         cli_args.get("model_name"),
     )
