@@ -163,7 +163,8 @@ class VLLMDeployment:
         input_ids = inputs.input_ids
 
         class GeneratorThread(Thread):
-            "Thread to generate completions in the background."
+            """Thread to generate completions in the background."""
+
             def __init__(self, model, **generation_kwargs):
                 super().__init__()
 
@@ -293,8 +294,9 @@ class VLLMDeployment:
 
         choices: List[ChatCompletionChoice] = []
 
-        for i in range(len(batch_decoded_outputs)):
-            response = batch_decoded_outputs[i]
+        # for i in range(len(batch_decoded_outputs)):
+        for i, response in enumerate(batch_decoded_outputs):
+            # response = batch_decoded_outputs[i]
 
             # try:
             # response = json.loads(response)
@@ -359,7 +361,7 @@ class VLLMDeployment:
 
 
 def build_app(cli_args: Dict[str, str]) -> serve.Application:
-    "Builds the Serve app based on CLI arguments."
+    """Builds the Serve app based on CLI arguments."""
     return VLLMDeployment.options().bind(
         cli_args.get("model_name"),
     )

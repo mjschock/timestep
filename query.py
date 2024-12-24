@@ -22,8 +22,8 @@ messages=[
     }
 ]
 
-max_completion_tokens=20
-model="HuggingFaceTB/SmolVLM-Instruct"
+max_completion_tokens = 20
+model = "HuggingFaceTB/SmolVLM-Instruct"
 
 print('stream=False')
 
