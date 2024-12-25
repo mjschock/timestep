@@ -93,6 +93,10 @@ class VLLMDeployment:
             model_name=self.model_name,
         )
 
+        with open("chat_template.txt", "r") as f:
+            processor.chat_template = f.read()
+            processor.tokenizer.chat_template = processor.chat_template
+
         FastVisionModel.for_inference(model)  # Enable native 2x faster inference
 
         self.model = model
@@ -136,13 +140,15 @@ class VLLMDeployment:
 
         for message in messages:
             for content in message["content"]:
-                if content["type"] == "image_url":
+                if "type" in content and content["type"] == "image_url":
                     image_url = content["image_url"]["url"]
                     image = load_image(image_url)
                     images.append(image)
 
                     content["type"] = "image"
                     del content["image_url"]
+
+        images = images if images else None
 
         if model_name != self.model_name:
             return JSONResponse(content={"error": "Model not found"}, status_code=404)
@@ -157,6 +163,9 @@ class VLLMDeployment:
 
         print("prompt:")
         print(prompt)
+
+        print("images:")
+        print(images)
 
         inputs = self.processor(text=prompt, images=images, return_tensors="pt")
         inputs = inputs.to(self.model.device)

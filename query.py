@@ -24,6 +24,8 @@ messages=[
 
 max_completion_tokens = 20
 model = "HuggingFaceTB/SmolVLM-Instruct"
+# model = "/root/sky_workdir/lora_model"
+# model = "mjschock/SmolVLM-Instruct"
 
 print('stream=False')
 

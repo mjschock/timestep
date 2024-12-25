@@ -1,5 +1,6 @@
 import argparse
 import os
+from pprint import pprint
 
 import mlflow
 import torch
@@ -112,8 +113,8 @@ model, processor = FastVisionModel.from_pretrained(
     use_gradient_checkpointing="unsloth",  # True or "unsloth" for long context
 )
 
-print("model:")
-print(model)
+# print("model:")
+# print(model)
 
 
 def print_nparams(model):
@@ -181,21 +182,31 @@ tool_response_template = """
 }
 """
 
+content_template = """{% if message['content'] is string %}{{message['content']}}{% else %}{% for line in message['content'] %}{% if line['type'] == 'text' %}{{line['text']}}{% elif line['type'] in ['image'] %}{{ '<image>' }}{% endif %}{% endfor %}{% endif %}"""
+
 # if pretrained_model_name == "TinyLlama-1.1B-Chat-v1.0":
 # start_header_id = "<|"
 # end_header_id = "|>"
-start_header_id = "<|im_start|>"  # https://github.com/Mozilla-Ocho/llamafile/blob/a8fd4d28c3d2259c98af7035bcdda1a68af6f62c/llama.cpp/server/server.cpp#L492
-end_header_id = ""
+# start_header_id = "<|im_start|>"  # https://github.com/Mozilla-Ocho/llamafile/blob/a8fd4d28c3d2259c98af7035bcdda1a68af6f62c/llama.cpp/server/server.cpp#L492
+start_header_id = ""
+# end_header_id = ":" + "' '"
+end_header_id = ":"
 
 # else:
 #   start_header_id = "<|start_header_id|>"
 #   end_header_id = "<|end_header_id|>"
 
 role_header_template = (
-    start_header_id + "{{ message.role }}" + end_header_id + "{{ '\n' }}"
+    # start_header_id + "{{ message.role }}" + end_header_id + "{{ '\n' }}"
+    start_header_id
+    + "{{ message.role | capitalize }}"
+    + end_header_id
 )
 assistant_generation_role_header_template = (
-    start_header_id + "assistant" + end_header_id + "{{ '\n' }}"
+    # start_header_id + "assistant" + end_header_id + "{{ '\n' }}"
+    start_header_id
+    + "Assistant"
+    + end_header_id
 )
 
 # Influenced by:
@@ -211,11 +222,12 @@ chat_template = (
     "{%- set config = namespace(has_system_message=false, has_tools=false) -%}"
     "{%- set system_messages = messages | selectattr('role', 'equalto', 'system') | list -%}"
     "{%- set config.has_system_message = system_messages | length > 0 -%}"
-    "{%- set config.has_tools = tools is defined and tools | length > 0 -%}"
+    # "{%- set config.has_tools = tools is defined and tools | length > 0 -%}"
+    "{%- set config.has_tools = tools is not none and tools | length > 0 -%}"
     # Ensure system message exists
-    "{%- if not config.has_system_message -%}"
-    f'{{%- set messages = [{{ "content": "{DEFAULT_SYSTEM_MESSAGE["content"]}", "role": "{DEFAULT_SYSTEM_MESSAGE["role"]}" }}] + messages -%}}'
-    "{%- endif -%}"
+    # "{%- if not config.has_system_message -%}"
+    # f'{{%- set messages = [{{ "content": "{DEFAULT_SYSTEM_MESSAGE["content"]}", "role": "{DEFAULT_SYSTEM_MESSAGE["role"]}" }}] + messages -%}}'
+    # "{%- endif -%}"
     # Process messages
     "{%- for message in messages -%}"
     # "<|{{ message.role }}|>{{ '\n' }}" # "<|start_header_id|>{{ message.role }}<|end_header_id|>{{ '\n' }}"
@@ -223,7 +235,13 @@ chat_template = (
     # start_header_id + "{{ message.role }}" + end_header_id + "{{ '\n' }}"
     # TODO: add bos_token if first message?
     "{% if loop.first %}{{ bos_token }}{% endif %}"
+    # f"{role_header_template}" + "{{ ' ' }}"
+    "{% if message.content is not string and message.content[0]['type'] in ['image'] %}"
+    # "{% if message.content is list and message.content[0]['type'] in ['image', 'image_url'] %}"
     f"{role_header_template}"
+    "{%- else -%}"
+    f"{role_header_template}" + "{{ ' ' }}"
+    "{%- endif -%}"
     # System message handling
     "{%- if message.role == 'system' -%}"
     "{{ message.content }}"
@@ -232,12 +250,16 @@ chat_template = (
     f"{tools_template}"
     "{%- endif -%}"
     # "{{ eos_token }}{{ '\n' }}" # <|eot_id|>
-    "<|im_end|>{{ '\n' }}"
+    # "<|im_end|>{{ '\n' }}"
+    "<end_of_utterance>{{ '\n' }}"
     "{%- endif -%}"
     # User message handling
     "{%- if message.role == 'user' -%}"
     # "{{ message.content }}{{ eos_token }}{{ '\n' }}"
-    "{{ message.content }}<|im_end|>{{ '\n' }}"
+    # "{{ message.content }}<|im_end|>{{ '\n' }}"
+    # "{{ message.content }}<end_of_utterance>{{ '\n' }}"
+    # f"{content_template}<end_of_utterance>{{ '\n' }}"
+    f"{content_template}" + "<end_of_utterance>{{ '\n' }}"
     "{%- endif -%}"
     # Assistant message handling
     "{%- if message.role == 'assistant' -%}"
@@ -249,34 +271,132 @@ chat_template = (
     "{%- endif -%}"
     "{% endgeneration %}"
     # "{{ eos_token }}{{ '\n' }}"
-    "<|im_end|>{{ '\n' }}"
+    # "<|im_end|>{{ '\n' }}"
+    "<end_of_utterance>{{ '\n' }}"
     "{%- endif -%}"
     # Tool message handling
     "{%- if message.role == 'tool' -%}"
     f"{tool_response_template}"
     # "{{ eos_token }}{{ '\n' }}"
-    "<|im_end|>{{ '\n' }}"
+    # "<|im_end|>{{ '\n' }}"
+    "<end_of_utterance>{{ '\n' }}"
     "{%- endif -%}"
     "{%- endfor -%}"
     # Generation prompt
     "{%- if add_generation_prompt -%}"
     # "<|assistant|>{{ '\n' }}" # <|start_header_id|>assistant<|end_header_id|>
+    # f"{assistant_generation_role_header_template}" + "{{ ' ' }}"
     f"{assistant_generation_role_header_template}"
     "{%- endif -%}"
 )
+
+# chat_template_with_tool_calls = chat_template
 
 # {
 #   "chat_template": "<|im_start|>{% for message in messages %}{{message['role'] | capitalize}}{% if message['content'][0]['type'] == 'image' %}{{':'}}{% else %}{{': '}}{% endif %}{% for line in message['content'] %}{% if line['type'] == 'text' %}{{line['text']}}{% elif line['type'] == 'image' %}{{ '<image>' }}{% endif %}{% endfor %}<end_of_utterance>\n{% endfor %}{% if add_generation_prompt %}{{ 'Assistant:' }}{% endif %}"
 # }
 
-print("type(processor):")
-print(type(processor))
+# chat_template = "{% for message in messages %}{% if loop.first and messages[0]['role'] != 'system' %}{{ '<|im_start|>system\nYou are a helpful AI assistant<|im_end|>\n' }}{% endif %}<|im_start|>{{message['role'] | capitalize}}{% if message['content'] is string %}{{': '}}{{message['content']}}{% else %}{% if message['content'][0]['type'] == 'image' %}{{':'}}{% else %}{{': '}}{% endif %}{% for line in message['content'] %}{% if line['type'] == 'text' %}{{line['text']}}{% elif line['type'] == 'image' %}{{ '<image>' }}{% endif %}{% endfor %}{% endif %}<end_of_utterance>\n{% endfor %}{% if add_generation_prompt %}{{ 'Assistant: ' }}{% endif %}"
+# chat_template = "{% for message in messages %}{% if loop.first and messages[0]['role'] != 'system' %}{{ '<|im_start|>System: You are a helpful AI assistant.<end_of_utterance>\n' }}{% endif %}<|im_start|>{{message['role'] | capitalize}}{% if message['content'] is string %}{{': '}}{{message['content']}}{% else %}{% if message['content'][0]['type'] == 'image' %}{{':'}}{% else %}{{': '}}{% endif %}{% for line in message['content'] %}{% if line['type'] == 'text' %}{{line['text']}}{% elif line['type'] == 'image' %}{{ '<image>' }}{% endif %}{% endfor %}{% endif %}<end_of_utterance>\n{% endfor %}{% if add_generation_prompt %}{{ 'Assistant: ' }}{% endif %}"
+# chat_template = "<|im_start|>{% for message in messages %}{% if loop.first and messages[0]['role'] != 'system' %}{{ 'System: You are a helpful AI assistant.<end_of_utterance>\n' }}{% endif %}{{message['role'] | capitalize}}{% if message['content'] is string %}{{': '}}{{message['content']}}{% else %}{% if message['content'][0]['type'] in ['image', 'image_url'] %}{{':'}}{% else %}{{': '}}{% endif %}{% for line in message['content'] %}{% if line['type'] == 'text' %}{{line['text']}}{% elif line['type'] in ['image', 'image_url'] %}{{ '<image>' }}{% endif %}{% endfor %}{% endif %}<end_of_utterance>\n{% endfor %}{% if add_generation_prompt %}{{ 'Assistant: ' }}{% endif %}"
 
-print("processor.chat_template (before):")
-print(processor.chat_template)
+messages = []
 
-print("processor.tokenizer.chat_template (before):")
-print(processor.tokenizer.chat_template)
+# messages += [
+#     {
+#         "role": "user",
+#         "content": [
+#             {"type": "image"},
+#             {"type": "image"},
+#             {"type": "text", "text": "Can you describe the two images?"}
+#         ]
+#     },
+# ]
+
+messages += [
+    {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "What's in this image?"},
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
+                },
+            },
+        ],
+    }
+]
+
+# messages += [{'content': 'Welcome to the chat! Please enter your name to join.', 'role': 'system'}, {'content': 'Hello! How can I help you today?', 'role': 'assistant'}, {'content': "What's 2+2?", 'role': 'user'}]
+
+
+print("messages:")
+pprint(messages)
+
+# Show example of prompt generated from chat_template before setting it
+prompt_before = processor.apply_chat_template(
+    add_generation_prompt=True,
+    conversation=messages,
+    # documents=documents,
+    # tools=tools,
+)
+
+print("=========================================")
+print("\nprompt (before):\n")
+print(prompt_before)
+
+# Set the chat_template
+processor.chat_template = chat_template
+processor.tokenizer.chat_template = chat_template
+
+# Show the same example of prompt generated from chat_template after setting it
+
+prompt = processor.apply_chat_template(
+    add_generation_prompt=True,
+    conversation=messages,
+    # documents=documents,
+    # tools=tools,
+)
+
+print("\nprompt (after):\n")
+print(prompt)
+
+# processor.chat_template = chat_template_with_tool_calls
+# processor.tokenizer.chat_template = chat_template_with_tool_calls
+
+# prompt = processor.apply_chat_template(
+#     add_generation_prompt=True,
+#     conversation=messages,
+#     # documents=documents,
+#     # tools=tools,
+# )
+
+# print("\nprompt (with tool calls):\n")
+# print(prompt)
+print("=========================================")
+print()
+
+assert prompt == prompt_before, f"{prompt} != {prompt_before}"
+
+# raise SystemExit
+
+# print("type(processor):")
+# print(type(processor))
+
+# print("processor.chat_template (before):")
+# print(processor.chat_template)
+
+# print("processor.tokenizer.chat_template (before):")
+# print(processor.tokenizer.chat_template)
+
+assert (
+    processor.chat_template == processor.tokenizer.chat_template
+), f"{processor.chat_template} != {processor.tokenizer.chat_template}"
+
+# Save the chat_template to file
+with open("chat_template.txt", "w") as f:
+    f.write(processor.chat_template)
 
 # processor.chat_template = chat_template
 
@@ -349,6 +469,12 @@ print(model.generation_config)
 #     use_gradient_checkpointing="unsloth",  # True or "unsloth" for very long context
 #     use_rslora=False,  # We support rank stabilized LoRA
 # )
+
+# model.push_to_hub("mjschock/SmolVLM-Instruct", token=os.getenv("HF_TOKEN"))
+# processor.push_to_hub("mjschock/SmolVLM-Instruct", token=os.getenv("HF_TOKEN"))
+# model.push_to_hub_merged("mjschock/SmolVLM-Instruct", processor, save_method="merged_16bit", token=os.getenv("HF_TOKEN"))
+
+raise SystemExit
 
 model = FastVisionModel.get_peft_model(
     model,

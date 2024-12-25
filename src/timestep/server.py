@@ -20,7 +20,8 @@ default_hf_repo_id = settings.default_hf_repo_id
 
 client = AsyncOpenAI(
     api_key="sk-no-key-required",
-    base_url="http://localhost:8080/v1",
+    # base_url="http://localhost:8080/v1",
+    base_url="http://localhost:8000/v1",
 )
 
 
@@ -184,6 +185,15 @@ async def root_main(page: ft.Page):
             "Assistant",
             "System",
         ):
+            messages = [
+                chat_message.to_dict()
+                for chat_message in chat.controls
+                if type(chat_message) == ChatMessage
+            ]
+
+            print("messages:")
+            print(messages)
+
             assistant_message = ChatMessage(
                 Message(
                     user_name="Assistant",
@@ -195,26 +205,20 @@ async def root_main(page: ft.Page):
             chat.controls.append(assistant_message)
             page.update()
 
-            messages = [
-                chat_message.to_dict()
-                for chat_message in chat.controls
-                if type(chat_message) == ChatMessage
-            ]
-
-            print("messages:")
-            print(messages)
-
             stream = await client.chat.completions.create(
-                max_tokens=100,
+                # max_tokens=100,
+                max_completion_tokens=100,
                 # messages=[{"role": "user", "content": "Say this is a test"}],
                 messages=messages,
-                model="LLaMA_CPP",
+                # model="LLaMA_CPP",
+                model="HuggingFaceTB/SmolVLM-Instruct",
                 stop=[
-                    "<|assistant|>",
-                    "<|endoftext|>",
-                    "<|system|>",
-                    "<|user|>",
-                    "</s>",
+                    # "<|assistant|>",
+                    # "<|endoftext|>",
+                    # "<|system|>",
+                    # "<|user|>",
+                    # "</s>",
+                    # "<end_of_utterance>",
                 ],
                 stream=True,
             )
@@ -368,7 +372,8 @@ def main(*args, **kwargs):
         log_level="info",
         loop="asyncio",
         # port=8000,
-        port=kwargs.get("port", 8000),
+        # port=kwargs.get("port", 8000),
+        port=kwargs.get("port", 8080),
         # reload=True,
         reload=kwargs.get("dev", False),
         reload_dirs=[
