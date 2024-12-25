@@ -18,7 +18,6 @@ from pydantic import TypeAdapter
 from ray import serve
 from sse_starlette import EventSourceResponse
 from starlette.responses import JSONResponse
-
 from transformers.generation.streamers import AsyncTextIteratorStreamer
 from transformers.image_utils import load_image
 from unsloth import FastVisionModel
@@ -77,7 +76,7 @@ app = FastAPI()
     ray_actor_options={"num_gpus": 1},
 )
 @serve.ingress(app)
-class VLLMDeployment:
+class ModelDeployment:
     def __init__(
         self,
         model_name: str,
@@ -154,15 +153,8 @@ class VLLMDeployment:
             add_generation_prompt=True,
             conversation=messages,
             # documents=documents,
-            temperature=temperature,
             tools=tools,
         )
-
-        print("prompt:")
-        print(prompt)
-
-        print("images:")
-        print(images)
 
         inputs = self.processor(text=prompt, images=images, return_tensors="pt")
         inputs = inputs.to(self.model.device)
@@ -192,10 +184,6 @@ class VLLMDeployment:
                         print(e)
                         print("Disabling dynamo...")
 
-                        # TODO: Use CompileConfig to disable dynamo?
-                        # https://huggingface.co/docs/transformers/v4.47.1/en/internal/generation_utils#transformers.CompileConfig
-                        # compile_config = CompileConfig(dynamic=True)
-                        # If this works, I can skip this GeneratorThread class and just call thread = Thread(target=model.generate, kwargs=generation_kwargs)
                         torch._dynamo.config.disable = True
 
                         self.generated_ids = self.model.generate(
@@ -212,14 +200,13 @@ class VLLMDeployment:
 
                 return self.generated_ids
 
+        decode_kwargs = dict(skip_special_tokens=True)
+
         streamer = (
             AsyncTextIteratorStreamer(
                 self.processor,
-                # decode_kwargs=dict(skip_special_tokens=True), # TODO: Why isn't this working?
-                decode_kwargs={
-                    "skip_special_tokens": True,
-                },
                 skip_prompt=True,
+                **decode_kwargs,
             )
             if stream
             else None
@@ -229,6 +216,7 @@ class VLLMDeployment:
             **inputs,
             max_new_tokens=max_new_tokens,
             streamer=streamer,
+            temperature=temperature,
             use_cache=True,
         )
 
@@ -277,8 +265,8 @@ class VLLMDeployment:
 
                 except asyncio.CancelledError as e:
                     print("Disconnected from client (via refresh/close)")
-                    # Do any other cleanup, if any
                     raise e
+
                 except Exception as e:
                     print(f"Exception: {e}")
                     raise e
@@ -360,6 +348,6 @@ class VLLMDeployment:
 
 def build_app(cli_args: Dict[str, str]) -> serve.Application:
     """Builds the Serve app based on CLI arguments."""
-    return VLLMDeployment.options().bind(
+    return ModelDeployment.options().bind(
         cli_args.get("model_name"),
     )
