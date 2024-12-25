@@ -32,9 +32,21 @@ run: |
   nvidia-smi
 
   python train.py --output-dir outputs
-  serve run llm:build_app model_name="HuggingFaceTB/SmolVLM-Instruct"
-  # serve run llm:build_app model_name="/root/sky_workdir/lora_model"
-  # serve run llm:build_app model_name="mjschock/SmolVLM-Instruct"
+  serve run serve:build_app model_name="HuggingFaceTB/SmolVLM-Instruct"
+  # serve run serve:build_app model_name="/root/sky_workdir/lora_model"
+  # serve run serve:build_app model_name="mjschock/SmolVLM-Instruct"
+
+# service:
+#   replicas: 1
+#   readiness_probe:
+#     initial_delay_seconds: 3600 # 60 minutes
+#     path: /v1/chat/completions
+#     post_data:
+#       model: $MODEL_ID
+#       messages:
+#         - role: user
+#           content: Hello! What is your name?
+#       max_tokens: 1
 
 setup: |
   set -ex # Echo commands and exit on first error

@@ -1,5 +1,4 @@
 import asyncio
-import json
 import logging
 import os
 import time
@@ -7,7 +6,6 @@ from pprint import pprint
 from threading import Thread
 from typing import Any, Dict, List
 
-import torch
 from fastapi import FastAPI, Request
 from openai.types.chat.chat_completion import ChatCompletion
 from openai.types.chat.chat_completion import Choice as ChatCompletionChoice
@@ -20,9 +18,8 @@ from pydantic import TypeAdapter
 from ray import serve
 from sse_starlette import EventSourceResponse
 from starlette.responses import JSONResponse
-from transformers import TextIteratorStreamer
 
-# from transformers.generation.streamers import AsyncTextIteratorStreamer
+from transformers.generation.streamers import AsyncTextIteratorStreamer
 from transformers.image_utils import load_image
 from unsloth import FastVisionModel
 
@@ -216,8 +213,7 @@ class VLLMDeployment:
                 return self.generated_ids
 
         streamer = (
-            TextIteratorStreamer(  # TODO: Switch TextIteratorStreamer to AsyncTextIteratorStreamer
-                # AsyncTextIteratorStreamer(
+            AsyncTextIteratorStreamer(
                 self.processor,
                 # decode_kwargs=dict(skip_special_tokens=True), # TODO: Why isn't this working?
                 decode_kwargs={
@@ -230,7 +226,6 @@ class VLLMDeployment:
         )
 
         generation_kwargs = dict(
-            # inputs, max_new_tokens=max_new_tokens, streamer=streamer, use_cache=True
             **inputs,
             max_new_tokens=max_new_tokens,
             streamer=streamer,
@@ -246,8 +241,7 @@ class VLLMDeployment:
                 i = 0
 
                 try:
-                    for new_text in streamer:
-                        # async for new_text in streamer:
+                    async for new_text in streamer:
                         choices: List[ChatCompletionChunkChoice] = [
                             ChatCompletionChunkChoice(
                                 _request_id=None,
@@ -292,11 +286,9 @@ class VLLMDeployment:
             return EventSourceResponse(event_publisher())
 
         generated_ids = thread.join()
-        # input_length = inputs.shape[1]
         input_length = input_ids.shape[1]
 
         batch_decoded_outputs = self.processor.batch_decode(
-            # generated_ids,
             generated_ids[:, input_length:],
             skip_special_tokens=True,
         )

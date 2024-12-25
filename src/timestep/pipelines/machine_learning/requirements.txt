@@ -1,3 +1,4 @@
+bitsandbytes
 mlflow
 nvidia-ml-py
 openai
@@ -8,5 +9,5 @@ ray[serve]
 sse-starlette
 torchvision
 git+https://github.com/huggingface/transformers.git@24c91f095fec4d90fa6901ef17146b4f4c21d0a3
-git+https://github.com/unslothai/unsloth.git@a2407835534747d2421f58cbdeeb5a49482e7235
-git+https://github.com/unslothai/unsloth-zoo.git@3db4380926ce226677c2dfdbb5deef5e8c7ee44b
+unsloth==2024.12.9
+unsloth-zoo==2024.12.4
