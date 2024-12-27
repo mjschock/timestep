@@ -236,7 +236,7 @@ class ModelDeployment:
 
                 try:
                     async for new_text in streamer:
-                        print('new_text:')
+                        print("new_text:")
                         print(new_text)
 
                         choices: List[ChatCompletionChunkChoice] = [

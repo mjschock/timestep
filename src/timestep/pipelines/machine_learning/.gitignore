@@ -1,0 +1,7 @@
+.venv
+.vscode
+lora_model
+mlruns
+outputs
+unsloth_compiled_cache
+chat_template.txt

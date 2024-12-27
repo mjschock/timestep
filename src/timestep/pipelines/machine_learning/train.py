@@ -1,10 +1,12 @@
 import argparse
 import os
 from pprint import pprint
+from typing import Dict, List
 
 import mlflow
 import torch
-from datasets import load_dataset
+from datasets import interleave_datasets, load_dataset
+from datasets.features import Features, Image, Sequence, Value
 from mlflow import MlflowClient
 from trl import SFTConfig, SFTTrainer
 from unsloth import FastVisionModel, is_bfloat16_supported
@@ -62,13 +64,23 @@ max_seq_length = 2048  # Supports RoPE Scaling interally, so choose any!
 # dataset = load_dataset("unsloth/llava-instruct-mix-vsft-mini", split = "train[:1%]")
 # dataset = load_dataset("unsloth/LaTeX_OCR", split = "train")
 # dataset = load_dataset("unsloth/LaTeX_OCR", split="train[:1%]")
-dataset = load_dataset("unsloth/LaTeX_OCR", split="train", streaming=True)
+# dataset = load_dataset("unsloth/LaTeX_OCR", split="train", streaming=True)
 # dataset = load_dataset("HuggingFaceH4/llava-instruct-mix-vsft", split="train[:1%]")
 # lmms-lab/LLaVA-OneVision-Data
 
+from datasets.features import Features, Image, Sequence, Value
+
+# Load the streaming dataset
+dataset = load_dataset("unsloth/LaTeX_OCR", split="train", streaming=True)
+
 
 # def convert_to_conversation(sample, instruction, image_key="image", text_key="text"):
-def convert_to_conversation(sample, instruction="Write the LaTeX representation for this image.", image_key="image", text_key="text"):
+def convert_to_conversation(
+    sample,
+    instruction="Write the LaTeX representation for this image.",
+    image_key="image",
+    text_key="text",
+):
     conversation = [
         {
             "role": "user",
@@ -82,33 +94,55 @@ def convert_to_conversation(sample, instruction="Write the LaTeX representation 
 
     return {"messages": conversation}
 
-# dataset = dataset.map(convert_to_conversation, remove_columns=dataset.column_names)
 
-# # print(list(dataset.take(3)))
-# print('type(dataset):')
-# print(type(dataset))
+# def process_batch(examples, indices):
+#     """
+#     Transform batch of examples into conversation format with image and text.
+#     """
+#     conversations = []
 
+#     for idx in range(len(indices)):
+#         conversation = {
+#             "messages": [
+#                 {
+#                     "role": "user",
+#                     "content": [
+#                         {
+#                             "type": "text",
+#                             "text": "Please convert this image to LaTeX notation"
+#                         },
+#                         {
+#                             "type": "image",
+#                             "image": examples['image'][idx]  # Keep as raw data or PIL object
+#                         }
+#                     ]
+#                 },
+#                 {
+#                     "role": "assistant",
+#                     "content": [
+#                         {
+#                             "type": "text",
+#                             "text": examples['text'][idx]
+#                         }
+#                     ]
+#                 }
+#             ]
+#         }
 
-# dataset = [
-#     convert_to_conversation(sample, "Write the LaTeX representation for this image.")
-#     for sample in dataset
-# ]
+#         conversations.append(conversation)
 
-# 4bit pre quantized models we support for 4x faster downloading + no OOMs.
-# fourbit_models = [
-# "unsloth/tinyllama-bnb-4bit",  # "unsloth/tinyllama" for 16bit loading
-# ]  # More models at https://huggingface.co/unsloth
+#     return {"conversations": conversations}
+#     # return conversations
 
-# [2] Load Mistral model
-# model, tokenizer = FastLanguageModel.from_pretrained(
-#     dtype=dtype,
-#     load_in_4bit=load_in_4bit,
-#     max_seq_length=max_seq_length,
-#     # model_name=fourbit_models[0],
-#     model_name="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-#     # model_name="ibm-fms/Bamba-9B",
-#     # token = "hf_...", # use one if using gated models like meta-llama/Llama-2-7b-hf
+# # Stream the dataset and apply processing
+# processed_dataset = dataset.map(
+#     process_batch,
+#     batched=True,
+#     with_indices=True,
+#     batch_size=4
 # )
+
+# processed_dataset.column_names = ["conversations", "image", "text"]
 
 model, processor = FastVisionModel.from_pretrained(
     # "unsloth/Llama-3.2-11B-Vision-Instruct",
@@ -388,24 +422,6 @@ print(prompt)
 print("=========================================")
 print()
 
-# if enable_system_message:
-#     # assert prompt == f"{DEFAULT_SYSTEM_MESSAGE['content']}\n{prompt_before}", f"{prompt} != {DEFAULT_SYSTEM_MESSAGE['content']}\n{prompt_before}"
-#     assert prompt == f"<|im_start|>System: You are an AI agent acting as a human assistant.<end_of_utterance>\n{prompt_before}", f"{prompt} != <|im_start|>System: You are an AI agent acting as a human assistant.<end_of_utterance>\n{prompt_before}"
-
-# else:
-#     assert prompt == prompt_before, f"{prompt} != {prompt_before}"
-
-# raise SystemExit
-
-# print("type(processor):")
-# print(type(processor))
-
-# print("processor.chat_template (before):")
-# print(processor.chat_template)
-
-# print("processor.tokenizer.chat_template (before):")
-# print(processor.tokenizer.chat_template)
-
 assert (
     processor.chat_template == processor.tokenizer.chat_template
 ), f"{processor.chat_template} != {processor.tokenizer.chat_template}"
@@ -413,42 +429,6 @@ assert (
 # Save the chat_template to file
 with open("chat_template.txt", "w") as f:
     f.write(processor.chat_template)
-
-# processor.chat_template = chat_template
-
-# print('tokenizer.chat_template (after):')
-# print(processor.chat_template)
-
-print("model.config:")
-print(model.config)
-
-# print('model.text_config:')
-# print(model.config.text_config)
-
-print("model.generation_config:")
-print(model.generation_config)
-
-# assert model.config.bos_token_id == tokenizer.bos_token_id, f"{model.config.bos_token_id} != {tokenizer.bos_token_id}"
-
-# try:
-#     assert model.config.eos_token_id == tokenizer.eos_token_id, f"{model.config.eos_token_id} != {tokenizer.eos_token_id}"
-
-# except AssertionError as e:
-#     print(e)
-#     model.config.eos_token_id = tokenizer.eos_token_id
-
-# assert model.config.pad_token_id == tokenizer.pad_token_id, f"{model.config.pad_token_id} != {tokenizer.pad_token_id}"
-
-# assert model.generation_config.bos_token_id == tokenizer.bos_token_id, f"{model.generation_config.bos_token_id} != {tokenizer.bos_token_id}"
-
-# try:
-#     assert model.generation_config.eos_token_id == tokenizer.eos_token_id, f"{model.generation_config.eos_token_id} != {tokenizer.eos_token_id}"
-
-# except AssertionError as e:
-#     print(e)
-#     model.generation_config.eos_token_id = tokenizer.eos_token_id
-
-# assert model.generation_config.pad_token_id == tokenizer.pad_token_id, f"{model.generation_config.pad_token_id} != {tokenizer.pad_token_id}"
 
 # model.save_pretrained_merged(
 #     "models/pretrained_merged_model",
@@ -458,39 +438,9 @@ print(model.generation_config)
 #     save_method="merged_16bit",
 # )
 
-# [3] Do model patching and add fast LoRA weights
-# model = FastLanguageModel.get_peft_model(
-#     model,
-#     bias="none",  # Supports any, but = "none" is optimized
-#     loftq_config=None,  # We support LoftQ
-#     lora_alpha=16,
-#     # lora_alpha=32,
-#     lora_dropout=0,  # Supports any, but = 0 is optimized
-#     max_seq_length=max_seq_length,
-#     r=16,
-#     # r = 32, # Choose any number > 0 ! Suggested 8, 16, 32, 64, 128
-#     random_state=42,
-#     target_modules=[
-#         # "embed_tokens",
-#         "q_proj",
-#         "k_proj",
-#         "v_proj",
-#         "o_proj",
-#         "gate_proj",
-#         "up_proj",
-#         "down_proj",
-#         # "lm_head",
-#     ],
-#     # [NEW] "unsloth" uses 30% less VRAM, fits 2x larger batch sizes!
-#     use_gradient_checkpointing="unsloth",  # True or "unsloth" for very long context
-#     use_rslora=False,  # We support rank stabilized LoRA
-# )
-
 # model.push_to_hub("mjschock/SmolVLM-Instruct", token=os.getenv("HF_TOKEN"))
 # processor.push_to_hub("mjschock/SmolVLM-Instruct", token=os.getenv("HF_TOKEN"))
 # model.push_to_hub_merged("mjschock/SmolVLM-Instruct", processor, save_method="merged_16bit", token=os.getenv("HF_TOKEN"))
-
-# raise SystemExit
 
 model = FastVisionModel.get_peft_model(
     model,
@@ -623,6 +573,96 @@ FastVisionModel.for_training(model)  # Enable for training!
 
 #     return batch
 
+from unsloth_zoo.vision_utils import (
+    _get_dtype,
+    get_padding_tokens_ids,
+    process_vision_info,
+)
+
+
+class CustomUnslothVisionDataCollator:
+    __slots__ = (
+        "padding_token_ids",
+        "dtype",
+        "ignore_index",
+        "processor",
+        "formatting_func",
+    )
+
+    def __init__(self, model, processor, formatting_func=None, ignore_index=-100):
+        self.padding_token_ids = get_padding_tokens_ids(processor)
+        self.dtype = _get_dtype(
+            model.config.torch_dtype
+            if hasattr(model.config, "torch_dtype")
+            else model.get_input_embeddings().weight.dtype
+        )
+        self.ignore_index = ignore_index
+        self.processor = processor
+        self.formatting_func = formatting_func
+        return
+
+    def __call__(self, examples):
+        # [TODO] Support non image inputs as well
+        # The issue is batch = self.processor( forces tensors to be returned and not None.
+        texts = []
+        images = []
+
+        print("============================== __call__ ==============================")
+        print("type(examples):")
+        print(type(examples))
+
+        print("examples:")
+        print(examples)
+
+        if self.formatting_func is not None:
+            examples = [self.formatting_func(example) for example in examples]
+
+        for example in examples:
+            messages = example["messages"]
+            message = self.processor.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=False,
+            )
+            # Dataset with 2 columns messages / images
+            if "images" in example:
+                image = example["images"][0]
+            else:
+                image, video = process_vision_info(messages)
+            texts.append(message)
+            images.append(image)
+
+        # Tokenize the texts and process the images
+        batch = self.processor(
+            text=texts,
+            images=images,
+            padding=True,
+            # [TODO] Truncating to max_seq_length does NOT work for VLMs
+            # truncation = True,
+            return_tensors="pt",
+        )
+        batch.pop("token_type_ids", None)
+
+        # Pixtral accepts multiple images, so we have to cast it individually
+        pixel_values = batch["pixel_values"]
+        if type(pixel_values) is list:
+            for j, pixel_value_j in enumerate(pixel_values):
+                if type(pixel_value_j) is list:
+                    for k, pixel_value_k in enumerate(pixel_value_j):
+                        pixel_value_j[k] = pixel_value_k.to(self.dtype)
+                else:
+                    pixel_values[j] = pixel_value_j.to(self.dtype)
+            batch["pixel_values"] = pixel_values
+        else:
+            batch["pixel_values"] = batch["pixel_values"].to(self.dtype)
+
+        # Mask image tokens and pad tokens
+        labels = batch["input_ids"].clone()
+        labels[torch.isin(labels, self.padding_token_ids)] = self.ignore_index
+        batch["labels"] = labels
+        return batch
+
+
 trainer = SFTTrainer(
     # args=TrainingArguments(
     args=SFTConfig(
@@ -663,7 +703,10 @@ trainer = SFTTrainer(
         max_seq_length=2048,
     ),
     # data_collator=UnslothVisionDataCollator(model, processor),  # Must use! https://github.com/unslothai/unsloth-zoo/blob/main/unsloth_zoo/vision_utils.py#L243
-    data_collator=UnslothVisionDataCollator(model, processor, formatting_func=convert_to_conversation),
+    # data_collator=CustomUnslothVisionDataCollator(model, processor),
+    data_collator=UnslothVisionDataCollator(
+        model, processor, formatting_func=convert_to_conversation
+    ),
     # data_collator=collate_fn,
     # dataset_num_proc=1, # https://github.com/unslothai/unsloth?tab=readme-ov-file#windows-installation
     # dataset_text_field="text",
@@ -672,7 +715,6 @@ trainer = SFTTrainer(
     # processing_class=processor.tokenizer,
     tokenizer=processor,
     train_dataset=dataset,
-    # train_dataset=train_dataset,
 )
 
 gpu_stats = torch.cuda.get_device_properties(0)
@@ -680,15 +722,6 @@ start_gpu_memory = round(torch.cuda.max_memory_reserved() / 1024 / 1024 / 1024, 
 max_memory = round(gpu_stats.total_memory / 1024 / 1024 / 1024, 3)
 print(f"\nGPU = {gpu_stats.name}. Max memory = {max_memory} GB.")
 print(f"{start_gpu_memory} GB of memory reserved.\n")
-
-# with mlflow.start_run() as run:
-# trainer_stats = trainer.train()
-
-# try:
-#     trainer_stats = trainer.train()
-
-# except torch._dynamo.exc.BackendCompilerFailed as e:
-#     print(e)
 
 torch._dynamo.config.disable = True
 
@@ -709,59 +742,8 @@ print(f"Peak reserved memory for training = {used_memory_for_lora} GB.")
 print(f"Peak reserved memory % of max memory = {used_percentage} %.")
 print(f"Peak reserved memory for training % of max memory = {lora_percentage} %.\n")
 
-# last_active_run = mlflow.last_active_run()
 run_id = mlflow.last_active_run().info.run_id
 print(f"run_id: {run_id}")
 
-model.save_pretrained("lora_model")  # Local saving
-# tokenizer.save_pretrained("lora_model")
+model.save_pretrained("lora_model")
 processor.save_pretrained("lora_model")
-
-# remove the models/merged_model directory if it exists
-# if os.path.exists("models/merged_model"):
-# os.rmdir("models/merged_model")
-# os.system("rm -rf models/merged_model")
-
-# https://docs.unsloth.ai/basics/saving-and-using-models/saving-to-gguf - Manual Saving
-# trainer.model.save_pretrained_merged(
-#     "models/merged_model",
-#     trainer.processing_class,
-#     # maximum_memory_usage=0.5,
-#     maximum_memory_usage=0.25,
-#     save_method="merged_16bit",
-# )
-
-# run_id = last_active_run.info.run_id
-# print_auto_logged_info(mlflow.get_run(run_id=run_id))
-
-# subprocess.run(
-#     [
-#         "python",
-#         "llama.cpp/convert_hf_to_gguf.py",
-#         "models/merged_model/",
-#         "--outfile",
-#         # "models/merged_model/tinyllama-1.1B-chat-bnb-4bit-F16.gguf",
-#         "models/merged_model/model-bnb-4bit-F16.gguf",
-#         "--outtype",
-#         "f16",
-#     ]
-# )
-
-# subprocess.run(
-#     [
-#         "llama.cpp/build/bin/llama-quantize",
-#         # "models/merged_model/tinyllama-1.1B-chat-bnb-4bit-F16.gguf",
-#         "models/merged_model/model-bnb-4bit-F16.gguf",
-#         # "models/merged_model/tinyllama-1.1B-chat-bnb-4bit-Q4_K_M.gguf",
-#         "models/merged_model/model-bnb-4bit-Q4_K_M.gguf",
-#         "Q4_K_M",
-#     ]
-# )
-
-# subprocess.run(
-#     [
-#         "ls",
-#         "-al",
-#         "models/merged_model"
-#     ]
-# )
