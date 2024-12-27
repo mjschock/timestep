@@ -36,7 +36,7 @@ connexion = {extras = ["swagger-ui", "uvicorn"], version = "^3.1.0"}
 fastapi = "^0.115.6"
 flet = "^0.25.2"
 flet-web = "^0.25.2"
-openai = "^1.57.4"
+openai = "^1.58.1"
 paramiko = "^3.5.0"
 pydantic-settings = "^2.7.0"
 python = "^3.10"

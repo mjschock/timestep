@@ -10,4 +10,4 @@ sse-starlette
 torchvision
 git+https://github.com/huggingface/transformers.git@24c91f095fec4d90fa6901ef17146b4f4c21d0a3
 unsloth==2024.12.9
-unsloth-zoo==2024.12.4
+unsloth-zoo==2024.12.6

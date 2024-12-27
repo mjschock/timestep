@@ -61,11 +61,14 @@ max_seq_length = 2048  # Supports RoPE Scaling interally, so choose any!
 # dataset = load_dataset("unsloth/Radiology_mini", split = "train[:1%]")
 # dataset = load_dataset("unsloth/llava-instruct-mix-vsft-mini", split = "train[:1%]")
 # dataset = load_dataset("unsloth/LaTeX_OCR", split = "train")
-dataset = load_dataset("unsloth/LaTeX_OCR", split="train[:1%]")
+# dataset = load_dataset("unsloth/LaTeX_OCR", split="train[:1%]")
+dataset = load_dataset("unsloth/LaTeX_OCR", split="train", streaming=True)
+# dataset = load_dataset("HuggingFaceH4/llava-instruct-mix-vsft", split="train[:1%]")
 # lmms-lab/LLaVA-OneVision-Data
 
 
-def convert_to_conversation(sample, instruction, image_key="image", text_key="text"):
+# def convert_to_conversation(sample, instruction, image_key="image", text_key="text"):
+def convert_to_conversation(sample, instruction="Write the LaTeX representation for this image.", image_key="image", text_key="text"):
     conversation = [
         {
             "role": "user",
@@ -79,11 +82,17 @@ def convert_to_conversation(sample, instruction, image_key="image", text_key="te
 
     return {"messages": conversation}
 
+# dataset = dataset.map(convert_to_conversation, remove_columns=dataset.column_names)
 
-dataset = [
-    convert_to_conversation(sample, "Write the LaTeX representation for this image.")
-    for sample in dataset
-]
+# # print(list(dataset.take(3)))
+# print('type(dataset):')
+# print(type(dataset))
+
+
+# dataset = [
+#     convert_to_conversation(sample, "Write the LaTeX representation for this image.")
+#     for sample in dataset
+# ]
 
 # 4bit pre quantized models we support for 4x faster downloading + no OOMs.
 # fourbit_models = [
@@ -209,6 +218,8 @@ assistant_generation_role_header_template = (
     + end_header_id
 )
 
+enable_system_message = True
+
 # Influenced by:
 # https://cookbook.openai.com/examples/how_to_call_functions_with_chat_models
 # https://docs.anthropic.com/en/docs/build-with-claude/tool-use
@@ -226,7 +237,7 @@ chat_template = (
     "{%- set config.has_tools = tools is not none and tools | length > 0 -%}"
     # Ensure system message exists
     # "{%- if not config.has_system_message -%}"
-    # f'{{%- set messages = [{{ "content": "{DEFAULT_SYSTEM_MESSAGE["content"]}", "role": "{DEFAULT_SYSTEM_MESSAGE["role"]}" }}] + messages -%}}'
+    f'{{%- set messages = [{{ "content": "{DEFAULT_SYSTEM_MESSAGE["content"]}", "role": "{DEFAULT_SYSTEM_MESSAGE["role"]}" }}] + messages -%}}'
     # "{%- endif -%}"
     # Process messages
     "{%- for message in messages -%}"
@@ -377,7 +388,12 @@ print(prompt)
 print("=========================================")
 print()
 
-assert prompt == prompt_before, f"{prompt} != {prompt_before}"
+# if enable_system_message:
+#     # assert prompt == f"{DEFAULT_SYSTEM_MESSAGE['content']}\n{prompt_before}", f"{prompt} != {DEFAULT_SYSTEM_MESSAGE['content']}\n{prompt_before}"
+#     assert prompt == f"<|im_start|>System: You are an AI agent acting as a human assistant.<end_of_utterance>\n{prompt_before}", f"{prompt} != <|im_start|>System: You are an AI agent acting as a human assistant.<end_of_utterance>\n{prompt_before}"
+
+# else:
+#     assert prompt == prompt_before, f"{prompt} != {prompt_before}"
 
 # raise SystemExit
 
@@ -474,7 +490,7 @@ print(model.generation_config)
 # processor.push_to_hub("mjschock/SmolVLM-Instruct", token=os.getenv("HF_TOKEN"))
 # model.push_to_hub_merged("mjschock/SmolVLM-Instruct", processor, save_method="merged_16bit", token=os.getenv("HF_TOKEN"))
 
-raise SystemExit
+# raise SystemExit
 
 model = FastVisionModel.get_peft_model(
     model,
@@ -500,6 +516,113 @@ args = parser.parse_args()
 # [5] Initialize and train the model using the SFTTrainer
 FastVisionModel.for_training(model)  # Enable for training!
 
+################
+# Create a data collator to encode text and image pairs
+################
+# def collate_fn(examples):
+#     # Get the texts and images, and apply the chat template
+#     texts = [processor.apply_chat_template(example["messages"], tokenize=False) for example in examples]
+#     tokenized_texts = [processor.apply_chat_template(example["messages"], return_assistant_tokens_mask=True, return_dict=True, return_tensors="pt", tokenize=True) for example in examples]
+#     images = [example["images"] for example in examples]
+#     # if isinstance(model, LlavaForConditionalGeneration):
+#         # LLava1.5 does not support multiple images
+#         # images = [image[0] for image in images]
+
+#     print('tokenized_texts:')
+#     print(tokenized_texts)
+
+#     # Tokenize the texts and process the images
+#     # print('type(processor):')
+#     # print(type(processor))
+#     batch = processor(text=texts, images=images, return_tensors="pt", padding=True)
+
+#     # assert tokenized_texts[0]["input_ids"] == batch["input_ids"][0], f"{tokenized_texts[0]['input_ids']} != {batch['input_ids'][0]}"
+#     # assert tokenized_texts[0]["attention_mask"] == batch["attention_mask"][0], f"{tokenized_texts[0]['attention_mask']} != {batch['attention_mask'][0]}"
+
+#     # assistant_masks = torch.tensor([tokenized_text["assistant_tokens_mask"] for tokenized_text in tokenized_texts])
+
+#     # The labels are the input_ids, and we mask the padding tokens in the loss computation
+#     labels = batch["input_ids"].clone()
+#     labels[labels == processor.tokenizer.pad_token_id] = -100  #
+
+#     # Use the assistant mask to creat the labels
+#     # labels = torch.where(assistant_masks == 1, labels, -100)
+
+#     # Ignore the image token index in the loss computation (model specific)
+#     image_token_id = processor.tokenizer.convert_tokens_to_ids(processor.image_token)
+#     labels[labels == image_token_id] = -100  # Mask image token IDs in labels
+
+#     batch["labels"] = labels
+
+#     return batch
+
+# dataset = load_dataset("HuggingFaceH4/llava-instruct-mix-vsft", split="train[:1%]")
+# dataset = load_dataset("HuggingFaceH4/llava-instruct-mix-vsft", split="train", streaming=True)
+
+# system_message = """You are a Vision Language Model specialized in interpreting visual data from chart images.
+# Your task is to analyze the provided chart image and respond to queries with concise answers, usually a single word, number, or short phrase.
+# The charts include a variety of types (e.g., line charts, bar charts) and contain colors, labels, and text.
+# Focus on delivering accurate, succinct answers based on the visual information. Avoid additional explanation unless absolutely necessary."""
+
+# def format_data(sample):
+#     messages = [
+#         {
+#             "role": "system",
+#             "content": [{"type": "text", "text": system_message}],
+#         },
+#         {
+#             "role": "user",
+#             "content": [
+#                 {
+#                     "type": "image",
+#                     "image": sample["image"],
+#                 },
+#                 {
+#                     "type": "text",
+#                     "text": sample["query"],
+#                 },
+#             ],
+#         },
+#         {
+#             "role": "assistant",
+#             "content": [{"type": "text", "text": sample["label"][0]}],
+#         },
+#     ]
+
+#     return {"messages": messages}
+
+# dataset_id = "HuggingFaceM4/ChartQA"
+# train_dataset, eval_dataset, test_dataset = load_dataset(dataset_id, split=["train[:1%]", "val[:1%]", "test[:1%]"])
+# # train_dataset, eval_dataset, test_dataset = load_dataset(dataset_id, split=["train", "val", "test"], streaming=True)
+
+# train_dataset = [format_data(sample) for sample in train_dataset]
+# eval_dataset = [format_data(sample) for sample in eval_dataset]
+# test_dataset = [format_data(sample) for sample in test_dataset]
+
+# image_token_id = processor.tokenizer.additional_special_tokens_ids[
+#     processor.tokenizer.additional_special_tokens.index("<image>")
+# ]
+
+
+# def collate_fn(examples):
+#     texts = [processor.apply_chat_template(example, tokenize=False) for example in examples]
+
+#     image_inputs = []
+#     for example in examples:
+#         image = example[1]["content"][0]["image"]
+#         if image.mode != "RGB":
+#             image = image.convert("RGB")
+#         image_inputs.append([image])
+
+#     batch = processor(text=texts, images=image_inputs, return_tensors="pt", padding=True)
+#     labels = batch["input_ids"].clone()
+#     labels[labels == processor.tokenizer.pad_token_id] = -100  # Mask padding tokens in labels
+#     labels[labels == image_token_id] = -100  # Mask image token IDs in labels
+
+#     batch["labels"] = labels
+
+#     return batch
+
 trainer = SFTTrainer(
     # args=TrainingArguments(
     args=SFTConfig(
@@ -516,6 +639,7 @@ trainer = SFTTrainer(
         # num_train_epochs = 1, # Set this instead of max_steps for full training runs
         optim="adamw_8bit",
         # optim = "paged_adamw_8bit",
+        # optim="adamw_torch_fused",
         output_dir=args.output_dir,
         # per_device_train_batch_size=2,
         per_device_train_batch_size=1,
@@ -538,13 +662,17 @@ trainer = SFTTrainer(
         dataset_num_proc=4,
         max_seq_length=2048,
     ),
-    data_collator=UnslothVisionDataCollator(model, processor),  # Must use!
+    # data_collator=UnslothVisionDataCollator(model, processor),  # Must use! https://github.com/unslothai/unsloth-zoo/blob/main/unsloth_zoo/vision_utils.py#L243
+    data_collator=UnslothVisionDataCollator(model, processor, formatting_func=convert_to_conversation),
+    # data_collator=collate_fn,
     # dataset_num_proc=1, # https://github.com/unslothai/unsloth?tab=readme-ov-file#windows-installation
     # dataset_text_field="text",
     # max_seq_length=max_seq_length,
     model=model,
+    # processing_class=processor.tokenizer,
     tokenizer=processor,
     train_dataset=dataset,
+    # train_dataset=train_dataset,
 )
 
 gpu_stats = torch.cuda.get_device_properties(0)

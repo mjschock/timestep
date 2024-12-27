@@ -147,6 +147,9 @@ class ModelDeployment:
         images = images if images else None
 
         if model_name != self.model_name:
+            # adapter_path = model_name
+            # self.model.load_adapter(adapter_path)
+
             return JSONResponse(content={"error": "Model not found"}, status_code=404)
 
         prompt = self.processor.apply_chat_template(
@@ -155,6 +158,9 @@ class ModelDeployment:
             # documents=documents,
             tools=tools,
         )
+
+        print("prompt:")
+        print(prompt)
 
         inputs = self.processor(text=prompt, images=images, return_tensors="pt")
         inputs = inputs.to(self.model.device)
@@ -230,6 +236,9 @@ class ModelDeployment:
 
                 try:
                     async for new_text in streamer:
+                        print('new_text:')
+                        print(new_text)
+
                         choices: List[ChatCompletionChunkChoice] = [
                             ChatCompletionChunkChoice(
                                 _request_id=None,
@@ -284,6 +293,9 @@ class ModelDeployment:
         choices: List[ChatCompletionChoice] = []
 
         for i, response in enumerate(batch_decoded_outputs):
+            print("response:")
+            print(response)
+
             # try:
             # response = json.loads(response)
 
