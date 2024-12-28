@@ -40,7 +40,7 @@ openai = "^1.58.1"
 paramiko = "^3.5.0"
 pydantic-settings = "^2.7.0"
 python = "^3.10"
-respx = "^0.21.1"
+respx = ">=0.21.1,<0.23.0"
 skypilot-nightly = {extras = ["aws", "kubernetes", "paperspace"], version = "^1.0.0.dev20241216"}
 sqlmodel = "^0.0.22"
 sse-starlette = "^2.1.2"
