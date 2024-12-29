@@ -1,20 +1,28 @@
 import argparse
-import json
+import logging
 import os
-from pprint import pprint
-from typing import Dict, Union
+from typing import Dict, List
 
+import evaluate
 import mlflow
-import PIL
+import numpy as np
 import torch
-from datasets import interleave_datasets, load_dataset
-from datasets.features import Features, Image, Sequence, Value
+from data import MultiModalConversationalDataCollator, train_dataset, validation_dataset
+from transformers.image_utils import load_image
+from transformers.trainer_utils import EvalPrediction
 from trl import SFTConfig, SFTTrainer
 from unsloth import FastVisionModel, is_bfloat16_supported
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--output-dir", type=str, default="outputs")
+args = parser.parse_args()
+
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
 
-os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
@@ -38,232 +46,7 @@ dtype = (
 load_in_4bit = True  # Use 4bit quantization to reduce memory usage. Can be False.
 max_seq_length = 2048  # Supports RoPE Scaling interally, so choose any!
 # max_seq_length = 4096 # Choose any! We auto support RoPE Scaling internally!
-verbose = True
-
-
-def create_conversation_features():
-    """
-    Creates a Feature object representing a conversation with multi-modal content.
-    Format:
-    - Each message has a role (user/assistant) and a list of content items
-    - Content items can be text or images
-
-    Returns:
-        datasets.Features: A Feature object for conversations
-    """
-    content_list_feature = {
-        "type": Value("string"),  # 'text' or 'image'
-        "text": Value("string", id=None),  # Used when type is 'text'
-        "image": Value(
-            "string", id=None
-        ),  # Used when type is 'image' - stores image path/url/bytes
-    }
-
-    content_string_feature = Value("string")
-
-    tool_call_feature = {
-        "function": {
-            "arguments": Value("string"),
-            "description": Value("string"),
-            "name": Value("string"),
-        },
-        "id": Value("string"),
-        "type": Value("string"),
-    }
-
-    message_feature = {
-        "content": Union[Sequence(content_list_feature), content_string_feature],
-        "role": Value("string"),
-        "tool_calls": Sequence(tool_call_feature),
-    }
-
-    parameters_feature = {
-        "properties": Dict,
-        "required": Sequence(Value("string")),
-        "type": Value("string"),
-    }
-
-    tool_feature = {
-        "function": {
-            "description": Value("string"),
-            "name": Value("string"),
-            "parameters": parameters_feature,
-        },
-        "type": Value("string"),
-    }
-
-    conversation_features = Features(
-        {
-            "completion": Sequence(message_feature),
-            "images": Sequence(Image()),
-            "messages": Sequence(message_feature),
-            "prompt": Sequence(message_feature),
-            "tools": Sequence(tool_feature),
-        }
-    )
-
-    return conversation_features
-
-
-features = create_conversation_features()
-
-
-def load_and_transform_chat_threads(features):
-    chat_threads_train_dataset = load_dataset(
-        "mjschock/chat_threads", split="train", streaming=True
-    )
-
-    def transform_chat_threads(
-        sample,
-        indices,
-    ):
-        messages = json.loads(sample["messages"])
-        tools = json.loads(sample["tools"])
-
-        # TODO: adjust call_id to call_0, call_1, etc.
-
-        return {
-            "messages": messages,
-            "tools": tools,
-        }
-
-    chat_threads_train_dataset = chat_threads_train_dataset.map(
-        transform_chat_threads,
-        batched=False,
-        features=features,
-        # remove_columns=chat_threads_dataset.column_names,
-        with_indices=True,
-        batch_size=4,
-    )
-
-    assert chat_threads_train_dataset.column_names == list(
-        features.keys()
-    ), f"{chat_threads_train_dataset.column_names} != {list(features.keys())}"
-
-    return chat_threads_train_dataset
-
-
-chat_threads_train_dataset = load_and_transform_chat_threads(features)
-
-
-def load_and_transform_chart_qa(features):
-    chart_qa_train_dataset = load_dataset(
-        "HuggingFaceM4/ChartQA", split="train", streaming=True
-    )
-
-    def transform_chart_qa(sample, indices):
-        system_message = """You are a Vision Language Model specialized in interpreting visual data from chart images.
-Your task is to analyze the provided chart image and respond to queries with concise answers, usually a single word, number, or short phrase.
-The charts include a variety of types (e.g., line charts, bar charts) and contain colors, labels, and text.
-Focus on delivering accurate, succinct answers based on the visual information. Avoid additional explanation unless absolutely necessary."""
-
-        messages = [
-            {
-                "role": "system",
-                "content": [{"type": "text", "text": system_message}],
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                    },
-                    {
-                        "type": "text",
-                        "text": sample["query"],
-                    },
-                ],
-            },
-            {
-                "role": "assistant",
-                "content": [{"type": "text", "text": sample["label"][0]}],
-            },
-        ]
-
-        return {"images": [sample["image"]], "messages": messages}
-
-    chart_qa_train_dataset = chart_qa_train_dataset.map(
-        transform_chart_qa,
-        batched=False,
-        features=features,
-        remove_columns=chart_qa_train_dataset.column_names,
-        with_indices=True,
-        batch_size=4,
-    )
-
-    assert chart_qa_train_dataset.column_names == list(
-        features.keys()
-    ), f"{chart_qa_train_dataset.column_names} != {list(features.keys())}"
-
-    return chart_qa_train_dataset
-
-
-chart_qa_train_dataset = load_and_transform_chart_qa(features)
-
-
-def load_and_transform_latex_dataset(features):
-    latex_ocr_train_dataset = load_dataset(
-        "unsloth/LaTeX_OCR", split="train", streaming=True
-    )
-
-    def transform_latex_ocr(
-        sample,
-        indices,
-        image_key="image",
-        text_key="text",
-    ):
-        messages = [
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "Write the LaTeX representation for this image.",
-                    },
-                    {"type": "image"},
-                ],
-            },
-            {
-                "role": "assistant",
-                "content": [{"type": "text", "text": sample[text_key]}],
-            },
-        ]
-
-        return {
-            "completion": messages[1:],
-            "images": [sample[image_key]],
-            "prompt": messages[:1],
-        }
-
-    latex_ocr_train_dataset = latex_ocr_train_dataset.map(
-        transform_latex_ocr,
-        batched=False,
-        features=features,
-        remove_columns=latex_ocr_train_dataset.column_names,
-        with_indices=True,
-        batch_size=4,
-    )
-
-    assert latex_ocr_train_dataset.column_names == list(
-        features.keys()
-    ), f"{latex_ocr_train_dataset.column_names} != {list(features.keys())}"
-
-    return latex_ocr_train_dataset
-
-
-latex_ocr_train_dataset = load_and_transform_latex_dataset(features)
-
-train_dataset = interleave_datasets(
-    # [chat_threads_train_dataset, chart_qa_train_dataset, latex_ocr_train_dataset],
-    [chat_threads_train_dataset, latex_ocr_train_dataset],
-    # probabilities=
-    seed=42,
-    stopping_strategy="first_exhausted",
-)
-
-assert train_dataset.column_names == list(
-    features.keys()
-), f"{train_dataset.column_names} != {list(features.keys())}"
+seed = 42
 
 model, processor = FastVisionModel.from_pretrained(
     "HuggingFaceTB/SmolVLM-Instruct",
@@ -272,12 +55,8 @@ model, processor = FastVisionModel.from_pretrained(
     use_gradient_checkpointing="unsloth",  # True or "unsloth" for long context
 )
 
-if verbose:
-    print("\nmodel:")
-    pprint(model)
-
-    print("\nprocessor:")
-    pprint(processor)
+logger.debug(f"model: {model}")
+logger.debug(f"processor: {processor}")
 
 DEFAULT_SYSTEM_MESSAGE = {
     "content": "You are an AI agent acting as a human assistant.",
@@ -417,19 +196,22 @@ chat_template = (
     "{%- endif -%}"
 )
 
+image1 = load_image(
+    "https://cdn.britannica.com/61/93061-050-99147DCE/Statue-of-Liberty-Island-New-York-Bay.jpg"
+)
+image2 = load_image(
+    "https://huggingface.co/spaces/merve/chameleon-7b/resolve/main/bee.jpg"
+)
+
 messages = [
     {
         "role": "user",
         "content": [
-            {"type": "text", "text": "What's in this image?"},
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
-                },
-            },
+            {"type": "image"},
+            {"type": "image"},
+            {"type": "text", "text": "Can you describe the two images?"},
         ],
-    }
+    },
 ]
 
 # Show example of prompt generated from chat_template before setting it
@@ -442,28 +224,48 @@ prompt_before = processor.apply_chat_template(
 processor.chat_template = chat_template
 processor.tokenizer.chat_template = chat_template
 
+assert (
+    processor.chat_template == processor.tokenizer.chat_template
+), f"{processor.chat_template} != {processor.tokenizer.chat_template}"
+
+with open("chat_template.txt", "w") as f:
+    f.write(
+        processor.chat_template
+    )  # TODO: Don't write this out here, update the server to point to lora_model/chat_template.json
+
 # Show the same example of prompt generated from chat_template after setting it
 prompt = processor.apply_chat_template(
     add_generation_prompt=True,
     conversation=messages,
 )
 
-if verbose:
-    print("\nprompt (before setting chat_template):")
-    print(prompt_before)
-
-    print("\nprompt (after setting chat_template):")
-    print(prompt)
-    print()
+logger.debug(f"prompt_before: {prompt_before}")
+logger.debug(f"prompt: {prompt}")
 
 assert prompt == prompt_before, f"{prompt} != {prompt_before}"
 
-assert (
-    processor.chat_template == processor.tokenizer.chat_template
-), f"{processor.chat_template} != {processor.tokenizer.chat_template}"
+# inputs = processor(text=prompt, images=[image1, image2], return_tensors="pt").to(model.device)
+inputs = processor(text=prompt, images=[image2, image1], return_tensors="pt").to(
+    model.device
+)
 
-with open("chat_template.txt", "w") as f:
-    f.write(processor.chat_template)
+try:
+    generated_ids = model.generate(**inputs, max_new_tokens=500)
+
+except torch._dynamo.exc.BackendCompilerFailed as e:
+    logger.debug(e)
+    logger.info("Disabling dynamo...")
+
+    torch._dynamo.config.disable = True
+
+    generated_ids = model.generate(**inputs, max_new_tokens=500)
+
+generated_texts = processor.batch_decode(
+    generated_ids,
+    skip_special_tokens=True,
+)
+
+print(generated_texts[0])
 
 # model.save_pretrained_merged(
 #     "models/pretrained_merged_model",
@@ -479,308 +281,132 @@ with open("chat_template.txt", "w") as f:
 
 model = FastVisionModel.get_peft_model(
     model,
-    finetune_vision_layers=True,  # False if not finetuning vision layers
-    finetune_language_layers=True,  # False if not finetuning language layers
+    bias="none",
     finetune_attention_modules=True,  # False if not finetuning attention layers
+    finetune_language_layers=True,  # False if not finetuning language layers
     finetune_mlp_modules=True,  # False if not finetuning MLP layers
-    r=16,  # The larger, the higher the accuracy, but might overfit
+    finetune_vision_layers=True,  # False if not finetuning vision layers
+    loftq_config=None,  # And LoftQ
     lora_alpha=16,  # Recommended alpha == r at least
     lora_dropout=0,
-    bias="none",
-    random_state=42,
-    use_rslora=False,  # We support rank stabilized LoRA
-    loftq_config=None,  # And LoftQ
+    r=16,  # The larger, the higher the accuracy, but might overfit
+    random_state=seed,
     # target_modules = "all-linear", # Optional now! Can specify a list if needed
+    use_rslora=False,  # We support rank stabilized LoRA
 )
-
-parser = argparse.ArgumentParser()
-parser.add_argument("--output-dir", type=str, default="outputs")
-args = parser.parse_args()
 
 FastVisionModel.for_training(model)  # Enable for training!
 
-image_token_id = processor.tokenizer.additional_special_tokens_ids[
-    processor.tokenizer.additional_special_tokens.index("<image>")
-]
+metrics = evaluate.combine(["accuracy", "bleu", "meteor", "rouge"])
+metrics_tracker = {}
 
 
-def collate_fn(examples):
-    conversations = []
+def compute_metrics(eval_pred: EvalPrediction, compute_result: bool) -> Dict:
+    assert isinstance(
+        eval_pred, EvalPrediction
+    ), f"Expected EvalPrediction, got {type(eval_pred)}"
 
-    for example in examples:
-        completion = extract_messages(example, messages_key="completion")
-        messages = extract_messages(example, messages_key="messages")
-        prompt = extract_messages(example, messages_key="prompt")
-        tools = extract_tools(example)
+    all_labels = eval_pred.label_ids
+    all_preds = eval_pred.predictions
+    is_last_step = compute_result
 
-        conversations.append(
-            {
-                "completion": completion,
-                "images": example["images"],
-                "prompt": prompt,
-                "messages": prompt + completion if not messages else messages,
-                "tools": tools,
-            }
-        )
+    all_labels[all_labels == -100] = processor.tokenizer.pad_token_id
+    references: List[str] = processor.tokenizer.batch_decode(
+        all_labels, skip_special_tokens=True
+    )
 
-    text_batch = [
-        processor.apply_chat_template(
-            add_generation_prompt=False,
-            conversation=conversation["messages"],
-            documents=None,
-            tokenize=False,
-            tools=conversation["tools"],
-        )
-        for conversation in conversations
-    ]
+    assert (
+        all_preds.shape == all_labels.shape
+    ), f"Expected predictions and labels to have the same shape, got {all_preds.shape} and {all_labels.shape}"
 
-    if verbose:
-        for text in text_batch:
-            print("text:")
-            print(text)
+    predictions: List[str] = processor.tokenizer.batch_decode(
+        all_preds, skip_special_tokens=True
+    )
 
-    tokenized_text_batch = [
-        processor.apply_chat_template(
-            add_generation_prompt=False,
-            conversation=conversation["messages"],
-            documents=None,
-            return_assistant_tokens_mask=True,
-            return_dict=True,
-            return_tensors="pt",
-            tokenize=True,
-            tools=conversation["tools"],
-        )
-        for conversation in conversations
-    ]
+    assert len(predictions) == len(
+        references
+    ), f"Expected predictions and references to have the same length, got {len(predictions)} and {len(references)}"
 
-    images_batch = [conversation["images"] for conversation in conversations]
+    eval_batch_metrics = metrics.compute(
+        predictions=predictions,
+        references=references,
+    )
 
-    for images in images_batch:
-        if images is not None:
-            for image in images:
-                assert (
-                    type(image) == PIL.PngImagePlugin.PngImageFile
-                ), f"{type(image)} != PIL.PngImagePlugin.PngImageFile"
-                assert image.mode == "RGB", f"{image.mode} != RGB"
+    computed_metrics = {}
 
-                if verbose:
-                    print("image.size:")
-                    print(image.size)
+    for key, value in eval_batch_metrics.items():
+        if type(value) in [list, np.ndarray]:
+            value = np.mean(value)
 
-    # if any images are None in the batch, we need to process them separately
-    if any(images is None for images in images_batch):
-        batch = {
-            "attention_mask": [],
-            "input_ids": [],
-            "pixel_attention_mask": [],
-            "pixel_values": [],
-        }
+        metrics_tracker[key] = np.mean([metrics_tracker.get(key, 0.0), value])
+        computed_metrics[key] = metrics_tracker[key]
 
-        for text, images in zip(text_batch, images_batch):
-            processed = processor(
-                text=text, images=images, return_tensors="pt", padding=True
-            )
+        if is_last_step:
+            metrics_tracker[key] = 0.0
 
-            batch["attention_mask"].append(processed["attention_mask"])
-            batch["input_ids"].append(processed["input_ids"])
-
-            if "pixel_attention_mask" in processed:
-                batch["pixel_attention_mask"].append(processed["pixel_attention_mask"])
-
-            else:
-                batch["pixel_attention_mask"].append(torch.tensor([]))
-
-            if "pixel_values" in processed:
-                batch["pixel_values"].append(processed["pixel_values"])
-
-            else:
-                batch["pixel_values"].append(torch.tensor([]))
-
-        for key, value in batch.items():
-            batch[key] = torch.cat(value, dim=0)
-
-    else:
-        batch = processor(
-            text=text_batch, images=images_batch, return_tensors="pt", padding=True
-        )
-
-    assistant_masks = []
-
-    for i in range(len(batch["input_ids"])):
-        assistant_mask = torch.zeros_like(batch["input_ids"][i])
-        offset = 0
-
-        for j in range(len(tokenized_text_batch[i]["input_ids"][0])):
-            if tokenized_text_batch[i]["input_ids"][0][j] == image_token_id:
-                while (
-                    batch["input_ids"][i][j + offset]
-                    != tokenized_text_batch[i]["input_ids"][0][j + 1]
-                ):
-                    offset += 1
-
-                offset -= 1
-
-            else:
-                assert (
-                    tokenized_text_batch[i]["input_ids"][0][j]
-                    == batch["input_ids"][i][j + offset]
-                ), f"{tokenized_text_batch[i]['input_ids'][0][j]} != {batch["input_ids"][i][j+offset]}"
-
-                if tokenized_text_batch[i]["assistant_masks"][j] == 1:
-                    assistant_mask[j + offset] = 1
-
-        decoded_assistant_input_ids = processor.tokenizer.decode(
-            batch["input_ids"][i][assistant_mask == 1]
-        )
-        decoded_assistant_tokenized_text_batch_input_ids = processor.tokenizer.decode(
-            tokenized_text_batch[i]["input_ids"][0][
-                torch.tensor(tokenized_text_batch[i]["assistant_masks"]) == 1
-            ]
-        )
-
-        assert (
-            decoded_assistant_input_ids
-            == decoded_assistant_tokenized_text_batch_input_ids
-        ), f"{decoded_assistant_input_ids} != {decoded_assistant_tokenized_text_batch_input_ids}"
-
-        assistant_masks.append(assistant_mask)
-
-    assistant_masks = torch.stack(assistant_masks)
-    labels = torch.where(assistant_masks == 1, batch["input_ids"], torch.tensor(-100))
-
-    batch["labels"] = labels
-
-    if len(batch["pixel_attention_mask"]) == 0:
-        del batch["pixel_attention_mask"]
-
-    if len(batch["pixel_values"]) == 0:
-        del batch["pixel_values"]
-
-    return batch
+    return computed_metrics
 
 
-def extract_messages(example, messages_key="messages"):
-    messages = []
+def preprocess_logits_for_metrics(
+    logits: torch.Tensor, labels: torch.Tensor
+) -> torch.Tensor:
+    """
+    Original Trainer may have a memory leak.
+    This is a workaround to avoid storing too many tensors that are not needed.
+    """
+    pred_ids = torch.argmax(logits, dim=-1)
 
-    if example[messages_key] is None:
-        return messages
-
-    for role_idx in range(len(example[messages_key]["role"])):
-        message = {"role": example[messages_key]["role"][role_idx]}
-
-        contents = example[messages_key]["content"][role_idx]
-
-        if type(contents) == str:
-            message["content"] = contents
-
-        elif type(contents) == list:
-            message["content"] = contents
-
-        tool_calls = example[messages_key]["tool_calls"][role_idx]
-
-        if tool_calls is not None:
-            message["tool_calls"] = []
-
-            for tool_call_idx in range(len(tool_calls["id"])):
-
-                tool_call = {
-                    "function": {
-                        "arguments": tool_calls["function"][tool_call_idx]["arguments"],
-                        "description": tool_calls["function"][tool_call_idx][
-                            "description"
-                        ],
-                        "name": tool_calls["function"][tool_call_idx]["name"],
-                    },
-                    "id": tool_calls["id"][tool_call_idx],
-                    "type": tool_calls["type"][tool_call_idx],
-                }
-
-                message["tool_calls"].append(tool_call)
-
-        messages.append(message)
-
-    return messages
-
-
-def extract_tools(example):
-    tools = []
-
-    if example["tools"] is None:
-        return tools
-
-    for function_idx in range(len(example["tools"]["function"])):
-        tool = {
-            "function": {
-                "description": example["tools"]["function"][function_idx][
-                    "description"
-                ],
-                "name": example["tools"]["function"][function_idx]["name"],
-                "parameters": example["tools"]["function"][function_idx]["parameters"],
-            },
-            "type": example["tools"]["type"][function_idx],
-        }
-
-        tools.append(tool)
-
-    return tools
+    return pred_ids
 
 
 trainer = SFTTrainer(
     args=SFTConfig(
         bf16=is_bfloat16_supported(),
+        dataloader_num_workers=1,
+        dataset_kwargs={"skip_prepare_dataset": True},
+        dataset_num_proc=1,  # https://github.com/unslothai/unsloth?tab=readme-ov-file#windows-installation
+        dataset_text_field="",
+        # eval_on_start=True,
+        hub_model_id=None,
+        hub_token=os.getenv("HF_TOKEN"),
         fp16=not is_bfloat16_supported(),
         gradient_accumulation_steps=4,
+        # gradient_accumulation_steps=1,
+        gradient_checkpointing=True,
         logging_steps=1,
         learning_rate=2e-4,
-        # learning_rate=2e-5,
         lr_scheduler_type="linear",
-        # max_steps=60,
-        # max_steps=30,
         max_steps=3,
         # num_train_epochs = 1, # Set this instead of max_steps for full training runs
-        optim="adamw_8bit",
-        # optim = "paged_adamw_8bit",
-        # optim="adamw_torch_fused",
-        output_dir=args.output_dir,
-        # per_device_train_batch_size=2,
-        per_device_train_batch_size=1,
-        # report_to="none", # Use this for WandB etc
-        report_to=["mlflow"],  # TODO: Add tensorboard and get it to show up on HF
-        # run_name="Training Run",
-        run_name=os.getenv("SKYPILOT_TASK_ID", "Training Run"),
-        # save_steps=10,
-        save_steps=1,
-        seed=42,
-        # warmup_ratio=0.1,
-        # warmup_steps=10,
-        # warmup_steps=5,
-        warmup_steps=1,
-        weight_decay=0.01,
-        # You MUST put the below items for vision finetuning:
-        remove_unused_columns=False,
-        dataset_text_field="",
-        dataset_kwargs={"skip_prepare_dataset": True},
-        dataset_num_proc=4,
-        # dataset_num_proc=1, # https://github.com/unslothai/unsloth?tab=readme-ov-file#windows-installation
         max_seq_length=max_seq_length,
+        optim="adamw_bnb_8bit",
+        output_dir=args.output_dir,
+        per_device_eval_batch_size=1,
+        per_device_train_batch_size=1,
+        # push_to_hub=True,
+        report_to=["mlflow", "tensorboard"],
+        remove_unused_columns=False,
+        run_name=os.getenv("SKYPILOT_TASK_ID"),
+        save_steps=1,
+        save_total_limit=1,
+        seed=seed,
+        torch_empty_cache_steps=1,
+        warmup_steps=0,
+        weight_decay=0.01,
     ),
-    data_collator=collate_fn,
+    compute_metrics=compute_metrics,
+    data_collator=MultiModalConversationalDataCollator(model, processor),
+    eval_dataset=validation_dataset,
     model=model,
+    preprocess_logits_for_metrics=preprocess_logits_for_metrics,
     processing_class=processor.tokenizer,
     train_dataset=train_dataset,
 )
 
-try:
-    # TODO: Use generate to figure this out above b/c we're losing the stream here
-    trainer_stats = trainer.train()
-
-except torch._dynamo.exc.BackendCompilerFailed as e:
-    print(e)
-    print("Disabling dynamo...")
-
-    torch._dynamo.config.disable = True
-
-    trainer_stats = trainer.train()
+trainer_stats = trainer.train(
+    resume_from_checkpoint=False,
+    trial=None,
+)
 
 run_id = mlflow.last_active_run().info.run_id
 print(f"run_id: {run_id}")
