@@ -2,26 +2,22 @@ import argparse
 import json
 import os
 from pprint import pprint
-from typing import Dict, List, Union
+from typing import Dict, Union
 
 import mlflow
 import PIL
 import torch
 from datasets import interleave_datasets, load_dataset
 from datasets.features import Features, Image, Sequence, Value
-from mlflow import MlflowClient
-from trl import SFTConfig, SFTTrainer, apply_chat_template
+from trl import SFTConfig, SFTTrainer
 from unsloth import FastVisionModel, is_bfloat16_supported
 
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
 
-print(f"MLFLOW_TRACKING_URI: {MLFLOW_TRACKING_URI}")
-
-# PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-# mlflow.transformers.autolog()
+
 mlflow.autolog(
     disable=False,
     disable_for_unsupported_versions=False,
@@ -36,80 +32,16 @@ mlflow.autolog(
     silent=False,
 )
 
-
-def print_auto_logged_info(r):
-    tags = {k: v for k, v in r.data.tags.items() if not k.startswith("mlflow.")}
-    artifacts = [f.path for f in MlflowClient().list_artifacts(r.info.run_id, "model")]
-    print(f"run_id: {r.info.run_id}")
-    print(f"artifacts: {artifacts}")
-    print(f"params: {r.data.params}")
-    print(f"metrics: {r.data.metrics}")
-    print(f"tags: {tags}")
-
-
 dtype = (
     None  # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
 )
 load_in_4bit = True  # Use 4bit quantization to reduce memory usage. Can be False.
 max_seq_length = 2048  # Supports RoPE Scaling interally, so choose any!
 # max_seq_length = 4096 # Choose any! We auto support RoPE Scaling internally!
-
-# [1] Get LAION dataset
-# url = "https://huggingface.co/datasets/laion/OIG/resolve/main/unified_chip2.jsonl"
-# dataset = load_dataset("json", data_files={"train": url}, split="train")
-# dataset = load_dataset("json", data_files={"train": url}, split="train[:1%]")
-# dataset = load_dataset("HuggingFaceFW/fineweb", name="CC-MAIN-2024-10", split="train", streaming=True)
-# dataset = load_dataset("HuggingFaceFW/fineweb", name="CC-MAIN-2024-46", split="train[:1%]")
-# dataset = DataChain.from_hf("HuggingFaceFW/fineweb", name="CC-MAIN-2024-46", split="train")
-# dataset = load_dataset("unsloth/Radiology_mini", split = "train[:1%]")
-# dataset = load_dataset("unsloth/llava-instruct-mix-vsft-mini", split = "train[:1%]")
-# dataset = load_dataset("unsloth/LaTeX_OCR", split = "train")
-# dataset = load_dataset("unsloth/LaTeX_OCR", split="train[:1%]")
-# dataset = load_dataset("unsloth/LaTeX_OCR", split="train", streaming=True)
-# dataset = load_dataset("HuggingFaceH4/llava-instruct-mix-vsft", split="train[:1%]")
-# lmms-lab/LLaVA-OneVision-Data
-
-# dataset = load_dataset("HuggingFaceH4/llava-instruct-mix-vsft", split="train[:1%]")
-# dataset = load_dataset("HuggingFaceH4/llava-instruct-mix-vsft", split="train", streaming=True)
-
-# system_message = """You are a Vision Language Model specialized in interpreting visual data from chart images.
-# Your task is to analyze the provided chart image and respond to queries with concise answers, usually a single word, number, or short phrase.
-# The charts include a variety of types (e.g., line charts, bar charts) and contain colors, labels, and text.
-# Focus on delivering accurate, succinct answers based on the visual information. Avoid additional explanation unless absolutely necessary."""
-
-# def format_data(sample):
-#     messages = [
-#         {
-#             "role": "system",
-#             "content": [{"type": "text", "text": system_message}],
-#         },
-#         {
-#             "role": "user",
-#             "content": [
-#                 {
-#                     "type": "image",
-#                     "image": sample["image"],
-#                 },
-#                 {
-#                     "type": "text",
-#                     "text": sample["query"],
-#                 },
-#             ],
-#         },
-#         {
-#             "role": "assistant",
-#             "content": [{"type": "text", "text": sample["label"][0]}],
-#         },
-#     ]
-
-#     return {"messages": messages}
-
-# dataset_id = "HuggingFaceM4/ChartQA"
-# train_dataset, eval_dataset, test_dataset = load_dataset(dataset_id, split=["train[:1%]", "val[:1%]", "test[:1%]"])
-# # train_dataset, eval_dataset, test_dataset = load_dataset(dataset_id, split=["train", "val", "test"], streaming=True)
+verbose = True
 
 
-def create_conversation_feature():
+def create_conversation_features():
     """
     Creates a Feature object representing a conversation with multi-modal content.
     Format:
@@ -160,7 +92,7 @@ def create_conversation_feature():
         "type": Value("string"),
     }
 
-    conversation_feature = Features(
+    conversation_features = Features(
         {
             "completion": Sequence(message_feature),
             "images": Sequence(Image()),
@@ -170,121 +102,182 @@ def create_conversation_feature():
         }
     )
 
-    return conversation_feature
+    return conversation_features
 
 
-expected_column_names = [
-    "completion",
-    "images",
-    "messages",
-    "prompt",
-    "tools",
-]
-
-features = create_conversation_feature()
-
-latex_ocr_dataset = load_dataset("unsloth/LaTeX_OCR", split="train", streaming=True)
+features = create_conversation_features()
 
 
-def convert_to_conversation(
-    sample,
-    indices,
-    image_key="image",
-    text_key="text",
-):
-    messages = [
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "text",
-                    "text": "Write the LaTeX representation for this image.",
-                },
-                {"type": "image"},
-            ],
-        },
-        {"role": "assistant", "content": [{"type": "text", "text": sample[text_key]}]},
-    ]
+def load_and_transform_chat_threads(features):
+    chat_threads_train_dataset = load_dataset(
+        "mjschock/chat_threads", split="train", streaming=True
+    )
 
-    return {
-        "completion": messages[1:],
-        "images": [sample[image_key]],
-        "prompt": messages[:1],
-    }
+    def transform_chat_threads(
+        sample,
+        indices,
+    ):
+        messages = json.loads(sample["messages"])
+        tools = json.loads(sample["tools"])
 
+        # TODO: adjust call_id to call_0, call_1, etc.
 
-latex_ocr_dataset = latex_ocr_dataset.map(
-    convert_to_conversation,
-    batched=False,
-    features=features,
-    remove_columns=latex_ocr_dataset.column_names,
-    with_indices=True,
-    batch_size=4,
-)
+        return {
+            "messages": messages,
+            "tools": tools,
+        }
 
-assert (
-    latex_ocr_dataset.column_names == expected_column_names
-), f"{latex_ocr_dataset.column_names} != {expected_column_names}"
+    chat_threads_train_dataset = chat_threads_train_dataset.map(
+        transform_chat_threads,
+        batched=False,
+        features=features,
+        # remove_columns=chat_threads_dataset.column_names,
+        with_indices=True,
+        batch_size=4,
+    )
 
-chat_threads_dataset = load_dataset(
-    "mjschock/chat_threads", split="train", streaming=True
-)
+    assert chat_threads_train_dataset.column_names == list(
+        features.keys()
+    ), f"{chat_threads_train_dataset.column_names} != {list(features.keys())}"
+
+    return chat_threads_train_dataset
 
 
-def chat_threads_dataset_function(
-    sample,
-    indices,
-):
-    messages = json.loads(sample["messages"])
-    tools = json.loads(sample["tools"])
-
-    # TODO: adjust call_id to call_0, call_1, etc.
-
-    return {
-        "messages": messages,
-        "tools": tools,
-    }
+chat_threads_train_dataset = load_and_transform_chat_threads(features)
 
 
-chat_threads_dataset = chat_threads_dataset.map(
-    chat_threads_dataset_function,
-    batched=False,
-    features=features,
-    # remove_columns=chat_threads_dataset.column_names,
-    with_indices=True,
-    batch_size=4,
-)
+def load_and_transform_chart_qa(features):
+    chart_qa_train_dataset = load_dataset(
+        "HuggingFaceM4/ChartQA", split="train", streaming=True
+    )
 
-assert (
-    chat_threads_dataset.column_names == expected_column_names
-), f"{chat_threads_dataset.column_names} != {expected_column_names}"
+    def transform_chart_qa(sample, indices):
+        system_message = """You are a Vision Language Model specialized in interpreting visual data from chart images.
+Your task is to analyze the provided chart image and respond to queries with concise answers, usually a single word, number, or short phrase.
+The charts include a variety of types (e.g., line charts, bar charts) and contain colors, labels, and text.
+Focus on delivering accurate, succinct answers based on the visual information. Avoid additional explanation unless absolutely necessary."""
 
-dataset = interleave_datasets(
-    [chat_threads_dataset, latex_ocr_dataset],
-    probabilities=[0.5, 0.5],
+        messages = [
+            {
+                "role": "system",
+                "content": [{"type": "text", "text": system_message}],
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image",
+                    },
+                    {
+                        "type": "text",
+                        "text": sample["query"],
+                    },
+                ],
+            },
+            {
+                "role": "assistant",
+                "content": [{"type": "text", "text": sample["label"][0]}],
+            },
+        ]
+
+        return {"images": [sample["image"]], "messages": messages}
+
+    chart_qa_train_dataset = chart_qa_train_dataset.map(
+        transform_chart_qa,
+        batched=False,
+        features=features,
+        remove_columns=chart_qa_train_dataset.column_names,
+        with_indices=True,
+        batch_size=4,
+    )
+
+    assert chart_qa_train_dataset.column_names == list(
+        features.keys()
+    ), f"{chart_qa_train_dataset.column_names} != {list(features.keys())}"
+
+    return chart_qa_train_dataset
+
+
+chart_qa_train_dataset = load_and_transform_chart_qa(features)
+
+
+def load_and_transform_latex_dataset(features):
+    latex_ocr_train_dataset = load_dataset(
+        "unsloth/LaTeX_OCR", split="train", streaming=True
+    )
+
+    def transform_latex_ocr(
+        sample,
+        indices,
+        image_key="image",
+        text_key="text",
+    ):
+        messages = [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Write the LaTeX representation for this image.",
+                    },
+                    {"type": "image"},
+                ],
+            },
+            {
+                "role": "assistant",
+                "content": [{"type": "text", "text": sample[text_key]}],
+            },
+        ]
+
+        return {
+            "completion": messages[1:],
+            "images": [sample[image_key]],
+            "prompt": messages[:1],
+        }
+
+    latex_ocr_train_dataset = latex_ocr_train_dataset.map(
+        transform_latex_ocr,
+        batched=False,
+        features=features,
+        remove_columns=latex_ocr_train_dataset.column_names,
+        with_indices=True,
+        batch_size=4,
+    )
+
+    assert latex_ocr_train_dataset.column_names == list(
+        features.keys()
+    ), f"{latex_ocr_train_dataset.column_names} != {list(features.keys())}"
+
+    return latex_ocr_train_dataset
+
+
+latex_ocr_train_dataset = load_and_transform_latex_dataset(features)
+
+train_dataset = interleave_datasets(
+    # [chat_threads_train_dataset, chart_qa_train_dataset, latex_ocr_train_dataset],
+    [chat_threads_train_dataset, latex_ocr_train_dataset],
+    # probabilities=
     seed=42,
     stopping_strategy="first_exhausted",
 )
 
-assert (
-    dataset.column_names == expected_column_names
-), f"{dataset.column_names} != {expected_column_names}"
+assert train_dataset.column_names == list(
+    features.keys()
+), f"{train_dataset.column_names} != {list(features.keys())}"
 
 model, processor = FastVisionModel.from_pretrained(
     "HuggingFaceTB/SmolVLM-Instruct",
-    load_in_4bit=True,  # Use 4bit to reduce memory use. False for 16bit LoRA.
-    max_seq_length=2048,  # Supports RoPE Scaling internally, so choose any!
+    load_in_4bit=load_in_4bit,  # Use 4bit to reduce memory use. False for 16bit LoRA.
+    max_seq_length=max_seq_length,  # Supports RoPE Scaling internally, so choose any!
     use_gradient_checkpointing="unsloth",  # True or "unsloth" for long context
 )
 
+if verbose:
+    print("\nmodel:")
+    pprint(model)
 
-def print_nparams(model):
-    """Calculate the total number of model parameters"""
-    nparams = sum(p.numel() for p in model.parameters())
-    print(f"Number of parameters: {nparams}")
-
-
-print_nparams(model)
+    print("\nprocessor:")
+    pprint(processor)
 
 DEFAULT_SYSTEM_MESSAGE = {
     "content": "You are an AI agent acting as a human assistant.",
@@ -320,6 +313,7 @@ If you would like to suggest one or more tool calls, please respond in the follo
 }
 """
 
+# TODO: Probably use the other format which makes it easier to pass tools to other tools
 tool_calls_template = """
 {
   "finish_reason": "tool_calls",
@@ -354,15 +348,11 @@ start_header_id = ""
 end_header_id = ":"
 
 role_header_template = (
-    start_header_id
-    + "{{ message.role | capitalize }}"
-    + end_header_id
+    start_header_id + "{{ message.role | capitalize }}" + end_header_id
 )
 
 assistant_generation_role_header_template = (
-    start_header_id
-    + "Assistant"
-    + end_header_id
+    start_header_id + "Assistant" + end_header_id
 )
 
 # Influenced by:
@@ -379,8 +369,8 @@ chat_template = (
     "{%- set system_messages = messages | selectattr('role', 'equalto', 'system') | list -%}"
     "{%- set config.has_system_message = system_messages | length > 0 -%}"
     "{%- set config.has_tools = tools is not none and tools | length > 0 -%}"
-    # Ensure system message exists
-    "{%- if not config.has_system_message -%}"
+    # Ensure system message exists if using tools
+    "{%- if config.has_tools and not config.has_system_message -%}"
     f'{{%- set messages = [{{ "content": "{DEFAULT_SYSTEM_MESSAGE["content"]}", "role": "{DEFAULT_SYSTEM_MESSAGE["role"]}" }}] + messages -%}}'
     "{%- endif -%}"
     # Process messages
@@ -393,7 +383,7 @@ chat_template = (
     "{%- endif -%}"
     # System message handling
     "{%- if message.role == 'system' -%}"
-    "{{ message.content }}"
+    f"{content_template}"
     "{%- if config.has_tools -%}"
     "{{ '\n\n' }}You are aware of the following tools in your environment:"
     f"{tools_template}"
@@ -427,20 +417,7 @@ chat_template = (
     "{%- endif -%}"
 )
 
-messages = []
-
-# messages += [
-#     {
-#         "role": "user",
-#         "content": [
-#             {"type": "image"},
-#             {"type": "image"},
-#             {"type": "text", "text": "Can you describe the two images?"}
-#         ]
-#     },
-# ]
-
-messages += [
+messages = [
     {
         "role": "user",
         "content": [
@@ -455,48 +432,36 @@ messages += [
     }
 ]
 
-# messages += [{'content': 'Welcome to the chat! Please enter your name to join.', 'role': 'system'}, {'content': 'Hello! How can I help you today?', 'role': 'assistant'}, {'content': "What's 2+2?", 'role': 'user'}]
-
-
-print("messages:")
-pprint(messages)
-
 # Show example of prompt generated from chat_template before setting it
 prompt_before = processor.apply_chat_template(
     add_generation_prompt=True,
     conversation=messages,
-    # documents=documents,
-    # tools=tools,
 )
-
-print("=========================================")
-print("\nprompt (before):\n")
-print(prompt_before)
 
 # Set the chat_template
 processor.chat_template = chat_template
 processor.tokenizer.chat_template = chat_template
 
 # Show the same example of prompt generated from chat_template after setting it
-
 prompt = processor.apply_chat_template(
     add_generation_prompt=True,
     conversation=messages,
-    # documents=documents,
-    # tools=tools,
 )
 
-print("\nprompt (after):\n")
-print(prompt)
+if verbose:
+    print("\nprompt (before setting chat_template):")
+    print(prompt_before)
 
-print("=========================================")
-print()
+    print("\nprompt (after setting chat_template):")
+    print(prompt)
+    print()
+
+assert prompt == prompt_before, f"{prompt} != {prompt_before}"
 
 assert (
     processor.chat_template == processor.tokenizer.chat_template
 ), f"{processor.chat_template} != {processor.tokenizer.chat_template}"
 
-# Save the chat_template to file
 with open("chat_template.txt", "w") as f:
     f.write(processor.chat_template)
 
@@ -569,9 +534,10 @@ def collate_fn(examples):
         for conversation in conversations
     ]
 
-    for text in text_batch:
-        print("text:")
-        print(text)
+    if verbose:
+        for text in text_batch:
+            print("text:")
+            print(text)
 
     tokenized_text_batch = [
         processor.apply_chat_template(
@@ -596,6 +562,10 @@ def collate_fn(examples):
                     type(image) == PIL.PngImagePlugin.PngImageFile
                 ), f"{type(image)} != PIL.PngImagePlugin.PngImageFile"
                 assert image.mode == "RGB", f"{image.mode} != RGB"
+
+                if verbose:
+                    print("image.size:")
+                    print(image.size)
 
     # if any images are None in the batch, we need to process them separately
     if any(images is None for images in images_batch):
@@ -792,39 +762,25 @@ trainer = SFTTrainer(
         dataset_kwargs={"skip_prepare_dataset": True},
         dataset_num_proc=4,
         # dataset_num_proc=1, # https://github.com/unslothai/unsloth?tab=readme-ov-file#windows-installation
-        max_seq_length=2048,
-        # max_seq_length=max_seq_length,
+        max_seq_length=max_seq_length,
     ),
     data_collator=collate_fn,
     model=model,
     processing_class=processor.tokenizer,
-    train_dataset=dataset,
+    train_dataset=train_dataset,
 )
 
-gpu_stats = torch.cuda.get_device_properties(0)
-start_gpu_memory = round(torch.cuda.max_memory_reserved() / 1024 / 1024 / 1024, 3)
-max_memory = round(gpu_stats.total_memory / 1024 / 1024 / 1024, 3)
-print(f"\nGPU = {gpu_stats.name}. Max memory = {max_memory} GB.")
-print(f"{start_gpu_memory} GB of memory reserved.\n")
+try:
+    # TODO: Use generate to figure this out above b/c we're losing the stream here
+    trainer_stats = trainer.train()
 
-torch._dynamo.config.disable = True
+except torch._dynamo.exc.BackendCompilerFailed as e:
+    print(e)
+    print("Disabling dynamo...")
 
-print("Dynamic compilation disabled")
+    torch._dynamo.config.disable = True
 
-trainer_stats = trainer.train()
-
-used_memory = round(torch.cuda.max_memory_reserved() / 1024 / 1024 / 1024, 3)
-used_memory_for_lora = round(used_memory - start_gpu_memory, 3)
-used_percentage = round(used_memory / max_memory * 100, 3)
-lora_percentage = round(used_memory_for_lora / max_memory * 100, 3)
-print(f"\n{trainer_stats.metrics['train_runtime']} seconds used for training.")
-print(
-    f"{round(trainer_stats.metrics['train_runtime']/60, 2)} minutes used for training."
-)
-print(f"Peak reserved memory = {used_memory} GB.")
-print(f"Peak reserved memory for training = {used_memory_for_lora} GB.")
-print(f"Peak reserved memory % of max memory = {used_percentage} %.")
-print(f"Peak reserved memory for training % of max memory = {lora_percentage} %.\n")
+    trainer_stats = trainer.train()
 
 run_id = mlflow.last_active_run().info.run_id
 print(f"run_id: {run_id}")
