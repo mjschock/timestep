@@ -108,6 +108,7 @@ max_seq_length = 2048  # Supports RoPE Scaling interally, so choose any!
 # train_dataset, eval_dataset, test_dataset = load_dataset(dataset_id, split=["train[:1%]", "val[:1%]", "test[:1%]"])
 # # train_dataset, eval_dataset, test_dataset = load_dataset(dataset_id, split=["train", "val", "test"], streaming=True)
 
+
 def create_conversation_feature():
     """
     Creates a Feature object representing a conversation with multi-modal content.
@@ -144,29 +145,46 @@ def create_conversation_feature():
         "tool_calls": Sequence(tool_call_feature),
     }
 
+    parameters_feature = {
+        "properties": Dict,
+        "required": Sequence(Value("string")),
+        "type": Value("string"),
+    }
+
+    tool_feature = {
+        "function": {
+            "description": Value("string"),
+            "name": Value("string"),
+            "parameters": parameters_feature,
+        },
+        "type": Value("string"),
+    }
+
     conversation_feature = Features(
         {
             "completion": Sequence(message_feature),
             "images": Sequence(Image()),
             "messages": Sequence(message_feature),
             "prompt": Sequence(message_feature),
+            "tools": Sequence(tool_feature),
         }
     )
 
     return conversation_feature
 
 
+expected_column_names = [
+    "completion",
+    "images",
+    "messages",
+    "prompt",
+    "tools",
+]
+
 features = create_conversation_feature()
 
-print("features:")
-print(features)
-
-# Load the streaming dataset
 latex_ocr_dataset = load_dataset("unsloth/LaTeX_OCR", split="train", streaming=True)
-# dataset = load_dataset("unsloth/LaTeX_OCR", streaming=True)
 
-print('latex_ocr_dataset [before]:')
-print(latex_ocr_dataset)
 
 def convert_to_conversation(
     sample,
@@ -174,8 +192,6 @@ def convert_to_conversation(
     image_key="image",
     text_key="text",
 ):
-    print('=== convert_to_conversation [begin] ===')
-
     messages = [
         {
             "role": "user",
@@ -190,13 +206,12 @@ def convert_to_conversation(
         {"role": "assistant", "content": [{"type": "text", "text": sample[text_key]}]},
     ]
 
-    print('=== convert_to_conversation [end] ===')
-
     return {
         "completion": messages[1:],
         "images": [sample[image_key]],
         "prompt": messages[:1],
     }
+
 
 latex_ocr_dataset = latex_ocr_dataset.map(
     convert_to_conversation,
@@ -207,64 +222,29 @@ latex_ocr_dataset = latex_ocr_dataset.map(
     batch_size=4,
 )
 
-print("latex_ocr_dataset [after]:")
-print(latex_ocr_dataset)
+assert (
+    latex_ocr_dataset.column_names == expected_column_names
+), f"{latex_ocr_dataset.column_names} != {expected_column_names}"
 
-assert latex_ocr_dataset.column_names == [
-    "completion",
-    "images",
-    "messages",
-    "prompt",
-], f"{latex_ocr_dataset.column_names} != ['completion', 'images', 'messages', 'prompt']"
+chat_threads_dataset = load_dataset(
+    "mjschock/chat_threads", split="train", streaming=True
+)
 
-example = latex_ocr_dataset.take(3)
-# print("example:")
-# print(example)
-print("list(example):")
-print(list(example))
-
-chat_threads_dataset = load_dataset("mjschock/chat_threads", split="train", streaming=True)
-
-print('chat_threads_dataset [before]:')
-print(chat_threads_dataset)
 
 def chat_threads_dataset_function(
     sample,
     indices,
-    # image_key="image",
-    # text_key="text",
 ):
-    print('=== chat_threads_dataset_function [begin] ===')
-
     messages = json.loads(sample["messages"])
-
-    print("messages:")
-    print(messages)
+    tools = json.loads(sample["tools"])
 
     # TODO: adjust call_id to call_0, call_1, etc.
 
-    # messages = [
-    #     {
-    #         "role": "user",
-    #         "content": [
-    #             {
-    #                 "type": "text",
-    #                 "text": "Write the LaTeX representation for this image.",
-    #             },
-    #             {"type": "image"},
-    #         ],
-    #     },
-    #     {"role": "assistant", "content": [{"type": "text", "text": sample[text_key]}]},
-    # ]
-
-    print('=== chat_threads_dataset_function [end] ===')
-
     return {
-        # "completion": messages[1:],
-        # "images": [sample[image_key]],
-        # "prompt": messages[:1],
         "messages": messages,
+        "tools": tools,
     }
+
 
 chat_threads_dataset = chat_threads_dataset.map(
     chat_threads_dataset_function,
@@ -275,37 +255,20 @@ chat_threads_dataset = chat_threads_dataset.map(
     batch_size=4,
 )
 
-print('chat_threads_dataset [after]:')
-print(chat_threads_dataset)
+assert (
+    chat_threads_dataset.column_names == expected_column_names
+), f"{chat_threads_dataset.column_names} != {expected_column_names}"
 
-assert chat_threads_dataset.column_names == [
-    "completion",
-    "images",
-    "messages",
-    "prompt",
-], f"{chat_threads_dataset.column_names} != ['completion', 'images', 'messages', 'prompt']"
+dataset = interleave_datasets(
+    [chat_threads_dataset, latex_ocr_dataset],
+    probabilities=[0.5, 0.5],
+    seed=42,
+    stopping_strategy="first_exhausted",
+)
 
-example = chat_threads_dataset.take(3)
-print("list(example):")
-print(list(example))
-
-dataset = interleave_datasets([chat_threads_dataset, latex_ocr_dataset], probabilities=[0.5, 0.5], seed=42, stopping_strategy="first_exhausted")
-
-print("dataset:")
-print(dataset)
-
-assert dataset.column_names == [
-    "completion",
-    "images",
-    "messages",
-    "prompt",
-], f"{dataset.column_names} != ['completion', 'images', 'messages', 'prompt']"
-
-# example = dataset.take(3)
-print("list(dataset.take(3)):")
-print(list(dataset.take(3)))
-
-# raise Exception("stop here")
+assert (
+    dataset.column_names == expected_column_names
+), f"{dataset.column_names} != {expected_column_names}"
 
 model, processor = FastVisionModel.from_pretrained(
     "HuggingFaceTB/SmolVLM-Instruct",
@@ -382,32 +345,25 @@ tool_response_template = """
 
 content_template = """{% if message['content'] is string %}{{message['content']}}{% else %}{% for line in message['content'] %}{% if line['type'] == 'text' %}{{line['text']}}{% elif line['type'] in ['image'] %}{{ '<image>' }}{% endif %}{% endfor %}{% endif %}"""
 
-# if pretrained_model_name == "TinyLlama-1.1B-Chat-v1.0":
 # start_header_id = "<|"
-# end_header_id = "|>"
-# start_header_id = "<|im_start|>"  # https://github.com/Mozilla-Ocho/llamafile/blob/a8fd4d28c3d2259c98af7035bcdda1a68af6f62c/llama.cpp/server/server.cpp#L492
+# start_header_id = "<|start_header_id|>"
 start_header_id = ""
-# end_header_id = ":" + "' '"
+
+# end_header_id = "|>"
+# end_header_id = "<|end_header_id|>"
 end_header_id = ":"
 
-# else:
-#   start_header_id = "<|start_header_id|>"
-#   end_header_id = "<|end_header_id|>"
-
 role_header_template = (
-    # start_header_id + "{{ message.role }}" + end_header_id + "{{ '\n' }}"
     start_header_id
     + "{{ message.role | capitalize }}"
     + end_header_id
 )
+
 assistant_generation_role_header_template = (
-    # start_header_id + "assistant" + end_header_id + "{{ '\n' }}"
     start_header_id
     + "Assistant"
     + end_header_id
 )
-
-enable_system_message = True
 
 # Influenced by:
 # https://cookbook.openai.com/examples/how_to_call_functions_with_chat_models
@@ -422,23 +378,15 @@ chat_template = (
     "{%- set config = namespace(has_system_message=false, has_tools=false) -%}"
     "{%- set system_messages = messages | selectattr('role', 'equalto', 'system') | list -%}"
     "{%- set config.has_system_message = system_messages | length > 0 -%}"
-    # "{%- set config.has_tools = tools is defined and tools | length > 0 -%}"
     "{%- set config.has_tools = tools is not none and tools | length > 0 -%}"
     # Ensure system message exists
-    # "{%- if not config.has_system_message -%}"
+    "{%- if not config.has_system_message -%}"
     f'{{%- set messages = [{{ "content": "{DEFAULT_SYSTEM_MESSAGE["content"]}", "role": "{DEFAULT_SYSTEM_MESSAGE["role"]}" }}] + messages -%}}'
-    # "{%- endif -%}"
+    "{%- endif -%}"
     # Process messages
     "{%- for message in messages -%}"
-    # "<|{{ message.role }}|>{{ '\n' }}" # "<|start_header_id|>{{ message.role }}<|end_header_id|>{{ '\n' }}"
-    # f"{start_header_id}{{ message.role }}{end_header_id}{{ '\n' }}"
-    # start_header_id + "{{ message.role }}" + end_header_id + "{{ '\n' }}"
-    # TODO: add bos_token if first message?
     "{% if loop.first %}{{ bos_token }}{% endif %}"
-    # f"{role_header_template}" + "{{ ' ' }}"
-    # "{% if message.content is not string and message.content[0]['type'] in ['image'] %}"
     "{% if message.content is defined and message.content is not string and message.content[0]['type'] in ['image'] %}"
-    # "{% if message.content is list and message.content[0]['type'] in ['image', 'image_url'] %}"
     f"{role_header_template}"
     "{%- else -%}"
     f"{role_header_template}" + "{{ ' ' }}"
@@ -450,45 +398,31 @@ chat_template = (
     "{{ '\n\n' }}You are aware of the following tools in your environment:"
     f"{tools_template}"
     "{%- endif -%}"
-    # "{{ eos_token }}{{ '\n' }}" # <|eot_id|>
-    # "<|im_end|>{{ '\n' }}"
-    "<end_of_utterance>{{ '\n' }}"
+    "{{ eos_token }}{{ '\n' }}"
     "{%- endif -%}"
     # User message handling
     "{%- if message.role == 'user' -%}"
-    # "{{ message.content }}{{ eos_token }}{{ '\n' }}"
-    # "{{ message.content }}<|im_end|>{{ '\n' }}"
-    # "{{ message.content }}<end_of_utterance>{{ '\n' }}"
-    # f"{content_template}<end_of_utterance>{{ '\n' }}"
-    f"{content_template}" + "<end_of_utterance>{{ '\n' }}"
+    f"{content_template}" + "{{ eos_token }}{{ '\n' }}"
     "{%- endif -%}"
     # Assistant message handling
     "{%- if message.role == 'assistant' -%}"
     "{% generation %}"
-    # "{%- if message.tool_calls | default(false) -%}"
     "{%- if message.tool_calls is defined and message.tool_calls | length > 0 -%}"
     f"{tool_calls_template}"
     "{%- else -%}"
-    # "{{ message.content }}"
     f"{content_template}"
     "{%- endif -%}"
     "{% endgeneration %}"
-    # "{{ eos_token }}{{ '\n' }}"
-    # "<|im_end|>{{ '\n' }}"
-    "<end_of_utterance>{{ '\n' }}"
+    "{{ eos_token }}{{ '\n' }}"
     "{%- endif -%}"
     # Tool message handling
     "{%- if message.role == 'tool' -%}"
     f"{tool_response_template}"
-    # "{{ eos_token }}{{ '\n' }}"
-    # "<|im_end|>{{ '\n' }}"
-    "<end_of_utterance>{{ '\n' }}"
+    "{{ eos_token }}{{ '\n' }}"
     "{%- endif -%}"
     "{%- endfor -%}"
     # Generation prompt
     "{%- if add_generation_prompt -%}"
-    # "<|assistant|>{{ '\n' }}" # <|start_header_id|>assistant<|end_header_id|>
-    # f"{assistant_generation_role_header_template}" + "{{ ' ' }}"
     f"{assistant_generation_role_header_template}"
     "{%- endif -%}"
 )
@@ -594,12 +528,10 @@ model = FastVisionModel.get_peft_model(
     # target_modules = "all-linear", # Optional now! Can specify a list if needed
 )
 
-# [4] Parse output directory of checkpoints
 parser = argparse.ArgumentParser()
 parser.add_argument("--output-dir", type=str, default="outputs")
 args = parser.parse_args()
 
-# [5] Initialize and train the model using the SFTTrainer
 FastVisionModel.for_training(model)  # Enable for training!
 
 image_token_id = processor.tokenizer.additional_special_tokens_ids[
@@ -608,24 +540,13 @@ image_token_id = processor.tokenizer.additional_special_tokens_ids[
 
 
 def collate_fn(examples):
-    print('=== collate_fn [begin] ===')
-
     conversations = []
 
     for example in examples:
-        print('example:')
-        print(example)
-
         completion = extract_messages(example, messages_key="completion")
         messages = extract_messages(example, messages_key="messages")
         prompt = extract_messages(example, messages_key="prompt")
-
-        print("completion:")
-        print(completion)
-        print("messages:")
-        print(messages)
-        print("prompt:")
-        print(prompt)
+        tools = extract_tools(example)
 
         conversations.append(
             {
@@ -633,27 +554,40 @@ def collate_fn(examples):
                 "images": example["images"],
                 "prompt": prompt,
                 "messages": prompt + completion if not messages else messages,
+                "tools": tools,
             }
         )
 
     text_batch = [
-        processor.apply_chat_template(conversation["messages"], tokenize=False)
+        processor.apply_chat_template(
+            add_generation_prompt=False,
+            conversation=conversation["messages"],
+            documents=None,
+            tokenize=False,
+            tools=conversation["tools"],
+        )
         for conversation in conversations
     ]
+
+    for text in text_batch:
+        print("text:")
+        print(text)
+
     tokenized_text_batch = [
         processor.apply_chat_template(
-            conversation["messages"],
+            add_generation_prompt=False,
+            conversation=conversation["messages"],
+            documents=None,
             return_assistant_tokens_mask=True,
             return_dict=True,
             return_tensors="pt",
             tokenize=True,
+            tools=conversation["tools"],
         )
         for conversation in conversations
     ]
-    images_batch = [conversation["images"] for conversation in conversations]
 
-    print('images_batch:')
-    print(images_batch)
+    images_batch = [conversation["images"] for conversation in conversations]
 
     for images in images_batch:
         if images is not None:
@@ -664,8 +598,7 @@ def collate_fn(examples):
                 assert image.mode == "RGB", f"{image.mode} != RGB"
 
     # if any images are None in the batch, we need to process them separately
-    # if any(images is None for images in images_batch):
-    if True:
+    if any(images is None for images in images_batch):
         batch = {
             "attention_mask": [],
             "input_ids": [],
@@ -674,18 +607,9 @@ def collate_fn(examples):
         }
 
         for text, images in zip(text_batch, images_batch):
-            # if images is None:
-                # continue
-
             processed = processor(
                 text=text, images=images, return_tensors="pt", padding=True
             )
-
-            # for key, value in processed.items():
-            #     # if key not in batch:
-            #         # batch[key] = []
-
-            #     batch[key].append(value)
 
             batch["attention_mask"].append(processed["attention_mask"])
             batch["input_ids"].append(processed["input_ids"])
@@ -703,67 +627,23 @@ def collate_fn(examples):
                 batch["pixel_values"].append(torch.tensor([]))
 
         for key, value in batch.items():
-            # batch[key] = torch.stack(value)
             batch[key] = torch.cat(value, dim=0)
-
-    # batch_alt = batch
 
     else:
         batch = processor(
             text=text_batch, images=images_batch, return_tensors="pt", padding=True
         )
 
-    # print('tokenized_text_batch:')
-    # print(tokenized_text_batch)
-    print('batch:')
-    print(batch)
-
-    # print('batch_alt:')
-    # print(batch_alt)
-
-    # print('batch["input_ids"].shape:')
-    # print(batch["input_ids"].shape)
-
-    # print('batch_alt["input_ids"].shape:')
-    # print(batch_alt["input_ids"].shape)
-
-    # assert batch["attention_mask"].shape == batch_alt["attention_mask"].shape, f"{batch['attention_mask'].shape} != {batch_alt['attention_mask'].shape}"
-    # assert torch.equal(batch["attention_mask"], batch_alt["attention_mask"]), f"{batch['attention_mask']} != {batch_alt['attention_mask']}"
-
-    # assert batch["input_ids"].shape == batch_alt["input_ids"].shape, f"{batch['input_ids'].shape} != {batch_alt['input_ids'].shape}"
-    # assert torch.equal(batch["input_ids"], batch_alt["input_ids"]), f"{batch['input_ids']} != {batch_alt['input_ids']}"
-
-    # assert batch["pixel_attention_mask"].shape == batch_alt["pixel_attention_mask"].shape, f"{batch['pixel_attention_mask'].shape} != {batch_alt['pixel_attention_mask'].shape}"
-    # assert torch.equal(batch["pixel_attention_mask"], batch_alt["pixel_attention_mask"]), f"{batch['pixel_attention_mask']} != {batch_alt['pixel_attention_mask']}"
-
-    # assert batch["pixel_values"].shape == batch_alt["pixel_values"].shape, f"{batch['pixel_values'].shape} != {batch_alt['pixel_values'].shape}"
-    # assert torch.equal(batch["pixel_values"], batch_alt["pixel_values"]), f"{batch['pixel_values']} != {batch_alt['pixel_values']}"
-
-    # raise Exception("stop here")
-
-    attention_mask = batch["attention_mask"]
-    input_ids = batch["input_ids"]
-    pixel_attention_mask = batch["pixel_attention_mask"]
-    pixel_values = batch["pixel_values"]
-
-    print('input_ids.shape:')
-    print(input_ids.shape)
-
-    print('tokenized_text_batch[0]["input_ids"].shape:')
-    print(tokenized_text_batch[0]["input_ids"].shape)
-
-    # raise Exception("stop here")
-
     assistant_masks = []
 
-    for i in range(len(input_ids)):
-        assistant_mask = torch.zeros_like(input_ids[i])
+    for i in range(len(batch["input_ids"])):
+        assistant_mask = torch.zeros_like(batch["input_ids"][i])
         offset = 0
 
         for j in range(len(tokenized_text_batch[i]["input_ids"][0])):
             if tokenized_text_batch[i]["input_ids"][0][j] == image_token_id:
                 while (
-                    input_ids[i][j + offset]
+                    batch["input_ids"][i][j + offset]
                     != tokenized_text_batch[i]["input_ids"][0][j + 1]
                 ):
                     offset += 1
@@ -773,14 +653,14 @@ def collate_fn(examples):
             else:
                 assert (
                     tokenized_text_batch[i]["input_ids"][0][j]
-                    == input_ids[i][j + offset]
-                ), f"{tokenized_text_batch[i]['input_ids'][0][j]} != {input_ids[i][j+offset]}"
+                    == batch["input_ids"][i][j + offset]
+                ), f"{tokenized_text_batch[i]['input_ids'][0][j]} != {batch["input_ids"][i][j+offset]}"
 
                 if tokenized_text_batch[i]["assistant_masks"][j] == 1:
                     assistant_mask[j + offset] = 1
 
         decoded_assistant_input_ids = processor.tokenizer.decode(
-            input_ids[i][assistant_mask == 1]
+            batch["input_ids"][i][assistant_mask == 1]
         )
         decoded_assistant_tokenized_text_batch_input_ids = processor.tokenizer.decode(
             tokenized_text_batch[i]["input_ids"][0][
@@ -796,45 +676,21 @@ def collate_fn(examples):
         assistant_masks.append(assistant_mask)
 
     assistant_masks = torch.stack(assistant_masks)
-    labels = torch.where(assistant_masks == 1, input_ids, torch.tensor(-100))
-
-    print('=== collate_fn [end] ===')
-
-    print('pixel_attention_mask:')
-    print(pixel_attention_mask)
-
-    print('pixel_values:')
-    print(pixel_values)
-
-    # return {
-    #     "attention_mask": attention_mask,
-    #     "input_ids": input_ids,
-    #     "labels": labels,
-    #     # "pixel_attention_mask": pixel_attention_mask if len(pixel_attention_mask) > 0 else None,
-    #     # "pixel_values": pixel_values if len(pixel_values) > 0 else None,
-    # }
+    labels = torch.where(assistant_masks == 1, batch["input_ids"], torch.tensor(-100))
 
     batch["labels"] = labels
 
-    if len(pixel_attention_mask) == 0:
+    if len(batch["pixel_attention_mask"]) == 0:
         del batch["pixel_attention_mask"]
 
-    if len(pixel_values) == 0:
+    if len(batch["pixel_values"]) == 0:
         del batch["pixel_values"]
-
-    print('batch:')
-    print(batch)
 
     return batch
 
 
 def extract_messages(example, messages_key="messages"):
-    print('=== extract_messages [begin] ===')
-
     messages = []
-
-    print("example[messages_key]:")
-    print(example[messages_key])
 
     if example[messages_key] is None:
         return messages
@@ -844,39 +700,13 @@ def extract_messages(example, messages_key="messages"):
 
         contents = example[messages_key]["content"][role_idx]
 
-        print("contents:")
-        print(contents)
-
         if type(contents) == str:
             message["content"] = contents
 
         elif type(contents) == list:
             message["content"] = contents
-            # message["content"] = []
-
-            # for content_idx in range(len(contents["type"])):
-            #     content = {
-            #         "type": contents["type"][content_idx],
-            #         "text": (
-            #             contents["text"][content_idx]
-            #             if contents["text"][content_idx] is not None
-            #             else None
-            #         ),
-            #         "image": (
-            #             contents["image"][content_idx]
-            #             if contents["image"][content_idx] is not None
-            #             else None
-            #         ),
-            #     }
-
-            #     message["content"].append(content)
-
-        # message["content"] = contents
 
         tool_calls = example[messages_key]["tool_calls"][role_idx]
-
-        print("tool_calls:")
-        print(tool_calls)
 
         if tool_calls is not None:
             message["tool_calls"] = []
@@ -886,7 +716,9 @@ def extract_messages(example, messages_key="messages"):
                 tool_call = {
                     "function": {
                         "arguments": tool_calls["function"][tool_call_idx]["arguments"],
-                        "description": tool_calls["function"][tool_call_idx]["description"],
+                        "description": tool_calls["function"][tool_call_idx][
+                            "description"
+                        ],
                         "name": tool_calls["function"][tool_call_idx]["name"],
                     },
                     "id": tool_calls["id"][tool_call_idx],
@@ -897,9 +729,30 @@ def extract_messages(example, messages_key="messages"):
 
         messages.append(message)
 
-    print('=== extract_messages [end] ===')
-
     return messages
+
+
+def extract_tools(example):
+    tools = []
+
+    if example["tools"] is None:
+        return tools
+
+    for function_idx in range(len(example["tools"]["function"])):
+        tool = {
+            "function": {
+                "description": example["tools"]["function"][function_idx][
+                    "description"
+                ],
+                "name": example["tools"]["function"][function_idx]["name"],
+                "parameters": example["tools"]["function"][function_idx]["parameters"],
+            },
+            "type": example["tools"]["type"][function_idx],
+        }
+
+        tools.append(tool)
+
+    return tools
 
 
 trainer = SFTTrainer(
