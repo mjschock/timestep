@@ -10,11 +10,156 @@ from libcloud.compute.base import (
     NodeLocation,
     NodeSize,
 )
-from libcloud.compute.providers import get_driver
-from libcloud.compute.types import Provider
+from libcloud.compute.providers import get_driver, set_driver
+# from libcloud.compute.types import Provider as BaseProvider
+from libcloud.common.types import (
+    Type,
+)
 
 from timestep.infra.cloud_management.utils import get_or_create_key_pair
 
+
+# class Provider(BaseProvider):
+#     """
+#     Custom provider class to support additional cloud providers.
+#     """
+
+#     MULTIPASS = "multipass"
+
+class Provider(Type):
+    """
+    Defines for each of the supported providers
+
+    Non-Dummy drivers are sorted in alphabetical order. Please preserve this
+    ordering when adding new drivers.
+
+    :cvar DUMMY: Example provider
+    :cvar ABIQUO: Abiquo driver
+    :cvar ALIYUN_ECS: Aliyun ECS driver.
+    :cvar AURORACOMPUTE: Aurora Compute driver.
+    :cvar AZURE: Azure (classic) driver.
+    :cvar AZURE_ARM: Azure Resource Manager (modern) driver.
+    :cvar CLOUDSIGMA: CloudSigma
+    :cvar CLOUDSCALE: cloudscale.ch
+    :cvar CLOUDSTACK: CloudStack
+    :cvar DIMENSIONDATA: Dimension Data Cloud
+    :cvar EC2: Amazon AWS.
+    :cvar EXOSCALE: Exoscale driver.
+    :cvar GCE: Google Compute Engine
+    :cvar GRIDSCALE: gridscale
+    :cvar IBM: IBM Developer Cloud
+    :cvar IKOULA: Ikoula driver.
+    :cvar KAMATERA: Kamatera driver
+    :cvar KTUCLOUD: kt ucloud driver
+    :cvar KUBEVIRT: kubevirt driver
+    :cvar LIBVIRT: Libvirt driver
+    :cvar LINODE: Linode.com
+    :cvar NIMBUS: Nimbus
+    :cvar NINEFOLD: Ninefold
+    :cvar NTTC-CIS: NTT Communications CIS
+    :cvar OPENNEBULA: OpenNebula.org
+    :cvar OPSOURCE: Opsource Cloud
+    :cvar OUTSCALE_INC: Outscale INC driver.
+    :cvar OUTSCALE_SAS: Outscale SAS driver.
+    :cvar OUTSCALE_SDK: Outscale SDK driver.
+    :cvar RACKSPACE: Rackspace next-gen OpenStack based Cloud Servers
+    :cvar RACKSPACE_FIRST_GEN: Rackspace First Gen Cloud Servers
+    :cvar RIMUHOSTING: RimuHosting.com
+    :cvar TERREMARK: Terremark
+    :cvar UPCLOUD: UpCloud
+    :cvar VCL: VCL driver
+    :cvar VCLOUD: vmware vCloud
+    :cvar VPSNET: VPS.net
+    :cvar VSphere: VSphere driver.
+    :cvar VULTR: vultr driver.
+    """
+
+    AZURE = "azure"
+    AZURE_ARM = "azure_arm"
+    DUMMY = "dummy"
+    ABIQUO = "abiquo"
+    ALIYUN_ECS = "aliyun_ecs"
+    AURORACOMPUTE = "aurora_compute"
+    BRIGHTBOX = "brightbox"
+    CISCOCCS = "ciscoccs"
+    CLOUDFRAMES = "cloudframes"
+    CLOUDSIGMA = "cloudsigma"
+    CLOUDSCALE = "cloudscale"
+    CLOUDSTACK = "cloudstack"
+    DIGITAL_OCEAN = "digitalocean"
+    DIMENSIONDATA = "dimensiondata"
+    EC2 = "ec2"
+    EQUINIXMETAL = "equinixmetal"
+    EUCALYPTUS = "eucalyptus"
+    EXOSCALE = "exoscale"
+    GANDI = "gandi"
+    GCE = "gce"
+    GIG_G8 = "gig_g8"
+    GRIDSCALE = "gridscale"
+    IBM = "ibm"
+    IKOULA = "ikoula"
+    INTERNETSOLUTIONS = "internetsolutions"
+    KAMATERA = "kamatera"
+    KTUCLOUD = "ktucloud"
+    KUBEVIRT = "kubevirt"
+    LIBVIRT = "libvirt"
+    LINODE = "linode"
+    MAXIHOST = "maxihost"
+    MULTIPASS = "multipass"
+    NIMBUS = "nimbus"
+    NINEFOLD = "ninefold"
+    NTTA = "ntta"
+    NTTCIS = "nttcis"
+    OPENNEBULA = "opennebula"
+    OPENSTACK = "openstack"
+    OPSOURCE = "opsource"
+    OUTSCALE_INC = "outscale_inc"
+    OUTSCALE_SAS = "outscale_sas"
+    OUTSCALE = "outscale"
+    OVH = "ovh"
+    RACKSPACE = "rackspace"
+    RACKSPACE_FIRST_GEN = "rackspace_first_gen"
+    RIMUHOSTING = "rimuhosting"
+    RUNABOVE = "runabove"
+    SCALEWAY = "scaleway"
+    TERREMARK = "terremark"
+    UPCLOUD = "upcloud"
+    VCL = "vcl"
+    VCLOUD = "vcloud"
+    VPSNET = "vpsnet"
+    VSPHERE = "vsphere"
+    VULTR = "vultr"
+
+    # OpenStack based providers
+    HPCLOUD = "hpcloud"
+    ONAPP = "onapp"
+
+    # Deprecated constants which aren't supported anymore
+    RACKSPACE_UK = "rackspace_uk"
+    RACKSPACE_NOVA_BETA = "rackspace_nova_beta"
+    RACKSPACE_NOVA_DFW = "rackspace_nova_dfw"
+    RACKSPACE_NOVA_LON = "rackspace_nova_lon"
+    RACKSPACE_NOVA_ORD = "rackspace_nova_ord"
+
+    EC2_US_EAST = "ec2_us_east"
+    EC2_US_EAST_OHIO = "ec2_us_east_ohio"
+    EC2_EU = "ec2_eu_west"  # deprecated name
+    EC2_EU_WEST = "ec2_eu_west"
+    EC2_EU_WEST2 = "ec2_eu_west_london"
+    EC2_US_WEST = "ec2_us_west"
+    EC2_AP_SOUTHEAST = "ec2_ap_southeast"
+    EC2_AP_NORTHEAST = "ec2_ap_northeast"
+    EC2_AP_NORTHEAST1 = "ec2_ap_northeast_1"
+    EC2_AP_NORTHEAST2 = "ec2_ap_northeast_2"
+    EC2_US_WEST_OREGON = "ec2_us_west_oregon"
+    EC2_SA_EAST = "ec2_sa_east"
+    EC2_AP_SOUTHEAST2 = "ec2_ap_southeast_2"
+    EC2_CA_CENTRAL1 = "ec2_ca_central_1"
+
+    CLOUDSIGMA_US = "cloudsigma_us"
+
+    # Removed
+    # SLICEHOST = 'slicehost'
 
 class CloudInstanceController:
     """
@@ -45,7 +190,10 @@ class CloudInstanceController:
             "dummy": Provider.DUMMY,
             "gcp": Provider.GCE,
             "linode": Provider.LINODE,
+            "multipass": Provider.MULTIPASS,
         }
+
+        set_driver(Provider.MULTIPASS, "timestep.infra.cloud_management.drivers.multipass", "MultipassNodeDriver")
 
         # Initialize drivers for each provider
         for provider, creds in credentials.items():
@@ -57,6 +205,7 @@ class CloudInstanceController:
 
             except Exception as e:
                 self.logger.error(f"Failed to initialize {provider} driver: {e}")
+                raise e
 
     def create_instance(
         self,

@@ -1,6 +1,7 @@
 #!/bin/bash
 # Refer to https://skypilot.readthedocs.io/en/latest/reservations/existing-machines.html for details on how to use this script.
-set -e
+set -e # Exit on error
+set -x # Print commands
 
 # Colors for nicer UX
 RED='\033[0;31m'

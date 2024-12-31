@@ -12,6 +12,7 @@ from libcloud.compute.base import Node
 from timestep.infra.cloud_management.cloud_instance_controller import (
     CloudInstanceController,
 )
+from timestep.infra.cloud_management.drivers.multipass import MultipassNodeDriver
 from timestep.infra.cluster_management.k3s_cluster_controller import (
     K3sClusterController,
 )
@@ -24,6 +25,7 @@ DEFAULT_ALLOWED_IMAGES_IDS = [
 
 DEFAULT_ALLOWED_IMAGE_NAMES = [
     # " (SupportedImages) - Ubuntu 24.04 LTS x86_64 LATEST - 20240603-prod-ajeby5guflgu4", # AWS
+    "24.04 LTS", # Multipass
     "24.04 (LTS) x64",  # DigitalOcean
     "Ubuntu 24.04 LTS",  # Linode
 ]
@@ -168,7 +170,7 @@ def up(
         #     'key_file': os.getenv('AZURE_KEY_FILE'),
         #     'subscription_id': os.getenv('AZURE_SUBSCRIPTION_ID'),
         # },
-        "digital_ocean": {"key": os.getenv("DIGITAL_OCEAN_API_KEY")},
+        # "digital_ocean": {"key": os.getenv("DIGITAL_OCEAN_API_KEY")},
         # "dummy": {
         #     'creds': os.getenv('DUMMY_CREDS')
         # },
@@ -176,7 +178,8 @@ def up(
         #     'project': os.getenv('GCE_PROJECT'),
         #     'user_id': os.getenv('GCE_USER_ID'),
         # },
-        "linode": {"key": os.getenv("LINODE_API_KEY")},
+        # "linode": {"key": os.getenv("LINODE_API_KEY")},
+        "multipass": {},
         # ... add more providers here
     }
 
@@ -303,21 +306,27 @@ def up(
 
         print(f"ip: {ip}")
 
-        SCRIPT = """#!/usr/bin/env bash
-        adduser --disabled-password --gecos "" sky
-        usermod -aG sudo sky
-        echo "sky ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/sky
-        mkdir -p /home/sky/.ssh
-        cp /root/.ssh/authorized_keys /home/sky/.ssh/authorized_keys
-        chown -R sky:sky /home/sky/.ssh
-        chmod 700 /home/sky/.ssh
-        chmod 600 /home/sky/.ssh/authorized_keys
-        usermod -s /bin/bash sky
-        usermod -d /home/sky sky
-        passwd -d root
-        """
+        if selected_driver.name in [MultipassNodeDriver.name]:
+            print(f'Skipping sky user creation for {selected_driver.name} driver')
 
-        ssh_connect(ip, script=SCRIPT, username="root", ssh_key=ssh_key)
+        else:
+            print(f'Creating sky user for {selected_driver.name} driver')
+
+            SCRIPT = """#!/usr/bin/env bash
+            adduser --disabled-password --gecos "" sky
+            usermod -aG sudo sky
+            echo "sky ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/sky
+            mkdir -p /home/sky/.ssh
+            cp /root/.ssh/authorized_keys /home/sky/.ssh/authorized_keys
+            chown -R sky:sky /home/sky/.ssh
+            chmod 700 /home/sky/.ssh
+            chmod 600 /home/sky/.ssh/authorized_keys
+            usermod -s /bin/bash sky
+            usermod -d /home/sky sky
+            passwd -d root
+            """
+
+            ssh_connect(ip, script=SCRIPT, username="root", ssh_key=ssh_key)
 
         ips_file = "ips.txt"
 
@@ -328,6 +337,7 @@ def up(
 
     except Exception as e:
         print(f"Error: {e}")
+        raise typer.Abort()
 
     typer.echo("\nWaiting for 15 seconds...")
     time.sleep(15)

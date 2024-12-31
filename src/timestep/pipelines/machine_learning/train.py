@@ -1,7 +1,8 @@
 import argparse
 import logging
 import os
-from typing import Dict, List
+from datetime import datetime
+from typing import Dict
 
 import evaluate
 import mlflow
@@ -40,9 +41,8 @@ mlflow.autolog(
     silent=False,
 )
 
-dtype = (
-    None  # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
-)
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 load_in_4bit = True  # Use 4bit quantization to reduce memory usage. Can be False.
 max_seq_length = 2048  # Supports RoPE Scaling interally, so choose any!
 # max_seq_length = 4096 # Choose any! We auto support RoPE Scaling internally!
@@ -295,68 +295,76 @@ model = FastVisionModel.get_peft_model(
     use_rslora=False,  # We support rank stabilized LoRA
 )
 
+model.config.use_cache = False
+
 FastVisionModel.for_training(model)  # Enable for training!
-
-metrics = evaluate.combine(["accuracy", "bleu", "meteor", "rouge"])
-metrics_tracker = {}
-
-
-def compute_metrics(eval_pred: EvalPrediction, compute_result: bool) -> Dict:
-    assert isinstance(
-        eval_pred, EvalPrediction
-    ), f"Expected EvalPrediction, got {type(eval_pred)}"
-
-    all_labels = eval_pred.label_ids
-    all_preds = eval_pred.predictions
-    is_last_step = compute_result
-
-    all_labels[all_labels == -100] = processor.tokenizer.pad_token_id
-    references: List[str] = processor.tokenizer.batch_decode(
-        all_labels, skip_special_tokens=True
-    )
-
-    assert (
-        all_preds.shape == all_labels.shape
-    ), f"Expected predictions and labels to have the same shape, got {all_preds.shape} and {all_labels.shape}"
-
-    predictions: List[str] = processor.tokenizer.batch_decode(
-        all_preds, skip_special_tokens=True
-    )
-
-    assert len(predictions) == len(
-        references
-    ), f"Expected predictions and references to have the same length, got {len(predictions)} and {len(references)}"
-
-    eval_batch_metrics = metrics.compute(
-        predictions=predictions,
-        references=references,
-    )
-
-    computed_metrics = {}
-
-    for key, value in eval_batch_metrics.items():
-        if type(value) in [list, np.ndarray]:
-            value = np.mean(value)
-
-        metrics_tracker[key] = np.mean([metrics_tracker.get(key, 0.0), value])
-        computed_metrics[key] = metrics_tracker[key]
-
-        if is_last_step:
-            metrics_tracker[key] = 0.0
-
-    return computed_metrics
 
 
 def preprocess_logits_for_metrics(
     logits: torch.Tensor, labels: torch.Tensor
 ) -> torch.Tensor:
-    """
-    Original Trainer may have a memory leak.
-    This is a workaround to avoid storing too many tensors that are not needed.
-    """
-    pred_ids = torch.argmax(logits, dim=-1)
+    if isinstance(logits, tuple):
+        logits = logits[0]
 
-    return pred_ids
+    return logits.argmax(dim=-1)
+
+
+def compute_metrics(eval_pred: EvalPrediction) -> Dict:
+    # metrics = evaluate.combine(
+    #     ["accuracy", "bleu", "bertscore", "chrf", "meteor", "rouge", "sacrebleu", "ter"]
+    # )
+    # metrics = evaluate.combine(["accuracy", "bleu", "meteor", "rouge"])
+    # Use metrics that work well with structured text
+    metrics = evaluate.combine(["rouge"])  # Start with just ROUGE
+
+    predictions = eval_pred.predictions
+    labels = eval_pred.label_ids
+
+    # Replace padding tokens and clip to vocab size
+    predictions[predictions == -100] = processor.tokenizer.pad_token_id
+    labels[labels == -100] = processor.tokenizer.pad_token_id
+    predictions = np.clip(predictions, 0, processor.tokenizer.vocab_size - 1)
+    labels = np.clip(labels, 0, processor.tokenizer.vocab_size - 1)
+
+    try:
+        pred_texts = processor.tokenizer.batch_decode(
+            predictions, skip_special_tokens=True, clean_up_tokenization_spaces=True
+        )
+
+        label_texts = processor.tokenizer.batch_decode(
+            labels, skip_special_tokens=True, clean_up_tokenization_spaces=True
+        )
+
+        # Add custom exact match metric for JSON structure
+        def normalize_json_string(s):
+            # Remove whitespace and normalize quotes
+            return "".join(s.split())
+
+        exact_matches = sum(
+            normalize_json_string(pred) == normalize_json_string(ref)
+            for pred, ref in zip(pred_texts, label_texts)
+        )
+        exact_match_rate = exact_matches / len(pred_texts)
+
+        # Compute ROUGE scores
+        rouge_scores = metrics.compute(predictions=pred_texts, references=label_texts)
+
+        # Combine metrics
+        results = {
+            "exact_match": exact_match_rate,
+            **{
+                k: float(np.mean(v)) if isinstance(v, (list, np.ndarray)) else float(v)
+                for k, v in rouge_scores.items()
+            },
+        }
+
+        return results
+
+    except Exception as e:
+        print(f"Error in compute_metrics: {str(e)}")
+        print(f"Sample prediction: {pred_texts[0][:100]}")
+        print(f"Sample label: {label_texts[0][:100]}")
+        raise
 
 
 trainer = SFTTrainer(
@@ -366,31 +374,33 @@ trainer = SFTTrainer(
         dataset_kwargs={"skip_prepare_dataset": True},
         dataset_num_proc=1,  # https://github.com/unslothai/unsloth?tab=readme-ov-file#windows-installation
         dataset_text_field="",
-        # eval_on_start=True,
-        hub_model_id=None,
-        hub_token=os.getenv("HF_TOKEN"),
+        eval_on_start=True,
         fp16=not is_bfloat16_supported(),
         gradient_accumulation_steps=4,
-        # gradient_accumulation_steps=1,
         gradient_checkpointing=True,
-        logging_steps=1,
+        hub_model_id=None,
+        hub_token=os.getenv("HF_TOKEN"),
         learning_rate=2e-4,
+        logging_steps=1,
         lr_scheduler_type="linear",
+        max_seq_length=max_seq_length,
         max_steps=3,
         # num_train_epochs = 1, # Set this instead of max_steps for full training runs
-        max_seq_length=max_seq_length,
         optim="adamw_bnb_8bit",
         output_dir=args.output_dir,
         per_device_eval_batch_size=1,
         per_device_train_batch_size=1,
         # push_to_hub=True,
-        report_to=["mlflow", "tensorboard"],
         remove_unused_columns=False,
-        run_name=os.getenv("SKYPILOT_TASK_ID"),
+        report_to=["mlflow", "tensorboard"],
+        run_name=os.getenv(
+            "SKYPILOT_TASK_ID",
+            f"SmolVLM-Instruct-SFT-{datetime.now().strftime('%Y-%m-%d-%H-%M-%s')}",
+        ),
         save_steps=1,
         save_total_limit=1,
         seed=seed,
-        torch_empty_cache_steps=1,
+        # torch_empty_cache_steps=1, # TODO: Try removing this
         warmup_steps=0,
         weight_decay=0.01,
     ),
@@ -404,6 +414,7 @@ trainer = SFTTrainer(
 )
 
 trainer_stats = trainer.train(
+    ignore_keys_for_eval=["pixel_attention_mask", "pixel_values"],
     resume_from_checkpoint=False,
     trial=None,
 )

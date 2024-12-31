@@ -5,6 +5,7 @@ import PIL
 import torch
 from datasets import interleave_datasets, load_dataset
 from datasets.features import Features, Image, Sequence, Value
+from transformers import PreTrainedModel, ProcessorMixin
 
 seed = 42
 stopping_strategy = "first_exhausted"
@@ -309,7 +310,8 @@ latex_ocr_train_dataset, latex_ocr_validation_dataset, _ = (
 )
 
 train_dataset = interleave_datasets(
-    [chat_threads_train_dataset, latex_ocr_train_dataset] + the_cauldron_train_datasets,
+    # [chat_threads_train_dataset, latex_ocr_train_dataset] + the_cauldron_train_datasets,
+    [chat_threads_train_dataset, latex_ocr_train_dataset],
     seed=seed,
     stopping_strategy=stopping_strategy,
 )
@@ -336,6 +338,9 @@ test_dataset = interleave_datasets(
 
 
 class MultiModalConversationalDataCollator:
+    processor: ProcessorMixin
+    model: PreTrainedModel
+
     def __init__(self, model, processor):
         self.model = model
         self.processor = processor
@@ -366,6 +371,7 @@ class MultiModalConversationalDataCollator:
                 documents=None,
                 tokenize=False,
                 tools=conversation["tools"],
+                # use_cache=False,
             )
             for conversation in conversations
         ]
@@ -380,6 +386,7 @@ class MultiModalConversationalDataCollator:
                 return_tensors="pt",
                 tokenize=True,
                 tools=conversation["tools"],
+                # use_cache=False,
             )
             for conversation in conversations
         ]
@@ -415,7 +422,7 @@ class MultiModalConversationalDataCollator:
             }
 
             for text, images in zip(text_batch, images_batch):
-                processed = self.processor(
+                processed = self.processor(  # TODO: Set add_end_of_utterance_token=False here and below? P.S., why is the vocab size 49152 when the end_of_utterance token id is 49154?
                     text=text,
                     images=images,
                     return_tensors="pt",
