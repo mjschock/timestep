@@ -83,17 +83,20 @@ $ timestep up [OPTIONS]
 **Options**:
 
 * `--allowed-image-ids TEXT`: Allowed image IDs to filter by  [default: ami-0e7c4f6b17a66658a]
-* `--allowed-image-names TEXT`: Allowed image names to filter by  [default: 24.04 (LTS) x64, Ubuntu 24.04 LTS]
+* `--allowed-image-names TEXT`: Allowed image names to filter by  [default: 24.04 LTS, 24.04 (LTS) x64, Ubuntu 24.04 LTS]
 * `--allowed-location-countries TEXT`: Allowed location countries to filter by
 * `--allowed-location-ids TEXT`: Allowed location IDs to filter by
 * `--allowed-location-names TEXT`: Allowed location names to filter by
 * `--clean / --no-clean`: Clean up  [default: no-clean]
 * `--dev / --no-dev`: Development mode  [default: no-dev]
+* `--down / --no-down`: Down  [default: no-down]
 * `--host TEXT`: Host  [default: 0.0.0.0]
 * `--min-bandwidth INTEGER`: Minimum bandwidth in GB
+* `--min-cpu INTEGER`: Minimum CPU count  [default: 2]
 * `--min-disk INTEGER`: Minimum disk size in GB  [default: 10]
-* `--min-ram INTEGER`: Minimum RAM in MB  [default: 2000]
+* `--min-ram INTEGER`: Minimum RAM in MB  [default: 4000]
 * `--name TEXT`: Name  [default: timestep]
+* `--providers TEXT`: Providers to filter by
 * `--port INTEGER`: Port  [default: 8000]
 * `--ssh-key TEXT`: Path to the SSH key  [default: ~/.ssh/id_ed25519]
 * `--help`: Show this message and exit.

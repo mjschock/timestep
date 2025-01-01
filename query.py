@@ -7,7 +7,7 @@ client = OpenAI(
     base_url="http://localhost:8000/v1",
 )
 
-messages=[
+messages = [
     {
         "role": "user",
         "content": [
@@ -28,7 +28,7 @@ model = "HuggingFaceTB/SmolVLM-Instruct"
 # model = "mjschock/SmolVLM-Instruct"
 temperature = 0.0
 
-print('stream=False')
+print("stream=False")
 
 chat_completion: ChatCompletion = client.chat.completions.create(
     max_completion_tokens=max_completion_tokens,
@@ -41,7 +41,7 @@ chat_completion: ChatCompletion = client.chat.completions.create(
 response = chat_completion.choices[0].message.content
 print(response)
 
-print('stream=True')
+print("stream=True")
 
 chat_completion_chunks: Stream[ChatCompletionChunk] = client.chat.completions.create(
     max_completion_tokens=max_completion_tokens,

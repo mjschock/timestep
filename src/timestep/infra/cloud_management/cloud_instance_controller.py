@@ -2,6 +2,8 @@ import logging
 import os
 from typing import Dict, List, Optional
 
+# from libcloud.compute.types import Provider as BaseProvider
+from libcloud.common.types import Type
 from libcloud.compute.base import (
     KeyPair,
     Node,
@@ -11,13 +13,8 @@ from libcloud.compute.base import (
     NodeSize,
 )
 from libcloud.compute.providers import get_driver, set_driver
-# from libcloud.compute.types import Provider as BaseProvider
-from libcloud.common.types import (
-    Type,
-)
 
 from timestep.infra.cloud_management.utils import get_or_create_key_pair
-
 
 # class Provider(BaseProvider):
 #     """
@@ -25,6 +22,7 @@ from timestep.infra.cloud_management.utils import get_or_create_key_pair
 #     """
 
 #     MULTIPASS = "multipass"
+
 
 class Provider(Type):
     """
@@ -161,6 +159,7 @@ class Provider(Type):
     # Removed
     # SLICEHOST = 'slicehost'
 
+
 class CloudInstanceController:
     """
     Manages cloud instances by finding the most cost-effective option
@@ -193,7 +192,11 @@ class CloudInstanceController:
             "multipass": Provider.MULTIPASS,
         }
 
-        set_driver(Provider.MULTIPASS, "timestep.infra.cloud_management.drivers.multipass", "MultipassNodeDriver")
+        set_driver(
+            Provider.MULTIPASS,
+            "timestep.infra.cloud_management.drivers.multipass",
+            "MultipassNodeDriver",
+        )
 
         # Initialize drivers for each provider
         for provider, creds in credentials.items():
@@ -360,6 +363,7 @@ class CloudInstanceController:
         Args:
             specs (Dict): Desired instance specifications
                 {
+                    'min_cpu': int,  # Minimum number of CPUs
                     'min_bandwidth': int,  # Minimum bandwidth in Mbps
                     'min_disk': int,  # Minimum disk size in GB
                     'min_ram': int,  # Minimum RAM in MB
@@ -380,6 +384,10 @@ class CloudInstanceController:
                         (
                             specs["min_bandwidth"] is None
                             or size.bandwidth >= specs["min_bandwidth"]
+                        )
+                        and (
+                            specs["min_cpu"] is None
+                            or size.extra["vcpus"] >= specs["min_cpu"]
                         )
                         and (
                             specs["min_disk"] is None or size.disk >= specs["min_disk"]

@@ -25,7 +25,7 @@ DEFAULT_ALLOWED_IMAGES_IDS = [
 
 DEFAULT_ALLOWED_IMAGE_NAMES = [
     # " (SupportedImages) - Ubuntu 24.04 LTS x86_64 LATEST - 20240603-prod-ajeby5guflgu4", # AWS
-    "24.04 LTS", # Multipass
+    "24.04 LTS",  # Multipass
     "24.04 (LTS) x64",  # DigitalOcean
     "Ubuntu 24.04 LTS",  # Linode
 ]
@@ -128,19 +128,24 @@ def up(
     ),
     clean: bool = typer.Option(default=False, help="Clean up"),
     dev: bool = typer.Option(default=False, help="Development mode"),
+    down: bool = typer.Option(default=False, help="Down"),
     host: str = typer.Option(default="0.0.0.0", help="Host"),
     min_bandwidth: Optional[int] = typer.Option(
         default=None, help="Minimum bandwidth in GB"
     ),  # TODO: Need to check or convert to proper unit
+    min_cpu: Optional[int] = typer.Option(default=2, help="Minimum CPU count"),
     min_disk: Optional[int] = typer.Option(
         default=10, help="Minimum disk size in GB"
     ),  # TODO: Need to check or convert to proper unit
     min_ram: Optional[int] = typer.Option(
         # None, help="Minimum RAM in MB"
-        default=2000,
+        default=4000,
         help="Minimum RAM in MB",
     ),  # TODO: Need to check or convert to proper unit
     name: str = typer.Option(default="timestep", help="Name"),
+    providers: Optional[List[str]] = typer.Option(
+        default=None, help="Providers to filter by"
+    ),
     port: int = typer.Option(default=8000, help="Port"),
     ssh_key: str = typer.Option(
         default="~/.ssh/id_ed25519",
@@ -170,7 +175,7 @@ def up(
         #     'key_file': os.getenv('AZURE_KEY_FILE'),
         #     'subscription_id': os.getenv('AZURE_SUBSCRIPTION_ID'),
         # },
-        # "digital_ocean": {"key": os.getenv("DIGITAL_OCEAN_API_KEY")},
+        "digital_ocean": {"key": os.getenv("DIGITAL_OCEAN_API_KEY")},
         # "dummy": {
         #     'creds': os.getenv('DUMMY_CREDS')
         # },
@@ -183,6 +188,9 @@ def up(
         # ... add more providers here
     }
 
+    if providers:
+        credentials = {provider: credentials[provider] for provider in providers}
+
     # Initialize the controller
     controller = CloudInstanceController(credentials)
 
@@ -190,6 +198,7 @@ def up(
         # Specify instance requirements
         instance_specs = {
             "min_bandwidth": min_bandwidth,
+            "min_cpu": min_cpu,
             "min_disk": min_disk,
             "min_ram": min_ram,
         }
@@ -307,10 +316,10 @@ def up(
         print(f"ip: {ip}")
 
         if selected_driver.name in [MultipassNodeDriver.name]:
-            print(f'Skipping sky user creation for {selected_driver.name} driver')
+            print(f"Skipping sky user creation for {selected_driver.name} driver")
 
         else:
-            print(f'Creating sky user for {selected_driver.name} driver')
+            print(f"Creating sky user for {selected_driver.name} driver")
 
             SCRIPT = """#!/usr/bin/env bash
             adduser --disabled-password --gecos "" sky
@@ -328,12 +337,19 @@ def up(
 
             ssh_connect(ip, script=SCRIPT, username="root", ssh_key=ssh_key)
 
+        attach_local_instance_as_k3s_agent_to_remote_cluster = typer.confirm(
+            "Would you like to attach your local machine (127.0.0.1) as a K3s agent to the remote cluster?"
+        )
+
         ips_file = "ips.txt"
 
         with open(ips_file, "w") as f:
             f.write(ip)
             f.write("\n")
-            f.write("127.0.0.1")
+            # f.write("127.0.0.1")
+
+            if attach_local_instance_as_k3s_agent_to_remote_cluster:
+                f.write("127.0.0.1")
 
     except Exception as e:
         print(f"Error: {e}")
@@ -344,7 +360,7 @@ def up(
 
     username = "sky"
 
-    controller = K3sClusterController(
+    k3s_cluster_controller = K3sClusterController(
         cluster_config={
             "ip": ip,
             "ips_file": ips_file,
@@ -354,10 +370,19 @@ def up(
     )
 
     try:
-        controller.create_cluster()
+        k3s_cluster_controller.create_cluster()
 
     except Exception as e:
         print(f"Error: {e}")
+
+    if down:
+        typer.echo("\nTearing down...")
+
+        # k3s_cluster_controller.delete_cluster()
+
+        controller.terminate_instance(node.id)
+
+        typer.echo(f"\nDeleted cluster and terminated instance: {node}")
 
     # typer.echo(f"Starting up the Timestep AI platform at http://{host}:{port}...")
 

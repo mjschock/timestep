@@ -239,6 +239,40 @@ the_cauldron_train_datasets = [
 ]
 
 
+def load_and_transform_code_act_dataset(features):
+    code_act_train_dataset = load_dataset(
+        "xingyaoww/code-act",
+        split="codeact",
+        streaming=True,
+    )
+
+    def transform_code_act(
+        sample,
+        indices,
+    ):
+        return {
+            "messages": sample["conversations"],
+        }
+
+    code_act_train_dataset = code_act_train_dataset.map(
+        transform_code_act,
+        batched=False,
+        features=features,
+        remove_columns=code_act_train_dataset.column_names,
+        with_indices=True,
+        batch_size=1,
+    )
+
+    assert code_act_train_dataset.column_names == list(
+        features.keys()
+    ), f"{code_act_train_dataset.column_names} != {list(features.keys())}"
+
+    return code_act_train_dataset, None, None
+
+
+code_act_train_dataset, _, _ = load_and_transform_code_act_dataset(features)
+
+
 def load_and_transform_latex_dataset(features):
     latex_ocr_train_dataset = load_dataset(
         "unsloth/LaTeX_OCR", split="train", streaming=True
@@ -304,14 +338,12 @@ def load_and_transform_latex_dataset(features):
     return latex_ocr_train_dataset, latex_ocr_validation_dataset, None
 
 
-# latex_ocr_train_dataset = load_and_transform_latex_dataset(features)
 latex_ocr_train_dataset, latex_ocr_validation_dataset, _ = (
     load_and_transform_latex_dataset(features)
 )
 
 train_dataset = interleave_datasets(
-    # [chat_threads_train_dataset, latex_ocr_train_dataset] + the_cauldron_train_datasets,
-    [chat_threads_train_dataset, latex_ocr_train_dataset],
+    [chat_threads_train_dataset, code_act_train_dataset, latex_ocr_train_dataset],
     seed=seed,
     stopping_strategy=stopping_strategy,
 )

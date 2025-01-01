@@ -1,4 +1,5 @@
 import argparse
+import json
 import logging
 import os
 from datetime import datetime
@@ -367,6 +368,10 @@ def compute_metrics(eval_pred: EvalPrediction) -> Dict:
         raise
 
 
+if os.path.exists(f"{args.output_dir}/train_dataset_state_dict.json"):
+    with open(f"{args.output_dir}/train_dataset_state_dict.json", "r") as f:
+        train_dataset.load_state_dict(json.loads(f.read()))
+
 trainer = SFTTrainer(
     args=SFTConfig(
         bf16=is_bfloat16_supported(),
@@ -378,11 +383,12 @@ trainer = SFTTrainer(
         fp16=not is_bfloat16_supported(),
         gradient_accumulation_steps=4,
         gradient_checkpointing=True,
-        hub_model_id=None,
+        hub_model_id="mjschock/SmolVLM-Instruct-SFT",
         hub_token=os.getenv("HF_TOKEN"),
-        learning_rate=2e-4,
+        # learning_rate=1e-5,
+        learning_rate=1e-4,
         logging_steps=1,
-        lr_scheduler_type="linear",
+        lr_scheduler_type="constant",
         max_seq_length=max_seq_length,
         max_steps=3,
         # num_train_epochs = 1, # Set this instead of max_steps for full training runs
@@ -390,7 +396,7 @@ trainer = SFTTrainer(
         output_dir=args.output_dir,
         per_device_eval_batch_size=1,
         per_device_train_batch_size=1,
-        # push_to_hub=True,
+        push_to_hub=True,
         remove_unused_columns=False,
         report_to=["mlflow", "tensorboard"],
         run_name=os.getenv(
@@ -400,7 +406,6 @@ trainer = SFTTrainer(
         save_steps=1,
         save_total_limit=1,
         seed=seed,
-        # torch_empty_cache_steps=1, # TODO: Try removing this
         warmup_steps=0,
         weight_decay=0.01,
     ),
@@ -413,14 +418,70 @@ trainer = SFTTrainer(
     train_dataset=train_dataset,
 )
 
-trainer_stats = trainer.train(
-    ignore_keys_for_eval=["pixel_attention_mask", "pixel_values"],
-    resume_from_checkpoint=False,
-    trial=None,
-)
+try:
+    trainer_stats = trainer.train(
+        ignore_keys_for_eval=["pixel_attention_mask", "pixel_values"],
+        resume_from_checkpoint=True,
+        trial=None,
+    )
+
+except ValueError as e:
+    if "No valid checkpoint found" in str(e):
+        logger.info("No valid checkpoint found, starting from scratch...")
+
+        trainer_stats = trainer.train(
+            ignore_keys_for_eval=["pixel_attention_mask", "pixel_values"],
+            resume_from_checkpoint=False,
+            trial=None,
+        )
+
+    else:
+        raise
+
+with open(f"{args.output_dir}/train_dataset_state_dict.json", "w") as f:
+    f.write(json.dumps(train_dataset.state_dict()))
 
 run_id = mlflow.last_active_run().info.run_id
 print(f"run_id: {run_id}")
 
-model.save_pretrained("lora_model")
-processor.save_pretrained("lora_model")
+# model.save_pretrained("lora_model")
+# processor.save_pretrained("lora_model")
+
+# Save and push to hub
+# trainer.save_model(training_args.output_dir)
+trainer.save_model(args.output_dir)
+# if training_args.push_to_hub:
+if trainer.args.push_to_hub:
+    # trainer.push_to_hub(dataset_name=script_args.dataset_name)
+
+    kwargs = {
+        "dataset": [
+            "mjschock/chat_threads",
+            "unsloth/LaTeX_OCR",
+            "xingyaoww/code-act",
+        ],
+        "tags": [
+            "image-text-to-text",
+        ],
+    }
+
+    trainer.push_to_hub(
+        # language: Optional[str] = None,
+        # license: Optional[str] = None,
+        # tags: Union[str, List[str], None] = None,
+        # model_name: Optional[str] = None,
+        # finetuned_from: Optional[str] = None,
+        # tasks: Union[str, List[str], None] = None,
+        # dataset_tags: Union[str, List[str], None] = None,
+        # dataset: Union[str, List[str], None] = None,
+        # dataset_args: Union[str, List[str], None] = None,
+        # dataset = [
+        #     "mjschock/chat_threads",
+        #     "unsloth/LaTeX_OCR",
+        #     "xingyaoww/code-act",
+        # ],
+        **kwargs,
+    )
+    if trainer.accelerator.is_main_process:
+        # processor.push_to_hub(training_args.hub_model_id)
+        processor.push_to_hub(trainer.args.hub_model_id)
