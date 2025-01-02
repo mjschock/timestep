@@ -9,13 +9,11 @@ import typer
 from click import Choice
 from libcloud.compute.base import Node
 
-from timestep.infra.cloud_management.cloud_instance_controller import (
-    CloudInstanceController,
-)
-from timestep.infra.cloud_management.drivers.multipass import MultipassNodeDriver
-from timestep.infra.cluster_management.k3s_cluster_controller import (
-    K3sClusterController,
-)
+from timestep.config import settings
+from timestep.infra.cloud.cloud_instance_controller import CloudInstanceController
+from timestep.infra.cloud.drivers.multipass import MultipassNodeDriver
+from timestep.infra.k3s.k3s_cluster_controller import K3sClusterController
+from timestep.infra.sky.sky_workload_controller import SkyWorkloadController
 from timestep.utils import ssh_connect
 
 # https://cloud-images.ubuntu.com/locator/
@@ -47,27 +45,31 @@ Timestep AI CLI - free, local-first, open-source AI
 src/timestep/
 │
 ├── infra/                  # Infrastructure management
-│   ├── cloud_management/   # Cloud instance operations
+│   ├── cloud/              # Cloud instance management
 │   │   └── cloud_instance_controller.py
 │   │       - Manages cloud instances using Apache Libcloud
 │   │
-│   ├── cluster_management/ # Kubernetes cluster management
+│   ├── k3s/                # K3s Kubernetes cluster management
 │   │   └── k3s_cluster_controller.py
 │   │       - Manages K3s Kubernetes clusters
 │   │
-│   └── workload_management/ # Workload orchestration
+│   └── sky/                # SkyPilot workload management
 │       └── sky_workload_controller.py
 │           - Manages computational workloads using SkyPilot
 │
-└── pipelines/              # Data and ML pipeline components
-    ├── data_engineering/   # Data preparation stage
-    │   └── task.yaml
+|── platform/              # Timestep AI platform
+|   └── ml/                # Machine learning stage
+|       └── task.yaml
+|           - SkyPilot task specification
+|
+└── services/              # Services
+    ├── backend/           # Backend service
+    │   └── main.py
+    │       - FastAPI backend service
     │
-    ├── machine_learning/   # Model development stage
-    │   └── task.yaml
-    │
-    └── model_deployment/   # Model deployment and monitoring
-        └── task.yaml
+    └── frontend/          # Frontend service
+        └── main.py
+            - Flet frontend service
 ```
 
 **Development Setup**:
@@ -373,7 +375,58 @@ def up(
         k3s_cluster_controller.create_cluster()
 
     except Exception as e:
-        print(f"Error: {e}")
+        typer.echo(f"Error: {e}")
+        raise typer.Abort()
+
+    # mlflow_tracking_password = $(kubectl get secret --namespace mlflow mlflow-tracking -o jsonpath="{.data.admin-password }" | base64 -d)
+    mlflow_tracking_password = subprocess.run(  # TODO: Do this securely (set it as a secret in the config and pass it to the Helm chart)
+        [
+            "kubectl",
+            "get",
+            "secret",
+            "--namespace",
+            "mlflow",
+            "mlflow-tracking",
+            "-o",
+            "jsonpath={.data.admin-password}",
+        ],
+        capture_output=True,
+        text=True,
+    ).stdout
+
+    sky_workload_controller = SkyWorkloadController(
+        project_config={
+            "HF_TOKEN": settings.hf_token.get_secret_value(),
+            "MLFLOW_TRACKING_PASSWORD": mlflow_tracking_password,
+        }
+    )
+
+    should_deploy_ml_platform = typer.confirm(
+        "Would you like to deploy the Timestep AI platform?"
+    )
+
+    if should_deploy_ml_platform:
+        task_spec = "src/timestep/platform/ml/task.yaml"
+
+        sky_workload_controller.launch_task(task_spec)
+
+    task_spec = "src/timestep/services/task.yaml"
+
+    job_id, handle = sky_workload_controller.launch_task(task_spec, down=True)
+
+    print(f"Task launched with job ID: {job_id}")
+    print(f"Handle: {handle}")
+
+    subprocess.run(
+        args=[
+            "kompose",
+            "convert",
+            "-f",
+            "docker-compose.yaml",
+            "-o",
+            "k8s",
+        ]
+    )
 
     if down:
         typer.echo("\nTearing down...")
@@ -383,15 +436,6 @@ def up(
         controller.terminate_instance(node.id)
 
         typer.echo(f"\nDeleted cluster and terminated instance: {node}")
-
-    # typer.echo(f"Starting up the Timestep AI platform at http://{host}:{port}...")
-
-    # timestep_serve(
-    #     dev=dev,
-    #     host=host,
-    #     # llamafile_path=llamafile_path,
-    #     port=port,
-    # )
 
 
 if __name__ == "__main__":

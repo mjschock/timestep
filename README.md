@@ -8,27 +8,31 @@ Timestep AI CLI - free, local-first, open-source AI
 src/timestep/
 │
 ├── infra/                  # Infrastructure management
-│   ├── cloud_management/   # Cloud instance operations
+│   ├── cloud/              # Cloud instance management
 │   │   └── cloud_instance_controller.py
 │   │       - Manages cloud instances using Apache Libcloud
 │   │
-│   ├── cluster_management/ # Kubernetes cluster management
+│   ├── k3s/                # K3s Kubernetes cluster management
 │   │   └── k3s_cluster_controller.py
 │   │       - Manages K3s Kubernetes clusters
 │   │
-│   └── workload_management/ # Workload orchestration
+│   └── sky/                # SkyPilot workload management
 │       └── sky_workload_controller.py
 │           - Manages computational workloads using SkyPilot
 │
-└── pipelines/              # Data and ML pipeline components
-    ├── data_engineering/   # Data preparation stage
-    │   └── task.yaml
+|── platform/              # Timestep AI platform
+|   └── ml/                # Machine learning stage
+|       └── task.yaml
+|           - SkyPilot task specification
+|
+└── services/              # Services
+    ├── backend/           # Backend service
+    │   └── main.py
+    │       - FastAPI backend service
     │
-    ├── machine_learning/   # Model development stage
-    │   └── task.yaml
-    │
-    └── model_deployment/   # Model deployment and monitoring
-        └── task.yaml
+    └── frontend/          # Frontend service
+        └── main.py
+            - Flet frontend service
 ```
 
 **Development Setup**:

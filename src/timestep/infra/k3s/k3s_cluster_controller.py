@@ -4,7 +4,7 @@ import subprocess
 import sys
 import tempfile
 
-from timestep.infra.cluster_management.utils import (
+from timestep.infra.k3s.utils import (
     Colors,
     check_gpu,
     cleanup_agent_node,

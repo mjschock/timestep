@@ -172,11 +172,14 @@ class MultipassNodeDriver(NodeDriver):
                 NodeSize(
                     id=image_key,
                     name=image_val["release"],
-                    ram=2000,
-                    disk=10,
-                    bandwidth=None,
+                    ram=4000,  # TODO: Get default values from the config
+                    disk=10,  # TODO: Get default values from the config
+                    bandwidth=None,  # TODO: Get default values from the config
                     price=0.1,
                     driver=self,
+                    extra=dict(
+                        vcpus=2,  # TODO: Get default values from the config
+                    ),
                 )
             )
 

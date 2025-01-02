@@ -12,7 +12,7 @@ sky launch \
     --cluster cluster \
     --env HF_TOKEN \
     --env MLFLOW_TRACKING_PASSWORD \
-    src/timestep/pipelines/machine_learning/task.yaml
+    src/timestep/platform/ml/task.yaml
 
 # kubectl port-forward pod/cluster-63c1-head 8000:8000 &
 # python query.py

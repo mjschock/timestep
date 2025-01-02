@@ -15,3 +15,5 @@ poetry run isort src
 poetry run pytest
 poetry run toml-sort -ai pyproject.toml
 poetry run typer timestep.main utils docs --name timestep --output README.md --title "Timestep AI"
+poetry export --output src/timestep/services/backend/requirements.txt --without-hashes
+poetry export --output src/timestep/services/frontend/requirements.txt --without-hashes

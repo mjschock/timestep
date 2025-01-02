@@ -22,7 +22,7 @@ apis:
 		-o /local/build/openai/python-flask \
 		--additional-properties packageName=api.v1
 
-	mv build/openai/python-flask/api/v1 src/timestep/pipelines/machine_learning/api/v1
+	mv build/openai/python-flask/api/v1 src/timestep/platform/ml/api/v1
 
 build:
 	$$SHELL ./scripts/build.sh

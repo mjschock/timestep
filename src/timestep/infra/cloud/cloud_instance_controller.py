@@ -14,7 +14,7 @@ from libcloud.compute.base import (
 )
 from libcloud.compute.providers import get_driver, set_driver
 
-from timestep.infra.cloud_management.utils import get_or_create_key_pair
+from timestep.infra.cloud.utils import get_or_create_key_pair
 
 # class Provider(BaseProvider):
 #     """
@@ -194,7 +194,7 @@ class CloudInstanceController:
 
         set_driver(
             Provider.MULTIPASS,
-            "timestep.infra.cloud_management.drivers.multipass",
+            f"{__package__}.drivers.multipass",
             "MultipassNodeDriver",
         )
 
