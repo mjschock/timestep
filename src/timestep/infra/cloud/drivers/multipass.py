@@ -57,7 +57,8 @@ class MultipassNodeDriver(NodeDriver):
                 "--cloud-init",
                 "-",
                 "--cpus",
-                "2",
+                # "2",
+                str(size.extra["vcpus"]),
                 "--disk",
                 "10G",
                 "--memory",
@@ -83,14 +84,7 @@ class MultipassNodeDriver(NodeDriver):
         )
 
     def destroy_node(self, node: Node):
-        print("=== Destroying node ===")
-        info = subprocess.run(
-            ["multipass", "delete", "--purge", node.id], capture_output=True
-        )
-        print("info:")
-        print(info)
-        print('info.stdout.decode("utf-8"):')
-        print(info.stdout.decode("utf-8"))
+        subprocess.run(["multipass", "delete", "--purge", node.id], capture_output=True)
 
         return True
 
@@ -124,7 +118,10 @@ class MultipassNodeDriver(NodeDriver):
 
     def list_locations(self):
         return [
-            NodeLocation(id="sfo3", name="localhost", country="localhost", driver=self)
+            # NodeLocation(id="sfo3", name="localhost", country="localhost", driver=self)
+            NodeLocation(
+                id="localhost", name="localhost", country="localhost", driver=self
+            )
         ]
 
     def list_nodes(self) -> List[Node]:
@@ -138,10 +135,8 @@ class MultipassNodeDriver(NodeDriver):
 
         for node in nodes:
             if node["state"] == "Running":
-                print(node["state"])
                 node_state = NodeState.RUNNING
             else:
-                print(node["state"])
                 node_state = NodeState.UNKNOWN
 
             node_list.append(
@@ -167,20 +162,24 @@ class MultipassNodeDriver(NodeDriver):
 
         node_sizes: List[NodeSize] = []
 
-        for image_key, image_val in images.items():
-            node_sizes.append(
-                NodeSize(
-                    id=image_key,
-                    name=image_val["release"],
-                    ram=4000,  # TODO: Get default values from the config
-                    disk=10,  # TODO: Get default values from the config
-                    bandwidth=None,  # TODO: Get default values from the config
-                    price=0.1,
-                    driver=self,
-                    extra=dict(
-                        vcpus=2,  # TODO: Get default values from the config
-                    ),
-                )
+        # for image_key, image_val in images.items():
+        node_sizes.append(
+            NodeSize(
+                # id=image_key,
+                id="2vcpu-4gb",
+                # name=image_val["release"],
+                name="2vcpu-4gb",
+                ram=4096,  # TODO: Get default values from the config
+                disk=10,  # TODO: Get default values from the config
+                bandwidth=None,  # TODO: Get default values from the config
+                # price=0.1,
+                price=0.0,
+                driver=self,
+                extra=dict(
+                    # vcpus=2,  # TODO: Get default values from the config
+                    vcpus=4,
+                ),
             )
+        )
 
         return node_sizes

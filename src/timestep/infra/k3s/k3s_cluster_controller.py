@@ -77,11 +77,13 @@ class K3sClusterController:
             print_color("Cleanup completed successfully.", Colors.GREEN)
             return
 
+        # INSTALL_K3S_EXEC="server --cluster-init --disable=traefik,servicelb --flannel-backend=wireguard-native" \
+
         # Deploy head node
         progress_message(f"Deploying Kubernetes on head node ({head_node})...")
         head_node_cmd = f"""
             curl -sfL https://get.k3s.io | \
-            INSTALL_K3S_EXEC="server --cluster-init --disable=traefik --flannel-backend=wireguard-native" \
+            INSTALL_K3S_EXEC="server --cluster-init --disable=traefik,servicelb --flannel-backend=wireguard-native" \
             K3S_TOKEN={k3s_token} sh - &&
             mkdir -p ~/.kube &&
             sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config &&
@@ -280,6 +282,76 @@ class K3sClusterController:
             username=self.cluster_config["username"],
             ssh_key=os.path.expanduser(self.cluster_config["ssh_key"]),
         )
+
+        address_pool_name = "first-pool"
+
+        manifest = f"""apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: {address_pool_name}
+  namespace: metallb-system
+spec:
+  addresses:
+    - {self.cluster_config['ip']}-{self.cluster_config['ip']}
+  autoAssign: false
+---
+
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: example
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - {address_pool_name}
+"""
+
+        with open("dist/metallb-config.yaml", "w") as f:
+            f.write(manifest)
+
+        print_color("Installing the Helm chart for MetalLB...", Colors.YELLOW)
+
+        SCRIPT = f"""#!/usr/bin/env bash
+        echo "Installing Helm chart for MetalLB..."
+        helm repo add metallb https://metallb.github.io/metallb
+        helm repo update
+        helm install metallb metallb/metallb --create-namespace --namespace metallb-system
+        echo "...done"
+        """
+
+        ssh_connect(
+            self.cluster_config["ip"],
+            script=SCRIPT,
+            username=self.cluster_config["username"],
+            ssh_key=os.path.expanduser(self.cluster_config["ssh_key"]),
+        )
+
+        success_message("MetalLB installed.")
+
+        print_color(
+            "Installing Helm chart for Caddy Ingress Controller.", Colors.YELLOW
+        )
+
+        SCRIPT = f"""#!/usr/bin/env bash
+        echo "Installing Helm chart for Caddy Ingress Controller..."
+        helm repo add caddy https://caddyserver.github.io/ingress/
+        helm repo update
+        helm install caddy caddy/caddy-ingress-controller \
+            --create-namespace \
+            --namespace caddy-system \
+            --set ingressController.config.email=m@mjschock.com \
+            --set-string loadBalancer.annotations."metallb\.universe\.tf/address-pool"={address_pool_name}
+        echo "...done"
+        """
+
+        ssh_connect(
+            self.cluster_config["ip"],
+            script=SCRIPT,
+            username=self.cluster_config["username"],
+            ssh_key=os.path.expanduser(self.cluster_config["ssh_key"]),
+        )
+
+        success_message("Caddy Ingress Controller installed.")
 
     def delete_cluster(self):
         """

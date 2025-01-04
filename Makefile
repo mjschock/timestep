@@ -29,6 +29,3 @@ build:
 
 clean:
 	$$SHELL ./scripts/clean.sh
-
-up:
-	$$SHELL ./scripts/up.sh

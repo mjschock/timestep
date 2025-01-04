@@ -1,20 +1,22 @@
 services:
-
-  redis-leader:
-    container_name: redis-leader
-    image: redis
-    ports:
-      - "6379"
-
-  redis-replica:
-    container_name: redis-replica
-    image: redis
-    ports:
-      - "6379"
-    command: redis-server --replicaof redis-leader 6379 --dir /tmp
-
-  web:
-    container_name: web
-    image: quay.io/kompose/web
+  backend:
+    build:
+      context: src/timestep/services/backend
+      dockerfile: Dockerfile
+    image: docker.io/mschock/timestep-backend:latest
+    labels:
+      kompose.service.expose: "api.${PRIMARY_DOMAIN_NAME}"
+      kompose.service.expose.ingress-class-name: "caddy"
     ports:
       - "8080:8080"
+
+  frontend:
+    build:
+      context: src/timestep/services/frontend
+      dockerfile: Dockerfile
+    image: docker.io/mschock/timestep-frontend:latest
+    labels:
+      kompose.service.expose: "${PRIMARY_DOMAIN_NAME}"
+      kompose.service.expose.ingress-class-name: "caddy"
+    ports:
+      - "5000:5000"

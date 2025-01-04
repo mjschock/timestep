@@ -89,7 +89,8 @@ jobs:
           timeout_minutes: 15
       - name: Verify
         run: |
-          timestep up --help
+          # timestep up --help
+          timestep up --accept-defaults --down --clean --providers multipass
   build-publish-pypi:
     needs: build-publish-testpypi-verify
     runs-on: ubuntu-latest

@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     prefect_api_url: str = Field(default="http://127.0.0.1:4200/api")
     prefect_logging_level: str = Field(default="INFO")
     prefect_logging_log_prints: bool = Field(default=True)
+    primary_domain_name: str = Field()
     pyenv_version: str = Field(default="3.10.14")
 
     # poetry_pypi_token_testpypi: SecretStr = Field(default=None)

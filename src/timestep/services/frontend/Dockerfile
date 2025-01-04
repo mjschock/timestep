@@ -1,4 +1,5 @@
-FROM ros:jazzy-ros-base-noble
+# FROM ros:jazzy-ros-base-noble
+FROM python:3-alpine
 
 WORKDIR /app
 
@@ -7,8 +8,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 8550
+EXPOSE 5000
 
-ENV BACKEND_URL=http://backend-service:8000
+# ENV BACKEND_URL=http://backend-service:8000
+ENV BACKEND_URL=http://backend.default.svc.cluster.local:8080
 
 CMD ["python", "main.py"]

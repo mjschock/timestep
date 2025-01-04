@@ -392,7 +392,7 @@ class CloudInstanceController:
                         and (
                             specs["min_disk"] is None or size.disk >= specs["min_disk"]
                         )
-                        and size.price > 0
+                        # and size.price > 0
                         and (specs["min_ram"] is None or size.ram >= specs["min_ram"])
                     ):
                         available_instances.append(

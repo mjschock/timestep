@@ -9,18 +9,18 @@ import pytest_asyncio
 from asgi_lifespan import LifespanManager
 
 from timestep.config import settings
-from timestep.server import fastapi_app
+# from timestep.services.backend.main import fastapi_app
 
 
-@pytest_asyncio.fixture(
-    autouse=True,
-    scope="session",
-)
-async def app(tmp_path_factory, worker_id):
-    async with LifespanManager(app=fastapi_app, startup_timeout=300) as manager:
-        print("App is ready")
-        yield manager.app
-        print("App is closing")
+# @pytest_asyncio.fixture(
+#     autouse=True,
+#     scope="session",
+# )
+# async def app(tmp_path_factory, worker_id):
+#     async with LifespanManager(app=fastapi_app, startup_timeout=300) as manager:
+#         print("App is ready")
+#         yield manager.app
+#         print("App is closing")
 
 
 @pytest_asyncio.fixture(scope="function")
@@ -29,7 +29,8 @@ async def current_loop():
 
 
 @pytest_asyncio.fixture(autouse=True, scope="function")
-async def client(app, current_loop, monkeypatch):
+# async def client(app, current_loop, monkeypatch):
+async def client(current_loop, monkeypatch):
     assert current_loop is asyncio.get_running_loop()
 
     base_url = settings.openai_base_url.replace(
@@ -52,23 +53,23 @@ async def client(app, current_loop, monkeypatch):
     #     mocked_handle_request,
     # )
 
-    async with httpx.AsyncClient(
-        base_url=base_url, transport=httpx.ASGITransport(app=app)
-    ) as client, openai.AsyncOpenAI(
-        api_key=settings.openai_api_key.get_secret_value(),
-        base_url=os.getenv("OPENAI_BASE_URL"),
-    ) as openai_client:
-        print("Clients are ready")
-        # yield client
-        # yield client, openai_client
-        clients: Dict[str, Union[httpx.AsyncClient, openai.AsyncOpenAI]] = {
-            # "httpx": client,
-            "async_httpx": client,
-            "async_openai": openai_client,
-        }
+    # async with httpx.AsyncClient(
+    #     base_url=base_url, transport=httpx.ASGITransport(app=app)
+    # ) as client, openai.AsyncOpenAI(
+    #     api_key=settings.openai_api_key.get_secret_value(),
+    #     base_url=os.getenv("OPENAI_BASE_URL"),
+    # ) as openai_client:
+    #     print("Clients are ready")
+    #     # yield client
+    #     # yield client, openai_client
+    #     clients: Dict[str, Union[httpx.AsyncClient, openai.AsyncOpenAI]] = {
+    #         # "httpx": client,
+    #         "async_httpx": client,
+    #         "async_openai": openai_client,
+    #     }
 
-        yield clients["async_httpx"]  # TODO: return both clients
-        print("Clients are closing")
+    #     yield clients["async_httpx"]  # TODO: return both clients
+    #     print("Clients are closing")
 
 
 @pytest.fixture

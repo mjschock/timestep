@@ -113,6 +113,9 @@ def main():
 
 @typer_app.command()
 def up(
+    accept_defaults: bool = typer.Option(
+        default=False, help="Accept defaults and skip prompts"
+    ),
     allowed_image_ids: Optional[List[str]] = typer.Option(
         default=DEFAULT_ALLOWED_IMAGES_IDS, help="Allowed image IDs to filter by"
     ),
@@ -129,9 +132,7 @@ def up(
         default=None, help="Allowed location names to filter by"
     ),
     clean: bool = typer.Option(default=False, help="Clean up"),
-    dev: bool = typer.Option(default=False, help="Development mode"),
     down: bool = typer.Option(default=False, help="Down"),
-    host: str = typer.Option(default="0.0.0.0", help="Host"),
     min_bandwidth: Optional[int] = typer.Option(
         default=None, help="Minimum bandwidth in GB"
     ),  # TODO: Need to check or convert to proper unit
@@ -148,7 +149,6 @@ def up(
     providers: Optional[List[str]] = typer.Option(
         default=None, help="Providers to filter by"
     ),
-    port: int = typer.Option(default=8000, help="Port"),
     ssh_key: str = typer.Option(
         default="~/.ssh/id_ed25519",
         help="Path to the SSH key",
@@ -161,11 +161,9 @@ def up(
     if clean:
         typer.echo("\nCleaning up...")
 
-        completed_process: subprocess.CompletedProcess[bytes] = subprocess.run(
-            ["./scripts/clean.sh"]
-        )
+        subprocess.run(args=["./scripts/clean.sh"])
 
-        typer.echo(f"\nCompleted process: {completed_process}")
+    os.makedirs("dist", exist_ok=True)
 
     # Example credentials (these would be securely stored)
     credentials = {
@@ -217,13 +215,17 @@ def up(
         def value_proc(value):
             return value
 
-        size_id = typer.prompt(
-            "\nSelect a node size id",
-            default=sizes[0].id,
-            show_choices=True,
-            type=Choice([choice(size) for size in sizes]),
-            value_proc=value_proc,
-        )
+        if accept_defaults:
+            size_id = sizes[0].id
+
+        else:
+            size_id = typer.prompt(
+                "\nSelect a node size id",
+                default=sizes[0].id,
+                show_choices=True,
+                type=Choice([choice(size) for size in sizes]),
+                value_proc=value_proc,
+            )
 
         selected_driver = [size.driver for size in sizes if size.id == size_id][0]
         selected_size = [size for size in sizes if size.id == size_id][0]
@@ -238,14 +240,18 @@ def up(
         if not images:
             raise typer.BadParameter("No matching images found")
 
-        image_id = typer.prompt(
-            "\nSelect a node image id",
-            default=images[0].id,
-            prompt_suffix=":",
-            show_choices=True,
-            type=Choice(sorted([choice(image) for image in images])),
-            value_proc=value_proc,
-        )
+        if accept_defaults:
+            image_id = images[0].id
+
+        else:
+            image_id = typer.prompt(
+                "\nSelect a node image id",
+                default=images[0].id,
+                prompt_suffix=":",
+                show_choices=True,
+                type=Choice(sorted([choice(image) for image in images])),
+                value_proc=value_proc,
+            )
 
         selected_image = [image for image in images if image.id == image_id][0]
 
@@ -260,25 +266,31 @@ def up(
         if not locations:
             raise typer.BadParameter("No matching locations found")
 
-        location_id = typer.prompt(
-            "\nSelect a node location id",
-            default="sfo3",
-            show_choices=True,
-            type=Choice(sorted([choice(location) for location in locations])),
-            value_proc=value_proc,
-        )
+        if accept_defaults:
+            location_id = locations[0].id
+
+        else:
+            location_id = typer.prompt(
+                "\nSelect a node location id",
+                default=locations[0].id,
+                show_choices=True,
+                type=Choice(sorted([choice(location) for location in locations])),
+                value_proc=value_proc,
+            )
 
         selected_location = [
             location for location in locations if location.id == location_id
         ][0]
 
         # Confirm selection
-        typer.echo("\nSelected Cloud Instance Details:\n")
-        typer.echo(f"Image: {selected_image}")
-        typer.echo(f"Location: {selected_location}")
-        typer.echo(f"Size: {selected_size}")
+        typer.echo("\nSelected Cloud Instance Details:")
+        typer.echo(f"\tImage: {selected_image}")
+        typer.echo(f"\tLocation: {selected_location}")
+        typer.echo(f"\tSize: {selected_size}\n")
 
-        if not typer.confirm("\nConfirm these details?"):
+        if not accept_defaults and not typer.confirm(
+            "\nConfirm these details?", default=True
+        ):
             raise typer.Abort()
 
         instance = controller.get_instance_by_name(
@@ -287,13 +299,13 @@ def up(
         )
 
         if instance:
-            terminate = typer.confirm(
-                f"\nInstance {name} already exists. Do you want to terminate it?"
+            terminate = accept_defaults or typer.confirm(
+                f"\nInstance {name} already exists. Do you want to terminate it?",
+                default=True,
             )
 
             if terminate:
                 controller.terminate_instance(instance.id)
-                typer.echo(f"Terminated instance: {instance}")
 
         # Create a cost-optimized instance
         node = controller.create_instance(
@@ -304,7 +316,6 @@ def up(
             ssh_key=ssh_key,
             size=selected_size,
         )
-        print(f"Created instance: {node}")
 
         nodes_to_ip_addresses: List[Tuple[Node, List[str]]] = (
             selected_driver.wait_until_running([node])
@@ -314,8 +325,6 @@ def up(
             typer.echo(f"\nNode {node.name} is running at {ip_addresses}")
 
         ip = nodes_to_ip_addresses[0][1][0]
-
-        print(f"ip: {ip}")
 
         if selected_driver.name in [MultipassNodeDriver.name]:
             print(f"Skipping sky user creation for {selected_driver.name} driver")
@@ -339,16 +348,20 @@ def up(
 
             ssh_connect(ip, script=SCRIPT, username="root", ssh_key=ssh_key)
 
-        attach_local_instance_as_k3s_agent_to_remote_cluster = typer.confirm(
-            "Would you like to attach your local machine (127.0.0.1) as a K3s agent to the remote cluster?"
+        attach_local_instance_as_k3s_agent_to_remote_cluster = (
+            False
+            if accept_defaults
+            else typer.confirm(
+                "Would you like to attach your local machine (127.0.0.1) as a K3s agent to the remote cluster?",
+                default=False,
+            )
         )
 
-        ips_file = "ips.txt"
+        ips_file = "dist/ips.txt"
 
         with open(ips_file, "w") as f:
             f.write(ip)
             f.write("\n")
-            # f.write("127.0.0.1")
 
             if attach_local_instance_as_k3s_agent_to_remote_cluster:
                 f.write("127.0.0.1")
@@ -357,8 +370,8 @@ def up(
         print(f"Error: {e}")
         raise typer.Abort()
 
-    typer.echo("\nWaiting for 15 seconds...")
-    time.sleep(15)
+    # typer.echo("\nWaiting for 15 seconds...")
+    # time.sleep(15)
 
     username = "sky"
 
@@ -378,7 +391,6 @@ def up(
         typer.echo(f"Error: {e}")
         raise typer.Abort()
 
-    # mlflow_tracking_password = $(kubectl get secret --namespace mlflow mlflow-tracking -o jsonpath="{.data.admin-password }" | base64 -d)
     mlflow_tracking_password = subprocess.run(  # TODO: Do this securely (set it as a secret in the config and pass it to the Helm chart)
         [
             "kubectl",
@@ -401,8 +413,9 @@ def up(
         }
     )
 
-    should_deploy_ml_platform = typer.confirm(
-        "Would you like to deploy the Timestep AI platform?"
+    should_deploy_ml_platform = not accept_defaults and typer.confirm(
+        "Would you like to deploy the Timestep AI platform?",
+        default=False,
     )
 
     if should_deploy_ml_platform:
@@ -410,23 +423,65 @@ def up(
 
         sky_workload_controller.launch_task(task_spec)
 
-    task_spec = "src/timestep/services/task.yaml"
-
-    job_id, handle = sky_workload_controller.launch_task(task_spec, down=True)
-
-    print(f"Task launched with job ID: {job_id}")
-    print(f"Handle: {handle}")
-
+    typer.echo("\nCreating Helm chart...")
     subprocess.run(
         args=[
             "kompose",
             "convert",
-            "-f",
+            "--chart",
+            "--file",
             "docker-compose.yaml",
-            "-o",
-            "k8s",
+            "--out",
+            "timestep-ai",
+            "--with-kompose-annotation=false",
         ]
     )
+
+    typer.echo("\nBuilding Docker images...")
+    subprocess.run(
+        args=[
+            "docker",
+            "compose",
+            "build",
+        ]
+    )
+
+    typer.echo("\nPushing Docker images...")
+    subprocess.run(
+        args=[
+            "docker",
+            "compose",
+            "push",
+        ]
+    )
+
+    typer.echo("\nInstalling Helm chart...")
+    subprocess.run(
+        args=[
+            "helm",
+            "install",
+            "timestep-ai",
+            "timestep-ai",
+        ]
+    )
+
+    typer.echo("\nWaiting for 15 seconds...")
+    time.sleep(15)
+
+    subprocess.run(
+        args=[
+            "kubectl",
+            "apply",
+            "-f",
+            "dist/metallb-config.yaml",
+        ]
+    )
+
+    with open("dist/.etchosts", "w") as f:
+        f.write(f"{ip} api.{settings.primary_domain_name}\n")
+        f.write(f"{ip} {settings.primary_domain_name}\n")
+
+    print("cat dist/.etchosts | sudo $(which hostctl) add timestep-ai --wait 0")
 
     if down:
         typer.echo("\nTearing down...")
