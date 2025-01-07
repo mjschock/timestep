@@ -176,6 +176,7 @@ def up(
         #     'subscription_id': os.getenv('AZURE_SUBSCRIPTION_ID'),
         # },
         "digital_ocean": {"key": os.getenv("DIGITAL_OCEAN_API_KEY")},
+        "docker": {},
         # "dummy": {
         #     'creds': os.getenv('DUMMY_CREDS')
         # },
@@ -185,6 +186,7 @@ def up(
         # },
         # "linode": {"key": os.getenv("LINODE_API_KEY")},
         "multipass": {},
+        "vagrant": {},
         # ... add more providers here
     }
 
@@ -293,6 +295,8 @@ def up(
         ):
             raise typer.Abort()
 
+        controller.prepare_driver(selected_driver)
+
         instance = controller.get_instance_by_name(
             driver=selected_driver,
             name=name,
@@ -370,8 +374,8 @@ def up(
         print(f"Error: {e}")
         raise typer.Abort()
 
-    # typer.echo("\nWaiting for 15 seconds...")
-    # time.sleep(15)
+    typer.echo("\nWaiting for 15 seconds...")
+    time.sleep(15)
 
     username = "sky"
 

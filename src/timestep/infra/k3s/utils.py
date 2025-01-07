@@ -41,7 +41,7 @@ def run_remote(node_ip: str, user: str, ssh_key: str, command: str) -> str:
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         print_color(f"Error running command on {node_ip}: {e.stderr}", Colors.RED)
-        raise
+        raise e
 
 
 def check_gpu(node_ip: str, user: str, ssh_key: str) -> bool:

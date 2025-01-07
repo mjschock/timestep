@@ -40,7 +40,9 @@ class Provider(Type):
     :cvar CLOUDSIGMA: CloudSigma
     :cvar CLOUDSCALE: cloudscale.ch
     :cvar CLOUDSTACK: CloudStack
+    :cvar DIGITAL_OCEAN: Digital Ocean driver.
     :cvar DIMENSIONDATA: Dimension Data Cloud
+    :cvar DOCKER: Docker driver.
     :cvar EC2: Amazon AWS.
     :cvar EXOSCALE: Exoscale driver.
     :cvar GCE: Google Compute Engine
@@ -65,6 +67,7 @@ class Provider(Type):
     :cvar RIMUHOSTING: RimuHosting.com
     :cvar TERREMARK: Terremark
     :cvar UPCLOUD: UpCloud
+    :cvar VAGRANT: Vagrant driver.
     :cvar VCL: VCL driver
     :cvar VCLOUD: vmware vCloud
     :cvar VPSNET: VPS.net
@@ -86,6 +89,7 @@ class Provider(Type):
     CLOUDSTACK = "cloudstack"
     DIGITAL_OCEAN = "digitalocean"
     DIMENSIONDATA = "dimensiondata"
+    DOCKER = "docker"
     EC2 = "ec2"
     EQUINIXMETAL = "equinixmetal"
     EUCALYPTUS = "eucalyptus"
@@ -122,6 +126,7 @@ class Provider(Type):
     SCALEWAY = "scaleway"
     TERREMARK = "terremark"
     UPCLOUD = "upcloud"
+    VAGRANT = "vagrant"
     VCL = "vcl"
     VCLOUD = "vcloud"
     VPSNET = "vpsnet"
@@ -186,16 +191,30 @@ class CloudInstanceController:
             "aws": Provider.EC2,
             "azure": Provider.AZURE,
             "digital_ocean": Provider.DIGITAL_OCEAN,
+            "docker": Provider.DOCKER,
             "dummy": Provider.DUMMY,
             "gcp": Provider.GCE,
             "linode": Provider.LINODE,
             "multipass": Provider.MULTIPASS,
+            "vagrant": Provider.VAGRANT,
         }
+
+        set_driver(
+            Provider.DOCKER,
+            f"{__package__}.drivers.docker",
+            "DockerNodeDriver",
+        )
 
         set_driver(
             Provider.MULTIPASS,
             f"{__package__}.drivers.multipass",
             "MultipassNodeDriver",
+        )
+
+        set_driver(
+            Provider.VAGRANT,
+            f"{__package__}.drivers.vagrant",
+            "VagrantNodeDriver",
         )
 
         # Initialize drivers for each provider
@@ -424,6 +443,21 @@ class CloudInstanceController:
         except Exception as e:
             self.logger.error(f"Error fetching instance by name: {e}")
             return None
+
+    def prepare_driver(self, driver: NodeDriver) -> NodeDriver:
+        """
+        Prepare the driver for a specific cloud provider.
+
+        Args:
+            driver (NodeDriver): Cloud provider driver
+
+        Returns:
+            NodeDriver: Initialized driver object
+        """
+        if hasattr(driver, "_prepare"):
+            driver._prepare()
+
+        return driver
 
     def terminate_instance(self, instance_id: str, provider: Optional[str] = None):
         """

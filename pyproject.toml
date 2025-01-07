@@ -33,6 +33,7 @@ version = "13.0.0a21"
 apache-libcloud = "^3.8.0"
 asgi-lifespan = "^2.1.0"
 connexion = {extras = ["swagger-ui", "uvicorn"], version = "^3.1.0"}
+docker = "^7.1.0"
 fastapi = "^0.115.6"
 flet = "^0.25.2"
 flet-web = "^0.25.2"
