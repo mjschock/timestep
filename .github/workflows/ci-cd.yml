@@ -105,6 +105,8 @@ jobs:
           fi
 
           multipass help
+          ls -l /var/snap/multipass/common/multipass_socket
+          newgrp adm
           multipass find --format json
 
           timestep up --accept-defaults --down --providers multipass
