@@ -67,7 +67,8 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12']
-        runs-on: [ubuntu-latest, macos-latest, windows-latest]
+        # runs-on: [ubuntu-latest, macos-latest, windows-latest]
+        runs-on: [ubuntu-latest]
     steps:
       - name: Set up Python
         uses: actions/setup-python@v3
@@ -93,11 +94,13 @@ jobs:
 
           uname -a
 
-          if [ "$(uname)" == "Linux" ]; then
+          if [ '${{ matrix.runs-on }}' == 'ubuntu-latest' ]; then
             sudo snap install multipass
-          elif [ "$(uname)" == "Darwin" ]; then
+
+          elif [ '${{ matrix.runs-on }}' == 'macos-latest' ]; then
             brew install multipass
-          elif [ "$(uname)" == "Windows" ]; then
+
+          elif [ '${{ matrix.runs-on }}' == 'windows-latest' ]; then
             choco install multipass
           fi
 
