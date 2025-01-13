@@ -11,10 +11,10 @@ if [ -f /usr/local/bin/k3s-uninstall.sh ]; then
     /usr/local/bin/k3s-uninstall.sh
 fi
 
-if [ -d ~/.config/timestep ]; then
-    echo "Removing timestep config"
-    rm -rf ~/.config/timestep
-fi
+# if [ -d ~/.config/timestep ]; then
+#     echo "Removing timestep config"
+#     rm -rf ~/.config/timestep
+# fi
 
 # if [ -f ~/.kube/config ]; then
 #     echo "Removing kube config"
