@@ -20,3 +20,9 @@ services:
       kompose.service.expose.ingress-class-name: "caddy"
     ports:
       - "5000:5000"
+
+  # virtual-kubelet-saladcloud:
+  #   build:
+  #     context: src/lib/virtual-kubelet-saladcloud
+  #     dockerfile: docker/Dockerfile
+  #   image: docker.io/mschock/virtual-kubelet-saladcloud:latest

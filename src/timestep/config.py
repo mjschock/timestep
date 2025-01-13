@@ -44,6 +44,7 @@ class Settings(BaseSettings):
     #     default="http://prefect-server.default.svc.cluster.local:4200/api"
     # )
     # pyenv_version: str = Field()
+    salad_cloud_api_key: SecretStr | None = Field(default=None)
     verbose: bool = Field(default=True)
     # version: str = Field()
 

@@ -1,0 +1,6 @@
+[submodule "src/lib/skypilot"]
+	path = src/lib/skypilot
+	url = https://github.com/mjschock/skypilot.git
+[submodule "src/lib/virtual-kubelet-saladcloud"]
+	path = src/lib/virtual-kubelet-saladcloud
+	url = https://github.com/SaladTechnologies/virtual-kubelet-saladcloud.git

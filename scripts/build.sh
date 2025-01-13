@@ -10,10 +10,8 @@ if [ -n "$POETRY_REPOSITORIES_TESTPYPI_URL" ]; then
 fi
 
 poetry install
-poetry run black src
-poetry run isort src
-poetry run pytest
+poetry run black src/timestep
+poetry run isort src/timestep
+poetry run pytest tests
 poetry run toml-sort -ai pyproject.toml
 poetry run typer timestep.main utils docs --name timestep --output README.md --title "Timestep AI"
-# poetry export --output src/timestep/services/backend/requirements.txt --without-hashes
-# poetry export --output src/timestep/services/frontend/requirements.txt --without-hashes

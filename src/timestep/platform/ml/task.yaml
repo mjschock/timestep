@@ -13,7 +13,7 @@ envs:
 
 resources:
   accelerators: GTX-1050-TI:1
-  cloud: kubernetes
+  # cloud: kubernetes
   cpus: 2+
   image_id: docker:ros:jazzy-ros-base-noble
   memory: 2+
