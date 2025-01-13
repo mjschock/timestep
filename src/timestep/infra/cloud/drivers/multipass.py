@@ -154,11 +154,11 @@ class MultipassNodeDriver(NodeDriver):
         return node_list
 
     def list_sizes(self):
-        info = subprocess.run(
-            ["multipass", "find", "--format", "json"], capture_output=True
-        )
-        info_json = json.loads(info.stdout.decode("utf-8"))
-        images = info_json["images"]
+        # info = subprocess.run(
+        #     ["multipass", "find", "--format", "json"], capture_output=True
+        # )
+        # info_json = json.loads(info.stdout.decode("utf-8"))
+        # images = info_json["images"]
 
         node_sizes: List[NodeSize] = []
 
