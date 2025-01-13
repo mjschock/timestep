@@ -105,6 +105,7 @@ jobs:
           fi
 
           multipass help
+          multipass find --format json
 
           timestep up --accept-defaults --down --providers multipass
   build-publish-pypi:
