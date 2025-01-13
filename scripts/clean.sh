@@ -36,6 +36,11 @@ serve:
 EOF
 fi
 
+if [ -d build ]; then
+    echo "Removing build"
+    rm -rf build
+fi
+
 if [ -d dist ]; then
     echo "Removing dist"
     rm -rf dist

@@ -1,4 +1,4 @@
-default: build
+default: clean build
 
 apis:
 	rm -rf build && mkdir -p build
@@ -22,7 +22,7 @@ apis:
 		-o /local/build/openai/python-flask \
 		--additional-properties packageName=api.v1
 
-	mv build/openai/python-flask/api/v1 src/timestep/platform/ml/api/v1
+	mv build/openai/python-flask/api/v1 src/timestep/services/backend/api/v1
 
 build:
 	$$SHELL ./scripts/build.sh

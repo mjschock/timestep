@@ -89,8 +89,21 @@ jobs:
           timeout_minutes: 15
       - name: Verify
         run: |
-          # timestep up --help
-          timestep up --accept-defaults --down --providers multipass
+          timestep up --help
+
+          uname -a
+
+          if [ "$(uname)" == "Linux" ]; then
+            sudo snap install multipass
+          elif [ "$(uname)" == "Darwin" ]; then
+            brew install multipass
+          elif [ "$(uname)" == "Windows" ]; then
+            choco install multipass
+          fi
+
+          multipass help
+
+          timestep up --accept-defaults --clean --down --providers multipass
   build-publish-pypi:
     needs: build-publish-testpypi-verify
     runs-on: ubuntu-latest

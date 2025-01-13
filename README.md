@@ -20,8 +20,17 @@ src/timestep/
 │       └── sky_workload_controller.py
 │           - Manages computational workloads using SkyPilot
 │
-|── platform/              # Timestep AI platform
-|   └── ml/                # Machine learning stage
+|── pipelines/             # Pipelines
+|   ├── data_engineering/  # Data engineering pipeline
+|   │   └── task.yaml
+|   │       - SkyPilot task specification
+|   ├── machine_learning/   # Machine learning pipeline
+|   │   └── task.yaml
+|   │       - SkyPilot task specification
+|   ├── model_deployment/   # Model deployment pipeline
+|   │   └── task.yaml
+|   │       - SkyPilot task specification
+|   └── model_monitoring/   # Model monitoring pipeline
 |       └── task.yaml
 |           - SkyPilot task specification
 |

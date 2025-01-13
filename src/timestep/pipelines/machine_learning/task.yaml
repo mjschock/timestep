@@ -9,7 +9,7 @@ envs:
   TORCHDYNAMO_VERBOSE: 1
 
 # export MLFLOW_TRACKING_PASSWORD=$(kubectl get secret --namespace mlflow mlflow-tracking -o jsonpath="{.data.admin-password }" | base64 -d)
-# sky launch -c cluster --env HF_TOKEN --env MLFLOW_TRACKING_PASSWORD src/timestep/platform/ml/task.yaml
+# sky launch -c cluster --env HF_TOKEN --env MLFLOW_TRACKING_PASSWORD src/timestep/pipelines/machine_learning/task.yaml
 
 resources:
   accelerators: GTX-1050-TI:1
@@ -102,4 +102,4 @@ setup: |
   python -c "import torch; print(torch.cuda.is_available())"
   python -c "import torch; print(torch.version.cuda)"
 
-workdir: src/timestep/platform/ml
+workdir: src/timestep/pipelines/machine_learning
