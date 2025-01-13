@@ -106,7 +106,7 @@ jobs:
 
           multipass help
 
-          timestep up --accept-defaults --clean --down --providers multipass
+          timestep up --accept-defaults --down --providers multipass
   build-publish-pypi:
     needs: build-publish-testpypi-verify
     runs-on: ubuntu-latest

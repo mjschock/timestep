@@ -140,7 +140,7 @@ def up(
     allowed_location_names: Optional[List[str]] = typer.Option(
         default=None, help="Allowed location names to filter by"
     ),
-    clean: bool = typer.Option(default=False, help="Clean up"),
+    # clean: bool = typer.Option(default=False, help="Clean up"),
     down: bool = typer.Option(default=False, help="Down"),
     min_bandwidth: Optional[int] = typer.Option(
         default=None, help="Minimum bandwidth in GB"
@@ -167,10 +167,10 @@ def up(
     Start up the Timestep AI platform.
     """
 
-    if clean:
-        typer.echo("\nCleaning up...")
+    # if clean:
+    #     typer.echo("\nCleaning up...")
 
-        subprocess.run(args=["./scripts/clean.sh"])
+    #     subprocess.run(args=["./scripts/clean.sh"])
 
     os.makedirs("dist", exist_ok=True)
 

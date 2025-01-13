@@ -101,7 +101,6 @@ $ timestep up [OPTIONS]
 * `--allowed-location-countries TEXT`: Allowed location countries to filter by
 * `--allowed-location-ids TEXT`: Allowed location IDs to filter by
 * `--allowed-location-names TEXT`: Allowed location names to filter by
-* `--clean / --no-clean`: Clean up  [default: no-clean]
 * `--down / --no-down`: Down  [default: no-down]
 * `--min-bandwidth INTEGER`: Minimum bandwidth in GB
 * `--min-cpu INTEGER`: Minimum CPU count  [default: 2]
