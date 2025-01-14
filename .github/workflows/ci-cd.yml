@@ -81,19 +81,25 @@ jobs:
           python3 -m pipx ensurepath
           which pipx
           pipx --version
-      - name: Install timestep
-        uses: nick-fields/retry@v3
-        with:
-          command: pipx install --index-url https://test.pypi.org/simple/ --pip-args="--extra-index-url https://pypi.org/simple/" -vvv timestep==${{ needs.build-publish-testpypi.outputs.TIMESTEP_VERSION }}
-          max_attempts: 3
-          retry_on: error
-          timeout_minutes: 15
-      - name: Verify
+      - name: Generate SSH key pair
         run: |
-          timestep up --help
+          mkdir -p ~/.ssh
+          ssh-keygen -t ed25519 -C "github-actions-automation" -f ~/.ssh/id_ed25519 -N ""
 
-          uname -a
+          # Set permissions
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/id_ed25519
+          chmod 644 ~/.ssh/id_ed25519.pub
 
+          # # Optional: Display the public key
+          # echo "Public key:"
+          # cat ~/.ssh/id_ed25519.pub
+
+          # # Optional: Save as GitHub Actions secrets
+          # echo "PRIVATE_KEY=$(cat ~/.ssh/id_ed25519)" >> $GITHUB_ENV
+          # echo "PUBLIC_KEY=$(cat ~/.ssh/id_ed25519.pub)" >> $GITHUB_ENV
+      - name: Install multipass
+        run: |
           if [ '${{ matrix.runs-on }}' == 'ubuntu-latest' ]; then
             sudo snap install multipass
             sudo chmod 666 /var/snap/multipass/common/multipass_socket
@@ -106,9 +112,16 @@ jobs:
           fi
 
           multipass help
-          ls -l /var/snap/multipass/common/multipass_socket
-          multipass find --format json
-
+      - name: Install timestep
+        uses: nick-fields/retry@v3
+        with:
+          command: pipx install --index-url https://test.pypi.org/simple/ --pip-args="--extra-index-url https://pypi.org/simple/" -vvv timestep==${{ needs.build-publish-testpypi.outputs.TIMESTEP_VERSION }}
+          max_attempts: 3
+          retry_on: error
+          timeout_minutes: 15
+      - name: Verify
+        run: |
+          timestep up --help
           timestep up --accept-defaults --down --providers multipass
   build-publish-pypi:
     needs: build-publish-testpypi-verify
