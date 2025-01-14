@@ -421,8 +421,8 @@ def up(
 
     sky_workload_controller = SkyWorkloadController(
         project_config={
-            "HF_TOKEN": settings.hf_token.get_secret_value(),
-            "MLFLOW_TRACKING_PASSWORD": mlflow_tracking_password,
+            # "HF_TOKEN": settings.hf_token.get_secret_value(),
+            # "MLFLOW_TRACKING_PASSWORD": mlflow_tracking_password,
         }
     )
 
@@ -434,7 +434,13 @@ def up(
     if should_deploy_ml_platform:
         task_spec = "src/timestep/pipelines/machine_learning/task.yaml"
 
-        sky_workload_controller.launch_task(task_spec)
+        sky_workload_controller.launch_task(
+            task_spec,
+            env_overrides={
+                "HF_TOKEN": settings.hf_token.get_secret_value(),
+                "MLFLOW_TRACKING_PASSWORD": mlflow_tracking_password,
+            }
+        )
 
     typer.echo("\nCreating Helm chart...")
     subprocess.run(

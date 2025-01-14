@@ -16,7 +16,7 @@ class SkyWorkloadController:
         """
         self.project_config = project_config
 
-    def launch_task(self, task_spec, down=False):
+    def launch_task(self, task_spec, env_overrides={}, down=False):
         """
         Launch a specific workload task.
 
@@ -28,7 +28,8 @@ class SkyWorkloadController:
         """
         print(f"Launching task: {task_spec}")
         print(f"Project config: {self.project_config}")
-        env_overrides = self.project_config.items()
+        # env_overrides = self.project_config.items()
+        env_overrides = env_overrides.items()
         print("Env overrides:", env_overrides)
 
         yaml_path = task_spec
