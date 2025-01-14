@@ -261,9 +261,9 @@ class K3sClusterController:
         except ModuleNotFoundError as e:
             self.logger.error(f"Failed to import sky.check: {e}")
 
-            subprocess.run(["sky", "check", "k8s"])
+            # subprocess.run(["sky", "check", "k8s"])
 
-        subprocess.run(["sky", "show-gpus", "--cloud", "k8s"])
+        # subprocess.run(["sky", "show-gpus", "--cloud", "k8s"])
 
         self.logger.info(
             f"Deploying Helm charts to K3s cluster: {self.cluster_config['ip']}"
