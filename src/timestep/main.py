@@ -443,16 +443,32 @@ def up(
         )
 
     typer.echo("\nCreating Helm chart...")
+    # subprocess.run(
+    #     args=[
+    #         "kompose",
+    #         "convert",
+    #         "--chart",
+    #         "--file",
+    #         "docker-compose.yaml",
+    #         "--out",
+    #         "timestep-ai",
+    #         "--with-kompose-annotation=false",
+    #     ]
+    # )
+
+    # docker run --rm -it -v $PWD:/opt kompose sh -c "cd /opt && kompose convert"
     subprocess.run(
         args=[
+            "docker",
+            "run",
+            "--rm",
+            "-it",
+            "-v",
+            f"{os.getcwd()}:/opt",
             "kompose",
-            "convert",
-            "--chart",
-            "--file",
-            "docker-compose.yaml",
-            "--out",
-            "timestep-ai",
-            "--with-kompose-annotation=false",
+            "sh",
+            "-c",
+            "cd /opt && kompose convert --chart --file docker-compose.yaml --out timestep-ai --with-kompose-annotation=false",
         ]
     )
 
