@@ -11,6 +11,9 @@ def run_kompose_convert(env: dict, out: str):
 
     # Configure the volume mapping
     current_dir = Path.cwd()
+
+    print('===> current_dir:', current_dir)
+
     volumes = {str(current_dir): {"bind": "/opt", "mode": "rw"}}
 
     try:
@@ -41,7 +44,9 @@ def run_kompose_convert(env: dict, out: str):
 
         # Stream the logs
         for log in container.logs(stream=True, follow=True):
-            print(log.decode().strip())
+            print(log.decode().strip(), end="")
+
+        print("")
 
         # Wait for container to finish
         result = container.wait()
