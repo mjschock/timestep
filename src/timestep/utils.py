@@ -1,7 +1,65 @@
 import os
 import time
+from pathlib import Path
 
+import docker
 import paramiko
+
+
+def run_kompose_convert(env: dict, out: str):
+    client = docker.from_env()
+
+    # Configure the volume mapping
+    current_dir = Path.cwd()
+    volumes = {str(current_dir): {"bind": "/opt", "mode": "rw"}}
+
+    try:
+        client.images.get("kompose")
+
+    except docker.errors.ImageNotFound:
+        print("Image 'kompose' not found. Building it now...")
+        client.images.build(
+            path="https://github.com/kubernetes/kompose.git#main",
+            pull=True,
+            tag="kompose",
+        )
+
+    try:
+        command = f"cd /opt && kompose convert --chart --file docker-compose.yaml --out {out} --with-kompose-annotation=false"
+
+        container = client.containers.run(
+            command=["sh", "-c", command],
+            detach=True,  # Run in background
+            environment=env,
+            image="kompose",
+            remove=True,  # equivalent to --rm
+            stdin_open=True,  # equivalent to -i
+            tty=True,  # equivalent to -t
+            user=f"{os.getuid()}:{os.getgid()}",
+            volumes=volumes,
+        )
+
+        # Stream the logs
+        for log in container.logs(stream=True, follow=True):
+            print(log.decode().strip())
+
+        # Wait for container to finish
+        result = container.wait()
+        if result["StatusCode"] != 0:
+            raise Exception(f"Container exited with status code {result['StatusCode']}")
+
+    except docker.errors.ContainerError as e:
+        print(f"Container error: {e}")
+    except docker.errors.ImageNotFound:
+        print("Image 'kompose' not found")
+    except docker.errors.APIError as e:
+        print(f"Docker API error: {e}")
+    finally:
+        # Ensure the container is removed even if an error occurred
+        try:
+            container.remove(force=True)
+        except:
+            pass
 
 
 def ssh_connect(

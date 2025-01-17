@@ -14,4 +14,4 @@ poetry run black src/timestep
 poetry run isort src/timestep
 poetry run pytest tests
 poetry run toml-sort -ai pyproject.toml
-poetry run typer timestep.main utils docs --name timestep --output README.md --title "Timestep AI"
+poetry run typer timestep.main utils docs --name timestep --output README.md --title "Timestep"

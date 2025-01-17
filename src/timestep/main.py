@@ -1,3 +1,4 @@
+import asyncio
 import inspect
 import logging
 import os
@@ -8,13 +9,14 @@ from typing import List, Optional, Tuple
 import typer
 from click import Choice
 from libcloud.compute.base import Node
+from pyhelm3 import Client
 
 from timestep.config import settings
 from timestep.infra.cloud.cloud_instance_controller import CloudInstanceController
 from timestep.infra.cloud.drivers.multipass import MultipassNodeDriver
 from timestep.infra.k3s.k3s_cluster_controller import K3sClusterController
 from timestep.infra.sky.sky_workload_controller import SkyWorkloadController
-from timestep.utils import ssh_connect
+from timestep.utils import run_kompose_convert, ssh_connect
 
 # https://cloud-images.ubuntu.com/locator/
 DEFAULT_ALLOWED_IMAGES_IDS = [
@@ -36,7 +38,7 @@ def get_help_message():
     is_readme_context = inspect.getmodule(inspect.stack()[1][0]) is None
 
     return """
-Timestep AI CLI - free, local-first, open-source AI
+Timestep CLI - free, local-first, open-source AI
 """ + (
         """
 ## Project Structure
@@ -117,7 +119,7 @@ typer_app = typer.Typer(
 
 @typer_app.callback()
 def main():
-    "Timestep AI CLI"
+    "Timestep CLI"
 
 
 @typer_app.command()
@@ -164,7 +166,7 @@ def up(
     ),
 ):
     """
-    Start up the Timestep AI platform.
+    Start up the Timestep platform.
     """
 
     # if clean:
@@ -427,7 +429,7 @@ def up(
     )
 
     should_deploy_ml_platform = not accept_defaults and typer.confirm(
-        "Would you like to deploy the Timestep AI platform?",
+        "Would you like to deploy the Timestep platform?",
         default=False,
     )
 
@@ -439,37 +441,15 @@ def up(
             env_overrides={
                 "HF_TOKEN": settings.hf_token.get_secret_value(),
                 "MLFLOW_TRACKING_PASSWORD": mlflow_tracking_password,
-            }
+            },
         )
 
     typer.echo("\nCreating Helm chart...")
-    # subprocess.run(
-    #     args=[
-    #         "kompose",
-    #         "convert",
-    #         "--chart",
-    #         "--file",
-    #         "docker-compose.yaml",
-    #         "--out",
-    #         "timestep-ai",
-    #         "--with-kompose-annotation=false",
-    #     ]
-    # )
-
-    # docker run --rm -it -v $PWD:/opt kompose sh -c "cd /opt && kompose convert"
-    subprocess.run(
-        args=[
-            "docker",
-            "run",
-            "--rm",
-            "-it",
-            "-v",
-            f"{os.getcwd()}:/opt",
-            "kompose",
-            "sh",
-            "-c",
-            "cd /opt && kompose convert --chart --file docker-compose.yaml --out timestep-ai --with-kompose-annotation=false",
-        ]
+    run_kompose_convert(
+        env={
+            "PRIMARY_DOMAIN_NAME": settings.primary_domain_name,
+        },
+        out="timestep-ai",
     )
 
     typer.echo("\nBuilding Docker images...")
@@ -491,13 +471,23 @@ def up(
     )
 
     typer.echo("\nInstalling Helm chart...")
-    subprocess.run(
-        args=[
-            "helm",
-            "install",
-            "timestep-ai",
-            "timestep-ai",
-        ]
+    helm_client = Client()
+
+    # Fetch a chart
+    chart = asyncio.get_event_loop().run_until_complete(
+        helm_client.get_chart(
+            "./timestep-ai",
+        )
+    )
+
+    # Install or upgrade a release
+    asyncio.get_event_loop().run_until_complete(
+        helm_client.install_or_upgrade_release(
+            atomic=True,
+            chart=chart,
+            release_name="timestep-ai",
+            wait=True,
+        )
     )
 
     typer.echo("\nWaiting for 15 seconds...")

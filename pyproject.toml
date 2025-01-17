@@ -22,12 +22,12 @@ profile = "black"
 
 [tool.poetry]
 authors = ["Michael James Schock <m@mjschock.com>"]
-description = "Timestep AI CLI - free, local-first, open-source AI"
+description = "Timestep CLI - free, local-first, open-source AI"
 license = "MIT"
 name = "timestep"
 packages = [{from = "src", include = "timestep"}]
 readme = "README.md"
-version = "13.0.0a33"
+version = "13.0.0a35"
 
 [tool.poetry.dependencies]
 apache-libcloud = "^3.8.0"
@@ -37,9 +37,11 @@ docker = "^7.1.0"
 fastapi = "^0.115.6"
 flet = "^0.25.2"
 flet-web = "^0.25.2"
+kubernetes = "^31.0.0"
 openai = "^1.58.1"
 paramiko = "^3.5.0"
 pydantic-settings = "^2.7.0"
+pyhelm3 = "^0.4.0"
 python = "^3.10"
 respx = "^0.21.1"
 salad-cloud-sdk = "^0.9.0a5"

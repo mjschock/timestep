@@ -1,6 +1,6 @@
-# Timestep AI
+# Timestep
 
-Timestep AI CLI - free, local-first, open-source AI
+Timestep CLI - free, local-first, open-source AI
 
 ## Project Structure
 
@@ -81,11 +81,11 @@ $ timestep [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
-* `up`: Start up the Timestep AI platform.
+* `up`: Start up the Timestep platform.
 
 ## `timestep up`
 
-Start up the Timestep AI platform.
+Start up the Timestep platform.
 
 **Usage**:
 
