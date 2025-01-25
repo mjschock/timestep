@@ -9,6 +9,16 @@ app_dir = typer.get_app_dir(__package__)
 # if app_dir exists and is not a git repo, delete it
 if os.path.exists(app_dir):
     if not os.path.exists(f"{app_dir}/.git"):
+        # backup data, models, and secrets if they exist
+        if os.path.exists(f"{app_dir}/data"):
+            os.system(f"mv {app_dir}/data {app_dir}.data")
+
+        if os.path.exists(f"{app_dir}/models"):
+            os.system(f"mv {app_dir}/models {app_dir}.models")
+
+        if os.path.exists(f"{app_dir}/secrets"):
+            os.system(f"mv {app_dir}/secrets {app_dir}.secrets")
+
         print(f"Removing {app_dir}")
         os.system(f"rm -rf {app_dir}")
 
@@ -19,6 +29,16 @@ if not os.path.exists(app_dir):
 
 # pull the latest changes
 os.system(f"cd {app_dir} && git pull")
+
+# restore data, models, and secrets if they exist
+if os.path.exists(f"{app_dir}.data"):
+    os.system(f"mv {app_dir}.data {app_dir}/data")
+
+if os.path.exists(f"{app_dir}.models"):
+    os.system(f"mv {app_dir}.models {app_dir}/models")
+
+if os.path.exists(f"{app_dir}.secrets"):
+    os.system(f"mv {app_dir}.secrets {app_dir}/secrets")
 
 os.makedirs(f"{app_dir}/data", exist_ok=True)
 os.makedirs(f"{app_dir}/models", exist_ok=True)
