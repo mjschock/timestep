@@ -467,6 +467,7 @@ def up(
     typer.echo("\nBuilding Docker images...")
     subprocess.run(
         args=[
+            f"PRIMARY_DOMAIN_NAME={settings.primary_domain_name}",
             "docker",
             "compose",
             "--file",
@@ -478,6 +479,7 @@ def up(
     typer.echo("\nPushing Docker images...")
     subprocess.run(
         args=[
+            f"PRIMARY_DOMAIN_NAME={settings.primary_domain_name}",
             "docker",
             "compose",
             "--file",
