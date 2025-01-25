@@ -410,7 +410,7 @@ def up(
     )
 
     try:
-        k3s_cluster_controller.create_cluster()
+        k3s_cluster_controller.create_cluster(cwd)
 
     except Exception as e:
         typer.echo(f"Error: {e}")
