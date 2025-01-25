@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 import tempfile
+from pathlib import Path
 
 from timestep.infra.k3s.utils import (
     Colors,
@@ -30,7 +31,7 @@ class K3sClusterController:
         self.logger = logging.getLogger(__name__)
         self.cluster_config = cluster_config
 
-    def create_cluster(self):
+    def create_cluster(self, cwd: Path):
         """
         Create a new Kubernetes cluster using k3s.
 
@@ -306,7 +307,8 @@ spec:
     - {address_pool_name}
 """
 
-        with open("dist/metallb-config.yaml", "w") as f:
+        # with open("dist/metallb-config.yaml", "w") as f:
+        with open(f"{cwd}/dist/metallb-config.yaml", "w") as f:
             f.write(manifest)
 
         print_color("Installing the Helm chart for MetalLB...", Colors.YELLOW)
