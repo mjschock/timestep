@@ -30,6 +30,14 @@ DEFAULT_ALLOWED_IMAGE_NAMES = [
     "Ubuntu 24.04 LTS",  # Linode
 ]
 
+app_dir = typer.get_app_dir(__package__)
+
+# if cwd is a git repo, set cwd to cwd else set cwd to app_dir
+cwd = os.getcwd()
+
+if not os.path.exists(f"{cwd}/.git"):
+    cwd = app_dir
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
@@ -174,7 +182,8 @@ def up(
 
     #     subprocess.run(args=["./scripts/clean.sh"])
 
-    os.makedirs("dist", exist_ok=True)
+    # os.makedirs("dist", exist_ok=True)
+    os.makedirs(f"{cwd}/dist", exist_ok=True)
 
     # Example credentials (these would be securely stored)
     credentials = {
@@ -372,7 +381,8 @@ def up(
             )
         )
 
-        ips_file = "dist/ips.txt"
+        # ips_file = "dist/ips.txt"
+        ips_file = f"{cwd}/dist/ips.txt"
 
         with open(ips_file, "w") as f:
             f.write(ip)
@@ -434,7 +444,8 @@ def up(
     )
 
     if should_deploy_ml_platform:
-        task_spec = "src/timestep/pipelines/machine_learning/task.yaml"
+        # task_spec = "src/timestep/pipelines/machine_learning/task.yaml"
+        task_spec = f"{cwd}/src/timestep/pipelines/machine_learning/task.yaml"
 
         sky_workload_controller.launch_task(
             task_spec,
@@ -446,6 +457,7 @@ def up(
 
     typer.echo("\nCreating Helm chart...")
     run_kompose_convert(
+        cwd=cwd,
         env={
             "PRIMARY_DOMAIN_NAME": settings.primary_domain_name,
         },
@@ -457,6 +469,8 @@ def up(
         args=[
             "docker",
             "compose",
+            "--file",
+            f"{cwd}/docker-compose.yaml",
             "build",
         ]
     )
@@ -466,6 +480,8 @@ def up(
         args=[
             "docker",
             "compose",
+            "--file",
+            f"{cwd}/docker-compose.yaml",
             "push",
         ]
     )
@@ -476,7 +492,8 @@ def up(
     # Fetch a chart
     chart = asyncio.get_event_loop().run_until_complete(
         helm_client.get_chart(
-            "./timestep-ai",
+            # "./timestep-ai",
+            f"{cwd}/timestep-ai",
         )
     )
 
@@ -498,15 +515,18 @@ def up(
             "kubectl",
             "apply",
             "-f",
-            "dist/metallb-config.yaml",
+            # "dist/metallb-config.yaml",
+            f"{cwd}/dist/metallb-config.yaml",
         ]
     )
 
-    with open("dist/.etchosts", "w") as f:
+    # with open("dist/.etchosts", "w") as f:
+    with open(f"{cwd}/dist/.etchosts", "w") as f:
         f.write(f"{ip} api.{settings.primary_domain_name}\n")
         f.write(f"{ip} {settings.primary_domain_name}\n")
 
-    print("cat dist/.etchosts | sudo $(which hostctl) add timestep-ai --wait 0")
+    # print("cat dist/.etchosts | sudo $(which hostctl) add timestep-ai --wait 0")
+    print(f"cat {cwd}/dist/.etchosts | sudo $(which hostctl) add timestep-ai --wait 0")
 
     if down:
         typer.echo("\nTearing down...")

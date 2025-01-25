@@ -6,6 +6,20 @@ from pydantic_settings import BaseSettings
 
 app_dir = typer.get_app_dir(__package__)
 
+# if app_dir exists and is not a git repo, delete it
+if os.path.exists(app_dir):
+    if not os.path.exists(f"{app_dir}/.git"):
+        print(f"Removing {app_dir}")
+        os.system(f"rm -rf {app_dir}")
+
+# if app_dir does not exist, clone the repo there
+if not os.path.exists(app_dir):
+    print(f"Cloning timestep repo to {app_dir}")
+    os.system(f"git clone --depth 1 https://github.com/mjschock/timestep.git {app_dir}")
+
+# pull the latest changes
+os.system(f"cd {app_dir} && git pull")
+
 os.makedirs(f"{app_dir}/data", exist_ok=True)
 os.makedirs(f"{app_dir}/models", exist_ok=True)
 os.makedirs(f"{app_dir}/secrets", exist_ok=True)

@@ -6,15 +6,11 @@ import docker
 import paramiko
 
 
-def run_kompose_convert(env: dict, out: str):
+def run_kompose_convert(cwd: Path, env: dict, out: str):
     client = docker.from_env()
 
     # Configure the volume mapping
-    current_dir = Path.cwd()
-
-    print('===> current_dir:', current_dir)
-
-    volumes = {str(current_dir): {"bind": "/opt", "mode": "rw"}}
+    volumes = {str(cwd): {"bind": "/opt", "mode": "rw"}}
 
     try:
         client.images.get("kompose")
