@@ -55,7 +55,7 @@ websockets = "^14.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"
-coverage = "^7.6.0"
+coverage = "^7.6.12"
 flet = {extras = ["all"], version = "0.25.2"}
 ipykernel = "^6.29.5"
 isort = "^5.13.2"
