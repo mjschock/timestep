@@ -1,6 +1,6 @@
 """FastAPI application for LangGraph backend with smolagents integration."""
 
-# Trigger rebuild
+# Trigger rebuild with Ollama configuration
 
 from fastapi import FastAPI, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware

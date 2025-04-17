@@ -13,7 +13,7 @@ class Configuration:
     """The configuration for the agent with smolagents integration."""
 
     # Model parameters
-    model_id: str = "llama2"  # Default model ID for Ollama
+    model_id: str = "codellama"  # Default model ID for Ollama
     model_provider: str = "ollama"  # Options: "huggingface", "openai", "litellm", "ollama"
     ollama_base_url: str = "http://host.docker.internal:11434"  # Ollama API URL
     
