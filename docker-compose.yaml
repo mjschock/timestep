@@ -3,23 +3,30 @@ services:
     build:
       context: src/timestep/services/backend
       dockerfile: Dockerfile
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
     image: docker.io/mschock/timestep-backend:latest
     labels:
       kompose.service.expose: "api.${PRIMARY_DOMAIN_NAME}"
       kompose.service.expose.ingress-class-name: "caddy"
     ports:
-      - "8080:8080"
+      - "8000:8000"
 
   frontend:
     build:
       context: src/timestep/services/frontend
       dockerfile: Dockerfile
+      target: dev
+    command: npm run dev
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://backend:8000
     image: docker.io/mschock/timestep-frontend:latest
     labels:
       kompose.service.expose: "${PRIMARY_DOMAIN_NAME}"
       kompose.service.expose.ingress-class-name: "caddy"
     ports:
-      - "5000:5000"
+      - "3000:3000"
 
   # virtual-kubelet-saladcloud:
   #   build:

@@ -1,16 +1,42 @@
-# FROM ros:jazzy-ros-base-noble
-FROM python:3-alpine
+FROM node:20-alpine AS base
 
+# Install dependencies only when needed
+FROM base AS deps
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy and install dependencies
+COPY package.json package-lock.json* ./
+RUN npm ci
 
+# Development image, everything is built during runtime
+FROM base AS dev
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-EXPOSE 5000
+# Build the application for production
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 
-# ENV BACKEND_URL=http://backend-service:8000
-ENV BACKEND_URL=http://backend.default.svc.cluster.local:8080
+RUN npm run build
 
-CMD ["python", "main.py"]
+# Production image, copy all the files and run next
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+# Copy only necessary files
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./
+
+# Expose port
+EXPOSE 3000
+
+# Set the command to run the app
+CMD ["npm", "start"] 

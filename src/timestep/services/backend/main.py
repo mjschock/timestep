@@ -1,147 +1,226 @@
-import json
-from contextlib import asynccontextmanager
-from enum import Enum
+"""FastAPI application for LangGraph backend with smolagents integration."""
 
-import uvicorn
-from connexion import AsyncApp, ConnexionMiddleware
-from fastapi import FastAPI, Request
+# Trigger rebuild
+
+from fastapi import FastAPI, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from openai import AsyncOpenAI
-from routes import router
+from fastapi.responses import StreamingResponse
+import uvicorn
+import json
+from typing import Dict, Any, List
+from fastapi.websockets import WebSocket
+from agent.graph import graph, State
+from agent.state import Message
+import time
 
-# from timestep.config import settings
+app = FastAPI()
 
-# app_dir = settings.app_dir
-connexion_app = AsyncApp(import_name=__name__)
-# default_hf_repo_id = settings.default_hf_repo_id
-
-# client = AsyncOpenAI(
-#     api_key="sk-no-key-required",
-#     # base_url="http://localhost:8080/v1",
-#     base_url="http://localhost:8000/v1",
-# )
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    try:
-        print("=== Lifespan startup ===")
-
-        # await flet_fastapi.app_manager.start()
-        yield
-        # await flet_fastapi.app_manager.shutdown()
-
-    finally:
-        print("=== Lifespan cleanup ===")
-        print("Shutting down...")
-
-
-fastapi_app = FastAPI(
-    lifespan=lifespan,
-    # servers= # TODO: add server for testing?
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, replace with specific origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# connexion_app.add_api(
-#     "api/openai/v1/openapi/openapi.yaml",
-#     base_path="/openai/v1",
-#     pythonic_params=True,
-#     resolver_error=500,
-# )
+@app.get("/")
+async def root():
+    """Health check endpoint."""
+    return {"status": "ok"}
 
-fastapi_app.mount("/api", ConnexionMiddleware(app=connexion_app, import_name=__name__))
-
-# app = FastAPI(title="Flet FastAPI Backend")
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-# app.include_router(router, prefix="/api")
-
-
-class Engine(str, Enum):
-    copilot_codex = "copilot-codex"
-
-
-@fastapi_app.get("/v1/engines")
-async def list_engines():
-    # return [engine.value for engine in Engine]
-    return {
-        "data": [
-            {
-                "id": Engine.copilot_codex,
-                "name": "Copilot Codex",
-                "description": "OpenAI's Codex model, formerly known as GitHub Copilot",
+@app.post("/chat")
+async def chat(message: Dict[str, Any]):
+    """Process chat messages through LangGraph with smolagents."""
+    try:
+        # Extract the user message
+        messages = message.get("messages", [])
+        last_message = messages[-1] if messages else {}
+        user_message = ""
+        
+        # Handle different message formats
+        if isinstance(last_message.get("content"), str):
+            user_message = last_message.get("content", "")
+        elif isinstance(last_message.get("content"), list):
+            # Handle array format with text objects
+            content_parts = last_message.get("content", [])
+            text_parts = []
+            for part in content_parts:
+                if isinstance(part, dict) and part.get("type") == "text":
+                    text_parts.append(part.get("text", ""))
+            user_message = " ".join(text_parts)
+        
+        print(f"Received message: {user_message}")
+        
+        # Convert messages to the format expected by the state
+        history: List[Message] = []
+        for msg in messages:
+            if isinstance(msg.get("content"), str):
+                history.append(Message(
+                    role=msg.get("role", "user"),
+                    content=msg.get("content", "")
+                ))
+        
+        # Create initial state
+        initial_state = State(changeme=user_message, messages=history)
+        
+        # Format the response as a stream
+        async def generate():
+            try:
+                # Send initial processing message
+                yield f'data: {json.dumps({"type": 1, "content": "Processing your request..."})}\n\n'
+                
+                # Process the message through the agent
+                async for event in graph.astream(initial_state):
+                    if event.get("agent_history"):
+                        # Send step messages
+                        for step in event.get("agent_history", []):
+                            step_message = f"Step {step.get('step_number', '?')}"
+                            if step.get("action"):
+                                step_message = f"{step_message}: {step.get('action')}"
+                            if step.get("output"):
+                                step_message = f"{step_message} → {step.get('output')}"
+                            if step.get("error"):
+                                step_message = f"{step_message} (Error: {step.get('error')})"
+                            yield f'data: {json.dumps({"type": 2, "content": step_message})}\n\n'
+                    
+                    # Send the final response
+                    if event.get("changeme"):
+                        yield f'data: {json.dumps({"type": 0, "content": event["changeme"]})}\n\n'
+                        
+            except Exception as e:
+                # Send error message
+                yield f'data: {json.dumps({"type": 3, "content": f"Error: {str(e)}"})}\n\n'
+        
+        return StreamingResponse(
+            generate(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
             }
-        ]
-    }
+        )
+        
+    except Exception as e:
+        print(f"Error processing chat message: {str(e)}")
+        return StreamingResponse(
+            iter([f'data: {json.dumps({"type": 3, "content": f"Error: {str(e)}"})}\n\n']),
+            media_type="text/event-stream"
+        )
 
-
-@fastapi_app.post("/v1/engines/{engine}/completions")
-async def create_code_completion(engine: Engine, request: Request):
-    print(
-        f"=== {__name__}.create_code_completion(engine: Engine, request: Request) ==="
-    )
-    print(f"engine: {engine}")
-    print(f"request: {request}")
-
-    if engine == Engine.copilot_codex:
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    """WebSocket endpoint for streaming chat responses."""
+    await websocket.accept()
+    try:
+        while True:
+            # Receive message from client
+            data = await websocket.receive_text()
+            message_data = json.loads(data)
+            
+            # Process with LangGraph
+            user_message = message_data.get("message", "")
+            history = message_data.get("history", [])
+            
+            print(f"WebSocket received: {user_message}")
+            
+            # Convert history to the format expected by the state
+            message_history = []
+            for msg in history:
+                message_history.append(Message(
+                    role=msg.get("role", "user"),
+                    content=msg.get("content", "")
+                ))
+            
+            initial_state = State(changeme=user_message, messages=message_history)
+            
+            # Send initial thinking status
+            await websocket.send_text(json.dumps({
+                "type": "status", 
+                "status": "thinking",
+                "message": "Starting to process your request..."
+            }))
+            
+            # Keep track of steps for progress reporting
+            step_counter = 0
+            last_progress_time = 0
+            
+            try:
+                # Stream the response
+                async for event in graph.astream(initial_state):
+                    current_time = time.time()
+                    
+                    # Send agent progress updates
+                    if event.get("agent_history") and event.get("agent_history") != []:
+                        agent_history = event.get("agent_history", [])
+                        
+                        # Find new steps (ones we haven't reported yet)
+                        while step_counter < len(agent_history):
+                            step = agent_history[step_counter]
+                            step_counter += 1
+                            
+                            # Create a descriptive step message
+                            step_message = f"Step {step_counter}"
+                            if "action" in step:
+                                step_message = f"{step_message}: {step['action']}"
+                            
+                            # Add input/output/error information if available
+                            if "output" in step and step["output"]:
+                                step_message = f"{step_message} → {step['output']}"
+                            elif "error" in step and step["error"]:
+                                step_message = f"{step_message} (Error: {step['error']})"
+                            
+                            # Send step info as progress update
+                            await websocket.send_text(json.dumps({
+                                "type": "progress", 
+                                "step": step_counter,
+                                "total_steps": len(agent_history),
+                                "details": step,
+                                "message": step_message
+                            }))
+                    
+                    # Send intermediate status update if no new steps in a while 
+                    # but we're still processing
+                    elif current_time - last_progress_time > 3 and not event.get("changeme"):
+                        last_progress_time = current_time
+                        await websocket.send_text(json.dumps({
+                            "type": "status",
+                            "status": "processing",
+                            "message": "Still working on your request..."
+                        }))
+                    
+                    # Send response fragments
+                    response = event.get("changeme", "")
+                    if response:
+                        await websocket.send_text(json.dumps({
+                            "type": "message",
+                            "response": response
+                        }))
+                
+                # Signal completion
+                await websocket.send_text(json.dumps({
+                    "type": "done"
+                }))
+                
+            except Exception as e:
+                error_msg = f"Error processing request: {str(e)}"
+                print(error_msg)
+                await websocket.send_text(json.dumps({
+                    "type": "error",
+                    "error": error_msg
+                }))
+                
+    except WebSocketDisconnect:
+        print("Client disconnected")
+    except Exception as e:
+        print(f"Error in websocket: {str(e)}")
         try:
-            body = await request.json()
-
-        except json.decoder.JSONDecodeError as e:
-            print(f"Error: {e}")
-            body = {
-                "model": "LLaMA_CPP",
-                "prompt": "int main() {",
-            }
-
-        # body["model"] = "LLaMA_CPP"
-
-        # return await create_completion(body, token_info={}, user=None)
-        raise NotImplementedError("Not implemented")
-
-    else:
-        raise NotImplementedError("Not implemented")
-
-
-def main(*args, **kwargs):
-    print(f"=== {__name__}.main(*args, **kwargs) ===")
-    print(f"args: {args}")
-    print(f"kwargs: {kwargs}")
-
-    # cwd = os.getcwd()
-    # print(f"cwd: {cwd}")
-
-    # uvicorn.run(
-    #     f"{__name__}:fastapi_app",
-    #     # host="0.0.0.0",
-    #     host=kwargs.get("host", "0.0.0.0"),
-    #     log_level="info",
-    #     loop="asyncio",
-    #     # port=8000,
-    #     # port=kwargs.get("port", 8000),
-    #     port=kwargs.get("port", 8080),
-    #     # reload=True,
-    #     reload=kwargs.get("dev", False),
-    #     reload_dirs=[
-    #         # f"{os.getcwd()}/timestep",
-    #         f"{os.getcwd()}/src/timestep",
-    #     ],
-    #     workers=1,
-    # )
-
-    # uvicorn.run(app, host="0.0.0.0", port=8080)
-    uvicorn.run(
-        fastapi_app,
-        host="0.0.0.0",
-        port=8080,
-    )
-
+            await websocket.send_text(json.dumps({
+                "type": "error",
+                "error": f"Websocket error: {str(e)}"
+            }))
+        except:
+            print("Could not send error message to client")
 
 if __name__ == "__main__":
-    main()
+    uvicorn.run(app, host="0.0.0.0", port=8000) 

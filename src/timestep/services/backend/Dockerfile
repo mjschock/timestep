@@ -1,13 +1,19 @@
-# FROM ros:jazzy-ros-base-noble
-FROM python:3-alpine
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies first
+COPY pyproject.toml .
+RUN pip install --no-cache-dir --upgrade pip
 
+# Copy the entire project
 COPY . .
 
-EXPOSE 8080
+# Now install the package in development mode
+RUN pip install --no-cache-dir -e .
 
+# Run the application
 CMD ["python", "main.py"]
+
+# Expose port
+EXPOSE 8000 

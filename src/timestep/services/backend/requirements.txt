@@ -1,4 +1,0 @@
-connexion[swagger-ui,uvicorn]
-openai
-fastapi
-# uvicorn
