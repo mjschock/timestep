@@ -143,10 +143,7 @@ class ModelServer:
         # Ensure model is in inference mode
         FastModel.for_inference(self.model)
 
-        example = dataset[1]
-
-        print("example:")
-        print(example)
+        example = dataset[3]
 
         def format_conversation(messages):
             for message in messages:
@@ -159,13 +156,9 @@ class ModelServer:
 
         conversation = format_conversation(example["messages"])
 
-        print("conversation:")
-        print(conversation)
-
         images, text, videos = process_conversation(conversation, self.tokenizer)
 
-        print("text:")
-        print(text)
+        logger.info(f"text: {text}")
 
         inputs = self.tokenizer(
             images=images,
@@ -191,8 +184,9 @@ class ModelServer:
             skip_special_tokens=True,
         )
 
-        print("response:")
-        print(generated_texts[0])
+        logger.info(f"response: {generated_texts[0]}")
+
+        return generated_texts
 
 
 # Example usage and testing
@@ -230,12 +224,7 @@ async def main():
         # Create dataset from test data
         test_dataset = Dataset.from_list(normalized_conversations)
 
-        # Log dataset structure
-        logger.info(f"Dataset structure: {test_dataset}")
-
         for example_i, example in enumerate(test_dataset):
-            logger.info(f"Example {example_i}: {example['messages']}")
-
             for msg_i, msg in enumerate(example["messages"]):
                 try:
                     assert (
@@ -247,9 +236,6 @@ async def main():
                         msg["content"]
                         == conversations[example_i]["messages"][msg_i]["content"]
                     ), f"{msg['content']} != {conversations[example_i]['messages'][msg_i]['content']}"
-
-        # Test inference with minimal parameters
-        logger.info("\nTesting inference...")
 
         step_args = StepArguments(
             batch_size=1,
