@@ -143,7 +143,7 @@ class ModelServer:
         # Ensure model is in inference mode
         FastModel.for_inference(self.model)
 
-        example = dataset[0]
+        example = dataset[1]
 
         print("example:")
         print(example)
@@ -163,6 +163,9 @@ class ModelServer:
         print(conversation)
 
         images, text, videos = process_conversation(conversation, self.tokenizer)
+
+        print("text:")
+        print(text)
 
         inputs = self.tokenizer(
             images=images,

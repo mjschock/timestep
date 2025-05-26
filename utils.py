@@ -74,6 +74,7 @@ def process_conversation(
                     image_url = content["url"]
                     image = load_image(image_url)
                     images = [image] if images is None else images + [image]
+                    text += "<image>"
 
                 elif content["type"] == "video":
                     video_path = content["path"]
