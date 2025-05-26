@@ -5,6 +5,7 @@ Unified Model Server using Unsloth
 import asyncio
 import json
 import logging
+import pprint
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
@@ -76,17 +77,17 @@ class ModelServer:
 
     def __init__(
         self,
-        model_args: Optional[FastModelArguments] = None,
+        model_args: Optional[FastModelArguments] = FastModelArguments(),
     ):
-        # Use provided args or default
-        self.model_args = model_args or FastModelArguments()
+        self.model_args = model_args
+
+        logger.info(f"model_args:\n{pprint.pformat(self.model_args.model_dump())}")
+
         self.model: Optional[PreTrainedModel] = None
         self.tokenizer: Optional[PreTrainedTokenizer] = None
 
         # Initialize model and tokenizer
         try:
-            logger.info(f"Loading model: {self.model_args.model_name}")
-
             # Load model using unified FastModel
             self.model, self.tokenizer = FastModel.from_pretrained(
                 **self.model_args.model_dump(exclude_none=True)
@@ -102,12 +103,17 @@ class ModelServer:
                 ).major
                 < 7
             ):
+                # Get all attributes and their values in alphabetical order
+                props = {
+                    attr: getattr(device_props, attr)
+                    for attr in sorted(dir(device_props))
+                    if not attr.startswith("_")
+                    and not callable(getattr(device_props, attr))
+                }
                 logger.warning(
-                    f"Disabling torch.dynamo since GPU is too old: {device_props}"
+                    f"Disabling torch.dynamo since GPU is too old; device properties:\n{pprint.pformat(props)}"
                 )
                 torch._dynamo.config.disable = True
-
-            logger.info("Model loaded successfully")
 
         except Exception as e:
             logger.error(f"Failed to initialize model: {e}")
@@ -116,7 +122,7 @@ class ModelServer:
     async def step(
         self,
         dataset: Dataset,
-        step_args: Optional[StepArguments] = None,
+        step_args: Optional[StepArguments] = StepArguments(),
     ) -> List[str]:
         """
         Main step function for inference.
@@ -128,22 +134,16 @@ class ModelServer:
         Returns:
             List of predictions
         """
-        # Use provided args or default
-        step_args = step_args or StepArguments()
+        logger.info(f"step_args:\n{pprint.pformat(step_args.model_dump())}")
 
         # Validate mode
         if step_args.mode != StepArguments.Mode.INFERENCE:
             raise ValueError("Currently only 'inference' mode is supported")
 
-        logger.info(
-            f"Starting inference with parameters: max_new_tokens={step_args.max_new_tokens}, "
-            f"temperature={step_args.temperature}, batch_size={step_args.batch_size}"
-        )
-
         # Ensure model is in inference mode
         FastModel.for_inference(self.model)
 
-        example = dataset[3]
+        example = dataset[4]
 
         def format_conversation(messages):
             for message in messages:
@@ -158,7 +158,7 @@ class ModelServer:
 
         images, text, videos = process_conversation(conversation, self.tokenizer)
 
-        logger.info(f"text: {text}")
+        logger.info(f"text:\n{text}")
 
         inputs = self.tokenizer(
             images=images,
@@ -183,8 +183,6 @@ class ModelServer:
             generated_ids,
             skip_special_tokens=True,
         )
-
-        logger.info(f"response: {generated_texts[0]}")
 
         return generated_texts
 
@@ -249,7 +247,7 @@ async def main():
             step_args=step_args,
         )
 
-        logger.info(f"Inference results: {inference_results}")
+        logger.info(f"inference_results:\n{inference_results}")
 
     except Exception as e:
         logger.error(f"Error in main: {e}")
