@@ -143,7 +143,7 @@ class ModelServer:
         # Ensure model is in inference mode
         FastModel.for_inference(self.model)
 
-        example = dataset[3]
+        example = dataset[0]
 
         print("example:")
         print(example)

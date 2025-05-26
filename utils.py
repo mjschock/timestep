@@ -60,26 +60,30 @@ def process_conversation(
         - List of video frames (or None if no videos)
     """
     images = None
-    videos = None
     text = f"{processor.tokenizer.bos_token}User:"
+    videos = None
 
     # Process all messages in a single loop
     for message in conversation:
-        for content in message["content"]:
-            if content["type"] == "text":
-                text += content["text"]
+        if type(message["content"]) == list:
+            for content in message["content"]:
+                if content["type"] == "text":
+                    text += content["text"]
 
-            elif content["type"] == "image":
-                image_url = content["url"]
-                image = load_image(image_url)
-                images = [image] if images is None else images + [image]
+                elif content["type"] == "image":
+                    image_url = content["url"]
+                    image = load_image(image_url)
+                    images = [image] if images is None else images + [image]
 
-            elif content["type"] == "video":
-                video_path = content["path"]
-                video = load_video(video_path)
-                videos = [video] if videos is None else videos + [video]
-                # Add image token for each frame in the video
-                text += "<image>" * len(video)
+                elif content["type"] == "video":
+                    video_path = content["path"]
+                    video = load_video(video_path)
+                    videos = [video] if videos is None else videos + [video]
+                    # Add image token for each frame in the video
+                    text += "<image>" * len(video)
+
+        elif type(message["content"]) == str:
+            text += message["content"]
 
     text += f"{processor.tokenizer.eos_token}\nAssistant:"
 
