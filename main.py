@@ -187,53 +187,19 @@ class ModelServer:
         return generated_texts
 
 
-# Example usage and testing
 async def main():
     """Example usage of the ModelServer."""
 
-    # Initialize server with default arguments
     server = ModelServer()
 
     try:
-        # Create test dataset with three examples
         conversations = []
+
         with open("conversations.jsonl", "r") as f:
             for line in f:
                 conversations.append(json.loads(line.strip()))
 
-        # Normalize content in conversations before creating dataset
-        normalized_conversations = []
-
-        for conv in conversations:
-            normalized_conv = {"messages": []}
-
-            for msg in conv["messages"]:
-                normalized_msg = msg.copy()
-
-                if "content" in normalized_msg and not isinstance(
-                    normalized_msg["content"], str
-                ):
-                    normalized_msg["content"] = json.dumps(normalized_msg["content"])
-
-                normalized_conv["messages"].append(normalized_msg)
-
-            normalized_conversations.append(normalized_conv)
-
-        # Create dataset from test data
-        test_dataset = Dataset.from_list(normalized_conversations)
-
-        for example_i, example in enumerate(test_dataset):
-            for msg_i, msg in enumerate(example["messages"]):
-                try:
-                    assert (
-                        json.loads(msg["content"])
-                        == conversations[example_i]["messages"][msg_i]["content"]
-                    ), f"{json.loads(msg['content'])} != {conversations[example_i]['messages'][msg_i]['content']}"
-                except json.decoder.JSONDecodeError:
-                    assert (
-                        msg["content"]
-                        == conversations[example_i]["messages"][msg_i]["content"]
-                    ), f"{msg['content']} != {conversations[example_i]['messages'][msg_i]['content']}"
+        dataset = Dataset.from_list(conversations)
 
         step_args = StepArguments(
             batch_size=1,
@@ -243,7 +209,7 @@ async def main():
         )
 
         inference_results = await server.step(
-            dataset=test_dataset,
+            dataset=dataset,
             step_args=step_args,
         )
 
