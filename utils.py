@@ -3,12 +3,12 @@ Utility functions for video and conversation processing.
 """
 
 import json
-import tempfile
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import PIL
 import requests
+import yt_dlp
 from decord import VideoReader
 from transformers import AutoProcessor
 from transformers.image_utils import load_image
@@ -17,29 +17,131 @@ from transformers.image_utils import load_image
 def load_video(video_path) -> List[PIL.Image.Image]:
     frames: List[PIL.Image.Image] = []
 
+    # Create cache directory if it doesn't exist
+    cache_dir = Path("cache")
+    cache_dir.mkdir(exist_ok=True)
+
     # Download video if it's a URL
     if video_path.startswith(("http://", "https://")):
-        response = requests.get(video_path, stream=True)
-        response.raise_for_status()
+        if "youtube.com" in video_path or "youtu.be" in video_path:
+            # Handle YouTube URLs
+            try:
+                # Extract video ID for caching
+                with yt_dlp.YoutubeDL() as ydl:
+                    info = ydl.extract_info(video_path, download=False)
+                    video_id = info["id"]
 
-        # Create a temporary file to store the video
-        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_file:
-            for chunk in response.iter_content(chunk_size=8192):
-                temp_file.write(chunk)
-            temp_path = temp_file.name
+                # Check if video exists in cache
+                cached_path = cache_dir / f"{video_id}.mp4"
+                if cached_path.exists():
+                    print(f"Using cached video: {cached_path}")
+                    vr = VideoReader(str(cached_path))
+                    for frame in vr:
+                        # Convert frame to PIL Image and resize
+                        pil_frame = PIL.Image.fromarray(frame.asnumpy())
+                        resized_frame = resize_image(pil_frame)
+                        frames.append(resized_frame)
+                    print(f"Successfully read {len(frames)} frames from cached video")
+                    return frames
 
-        try:
-            vr = VideoReader(temp_path)
-            for frame in vr:
-                frames.append(PIL.Image.fromarray(frame.asnumpy()))
-        finally:
-            # Clean up the temporary file
-            Path(temp_path).unlink()
+                # If not in cache, download it
+                print(f"Downloading video from: {video_path}")
+                ydl_opts = {
+                    "format": "18",  # Use format 18 (360p MP4) which is consistently available
+                    "outtmpl": str(cached_path),
+                    "quiet": False,
+                    "no_warnings": False,
+                    "nocheckcertificate": True,
+                    "geo_bypass": True,
+                }
+
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([video_path])
+
+                    # Verify file after download
+                    if cached_path.exists():
+                        size = cached_path.stat().st_size
+                        if size == 0:
+                            raise RuntimeError("Downloaded file is empty")
+
+                        print(f"Attempting to read video file of size: {size} bytes")
+                        vr = VideoReader(str(cached_path))
+                        for frame in vr:
+                            # Convert frame to PIL Image and resize
+                            pil_frame = PIL.Image.fromarray(frame.asnumpy())
+                            resized_frame = resize_image(pil_frame)
+                            frames.append(resized_frame)
+                        print(f"Successfully read {len(frames)} frames from video")
+
+            except Exception as e:
+                raise RuntimeError(f"Failed to download YouTube video: {str(e)}")
+
+        else:
+            # Handle other URLs
+            # Generate a hash of the URL for the cache filename
+            import hashlib
+
+            url_hash = hashlib.md5(video_path.encode()).hexdigest()
+            cached_path = cache_dir / f"{url_hash}.mp4"
+
+            if cached_path.exists():
+                print(f"Using cached video: {cached_path}")
+                vr = VideoReader(str(cached_path))
+                for frame in vr:
+                    # Convert frame to PIL Image and resize
+                    pil_frame = PIL.Image.fromarray(frame.asnumpy())
+                    resized_frame = resize_image(pil_frame)
+                    frames.append(resized_frame)
+                print(f"Successfully read {len(frames)} frames from cached video")
+                return frames
+
+            # If not in cache, download it
+            response = requests.get(video_path, stream=True)
+            response.raise_for_status()
+
+            # Download directly to cache file
+            with open(cached_path, "wb") as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+
+            try:
+                # Verify the file exists and has content
+                if not cached_path.exists():
+                    raise RuntimeError("Downloaded video file does not exist")
+
+                size = cached_path.stat().st_size
+                if size == 0:
+                    raise RuntimeError(
+                        f"Downloaded video file is empty (size: {size} bytes)"
+                    )
+
+                print(f"Attempting to read video file of size: {size} bytes")
+                vr = VideoReader(str(cached_path))
+                for frame in vr:
+                    # Convert frame to PIL Image and resize
+                    pil_frame = PIL.Image.fromarray(frame.asnumpy())
+                    resized_frame = resize_image(pil_frame)
+                    frames.append(resized_frame)
+                print(f"Successfully read {len(frames)} frames from video")
+
+            except Exception as e:
+                # Clean up failed download
+                try:
+                    cached_path.unlink()
+                except Exception:
+                    pass
+                raise RuntimeError(f"Error processing video file: {str(e)}")
     else:
         # If it's a local file path, read directly
-        vr = VideoReader(video_path)
-        for frame in vr:
-            frames.append(PIL.Image.fromarray(frame.asnumpy()))
+        try:
+            vr = VideoReader(video_path)
+            for frame in vr:
+                # Convert frame to PIL Image and resize
+                pil_frame = PIL.Image.fromarray(frame.asnumpy())
+                resized_frame = resize_image(pil_frame)
+                frames.append(resized_frame)
+        except Exception as e:
+            raise RuntimeError(f"Error reading local video file: {str(e)}")
 
     return frames
 
@@ -92,6 +194,8 @@ def process_conversation(
                 elif content["type"] == "image":
                     image_url = content["url"]
                     image = load_image(image_url)
+                    # Resize image to target dimensions
+                    image = resize_image(image)
                     images = [image] if images is None else images + [image]
                     text += processor.image_token
 
@@ -108,3 +212,42 @@ def process_conversation(
     text += f"{processor.eos_token}\nAssistant:"  # TODO: abstract this
 
     return images, text, videos
+
+
+def resize_image(
+    image: PIL.Image.Image, target_size: Tuple[int, int] = (224, 224)
+) -> PIL.Image.Image:
+    """
+    Resize an image to fit within target dimensions while preserving aspect ratio.
+    The image will be centered on a black background if aspect ratio doesn't match.
+
+    Args:
+        image: PIL Image to resize
+        target_size: Target dimensions (width, height)
+
+    Returns:
+        Resized PIL Image
+    """
+    # Create a new black image of target size
+    resized = PIL.Image.new("RGB", target_size, (0, 0, 0))
+
+    # Calculate scaling factor to fit within target dimensions
+    width_ratio = target_size[0] / image.width
+    height_ratio = target_size[1] / image.height
+    scale = min(width_ratio, height_ratio)
+
+    # Calculate new dimensions
+    new_width = int(image.width * scale)
+    new_height = int(image.height * scale)
+
+    # Resize image
+    resized_image = image.resize((new_width, new_height), PIL.Image.Resampling.LANCZOS)
+
+    # Calculate position to paste resized image (centered)
+    paste_x = (target_size[0] - new_width) // 2
+    paste_y = (target_size[1] - new_height) // 2
+
+    # Paste resized image onto black background
+    resized.paste(resized_image, (paste_x, paste_y))
+
+    return resized

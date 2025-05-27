@@ -11,6 +11,7 @@ dependencies = [
     "num2words>=0.5.14",
     "pydantic>=2.11.5",
     "unsloth>=2025.5.7",
+    "yt-dlp>=2025.5.22",
 ]
 
 [dependency-groups]

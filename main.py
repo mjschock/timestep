@@ -10,6 +10,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 # isort: off
+import requests
 from unsloth import FastModel
 
 # isort: on
@@ -164,6 +165,19 @@ class ModelServer:
 
                 logger.info(f"text:\n{text}\n")
 
+                if images is not None or videos is not None:
+                    if images is not None:
+                        assert images[0].size == (
+                            224,
+                            224,
+                        ), f"{images[0].size} != (224, 224)"
+                    if videos is not None:
+                        assert videos[0][0].size == (
+                            224,
+                            224,
+                        ), f"{videos[0][0].size} != (224, 224)"
+                        continue
+
                 # Process each input individually
                 inputs = self.tokenizer(
                     images=images,
@@ -211,13 +225,126 @@ class ModelServer:
         raise NotImplementedError("Not implemented")
 
 
+def get_gaia_conversations():
+    DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
+    api_url = DEFAULT_API_URL
+    questions_url = f"{api_url}/questions"
+    response = requests.get(questions_url, timeout=15)
+    response.raise_for_status()
+    questions_data = response.json()
+
+    conversations = []
+
+    # for item in questions_data[0:3]:
+    #     task_id = item.get("task_id")
+    #     question_text = item.get("question")
+
+    #     if not task_id or question_text is None:
+    #         print(f"Skipping item with missing task_id or question: {item}")
+    #         continue
+
+    #     # logger.info(f"question_text:\n{question_text}\n")
+    #     conversation = {"messages": [{"role": "user", "content": question_text}]}
+
+    #     logger.info(f"conversation:\n{pprint.pformat(conversation)}\n")
+
+    #     # submitted_answer = agent(question_text)
+
+    #     conversations.append(conversation)
+
+    conversations.append(
+        {
+            "messages": [
+                {
+                    "content": "How many studio albums were published by Mercedes Sosa between 2000 and 2009 (included)? You can use the latest 2022 version of english wikipedia.",
+                    "role": "user",
+                },
+                {
+                    "content": "```python\nweb_search_query = 'How many studio albums were published by Mercedes Sosa between 2000 and 2009 (included)? You can use the latest 2022 version of english wikipedia.'\nweb_search_results = web_search(web_search_query)\nprint(web_search_results)```",
+                    "role": "assistant",
+                },
+                {
+                    "content": "Mercedes Sosa has published 3 studio albums between 2000 and 2009 (included).",
+                    "role": "tool",
+                },
+                # {
+                #     "content": "3",
+                #     "role": "assistant",
+                # },
+            ]
+        }
+    )
+
+    conversations.append(
+        {
+            "messages": [
+                {
+                    "content": "In the video https://www.youtube.com/watch?v=L1vXCYZAYYM, what is the highest number of bird species to be on camera simultaneously?",
+                    "role": "user",
+                },
+                {
+                    "content": "```python\ncontent=[{'type': 'text', 'text': 'In the video https://www.youtube.com/watch?v=L1vXCYZAYYM, what is the highest number of bird species to be on camera simultaneously?'}, {'type': 'video', 'path': 'https://www.youtube.com/watch?v=L1vXCYZAYYM'}]\nprint(content)```",
+                    "role": "assistant",
+                },
+                {
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "In the video https://www.youtube.com/watch?v=L1vXCYZAYYM, what is the highest number of bird species to be on camera simultaneously?",
+                        },
+                        {
+                            "type": "video",
+                            "path": "https://www.youtube.com/watch?v=L1vXCYZAYYM",
+                        },
+                    ],
+                    "role": "tool",
+                },
+                # {
+                #     "content": "10",
+                #     "role": "assistant",
+                # },
+            ]
+        }
+    )
+
+    conversations.append(
+        {
+            "messages": [
+                {
+                    "content": '.rewsna eht sa "tfel" drow eht fo etisoppo eht etirw ,ecnetnes siht dnatsrednu uoy fI',
+                    "role": "user",
+                },
+                {
+                    "content": '```python\ntext=".rewsna eht sa "tfel" drow eht fo etisoppo eht etirw ,ecnetnes siht dnatsrednu uoy fI"\nreversed_text = "".join(list(reversed(text)))\nprint(reversed_text)```',
+                    "role": "assistant",
+                },
+                {
+                    "content": 'If you understand this sentence, write the opposite of the word "left" as the answer.',
+                    "role": "tool",
+                },
+                # {
+                #     "content": "right",
+                #     "role": "assistant",
+                # },
+            ]
+        }
+    )
+
+    for conversation in conversations:
+        for message in conversation["messages"]:
+            if type(message["content"]) == list:
+                message["content"] = json.dumps(message["content"])
+
+    return conversations
+
+
 async def main():
     """Example usage of the ModelServer."""
 
     server = ModelServer()
 
     try:
-        conversations = []
+        conversations = get_gaia_conversations()
 
         with open("conversations.jsonl", "r") as f:
             for line in f:
