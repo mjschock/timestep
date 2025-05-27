@@ -105,6 +105,6 @@ def process_conversation(
         elif type(message["content"]) == str:
             text += message["content"]
 
-    text += f"{processor.eos_token}\nAssistant:"
+    text += f"{processor.eos_token}\nAssistant:"  # TODO: abstract this
 
     return images, text, videos

@@ -81,7 +81,7 @@ class ModelServer:
     ):
         self.model_args = model_args
 
-        logger.info(f"model_args:\n{pprint.pformat(self.model_args.model_dump())}")
+        logger.info(f"model_args:\n{pprint.pformat(self.model_args.model_dump())}\n")
 
         self.model: Optional[PreTrainedModel] = None
         self.tokenizer: Optional[PreTrainedTokenizer] = None
@@ -111,7 +111,7 @@ class ModelServer:
                     and not callable(getattr(device_props, attr))
                 }
                 logger.warning(
-                    f"Disabling torch.dynamo since GPU is too old; device properties:\n{pprint.pformat(props)}"
+                    f"Disabling torch.dynamo since GPU is too old; device properties:\n{pprint.pformat(props)}\n"
                 )
                 torch._dynamo.config.disable = True
 
@@ -134,7 +134,7 @@ class ModelServer:
         Returns:
             List of predictions
         """
-        logger.info(f"step_args:\n{pprint.pformat(step_args.model_dump())}")
+        logger.info(f"step_args:\n{pprint.pformat(step_args.model_dump())}\n")
 
         # Validate mode
         if step_args.mode == StepArguments.Mode.INFERENCE:
@@ -189,9 +189,14 @@ class ModelServer:
                     skip_special_tokens=True,
                 )
 
-                logger.info(f"generated_texts:\n{generated_texts}\n")
+                # Extract only the Assistant's response
+                response = (
+                    generated_texts[0].split("Assistant:")[-1].strip()
+                )  # TODO: abstract this
 
-                batch_results.append(generated_texts[0])
+                logger.info(f"response:\n{response}\n")
+
+                batch_results.append(response)
 
             results.extend(batch_results)
 
@@ -222,8 +227,8 @@ async def main():
 
         step_args = StepArguments(
             batch_size=2,
-            do_sample=False,  # Disable sampling for faster generation
-            max_new_tokens=32,  # Reduced for faster testing
+            do_sample=False,
+            max_new_tokens=64,
             temperature=0.7,
         )
 
