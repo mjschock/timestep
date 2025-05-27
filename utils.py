@@ -2,6 +2,7 @@
 Utility functions for video and conversation processing.
 """
 
+import json
 import tempfile
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -63,9 +64,9 @@ def process_conversation(
     text = ""
     videos = None
 
-    def name_me_better(message):
+    def format_message_role_prefix(message):
         if (
-            type(message["content"]) == list
+            isinstance(message["content"], list)
             and message["content"][0]["type"] == "image"
         ):
             return f"{message['role'].capitalize()}:"
@@ -75,7 +76,13 @@ def process_conversation(
 
     # Process all messages in a single loop
     for message in conversation:
-        text += f"{processor.bos_token}{name_me_better(message)}"
+        try:
+            message["content"] = json.loads(message["content"])
+
+        except (json.decoder.JSONDecodeError, TypeError):
+            pass
+
+        text += f"{processor.bos_token}{format_message_role_prefix(message)}"
 
         if type(message["content"]) == list:
             for content in message["content"]:

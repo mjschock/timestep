@@ -137,54 +137,73 @@ class ModelServer:
         logger.info(f"step_args:\n{pprint.pformat(step_args.model_dump())}")
 
         # Validate mode
-        if step_args.mode != StepArguments.Mode.INFERENCE:
-            raise ValueError("Currently only 'inference' mode is supported")
+        if step_args.mode == StepArguments.Mode.INFERENCE:
+            return await self.step_for_inference(dataset, step_args)
 
+        elif step_args.mode == StepArguments.Mode.TRAINING:
+            return await self.step_for_training(dataset, step_args)
+
+        else:
+            raise ValueError(f"Invalid mode: {step_args.mode}")
+
+    async def step_for_inference(
+        self, dataset: Dataset, step_args: Optional[StepArguments] = StepArguments()
+    ) -> List[str]:
         # Ensure model is in inference mode
         FastModel.for_inference(self.model)
 
-        example = dataset[4]
+        results = []
 
-        def format_conversation(messages):
-            for message in messages:
-                try:
-                    message["content"] = json.loads(message["content"])
-                except json.decoder.JSONDecodeError:
-                    pass
+        for batch in dataset.iter(batch_size=step_args.batch_size):
+            batch_results = []
 
-            return messages
+            for conversation in batch["messages"]:
+                images, text, videos = process_conversation(
+                    conversation, self.tokenizer
+                )
 
-        conversation = format_conversation(example["messages"])
+                logger.info(f"text:\n{text}\n")
 
-        images, text, videos = process_conversation(conversation, self.tokenizer)
+                # Process each input individually
+                inputs = self.tokenizer(
+                    images=images,
+                    return_tensors="pt",
+                    text=text,
+                    videos=videos,
+                ).to(self.model.device, dtype=torch.bfloat16)
 
-        logger.info(f"text:\n{text}")
+                with torch.no_grad():
+                    generated_ids = self.model.generate(  # TODO: batch generation
+                        **inputs,
+                        do_sample=step_args.do_sample,
+                        max_new_tokens=step_args.max_new_tokens,
+                        min_p=step_args.min_p,
+                        pad_token_id=self.tokenizer.eos_token_id,
+                        temperature=step_args.temperature,
+                        top_p=step_args.top_p,
+                        use_cache=step_args.use_cache,
+                    )
 
-        inputs = self.tokenizer(
-            images=images,
-            text=text,
-            videos=videos,
-            return_tensors="pt",
-        ).to(self.model.device, dtype=torch.bfloat16)
+                generated_texts = self.tokenizer.batch_decode(
+                    generated_ids,
+                    skip_special_tokens=True,
+                )
 
-        with torch.no_grad():
-            generated_ids = self.model.generate(
-                **inputs,
-                do_sample=step_args.do_sample,
-                max_new_tokens=step_args.max_new_tokens,
-                min_p=step_args.min_p,
-                pad_token_id=self.tokenizer.eos_token_id,
-                temperature=step_args.temperature,
-                top_p=step_args.top_p,
-                use_cache=step_args.use_cache,
-            )
+                logger.info(f"generated_texts:\n{generated_texts}\n")
 
-        generated_texts = self.tokenizer.batch_decode(
-            generated_ids,
-            skip_special_tokens=True,
-        )
+                batch_results.append(generated_texts[0])
 
-        return generated_texts
+            results.extend(batch_results)
+
+        return results
+
+    async def step_for_training(
+        self, dataset: Dataset, step_args: Optional[StepArguments] = StepArguments()
+    ) -> List[str]:
+        # Ensure model is in training mode
+        FastModel.for_training(self.model)
+
+        raise NotImplementedError("Not implemented")
 
 
 async def main():
@@ -202,7 +221,7 @@ async def main():
         dataset = Dataset.from_list(conversations)
 
         step_args = StepArguments(
-            batch_size=1,
+            batch_size=2,
             do_sample=False,  # Disable sampling for faster generation
             max_new_tokens=32,  # Reduced for faster testing
             temperature=0.7,
@@ -213,7 +232,7 @@ async def main():
             step_args=step_args,
         )
 
-        logger.info(f"inference_results:\n{inference_results}")
+        logger.info(f"inference_results:\n{pprint.pformat(inference_results)}")
 
     except Exception as e:
         logger.error(f"Error in main: {e}")
