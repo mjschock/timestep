@@ -42,6 +42,9 @@ def load_video(video_path) -> List[PIL.Image.Image]:
                         resized_frame = resize_image(pil_frame)
                         frames.append(resized_frame)
                     print(f"Successfully read {len(frames)} frames from cached video")
+                    # Sample frames to match model requirements
+                    frames = sample_video_frames(frames)
+                    print(f"Sampled down to {len(frames)} frames")
                     return frames
 
                 # If not in cache, download it
@@ -72,6 +75,9 @@ def load_video(video_path) -> List[PIL.Image.Image]:
                             resized_frame = resize_image(pil_frame)
                             frames.append(resized_frame)
                         print(f"Successfully read {len(frames)} frames from video")
+                        # Sample frames to match model requirements
+                        frames = sample_video_frames(frames)
+                        print(f"Sampled down to {len(frames)} frames")
 
             except Exception as e:
                 raise RuntimeError(f"Failed to download YouTube video: {str(e)}")
@@ -93,6 +99,9 @@ def load_video(video_path) -> List[PIL.Image.Image]:
                     resized_frame = resize_image(pil_frame)
                     frames.append(resized_frame)
                 print(f"Successfully read {len(frames)} frames from cached video")
+                # Sample frames to match model requirements
+                frames = sample_video_frames(frames)
+                print(f"Sampled down to {len(frames)} frames")
                 return frames
 
             # If not in cache, download it
@@ -123,6 +132,9 @@ def load_video(video_path) -> List[PIL.Image.Image]:
                     resized_frame = resize_image(pil_frame)
                     frames.append(resized_frame)
                 print(f"Successfully read {len(frames)} frames from video")
+                # Sample frames to match model requirements
+                frames = sample_video_frames(frames)
+                print(f"Sampled down to {len(frames)} frames")
 
             except Exception as e:
                 # Clean up failed download
@@ -140,6 +152,9 @@ def load_video(video_path) -> List[PIL.Image.Image]:
                 pil_frame = PIL.Image.fromarray(frame.asnumpy())
                 resized_frame = resize_image(pil_frame)
                 frames.append(resized_frame)
+            # Sample frames to match model requirements
+            frames = sample_video_frames(frames)
+            print(f"Sampled down to {len(frames)} frames")
         except Exception as e:
             raise RuntimeError(f"Error reading local video file: {str(e)}")
 
@@ -163,28 +178,30 @@ def process_conversation(
         - List of video frames (or None if no videos)
     """
     images = None
-    text = ""
+    text = processor.bos_token
     videos = None
 
-    def format_message_role_prefix(message):
-        if (
-            isinstance(message["content"], list)
-            and message["content"][0]["type"] == "image"
-        ):
-            return f"{message['role'].capitalize()}:"
+    def format_message_role_prefix(message, message_idx):
+        message_role_prefix = "" if message_idx == 0 else "\n"
+        message_role_prefix += f"{message['role'].capitalize()}:"
 
-        else:
-            return f"{message['role'].capitalize()}: "
+        if (
+            not isinstance(message["content"], list)
+            or message["content"][0]["type"] == "text"
+        ):
+            message_role_prefix += " "
+
+        return message_role_prefix
 
     # Process all messages in a single loop
-    for message in conversation:
+    for message_idx, message in enumerate(conversation):
         try:
             message["content"] = json.loads(message["content"])
 
         except (json.decoder.JSONDecodeError, TypeError):
             pass
 
-        text += f"{processor.bos_token}{format_message_role_prefix(message)}"
+        text += format_message_role_prefix(message, message_idx)
 
         if type(message["content"]) == list:
             for content in message["content"]:
@@ -251,3 +268,32 @@ def resize_image(
     resized.paste(resized_image, (paste_x, paste_y))
 
     return resized
+
+
+def sample_video_frames(
+    frames: List[PIL.Image.Image], max_frames: int = 64
+) -> List[PIL.Image.Image]:
+    """
+    Sample frames from a video to get a maximum number of frames.
+    Uses uniform sampling to select frames.
+
+    Args:
+        frames: List of video frames
+        max_frames: Maximum number of frames to return
+
+    Returns:
+        List of sampled frames
+    """
+    if len(frames) <= max_frames:
+        return frames
+
+    # Calculate sampling interval
+    interval = len(frames) / max_frames
+
+    # Sample frames uniformly
+    sampled_frames = []
+    for i in range(max_frames):
+        idx = int(i * interval)
+        sampled_frames.append(frames[idx])
+
+    return sampled_frames
