@@ -6,12 +6,14 @@ import asyncio
 import json
 import logging
 import pprint
+import sys
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
 # isort: off
 import requests
-from unsloth import FastModel
+from unsloth import FastModel, is_bf16_supported
+from unsloth.trainer import UnslothVisionDataCollator
 
 # isort: on
 
@@ -24,11 +26,32 @@ from transformers import (
     StoppingCriteria,
     StoppingCriteriaList,
 )
-
+from trl import SFTConfig, SFTTrainer
 from utils import process_conversation
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.INFO)
+
+# Remove any existing handlers to avoid duplication
+if root_logger.hasHandlers():
+    root_logger.handlers.clear()
+
+# Handler for stdout (INFO and WARNING levels)
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setLevel(logging.INFO)
+stdout_handler.addFilter(lambda record: record.levelno <= logging.WARNING)
+stdout_handler.setFormatter(logging.Formatter("%(message)s"))
+
+
+# Handler for stderr (ERROR and above)
+stderr_handler = logging.StreamHandler(sys.stderr)
+stderr_handler.setLevel(logging.ERROR)
+stderr_handler.setFormatter(logging.Formatter("%(levelname)s:%(name)s: %(message)s"))
+
+root_logger.addHandler(stdout_handler)
+root_logger.addHandler(stderr_handler)
+
 logger = logging.getLogger(__name__)
 
 
@@ -65,16 +88,17 @@ class StepArguments(BaseModel):
         """Available modes for the step method."""
 
         INFERENCE = "inference"
+        TRAINING = "training"
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     batch_size: int = 1  # Reduced from 2 to 1
     do_sample: bool = True
     max_new_tokens: int = 128
-    min_p: float = 0.1
+    min_p: float | None = 0.1
     mode: Mode = Mode.INFERENCE
-    temperature: float = 0.7
-    top_p: float = 0.9
+    temperature: float | None = 0.7
+    top_p: float | None = 0.9
     use_cache: bool = True
 
 
@@ -82,16 +106,20 @@ class CodeActStoppingCriteria(StoppingCriteria):
     def __init__(self, processor: PreTrainedTokenizer):
         self.processor = processor
         # Get the token IDs for "</execute>"
-        self.stop_sequence = self.processor.tokenizer.encode("</execute>", add_special_tokens=False)
-        
-    def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:
+        self.stop_sequence = self.processor.tokenizer.encode(
+            "</execute>", add_special_tokens=False
+        )
+
+    def __call__(
+        self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs
+    ) -> bool:
         # Get the last few tokens, looking at enough tokens to match our stop sequence
-        last_tokens = input_ids[0, -len(self.stop_sequence):].tolist()
-        
+        last_tokens = input_ids[0, -len(self.stop_sequence) :].tolist()
+
         # If we don't have enough tokens yet, continue generating
         if len(last_tokens) < len(self.stop_sequence):
             return False
-            
+
         # Check if the last tokens match our stop sequence
         return last_tokens == self.stop_sequence
 
@@ -100,16 +128,20 @@ class UserTokenStoppingCriteria(StoppingCriteria):
     def __init__(self, processor: PreTrainedTokenizer):
         self.processor = processor
         # Get the token IDs for "\nUser:"
-        self.stop_sequence = self.processor.tokenizer.encode("\nUser:", add_special_tokens=False)
-        
-    def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:
+        self.stop_sequence = self.processor.tokenizer.encode(
+            "\nUser:", add_special_tokens=False
+        )
+
+    def __call__(
+        self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs
+    ) -> bool:
         # Get the last few tokens, looking at enough tokens to match our stop sequence
-        last_tokens = input_ids[0, -len(self.stop_sequence):].tolist()
-        
+        last_tokens = input_ids[0, -len(self.stop_sequence) :].tolist()
+
         # If we don't have enough tokens yet, continue generating
         if len(last_tokens) < len(self.stop_sequence):
             return False
-            
+
         # Check if the last tokens match our stop sequence
         return last_tokens == self.stop_sequence
 
@@ -248,21 +280,30 @@ class ModelServer:
 
                 with torch.no_grad():
                     # Create stopping criteria
-                    stopping_criteria = StoppingCriteriaList([
-                        UserTokenStoppingCriteria(self.tokenizer),
-                        CodeActStoppingCriteria(self.tokenizer)
-                    ])
-                    
+                    stopping_criteria = StoppingCriteriaList(
+                        [
+                            UserTokenStoppingCriteria(self.tokenizer),
+                            CodeActStoppingCriteria(self.tokenizer),
+                        ]
+                    )
+
+                    generation_kwargs = {
+                        "max_new_tokens": step_args.max_new_tokens,
+                        "use_cache": step_args.use_cache,
+                        "pad_token_id": self.tokenizer.eos_token_id,
+                        "stopping_criteria": stopping_criteria,
+                        "do_sample": step_args.do_sample,
+                    }
+                    if step_args.do_sample:
+                        if step_args.temperature is not None:
+                            generation_kwargs["temperature"] = step_args.temperature
+                        if step_args.top_p is not None:
+                            generation_kwargs["top_p"] = step_args.top_p
+                        if step_args.min_p is not None:
+                            generation_kwargs["min_p"] = step_args.min_p
+
                     generated_ids = self.model.generate(  # TODO: batch generation
-                        **inputs,
-                        do_sample=step_args.do_sample,
-                        max_new_tokens=step_args.max_new_tokens,
-                        min_p=step_args.min_p,
-                        pad_token_id=self.tokenizer.eos_token_id,
-                        temperature=step_args.temperature,
-                        top_p=step_args.top_p,
-                        use_cache=step_args.use_cache,
-                        stopping_criteria=stopping_criteria,
+                        **inputs, **generation_kwargs
                     )
 
                 generated_texts = self.tokenizer.batch_decode(
@@ -272,21 +313,21 @@ class ModelServer:
 
                 # Extract only the Assistant's response and clean it up
                 response = generated_texts[0].split("Assistant:")[-1].strip()
-                
+
                 # Remove any "User:" that might have been generated
                 if "User:" in response:
                     response = response.split("User:")[0].strip()
-                
+
                 # If response contains <execute> tag, extract the code and result
                 if "<execute>" in response and "</execute>" in response:
                     code_start = response.find("<execute>") + len("<execute>")
                     code_end = response.find("</execute>")
                     code = response[code_start:code_end].strip()
-                    
+
                     # Extract the result after </execute>
                     result_start = response.find("</execute>") + len("</execute>")
                     result = response[result_start:].strip()
-                    
+
                     # If there's an "Env:" line, use that as the result
                     if "Env:" in result:
                         response = result.split("Env:")[-1].strip()
@@ -313,7 +354,95 @@ class ModelServer:
         # Ensure model is in training mode
         FastModel.for_training(self.model)
 
-        raise NotImplementedError("Not implemented")
+        # Print first example
+        print("First example:")
+        print(dataset[0])
+
+        # Standalone preprocess function for training dataset
+        # Pass the tokenizer as an argument
+
+        def preprocess_function(example, tokenizer):
+            conversation = example["messages"]
+            images, text, videos = process_conversation(conversation, tokenizer)
+            tokenized = tokenizer(
+                images=images,
+                text=text,
+                videos=videos,
+                return_tensors=None,  # Let Datasets handle batching
+                padding="max_length",
+                truncation=True,
+                max_length=2048,
+            )
+            # Convert tensors to lists for compatibility with Datasets
+            for k, v in tokenized.items():
+                if hasattr(v, "tolist"):
+                    tokenized[k] = v.tolist()
+            return tokenized
+
+        # Preprocess the dataset using the standalone function
+        print("Tokenizing dataset...")
+        tokenized_dataset = dataset.map(
+            lambda ex: preprocess_function(ex, self.tokenizer), batched=False
+        )
+        print("First tokenized example:")
+        print(tokenized_dataset[0])
+
+        # Ensure model is in training mode
+        FastModel.for_training(self.model)
+
+        # Apply LoRA/PEFT adapters before training (do not replace self.model)
+        model = FastModel.get_peft_model(
+            self.model,
+            finetune_vision_layers=True,
+            finetune_language_layers=True,
+            finetune_attention_modules=False,
+            finetune_mlp_modules=True,
+            r=8,
+            lora_alpha=8,
+            lora_dropout=0,
+            bias="none",
+            random_state=3407,
+            use_rslora=False,
+            loftq_config=None,
+            # target_modules="all-linear", # Optional
+        )
+
+        trainer = SFTTrainer(
+            model=model,
+            tokenizer=self.tokenizer,
+            data_collator=UnslothVisionDataCollator(self.tokenizer),  # Must use!
+            train_dataset=tokenized_dataset,
+            args=SFTConfig(
+                per_device_train_batch_size=1,  # Reduce to 1 to make Pixtral fit!
+                gradient_accumulation_steps=4,
+                warmup_steps=5,
+                max_steps=30,
+                # num_train_epochs = 1, # Set this instead of max_steps for full training runs
+                learning_rate=2e-4,
+                fp16=not is_bf16_supported(),
+                bf16=is_bf16_supported(),
+                logging_steps=1,
+                optim="paged_adamw_8bit",
+                weight_decay=0.01,
+                lr_scheduler_type="linear",
+                seed=3407,
+                output_dir="outputs",
+                report_to="none",  # For Weights and Biases
+                # You MUST put the below items for vision finetuning:
+                remove_unused_columns=False,
+                dataset_text_field="",
+                dataset_kwargs={"skip_prepare_dataset": True},
+                dataset_num_proc=4,
+                max_seq_length=2048,
+            ),
+        )
+
+        trainer_stats = trainer.train()
+
+        print("trainer_stats:")
+        print(trainer_stats)
+
+        return []
 
 
 def get_gaia_conversations():
@@ -476,7 +605,6 @@ async def main():
             batch_size=2,
             do_sample=False,
             max_new_tokens=64,
-            temperature=0.7,
         )
 
         inference_results = await server.step(
@@ -485,6 +613,23 @@ async def main():
         )
 
         logger.info(f"inference_results:\n{pprint.pformat(inference_results)}")
+
+        # # Load a dataset for training
+        # training_dataset = load_dataset("unsloth/llava-instruct-mix-vsft-mini", split="train")
+
+        # # Define training arguments
+        # training_step_args = StepArguments(
+        #     batch_size=1,
+        #     mode=StepArguments.Mode.TRAINING,
+        # )
+
+        # # Start the training process
+        # training_results = await server.step(
+        #     dataset=training_dataset,
+        #     step_args=training_step_args,
+        # )
+
+        # logger.info(f"training_results:\n{pprint.pformat(training_results)}")
 
     except Exception as e:
         logger.error(f"Error in main: {e}")
