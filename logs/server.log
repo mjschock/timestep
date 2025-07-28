@@ -1,0 +1,31 @@
+{"level": "INFO", "time": "2025-07-28 05:57:09,941", "name": "timestep", "message": "\ud83d\ude80 Initializing ModelsService - Loading all models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:09,941", "name": "timestep", "message": "\ud83d\udd0d Loading embedding models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:09,941", "name": "timestep", "message": "  Loading sentence-transformers/paraphrase-MiniLM-L3-v2..."}
+{"level": "ERROR", "time": "2025-07-28 05:57:09,942", "name": "timestep", "message": "  \u274c Failed to load sentence-transformers/paraphrase-MiniLM-L3-v2: 500: Failed to load embedding model: No module named 'sentence_transformers'"}
+{"level": "INFO", "time": "2025-07-28 05:57:24,600", "name": "timestep", "message": "\ud83d\ude80 Initializing ModelsService - Loading all models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:24,601", "name": "timestep", "message": "\ud83d\udd0d Loading embedding models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:24,601", "name": "timestep", "message": "  Loading sentence-transformers/paraphrase-MiniLM-L3-v2..."}
+{"level": "INFO", "time": "2025-07-28 05:57:28,607", "name": "timestep", "message": "  \u2705 sentence-transformers/paraphrase-MiniLM-L3-v2 loaded successfully"}
+{"level": "INFO", "time": "2025-07-28 05:57:28,607", "name": "timestep", "message": "\ud83c\udfa8 Loading image generation models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:28,607", "name": "timestep", "message": "  Loading vlm-image-generator..."}
+{"level": "ERROR", "time": "2025-07-28 05:57:28,607", "name": "timestep", "message": "  \u274c Failed to load vlm-image-generator: 500: Failed to load image model: cannot import name 'VLMImageService' from partially initialized module 'backend.services.vlm_image_service' (most likely due to a circular import) (/workspace/backend/src/backend/services/vlm_image_service.py)"}
+{"level": "INFO", "time": "2025-07-28 05:57:28,608", "name": "timestep", "message": "\ud83d\ude80 Initializing ModelsService - Loading all models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:28,608", "name": "timestep", "message": "\ud83d\udd0d Loading embedding models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:28,608", "name": "timestep", "message": "  Loading sentence-transformers/paraphrase-MiniLM-L3-v2..."}
+{"level": "INFO", "time": "2025-07-28 05:57:29,908", "name": "timestep", "message": "  \u2705 sentence-transformers/paraphrase-MiniLM-L3-v2 loaded successfully"}
+{"level": "INFO", "time": "2025-07-28 05:57:29,908", "name": "timestep", "message": "\ud83c\udfa8 Loading image generation models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:29,908", "name": "timestep", "message": "  Loading vlm-image-generator..."}
+{"level": "ERROR", "time": "2025-07-28 05:57:29,908", "name": "timestep", "message": "  \u274c Failed to load vlm-image-generator: 500: Failed to load image model: cannot import name 'VLMImageService' from partially initialized module 'backend.services.vlm_image_service' (most likely due to a circular import) (/workspace/backend/src/backend/services/vlm_image_service.py)"}
+{"level": "INFO", "time": "2025-07-28 05:57:54,194", "name": "timestep", "message": "\ud83d\ude80 Initializing ModelsService - Loading all models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:54,194", "name": "timestep", "message": "\ud83d\udd0d Loading embedding models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:54,194", "name": "timestep", "message": "  Loading sentence-transformers/paraphrase-MiniLM-L3-v2..."}
+{"level": "INFO", "time": "2025-07-28 05:57:55,861", "name": "timestep", "message": "  \u2705 sentence-transformers/paraphrase-MiniLM-L3-v2 loaded successfully"}
+{"level": "INFO", "time": "2025-07-28 05:57:55,861", "name": "timestep", "message": "\ud83c\udfa8 Loading image generation models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:55,861", "name": "timestep", "message": "  Loading vlm-image-generator..."}
+{"level": "INFO", "time": "2025-07-28 05:57:55,862", "name": "timestep", "message": "  \u2705 vlm-image-generator loaded successfully"}
+{"level": "INFO", "time": "2025-07-28 05:57:55,862", "name": "timestep", "message": "\ud83d\udd0a Loading speech-to-text models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:55,862", "name": "timestep", "message": "  Loading openai/whisper-tiny..."}
+{"level": "INFO", "time": "2025-07-28 05:57:59,198", "name": "timestep", "message": "  \u2705 openai/whisper-tiny loaded successfully"}
+{"level": "INFO", "time": "2025-07-28 05:57:59,198", "name": "timestep", "message": "\ud83c\udfb5 Loading text-to-speech models..."}
+{"level": "INFO", "time": "2025-07-28 05:57:59,198", "name": "timestep", "message": "  Loading microsoft/speecht5_tts..."}
+{"level": "ERROR", "time": "2025-07-28 05:57:59,374", "name": "timestep", "message": "  \u274c Failed to load microsoft/speecht5_tts: 500: Failed to load TTS model: \nSpeechT5Tokenizer requires the SentencePiece library but it was not found in your environment. Check out the instructions on the\ninstallation page of its repo: https://github.com/google/sentencepiece#installation and follow the ones\nthat match your environment. Please note that you may need to restart your runtime after installation.\n"}

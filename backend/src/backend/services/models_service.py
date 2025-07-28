@@ -41,6 +41,7 @@ class ModelsService:
             "sentence-transformers/paraphrase-MiniLM-L3-v2",
         ]
         self.supported_image_models: list[str] = [
+            "vlm-image-generator",
             # "stable-diffusion-v1-5/stable-diffusion-v1-5",
         ]
         self.supported_vlm_models = [
@@ -471,7 +472,7 @@ class ModelsService:
             ) from e
 
     def get_image_pipeline(
-        self, model_name="stable-diffusion-v1-5/stable-diffusion-v1-5", use_cache=True
+        self, model_name="vlm-image-generator", use_cache=True
     ):
         """
         Get an image generation pipeline for creating images.
@@ -495,23 +496,47 @@ class ModelsService:
             return self._pipeline_cache[cache_key]
 
         try:
-            import torch
-            from diffusers import StableDiffusionPipeline
+            if model_name == "vlm-image-generator":
+                # Import VLM-based image generation components
+                from .vlm_image_service import VLMImageService
+                from PIL import Image
+                
+                # Create a pipeline-like interface
+                class VLMImagePipeline:
+                    def __init__(self):
+                        self.vlm_service = VLMImageService(self)
+                    
+                    def __call__(self, prompt, width=512, height=512, **kwargs):
+                        """Generate image from prompt using VLM analysis"""
+                        img_array, img = self.vlm_service.generate_image(prompt, width, height)
+                        if img is not None:
+                            return type('Result', (), {'images': [img]})()
+                        else:
+                            # Return a default image if generation fails
+                            default_img = Image.new('RGB', (width, height), color='gray')
+                            return type('Result', (), {'images': [default_img]})()
 
-            # Load pipeline without device map to avoid meta tensor issues
-            pipe = StableDiffusionPipeline.from_pretrained(  # type: ignore
-                model_name,
-                torch_dtype=(
-                    torch.float16 if torch.cuda.is_available() else torch.float32
-                ),
-                device_map=None,  # Disable device map to avoid meta tensor issues
-            )
+                pipe = VLMImagePipeline()
 
-            # Move to device after loading
-            if torch.cuda.is_available():
-                pipe = pipe.to("cuda")
             else:
-                pipe = pipe.to("cpu")
+                # Fallback to Stable Diffusion for other models
+                import torch
+                from diffusers import StableDiffusionPipeline
+
+                # Load pipeline without device map to avoid meta tensor issues
+                pipe = StableDiffusionPipeline.from_pretrained(  # type: ignore
+                    model_name,
+                    torch_dtype=(
+                        torch.float16 if torch.cuda.is_available() else torch.float32
+                    ),
+                    device_map=None,  # Disable device map to avoid meta tensor issues
+                )
+
+                # Move to device after loading
+                if torch.cuda.is_available():
+                    pipe = pipe.to("cuda")
+                else:
+                    pipe = pipe.to("cpu")
 
             # Cache the pipeline if caching is enabled
             if use_cache:
