@@ -39,6 +39,7 @@ class ModelsService:
         # Define supported models
         self.supported_embedding_models = [
             "sentence-transformers/paraphrase-MiniLM-L3-v2",
+            "HuggingFaceTB/SmolVLM2-256M-Video-Instruct",  # VLM-based embeddings
         ]
         self.supported_image_models: list[str] = [
             # "stable-diffusion-v1-5/stable-diffusion-v1-5",
@@ -551,15 +552,22 @@ class ModelsService:
             return self._model_cache[cache_key]
 
         try:
-            from sentence_transformers import SentenceTransformer
+            # Handle VLM models for embeddings
+            if model_name in self.supported_vlm_models:
+                # For VLM models, return the model and processor tuple
+                # The embedding service will handle the extraction
+                model, processor = self.get_model_instance(model_name, use_cache=False)
+                return (model, processor)
+            else:
+                # Handle traditional sentence transformer models
+                from sentence_transformers import SentenceTransformer
+                model = SentenceTransformer(model_name)
 
-            model = SentenceTransformer(model_name)
+                # Cache the model if caching is enabled
+                if use_cache:
+                    self._model_cache[cache_key] = model
 
-            # Cache the model if caching is enabled
-            if use_cache:
-                self._model_cache[cache_key] = model
-
-            return model
+                return model
 
         except Exception as e:
             raise HTTPException(
