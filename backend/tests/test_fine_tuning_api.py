@@ -15,7 +15,7 @@ async def test_create_fine_tuning_job(async_client, sample_jsonl_file):
     assert hasattr(response, "model")
     assert hasattr(response, "status")
     assert response.training_file == training_file
-    
+
     # Check if the job is still cancellable before attempting to cancel
     # Jobs can complete very quickly in the mock implementation
     try:
@@ -147,7 +147,7 @@ async def test_retrieve_fine_tuning_job(async_client, sample_jsonl_file):
     response = await async_client.fine_tuning.jobs.retrieve(job.id)
     assert hasattr(response, "id")
     assert response.id == job.id
-    
+
     # Check if the job is still cancellable before attempting to cancel
     try:
         await async_client.fine_tuning.jobs.cancel(job.id)
@@ -218,7 +218,7 @@ async def test_cancel_fine_tuning_job(async_client, sample_jsonl_file):
     job = await async_client.fine_tuning.jobs.create(
         training_file=training_file, model=MODEL_NAME
     )
-    
+
     # Check if the job is still cancellable before attempting to cancel
     try:
         response = await async_client.fine_tuning.jobs.cancel(job.id)
@@ -260,7 +260,12 @@ async def test_cancel_fine_tuning_job_status(async_client, sample_jsonl_file):
         retrieved_job = await async_client.fine_tuning.jobs.retrieve(job.id)
         # Jobs can be cancelled, cancelling, failed, or succeeded (if completed before cancel)
         # In our mock implementation, jobs complete very quickly, so we need to handle both cases
-        assert retrieved_job.status in ["cancelled", "cancelling", "failed", "succeeded"]
+        assert retrieved_job.status in [
+            "cancelled",
+            "cancelling",
+            "failed",
+            "succeeded",
+        ]
     except Exception as e:
         # If the job is not found or cannot be cancelled, that's acceptable
         # since jobs can complete very quickly in the mock implementation
@@ -283,7 +288,7 @@ async def test_list_fine_tuning_events(async_client, sample_jsonl_file):
     response = await async_client.fine_tuning.jobs.list_events(job.id, limit=10)
     assert hasattr(response, "data")
     assert isinstance(response.data, list)
-    
+
     # Check if the job is still cancellable before attempting to cancel
     try:
         await async_client.fine_tuning.jobs.cancel(job.id)
@@ -373,7 +378,7 @@ async def test_list_fine_tuning_checkpoints(async_client, sample_jsonl_file):
     response = await async_client.fine_tuning.jobs.checkpoints.list(job.id)
     assert hasattr(response, "data")
     assert isinstance(response.data, list)
-    
+
     # Check if the job is still cancellable before attempting to cancel
     try:
         await async_client.fine_tuning.jobs.cancel(job.id)
