@@ -41,6 +41,7 @@ class ModelsService:
             "sentence-transformers/paraphrase-MiniLM-L3-v2",
         ]
         self.supported_image_models: list[str] = [
+            "text-image-gpt2",
             # "stable-diffusion-v1-5/stable-diffusion-v1-5",
         ]
         self.supported_vlm_models = [
@@ -471,7 +472,7 @@ class ModelsService:
             ) from e
 
     def get_image_pipeline(
-        self, model_name="stable-diffusion-v1-5/stable-diffusion-v1-5", use_cache=True
+        self, model_name="text-image-gpt2", use_cache=True
     ):
         """
         Get an image generation pipeline for creating images.
@@ -495,23 +496,50 @@ class ModelsService:
             return self._pipeline_cache[cache_key]
 
         try:
-            import torch
-            from diffusers import StableDiffusionPipeline
+            if model_name == "text-image-gpt2":
+                # Import text-based image generation components
+                from .text_image_generator import generate_image_with_fallback
+                from .text_image_trainer import train_model
+                
+                # Create a pipeline-like interface
+                class TextImagePipeline:
+                    def __init__(self):
+                        self.train_model = train_model
+                        self.generate_image = generate_image_with_fallback
+                    
+                    def __call__(self, prompt, width=28, height=28, **kwargs):
+                        """Generate image from prompt"""
+                        img_array, img = self.generate_image(prompt)
+                        if img_array is not None:
+                            # Resize to requested dimensions
+                            img = img.resize((width, height))
+                            return type('Result', (), {'images': [img]})()
+                        else:
+                            # Return a blank image if generation fails
+                            blank_img = Image.new('RGB', (width, height), color='white')
+                            return type('Result', (), {'images': [blank_img]})()
 
-            # Load pipeline without device map to avoid meta tensor issues
-            pipe = StableDiffusionPipeline.from_pretrained(  # type: ignore
-                model_name,
-                torch_dtype=(
-                    torch.float16 if torch.cuda.is_available() else torch.float32
-                ),
-                device_map=None,  # Disable device map to avoid meta tensor issues
-            )
+                pipe = TextImagePipeline()
 
-            # Move to device after loading
-            if torch.cuda.is_available():
-                pipe = pipe.to("cuda")
             else:
-                pipe = pipe.to("cpu")
+                # Fallback to Stable Diffusion for other models
+                import torch
+                from diffusers import StableDiffusionPipeline
+
+                # Load pipeline without device map to avoid meta tensor issues
+                pipe = StableDiffusionPipeline.from_pretrained(  # type: ignore
+                    model_name,
+                    torch_dtype=(
+                        torch.float16 if torch.cuda.is_available() else torch.float32
+                    ),
+                    device_map=None,  # Disable device map to avoid meta tensor issues
+                )
+
+                # Move to device after loading
+                if torch.cuda.is_available():
+                    pipe = pipe.to("cuda")
+                else:
+                    pipe = pipe.to("cpu")
 
             # Cache the pipeline if caching is enabled
             if use_cache:
