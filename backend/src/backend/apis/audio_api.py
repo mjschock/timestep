@@ -21,14 +21,14 @@ async def create_speech(
 @audio_router.post("/audio/transcriptions")
 async def create_transcription(
     file: UploadFile = AUDIO_FILE_DEPENDENCY,
-    model: str = Form("openai/whisper-tiny"),
+    model: str = Form("vlm:spectrogram:HuggingFaceTB/SmolVLM2-256M-Video-Instruct"),
     response_format: str = Form("text"),
     language: str = Form("en"),
     prompt: str = Form(""),
     temperature: float = Form(0.0),
     service: AudioService = Depends(AudioService),  # noqa: B008
 ) -> dict[str, str] | str:
-    """Transcribes audio into the input language."""
+    """Transcribes audio into the input language using VLM-based approach."""
     return await service.create_transcription_with_upload(
         file, model, response_format, language, prompt, temperature
     )
@@ -37,13 +37,13 @@ async def create_transcription(
 @audio_router.post("/audio/translations")
 async def create_translation(
     file: UploadFile = AUDIO_FILE_DEPENDENCY,
-    model: str = Form("openai/whisper-tiny"),
+    model: str = Form("vlm:spectrogram:HuggingFaceTB/SmolVLM2-256M-Video-Instruct"),
     response_format: str = Form("text"),
     prompt: str = Form(""),
     temperature: float = Form(0.0),
     service: AudioService = Depends(AudioService),  # noqa: B008
 ) -> dict[str, str] | str:
-    """Translates audio into English."""
+    """Translates audio into English using VLM-based approach."""
     return await service.create_translation_with_upload(
         file, model, response_format, prompt, temperature
     )
