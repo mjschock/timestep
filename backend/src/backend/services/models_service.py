@@ -411,7 +411,7 @@ class ModelsService:
         self, model_name: str = "microsoft/speecht5_tts", use_cache: bool = True
     ) -> Any:
         """
-        Get a text-to-speech pipeline for speech synthesis.
+        Get a text-to-speech pipeline for speech synthesis using spectrogram approach.
 
         Args:
             model_name: The name of the TTS model to load
@@ -432,32 +432,20 @@ class ModelsService:
             return self._pipeline_cache[cache_key]
 
         try:
-            import torch
-
-            if model_name == "microsoft/speecht5_tts":
-                # For SpeechT5, we need to handle speaker embeddings
-                from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
-
-                processor = SpeechT5Processor.from_pretrained(model_name)
-                model = SpeechT5ForTextToSpeech.from_pretrained(model_name)
-
-                # Create a simple pipeline function that handles the speaker embeddings
-                def tts_pipeline(text):
-                    inputs = processor(text=text, return_tensors="pt")
-                    # Use a default speaker embedding (zeros) for simplicity
-                    speaker_embeddings = torch.zeros(
-                        1, 512
-                    )  # Default size for SpeechT5
-                    speech = model.generate_speech(
-                        inputs["input_ids"], speaker_embeddings, vocoder=None
-                    )
-                    return speech
-
-                pipe = tts_pipeline
-            else:
-                raise HTTPException(
-                    status_code=404, detail=f"TTS model {model_name} not supported."
-                )
+            # Use the new spectrogram-based TTS service
+            from backend.services.tts_spectrogram_service import get_spectrogram_tts_service
+            
+            tts_service = get_spectrogram_tts_service()
+            
+            # Load models if not already loaded
+            if tts_service.text_to_spectrogram_model is None:
+                tts_service.load_models(model_name)
+            
+            # Create pipeline function
+            def tts_pipeline(text):
+                return tts_service.synthesize_speech(text)
+            
+            pipe = tts_pipeline
 
             # Cache the pipeline if caching is enabled
             if use_cache:
