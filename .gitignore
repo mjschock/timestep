@@ -1,6 +1,0 @@
-build
-cache
-*.egg-info
-__pycache__
-unsloth_compiled_cache
-.venv
