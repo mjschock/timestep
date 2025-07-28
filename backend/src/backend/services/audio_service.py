@@ -31,7 +31,7 @@ class AudioService:
             # Get TTS pipeline from models service
             tts_pipeline = get_models_service().get_tts_pipeline(model)
 
-            # Generate speech
+            # Generate speech using spectrogram-based TTS
             audio = tts_pipeline(input_text)
 
             # Convert to bytes
@@ -46,7 +46,11 @@ class AudioService:
             import numpy as np
 
             if isinstance(audio_array, np.ndarray):
-                # Ensure it's the right format
+                # Normalize audio to [-1, 1] range if needed
+                if audio_array.max() > 1.0 or audio_array.min() < -1.0:
+                    audio_array = np.clip(audio_array, -1.0, 1.0)
+                
+                # Convert to 16-bit PCM
                 if audio_array.dtype != np.int16:
                     audio_array = (audio_array * 32767).astype(np.int16)
                 audio_bytes = audio_array.tobytes()
