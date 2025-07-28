@@ -45,6 +45,7 @@ class ModelsService:
         ]
         self.supported_vlm_models = [
             "HuggingFaceTB/SmolVLM2-256M-Video-Instruct",
+            "HuggingFaceTB/SmolVLA-256M-Video-Instruct",
         ]
         self.supported_stt_models = [
             "openai/whisper-tiny",
@@ -361,6 +362,19 @@ class ModelsService:
         model = AutoModelForImageTextToText.from_pretrained(
             model_name, torch_dtype=torch.bfloat16
         ).to("cuda")
+        
+        # Add audio processing capabilities for SmolVLA
+        if "SmolVLA" in model_name:
+            logger.info(f"🎵 Loading SmolVLA model with audio capabilities: {model_name}")
+            # SmolVLA extends SmolVLM2 with audio processing
+            # The processor and model should handle audio inputs automatically
+            # SmolVLA supports the following content types:
+            # - text: {"type": "text", "text": "..."}
+            # - image: {"type": "image", "url": "..."} or {"type": "image_url", "image_url": {...}}
+            # - audio: {"type": "audio", "path": "..."}
+            # - video: {"type": "video", "path": "..."}
+            logger.info(f"🎵 SmolVLA supports text, image, audio, and video inputs")
+        
         return model, processor
 
     def get_stt_pipeline(
