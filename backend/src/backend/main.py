@@ -21,7 +21,6 @@ from backend.apis.realtime_api import realtime_router
 from backend.apis.responses_api import responses_router
 from backend.apis.uploads_api import uploads_router
 from backend.apis.vector_stores_api import vector_stores_router
-from backend.apis.tts_api import router as tts_router
 from backend.logging_config import logger
 
 app: FastAPI = FastAPI()
@@ -43,7 +42,6 @@ app.include_router(responses_router, prefix="/v1")
 
 app.include_router(uploads_router, prefix="/v1")
 app.include_router(vector_stores_router, prefix="/v1")
-app.include_router(tts_router, prefix="/v1")
 
 
 @app.middleware("http")
