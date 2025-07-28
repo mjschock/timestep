@@ -39,34 +39,46 @@ Audio File → Audio Visualization → VLM Processing → Transcribed Text
 
 ## 🚀 API Endpoints
 
-### VLM Transcription
+### Integrated VLM Transcription
+The VLM-based approach is integrated as a drop-in replacement for traditional STT models.
+
+#### Standard Transcription Endpoint
 ```http
-POST /audio/transcriptions/vlm
+POST /audio/transcriptions
 ```
 
 **Parameters:**
 - `file`: Audio file (multipart/form-data)
-- `image_type`: "spectrogram", "waveform", or "mfcc" (default: "spectrogram")
-- `vlm_model`: VLM model name (default: "HuggingFaceTB/SmolVLM2-256M-Video-Instruct")
-- `prompt`: Custom prompt for VLM (default: transcription prompt)
+- `model`: Use VLM models with format `vlm:image_type:vlm_model_name`
+- `response_format`: "text" or "json"
+- `language`: Language code (for traditional STT)
+- `prompt`: Custom prompt for VLM
+- `temperature`: Temperature for generation
 
-### Compare Methods
+#### VLM Model Examples:
+- `vlm:spectrogram:HuggingFaceTB/SmolVLM2-256M-Video-Instruct`
+- `vlm:waveform:HuggingFaceTB/SmolVLM2-256M-Video-Instruct`
+- `vlm:mfcc:HuggingFaceTB/SmolVLM2-256M-Video-Instruct`
+
+#### Translation Endpoint
 ```http
+POST /audio/translations
+```
+
+**Parameters:**
+- `file`: Audio file (multipart/form-data)
+- `model`: Use VLM models with format `vlm:image_type:vlm_model_name`
+- `response_format`: "text" or "json"
+- `prompt`: Custom prompt for VLM translation
+- `temperature`: Temperature for generation
+
+### Additional VLM-Specific Endpoints
+```http
+POST /audio/transcriptions/vlm
 POST /audio/transcriptions/compare
 ```
 
-**Parameters:**
-- `file`: Audio file (multipart/form-data)
-- `vlm_prompt`: Custom prompt for VLM comparison
-
-**Returns:**
-```json
-{
-  "traditional_stt": "Whisper transcription result",
-  "vlm_transcription": "VLM transcription result",
-  "methods_compared": ["whisper", "vlm_spectrogram"]
-}
-```
+These endpoints provide additional VLM-specific functionality while maintaining compatibility with the standard endpoints.
 
 ## 🎯 Potential Benefits
 
@@ -124,25 +136,45 @@ matplotlib>=3.7.0   # Image generation
 - `transcribe_with_vlm()`: Main transcription method
 - `compare_transcription_methods()`: Compare with traditional STT
 
+#### Integrated Audio Service
+- **Model Detection**: Detects VLM models by "vlm:" prefix
+- **Parameter Parsing**: Extracts image type and VLM model from model string
+- **Seamless Integration**: Same API endpoints, same response format
+- **Backward Compatibility**: Traditional STT models work unchanged
+
+#### Models Service Integration
+- VLM models added to `supported_stt_models` list
+- Special handling for VLM models in `get_stt_pipeline()`
+- Drop-in replacement for existing STT functionality
+
 #### API Integration
-- New endpoints in `audio_api.py`
+- Enhanced existing endpoints in `audio_api.py`
+- Additional VLM-specific endpoints for advanced usage
 - Compatible with existing audio service structure
 - Async processing for better performance
 
 ## 🧪 Testing
 
-### Run the Test Script
+### Run the Integrated Demo
+```bash
+cd backend
+python example_vlm_stt_usage.py
+```
+
+### Run the Original Test Script
 ```bash
 cd backend
 python test_speech_to_image.py
 ```
 
-### Test Different Visualizations
-The test script demonstrates:
-- Spectrogram transcription
-- Waveform transcription
-- MFCC transcription
-- Comparison with traditional STT
+### Test Different Approaches
+The demo scripts demonstrate:
+- Traditional STT (Whisper)
+- VLM-based STT with spectrogram
+- VLM-based STT with waveform
+- VLM-based STT with MFCC
+- VLM-based translation
+- Comparison between methods
 
 ## 🔬 Use Cases
 

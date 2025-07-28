@@ -48,6 +48,9 @@ class ModelsService:
         ]
         self.supported_stt_models = [
             "openai/whisper-tiny",
+            "vlm:spectrogram:HuggingFaceTB/SmolVLM2-256M-Video-Instruct",
+            "vlm:waveform:HuggingFaceTB/SmolVLM2-256M-Video-Instruct",
+            "vlm:mfcc:HuggingFaceTB/SmolVLM2-256M-Video-Instruct",
         ]
         self.supported_tts_models = [
             "microsoft/speecht5_tts",
@@ -381,6 +384,22 @@ class ModelsService:
             raise HTTPException(
                 status_code=404, detail=f"STT model {model_name} not supported."
             )
+
+        # Handle VLM-based models
+        if model_name.startswith("vlm:"):
+            # For VLM models, we return a special pipeline that will be handled
+            # by the audio service using the speech-to-image service
+            def vlm_pipeline(audio_file_path):
+                # This is a placeholder - the actual VLM processing happens in the audio service
+                # when it detects a VLM model
+                return {"text": "VLM processing handled by audio service"}
+            
+            # Cache the pipeline if caching is enabled
+            if use_cache:
+                cache_key = f"stt_{model_name}"
+                self._pipeline_cache[cache_key] = vlm_pipeline
+            
+            return vlm_pipeline
 
         # Return cached pipeline if available and caching is enabled
         cache_key = f"stt_{model_name}"

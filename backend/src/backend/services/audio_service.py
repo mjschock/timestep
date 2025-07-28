@@ -6,6 +6,7 @@ from fastapi.responses import Response
 
 from backend.logging_config import logger
 from backend.services.models_service import get_models_service
+from backend.services.speech_to_image_service import get_speech_to_image_service
 
 
 class AudioService:
@@ -79,28 +80,58 @@ class AudioService:
         try:
             logger.info("Received request for audio transcription")
 
-            # Save to temp file
-            with tempfile.NamedTemporaryFile(delete=True, suffix=".wav") as tmp:
-                content = await audio_file.read()
-                tmp.write(content)
-                tmp.flush()
-
-                # Get STT pipeline from models service
-                stt_pipeline = get_models_service().get_stt_pipeline(model)
-
-                # Run transcription with minimal parameters
-                result = stt_pipeline(tmp.name)
-
-                text = (
-                    result["text"]
-                    if isinstance(result, dict) and "text" in result
-                    else str(result)
-                )
-
-                if response_format == "json":
-                    return {"text": text}
+            # Check if this is a VLM-based model
+            if model.startswith("vlm:"):
+                # Extract VLM parameters from model string
+                # Format: vlm:image_type:vlm_model_name
+                parts = model.split(":")
+                if len(parts) >= 2:
+                    image_type = parts[1] if len(parts) > 1 else "spectrogram"
+                    vlm_model = parts[2] if len(parts) > 2 else "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
+                    
+                    logger.info(f"Using VLM-based transcription with {image_type} visualization")
+                    
+                    # Use VLM-based transcription
+                    speech_to_image_service = get_speech_to_image_service()
+                    vlm_prompt = prompt if prompt else f"Please transcribe the speech shown in this audio {image_type} image. Extract all spoken words and convert them to text."
+                    
+                    text = await speech_to_image_service.transcribe_with_vlm(
+                        audio_file, image_type, vlm_model, vlm_prompt
+                    )
+                    
+                    if response_format == "json":
+                        return {"text": text}
+                    else:
+                        return text
                 else:
-                    return text
+                    raise HTTPException(
+                        status_code=400, 
+                        detail="Invalid VLM model format. Use: vlm:image_type:vlm_model_name"
+                    )
+            else:
+                # Traditional STT approach
+                # Save to temp file
+                with tempfile.NamedTemporaryFile(delete=True, suffix=".wav") as tmp:
+                    content = await audio_file.read()
+                    tmp.write(content)
+                    tmp.flush()
+
+                    # Get STT pipeline from models service
+                    stt_pipeline = get_models_service().get_stt_pipeline(model)
+
+                    # Run transcription with minimal parameters
+                    result = stt_pipeline(tmp.name)
+
+                    text = (
+                        result["text"]
+                        if isinstance(result, dict) and "text" in result
+                        else str(result)
+                    )
+
+                    if response_format == "json":
+                        return {"text": text}
+                    else:
+                        return text
 
         except Exception as e:
             logger.error(f"Transcription failed: {e}", exc_info=True)
@@ -120,28 +151,58 @@ class AudioService:
         try:
             logger.info("Received request for audio translation")
 
-            # Save to temp file
-            with tempfile.NamedTemporaryFile(delete=True, suffix=".wav") as tmp:
-                content = await audio_file.read()
-                tmp.write(content)
-                tmp.flush()
-
-                # Get STT pipeline from models service
-                stt_pipeline = get_models_service().get_stt_pipeline(model)
-
-                # Run translation (same as transcription but with English output)
-                result = stt_pipeline(tmp.name)
-
-                text = (
-                    result["text"]
-                    if isinstance(result, dict) and "text" in result
-                    else str(result)
-                )
-
-                if response_format == "json":
-                    return {"text": text}
+            # Check if this is a VLM-based model
+            if model.startswith("vlm:"):
+                # Extract VLM parameters from model string
+                # Format: vlm:image_type:vlm_model_name
+                parts = model.split(":")
+                if len(parts) >= 2:
+                    image_type = parts[1] if len(parts) > 1 else "spectrogram"
+                    vlm_model = parts[2] if len(parts) > 2 else "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
+                    
+                    logger.info(f"Using VLM-based translation with {image_type} visualization")
+                    
+                    # Use VLM-based translation (same as transcription but with translation prompt)
+                    speech_to_image_service = get_speech_to_image_service()
+                    vlm_prompt = prompt if prompt else f"Please translate the speech shown in this audio {image_type} image to English. Extract all spoken words and convert them to English text."
+                    
+                    text = await speech_to_image_service.transcribe_with_vlm(
+                        audio_file, image_type, vlm_model, vlm_prompt
+                    )
+                    
+                    if response_format == "json":
+                        return {"text": text}
+                    else:
+                        return text
                 else:
-                    return text
+                    raise HTTPException(
+                        status_code=400, 
+                        detail="Invalid VLM model format. Use: vlm:image_type:vlm_model_name"
+                    )
+            else:
+                # Traditional STT approach
+                # Save to temp file
+                with tempfile.NamedTemporaryFile(delete=True, suffix=".wav") as tmp:
+                    content = await audio_file.read()
+                    tmp.write(content)
+                    tmp.flush()
+
+                    # Get STT pipeline from models service
+                    stt_pipeline = get_models_service().get_stt_pipeline(model)
+
+                    # Run translation (same as transcription but with English output)
+                    result = stt_pipeline(tmp.name)
+
+                    text = (
+                        result["text"]
+                        if isinstance(result, dict) and "text" in result
+                        else str(result)
+                    )
+
+                    if response_format == "json":
+                        return {"text": text}
+                    else:
+                        return text
 
         except Exception as e:
             logger.error(f"Translation failed: {e}", exc_info=True)
