@@ -17,7 +17,7 @@ default:
 	uv run ruff format .
 	uv run ruff check --fix . --ignore C901
 	uv run toml-sort -ai pyproject.toml
-	uv run pytest
+	uv run pytest --cov=src/backend --cov-report=term-missing --cov-fail-under=42
 
 	mkdir docs && uv run pyreverse src/backend/ \
 		--colorized \

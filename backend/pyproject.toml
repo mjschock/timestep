@@ -62,6 +62,7 @@ exclude_lines = [
   "raise AssertionError",
   "raise NotImplementedError"
 ]
+fail_under = 42
 
 [tool.coverage.run]
 concurrency = ["multiprocessing"]
