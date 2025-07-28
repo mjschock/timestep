@@ -47,10 +47,10 @@ class ModelsService:
             "HuggingFaceTB/SmolVLM2-256M-Video-Instruct",
         ]
         self.supported_stt_models = [
-            "openai/whisper-tiny",
             "vlm:spectrogram:HuggingFaceTB/SmolVLM2-256M-Video-Instruct",
             "vlm:waveform:HuggingFaceTB/SmolVLM2-256M-Video-Instruct",
             "vlm:mfcc:HuggingFaceTB/SmolVLM2-256M-Video-Instruct",
+            "openai/whisper-tiny",  # Legacy fallback
         ]
         self.supported_tts_models = [
             "microsoft/speecht5_tts",
@@ -367,7 +367,7 @@ class ModelsService:
         return model, processor
 
     def get_stt_pipeline(
-        self, model_name: str = "openai/whisper-tiny", use_cache: bool = True
+        self, model_name: str = "vlm:spectrogram:HuggingFaceTB/SmolVLM2-256M-Video-Instruct", use_cache: bool = True
     ) -> Any:
         """
         Get a speech-to-text pipeline for transcription.
