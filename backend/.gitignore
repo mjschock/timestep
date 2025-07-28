@@ -1,0 +1,16 @@
+build
+.coverage*
+coverage.xml
+data
+docs
+*.egg-info
+htmlcov
+.hypothesis
+logs
+mlruns
+.mypy_cache
+__pycache__
+.pytest_cache
+.ruff_cache
+test_outputs
+.venv
