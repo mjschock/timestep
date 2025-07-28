@@ -429,21 +429,11 @@ async def fine_tuned_performance_test(
     # Log exact performance for test updates
     print(f"📊 EXACT straightforward performance: {ft_straightforward_percentage}%")
 
-    # For now, assert the exact performance we observe - update this once we know the real number
     # Fine-tuned model should improve on straightforward prompts vs baseline 10.0%
-    if ft_straightforward_percentage == 10.0:
-        print("⚠️  Performance same as baseline - fine-tuning may need improvement")
-        assert ft_straightforward_percentage == 10.0, (
-            f"Fine-tuned straightforward performance is exactly baseline: {ft_straightforward_percentage}% - training may need adjustment"
-        )
-    else:
-        print(
-            f"✅ Performance differs from baseline - got {ft_straightforward_percentage}%"
-        )
-        # Update this assertion with the exact observed value once we see what it is
-        assert ft_straightforward_percentage >= 10.0, (
-            f"Fine-tuned model should not perform worse than baseline: got {ft_straightforward_percentage}%, baseline was 10.0%"
-        )
+    print(f"🎯 Expected: > 10.0%, Actual: {ft_straightforward_percentage}%")
+    assert ft_straightforward_percentage > 10.0, (
+        f"Fine-tuned model should perform better than baseline 10.0%, but got {ft_straightforward_percentage}%"
+    )
 
 
 @pytest.mark.asyncio
