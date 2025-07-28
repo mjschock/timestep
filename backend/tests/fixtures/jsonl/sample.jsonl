@@ -1,1 +1,1 @@
-{"prompt": "Say hello", "completion": "Hello!"}
+{"messages": [{"role": "user", "content": "Say hello"}, {"role": "assistant", "content": "Hello!"}]}
