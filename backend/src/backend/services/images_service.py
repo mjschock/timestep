@@ -20,7 +20,7 @@ class ImagesService:
             except Exception:
                 body = {}
 
-            model = body.get("model", "stable-diffusion-v1-5/stable-diffusion-v1-5")
+            model = body.get("model", "vlm-image-generator")
             prompt = body.get("prompt", "")
             n = body.get("n", 1)
             size = body.get("size", "1024x1024")
@@ -70,8 +70,6 @@ class ImagesService:
                     prompt=prompt,
                     width=width,
                     height=height,
-                    num_inference_steps=20,  # Keep it fast for testing
-                    guidance_scale=7.5,
                 )
 
                 image = result.images[0]

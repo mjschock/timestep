@@ -41,7 +41,7 @@ class ModelsService:
             "sentence-transformers/paraphrase-MiniLM-L3-v2",
         ]
         self.supported_image_models: list[str] = [
-            "text-image-gpt2",
+            "vlm-image-generator",
             # "stable-diffusion-v1-5/stable-diffusion-v1-5",
         ]
         self.supported_vlm_models = [
@@ -472,7 +472,7 @@ class ModelsService:
             ) from e
 
     def get_image_pipeline(
-        self, model_name="text-image-gpt2", use_cache=True
+        self, model_name="vlm-image-generator", use_cache=True
     ):
         """
         Get an image generation pipeline for creating images.
@@ -496,30 +496,27 @@ class ModelsService:
             return self._pipeline_cache[cache_key]
 
         try:
-            if model_name == "text-image-gpt2":
-                # Import text-based image generation components
-                from .text_image_generator import generate_image_with_fallback
-                from .text_image_trainer import train_model
+            if model_name == "vlm-image-generator":
+                # Import VLM-based image generation components
+                from .vlm_image_service import VLMImageService
+                from PIL import Image
                 
                 # Create a pipeline-like interface
-                class TextImagePipeline:
+                class VLMImagePipeline:
                     def __init__(self):
-                        self.train_model = train_model
-                        self.generate_image = generate_image_with_fallback
+                        self.vlm_service = VLMImageService(self)
                     
-                    def __call__(self, prompt, width=28, height=28, **kwargs):
-                        """Generate image from prompt"""
-                        img_array, img = self.generate_image(prompt)
-                        if img_array is not None:
-                            # Resize to requested dimensions
-                            img = img.resize((width, height))
+                    def __call__(self, prompt, width=512, height=512, **kwargs):
+                        """Generate image from prompt using VLM analysis"""
+                        img_array, img = self.vlm_service.generate_image(prompt, width, height)
+                        if img is not None:
                             return type('Result', (), {'images': [img]})()
                         else:
-                            # Return a blank image if generation fails
-                            blank_img = Image.new('RGB', (width, height), color='white')
-                            return type('Result', (), {'images': [blank_img]})()
+                            # Return a default image if generation fails
+                            default_img = Image.new('RGB', (width, height), color='gray')
+                            return type('Result', (), {'images': [default_img]})()
 
-                pipe = TextImagePipeline()
+                pipe = VLMImagePipeline()
 
             else:
                 # Fallback to Stable Diffusion for other models
