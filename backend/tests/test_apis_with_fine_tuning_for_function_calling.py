@@ -143,9 +143,9 @@ async def create_fine_tuning_job(async_client):
         model=MODEL_NAME,
         training_file=file_id,
         hyperparameters={
-            "n_epochs": 3,
-            "batch_size": 1,
-            "learning_rate_multiplier": 12.0,
+            "n_epochs": 5,  # Increased from 3 to 5 for more training
+            "batch_size": 2,  # Increased from 1 to 2 for better gradient estimates
+            "learning_rate_multiplier": 25.0,  # Increased from 12.0 to 25.0 for faster learning
         },
         seed=42,
     )

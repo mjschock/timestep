@@ -67,11 +67,11 @@ PEFT_METHOD_QLORA = "qlora"
 
 # Enhanced monitoring configuration - optimized for better training
 MONITORING_CONFIG = {
-    "patience": 50,  # Increased to allow more training
-    "min_improvement": 0.001,  # Keep sensitivity for improvement detection
-    "max_loss_threshold": 10.0,  # Fail if loss exceeds this
-    "log_frequency": 10,  # Reduced logging frequency for better performance
-    "grad_norm_threshold": 50.0,  # Warn if gradient norm exceeds this
+    "patience": 100,  # Increased from 50 to 100 for function calling tasks
+    "min_improvement": 0.0005,  # Reduced from 0.001 for more sensitive improvement detection
+    "max_loss_threshold": 15.0,  # Increased from 10.0 to allow for higher initial loss
+    "log_frequency": 5,  # Reduced from 10 for more frequent monitoring
+    "grad_norm_threshold": 100.0,  # Increased from 50.0 for function calling tasks
     "enable_wandb": False,  # Disabled for speed
     "enable_generation_metrics": False,  # Disabled for speed
 }
@@ -851,8 +851,8 @@ class UnifiedFineTuner:
         train_dataset: Any,
         fine_tuning_job: FineTuningJob,
         peft_method: str = PEFT_METHOD_QLORA,
-        max_steps: int = 10,  # Increased for better training
-        eval_steps: int = 5,  # Evaluate every 5 steps
+        max_steps: int = 25,  # Increased from 10 to 25 for more training
+        eval_steps: int = 10,  # Increased from 5 to 10 for better evaluation
     ):
         """Initialize the enhanced unified fine-tuner.
 
@@ -1425,12 +1425,12 @@ class UnifiedFineTuner:
             num_train_epochs=self._get_num_epochs(),  # Use job configuration
             per_device_train_batch_size=self._get_batch_size(),
             per_device_eval_batch_size=self._get_batch_size(),
-            gradient_accumulation_steps=4,  # Larger effective batch size for stability
+            gradient_accumulation_steps=2,  # Reduced from 4 for more frequent updates
             warmup_steps=max(
-                1, self.max_steps // 50
-            ),  # Minimal warmup for ultra-fast start
+                1, self.max_steps // 20
+            ),  # Increased warmup for better learning
             learning_rate=self._get_learning_rate(),
-            weight_decay=0.001,  # Reduced weight decay for faster convergence
+            weight_decay=0.01,  # Increased from 0.001 for better regularization
             logging_steps=1,  # Log every step for full monitoring
             eval_strategy="steps" if self.eval_dataset else "no",
             eval_steps=self.eval_steps if self.eval_dataset else None,
@@ -1454,12 +1454,12 @@ class UnifiedFineTuner:
             dataloader_pin_memory=False,
             gradient_checkpointing=False,  # Disabled for speed
             prediction_loss_only=True,  # Disabled generation metrics for speed
-            lr_scheduler_type="linear",  # Fast linear decay for aggressive training
-            warmup_ratio=0.02,  # Ultra-low warmup ratio
+            lr_scheduler_type="cosine",  # Changed from linear to cosine for better convergence
+            warmup_ratio=0.1,  # Increased from 0.02 for better warmup
             adam_beta1=0.9,  # Optimized Adam parameters
             adam_beta2=0.999,
-            adam_epsilon=1e-6,  # Smaller epsilon for faster convergence
-            max_grad_norm=0.5,  # Aggressive gradient clipping
+            adam_epsilon=1e-8,  # Increased from 1e-6 for stability
+            max_grad_norm=1.0,  # Increased from 0.5 for function calling tasks
         )
 
         # Create enhanced trainer
@@ -2364,8 +2364,8 @@ def run_fine_tuning_for_all_datasets(
     method_type: str = METHOD_TYPE_SUPERVISED,
     model: str = MODEL_ID,
     training_file_ids: list[str] | None = None,
-    max_steps: int = 10,
-    eval_steps: int = 5,
+    max_steps: int = 25,  # Increased from 10 to 25 for more training
+    eval_steps: int = 10,  # Increased from 5 to 10 for better evaluation
     learning_rate_multiplier: str | float = "auto",
     n_epochs: str | int = "auto",
     batch_size: str = "auto",
