@@ -3,6 +3,10 @@ Fine-tuning for Function Calling Test
 
 This test extracts the logic from the Fine_tuning_for_function_calling.ipynb notebook
 and runs it as a sequential test with assertions on intermediate state.
+
+Modified from: https://github.com/openai/openai-cookbook/blob/843a8bc6826bd4f32a035c95f67a36d6b7c14253/examples/Fine_tuning_for_function_calling.ipynb
+
+Uses the SmolVLM2-256M-Video-Instruct model for function calling fine-tuning capabilities.
 """
 
 import asyncio
@@ -451,7 +455,18 @@ async def test_fine_tuning_for_function_calling_full_workflow(async_client):
     # Define the drone system prompt
     drone_system_prompt = """You are an intelligent AI that controls a drone. Given a command or request from the user,
 call one of your functions to complete the request. If the request cannot be completed by your available functions, call the reject_request function.
-If the request is ambiguous or unclear, reject the request."""
+If the request is ambiguous or unclear, reject the request.
+
+Available functions:
+- takeoff_drone: Initiate drone takeoff to specified altitude
+- land_drone: Land the drone at current location, home base, or custom coordinates
+- control_drone_movement: Move the drone in a specific direction with distance and speed
+- set_drone_speed: Set the drone's movement speed
+- control_camera: Take photos or record videos with specified resolution
+- configure_led_display: Configure LED color and pattern
+- set_obstacle_avoidance: Enable/disable obstacle avoidance with sensitivity
+- set_follow_me_mode: Enable/disable follow-me mode with distance
+- reject_request: Reject requests that cannot be fulfilled"""
 
     # Define the function list for drone operations
     function_list = [
@@ -564,6 +579,72 @@ If the request is ambiguous or unclear, reject the request."""
                         },
                     },
                     "required": ["action"],
+                },
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "configure_led_display",
+                "description": "Configure the drone's LED display settings.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "color": {
+                            "type": "string",
+                            "enum": ["red", "green", "blue", "yellow", "white", "off"],
+                            "description": "Color for the LED display.",
+                        },
+                        "pattern": {
+                            "type": "string",
+                            "enum": ["solid", "blink", "pulse"],
+                            "description": "Display pattern for the LED.",
+                        },
+                    },
+                    "required": ["color"],
+                },
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "set_obstacle_avoidance",
+                "description": "Configure the drone's obstacle avoidance system.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Whether obstacle avoidance is enabled.",
+                        },
+                        "sensitivity": {
+                            "type": "string",
+                            "enum": ["low", "medium", "high"],
+                            "description": "Sensitivity level for obstacle detection.",
+                        },
+                    },
+                    "required": ["enabled"],
+                },
+            },
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "set_follow_me_mode",
+                "description": "Enable or disable the drone's follow-me mode.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Whether follow-me mode is enabled.",
+                        },
+                        "distance": {
+                            "type": "integer",
+                            "description": "Distance in meters to maintain from the target.",
+                        },
+                    },
+                    "required": ["enabled"],
                 },
             },
         },
