@@ -893,6 +893,28 @@ def get_model():
 # Example conversations for testing and demonstration
 EXAMPLE_CONVERSATIONS = [
     {
+        "expected": {
+            "messages": [
+                {
+                    "role": "system",
+                    "content": [
+                        {"type": "text", "text": "You are a vision assistant."}
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "What's in this image?"},
+                        {
+                            "type": "image",
+                            "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+                        },
+                    ],
+                },
+            ],
+            "prompt": "<|im_start|>System: You are a vision assistant.<end_of_utterance>\nUser: What's in this image?<image><end_of_utterance>\nAssistant:",
+            "response": "The image shows a bee on a pink flower. The flower has a yellow center and a pinkish-purple petals. The bee is in the center of the flower, and it is surrounded by the petals. The background is blurred, but it appears to be a garden or a field with green foliage.",
+        },
         "messages": [
             {
                 "role": "user",
@@ -909,6 +931,30 @@ EXAMPLE_CONVERSATIONS = [
         "tools": None,
     },
     {
+        "expected": {
+            "messages": [
+                {
+                    "role": "system",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "You are a vision assistant.\n\nThe following tools are available:\n\nTool name: get_weather\nDescription: Get current temperature for a given location.\nParameters:\n- location (string): City and country e.g. Bogotá, Colombia\n\nTo use a tool, respond with:\n<tool_call>{ ... }</tool_call>",
+                        }
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "What is the weather like in Oakland today?",
+                        }
+                    ],
+                },
+            ],
+            "prompt": "<|im_start|>System: You are a vision assistant.\n\nThe following tools are available:\n\nTool name: get_weather\nDescription: Get current temperature for a given location.\nParameters:\n- location (string): City and country e.g. Bogotá, Colombia\n\nTo use a tool, respond with:\n<tool_call>{ ... }</tool_call><end_of_utterance>\nUser: What is the weather like in Oakland today?<end_of_utterance>\nAssistant:",
+            "response": "Oakland is a city in California, USA, known for its mild climate and vibrant atmosphere. Here are some general weather forecasts for the city:\n\n* Average temperature: 68°F (20°C)\n* Precipitation: 12.5 inches (29 cm) per day\n* Wind speed: 10-15 mph (16-24 km/h)\n* Daytime high: 68°F (20°",
+        },
         "messages": [
             {"role": "user", "content": "What is the weather like in Oakland today?"},
             {
@@ -937,6 +983,30 @@ EXAMPLE_CONVERSATIONS = [
         ],
     },
     {
+        "expected": {
+            "messages": [
+                {
+                    "role": "system",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "You are a vision assistant.\n\nThe following tools are available:\n\nTool name: get_weather\nDescription: Get current temperature for a given location.\nParameters:\n- location (string): City and country e.g. Bogotá, Colombia\n\nTo use a tool, respond with:\n<tool_call>{ ... }</tool_call>",
+                        }
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "What is the weather like in Oakland today?",
+                        }
+                    ],
+                },
+            ],
+            "prompt": "<|im_start|>System: You are a vision assistant.\n\nThe following tools are available:\n\nTool name: get_weather\nDescription: Get current temperature for a given location.\nParameters:\n- location (string): City and country e.g. Bogotá, Colombia\n\nTo use a tool, respond with:\n<tool_call>{ ... }</tool_call><end_of_utterance>\nUser: What is the weather like in Oakland today?<end_of_utterance>\nAssistant:",
+            "response": "Oakland is a city in California, USA, known for its mild climate and vibrant atmosphere. Here are some general weather forecasts for the city:\n\n* Average temperature: 68°F (20°C)\n* Precipitation: 12.5 inches (29 cm) per day\n* Wind speed: 10-15 mph (16-24 km/h)\n* Daytime high: 68°F (20°",
+        },
         "messages": [
             {"role": "user", "content": "What is the weather like in Oakland today?"},
             {
@@ -1115,8 +1185,8 @@ def example_usage():  # noqa: C901
                         generated_ids = model.generate(
                             **inference_inputs,
                             max_new_tokens=100,
-                            do_sample=True,
-                            temperature=0.7,
+                            do_sample=False,
+                            temperature=0.0,
                             pad_token_id=processor.tokenizer.eos_token_id,
                         )
 
@@ -1128,6 +1198,55 @@ def example_usage():  # noqa: C901
 
                     print("✅ Inference completed!")
                     print(f"🤖 Model response: {response}")
+
+                    # Extract expected values from conversation
+                    expected = conversation_dict.get("expected", {})
+                    expected_response = expected.get("response")
+                    expected_messages = expected.get("messages", [])
+                    expected_prompt = expected.get("prompt")
+
+                    # Make assertions if expected values are provided
+                    if expected_response:
+                        print("\n🔍 ASSERTING RESPONSE:")
+                        print(f"  Expected: {expected_response}")
+                        print(f"  Actual:   {response}")
+                        assert response.strip() == expected_response.strip(), (
+                            f"Response mismatch: expected '{expected_response}', got '{response}'"
+                        )
+                        print("  ✅ Response assertion passed!")
+
+                    if expected_prompt:
+                        print("\n🔍 ASSERTING PROMPT:")
+                        print(f"  Expected: {expected_prompt}")
+                        print(f"  Actual:   {inference_prompt}")
+                        assert inference_prompt.strip() == expected_prompt.strip(), (
+                            f"Prompt mismatch: expected '{expected_prompt}', got '{inference_prompt}'"
+                        )
+                        print("  ✅ Prompt assertion passed!")
+
+                    if expected_messages:
+                        print("\n🔍 ASSERTING MESSAGES:")
+                        print(f"  Expected messages: {len(expected_messages)}")
+                        print(f"  Actual messages:   {len(inference_messages)}")
+                        assert len(inference_messages) == len(expected_messages), (
+                            f"Message count mismatch: expected {len(expected_messages)}, got {len(inference_messages)}"
+                        )
+
+                        for i, (expected_msg, actual_msg) in enumerate(
+                            zip(expected_messages, inference_messages, strict=True)
+                        ):
+                            print(f"  Message {i + 1}:")
+                            print(f"    Expected: {expected_msg}")
+                            print(f"    Actual:   {actual_msg}")
+                            assert actual_msg["role"] == expected_msg["role"], (
+                                f"Role mismatch in message {i + 1}: expected '{expected_msg['role']}', got '{actual_msg['role']}'"
+                            )
+                            assert actual_msg["content"] == expected_msg["content"], (
+                                f"Content mismatch in message {i + 1}: expected '{expected_msg['content']}', got '{actual_msg['content']}'"
+                            )
+                            print(f"    ✅ Message {i + 1} assertion passed!")
+
+                        print("  ✅ All message assertions passed!")
 
                 except Exception as e:
                     print(f"❌ Inference failed: {e}")
