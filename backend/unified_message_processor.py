@@ -4,6 +4,7 @@ Unified message processor for multimodal conversations.
 This module provides functions to process both text-only and multimodal conversations
 for training and inference with vision-language models.
 """
+# ruff: noqa: S101
 
 from pprint import pprint
 from typing import Any
@@ -31,6 +32,67 @@ def normalize_content(content: str | list[dict[str, Any]]) -> list[dict[str, Any
         raise ValueError(f"Content must be string or list, got {type(content)}")
 
 
+def _tensor_to_list(tensor_or_list):
+    """Convert tensor to list if needed, otherwise return as-is."""
+    if hasattr(tensor_or_list, "tolist"):
+        return tensor_or_list.tolist()
+    return tensor_or_list
+
+
+def _flatten_if_nested(lst):
+    """Flatten list if it's a list of lists."""
+    if lst and isinstance(lst[0], list):
+        return [item for sublist in lst for item in sublist]
+    return lst
+
+
+def _prepare_messages_for_tokenizer(
+    messages: list[dict[str, list[dict[str, Any]] | float]],
+) -> list[dict[str, list[dict[str, Any]]]]:
+    """
+    Convert messages with weights to tokenizer-compatible format by stripping weights.
+
+    Args:
+        messages: List of messages that may contain weights
+
+    Returns:
+        List of messages without weights
+    """
+    return [{"role": msg["role"], "content": msg["content"]} for msg in messages]
+
+
+def _build_system_message_parts(
+    system_message: str | None = None,
+    developer_message: str | None = None,
+    tools: list[dict[str, Any]] | None = None,
+) -> list[str]:
+    """
+    Build system message parts from components.
+
+    Args:
+        system_message: Base system prompt
+        developer_message: Developer instructions
+        tools: Tool definitions
+
+    Returns:
+        List of system message parts
+    """
+    system_parts = []
+
+    if system_message:
+        system_parts.append(system_message)
+
+    if developer_message:
+        system_parts.append(f"[Developer Instructions]: {developer_message}")
+
+    if tools:
+        tool_content = format_tool_definitions(tools)
+        if tool_content:
+            system_parts.append(tool_content)
+
+    return system_parts
+
+
 def format_tool_definitions(tools: list[dict[str, Any]]) -> str:
     """Format tools into a readable string for the system message."""
     if not tools:
@@ -40,32 +102,17 @@ def format_tool_definitions(tools: list[dict[str, Any]]) -> str:
 
     for tool in tools:
         if tool["type"] == "function":
-            fn = tool["function"]
-            tool_content += f"**{fn['name']}**\n"
-            tool_content += f"Description: {fn['description']}\n"
-
-            # Format parameters
-            if "parameters" in fn and "properties" in fn["parameters"]:
-                tool_content += "Parameters:\n"
-                props = fn["parameters"]["properties"]
-                required = fn["parameters"].get("required", [])
-
-                for name, spec in props.items():
-                    req_marker = " (required)" if name in required else ""
-                    desc = spec.get("description", "")
-                    param_type = spec.get("type", "unknown")
-
-                    if "enum" in spec:
-                        enum_vals = ", ".join(f'"{v}"' for v in spec["enum"])
-                        tool_content += f"  • {name} ({param_type}){req_marker}: {desc} [Options: {enum_vals}]\n"
-                    else:
-                        tool_content += (
-                            f"  • {name} ({param_type}){req_marker}: {desc}\n"
-                        )
-
+            tool_content += f"Tool name: {tool['name']}\n"
+            tool_content += f"Description: {tool['description']}\n"
+            tool_content += "Parameters:\n"
+            for name, spec in tool["parameters"]["properties"].items():
+                line = f"- {name} ({spec['type']}): {spec.get('description', '')}"
+                if "enum" in spec:
+                    line += f" (One of: {', '.join(spec['enum'])})"
+                tool_content += line + "\n"
             tool_content += "\n"
 
-    tool_content += 'To use a tool, respond with:\n<tool_call>\n{\n  "name": "tool_name",\n  "arguments": {...}\n}\n</tool_call>'
+    tool_content += "To use a tool, respond with:\n<tool_call>{ ... }</tool_call>"
     return tool_content.strip()
 
 
@@ -92,18 +139,7 @@ def build_messages(
     messages = []
 
     # Build combined system message
-    system_parts = []
-
-    if system_message:
-        system_parts.append(system_message)
-
-    if developer_message:
-        system_parts.append(f"[Developer Instructions]: {developer_message}")
-
-    if tools:
-        tool_content = format_tool_definitions(tools)
-        if tool_content:
-            system_parts.append(tool_content)
+    system_parts = _build_system_message_parts(system_message, developer_message, tools)
 
     # Add combined system message if any parts exist
     if system_parts:
@@ -151,21 +187,18 @@ def prepare_training_example(
         tools: Available tools
 
     Returns:
-        Tuple of (training_example, messages) where:
+        Tuple of (training_example, messages, prompt) where:
         - training_example: {"input_ids": [...], "attention_mask": [...], "labels": [...],
                            "pixel_values": [...]}  # pixel_values only for vision models
         - messages: List of processed messages used to create the training example
+        - prompt: Formatted text prompt from apply_chat_template
     """
+    # Validate input
+    if not conversation:
+        raise ValueError("Conversation cannot be empty")
+
     # Build system message parts
-    system_parts = []
-    if system_message:
-        system_parts.append(system_message)
-    if developer_message:
-        system_parts.append(f"[Developer Instructions]: {developer_message}")
-    if tools:
-        tool_content = format_tool_definitions(tools)
-        if tool_content:
-            system_parts.append(tool_content)
+    system_parts = _build_system_message_parts(system_message, developer_message, tools)
 
     # Prepare full conversation with system message
     messages = []
@@ -191,7 +224,14 @@ def prepare_training_example(
     # Create labels with message-level weights
     result = _create_weighted_labels_multimodal(messages, processor)
 
-    return result, messages
+    # Generate formatted prompt text
+    prompt = processor.apply_chat_template(
+        _prepare_messages_for_tokenizer(messages),
+        add_generation_prompt=False,
+        tokenize=False,
+    )
+
+    return result, messages, prompt
 
 
 def _create_weighted_labels_multimodal(
@@ -209,9 +249,7 @@ def _create_weighted_labels_multimodal(
 
         # Get conversation up to this point (inclusive)
         # Create processor-compatible format (strip weights)
-        tokenizer_messages = []
-        for msg in messages[: i + 1]:
-            tokenizer_messages.append({"role": msg["role"], "content": msg["content"]})
+        tokenizer_messages = _prepare_messages_for_tokenizer(messages[: i + 1])
 
         # Tokenize current conversation
         current_inputs = processor.apply_chat_template(
@@ -220,32 +258,26 @@ def _create_weighted_labels_multimodal(
             tokenize=True,
             return_dict=True,
         )
-        current_tokens = current_inputs["input_ids"]
-
-        # Convert tensor to list if needed
-        if hasattr(current_tokens, "tolist"):
-            current_tokens = current_tokens.tolist()
+        current_tokens = _tensor_to_list(current_inputs["input_ids"])
+        # Flatten if batch dimension exists
+        if current_tokens and isinstance(current_tokens[0], list):
+            current_tokens = current_tokens[0]
 
         # Get conversation up to previous message (exclusive)
         if i == 0:
             prev_tokens = []
         else:
-            prev_tokenizer_messages = []
-            for msg in messages[:i]:
-                prev_tokenizer_messages.append(
-                    {"role": msg["role"], "content": msg["content"]}
-                )
+            prev_tokenizer_messages = _prepare_messages_for_tokenizer(messages[:i])
             prev_inputs = processor.apply_chat_template(
                 prev_tokenizer_messages,
                 add_generation_prompt=False,
                 tokenize=True,
                 return_dict=True,
             )
-            prev_tokens = prev_inputs["input_ids"]
-
-            # Convert tensor to list if needed
-            if hasattr(prev_tokens, "tolist"):
-                prev_tokens = prev_tokens.tolist()
+            prev_tokens = _tensor_to_list(prev_inputs["input_ids"])
+            # Flatten if batch dimension exists
+            if prev_tokens and isinstance(prev_tokens[0], list):
+                prev_tokens = prev_tokens[0]
 
         # Find tokens added by this message
         new_tokens = current_tokens[len(prev_tokens) :]
@@ -266,7 +298,7 @@ def _create_weighted_labels_multimodal(
 
     # Add other modalities from final tokenization (like pixel_values for vision)
     final_inputs = processor.apply_chat_template(
-        [{"role": msg["role"], "content": msg["content"]} for msg in messages],
+        _prepare_messages_for_tokenizer(messages),
         add_generation_prompt=False,
         tokenize=True,
         return_dict=True,
@@ -276,6 +308,11 @@ def _create_weighted_labels_multimodal(
     for key, value in final_inputs.items():
         if key not in result and key not in ["input_ids", "attention_mask"]:
             result[key] = value
+
+    # Convert lists to tensors if needed for consistency
+    result["input_ids"] = result["input_ids"]
+    result["labels"] = result["labels"]
+    result["attention_mask"] = result["attention_mask"]
 
     return result
 
@@ -298,20 +335,13 @@ def prepare_inference_messages(
         tools: Available tools
 
     Returns:
-        Tuple of (inputs, messages) where:
+        Tuple of (inputs, messages, prompt) where:
         - inputs: {"input_ids": [...], "attention_mask": [...], "pixel_values": [...]}
         - messages: List of processed messages used for inference
+        - prompt: Formatted text prompt from apply_chat_template
     """
     # Build system message parts
-    system_parts = []
-    if system_message:
-        system_parts.append(system_message)
-    if developer_message:
-        system_parts.append(f"[Developer Instructions]: {developer_message}")
-    if tools:
-        tool_content = format_tool_definitions(tools)
-        if tool_content:
-            system_parts.append(tool_content)
+    system_parts = _build_system_message_parts(system_message, developer_message, tools)
 
     # Prepare messages
     messages = []
@@ -329,10 +359,21 @@ def prepare_inference_messages(
 
     # Apply chat template
     inputs = processor.apply_chat_template(
-        messages, tokenize=True, add_generation_prompt=True, return_tensors="pt"
+        messages,
+        tokenize=True,
+        add_generation_prompt=True,
+        return_tensors="pt",
+        return_dict=True,
     )
 
-    return inputs, messages
+    # Generate formatted prompt text
+    prompt = processor.apply_chat_template(
+        messages,
+        add_generation_prompt=True,
+        tokenize=False,
+    )
+
+    return inputs, messages, prompt
 
 
 def _validate_basic_structure(
@@ -345,20 +386,14 @@ def _validate_basic_structure(
     attention_mask = example.get("attention_mask", [])
 
     # Convert tensors to lists if needed
-    if hasattr(input_ids, "tolist"):
-        input_ids = input_ids.tolist()
-    if hasattr(labels, "tolist"):
-        labels = labels.tolist()
-    if hasattr(attention_mask, "tolist"):
-        attention_mask = attention_mask.tolist()
+    input_ids = _tensor_to_list(input_ids)
+    labels = _tensor_to_list(labels)
+    attention_mask = _tensor_to_list(attention_mask)
 
-    # Flatten input_ids if it's a list of lists
-    if input_ids and isinstance(input_ids[0], list):
-        input_ids = [item for sublist in input_ids for item in sublist]
-    if labels and isinstance(labels[0], list):
-        labels = [item for sublist in labels for item in sublist]
-    if attention_mask and isinstance(attention_mask[0], list):
-        attention_mask = [item for sublist in attention_mask for item in sublist]
+    # Flatten if nested
+    input_ids = _flatten_if_nested(input_ids)
+    labels = _flatten_if_nested(labels)
+    attention_mask = _flatten_if_nested(attention_mask)
 
     # Basic length checks
     if len(input_ids) != len(labels):
@@ -490,10 +525,8 @@ def assert_training_correctness(example: dict[str, Any], processor):
     labels = example["labels"]
 
     # Convert tensors to lists if needed
-    if hasattr(input_ids, "tolist"):
-        input_ids = input_ids.tolist()
-    if hasattr(labels, "tolist"):
-        labels = labels.tolist()
+    input_ids = _tensor_to_list(input_ids)
+    labels = _tensor_to_list(labels)
 
     for i, (inp, lab) in enumerate(zip(input_ids, labels, strict=True)):
         if lab != -100:
@@ -512,13 +545,10 @@ class TestMultimodalMessageProcessor:
     @pytest.fixture(scope="class")
     def processor(self):
         """Load the SmolVLM2 processor for testing."""
-        try:
-            processor = AutoProcessor.from_pretrained(
-                "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
-            )
-            return processor
-        except Exception as e:
-            pytest.skip(f"Could not load SmolVLM2 processor: {e}")
+        processor = AutoProcessor.from_pretrained(
+            "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
+        )
+        return processor
 
     @pytest.fixture
     def simple_conversation(self):
@@ -552,17 +582,17 @@ class TestMultimodalMessageProcessor:
         return [
             {
                 "type": "function",
-                "function": {
-                    "name": "get_weather",
-                    "description": "Get current weather",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "location": {"type": "string", "description": "City name"}
-                        },
-                        "required": ["location"],
+                "name": "get_weather",
+                "description": "Get current weather",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {"type": "string", "description": "City name"}
                     },
+                    "required": ["location"],
+                    "additionalProperties": False,
                 },
+                "strict": False,
             }
         ]
 
@@ -647,190 +677,147 @@ class TestMultimodalMessageProcessor:
 
     def test_prepare_training_example_text_only(self, processor, simple_conversation):
         """Test training example preparation with text-only conversation."""
-        try:
-            example, _ = prepare_training_example(
-                conversation=simple_conversation,
-                processor=processor,
-                system_message="You are a helpful assistant",
-            )
+        example, _, _ = prepare_training_example(
+            conversation=simple_conversation,
+            processor=processor,
+            system_message="You are a helpful assistant",
+        )
 
-            # Basic structure checks
-            if "input_ids" not in example:
-                raise AssertionError("Missing input_ids")
-            if "labels" not in example:
-                raise AssertionError("Missing labels")
-            if "attention_mask" not in example:
-                raise AssertionError("Missing attention_mask")
+        # Basic structure checks
+        assert "input_ids" in example, "Missing input_ids"
+        assert "labels" in example, "Missing labels"
+        assert "attention_mask" in example, "Missing attention_mask"
 
-            # Length consistency
-            if len(example["input_ids"]) != len(example["labels"]):
-                raise AssertionError("Length mismatch between input_ids and labels")
-            if len(example["input_ids"]) != len(example["attention_mask"]):
-                raise AssertionError(
-                    "Length mismatch between input_ids and attention_mask"
-                )
+        # Length consistency
+        assert len(example["input_ids"]) == len(example["labels"]), (
+            "Length mismatch between input_ids and labels"
+        )
+        assert len(example["input_ids"]) == len(example["attention_mask"]), (
+            "Length mismatch between input_ids and attention_mask"
+        )
 
-            # Should have some training tokens (assistant messages)
-            training_tokens = sum(1 for x in example["labels"] if x != -100)
-            if training_tokens <= 0:
-                raise AssertionError("No training tokens found")
+        # Should have some training tokens (assistant messages)
+        training_tokens = sum(1 for x in example["labels"] if x != -100)
+        assert training_tokens > 0, "No training tokens found"
 
-            # Validate correctness
-            assert_training_correctness(example, processor)
-
-        except Exception as e:
-            # If model loading fails, skip the test
-            pytest.skip(f"Could not run training test: {e}")
+        # Validate correctness
+        assert_training_correctness(example, processor)
 
     def test_prepare_training_example_multimodal(
         self, processor, multimodal_conversation
     ):
         """Test training example preparation with multimodal conversation."""
-        try:
-            example, _ = prepare_training_example(
-                conversation=multimodal_conversation,
-                processor=processor,
-                system_message="You are a vision assistant",
-            )
+        example, _, _ = prepare_training_example(
+            conversation=multimodal_conversation,
+            processor=processor,
+            system_message="You are a vision assistant",
+        )
 
-            # Should have all standard fields
-            if "input_ids" not in example:
-                raise AssertionError("Missing input_ids")
-            if "labels" not in example:
-                raise AssertionError("Missing labels")
-            if "attention_mask" not in example:
-                raise AssertionError("Missing attention_mask")
+        # Should have all standard fields
+        assert "input_ids" in example, "Missing input_ids"
+        assert "labels" in example, "Missing labels"
+        assert "attention_mask" in example, "Missing attention_mask"
 
-            # May have multimodal fields (like pixel_values)
-            # This depends on the processor implementation
+        # May have multimodal fields (like pixel_values)
+        # This depends on the processor implementation
 
-            # Length consistency
-            if len(example["input_ids"]) != len(example["labels"]):
-                raise AssertionError("Length mismatch between input_ids and labels")
+        # Length consistency
+        assert len(example["input_ids"]) == len(example["labels"]), (
+            "Length mismatch between input_ids and labels"
+        )
 
-            # Should have some training tokens
-            training_tokens = sum(1 for x in example["labels"] if x != -100)
-            if training_tokens <= 0:
-                raise AssertionError("No training tokens found")
+        # Should have some training tokens
+        training_tokens = sum(1 for x in example["labels"] if x != -100)
+        assert training_tokens > 0, "No training tokens found"
 
-            # Validate correctness
-            assert_training_correctness(example, processor)
-
-        except Exception as e:
-            pytest.skip(f"Could not run multimodal training test: {e}")
+        # Validate correctness
+        assert_training_correctness(example, processor)
 
     def test_custom_message_weights(self, processor, simple_conversation):
         """Test custom message-level weights."""
-        try:
-            # Add custom weights to conversation
-            weighted_conversation = []
-            for i, msg in enumerate(simple_conversation):
-                weighted_msg = msg.copy()
-                if msg["role"] == "assistant" and i == 1:  # First assistant message
-                    weighted_msg["weight"] = 1.0  # Train on this
-                elif msg["role"] == "assistant" and i == 3:  # Second assistant message
-                    weighted_msg["weight"] = 0.0  # Skip this
-                weighted_conversation.append(weighted_msg)
+        # Add custom weights to conversation
+        weighted_conversation = []
+        for i, msg in enumerate(simple_conversation):
+            weighted_msg = msg.copy()
+            if msg["role"] == "assistant" and i == 1:  # First assistant message
+                weighted_msg["weight"] = 1.0  # Train on this
+            elif msg["role"] == "assistant" and i == 3:  # Second assistant message
+                weighted_msg["weight"] = 0.0  # Skip this
+            weighted_conversation.append(weighted_msg)
 
-            example, _ = prepare_training_example(
-                conversation=weighted_conversation, processor=processor
-            )
+        example, _, _ = prepare_training_example(
+            conversation=weighted_conversation, processor=processor
+        )
 
-            # Should still have some training tokens, but fewer than default
-            training_tokens = sum(1 for x in example["labels"] if x != -100)
-            if training_tokens <= 0:
-                raise AssertionError("No training tokens found")
+        # Should still have some training tokens, but fewer than default
+        training_tokens = sum(1 for x in example["labels"] if x != -100)
+        assert training_tokens > 0, "No training tokens found"
 
-            # Compare with default weights
-            default_example, _ = prepare_training_example(
-                conversation=simple_conversation, processor=processor
-            )
-            default_training_tokens = sum(
-                1 for x in default_example["labels"] if x != -100
-            )
+        # Compare with default weights
+        default_example, _, _ = prepare_training_example(
+            conversation=simple_conversation, processor=processor
+        )
+        default_training_tokens = sum(1 for x in default_example["labels"] if x != -100)
 
-            # Custom weights should result in fewer training tokens
-            if training_tokens > default_training_tokens:
-                raise AssertionError(
-                    "Custom weights should result in fewer training tokens"
-                )
-
-        except Exception as e:
-            pytest.skip(f"Could not run custom weights test: {e}")
+        # Custom weights should result in fewer training tokens
+        assert training_tokens <= default_training_tokens, (
+            "Custom weights should result in fewer or equal training tokens"
+        )
 
     def test_inference_preparation(self, processor):
         """Test inference message preparation."""
-        try:
-            inputs, messages = prepare_inference_messages(
-                user_input="Hello there!",
-                processor=processor,
-                system_message="You are helpful",
-            )
+        inputs, messages, _ = prepare_inference_messages(
+            user_input="Hello there!",
+            processor=processor,
+            system_message="You are helpful",
+        )
 
-            # Should have the fields needed for generation
-            if "input_ids" not in inputs:
-                raise AssertionError("Missing input_ids")
+        # Should have the fields needed for generation
+        assert "input_ids" in inputs, "Missing input_ids"
 
-            # Should be ready for model.generate()
-            if not isinstance(inputs["input_ids"], list | torch.Tensor):
-                raise AssertionError("input_ids should be list or tensor")
+        # Should be ready for model.generate()
+        assert isinstance(inputs["input_ids"], list | torch.Tensor), (
+            "input_ids should be list or tensor"
+        )
 
-            # Should return the messages used for inference
-            if not isinstance(messages, list):
-                raise AssertionError("Messages should be a list")
-            if not all(
-                isinstance(msg, dict) and "role" in msg and "content" in msg
-                for msg in messages
-            ):
-                raise AssertionError(
-                    "Messages should be a list of dicts with 'role' and 'content'"
-                )
-
-        except Exception as e:
-            pytest.skip(f"Could not run inference test: {e}")
+        # Should return the messages used for inference
+        assert isinstance(messages, list), "Messages should be a list"
+        assert all(
+            isinstance(msg, dict) and "role" in msg and "content" in msg
+            for msg in messages
+        ), "Messages should be a list of dicts with 'role' and 'content'"
 
     def test_validation_functions(self, processor, simple_conversation):
         """Test validation and analysis functions."""
-        try:
-            example, _ = prepare_training_example(
-                conversation=simple_conversation, processor=processor
-            )
+        example, _, _ = prepare_training_example(
+            conversation=simple_conversation, processor=processor
+        )
 
-            # Test validation function
-            analysis = validate_training_example(example, processor)
-            if not analysis["valid"]:
-                raise AssertionError("Validation should pass")
-            if analysis["total_tokens"] <= 0:
-                raise AssertionError("Should have total tokens")
-            if analysis["training_tokens"] <= 0:
-                raise AssertionError("Should have training tokens")
-            if analysis["training_ratio"] <= 0:
-                raise AssertionError("Should have training ratio")
+        # Test validation function
+        analysis = validate_training_example(example, processor)
+        assert analysis["valid"], (
+            f"Validation should pass, issues: {analysis.get('issues', [])}"
+        )
+        assert analysis["total_tokens"] > 0, "Should have total tokens"
+        assert analysis["training_tokens"] > 0, "Should have training tokens"
+        assert analysis["training_ratio"] > 0, "Should have training ratio"
 
-            # Test assertion function (should not raise)
-            assert_training_correctness(example, processor)
-
-        except Exception as e:
-            pytest.skip(f"Could not run validation test: {e}")
+        # Test assertion function (should not raise)
+        assert_training_correctness(example, processor)
 
     def test_label_alignment_edge_cases(self, processor):
         """Test edge cases for label alignment."""
-        try:
-            # Empty conversation
-            with pytest.raises((ValueError, AssertionError)):
-                prepare_training_example([], processor)
+        # Empty conversation
+        with pytest.raises((ValueError, AssertionError)):
+            prepare_training_example([], processor)
 
-            # Conversation with only user messages (no training tokens)
-            user_only = [{"role": "user", "content": "Hello"}]
-            example, _ = prepare_training_example(user_only, processor)
-            training_tokens = sum(1 for x in example["labels"] if x != -100)
-            if training_tokens != 0:  # No assistant messages to train on
-                raise AssertionError(
-                    "Should have no training tokens for user-only conversation"
-                )
-
-        except Exception as e:
-            pytest.skip(f"Could not run edge case test: {e}")
+        # Conversation with only user messages (no training tokens)
+        user_only = [{"role": "user", "content": "Hello"}]
+        example, _, _ = prepare_training_example(user_only, processor)
+        training_tokens = sum(1 for x in example["labels"] if x != -100)
+        assert training_tokens == 0, (
+            "Should have no training tokens for user-only conversation"
+        )
 
 
 # ============================================================================
@@ -838,16 +825,10 @@ class TestMultimodalMessageProcessor:
 # ============================================================================
 
 
-def example_usage():
-    """Example of how to use the multimodal processor."""
-    try:
-        # Load processor
-        processor = AutoProcessor.from_pretrained(
-            "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
-        )
-
-        # Example multimodal conversation
-        conversation = [
+# Example conversations for testing and demonstration
+EXAMPLE_CONVERSATIONS = [
+    {
+        "messages": [
             {
                 "role": "user",
                 "content": [
@@ -859,67 +840,164 @@ def example_usage():
                 ],
             },
             {"role": "assistant", "content": "I can see a bee in the image."},
-        ]
-
-        # Prepare for training
-        training_example, messages = prepare_training_example(
-            conversation=conversation,
-            processor=processor,
-            system_message="You are a vision assistant.",
-        )
-
-        print("✅ Training example prepared successfully!")
-        print(f"Total tokens: {len(training_example['input_ids'])}")
-        print(
-            f"Training tokens: {sum(1 for x in training_example['labels'] if x != -100)}"
-        )
-
-        # Print the messages used for training
-        print("\n📝 Messages used for training:")
-        pprint(messages)
-
-        # Validate the example
-        try:
-            analysis = validate_training_example(training_example, processor, messages)
-            print("\n✅ Validation results:")
-            print(f"  Valid: {analysis['valid']}")
-            print(f"  Training ratio: {analysis['training_ratio']:.2%}")
-            print(f"  Total tokens: {analysis['total_tokens']}")
-            print(f"  Training tokens: {analysis['training_tokens']}")
-            print(f"  Ignored tokens: {analysis['ignored_tokens']}")
-            if analysis["issues"]:
-                print(f"  Issues: {analysis['issues']}")
-        except Exception as e:
-            print(f"❌ Validation failed: {e}")
-            import traceback
-
-            traceback.print_exc()
-
-        # Prepare for inference
-        inference_inputs, inference_messages = prepare_inference_messages(
-            user_input=[
-                {"type": "text", "text": "Describe this other image"},
-                {
-                    "type": "image",
-                    "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+        ],
+        "tools": None,
+    },
+    {
+        "messages": [
+            {"role": "user", "content": "What is the weather like in Oakland today?"},
+            {
+                "role": "assistant",
+                "content": "<tool_call>get_weather(location='Oakland, CA')</tool_call>",
+            },
+        ],
+        "tools": [
+            {
+                "type": "function",
+                "name": "get_weather",
+                "description": "Get current temperature for a given location.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "City and country e.g. Bogotá, Colombia",
+                        }
+                    },
+                    "required": ["location"],
+                    "additionalProperties": False,
                 },
-            ],
-            processor=processor,
-            system_message="You are a vision assistant.",
+                "strict": False,
+            }
+        ],
+    },
+]
+
+
+def example_usage():  # noqa: C901
+    """Example of how to use the multimodal processor."""
+    try:
+        # Load processor
+        processor = AutoProcessor.from_pretrained(
+            "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
         )
 
-        print("\n✅ Inference inputs prepared successfully!")
-        if hasattr(inference_inputs, "shape"):
-            print(f"  Input shape: {inference_inputs.shape}")
-        elif isinstance(inference_inputs, dict) and "input_ids" in inference_inputs:
-            if hasattr(inference_inputs["input_ids"], "shape"):
-                print(f"  Input shape: {inference_inputs['input_ids'].shape}")
+        # Array of conversations - each conversation is a complete dialogue
+        conversations = EXAMPLE_CONVERSATIONS
+
+        # Iterate through conversations
+        for i, conversation_dict in enumerate(conversations):
+            print(f"\n{'=' * 60}")
+            print(f"PROCESSING CONVERSATION {i + 1}")
+            print(f"{'=' * 60}")
+
+            # Extract messages and tools from conversation dictionary
+            conversation = conversation_dict["messages"]
+            tools = conversation_dict.get("tools")
+
+            # Create training conversation (full conversation)
+            training_conversation = conversation.copy()
+
+            # Create inference conversation (without last assistant message)
+            inference_conversation = []
+            for msg in conversation:
+                if msg["role"] == "assistant":
+                    # Stop before the last assistant message for inference
+                    break
+                inference_conversation.append(msg)
+
+            print(
+                f"\n📊 Training conversation has {len(training_conversation)} messages"
+            )
+            print(
+                f"📊 Inference conversation has {len(inference_conversation)} messages"
+            )
+
+            # TRAINING PROCESSING
+            print("\n🎓 TRAINING PROCESSING")
+            print("─" * 40)
+
+            training_example, messages, training_prompt = prepare_training_example(
+                conversation=training_conversation,
+                processor=processor,
+                system_message="You are a vision assistant.",
+                tools=tools,
+            )
+
+            print("✅ Training example prepared successfully!")
+            print(f"Total tokens: {len(training_example['input_ids'])}")
+            print(
+                f"Training tokens: {sum(1 for x in training_example['labels'] if x != -100)}"
+            )
+
+            # Print the messages used for training
+            print("\n📝 Messages used for training:")
+            pprint(messages)
+
+            # Print the formatted training prompt
+            print("\n📄 Training prompt:")
+            print(training_prompt)
+
+            # Validate the example
+            try:
+                analysis = validate_training_example(
+                    training_example, processor, messages
+                )
+                print("\n✅ Validation results:")
+                print(f"  Valid: {analysis['valid']}")
+                print(f"  Training ratio: {analysis['training_ratio']:.2%}")
+                print(f"  Total tokens: {analysis['total_tokens']}")
+                print(f"  Training tokens: {analysis['training_tokens']}")
+                print(f"  Ignored tokens: {analysis['ignored_tokens']}")
+                if analysis["issues"]:
+                    print(f"  Issues: {analysis['issues']}")
+            except Exception as e:
+                print(f"❌ Validation failed: {e}")
+                import traceback
+
+                traceback.print_exc()
+
+            # INFERENCE PROCESSING
+            print("\n🔮 INFERENCE PROCESSING")
+            print("─" * 40)
+
+            if inference_conversation:
+                # Use the last user message for inference
+                last_user_message = inference_conversation[-1]
+
+                inference_inputs, inference_messages, inference_prompt = (
+                    prepare_inference_messages(
+                        user_input=last_user_message["content"],
+                        processor=processor,
+                        system_message="You are a vision assistant.",
+                        tools=tools,
+                    )
+                )
+
+                print("✅ Inference inputs prepared successfully!")
+                if hasattr(inference_inputs, "shape"):
+                    print(f"  Input shape: {inference_inputs.shape}")
+                elif (
+                    isinstance(inference_inputs, dict)
+                    and "input_ids" in inference_inputs
+                ):
+                    if hasattr(inference_inputs["input_ids"], "shape"):
+                        print(f"  Input shape: {inference_inputs['input_ids'].shape}")
+                    else:
+                        print(
+                            f"  Input shape: {len(inference_inputs['input_ids'])} tokens"
+                        )
+                else:
+                    print(f"  Input type: {type(inference_inputs)}")
+
+                print("\n📝 Messages used for inference:")
+                pprint(inference_messages)
+
+                # Print the formatted inference prompt
+                print("\n📄 Inference prompt:")
+                print(inference_prompt)
             else:
-                print(f"  Input shape: {len(inference_inputs['input_ids'])} tokens")
-        else:
-            print(f"  Input type: {type(inference_inputs)}")
-        print("\n📝 Messages used for inference:")
-        pprint(inference_messages)
+                print("⚠️ No user messages found for inference")
 
     except Exception as e:
         print(f"❌ Example failed: {e}")
