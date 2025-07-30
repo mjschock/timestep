@@ -6,6 +6,7 @@ for training and inference with vision-language models.
 """
 # ruff: noqa: S101
 
+import json
 from pprint import pprint
 from typing import Any
 
@@ -30,6 +31,41 @@ def normalize_content(content: str | list[dict[str, Any]]) -> list[dict[str, Any
         return content
     else:
         raise ValueError(f"Content must be string or list, got {type(content)}")
+
+
+def convert_tool_calls_to_content(message: dict[str, Any]) -> dict[str, Any]:
+    """
+    Convert tool_calls to content format for compatibility with Jinja templates.
+
+    If a message has tool_calls, convert them to content wrapped in <tool_call> tags
+    using json.dumps. This ensures compatibility even if the Jinja template doesn't
+    support tool_calls.
+
+    Args:
+        message: Message dictionary that may contain tool_calls
+
+    Returns:
+        Message with tool_calls converted to content if present
+    """
+    if "tool_calls" in message and message["tool_calls"]:
+        # Convert each tool call to individual <tool_call> tags
+        tool_call_parts = []
+        for tool_call in message["tool_calls"]:
+            tool_call_json = json.dumps(tool_call, separators=(",", ":"))
+            tool_call_parts.append(f"<tool_call>{tool_call_json}</tool_call>")
+
+        # Concatenate all tool calls
+        tool_call_content = "".join(tool_call_parts)
+
+        # Create new message with content instead of tool_calls
+        converted_message = message.copy()
+        converted_message["content"] = tool_call_content
+        # Remove tool_calls since we've converted them to content
+        converted_message.pop("tool_calls", None)
+
+        return converted_message
+
+    return message
 
 
 def _tensor_to_list(tensor_or_list):
@@ -153,6 +189,9 @@ def build_messages(
     # Add conversation history with normalized content
     if conversation_history:
         for msg in conversation_history:
+            # Convert tool_calls to content if present
+            msg = convert_tool_calls_to_content(msg)
+
             normalized_msg = {
                 "role": msg["role"],
                 "content": normalize_content(msg["content"]),
@@ -213,6 +252,9 @@ def prepare_training_example(
 
     # Add conversation messages with default weights and normalized content
     for msg in conversation:
+        # Convert tool_calls to content if present
+        msg = convert_tool_calls_to_content(msg)
+
         message = {"role": msg["role"], "content": normalize_content(msg["content"])}
         # Default weights: assistant=1.0, others=0.0
         if "weight" not in msg:
@@ -545,10 +587,7 @@ class TestMultimodalMessageProcessor:
     @pytest.fixture(scope="class")
     def processor(self):
         """Load the SmolVLM2 processor for testing."""
-        processor = AutoProcessor.from_pretrained(
-            "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
-        )
-        return processor
+        return get_processor()
 
     @pytest.fixture
     def simple_conversation(self):
@@ -825,6 +864,32 @@ class TestMultimodalMessageProcessor:
 # ============================================================================
 
 
+# Global model and processor instances
+MODEL_PATH = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
+PROCESSOR = None
+MODEL = None
+
+
+def get_processor():
+    """Get or create the processor instance."""
+    global PROCESSOR
+    if PROCESSOR is None:
+        PROCESSOR = AutoProcessor.from_pretrained(MODEL_PATH)
+    return PROCESSOR
+
+
+def get_model():
+    """Get or create the model instance."""
+    global MODEL
+    if MODEL is None:
+        from transformers import AutoModelForImageTextToText
+
+        MODEL = AutoModelForImageTextToText.from_pretrained(
+            MODEL_PATH, torch_dtype=torch.float16
+        ).to("cuda")
+    return MODEL
+
+
 # Example conversations for testing and demonstration
 EXAMPLE_CONVERSATIONS = [
     {
@@ -848,7 +913,40 @@ EXAMPLE_CONVERSATIONS = [
             {"role": "user", "content": "What is the weather like in Oakland today?"},
             {
                 "role": "assistant",
-                "content": "<tool_call>get_weather(location='Oakland, CA')</tool_call>",
+                "content": "<tool_call>{'arguments': {'location': 'Oakland, CA'}, 'name': 'get_weather'}</tool_call>",
+            },
+        ],
+        "tools": [
+            {
+                "type": "function",
+                "name": "get_weather",
+                "description": "Get current temperature for a given location.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "City and country e.g. Bogotá, Colombia",
+                        }
+                    },
+                    "required": ["location"],
+                    "additionalProperties": False,
+                },
+                "strict": False,
+            }
+        ],
+    },
+    {
+        "messages": [
+            {"role": "user", "content": "What is the weather like in Oakland today?"},
+            {
+                "role": "assistant",
+                "tool_calls": [
+                    {
+                        "name": "get_weather",
+                        "arguments": {"location": "Oakland, CA"},
+                    }
+                ],
             },
         ],
         "tools": [
@@ -877,10 +975,9 @@ EXAMPLE_CONVERSATIONS = [
 def example_usage():  # noqa: C901
     """Example of how to use the multimodal processor."""
     try:
-        # Load processor
-        processor = AutoProcessor.from_pretrained(
-            "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
-        )
+        # Get processor and model instances
+        processor = get_processor()
+        model = get_model()
 
         # Array of conversations - each conversation is a complete dialogue
         conversations = EXAMPLE_CONVERSATIONS
@@ -996,6 +1093,47 @@ def example_usage():  # noqa: C901
                 # Print the formatted inference prompt
                 print("\n📄 Inference prompt:")
                 print(inference_prompt)
+
+                # Run actual inference
+                print("\n🤖 RUNNING INFERENCE...")
+                try:
+                    # Move inputs to the same device as the model
+                    device = next(model.parameters()).device
+                    inference_inputs = {
+                        k: v.to(device=device) if hasattr(v, "to") else v
+                        for k, v in inference_inputs.items()
+                    }
+
+                    # Convert pixel_values to float16 if present (but keep input_ids as long)
+                    if "pixel_values" in inference_inputs:
+                        inference_inputs["pixel_values"] = inference_inputs[
+                            "pixel_values"
+                        ].to(dtype=torch.float16)
+
+                    # Generate response
+                    with torch.no_grad():
+                        generated_ids = model.generate(
+                            **inference_inputs,
+                            max_new_tokens=100,
+                            do_sample=True,
+                            temperature=0.7,
+                            pad_token_id=processor.tokenizer.eos_token_id,
+                        )
+
+                    # Decode the response
+                    response = processor.tokenizer.decode(
+                        generated_ids[0][inference_inputs["input_ids"].shape[-1] :],
+                        skip_special_tokens=True,
+                    )
+
+                    print("✅ Inference completed!")
+                    print(f"🤖 Model response: {response}")
+
+                except Exception as e:
+                    print(f"❌ Inference failed: {e}")
+                    import traceback
+
+                    traceback.print_exc()
             else:
                 print("⚠️ No user messages found for inference")
 
