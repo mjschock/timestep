@@ -132,7 +132,7 @@ class ChatService:
                 return_dict=True,
                 tools=tools,
             )
-            logger.debug(f"Prompt: {prompt}")
+            logger.info(f"Prompt:\n{prompt}")
 
             inputs = processor.apply_chat_template(
                 normalized_messages,

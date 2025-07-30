@@ -215,19 +215,20 @@ class ModelsService:
                 f"DEBUG: Chat template overridden with code act format (contains 'execute': {'execute' in custom_template})"
             )
 
-            # Validate both the original and custom chat templates
-            try:
-                validate_chat_template(processor, original_chat_template)
-                logger.info("✅ Chat template validation completed successfully")
-            except Exception as e:
-                logger.error(f"❌ Chat template validation failed: {e}")
-                logger.error(
-                    "🛑 Halting application due to chat template validation failure"
-                )
-                # Exit the process immediately to halt the entire application
-                import sys
+            # Validate both the original and custom chat templates only when not using cache
+            if not cache:
+                try:
+                    validate_chat_template(processor, original_chat_template)
+                    logger.info("✅ Chat template validation completed successfully")
+                except Exception as e:
+                    logger.error(f"❌ Chat template validation failed: {e}")
+                    logger.error(
+                        "🛑 Halting application due to chat template validation failure"
+                    )
+                    # Exit the process immediately to halt the entire application
+                    import sys
 
-                sys.exit(1)
+                    sys.exit(1)
         else:
             print("DEBUG: No custom chat template found")
 

@@ -26,3 +26,6 @@ default:
 		--output-directory docs \
 		--project backend \
 		--source-roots src
+
+up:
+	PYTHONPATH=src uv run uvicorn src.backend.main:app --host 0.0.0.0 --port 8000
