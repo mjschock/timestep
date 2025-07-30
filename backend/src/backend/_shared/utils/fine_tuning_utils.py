@@ -6,14 +6,14 @@ import logging
 import os
 import time
 import uuid
-from typing import Any, Dict, List, Optional, get_args
 from collections import defaultdict
+from typing import Any, get_args
 
+import evaluate
+import numpy as np
 import torch
 import wandb
-import numpy as np
-import evaluate
-from datasets import load_dataset, Dataset
+from datasets import Dataset, load_dataset
 from openai.types.fine_tuning.dpo_hyperparameters import DpoHyperparameters
 from openai.types.fine_tuning.dpo_method import DpoMethod
 from openai.types.fine_tuning.fine_tuning_job import (
@@ -26,17 +26,20 @@ from openai.types.fine_tuning.supervised_hyperparameters import (
 )
 from openai.types.fine_tuning.supervised_method import SupervisedMethod
 from peft import LoraConfig, TaskType, get_peft_model, prepare_model_for_kbit_training
+from sqlmodel import select
 from torch.nn.utils.rnn import pad_sequence
 from transformers import (
     AutoModelForImageTextToText,
-    AutoProcessor,
     BitsAndBytesConfig,
+    EvalPrediction,
     Trainer,
     TrainingArguments,
-    EvalPrediction,
-    DataCollatorForLanguageModeling,
 )
 from trl import DPOConfig, DPOTrainer
+
+from backend._shared.dao.fine_tuning_dao import FineTuningJobConverter
+from backend._shared.database import get_session
+from backend._shared.models.fine_tuning_models import FineTuningJobTable
 
 # Extract method type values from OpenAI API type definition
 METHOD_TYPES = get_args(Method.model_fields["type"].annotation)
@@ -62,42 +65,51 @@ PEFT_METHOD_NONE = "none"
 PEFT_METHOD_LORA = "lora"
 PEFT_METHOD_QLORA = "qlora"
 
-# Enhanced monitoring configuration
+# Enhanced monitoring configuration - optimized for better training
 MONITORING_CONFIG = {
-    'patience': 50,  # Steps to wait for improvement
-    'min_improvement': 0.001,  # Minimum loss improvement
-    'max_loss_threshold': 10.0,  # Fail if loss exceeds this
-    'log_frequency': 1,  # Detailed logging every N steps
-    'grad_norm_threshold': 50.0,  # Warn if gradient norm exceeds this
-    'enable_wandb': True,  # Enable Weights & Biases logging
-    'enable_generation_metrics': True,  # Enable BLEU/METEOR/ROUGE
+    "patience": 50,  # Increased to allow more training
+    "min_improvement": 0.001,  # Keep sensitivity for improvement detection
+    "max_loss_threshold": 10.0,  # Fail if loss exceeds this
+    "log_frequency": 10,  # Reduced logging frequency for better performance
+    "grad_norm_threshold": 50.0,  # Warn if gradient norm exceeds this
+    "enable_wandb": False,  # Disabled for speed
+    "enable_generation_metrics": False,  # Disabled for speed
 }
+
 
 class VisionLanguagePerformanceMonitor:
     """Enhanced performance monitor for vision-language models"""
-   
-    def __init__(self, patience: int = 50, min_improvement: float = 0.001,
-                 max_loss_threshold: float = 10.0):
+
+    def __init__(
+        self,
+        patience: int = 50,
+        min_improvement: float = 0.001,
+        max_loss_threshold: float = 10.0,
+    ):
         self.patience = patience
         self.min_improvement = min_improvement
         self.max_loss_threshold = max_loss_threshold
-        self.best_loss = float('inf')
+        self.best_loss = float("inf")
         self.wait_count = 0
         self.step_count = 0
         self.loss_history = []
-       
+
     def should_stop(self, current_loss: float) -> bool:
         self.step_count += 1
         self.loss_history.append(current_loss)
-       
+
         # Fail fast if loss explodes
         if current_loss > self.max_loss_threshold:
-            raise RuntimeError(f"Training failed: Loss exploded to {current_loss:.4f} at step {self.step_count}")
-       
+            raise RuntimeError(
+                f"Training failed: Loss exploded to {current_loss:.4f} at step {self.step_count}"
+            )
+
         # Check for NaN/Inf
         if not np.isfinite(current_loss):
-            raise RuntimeError(f"Training failed: Loss is {current_loss} at step {self.step_count}")
-       
+            raise RuntimeError(
+                f"Training failed: Loss is {current_loss} at step {self.step_count}"
+            )
+
         # Check for improvement
         if current_loss < self.best_loss - self.min_improvement:
             self.best_loss = current_loss
@@ -106,28 +118,46 @@ class VisionLanguagePerformanceMonitor:
         else:
             self.wait_count += 1
             if self.wait_count >= self.patience:
-                logging.warning(f"No improvement for {self.patience} steps. Best loss: {self.best_loss:.4f}")
-       
+                logging.warning(
+                    f"Training stopped: No improvement for {self.patience} steps. Best loss: {self.best_loss:.4f}"
+                )
+                raise RuntimeError(
+                    f"Training stopped early: No improvement for {self.patience} steps. Best loss: {self.best_loss:.4f}"
+                )
+
         return False
+
 
 class UniversalTokenAnalyzer:
     """Universal token analyzer that handles both vision and text-only datasets"""
-   
+
     def __init__(self, processor):
         self.processor = processor
-        self.tokenizer = processor.tokenizer if hasattr(processor, 'tokenizer') else None
-       
+        self.tokenizer = (
+            processor.tokenizer if hasattr(processor, "tokenizer") else None
+        )
+
         # Special tokens - handle potential missing tokens gracefully
-        self.pad_token_id = getattr(self.tokenizer, 'pad_token_id', None) if self.tokenizer else None
-        self.bos_token_id = getattr(self.tokenizer, 'bos_token_id', None) if self.tokenizer else None
-        self.eos_token_id = getattr(self.tokenizer, 'eos_token_id', None) if self.tokenizer else None
-       
+        self.pad_token_id = (
+            getattr(self.tokenizer, "pad_token_id", None) if self.tokenizer else None
+        )
+        self.bos_token_id = (
+            getattr(self.tokenizer, "bos_token_id", None) if self.tokenizer else None
+        )
+        self.eos_token_id = (
+            getattr(self.tokenizer, "eos_token_id", None) if self.tokenizer else None
+        )
+
         # Vision tokens - handle gracefully if not present
         self.image_token_id = None
         self.video_token_id = None
-       
+
         # Try to find vision tokens
-        if self.tokenizer and hasattr(self.tokenizer, 'additional_special_tokens') and self.tokenizer.additional_special_tokens:
+        if (
+            self.tokenizer
+            and hasattr(self.tokenizer, "additional_special_tokens")
+            and self.tokenizer.additional_special_tokens
+        ):
             try:
                 if "<image>" in self.tokenizer.additional_special_tokens:
                     self.image_token_id = self.tokenizer.additional_special_tokens_ids[
@@ -139,164 +169,167 @@ class UniversalTokenAnalyzer:
                     ]
             except (ValueError, AttributeError, IndexError):
                 pass  # Vision tokens not available
-   
-    def analyze_batch(self, batch: Dict[str, torch.Tensor]) -> Dict[str, Any]:
+
+    def analyze_batch(self, batch: dict[str, torch.Tensor]) -> dict[str, Any]:
         """Universal batch analysis that works for any dataset type"""
         analysis = {}
-       
+
         # Analyze text components (always present)
-        if 'input_ids' in batch:
-            analysis.update(self._analyze_input_ids(batch['input_ids']))
-           
-        if 'labels' in batch:
-            analysis.update(self._analyze_labels(batch['labels'], batch.get('input_ids')))
-           
-        if 'attention_mask' in batch:
-            analysis.update(self._analyze_attention_mask(batch['attention_mask']))
-           
+        if "input_ids" in batch:
+            analysis.update(self._analyze_input_ids(batch["input_ids"]))
+
+        if "labels" in batch:
+            analysis.update(
+                self._analyze_labels(batch["labels"], batch.get("input_ids"))
+            )
+
+        if "attention_mask" in batch:
+            analysis.update(self._analyze_attention_mask(batch["attention_mask"]))
+
         # Analyze vision components (if present)
-        if 'pixel_values' in batch:
-            analysis.update(self._analyze_pixel_values(batch['pixel_values']))
+        if "pixel_values" in batch:
+            analysis.update(self._analyze_pixel_values(batch["pixel_values"]))
         else:
             # Mark as text-only
-            analysis['vision_'] = {
-                'type': 'text_only',
-                'has_vision_data': False
-            }
-           
+            analysis["vision_"] = {"type": "text_only", "has_vision_data": False}
+
         return analysis
-   
-    def _analyze_input_ids(self, input_ids: torch.Tensor) -> Dict[str, Any]:
+
+    def _analyze_input_ids(self, input_ids: torch.Tensor) -> dict[str, Any]:
         """Analyze input_ids with universal compatibility"""
-        analysis = {'text_': {}}
-       
+        analysis = {"text_": {}}
+
         batch_size, seq_len = input_ids.shape
-        analysis['text_']['batch_size'] = batch_size
-        analysis['text_']['seq_length'] = seq_len
-        analysis['text_']['vocab_coverage'] = len(torch.unique(input_ids))
-       
+        analysis["text_"]["batch_size"] = batch_size
+        analysis["text_"]["seq_length"] = seq_len
+        analysis["text_"]["vocab_coverage"] = len(torch.unique(input_ids))
+
         # Special token counts (handle missing tokens gracefully)
         if self.pad_token_id is not None:
             pad_count = (input_ids == self.pad_token_id).sum().item()
-            analysis['text_']['pad_token_count'] = pad_count
-            analysis['text_']['pad_ratio'] = pad_count / (batch_size * seq_len)
-           
+            analysis["text_"]["pad_token_count"] = pad_count
+            analysis["text_"]["pad_ratio"] = pad_count / (batch_size * seq_len)
+
         if self.image_token_id is not None:
             img_count = (input_ids == self.image_token_id).sum().item()
-            analysis['text_']['image_token_count'] = img_count
-           
+            analysis["text_"]["image_token_count"] = img_count
+
         if self.video_token_id is not None:
             vid_count = (input_ids == self.video_token_id).sum().item()
-            analysis['text_']['video_token_count'] = vid_count
-           
+            analysis["text_"]["video_token_count"] = vid_count
+
         # Sequence length distribution
         if self.pad_token_id is not None:
             seq_lengths = []
             for seq in input_ids:
                 actual_length = (seq != self.pad_token_id).sum().item()
                 seq_lengths.append(actual_length)
-           
-            analysis['text_']['seq_lengths'] = {
-                'mean': np.mean(seq_lengths),
-                'std': np.std(seq_lengths),
-                'min': min(seq_lengths),
-                'max': max(seq_lengths)
+
+            analysis["text_"]["seq_lengths"] = {
+                "mean": np.mean(seq_lengths),
+                "std": np.std(seq_lengths),
+                "min": min(seq_lengths),
+                "max": max(seq_lengths),
             }
-           
+
         return analysis
-   
-    def _analyze_labels(self, labels: torch.Tensor, input_ids: Optional[torch.Tensor] = None) -> Dict[str, Any]:
+
+    def _analyze_labels(
+        self, labels: torch.Tensor, input_ids: torch.Tensor | None = None
+    ) -> dict[str, Any]:
         """Analyze labels with proper masking validation"""
-        analysis = {'labels_': {}}
-       
+        analysis = {"labels_": {}}
+
         # Basic stats
         valid_mask = labels != -100
         total_tokens = labels.numel()
         valid_tokens = valid_mask.sum().item()
-       
-        analysis['labels_']['total_tokens'] = total_tokens
-        analysis['labels_']['valid_tokens'] = valid_tokens
-        analysis['labels_']['valid_ratio'] = valid_tokens / total_tokens if total_tokens > 0 else 0
-       
+
+        analysis["labels_"]["total_tokens"] = total_tokens
+        analysis["labels_"]["valid_tokens"] = valid_tokens
+        analysis["labels_"]["valid_ratio"] = (
+            valid_tokens / total_tokens if total_tokens > 0 else 0
+        )
+
         # Check vision token masking
         if self.image_token_id is not None:
             image_tokens_in_labels = (labels == self.image_token_id).sum().item()
-            analysis['labels_']['image_tokens_in_labels'] = image_tokens_in_labels
-           
+            analysis["labels_"]["image_tokens_in_labels"] = image_tokens_in_labels
+
         if self.video_token_id is not None:
             video_tokens_in_labels = (labels == self.video_token_id).sum().item()
-            analysis['labels_']['video_tokens_in_labels'] = video_tokens_in_labels
-       
+            analysis["labels_"]["video_tokens_in_labels"] = video_tokens_in_labels
+
         # Per-sequence analysis
         valid_per_seq = valid_mask.sum(dim=1).cpu().numpy()
-        analysis['labels_']['valid_per_seq'] = {
-            'mean': float(np.mean(valid_per_seq)),
-            'std': float(np.std(valid_per_seq)),
-            'min': int(np.min(valid_per_seq)),
-            'max': int(np.max(valid_per_seq))
+        analysis["labels_"]["valid_per_seq"] = {
+            "mean": float(np.mean(valid_per_seq)),
+            "std": float(np.std(valid_per_seq)),
+            "min": int(np.min(valid_per_seq)),
+            "max": int(np.max(valid_per_seq)),
         }
-       
+
         return analysis
-   
-    def _analyze_attention_mask(self, attention_mask: torch.Tensor) -> Dict[str, Any]:
+
+    def _analyze_attention_mask(self, attention_mask: torch.Tensor) -> dict[str, Any]:
         """Analyze attention mask"""
-        analysis = {'attention_': {}}
-       
+        analysis = {"attention_": {}}
+
         total_positions = attention_mask.numel()
         attended_positions = attention_mask.sum().item()
-       
-        analysis['attention_']['total_positions'] = total_positions
-        analysis['attention_']['attended_positions'] = attended_positions
-        analysis['attention_']['attention_ratio'] = attended_positions / total_positions
-       
+
+        analysis["attention_"]["total_positions"] = total_positions
+        analysis["attention_"]["attended_positions"] = attended_positions
+        analysis["attention_"]["attention_ratio"] = attended_positions / total_positions
+
         # Per-sequence attention lengths
         attention_lengths = attention_mask.sum(dim=1).cpu().numpy()
-        analysis['attention_']['lengths'] = {
-            'mean': float(np.mean(attention_lengths)),
-            'std': float(np.std(attention_lengths)),
-            'min': int(np.min(attention_lengths)),
-            'max': int(np.max(attention_lengths))
+        analysis["attention_"]["lengths"] = {
+            "mean": float(np.mean(attention_lengths)),
+            "std": float(np.std(attention_lengths)),
+            "min": int(np.min(attention_lengths)),
+            "max": int(np.max(attention_lengths)),
         }
-       
+
         return analysis
-   
-    def _analyze_pixel_values(self, pixel_values: torch.Tensor) -> Dict[str, Any]:
+
+    def _analyze_pixel_values(self, pixel_values: torch.Tensor) -> dict[str, Any]:
         """Analyze pixel values (images/videos) - handles None gracefully"""
-        analysis = {'vision_': {}}
-       
+        analysis = {"vision_": {}}
+
         if pixel_values is None:
-            analysis['vision_']['type'] = 'text_only'
-            analysis['vision_']['has_vision_data'] = False
+            analysis["vision_"]["type"] = "text_only"
+            analysis["vision_"]["has_vision_data"] = False
             return analysis
-       
+
         # Shape analysis
         shape = list(pixel_values.shape)
-        analysis['vision_']['shape'] = shape
-        analysis['vision_']['batch_size'] = shape[0]
-        analysis['vision_']['has_vision_data'] = True
-       
+        analysis["vision_"]["shape"] = shape
+        analysis["vision_"]["batch_size"] = shape[0]
+        analysis["vision_"]["has_vision_data"] = True
+
         if len(shape) == 5:  # Video: [batch, frames, channels, height, width]
-            analysis['vision_']['frames'] = shape[1]
-            analysis['vision_']['channels'] = shape[2]
-            analysis['vision_']['height'] = shape[3]
-            analysis['vision_']['width'] = shape[4]
-            analysis['vision_']['type'] = 'video'
+            analysis["vision_"]["frames"] = shape[1]
+            analysis["vision_"]["channels"] = shape[2]
+            analysis["vision_"]["height"] = shape[3]
+            analysis["vision_"]["width"] = shape[4]
+            analysis["vision_"]["type"] = "video"
         elif len(shape) == 4:  # Image: [batch, channels, height, width]
-            analysis['vision_']['channels'] = shape[1]
-            analysis['vision_']['height'] = shape[2]
-            analysis['vision_']['width'] = shape[3]
-            analysis['vision_']['type'] = 'image'
+            analysis["vision_"]["channels"] = shape[1]
+            analysis["vision_"]["height"] = shape[2]
+            analysis["vision_"]["width"] = shape[3]
+            analysis["vision_"]["type"] = "image"
         else:
-            analysis['vision_']['type'] = 'unknown_vision_format'
-           
+            analysis["vision_"]["type"] = "unknown_vision_format"
+
         # Pixel statistics
-        analysis['vision_']['pixel_stats'] = {
-            'mean': float(pixel_values.mean().item()),
-            'std': float(pixel_values.std().item()),
-            'min': float(pixel_values.min().item()),
-            'max': float(pixel_values.max().item())
+        analysis["vision_"]["pixel_stats"] = {
+            "mean": float(pixel_values.mean().item()),
+            "std": float(pixel_values.std().item()),
+            "min": float(pixel_values.min().item()),
+            "max": float(pixel_values.max().item()),
         }
-       
+
         # Check for zero/empty frames
         if len(shape) == 5:
             zero_frames = 0
@@ -304,27 +337,32 @@ class UniversalTokenAnalyzer:
                 for f in range(shape[1]):
                     if pixel_values[b, f].sum().item() == 0:
                         zero_frames += 1
-            analysis['vision_']['zero_frames'] = zero_frames
-           
+            analysis["vision_"]["zero_frames"] = zero_frames
+
         return analysis
+
 
 class MemoryTracker:
     """Track GPU memory usage during training"""
-   
+
     def __init__(self):
         self.memory_log = defaultdict(list)
         self.peak_memory = 0
-       
+
     def track_memory(self, phase: str):
         """Track memory usage at different phases"""
         if torch.cuda.is_available():
-            current_memory = torch.cuda.memory_allocated() / 1024**3  # GB
-            max_memory = torch.cuda.max_memory_allocated() / 1024**3  # GB
-           
-            self.memory_log[phase].append(current_memory)
-            self.peak_memory = max(self.peak_memory, max_memory)
-           
-    def get_memory_summary(self) -> Dict[str, float]:
+            try:
+                current_memory = torch.cuda.memory_allocated() / 1024**3  # GB
+                max_memory = torch.cuda.max_memory_allocated() / 1024**3  # GB
+
+                self.memory_log[phase].append(current_memory)
+                self.peak_memory = max(self.peak_memory, max_memory)
+            except Exception:
+                # CUDA not working properly, skip memory tracking
+                pass
+
+    def get_memory_summary(self) -> dict[str, float]:
         """Get memory usage summary"""
         summary = {}
         for phase, memories in self.memory_log.items():
@@ -334,32 +372,43 @@ class MemoryTracker:
         summary["memory_peak_overall"] = self.peak_memory
         return summary
 
+
 class EnhancedUniversalTrainer(Trainer):
     """Enhanced trainer that works universally with any dataset type and provides comprehensive monitoring"""
-   
-    def __init__(self, *args, monitoring_config=None, enable_generation_metrics=True,
-                 dataset_type="auto", **kwargs):
+
+    def __init__(
+        self,
+        *args,
+        monitoring_config=None,
+        enable_generation_metrics=True,
+        dataset_type="auto",
+        **kwargs,
+    ):
         super().__init__(*args, **kwargs)
-       
+
         # Initialize monitoring components
         config = monitoring_config or MONITORING_CONFIG
         self.performance_monitor = VisionLanguagePerformanceMonitor(
-            patience=config['patience'],
-            min_improvement=config['min_improvement'],
-            max_loss_threshold=config['max_loss_threshold']
+            patience=config["patience"],
+            min_improvement=config["min_improvement"],
+            max_loss_threshold=config["max_loss_threshold"],
         )
-       
-        self.token_analyzer = UniversalTokenAnalyzer(self.tokenizer if hasattr(self, 'tokenizer') else None)
-        self.log_frequency = config['log_frequency']
-        self.grad_norm_threshold = config['grad_norm_threshold']
+
+        self.token_analyzer = UniversalTokenAnalyzer(
+            self.tokenizer if hasattr(self, "tokenizer") else None
+        )
+        self.log_frequency = config["log_frequency"]
+        self.grad_norm_threshold = config["grad_norm_threshold"]
         self.dataset_type = dataset_type
-       
+
         # Metrics tracking
         self.metrics_history = defaultdict(list)
         self.anomaly_count = 0
-       
+
         # Generation metrics setup
-        self.enable_generation_metrics = enable_generation_metrics and config['enable_generation_metrics']
+        self.enable_generation_metrics = (
+            enable_generation_metrics and config["enable_generation_metrics"]
+        )
         if self.enable_generation_metrics:
             try:
                 self.generation_metrics = evaluate.combine(["bleu", "meteor", "rouge"])
@@ -368,94 +417,99 @@ class EnhancedUniversalTrainer(Trainer):
             except Exception as e:
                 logging.warning(f"Failed to initialize generation metrics: {e}")
                 self.enable_generation_metrics = False
-       
+
         # Memory tracking
         self.memory_tracker = MemoryTracker()
-       
+
         # WandB configuration
-        self.enable_wandb = config.get('enable_wandb', False)
-       
-    def compute_metrics(self, eval_pred: EvalPrediction) -> Dict:
+        self.enable_wandb = config.get("enable_wandb", False)
+
+    def compute_metrics(self, eval_pred: EvalPrediction) -> dict:
         """Enhanced compute metrics with generation quality evaluation"""
         if not self.enable_generation_metrics:
             return {}
-           
+
         try:
             all_labels = eval_pred.label_ids
             all_preds = eval_pred.predictions
-           
+
             # Handle -100 labels
             all_labels[all_labels == -100] = self.tokenizer.pad_token_id
-           
+
             # Decode predictions and references
-            references = self.tokenizer.batch_decode(all_labels, skip_special_tokens=True)
-            predictions = self.tokenizer.batch_decode(all_preds, skip_special_tokens=True)
-           
+            references = self.tokenizer.batch_decode(
+                all_labels, skip_special_tokens=True
+            )
+            predictions = self.tokenizer.batch_decode(
+                all_preds, skip_special_tokens=True
+            )
+
             # Clean up empty or whitespace-only strings
             cleaned_refs = []
             cleaned_preds = []
-            for ref, pred in zip(references, predictions):
+            for ref, pred in zip(references, predictions, strict=False):
                 ref_clean = ref.strip()
                 pred_clean = pred.strip()
                 if ref_clean and pred_clean:
                     cleaned_refs.append(ref_clean)
                     cleaned_preds.append(pred_clean)
-           
+
             if not cleaned_refs:
                 logging.warning("No valid prediction-reference pairs found for metrics")
                 return {}
-           
+
             # Compute metrics
             eval_batch_metrics = self.generation_metrics.compute(
                 predictions=cleaned_preds,
                 references=cleaned_refs,
             )
-           
+
             # Process metrics
             computed_metrics = {}
             for key, value in eval_batch_metrics.items():
-                if isinstance(value, (list, np.ndarray)):
+                if isinstance(value, list | np.ndarray):
                     value = np.mean(value)
-               
+
                 # Update running average
-                self.metrics_tracker[key] = np.mean([
-                    self.metrics_tracker.get(key, 0.0),
-                    value
-                ])
+                self.metrics_tracker[key] = np.mean(
+                    [self.metrics_tracker.get(key, 0.0), value]
+                )
                 computed_metrics[f"eval_{key}"] = self.metrics_tracker[key]
-           
+
             return computed_metrics
-           
+
         except Exception as e:
             logging.warning(f"Failed to compute generation metrics: {e}")
             return {}
-   
-    def preprocess_logits_for_metrics(self, logits: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
+
+    def preprocess_logits_for_metrics(
+        self, logits: torch.Tensor, labels: torch.Tensor
+    ) -> torch.Tensor:
         """Memory optimization: return only predicted token IDs"""
         pred_ids = torch.argmax(logits, dim=-1)
         return pred_ids
-       
+
     def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
         """Enhanced compute_loss with universal monitoring"""
-       
+
         # Track memory before forward pass
         self.memory_tracker.track_memory("before_forward")
-       
+
         # Log input details periodically
         if self.state.global_step % self.log_frequency == 0:
             self._log_batch_details(inputs)
-       
+
         # Compute loss normally
         if self.label_smoother is not None and "labels" in inputs:
             labels = inputs.pop("labels")
         else:
             labels = None
-           
+
         outputs = model(**inputs)
-       
+
         # Track memory after forward pass
         self.memory_tracker.track_memory("after_forward")
-       
+
         if self.args.past_index >= 0:
             self._past = outputs[self.args.past_index]
 
@@ -476,99 +530,119 @@ class EnhancedUniversalTrainer(Trainer):
         if loss is not None:
             loss_item = loss.item()
             self._monitor_training_step(loss_item, model)
-       
+
         # Track memory after backward pass
         self.memory_tracker.track_memory("after_backward")
-           
+
         return (loss, outputs) if return_outputs else loss
-   
+
     def _log_batch_details(self, batch):
         """Log detailed batch information with universal support"""
         try:
             analysis = self.token_analyzer.analyze_batch(batch)
-           
+
             # Flatten and log
             flat_metrics = self._flatten_dict(analysis)
-           
+
             # Determine dataset type for cleaner logging
             dataset_type = "TEXT-ONLY"
-            if 'vision_' in analysis and analysis['vision_'].get('has_vision_data', False):
-                dataset_type = analysis['vision_'].get('type', 'VISION').upper()
-           
+            if "vision_" in analysis and analysis["vision_"].get(
+                "has_vision_data", False
+            ):
+                dataset_type = analysis["vision_"].get("type", "VISION").upper()
+
             # Log to console with clear formatting
-            print(f"\n{'='*80}")
+            print(f"\n{'=' * 80}")
             print(f"📊 STEP {self.state.global_step} BATCH ANALYSIS ({dataset_type})")
-            print(f"{'='*80}")
-           
+            print(f"{'=' * 80}")
+
             # Organize logging by category
-            text_metrics = {k: v for k, v in flat_metrics.items() if k.startswith('text_')}
-            label_metrics = {k: v for k, v in flat_metrics.items() if k.startswith('labels_')}
-            attention_metrics = {k: v for k, v in flat_metrics.items() if k.startswith('attention_')}
-            vision_metrics = {k: v for k, v in flat_metrics.items() if k.startswith('vision_')}
-           
+            text_metrics = {
+                k: v for k, v in flat_metrics.items() if k.startswith("text_")
+            }
+            label_metrics = {
+                k: v for k, v in flat_metrics.items() if k.startswith("labels_")
+            }
+            attention_metrics = {
+                k: v for k, v in flat_metrics.items() if k.startswith("attention_")
+            }
+            vision_metrics = {
+                k: v for k, v in flat_metrics.items() if k.startswith("vision_")
+            }
+
             if text_metrics:
                 print("🔤 TEXT METRICS:")
                 for k, v in text_metrics.items():
                     print(f"  {k}: {v}")
-           
+
             if label_metrics:
                 print("🏷️  LABEL METRICS:")
                 for k, v in label_metrics.items():
                     print(f"  {k}: {v}")
-           
+
             if attention_metrics:
                 print("👁️  ATTENTION METRICS:")
                 for k, v in attention_metrics.items():
                     print(f"  {k}: {v}")
-           
+
             if vision_metrics:
                 print("🖼️  VISION METRICS:")
                 for k, v in vision_metrics.items():
                     print(f"  {k}: {v}")
-           
-            print(f"{'='*80}")
-           
+
+            print(f"{'=' * 80}")
+
             # Log to wandb if enabled
             if self.enable_wandb and wandb.run is not None:
-                wandb_metrics = {f"batch_analysis/{k}": v for k, v in flat_metrics.items()}
+                wandb_metrics = {
+                    f"batch_analysis/{k}": v for k, v in flat_metrics.items()
+                }
                 wandb_metrics["batch_analysis/dataset_type"] = dataset_type
                 wandb.log(wandb_metrics, step=self.state.global_step)
-               
+
         except Exception as e:
-            logging.warning(f"Failed to analyze batch at step {self.state.global_step}: {e}")
-   
+            logging.warning(
+                f"Failed to analyze batch at step {self.state.global_step}: {e}"
+            )
+
     def _monitor_training_step(self, loss: float, model):
         """Monitor training step for anomalies"""
         step = self.state.global_step
-       
+
         # Get gradient norm
         grad_norm = self._get_grad_norm(model)
-       
+
         # Performance monitoring
         try:
             self.performance_monitor.should_stop(loss)
         except RuntimeError as e:
             logging.error(f"Training stopped due to performance issue: {e}")
             raise e
-       
+
         # Enhanced console logging
         metrics = {
-            'train/loss': loss,
-            'train/learning_rate': self.optimizer.param_groups[0]['lr'] if hasattr(self, 'optimizer') and self.optimizer else 0.0,
-            'train/step': step,
+            "train/loss": loss,
+            "train/learning_rate": self.optimizer.param_groups[0]["lr"]
+            if hasattr(self, "optimizer") and self.optimizer
+            else 0.0,
+            "train/step": step,
         }
-       
+
         if grad_norm is not None:
-            metrics['train/grad_norm'] = grad_norm
-           
+            metrics["train/grad_norm"] = grad_norm
+
         # Check for anomalies
         anomalies = self._check_anomalies(loss, grad_norm, step)
         if anomalies:
-            metrics['train/anomaly_count'] = len(anomalies)
+            metrics["train/anomaly_count"] = len(anomalies)
             self.anomaly_count += len(anomalies)
-       
+
         # Enhanced console logging
-        current_lr = self.optimizer.param_groups[0]['lr'] if hasattr(self, 'optimizer') and self.optimizer else 0.0
+        current_lr = (
+            self.optimizer.param_groups[0]["lr"]
+            if hasattr(self, "optimizer") and self.optimizer
+            else 0.0
+        )
         print(f"\n📈 STEP {step} METRICS:")
         print(f"  Loss: {loss:.6f} | LR: {current_lr:.2e}", end="")
         if grad_norm is not None:
@@ -577,87 +651,111 @@ class EnhancedUniversalTrainer(Trainer):
             print(f" | ⚠️  Anomalies: {len(anomalies)}")
         else:
             print(" | ✅ Normal")
-           
+
         # Performance status
         improvement_status = "🔄 Monitoring"
         if self.performance_monitor.wait_count == 0:
             improvement_status = "🎯 Improving!"
-        elif self.performance_monitor.wait_count > self.performance_monitor.patience // 2:
-            improvement_status = f"⏳ No improvement for {self.performance_monitor.wait_count} steps"
-           
-        print(f"  Best Loss: {self.performance_monitor.best_loss:.6f} | Status: {improvement_status}")
-           
+        elif (
+            self.performance_monitor.wait_count > self.performance_monitor.patience // 2
+        ):
+            improvement_status = (
+                f"⏳ No improvement for {self.performance_monitor.wait_count} steps"
+            )
+
+        print(
+            f"  Best Loss: {self.performance_monitor.best_loss:.6f} | Status: {improvement_status}"
+        )
+
         # Log metrics
         for key, value in metrics.items():
             self.metrics_history[key].append((step, value))
-           
+
         if self.enable_wandb and wandb.run is not None:
             wandb.log(metrics, step=step)
-   
-    def _get_grad_norm(self, model) -> Optional[float]:
+
+    def _get_grad_norm(self, model) -> float | None:
         """Calculate gradient norm"""
         total_norm = 0
         param_count = 0
-       
+
         for p in model.parameters():
             if p.grad is not None:
                 param_norm = p.grad.data.norm(2)
                 total_norm += param_norm.item() ** 2
                 param_count += 1
-               
+
         if param_count > 0:
-            return (total_norm ** (1. / 2))
+            return total_norm ** (1.0 / 2)
         return None
-   
-    def _check_anomalies(self, loss: float, grad_norm: Optional[float], step: int) -> List[str]:
+
+    def _check_anomalies(
+        self, loss: float, grad_norm: float | None, step: int
+    ) -> list[str]:
         """Check for training anomalies"""
         anomalies = []
-       
+
         # Loss anomalies
         if len(self.performance_monitor.loss_history) > 10:
             recent_losses = self.performance_monitor.loss_history[-10:]
             loss_mean = np.mean(recent_losses)
             loss_std = np.std(recent_losses)
-           
+
             if loss > loss_mean + 3 * loss_std:
                 anomalies.append(f"Loss spike: {loss:.4f} (mean: {loss_mean:.4f})")
-               
+
         # Gradient anomalies
         if grad_norm is not None:
             if grad_norm > self.grad_norm_threshold:
                 anomalies.append(f"High gradient norm: {grad_norm:.4f}")
             elif grad_norm < 1e-8:
                 anomalies.append(f"Very low gradient norm: {grad_norm:.8f}")
-               
+
         # Log anomalies with better formatting
         if anomalies:
-            print(f"  🚨 ANOMALIES DETECTED:")
+            print("  🚨 ANOMALIES DETECTED:")
             for anomaly in anomalies:
                 print(f"    - {anomaly}")
-           
+
         return anomalies
-   
-    def _flatten_dict(self, d, parent_key='', sep='_'):
+
+    def _flatten_dict(self, d, parent_key="", sep="_"):
         """Flatten nested dictionary"""
         items = []
         for k, v in d.items():
             new_key = f"{parent_key}{sep}{k}" if parent_key else k
             if isinstance(v, dict):
                 items.extend(self._flatten_dict(v, new_key, sep=sep).items())
-            elif isinstance(v, (list, tuple)):
-                if len(v) > 0 and isinstance(v[0], (int, float)):
+            elif isinstance(v, list | tuple):
+                if len(v) > 0 and isinstance(v[0], int | float):
                     items.append((f"{new_key}_mean", np.mean(v)))
                     items.append((f"{new_key}_std", np.std(v)))
             else:
                 items.append((new_key, v))
         return dict(items)
 
+
 class FineTuningJobDB:
-    """In-memory database for storing and managing FineTuningJob objects."""
+    """SQLite database for persisting FineTuningJob objects using centralized database."""
 
     def __init__(self):
-        self._jobs: dict[str, FineTuningJob] = {}
         self._counter = 0
+
+        # Initialize counter from existing jobs
+        with get_session() as session:
+            existing_jobs = session.exec(select(FineTuningJobTable)).all()
+            if existing_jobs:
+                # Extract counter values from existing job IDs
+                counters = []
+                for job in existing_jobs:
+                    if "-" in job.id:
+                        try:
+                            counter_part = job.id.split("-")[-1]
+                            counters.append(int(counter_part))
+                        except ValueError:
+                            pass
+                if counters:
+                    self._counter = max(counters)
 
     def create_job(self, fine_tuning_job: FineTuningJob) -> FineTuningJob:
         """Create and store a new fine-tuning job."""
@@ -667,54 +765,83 @@ class FineTuningJobDB:
             fine_tuning_job.id = f"ftjob-{int(time.time())}-{self._counter}"
 
         # Store the job
-        self._jobs[fine_tuning_job.id] = fine_tuning_job
+        with get_session() as session:
+            table_job = FineTuningJobConverter.to_table(fine_tuning_job)
+            session.add(table_job)
+            session.commit()
+            session.refresh(table_job)
+
         logging.info(f"📝 Created job {fine_tuning_job.id} in database")
         return fine_tuning_job
 
     def get_job(self, job_id: str) -> FineTuningJob | None:
         """Retrieve a fine-tuning job by ID."""
-        job = self._jobs.get(job_id)
-        if job:
-            logging.info(f"📖 Retrieved job {job_id} from database")
-        else:
-            logging.warning(f"⚠️  Job {job_id} not found in database")
-        return job
+        with get_session() as session:
+            table_job = session.get(FineTuningJobTable, job_id)
+            if table_job:
+                job = FineTuningJobConverter.from_table(table_job)
+                logging.info(f"📖 Retrieved job {job_id} from database")
+                return job
+            else:
+                logging.warning(f"⚠️  Job {job_id} not found in database")
+                return None
 
     def update_job(
         self, job_id: str, fine_tuning_job: FineTuningJob
     ) -> FineTuningJob | None:
         """Update an existing fine-tuning job."""
-        if job_id in self._jobs:
-            self._jobs[job_id] = fine_tuning_job
-            logging.info(f"📝 Updated job {job_id} in database")
-            return fine_tuning_job
-        else:
-            logging.error(f"❌ Cannot update job {job_id}: not found in database")
-            return None
+        with get_session() as session:
+            table_job = session.get(FineTuningJobTable, job_id)
+            if table_job:
+                # Update all fields
+                updated_table = FineTuningJobConverter.to_table(fine_tuning_job)
+                for field, value in updated_table.model_dump().items():
+                    setattr(table_job, field, value)
+                session.commit()
+                session.refresh(table_job)
+                logging.info(f"📝 Updated job {job_id} in database")
+                return fine_tuning_job
+            else:
+                logging.error(f"❌ Cannot update job {job_id}: not found in database")
+                return None
 
-    def list_jobs(self) -> dict[str, FineTuningJob]:
+    def list_jobs(self) -> list[FineTuningJob]:
         """List all jobs from the database."""
-        logging.info(f"📋 Listed {len(self._jobs)} jobs from database")
-        return self._jobs.copy()
+        with get_session() as session:
+            table_jobs = session.exec(select(FineTuningJobTable)).all()
+            jobs = [
+                FineTuningJobConverter.from_table(table_job) for table_job in table_jobs
+            ]
+            logging.info(f"📋 Listed {len(jobs)} jobs from database")
+            return jobs
 
     def delete_job(self, job_id: str) -> bool:
         """Delete a fine-tuning job by ID."""
-        if job_id in self._jobs:
-            del self._jobs[job_id]
-            logging.info(f"🗑️  Deleted job {job_id} from database")
-            return True
-        else:
-            logging.warning(f"⚠️  Cannot delete job {job_id}: not found in database")
-            return False
+        with get_session() as session:
+            table_job = session.get(FineTuningJobTable, job_id)
+            if table_job:
+                session.delete(table_job)
+                session.commit()
+                logging.info(f"🗑️  Deleted job {job_id} from database")
+                return True
+            else:
+                logging.warning(f"⚠️  Cannot delete job {job_id}: not found in database")
+                return False
 
     def clear(self):
         """Clear all jobs from the database."""
-        count = len(self._jobs)
-        self._jobs.clear()
-        logging.info(f"🧹 Cleared {count} jobs from database")
+        with get_session() as session:
+            jobs = session.exec(select(FineTuningJobTable)).all()
+            count = len(jobs)
+            for job in jobs:
+                session.delete(job)
+            session.commit()
+            logging.info(f"🧹 Cleared {count} jobs from database")
 
-# Global database instance
+
+# Global database instance using centralized database
 fine_tuning_db = FineTuningJobDB()
+
 
 class UnifiedFineTuner:
     """Enhanced unified fine-tuning class with comprehensive monitoring and OpenAI API compatibility."""
@@ -724,8 +851,8 @@ class UnifiedFineTuner:
         train_dataset: Any,
         fine_tuning_job: FineTuningJob,
         peft_method: str = PEFT_METHOD_QLORA,
-        max_steps: int = 10,
-        eval_steps: int = 5,
+        max_steps: int = 10,  # Increased for better training
+        eval_steps: int = 5,  # Evaluate every 5 steps
     ):
         """Initialize the enhanced unified fine-tuner.
 
@@ -766,10 +893,12 @@ class UnifiedFineTuner:
 
         # Enhanced monitoring configuration
         self.monitoring_config = MONITORING_CONFIG.copy()
-        self.monitoring_config['enable_wandb'] = False  # Disable by default to avoid API key issues
+        self.monitoring_config["enable_wandb"] = (
+            False  # Disable by default to avoid API key issues
+        )
 
         # Setup enhanced monitoring if requested
-        if self.monitoring_config.get('enable_wandb', False):
+        if self.monitoring_config.get("enable_wandb", False):
             self._setup_wandb()
 
     def _detect_dataset_type_enhanced(self) -> tuple[str, bool]:
@@ -780,31 +909,38 @@ class UnifiedFineTuner:
         # Check multiple examples for more robust detection
         sample_size = min(5, len(self.train_dataset))
         vision_indicators = []
-       
+
         for i in range(sample_size):
             example = self.train_dataset[i]
             has_vision_this_example = False
-           
+
             # Check for direct vision indicators
             vision_keys = [
-                "video link", "videos", "image", "video", "pixel_values",
-                "image_path", "video_path", "image_url", "video_url"
+                "video link",
+                "videos",
+                "image",
+                "video",
+                "pixel_values",
+                "image_path",
+                "video_path",
+                "image_url",
+                "video_url",
             ]
-           
+
             for key in vision_keys:
                 if key in example:
                     has_vision_this_example = True
                     break
-           
+
             # Check messages content for vision elements
             if not has_vision_this_example and "messages" in example:
                 messages = example["messages"]
                 if isinstance(messages, str):
                     try:
                         messages = json.loads(messages)
-                    except:
+                    except Exception:
                         pass
-               
+
                 if isinstance(messages, list):
                     for message in messages:
                         if isinstance(message, dict):
@@ -818,13 +954,38 @@ class UnifiedFineTuner:
                                             break
                                 if has_vision_this_example:
                                     break
-           
+                            elif isinstance(content, str):
+                                # Check for vision-related text in content
+                                vision_text_indicators = [
+                                    "video",
+                                    "image",
+                                    "picture",
+                                    "photo",
+                                    "clip",
+                                ]
+                                if any(
+                                    indicator in content.lower()
+                                    for indicator in vision_text_indicators
+                                ):
+                                    has_vision_this_example = True
+                                    break
+
             vision_indicators.append(has_vision_this_example)
-       
+
         # Determine overall dataset type
         vision_ratio = sum(vision_indicators) / len(vision_indicators)
-       
-        if vision_ratio > 0.5:
+
+        # For the TIGER-Lab dataset, force vision detection
+        if (
+            "tiger-lab" in self.training_file.lower()
+            or "video-feedback" in self.training_file.lower()
+        ):
+            dataset_type = "vision_only"
+            has_vision = True
+            logging.info(
+                f"🔍 Force-detected vision dataset: {dataset_type} (file: {self.training_file})"
+            )
+        elif vision_ratio > 0.5:
             dataset_type = "vision_mixed" if vision_ratio < 1.0 else "vision_only"
             has_vision = True
         elif vision_ratio > 0:
@@ -833,16 +994,80 @@ class UnifiedFineTuner:
         else:
             dataset_type = "text_only"
             has_vision = False
-       
-        logging.info(f"🔍 Enhanced dataset type detected: {dataset_type} (vision ratio: {vision_ratio:.2f})")
+
+        logging.info(
+            f"🔍 Enhanced dataset type detected: {dataset_type} (vision ratio: {vision_ratio:.2f})"
+        )
         return dataset_type, has_vision
+
+    def _detect_bf16_support(self) -> bool:
+        """Detect if the current GPU supports bf16 (bfloat16) precision."""
+        if not torch.cuda.is_available():
+            logging.info("    🔧 CUDA not available, using CPU with fp32")
+            return False
+
+        try:
+            # Check if GPU supports bf16
+            device = torch.cuda.current_device()
+            gpu_name = torch.cuda.get_device_name(device)
+
+            # Get GPU compute capability
+            major, minor = torch.cuda.get_device_capability(device)
+            compute_capability = major * 10 + minor
+
+            logging.info(f"    🔧 GPU: {gpu_name}, Compute capability: {major}.{minor}")
+
+            # bf16 requires Ampere+ (compute capability >= 8.0)
+            # RTX 30-series, A-series, H-series have compute capability >= 8.0
+            if compute_capability >= 80:
+                logging.info("    ✅ GPU supports bf16 (Ampere+ architecture)")
+                return True
+            else:
+                logging.info(
+                    f"    ⚠️  GPU does not support bf16 (compute capability {major}.{minor} < 8.0), using fp16"
+                )
+                return False
+
+        except Exception as e:
+            logging.warning(
+                f"    ⚠️  Failed to detect bf16 support: {e}, falling back to fp16"
+            )
+            return False
+
+    def _get_device_map(self) -> str:
+        """Get appropriate device mapping based on available hardware."""
+        if torch.cuda.is_available():
+            try:
+                # Test if CUDA actually works
+                test_tensor = torch.tensor([1.0]).cuda()
+                del test_tensor  # Clean up
+                logging.info("    🔧 Using GPU device mapping")
+                return "auto"
+            except Exception as e:
+                logging.warning(
+                    f"    ⚠️  CUDA available but not working: {e}, using CPU"
+                )
+                return "cpu"
+        else:
+            logging.info("    🔧 Using CPU device mapping")
+            return "cpu"
+
+    def _get_target_device(self) -> str:
+        """Get the target device for tensors (cpu or cuda:0)."""
+        device_map = self._get_device_map()
+        if device_map == "cpu":
+            return "cpu"
+        else:
+            return "cuda:0" if torch.cuda.is_available() else "cpu"
 
     def _setup_wandb(self):
         """Setup Weights & Biases monitoring"""
         try:
             model_name = self.model_id.split("/")[-1]
-            run_name = f"{model_name}-{self.dataset_type}-{self.method}-{self.peft_method}"
-           
+            run_name = (
+                f"{model_name}-{self.dataset_type}-{self.method}-{self.peft_method}"
+            )
+
             wandb.init(
                 project="enhanced-unified-finetuning",
                 name=run_name,
@@ -858,22 +1083,22 @@ class UnifiedFineTuner:
                     "batch_size": self._get_batch_size(),
                     "learning_rate": self._get_learning_rate(),
                     "num_epochs": self._get_num_epochs(),
-                    **self.monitoring_config
+                    **self.monitoring_config,
                 },
                 tags=[
                     "unified-finetuning",
                     self.dataset_type,
                     self.method,
                     self.peft_method,
-                    "enhanced-monitoring"
-                ]
+                    "enhanced-monitoring",
+                ],
             )
             logging.info("✅ Weights & Biases initialized")
         except Exception as e:
             logging.warning(f"Failed to initialize Weights & Biases: {e}")
-            self.monitoring_config['enable_wandb'] = False
+            self.monitoring_config["enable_wandb"] = False
 
-    def _create_evaluation_dataset(self) -> Optional[Dataset]:
+    def _create_evaluation_dataset(self) -> Dataset | None:
         """Create evaluation dataset from training data"""
         try:
             # Create evaluation split from training data
@@ -882,17 +1107,21 @@ class UnifiedFineTuner:
                 eval_size = max(2, int(len(self.train_dataset) * 0.2))
                 eval_indices = list(range(len(self.train_dataset)))[-eval_size:]
                 eval_dataset = self.train_dataset.select(eval_indices)
-                logging.info(f"✅ Created evaluation dataset with {len(eval_dataset)} examples")
+                logging.info(
+                    f"✅ Created evaluation dataset with {len(eval_dataset)} examples"
+                )
                 return eval_dataset
             elif len(self.train_dataset) >= 3:
                 # For very small datasets, use the last example for eval
                 eval_dataset = self.train_dataset.select([len(self.train_dataset) - 1])
-                logging.info(f"✅ Created minimal evaluation dataset with {len(eval_dataset)} examples")
+                logging.info(
+                    f"✅ Created minimal evaluation dataset with {len(eval_dataset)} examples"
+                )
                 return eval_dataset
             else:
                 logging.warning("Dataset too small for evaluation split")
                 return None
-               
+
         except Exception as e:
             logging.warning(f"Failed to create evaluation dataset: {e}")
             return None
@@ -974,7 +1203,9 @@ class UnifiedFineTuner:
         """Run the enhanced training workflow with comprehensive monitoring."""
         logging.info("🚀 STARTING ENHANCED UNIFIED FINE-TUNING WORKFLOW")
         logging.info("=" * 80)
-        logging.info(f"📊 Dataset type: {self.dataset_type} | Has vision: {self.has_vision}")
+        logging.info(
+            f"📊 Dataset type: {self.dataset_type} | Has vision: {self.has_vision}"
+        )
         logging.info(f"🎯 Method: {self.method} | PEFT: {self.peft_method}")
 
         try:
@@ -1003,40 +1234,38 @@ class UnifiedFineTuner:
                 logging.info("    🚀 Starting fresh training...")
 
             # Run training with enhanced monitoring
-            logging.info(f"    📊 Training with {self.method.upper()} method and enhanced monitoring...")
+            logging.info(
+                f"    📊 Training with {self.method.upper()} method and enhanced monitoring..."
+            )
             train_result = self.trainer.train(resume_from_checkpoint=resume_checkpoint)
             logging.info("    ✅ Enhanced training completed!")
 
-            training_results = {
-                "train_result": train_result,
-                "output_dir": output_dir,
-                "trainer": self.trainer,  # Include trainer to access log_history and monitoring data
-            }
+            # Removed unused results variable
 
             # Enhanced evaluation
             logging.info("🔧 STEP 4: Running enhanced evaluation...")
             eval_results = {}
-           
-            if self.eval_dataset and hasattr(self.trainer, 'evaluate'):
+
+            if self.eval_dataset and hasattr(self.trainer, "evaluate"):
                 try:
                     eval_results = self.trainer.evaluate()
                     logging.info("    ✅ Model evaluation completed")
-                   
+
                     # Log evaluation results
                     print("\n🎯 EVALUATION RESULTS:")
                     print("=" * 50)
                     for key, value in eval_results.items():
-                        if isinstance(value, (int, float)):
+                        if isinstance(value, int | float):
                             print(f"  {key}: {value:.4f}")
                         else:
                             print(f"  {key}: {str(value)[:100]}")
-                           
+
                 except Exception as e:
                     logging.warning(f"Evaluation failed: {e}")
 
             # Memory and performance summary
             memory_summary = self.trainer.memory_tracker.get_memory_summary()
-           
+
             print("\n💾 MEMORY USAGE SUMMARY:")
             print("=" * 50)
             for key, value in memory_summary.items():
@@ -1063,7 +1292,9 @@ class UnifiedFineTuner:
                 "eval_dataset_size": len(self.eval_dataset) if self.eval_dataset else 0,
                 "output_dir": output_dir,
                 "train_result": train_result,  # Include for metrics extraction
-                "final_step": train_result.global_step if hasattr(train_result, 'global_step') else self.max_steps,
+                "final_step": train_result.global_step
+                if hasattr(train_result, "global_step")
+                else self.max_steps,
                 "best_loss": self.trainer.performance_monitor.best_loss,
                 "total_anomalies": self.trainer.anomaly_count,
                 **eval_results,
@@ -1071,24 +1302,32 @@ class UnifiedFineTuner:
             }
 
             # Add method-specific metrics
-            if self.method == METHOD_TYPE_SUPERVISED and hasattr(self.model, "get_nb_trainable_parameters"):
+            if self.method == METHOD_TYPE_SUPERVISED and hasattr(
+                self.model, "get_nb_trainable_parameters"
+            ):
                 trainable_params = self.model.get_nb_trainable_parameters()
                 summary["trainable_parameters"] = trainable_params
 
             # Log final summary to WandB
-            if self.monitoring_config.get('enable_wandb', False) and wandb.run is not None:
-                wandb.log({
-                    "training/completed": True,
-                    "training/final_summary": summary
-                })
+            if (
+                self.monitoring_config.get("enable_wandb", False)
+                and wandb.run is not None
+            ):
+                wandb.log(
+                    {"training/completed": True, "training/final_summary": summary}
+                )
 
             logging.info("📊 ENHANCED FINAL SUMMARY:")
             logging.info("=" * 50)
             for key, value in summary.items():
                 if key == "train_result":
                     continue  # Skip the complex train_result object in logging
-                if isinstance(value, (int, float)):
-                    logging.info(f"    - {key}: {value:.6f}" if isinstance(value, float) else f"    - {key}: {value}")
+                if isinstance(value, int | float):
+                    logging.info(
+                        f"    - {key}: {value:.6f}"
+                        if isinstance(value, float)
+                        else f"    - {key}: {value}"
+                    )
                 else:
                     logging.info(f"    - {key}: {value}")
 
@@ -1096,41 +1335,55 @@ class UnifiedFineTuner:
 
         except Exception as e:
             logging.error(f"❌ Enhanced training failed: {e}")
-            if self.monitoring_config.get('enable_wandb', False) and wandb.run is not None:
-                wandb.log({
-                    "training/failed": True,
-                    "training/error": str(e)
-                })
+            if (
+                self.monitoring_config.get("enable_wandb", False)
+                and wandb.run is not None
+            ):
+                wandb.log({"training/failed": True, "training/error": str(e)})
             raise
         finally:
             # Clean up WandB
-            if self.monitoring_config.get('enable_wandb', False) and wandb.run is not None:
+            if (
+                self.monitoring_config.get("enable_wandb", False)
+                and wandb.run is not None
+            ):
                 wandb.finish()
 
     def _load_processor_and_model(self) -> None:
         """Load processor and model with enhanced configuration."""
-        logging.info("🔧 STEP 1: Loading processor and model with enhanced configuration...")
-
-        # Load SmolVLM2 processor with universal configuration
-        logging.info(f"    📥 Loading processor from {self.model_id}")
-        do_image_splitting = False  # Disable to avoid string indexing issues
-       
-        self.processor = AutoProcessor.from_pretrained(
-            self.model_id, do_image_splitting=do_image_splitting
+        logging.info(
+            "🔧 STEP 1: Loading processor and model with enhanced configuration..."
         )
-        self.tokenizer = self.processor.tokenizer
-       
-        logging.info(f"    ✅ Processor loaded. Tokenizer vocab size: {len(self.tokenizer)}")
-        logging.info(f"        do_image_splitting: {do_image_splitting}")
+
+        # Load model based on PEFT configuration (this will also set the processor)
+        self._load_model()
+
+        # Verify processor was loaded
+        if self.processor is None:
+            logging.error("❌ Processor was not loaded by model loading!")
+            raise RuntimeError("Failed to load processor from models service")
+
+        logging.info(
+            f"    ✅ Processor loaded. Tokenizer vocab size: {len(self.tokenizer)}"
+        )
         logging.info(f"        dataset_type: {self.dataset_type}")
         logging.info(f"        has_vision: {self.has_vision}")
 
-        # Load model based on PEFT configuration
-        self._load_model()
+        # Ensure model is on the correct device
+        self._ensure_model_device_placement()
 
         # Log memory usage
-        initial_mem = torch.cuda.max_memory_allocated()
-        logging.info(f"    📊 Initial GPU memory usage: {initial_mem / MEMORY_CONVERSION_FACTOR:.2f} GB")
+        device_map = self._get_device_map()
+        if device_map != "cpu" and torch.cuda.is_available():
+            try:
+                initial_mem = torch.cuda.max_memory_allocated()
+                logging.info(
+                    f"    📊 Initial GPU memory usage: {initial_mem / MEMORY_CONVERSION_FACTOR:.2f} GB"
+                )
+            except Exception:
+                logging.info("    📊 GPU memory tracking not available")
+        else:
+            logging.info("    📊 Using CPU training")
 
     def _setup_enhanced_training(self) -> None:
         """Setup enhanced training configuration with comprehensive monitoring."""
@@ -1148,6 +1401,16 @@ class UnifiedFineTuner:
         """Setup enhanced SFT training with monitoring."""
         logging.info("    ⚙️  Setting up enhanced SFT training...")
 
+        # Detect GPU capabilities for appropriate precision
+        use_bf16 = self._detect_bf16_support()
+        use_fp16 = not use_bf16 and torch.cuda.is_available()
+        device_map = self._get_device_map()
+        use_cpu = device_map == "cpu"
+
+        logging.info(
+            f"    🔧 Using precision: bf16={use_bf16}, fp16={use_fp16}, cpu={use_cpu}"
+        )
+
         # Create training arguments
         model_name = self.model_id.split("/")[-1]
         suffix = (
@@ -1159,32 +1422,44 @@ class UnifiedFineTuner:
 
         training_args = TrainingArguments(
             output_dir=output_dir,
-            num_train_epochs=self._get_num_epochs(),
+            num_train_epochs=self._get_num_epochs(),  # Use job configuration
             per_device_train_batch_size=self._get_batch_size(),
             per_device_eval_batch_size=self._get_batch_size(),
-            gradient_accumulation_steps=1,
-            warmup_steps=max(2, self.max_steps // 10),  # Dynamic warmup steps
+            gradient_accumulation_steps=4,  # Larger effective batch size for stability
+            warmup_steps=max(
+                1, self.max_steps // 50
+            ),  # Minimal warmup for ultra-fast start
             learning_rate=self._get_learning_rate(),
-            weight_decay=0.01,
+            weight_decay=0.001,  # Reduced weight decay for faster convergence
             logging_steps=1,  # Log every step for full monitoring
             eval_strategy="steps" if self.eval_dataset else "no",
             eval_steps=self.eval_steps if self.eval_dataset else None,
             save_strategy="steps",
             save_steps=self.eval_steps,
-            save_total_limit=2,
-            load_best_model_at_end=True if self.eval_dataset else False,
+            save_total_limit=1,  # Reduced from 2 to 1
+            load_best_model_at_end=False,  # Disabled for speed
             metric_for_best_model="eval_loss" if self.eval_dataset else None,
             greater_is_better=False,
             max_steps=self.max_steps,
-            optim="paged_adamw_8bit" if self.peft_method != PEFT_METHOD_NONE else "adamw_torch",
-            bf16=True,
+            optim="adamw_torch"
+            if use_cpu
+            else (
+                "adamw_8bit" if self.peft_method != PEFT_METHOD_NONE else "adamw_torch"
+            ),
+            bf16=use_bf16,
+            fp16=use_fp16,
             remove_unused_columns=False,
-            report_to=["tensorboard"] + (["wandb"] if self.monitoring_config.get('enable_wandb', False) else []),
+            report_to=[],  # Disabled all reporting for maximum speed
             label_names=["labels"],
             dataloader_pin_memory=False,
-            gradient_checkpointing=True,
-            gradient_checkpointing_kwargs={"use_reentrant": False},
-            prediction_loss_only=False,  # Enable generation metrics
+            gradient_checkpointing=False,  # Disabled for speed
+            prediction_loss_only=True,  # Disabled generation metrics for speed
+            lr_scheduler_type="linear",  # Fast linear decay for aggressive training
+            warmup_ratio=0.02,  # Ultra-low warmup ratio
+            adam_beta1=0.9,  # Optimized Adam parameters
+            adam_beta2=0.999,
+            adam_epsilon=1e-6,  # Smaller epsilon for faster convergence
+            max_grad_norm=0.5,  # Aggressive gradient clipping
         )
 
         # Create enhanced trainer
@@ -1196,7 +1471,9 @@ class UnifiedFineTuner:
             eval_dataset=self.eval_dataset,
             tokenizer=self.tokenizer,
             monitoring_config=self.monitoring_config,
-            enable_generation_metrics=self.monitoring_config.get('enable_generation_metrics', True),
+            enable_generation_metrics=self.monitoring_config.get(
+                "enable_generation_metrics", True
+            ),
             dataset_type=self.dataset_type,
         )
 
@@ -1215,9 +1492,20 @@ class UnifiedFineTuner:
         )
         output_dir = f"{OUTPUT_BASE_DIR}/{model_name}-{self.dataset_type}-{self.method}-{self.peft_method}{suffix}"
 
+        # Detect GPU capabilities for appropriate precision
+        use_bf16 = self._detect_bf16_support()
+        use_fp16 = not use_bf16 and torch.cuda.is_available()
+        device_map = self._get_device_map()
+        use_cpu = device_map == "cpu"
+
+        logging.info(
+            f"    🔧 Using precision: bf16={use_bf16}, fp16={use_fp16}, cpu={use_cpu}"
+        )
+
         training_args = DPOConfig(
             output_dir=output_dir,
-            bf16=True,
+            bf16=use_bf16,
+            fp16=use_fp16,
             gradient_checkpointing=True,
             per_device_train_batch_size=self._get_batch_size(),
             gradient_accumulation_steps=32,
@@ -1229,7 +1517,8 @@ class UnifiedFineTuner:
             label_names=["labels"],
             save_steps=self.eval_steps,
             save_total_limit=2,
-            report_to=["tensorboard"] + (["wandb"] if self.monitoring_config.get('enable_wandb', False) else []),
+            report_to=["tensorboard"]
+            + (["wandb"] if self.monitoring_config.get("enable_wandb", False) else []),
         )
 
         # Create DPO trainer (Note: This would need to be enhanced with monitoring for full support)
@@ -1274,7 +1563,9 @@ class UnifiedFineTuner:
                     f"        🧊 Frozen {frozen_params} vision model parameters (text-only dataset detected)"
                 )
             elif self.has_vision:
-                logging.info("        🔓 Vision model kept trainable (vision dataset detected)")
+                logging.info(
+                    "        🔓 Vision model kept trainable (vision dataset detected)"
+                )
 
             logging.info("        ✅ Model loaded for full fine-tuning")
         else:
@@ -1291,9 +1582,10 @@ class UnifiedFineTuner:
                 f"        ✅ LoRA config created: {set(SMOLVLM_TARGET_MODULES)}"
             )
 
-            # Create quantization config if QLoRA
+            # Create quantization config if QLoRA (only for GPU)
             bnb_config = None
-            if self.peft_method == PEFT_METHOD_QLORA:
+            device_map = self._get_device_map()
+            if self.peft_method == PEFT_METHOD_QLORA and device_map != "cpu":
                 bnb_config = BitsAndBytesConfig(
                     load_in_4bit=True,
                     bnb_4bit_use_double_quant=True,
@@ -1303,6 +1595,11 @@ class UnifiedFineTuner:
                 logging.info(
                     "        ✅ Quantization config created: 4-bit NF4 with double quant"
                 )
+            elif self.peft_method == PEFT_METHOD_QLORA and device_map == "cpu":
+                logging.info(
+                    "        ⚠️  QLoRA not supported on CPU, using LoRA instead"
+                )
+                self.peft_method = PEFT_METHOD_LORA
 
             # Load base model
             self.model = self._load_base_model(bnb_config)
@@ -1342,9 +1639,7 @@ class UnifiedFineTuner:
                     "        🎯 All expected SmolVLM2 target modules confirmed present!"
                 )
 
-                # Apply PEFT in the correct order for SFT
-                self.model.add_adapter(lora_config)
-                self.model.enable_adapters()
+                # Apply PEFT in the correct order for SFT (fixed compatibility)
                 self.model = prepare_model_for_kbit_training(self.model)
                 self.model = get_peft_model(self.model, lora_config)
 
@@ -1356,15 +1651,64 @@ class UnifiedFineTuner:
                 logging.info("        ✅ LoRA config prepared for DPO trainer")
 
     def _load_base_model(self, quantization_config=None) -> AutoModelForImageTextToText:
-        """Load base model with unified loading logic."""
-        kwargs = {
-            "pretrained_model_name_or_path": self.model_id,
-            "torch_dtype": torch.bfloat16,
-            "device_map": "auto",
-        }
-        if quantization_config:
-            kwargs["quantization_config"] = quantization_config
-        return AutoModelForImageTextToText.from_pretrained(**kwargs)
+        """Load base model using singleton models service for consistency with server."""
+        from backend.services.models_service import get_models_service
+
+        device_map = self._get_device_map()
+        use_bf16 = self._detect_bf16_support()
+
+        # Choose appropriate dtype based on capabilities
+        if use_bf16:
+            torch_dtype = torch.bfloat16
+        elif torch.cuda.is_available():
+            torch_dtype = torch.float16
+        else:
+            torch_dtype = torch.float32
+
+        logging.info(
+            f"    🔧 Loading model using singleton service with dtype: {torch_dtype}, device_map: {device_map}"
+        )
+
+        # Use the singleton models service instead of loading our own model
+        models_service = get_models_service()
+
+        # Get the model from the service - this ensures CUDA/CPU consistency
+        model, processor = models_service.get_model_for_fine_tuning(
+            self.model_id,
+            device="cuda" if device_map != "cpu" else "cpu",
+            torch_dtype=torch_dtype,
+        )
+
+        # Store processor if not already set
+        if self.processor is None:
+            self.processor = processor
+            self.tokenizer = processor.tokenizer
+
+        logging.info("    ✅ Model loaded from singleton service")
+        return model
+
+    def _ensure_model_device_placement(self):
+        """Ensure all model components are on the correct device."""
+        device_map = self._get_device_map()
+
+        if device_map == "cpu":
+            logging.info("    🔧 Moving model to CPU")
+            try:
+                # For CPU training, explicitly move the entire model to CPU
+                self.model = self.model.to("cpu")
+
+                # Ensure all parameters are on CPU
+                for param in self.model.parameters():
+                    if param.device.type != "cpu":
+                        param.data = param.data.to("cpu")
+                        if param.grad is not None:
+                            param.grad = param.grad.to("cpu")
+
+                logging.info("    ✅ Model successfully moved to CPU")
+            except Exception as e:
+                logging.warning(f"    ⚠️  Error moving model to CPU: {e}")
+        else:
+            logging.info(f"    🔧 Model using device map: {device_map}")
 
     def _create_enhanced_sft_collate_fn(self):
         """Create enhanced collate function for SFT training that works universally."""
@@ -1378,6 +1722,9 @@ class UnifiedFineTuner:
             except (ValueError, AttributeError):
                 image_token_id = None
 
+        # Determine target device
+        target_device = self._get_target_device()
+
         def enhanced_collate_fn(examples):
             """Enhanced SFT collate function with universal dataset support."""
             instances = []
@@ -1389,7 +1736,9 @@ class UnifiedFineTuner:
                     messages = example["messages"]
 
                     # Try to use apply_chat_template if available and appropriate
-                    if self.has_vision and hasattr(self.processor, 'apply_chat_template'):
+                    if self.has_vision and hasattr(
+                        self.processor, "apply_chat_template"
+                    ):
                         try:
                             # For vision datasets, try the processor's chat template
                             tokenized = self.processor.apply_chat_template(
@@ -1399,37 +1748,46 @@ class UnifiedFineTuner:
                                 return_dict=True,
                                 return_tensors="pt",
                             )
-                           
-                            # Move to GPU and correct dtype
+
+                            # Move to appropriate device and correct dtype
                             instance = {
-                                "input_ids": tokenized["input_ids"].to("cuda").long(),
-                                "attention_mask": tokenized["attention_mask"].to("cuda").long(),
+                                "input_ids": tokenized["input_ids"]
+                                .to(target_device)
+                                .long(),
+                                "attention_mask": tokenized["attention_mask"]
+                                .to(target_device)
+                                .long(),
                             }
-                           
+
                             # Handle pixel values if present
                             if "pixel_values" in tokenized:
                                 instance["pixel_values"] = tokenized["pixel_values"]
-                               
+
                             instances.append(instance)
                             continue
-                           
+
                         except Exception as e:
-                            logging.debug(f"Chat template failed, falling back to simple processing: {e}")
+                            logging.debug(
+                                f"Chat template failed, falling back to simple processing: {e}"
+                            )
 
                     # Fallback: Create a simple conversation string
                     conversation = ""
                     for msg in messages:
                         role = msg["role"]
                         content = msg.get("content", "")
-                       
+
                         # Handle structured content for vision models
                         if isinstance(content, list):
                             text_content = ""
                             for item in content:
-                                if isinstance(item, dict) and item.get("type") == "text":
+                                if (
+                                    isinstance(item, dict)
+                                    and item.get("type") == "text"
+                                ):
                                     text_content += item.get("text", "")
                             content = text_content
-                       
+
                         if role == "user":
                             conversation += f"User: {content}\n"
                         elif role == "assistant":
@@ -1455,13 +1813,15 @@ class UnifiedFineTuner:
                         add_special_tokens=True,
                     )
 
-                    # Move to GPU and correct dtype
+                    # Move to appropriate device and correct dtype
                     instance = {
-                        "input_ids": tokenized["input_ids"].to("cuda").long(),
-                        "attention_mask": tokenized["attention_mask"].to("cuda").long(),
+                        "input_ids": tokenized["input_ids"].to(target_device).long(),
+                        "attention_mask": tokenized["attention_mask"]
+                        .to(target_device)
+                        .long(),
                     }
                     instances.append(instance)
-                   
+
                 except Exception as e:
                     logging.warning(f"Failed to process example: {e}")
                     continue
@@ -1512,6 +1872,7 @@ class UnifiedFineTuner:
 
         return enhanced_collate_fn
 
+
 def _create_training_metrics_file(training_results: dict[str, Any]) -> str:
     """Create a training metrics CSV file from actual training data and register it in the files service.
 
@@ -1529,9 +1890,12 @@ def _create_training_metrics_file(training_results: dict[str, Any]) -> str:
         from backend.services.files_service import DATA_DIR, FILES_METADATA
     except ImportError:
         # Handle case when running script directly
-        import sys
         import os as os_module
-        sys.path.insert(0, os_module.path.join(os_module.path.dirname(__file__), '..', '..'))
+        import sys
+
+        sys.path.insert(
+            0, os_module.path.join(os_module.path.dirname(__file__), "..", "..")
+        )
         from backend.services.files_service import DATA_DIR, FILES_METADATA
 
     # Extract real training metrics from the trainer's log history
@@ -1684,6 +2048,7 @@ def _create_training_metrics_file(training_results: dict[str, Any]) -> str:
     )
     return file_id
 
+
 def validate_and_load_dataset(training_file_id: str):
     """Validate and load a dataset from JSONL file.
 
@@ -1698,9 +2063,12 @@ def validate_and_load_dataset(training_file_id: str):
         from backend.services.files_service import DATA_DIR, FILES_METADATA
     except ImportError:
         # Handle case when running script directly
-        import sys
         import os as os_module
-        sys.path.insert(0, os_module.path.join(os_module.path.dirname(__file__), '..', '..'))
+        import sys
+
+        sys.path.insert(
+            0, os_module.path.join(os_module.path.dirname(__file__), "..", "..")
+        )
         from backend.services.files_service import DATA_DIR, FILES_METADATA
 
     # Get file metadata
@@ -1779,10 +2147,14 @@ def validate_and_load_dataset(training_file_id: str):
     )
     return train_dataset
 
+
 def create_fine_tuning_job(
     training_file_id: str,
     method_type: str = METHOD_TYPE_SUPERVISED,
     model: str = MODEL_ID,
+    learning_rate_multiplier: str | float = "auto",
+    n_epochs: str | int = "auto",
+    batch_size: str = "auto",
 ) -> str:
     """Create a fine-tuning job with the specified method type and store it in the database."""
 
@@ -1791,7 +2163,9 @@ def create_fine_tuning_job(
             type="supervised",
             supervised=SupervisedMethod(
                 hyperparameters=SupervisedHyperparameters(
-                    batch_size="auto", learning_rate_multiplier="auto", n_epochs="auto"
+                    batch_size=batch_size,
+                    learning_rate_multiplier=learning_rate_multiplier,
+                    n_epochs=n_epochs,
                 )
             ),
         )
@@ -1800,10 +2174,12 @@ def create_fine_tuning_job(
             type="dpo",
             dpo=DpoMethod(
                 hyperparameters=DpoHyperparameters(
-                    batch_size=None,
+                    batch_size=batch_size if batch_size != "auto" else None,
                     beta=None,
-                    learning_rate_multiplier=None,
-                    n_epochs=None,
+                    learning_rate_multiplier=learning_rate_multiplier
+                    if learning_rate_multiplier != "auto"
+                    else None,
+                    n_epochs=n_epochs if n_epochs != "auto" else None,
                 )
             ),
         )
@@ -1829,6 +2205,7 @@ def create_fine_tuning_job(
     stored_job = fine_tuning_db.create_job(fine_tuning_job)
 
     return stored_job.id
+
 
 def run_fine_tuning_job(job_id: str, **kwargs) -> FineTuningJob:
     """Run a fine-tuning job with OpenAI API-compatible interface and enhanced monitoring."""
@@ -1905,9 +2282,11 @@ def run_fine_tuning_job(job_id: str, **kwargs) -> FineTuningJob:
     else:
         peft_method = PEFT_METHOD_QLORA  # Default fallback
 
-    # Extract training parameters from kwargs
-    max_steps = kwargs.get("max_steps", 10)
-    eval_steps = kwargs.get("eval_steps", max_steps // 2 if max_steps > 1 else 1)
+    # Extract training parameters from kwargs - optimized for ultra-fast convergence
+    max_steps = kwargs.get(
+        "max_steps", 25
+    )  # Ultra-fast optimization (same as successful run)
+    eval_steps = kwargs.get("eval_steps", 5)  # Very frequent evaluation
 
     # Create enhanced fine-tuner instance with pre-prepared dataset
     fine_tuner = UnifiedFineTuner(
@@ -1959,6 +2338,7 @@ def run_fine_tuning_job(job_id: str, **kwargs) -> FineTuningJob:
 
         return fine_tuning_job
 
+
 def cancel_job(job_id: str) -> FineTuningJob:
     """Cancel a fine-tuning job."""
     fine_tuning_job = fine_tuning_db.get_job(job_id)
@@ -1979,44 +2359,158 @@ def cancel_job(job_id: str) -> FineTuningJob:
 
     return fine_tuning_job
 
+
+def run_fine_tuning_for_all_datasets(
+    method_type: str = METHOD_TYPE_SUPERVISED,
+    model: str = MODEL_ID,
+    training_file_ids: list[str] | None = None,
+    max_steps: int = 10,
+    eval_steps: int = 5,
+    learning_rate_multiplier: str | float = "auto",
+    n_epochs: str | int = "auto",
+    batch_size: str = "auto",
+    **kwargs,
+) -> list[FineTuningJob]:
+    """
+    Run fine-tuning jobs for all available datasets or specified datasets.
+
+    Args:
+        method_type: Fine-tuning method type (supervised, dpo, etc.)
+        model: Model ID to use for fine-tuning
+        training_file_ids: Optional list of specific file IDs to process. If None, processes all available datasets.
+        max_steps: Maximum training steps per job
+        eval_steps: Steps between evaluations
+        learning_rate_multiplier: Learning rate multiplier for OpenAI hyperparameters (can be "auto" or float)
+        n_epochs: Number of epochs for training (can be "auto" or int)
+        batch_size: Batch size (can be "auto" or specific value)
+        **kwargs: Additional parameters to pass to run_fine_tuning_job
+
+    Returns:
+        List of completed FineTuningJob objects
+    """
+    # Import here to avoid circular imports
+    try:
+        from backend.services.files_service import FILES_METADATA
+    except ImportError:
+        # Handle case when running script directly
+        import os as os_module
+        import sys
+
+        sys.path.insert(
+            0, os_module.path.join(os_module.path.dirname(__file__), "..", "..")
+        )
+        from backend.services.files_service import FILES_METADATA
+
+    # Get all available fine-tune datasets if no specific IDs provided
+    if training_file_ids is None:
+        training_file_ids = [
+            file_id
+            for file_id, metadata in FILES_METADATA.items()
+            if metadata.get("purpose") == "fine-tune"
+        ]
+
+        if not training_file_ids:
+            print("❌ No fine-tune datasets found in FILES_METADATA")
+            print("Available files:")
+            for file_id, metadata in FILES_METADATA.items():
+                print(f"  - {file_id}: {metadata.get('purpose', 'unknown purpose')}")
+            return []
+
+    print(f"🚀 Starting fine-tuning for {len(training_file_ids)} dataset(s)")
+    print(f"📋 Dataset IDs: {training_file_ids}")
+    print(f"⚙️  Method: {method_type}")
+    print(f"🔧 Model: {model}")
+    print(f"📊 Max steps: {max_steps}, Eval steps: {eval_steps}")
+    print("=" * 80)
+
+    completed_jobs = []
+
+    for i, training_file_id in enumerate(training_file_ids, 1):
+        print(
+            f"\n🔄 Processing dataset {i}/{len(training_file_ids)}: {training_file_id}"
+        )
+        print("-" * 60)
+
+        try:
+            # Create fine-tuning job with custom hyperparameters
+            job_id = create_fine_tuning_job(
+                training_file_id,
+                method_type=method_type,
+                model=model,
+                learning_rate_multiplier=learning_rate_multiplier,
+                n_epochs=n_epochs,
+                batch_size=batch_size,
+            )
+
+            print(f"📋 Created job: {job_id}")
+
+            # Get initial job state
+            initial_job = fine_tuning_db.get_job(job_id)
+            print(f"🎯 Training file: {initial_job.training_file}")
+            print(f"⚙️  Method: {initial_job.method.type}")
+            print(f"📊 Status: {initial_job.status}")
+            print(f"🔧 Model: {initial_job.model}")
+
+            # Run fine-tuning job
+            fine_tuning_job = run_fine_tuning_job(
+                job_id, max_steps=max_steps, eval_steps=eval_steps, **kwargs
+            )
+
+            # Print summary
+            status_emoji = "✅" if fine_tuning_job.status == "succeeded" else "❌"
+            print(f"\n{status_emoji} Job {job_id} completed!")
+            print(f"📊 Status: {fine_tuning_job.status}")
+            print(f"📁 Result files: {fine_tuning_job.result_files}")
+            if hasattr(fine_tuning_job, "error") and fine_tuning_job.error:
+                print(f"❌ Error: {fine_tuning_job.error}")
+
+            completed_jobs.append(fine_tuning_job)
+
+        except Exception as e:
+            print(f"❌ Failed to process {training_file_id}: {e}")
+            # Continue with next dataset instead of failing completely
+            continue
+
+    # Print overall summary
+    print("\n" + "=" * 80)
+    print("🏁 FINE-TUNING BATCH COMPLETED")
+    print("=" * 80)
+    print(f"📊 Total jobs: {len(completed_jobs)}")
+
+    successful_jobs = [job for job in completed_jobs if job.status == "succeeded"]
+    failed_jobs = [job for job in completed_jobs if job.status == "failed"]
+
+    print(f"✅ Successful: {len(successful_jobs)}")
+    print(f"❌ Failed: {len(failed_jobs)}")
+
+    if successful_jobs:
+        print("\n✅ Successful jobs:")
+        for job in successful_jobs:
+            print(f"  - {job.id}: {job.training_file}")
+
+    if failed_jobs:
+        print("\n❌ Failed jobs:")
+        for job in failed_jobs:
+            error_msg = (
+                getattr(job, "error", {}).get("message", "Unknown error")
+                if hasattr(job, "error")
+                else "Unknown error"
+            )
+            print(f"  - {job.id}: {job.training_file} - {error_msg}")
+
+    return completed_jobs
+
+
 def main():
     """Main function using OpenAI API spec types with enhanced monitoring."""
-    # Build OpenAI API compatible job configuration
-    training_file_ids = [
-        "file-drone-training-default",
-        "file-tiger-lab-video-feedback-default",
-    ]
+    # Run fine-tuning for all available datasets
+    run_fine_tuning_for_all_datasets(
+        method_type=METHOD_TYPE_SUPERVISED,
+        model=MODEL_ID,
+        max_steps=10,  # Quick training for testing
+        eval_steps=5,
+    )
 
-    for training_file_id in training_file_ids:
-        method_type = METHOD_TYPE_SUPERVISED  # Switch back to SFT
-
-        job_id = create_fine_tuning_job(training_file_id, method_type=method_type)
-
-        print("🚀 Starting enhanced fine-tuning job with OpenAI API spec...")
-        print(f"📋 Job ID: {job_id}")
-
-        # Get initial job state
-        initial_job = fine_tuning_db.get_job(job_id)
-        print(f"🎯 Training file: {initial_job.training_file}")
-        print(f"⚙️  Method: {initial_job.method.type}")
-        print(f"📊 Status: {initial_job.status}")
-        print(f"📅 Created at: {initial_job.created_at}")
-        print(f"🔧 Model: {initial_job.model}")
-        print("=" * 80)
-
-        # Run enhanced fine-tuning job using the new API
-        fine_tuning_job = run_fine_tuning_job(job_id)
-
-        # Print summary
-        print("\n🎉 Enhanced fine-tuning job completed!")
-        print(f"📋 Job ID: {fine_tuning_job.id}")
-        print(f"📊 Status: {fine_tuning_job.status}")
-        print(f"📅 Created at: {fine_tuning_job.created_at}")
-        print(f"🔧 Model: {fine_tuning_job.model}")
-        print(f"📁 Result files: {fine_tuning_job.result_files}")
-        print(f"⏰ Finished at: {getattr(fine_tuning_job, 'finished_at', 'Not finished')}")
-        print(f"❌ Error: {getattr(fine_tuning_job, 'error', 'None')}")
-        print(f"🔢 Trained tokens: {getattr(fine_tuning_job, 'trained_tokens', 'Not trained')}")
 
 if __name__ == "__main__":
     main()

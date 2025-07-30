@@ -17,11 +17,9 @@ except ImportError:
     AutoProcessor = Any  # type: ignore
     pipeline = Any  # type: ignore
 
-from backend.logging_config import logger
-from backend.utils.model_utils import validate_chat_template
-
-# Store PEFT adapter paths by fine-tuned model name
-PEFT_ADAPTERS = {}
+from backend._shared.dao.model_dao import ModelDAO
+from backend._shared.logging_config import logger
+from backend._shared.utils.model_utils import validate_chat_template
 
 
 class ModelsService:
@@ -35,6 +33,9 @@ class ModelsService:
         self._current_adapter = None  # Currently loaded adapter path
         self._model_lock = threading.RLock()  # Thread-safe model access
         self._base_model_instance = None  # Single base model instance
+
+        # Database access
+        self.dao = ModelDAO()
 
         # Define supported models
         self.supported_embedding_models = [
@@ -63,6 +64,9 @@ class ModelsService:
 
         # Load chat template
         self.chat_template = self._load_chat_template()
+
+        # Clear any existing cache to ensure fresh loading with correct tensor types
+        self.clear_cache()
 
         # Load all models as singletons during initialization
         logger.info("🚀 Initializing ModelsService - Loading all models...")
@@ -267,7 +271,9 @@ class ModelsService:
         logger.info(f"Loading fine-tuned PEFT model {model_name}")
 
         # Get the PEFT adapter path from the global storage
-        adapter_path = PEFT_ADAPTERS.get(model_name)
+        # Try to get from database first, then fallback to in-memory
+        model_record = self.dao.get_by_id(model_name)
+        adapter_path = model_record.adapter_path if model_record else None
 
         if adapter_path and os.path.exists(adapter_path):
             return self._load_peft_model(adapter_path, use_cache)
@@ -354,14 +360,81 @@ class ModelsService:
             ) from e
 
     def _load_vlm_model(self, model_name: str) -> tuple[Any, Any]:
-        """Load vision-language model."""
+        """Load vision-language model with graceful CPU/GPU fallback."""
         import torch
 
         processor = AutoProcessor.from_pretrained(model_name)  # type: ignore
+
+        # Determine optimal device and dtype with graceful fallback
+        device = "cpu"
+        torch_dtype = torch.float32
+
+        if torch.cuda.is_available():
+            try:
+                # Test if CUDA actually works
+                test_tensor = torch.tensor([1.0]).cuda()
+                del test_tensor  # Clean up
+
+                # Check GPU capabilities for dtype selection using the same logic as fine-tuning utils
+                device = torch.cuda.current_device()
+                gpu_name = torch.cuda.get_device_name(device)
+                major, minor = torch.cuda.get_device_capability(device)
+                compute_capability = major * 10 + minor
+
+                logger.info(f"GPU: {gpu_name}, Compute capability: {major}.{minor}")
+
+                # bf16 requires Ampere+ (compute capability >= 8.0)
+                # RTX 30-series, A-series, H-series have compute capability >= 8.0
+                if compute_capability >= 80:
+                    torch_dtype = torch.bfloat16
+                    logger.info("✅ GPU supports bf16 (Ampere+ architecture)")
+                else:
+                    torch_dtype = torch.float16
+                    logger.info(
+                        f"⚠️  GPU does not support bf16 (compute capability {major}.{minor} < 8.0), using fp16"
+                    )
+
+                device = "cuda"
+                logger.info(f"Using GPU with {torch_dtype}")
+            except Exception as e:
+                logger.warning(
+                    f"CUDA available but not working: {e}, falling back to CPU"
+                )
+                device = "cpu"
+                torch_dtype = torch.float32
+        else:
+            logger.info("CUDA not available, using CPU")
+
+        logger.info(
+            f"Loading model {model_name} with torch_dtype={torch_dtype}, device={device}"
+        )
         model = AutoModelForImageTextToText.from_pretrained(
-            model_name, torch_dtype=torch.bfloat16
-        ).to("cuda")
+            model_name, torch_dtype=torch_dtype
+        ).to(device)
+
+        # Log the actual dtype of the model parameters to verify
+        if hasattr(model, "parameters"):
+            param_dtypes = {param.dtype for param in model.parameters()}
+            logger.info(f"Model parameter dtypes: {param_dtypes}")
+
         return model, processor
+
+    def clear_model_cache(self) -> None:
+        """Clear the model cache to force reloading of models."""
+        with self._model_lock:
+            self._model_cache.clear()
+            self._processor_cache.clear()
+            self._pipeline_cache.clear()
+            self._base_model_instance = None
+            self._current_adapter = None
+            logger.info("Model cache cleared")
+
+    def force_reload_models(self) -> None:
+        """Force reload all models with current tensor type settings."""
+        logger.info("🔄 Force reloading all models...")
+        self.clear_cache()
+        self._load_all_models()
+        logger.info("✅ All models reloaded successfully!")
 
     def get_stt_pipeline(
         self, model_name: str = "openai/whisper-tiny", use_cache: bool = True
@@ -390,10 +463,27 @@ class ModelsService:
         try:
             import torch
 
+            # Graceful device selection with fallback
+            device = -1  # CPU default
+            if torch.cuda.is_available():
+                try:
+                    # Test if CUDA actually works
+                    test_tensor = torch.tensor([1.0]).cuda()
+                    del test_tensor  # Clean up
+                    device = 0  # Use GPU
+                    logger.info("STT pipeline using GPU")
+                except Exception as e:
+                    logger.warning(
+                        f"CUDA available but not working for STT: {e}, using CPU"
+                    )
+                    device = -1
+            else:
+                logger.info("STT pipeline using CPU")
+
             pipe = pipeline(
                 "automatic-speech-recognition",
                 model=model_name,
-                device=0 if torch.cuda.is_available() else -1,
+                device=device,
             )
 
             # Cache the pipeline if caching is enabled
@@ -696,8 +786,37 @@ class ModelsService:
             model_name: The fine-tuned model name (e.g., "ft:model:suffix:jobid")
             adapter_path: Path to the PEFT adapter directory
         """
-        PEFT_ADAPTERS[model_name] = adapter_path
+        # Store in database
+        try:
+            # Extract base model from fine-tuned model name
+            # Format: ft:base_model:suffix:job_id
+            parts = model_name.split(":")
+            base_model = parts[1] if len(parts) > 1 else "unknown"
+
+            self.dao.register_fine_tuned_model(model_name, base_model, adapter_path)
+            logger.info(
+                f"Registered fine-tuned model {model_name} in database with adapter: {adapter_path}"
+            )
+        except Exception as e:
+            logger.error(f"Failed to register model in database: {e}")
+            # Fallback to in-memory storage for backward compatibility
+            pass
+
         logger.info(f"Registered PEFT adapter for {model_name}: {adapter_path}")
+
+    def register_fine_tuned_model(
+        self, model_name: str, base_model: str, adapter_path: str
+    ) -> None:
+        """
+        Register a fine-tuned model with the models registry.
+
+        Args:
+            model_name: The fine-tuned model identifier
+            base_model: The base model that was fine-tuned
+            adapter_path: Path to the PEFT adapter
+        """
+        self.dao.register_fine_tuned_model(model_name, base_model, adapter_path)
+        logger.info(f"Registered fine-tuned model {model_name}")
 
     def get_peft_adapter_path(self, model_name: str) -> str | None:
         """
@@ -709,7 +828,9 @@ class ModelsService:
         Returns:
             The adapter path if found, None otherwise
         """
-        return PEFT_ADAPTERS.get(model_name)
+        # Try database first, then fallback to in-memory
+        model_record = self.dao.get_by_id(model_name)
+        return model_record.adapter_path if model_record else None
 
 
 # Create a private singleton instance

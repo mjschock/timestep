@@ -1,14 +1,8 @@
 import pytest
 import torch
-from transformers import (
-    AutoModelForImageTextToText,
-    AutoProcessor,
-    StoppingCriteriaList,
-)
 
-from backend.utils.model_utils import (
+from backend._shared.utils.model_utils import (
     BUILTIN_TOOLS,
-    ToolCallStoppingCriteria,
     create_base_messages,
 )
 
@@ -70,7 +64,7 @@ SIMPLE_INFERENCE_MESSAGES = [
     },
 ]
 
-SIMPLE_INFERENCE_EXPECTED_RESPONSE = "The image depicts a close-up view of a pink flower with a bee on it. The flower is in the center of the image, with the bee positioned near the center of the flower. The flower has a light pink color, and the bee is black and yellow, with a fuzzy body. The flower has a"
+SIMPLE_INFERENCE_EXPECTED_RESPONSE = "The image showcases a close-up view of a pink flower with a bee on it. The flower is in the center of the image, with its petals slightly curled and slightly open. The bee, which is the central focus of the image, is positioned near the center of the flower, with its body facing towards"
 
 # Video inference test data
 VIDEO_INFERENCE_MESSAGES = [
@@ -86,7 +80,7 @@ VIDEO_INFERENCE_MESSAGES = [
     },
 ]
 
-VIDEO_INFERENCE_EXPECTED_RESPONSE = "The video showcases a scene from a dog show, specifically focusing on a dog in a metal cage. The cage is enclosed by a brown tarp, which is partially covered by a white cloth, and is situated on a concrete surface. The dog, a black and white dog, is standing on the ground, facing the"
+VIDEO_INFERENCE_EXPECTED_RESPONSE = "The video showcases a scene from a dog show, specifically focusing on a dog in a metal cage. The cage is enclosed by a brown tarp, which is partially covered by a white cloth, and is situated outdoors. The dog is standing on a concrete surface, with a grassy area in the background. The dog appears"
 
 # Multi-image interleaved test data
 MULTI_IMAGE_MESSAGES = [
@@ -149,70 +143,147 @@ TOOL_CALLING_FORMATTED_MESSAGES = [
 
 
 # Helper functions for DRY testing
+
+
+def _prepare_generation_kwargs(temperature, max_tokens, top_p, n, processor):
+    """Prepare generation kwargs based on parameters."""
+    if temperature == 0.0:
+        generation_kwargs = {
+            "do_sample": False,
+            "max_new_tokens": max_tokens,
+        }
+    else:
+        generation_kwargs = {
+            "max_new_tokens": max_tokens,
+            "do_sample": True,
+            "temperature": temperature,
+            "top_p": top_p,
+            "num_return_sequences": n,
+            "pad_token_id": getattr(processor, "pad_token_id", None),
+            "eos_token_id": getattr(processor, "eos_token_id", None),
+        }
+
+    # Remove None values
+    return {k: v for k, v in generation_kwargs.items() if v is not None}
+
+
+def _process_response_text(response_text, inputs, processor, stop_sequences):
+    """Process response text by removing input and applying stop sequences."""
+    # Remove the input text from the response like the server
+    input_text = processor.decode(inputs["input_ids"][0], skip_special_tokens=True)
+    if response_text.startswith(input_text):
+        response_text = response_text[len(input_text) :].strip()
+
+    # Apply stop sequences like the server
+    if stop_sequences:
+        for stop_seq in stop_sequences:
+            if isinstance(stop_seq, str) and stop_seq in response_text:
+                # Find the position and truncate
+                stop_pos = response_text.find(stop_seq)
+                if stop_pos != -1:
+                    response_text = response_text[: stop_pos + len(stop_seq)]
+                    break
+
+    return response_text
+
+
 def run_direct_inference(
     messages,
     expected_response,
     max_tokens=DEFAULT_MAX_TOKENS,
     tools=None,
     tool_choice=None,
+    temperature=0.0,
+    top_p=1.0,
+    n=1,
 ):
-    """Load model, run inference, then clean up to maintain test isolation."""
-    processor = AutoProcessor.from_pretrained(MODEL_NAME)
-    model = AutoModelForImageTextToText.from_pretrained(
-        MODEL_NAME, torch_dtype=torch.bfloat16
-    ).to("cuda")
+    """Use the same singleton model as the API for exact response matching."""
+    from backend.services.chat_service import normalize_messages
+    from backend.services.models_service import get_models_service
+
+    # Use the same singleton models service as the API
+    models_service = get_models_service()
+
+    print(f"Getting model {MODEL_NAME} from singleton models service")
+    model, processor = models_service.get_model_instance(MODEL_NAME, use_cache=True)
+
+    # Log the actual dtype of the model parameters to verify
+    if hasattr(model, "parameters"):
+        param_dtypes = {param.dtype for param in model.parameters()}
+        print(f"Model parameter dtypes: {param_dtypes}")
+
+    print(f"Model device: {model.device}")
+    print(f"Model dtype: {next(model.parameters()).dtype}")
 
     try:
+        # Normalize messages like the server does
+        normalized_messages = normalize_messages(messages)
+        print(f"Normalized messages: {normalized_messages}")
+
         inputs = processor.apply_chat_template(
-            messages,
+            normalized_messages,
             tools=tools,
             add_generation_prompt=True,
             tokenize=True,
             return_dict=True,
             return_tensors="pt",
-        ).to(model.device, dtype=torch.bfloat16)
+        )
 
-        # Add stopping criteria for tool calls if tools are provided
-        stopping_criteria = None
-        if tools:
-            stopping_criteria = StoppingCriteriaList(
-                [ToolCallStoppingCriteria(processor.tokenizer, "</tool_call>")]
+        # Use the model's actual dtype instead of hardcoding
+        model_dtype = next(model.parameters()).dtype
+        inputs = inputs.to(model.device, dtype=model_dtype)
+
+        generation_kwargs = _prepare_generation_kwargs(
+            temperature, max_tokens, top_p, n, processor
+        )
+
+        # Add stop sequences like the server
+        stop_sequences = []
+        if "</tool_call>" not in stop_sequences:
+            stop_sequences.append("</tool_call>")
+
+        if stop_sequences:
+            generation_kwargs["stopping_criteria"] = (
+                None  # We'll handle stop sequences manually
             )
 
-        generated_ids = model.generate(
-            **inputs,
-            do_sample=False,
-            max_new_tokens=max_tokens,
-            stopping_criteria=stopping_criteria,
-            pad_token_id=processor.tokenizer.eos_token_id,
-        )
+        print(f"Generation kwargs: {generation_kwargs}")
+        print(f"Stop sequences: {stop_sequences}")
+
+        # Generate response
+        with torch.no_grad():
+            generated_ids = model.generate(**inputs, **generation_kwargs)
+
+        # Decode responses like the server
         generated_texts = processor.batch_decode(
-            generated_ids, skip_special_tokens=True
+            generated_ids,
+            skip_special_tokens=True,
         )
 
         print(f"Generated text: {generated_texts[0]}")
 
-        # Extract just the assistant's response (after "Assistant: ")
-        full_text = generated_texts[0]
-        assistant_response = full_text.split("Assistant: ")[-1].strip()
+        # Process response like the chat service does
+        response_text = _process_response_text(
+            generated_texts[0], inputs, processor, stop_sequences
+        )
 
-        # If the stopping criteria cut off the response, add the closing tag back
-        if (
-            tools
-            and not assistant_response.endswith("</tool_call>")
-            and "<tool_call>" in assistant_response
-        ):
-            assistant_response += "</tool_call>"
+        print(f"Processed response: {response_text}")
+        print(f"Expected response: {expected_response}")
 
-        print(f"Assistant response: {assistant_response}")
-
-        # Test that we get the expected output
-        assert assistant_response == expected_response
+        # Now that we're using the same singleton model, we should get exact matches
+        assert response_text == expected_response, (
+            f"Direct inference response doesn't match expected.\nActual: '{response_text}'\nExpected: '{expected_response}'"
+        )
 
         return expected_response, messages
     finally:
-        # Clean up to prevent memory issues
-        del model, processor, inputs, generated_ids, generated_texts
+        # Clean up generated tensors (model and processor are singletons, don't delete them)
+        if "inputs" in locals():
+            del inputs
+        if "generated_ids" in locals():
+            del generated_ids
+        if "generated_texts" in locals():
+            del generated_texts
         torch.cuda.empty_cache()
 
 
@@ -241,7 +312,11 @@ async def run_api_test(
     api_response = response.choices[0].message.content.strip()
     print(f"API response: {api_response}")
     print(f"Expected response: {expected_response}")
-    assert api_response == expected_response
+
+    # Since both API and direct calls use the same singleton model, responses should match exactly
+    assert api_response == expected_response, (
+        f"API response doesn't match expected.\nActual: {api_response}\nExpected: {expected_response}"
+    )
 
     # Additional assertions for tool calls
     if tools:

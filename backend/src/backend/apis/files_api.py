@@ -3,7 +3,7 @@ from typing import Any
 from fastapi import APIRouter, Depends, File, Form, UploadFile
 from fastapi.responses import Response
 
-from backend.logging_config import logger
+from backend._shared.logging_config import logger
 from backend.services.files_service import FilesService
 
 files_router = APIRouter()

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Request, Response
 
-from backend.logging_config import logger
+from backend._shared.logging_config import logger
 from backend.services.chat_service import ChatService
 
 chat_router = APIRouter()

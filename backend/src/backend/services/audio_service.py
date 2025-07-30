@@ -4,7 +4,7 @@ import tempfile
 from fastapi import HTTPException, Request, UploadFile
 from fastapi.responses import Response
 
-from backend.logging_config import logger
+from backend._shared.logging_config import logger
 from backend.services.models_service import get_models_service
 
 

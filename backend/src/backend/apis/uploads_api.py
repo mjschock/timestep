@@ -2,7 +2,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, File, Form, Request, UploadFile
 
-from backend.services.uploads_service import UPLOAD_PARTS, UploadsService
+from backend.services.uploads_service import UploadsService
 
 uploads_router = APIRouter()
 
@@ -83,10 +83,10 @@ async def add_upload_part(
 
     # Auto-assign part number if not provided
     if part is None:
-        # Get the next available part number
-        existing_parts = UPLOAD_PARTS.get(upload_id, [])
+        # Get the next available part number from the service
+        existing_parts = service.dao.get_upload_parts(upload_id)
         if existing_parts:
-            part = max(p["part_number"] for p in existing_parts) + 1
+            part = max(p.part_number for p in existing_parts) + 1
         else:
             part = 1
 

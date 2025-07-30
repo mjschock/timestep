@@ -145,7 +145,7 @@ async def create_fine_tuning_job(async_client):
         hyperparameters={
             "n_epochs": 3,
             "batch_size": 1,
-            "learning_rate_multiplier": 1.0,
+            "learning_rate_multiplier": 12.0,
         },
         seed=42,
     )

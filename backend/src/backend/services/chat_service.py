@@ -7,7 +7,7 @@ from typing import Any
 import torch
 from fastapi import HTTPException
 
-from backend.logging_config import logger
+from backend._shared.logging_config import logger
 from backend.services.models_service import get_models_service
 
 
@@ -142,7 +142,9 @@ class ChatService:
                 return_tensors="pt",
                 tools=tools,
             )
-            inputs = inputs.to(model.device, dtype=torch.bfloat16)
+            # Use the model's actual dtype instead of hardcoding bfloat16
+            model_dtype = next(model.parameters()).dtype
+            inputs = inputs.to(model.device, dtype=model_dtype)
 
             if stream:
                 return self._create_streaming_response(

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 
-from backend.logging_config import logger
+from backend._shared.logging_config import logger
 from backend.services.models_service import get_models_service
 
 models_router = APIRouter()

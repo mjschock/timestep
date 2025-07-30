@@ -164,7 +164,7 @@ def validate_chat_template(processor: Any, original_chat_template: str = "") -> 
     WARNING: Do not pass chat_template explicitly to apply_chat_template() as it bypasses
     video preprocessing and will break video content handling (<video> tags).
     """
-    from backend.logging_config import logger
+    from backend._shared.logging_config import logger
 
     # Test messages with different scenarios our training data will have
     test_cases = [

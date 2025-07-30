@@ -5,17 +5,15 @@ from typing import Any
 
 from fastapi import HTTPException
 
+from backend._shared.dao.upload_dao import UploadDAO
+
 DATA_DIR = os.path.join("data", "uploads")
 os.makedirs(DATA_DIR, exist_ok=True)
-
-# In-memory metadata store (replace with persistent storage as needed)
-UPLOADS_METADATA: dict[str, dict[str, Any]] = {}
-UPLOAD_PARTS: dict[str, list[dict[str, Any]]] = {}  # upload_id -> list of parts
 
 
 class UploadsService:
     def __init__(self) -> None:
-        pass
+        self.dao = UploadDAO()
 
     def create_upload(self, body: dict[str, Any] | None = None) -> dict[str, Any]:
         """
@@ -85,9 +83,18 @@ class UploadsService:
                 "mime_type": mime_type,
             }
 
-            # Store upload metadata
-            UPLOADS_METADATA[upload_id] = upload_obj
-            UPLOAD_PARTS[upload_id] = []
+            # Store upload metadata in database
+            upload_data = {
+                "id": upload_id,
+                "object": "upload",
+                "bytes": bytes_size,
+                "purpose": purpose,
+                "filename": filename,
+                "created_at": current_time,
+                "expires_at": current_time + 3600,
+                "status": "created",
+            }
+            self.dao.create_upload(upload_data)
 
             return upload_obj
 
@@ -138,10 +145,20 @@ class UploadsService:
 
     def _validate_upload_exists(self, upload_id: str) -> dict[str, Any]:
         """Validate that upload exists."""
-        upload_obj = UPLOADS_METADATA.get(upload_id)
-        if not upload_obj:
+        upload_table = self.dao.get_upload_by_id(upload_id)
+        if not upload_table:
             raise HTTPException(status_code=404, detail="Upload not found")
-        return upload_obj
+
+        return {
+            "id": upload_table.id,
+            "object": upload_table.object,
+            "bytes": upload_table.bytes,
+            "purpose": upload_table.purpose,
+            "filename": upload_table.filename,
+            "created_at": upload_table.created_at,
+            "expires_at": upload_table.expires_at,
+            "status": upload_table.status,
+        }
 
     def _validate_upload_status(self, upload_obj: dict[str, Any]) -> None:
         """Validate upload status is valid for adding parts."""
@@ -177,8 +194,8 @@ class UploadsService:
                 status_code=400, detail="'part_number' must be a positive integer"
             )
 
-        existing_parts = UPLOAD_PARTS[upload_id]
-        if any(part["part_number"] == part_number for part in existing_parts):
+        existing_part = self.dao.get_upload_part_by_number(upload_id, part_number)
+        if existing_part:
             raise HTTPException(
                 status_code=400, detail=f"Part number {part_number} already exists"
             )
@@ -211,7 +228,14 @@ class UploadsService:
 
     def _add_part_to_upload(self, upload_id: str, part_obj: dict[str, Any]) -> None:
         """Add part object to upload."""
-        UPLOAD_PARTS[upload_id].append(part_obj)
+        part_data = {
+            "id": part_obj["id"],
+            "upload_id": upload_id,
+            "part_number": part_obj["part_number"],
+            "bytes": part_obj["bytes"],
+            "created_at": part_obj["created_at"],
+        }
+        self.dao.create_upload_part(part_data)
 
     def complete_upload(
         self, upload_id: str, body: dict[str, Any] | None = None
@@ -235,7 +259,7 @@ class UploadsService:
             self._validate_upload_not_expired(upload_obj)
 
             part_ids = self._extract_and_validate_part_ids(body)
-            all_parts = UPLOAD_PARTS[upload_id]
+            all_parts = self._get_upload_parts(upload_id)
             ordered_parts = self._validate_and_order_parts(part_ids, all_parts)
 
             total_bytes = self._calculate_total_bytes(ordered_parts)
@@ -272,6 +296,19 @@ class UploadsService:
         if not part_ids:
             raise HTTPException(status_code=400, detail="'part_ids' is required")
         return part_ids
+
+    def _get_upload_parts(self, upload_id: str) -> list[dict[str, Any]]:
+        """Get all parts for an upload from database."""
+        parts = self.dao.get_upload_parts(upload_id)
+        return [
+            {
+                "id": part.id,
+                "part_number": part.part_number,
+                "bytes": part.bytes,
+                "created_at": part.created_at,
+            }
+            for part in parts
+        ]
 
     def _validate_and_order_parts(
         self, part_ids: list[str], all_parts: list[dict[str, Any]]
@@ -332,7 +369,7 @@ class UploadsService:
         self, file_id: str, total_bytes: int, upload_obj: dict[str, Any]
     ) -> dict[str, Any]:
         """Create file object."""
-        from backend.services.files_service import FILES_METADATA
+        from backend.services.files_service import FilesService
 
         file_obj = {
             "id": file_id,
@@ -344,7 +381,14 @@ class UploadsService:
             "status": "uploaded",
             "status_details": None,
         }
-        FILES_METADATA[file_id] = file_obj
+
+        # Store in files service database
+        from openai.types.file_object import FileObject
+
+        files_service = FilesService()
+        file_object = FileObject(**file_obj)
+        files_service.dao.create(file_object)
+
         return file_obj
 
     def _update_upload_status(
@@ -353,6 +397,9 @@ class UploadsService:
         """Update upload status and add file reference."""
         upload_obj["status"] = "completed"
         upload_obj["file"] = file_obj
+
+        # Update in database
+        self.dao.update_upload_status(upload_obj["id"], "completed")
 
     def _cleanup_part_files(
         self, upload_id: str, all_parts: list[dict[str, Any]]
@@ -378,23 +425,34 @@ class UploadsService:
             Dictionary with cancelled upload object
         """
         try:
-            # Check if upload exists
-            upload_obj = UPLOADS_METADATA.get(upload_id)
-            if not upload_obj:
+            # Check if upload exists and get status
+            upload_table = self.dao.get_upload_by_id(upload_id)
+            if not upload_table:
                 raise HTTPException(status_code=404, detail="Upload not found")
 
             # Check if upload can be cancelled
-            if upload_obj["status"] not in ["created", "processing"]:
+            if upload_table.status not in ["created", "processing"]:
                 raise HTTPException(
                     status_code=400,
-                    detail=f"Cannot cancel upload with status: {upload_obj['status']}",
+                    detail=f"Cannot cancel upload with status: {upload_table.status}",
                 )
 
             # Update upload status
-            upload_obj["status"] = "cancelled"
+            self.dao.update_upload_status(upload_id, "cancelled")
+
+            upload_obj = {
+                "id": upload_table.id,
+                "object": upload_table.object,
+                "bytes": upload_table.bytes,
+                "purpose": upload_table.purpose,
+                "filename": upload_table.filename,
+                "created_at": upload_table.created_at,
+                "expires_at": upload_table.expires_at,
+                "status": "cancelled",
+            }
 
             # Clean up part files
-            all_parts = UPLOAD_PARTS.get(upload_id, [])
+            all_parts = self._get_upload_parts(upload_id)
             for part in all_parts:
                 part_path = os.path.join(
                     DATA_DIR, f"{upload_id}-part-{part['part_number']}"

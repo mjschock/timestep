@@ -2,31 +2,24 @@
 from fastapi import BackgroundTasks
 from openai.types.fine_tuning.fine_tuning_job import FineTuningJob
 
-from backend.logging_config import logger
-from backend.services.models_service import get_models_service
-from backend.utils.fine_tuning_utils import (
+from backend._shared.dao.fine_tuning_dao import FineTuningJobDAO
+from backend._shared.logging_config import logger
+from backend._shared.utils.fine_tuning_utils import (
     METHOD_TYPE_DPO,
     METHOD_TYPE_SUPERVISED,
-    fine_tuning_db,
 )
-from backend.utils.fine_tuning_utils import (
-    cancel_job as cancel_ft_job_utils,
-)
-from backend.utils.fine_tuning_utils import (
+from backend._shared.utils.fine_tuning_utils import (
     create_fine_tuning_job as create_ft_job_utils,
 )
-from backend.utils.fine_tuning_utils import (
-    run_fine_tuning_job as run_ft_job_utils,
-)
-
-# Use the global fine_tuning_db from fine_tuning_utils
-# FINE_TUNING_JOBS and RUNNING_JOBS are now handled by fine_tuning_db
+from backend.services.models_service import get_models_service
+from backend.workers.fine_tuning_worker import FineTuningWorker
 
 
 class FineTuningService:
     def __init__(self) -> None:
-        # Use the unified fine tuning database
-        self.db = fine_tuning_db
+        # Use the service-specific database
+        self.dao = FineTuningJobDAO()
+        self.worker = FineTuningWorker()
 
     async def create_fine_tuning_job(self, request, background_tasks: BackgroundTasks):
         """Create a fine-tuning job from a request object (API endpoint)"""
@@ -75,7 +68,7 @@ class FineTuningService:
         )
 
         # Get the created job from the database
-        job = self.db.get_job(job_id)
+        job = self.dao.get_by_id(job_id)
         if not job:
             raise RuntimeError(f"Failed to create job {job_id}")
 
@@ -90,7 +83,7 @@ class FineTuningService:
             job.seed = seed
 
         # Update the job in the database
-        self.db.update_job(job_id, job)
+        self.dao.update(job_id, job)
 
         # Add background task to run the fine-tuning
         if background_tasks:
@@ -109,7 +102,7 @@ class FineTuningService:
             logger.info(f"🚀 Starting background fine-tuning for job {job_id}")
 
             # Check job status before running
-            job = self.db.get_job(job_id)
+            job = self.dao.get_by_id(job_id)
             if job:
                 logger.info(
                     f"📊 Job {job_id} current status before training: {job.status}"
@@ -118,9 +111,9 @@ class FineTuningService:
                 logger.error(f"❌ Job {job_id} not found in database before training")
                 return
 
-            # Use the unified fine tuning runner
-            logger.info(f"🔄 Calling run_ft_job_utils for job {job_id}")
-            completed_job = run_ft_job_utils(job_id)
+            # Use the fine-tuning worker
+            logger.info(f"🔄 Calling worker.execute_job for job {job_id}")
+            completed_job = self.worker.execute_job(job_id)
 
             logger.info(
                 f"✅ Fine-tuning job {job_id} completed with status: {completed_job.status}"
@@ -196,8 +189,8 @@ class FineTuningService:
             limit = int(limit)
 
         # Get all jobs from the database
-        all_jobs = self.db.list_jobs()
-        jobs = [self._convert_job_to_dict(job) for job in all_jobs.values()]
+        all_jobs = self.dao.list_all()
+        jobs = [self._convert_job_to_dict(job) for job in all_jobs]
         jobs.sort(key=lambda x: x["created_at"], reverse=True)
 
         if after:
@@ -220,7 +213,7 @@ class FineTuningService:
 
     def retrieve_fine_tuning_job(self, job_id):
         """Retrieve a specific fine-tuning job"""
-        job = self.db.get_job(job_id)
+        job = self.dao.get_by_id(job_id)
         if not job:
             return None
 
@@ -233,7 +226,7 @@ class FineTuningService:
     def cancel_fine_tuning_job(self, job_id):
         """Cancel a fine-tuning job"""
         try:
-            cancelled_job = cancel_ft_job_utils(job_id)
+            cancelled_job = self.worker.cancel_job(job_id)
             return self._convert_job_to_dict(cancelled_job)
         except ValueError:
             return None
@@ -244,7 +237,7 @@ class FineTuningService:
         if isinstance(limit, str):
             limit = int(limit)
 
-        job = self.db.get_job(job_id)
+        job = self.dao.get_by_id(job_id)
         if not job:
             return None
 

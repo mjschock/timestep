@@ -5,6 +5,7 @@ from fastapi import FastAPI, Request, Response, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from backend._shared.logging_config import logger
 from backend.apis.audio_api import audio_router
 from backend.apis.batches_api import batches_router
 from backend.apis.chat_api import chat_router
@@ -21,7 +22,6 @@ from backend.apis.realtime_api import realtime_router
 from backend.apis.responses_api import responses_router
 from backend.apis.uploads_api import uploads_router
 from backend.apis.vector_stores_api import vector_stores_router
-from backend.logging_config import logger
 
 app: FastAPI = FastAPI()
 

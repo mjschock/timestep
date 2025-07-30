@@ -3,7 +3,7 @@ from typing import Any
 
 from fastapi import HTTPException, Request
 
-from backend.logging_config import logger
+from backend._shared.logging_config import logger
 
 
 class EmbeddingsService:

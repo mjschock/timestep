@@ -6,7 +6,7 @@ from typing import Never
 
 from fastapi import HTTPException
 
-from backend.logging_config import logger
+from backend._shared.logging_config import logger
 from backend.services.chat_service import ChatService
 
 
