@@ -250,7 +250,7 @@ EXAMPLE_CONVERSATIONS = [
     },
 ]
 
-# Fine-tuned model expected responses (updated based on actual fine-tuned model outputs) 
+# Fine-tuned model expected responses (updated based on actual fine-tuned model outputs)
 FINE_TUNED_EXAMPLE_CONVERSATIONS = [
     {
         "expected": {
@@ -1079,7 +1079,7 @@ class TestMultimodalMessageProcessor:
 
     @pytest.mark.parametrize("conversation_idx", range(len(EXAMPLE_CONVERSATIONS)))
     @pytest.mark.slow
-    def test_example_conversations_with_model_training(
+    def test_example_conversations_with_model_training(  # noqa: C901
         self, processor, conversation_idx
     ):
         """Test example conversations with actual model training using QLoRA (single SFT iteration, requires GPU)."""
@@ -1237,15 +1237,15 @@ class TestMultimodalMessageProcessor:
         model.eval()
 
         # Test inference with the fine-tuned model
-        print(f"\n🔍 TESTING INFERENCE WITH FINE-TUNED MODEL...")
-        
+        print("\n🔍 TESTING INFERENCE WITH FINE-TUNED MODEL...")
+
         # Create inference conversation (without last assistant message)
         inference_conversation = []
         for msg in conversation:
             if msg["role"] == "assistant":
                 break
             inference_conversation.append(msg)
-        
+
         if inference_conversation:
             last_user_message = inference_conversation[-1]
             inference_inputs, inference_messages, inference_prompt = (
@@ -1256,19 +1256,19 @@ class TestMultimodalMessageProcessor:
                     tools=tools,
                 )
             )
-            
+
             # Move inputs to device and ensure correct dtypes for the fine-tuned model
             inference_inputs = {
                 k: v.to(device=device) if hasattr(v, "to") else v
                 for k, v in inference_inputs.items()
             }
-            
+
             # Use model.dtype for pixel_values to match the fine-tuned model
             if "pixel_values" in inference_inputs:
                 inference_inputs["pixel_values"] = inference_inputs["pixel_values"].to(
                     dtype=model.dtype
                 )
-            
+
             # Run inference with fine-tuned model
             with torch.no_grad():
                 generated_ids = model.generate(
@@ -1278,22 +1278,28 @@ class TestMultimodalMessageProcessor:
                     temperature=0.0,
                     pad_token_id=processor.tokenizer.eos_token_id,
                 )
-            
+
             # Decode the response
             fine_tuned_response = processor.tokenizer.decode(
                 generated_ids[0][inference_inputs["input_ids"].shape[-1] :],
                 skip_special_tokens=True,
             )
-            
+
             print(f"  🤖 Fine-tuned model response: {fine_tuned_response}")
-            
+
             # Compare with fine-tuned expected response
-            fine_tuned_expected = FINE_TUNED_EXAMPLE_CONVERSATIONS[conversation_idx].get("expected", {})
+            fine_tuned_expected = FINE_TUNED_EXAMPLE_CONVERSATIONS[
+                conversation_idx
+            ].get("expected", {})
             fine_tuned_expected_response = fine_tuned_expected.get("response")
             if fine_tuned_expected_response:
-                print(f"  📋 Fine-tuned expected response: {fine_tuned_expected_response}")
-                print(f"  📊 Response matches fine-tuned expected: {fine_tuned_response == fine_tuned_expected_response}")
-                
+                print(
+                    f"  📋 Fine-tuned expected response: {fine_tuned_expected_response}"
+                )
+                print(
+                    f"  📊 Response matches fine-tuned expected: {fine_tuned_response == fine_tuned_expected_response}"
+                )
+
                 # Assert that fine-tuned response matches fine-tuned expected response
                 assert fine_tuned_response == fine_tuned_expected_response, (
                     f"Fine-tuned response mismatch: expected '{fine_tuned_expected_response}', got '{fine_tuned_response}'"
@@ -1301,7 +1307,7 @@ class TestMultimodalMessageProcessor:
                 print("  ✅ Fine-tuned response assertion passed!")
             else:
                 print("  📋 No fine-tuned expected response available for comparison")
-            
+
             print("  ✅ Fine-tuned model inference completed!")
         else:
             print("  ⚠️  No user messages found for inference testing")
