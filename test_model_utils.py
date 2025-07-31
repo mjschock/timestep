@@ -1,6 +1,7 @@
 # ruff: noqa: S101
 
 import os
+from datetime import datetime
 
 import pytest
 import torch
@@ -19,15 +20,6 @@ from model_utils import (
 
 
 class TestMultimodalMessageProcessor:
-    """
-    Test suite for multimodal message processing functionality.
-
-    Tests cover text-only and multimodal conversations, training example preparation,
-    inference processing, validation functions, and edge cases for robust functionality.
-    Includes comprehensive testing of tool call conversion, message building, and
-    training example validation.
-    """
-
     @pytest.fixture(scope="class")
     def processor(self):
         """Load the SmolVLM2 processor for testing."""
@@ -275,8 +267,9 @@ class TestMultimodalMessageProcessor:
             optim="paged_adamw_8bit",  # appropriate optimizer for QLoRA
             bf16=True,
             # output_dir=f"./test-training-{conversation_idx}",
-            output_dir=f"data/models/{MODEL_PATH.split('/')[-1]}-{conversation_idx}",
-            hub_model_id=f"{os.getenv('HF_USERNAME', os.getenv('USER'))}/{MODEL_PATH.split('/')[-1]}-{conversation_idx}",
+            # output_dir=f"data/models/{MODEL_PATH.split('/')[-1]}-{conversation_idx}",
+            output_dir=f"data/models/{os.getenv('HF_USERNAME', os.getenv('USER'))}/{MODEL_PATH.split('/')[-1]}-{conversation_idx}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
+            hub_model_id=f"{os.getenv('HF_USERNAME', os.getenv('USER'))}/{MODEL_PATH.split('/')[-1]}-{conversation_idx}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
             remove_unused_columns=False,
             report_to="tensorboard",
             label_names=["labels"],
@@ -313,6 +306,23 @@ class TestMultimodalMessageProcessor:
         model.train()
         train_result = trainer.train()
 
+        print("train_result:")
+        print(train_result)
+        # TrainOutput(
+        #     global_step=1,
+        #     training_loss=4.200301170349121,
+        #     metrics={
+        #         'train_runtime': 5.2081,
+        #         'train_samples_per_second': 0.192,
+        #         'train_steps_per_second': 0.192,
+        #         'total_flos': 374960904192.0,
+        #         'train_loss': 4.200301170349121,
+        #         'epoch': 1.0
+        #     }
+        # )
+
+        # raise ValueError("stop here")
+
         print("  Training completed!")
         print(f"  Final loss: {train_result.training_loss:.4f}")
         print(f"  Loss improvement: {initial_loss - train_result.training_loss:.4f}")
@@ -321,3 +331,31 @@ class TestMultimodalMessageProcessor:
         assert train_result.training_loss < initial_loss, (
             "Training should improve the model"
         )
+
+        # ### PREPARE INPUTS
+        # print("Preparing inputs...")
+
+        # model_inputs, inference_messages, inference_prompt = prepare_model_inputs(
+        #     messages=messages,
+        #     processor=processor,
+        #     tools=tools,
+        # )
+
+        # print("Testing inputs...")
+        # assert inference_messages == expected["messages"]
+        # assert inference_prompt == expected["prompt"]
+
+        # ### PROCESS INPUTS
+        # print("Processing inputs...")
+
+        # model_outputs = process_model_inputs(model_inputs, model, processor)
+
+        # ### PROCESS OUTPUTS
+        # print("Processing outputs...")
+
+        # response = process_model_outputs(model_inputs, model_outputs, processor)
+
+        # print("✅ Inference completed!")
+        # print(f"🤖 Model response: {response}")
+
+        # assert response == expected["response"]

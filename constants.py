@@ -241,6 +241,43 @@ EXAMPLE_CONVERSATIONS = [
         ],
         "tools": None,
     },
+    {
+        "expected": {
+            "messages": [
+                {
+                    "role": "system",
+                    "content": [
+                        {"type": "text", "text": "You are a helpful assistant."},
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "video",
+                            "url": "https://huggingface.co/datasets/hexuan21/VideoFeedback-videos-mp4/resolve/main/p/p000304.mp4",
+                        },
+                        {"type": "text", "text": "Describe this video in detail"},
+                    ],
+                },
+            ],
+            "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: <video>Describe this video in detail<end_of_utterance>\nAssistant:",
+            "response": " The video depicts a scene at a podium where a woman in a white shirt is speaking into a microphone. The podium is adorned with a yellow sign that reads 'VOLUNTEER' and a logo that reads 'VOLUNTEER' in a stylized font. The woman is holding a microphone and appears to be speaking, gesturing with her hands as she speaks. She is standing in front of a wooden paneled wall, which adds to the ambiance of the setting.",
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "video",
+                        "url": "https://huggingface.co/datasets/hexuan21/VideoFeedback-videos-mp4/resolve/main/p/p000304.mp4",
+                    },
+                    {"type": "text", "text": "Describe this video in detail"},
+                ],
+            },
+        ],
+        "tools": None,
+    },
     # Weather conversation with tool call in content format
     {
         "expected": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]),
@@ -257,6 +294,46 @@ EXAMPLE_CONVERSATIONS = [
 
 # Fine-tuned model expected responses (updated based on actual fine-tuned model outputs)
 FINE_TUNED_EXAMPLE_CONVERSATIONS = [
+    # {
+    #     "expected": {
+    #         "messages": [
+    #             {
+    #                 "role": "system",
+    #                 "content": [
+    #                     {
+    #                         "type": "text",
+    #                         "text": "You are a helpful assistant.",
+    #                     }
+    #                 ],
+    #             },
+    #             {
+    #                 "role": "user",
+    #                 "content": [
+    #                     {"type": "text", "text": "What's in this image?"},
+    #                     {
+    #                         "type": "image",
+    #                         "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+    #                     },
+    #                 ],
+    #             },
+    #         ],
+    #         "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: What's in this image?<image><end_of_utterance>\nAssistant:",
+    #         "response": " The image shows a bee on a pink flower. The flower has a yellow center and a pinkish-purple petals. The bee is in the center of the flower, and it is surrounded by the petals. The background is blurred, but it appears to be a garden or a field with green foliage.",
+    #     },
+    #     "messages": [
+    #         {
+    #             "role": "user",
+    #             "content": [
+    #                 {"type": "text", "text": "What's in this image?"},
+    #                 {
+    #                     "type": "image",
+    #                     "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+    #                 },
+    #             ],
+    #         },
+    #     ],
+    #     "tools": None,
+    # },
     {
         "expected": {
             "messages": [
@@ -266,7 +343,19 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
                         {"type": "text", "text": "You are a helpful assistant."},
                     ],
                 },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "video",
+                            "url": "https://huggingface.co/datasets/hexuan21/VideoFeedback-videos-mp4/resolve/main/p/p000304.mp4",
+                        },
+                        {"type": "text", "text": "Describe this video in detail"},
+                    ],
+                },
             ],
+            "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: <video>Describe this video in detail<end_of_utterance>\nAssistant:",
+            "response": " I am not able to see any text in the image",
         },
         "messages": [
             {
@@ -281,49 +370,8 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
             },
         ],
         "tools": None,
-    }
-#     {
-#         "expected": {
-#             "messages": [
-#                 {
-#                     "role": "system",
-#                     "content": [
-#                         {
-#                             "type": "text",
-#                             "text": "You are a helpful assistant.",
-#                         }
-#                     ],
-#                 },
-#                 {
-#                     "role": "user",
-#                     "content": [
-#                         {"type": "text", "text": "What's in this image?"},
-#                         {
-#                             "type": "image",
-#                             "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
-#                         },
-#                     ],
-#                 },
-#             ],
-#             "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: What's in this image?<image><end_of_utterance>\nAssistant:",
-#             "response": " I am not able to see any text in the image",
-#         },
-#         "messages": [
-#             {
-#                 "role": "user",
-#                 "content": [
-#                     {"type": "text", "text": "What's in this image?"},
-#                     {
-#                         "type": "image",
-#                         "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
-#                     },
-#                 ],
-#             },
-#             {"role": "assistant", "content": "I can see a bee in the image."},
-#         ],
-#         "tools": None,
-#     },
-#     # Weather conversation with tool call in content format
+    },
+    # Weather conversation with tool call in content format
 #     {
 #         "expected": {
 #             "messages": copy.deepcopy(
@@ -351,7 +399,7 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
 #         ],
 #         "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
 #     },
-#     # Weather conversation with tool call in tool_calls array format (tests convert_tool_calls_to_content)
+    # Weather conversation with tool call in tool_calls array format (tests convert_tool_calls_to_content)
 #     {
 #         "expected": {
 #             "messages": copy.deepcopy(
