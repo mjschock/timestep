@@ -1,90 +1,23 @@
-"""
-Unified message processor for multimodal conversations.
-
-This module provides comprehensive functions to process both text-only and multimodal
-conversations for training and inference with vision-language models. Key features include:
-
-- Message normalization and content formatting
-- Tool call conversion between different formats (content vs tool_calls array)
-- Training example preparation with message-level weighting
-- Inference message preparation with multimodal support
-- Comprehensive validation and error checking
-- N-shot example generation and tool definition formatting
-
-Main Functions:
-    - build_messages: Build messages for any chat template
-    - prepare_training_example: Create weighted training examples
-    - prepare_inference_messages: Prepare inputs for model inference
-    - convert_tool_calls_to_content: Convert tool_calls to XML content format
-    - validate_training_example: Comprehensive training data validation
-
-Example Usage:
-    # Prepare training data
-    example, messages, prompt = prepare_training_example(
-        conversation=[
-            {"role": "user", "content": "Hello"},
-            {"role": "assistant", "content": "Hi there!"}
-        ],
-        processor=processor,
-        system_message="You are helpful"
-    )
-
-    # Prepare inference
-    inputs, messages, prompt = prepare_inference_messages(
-        user_input="What's the weather?",
-        processor=processor,
-        tools=weather_tools
-    )
-"""
 # ruff: noqa: S101
 
 import json
 from typing import Any
 
 import torch
-from transformers import AutoModelForImageTextToText, AutoProcessor, StoppingCriteria, BitsAndBytesConfig, Trainer, TrainingArguments
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, TaskType
+from peft import LoraConfig, TaskType, get_peft_model, prepare_model_for_kbit_training
+from transformers import (
+    AutoModelForImageTextToText,
+    AutoProcessor,
+    BitsAndBytesConfig,
+    StoppingCriteria,
+)
 
-# Constants
-DEFAULT_N_SHOT = 3
-DEFAULT_SYSTEM_MESSAGE = "You are a helpful assistant."
+from constants import DEFAULT_N_SHOT, DEFAULT_SYSTEM_MESSAGE, DEFAULT_TOOLS
 
-DEFAULT_TOOLS = [
-    {
-        "type": "function",
-        "name": "code_interpreter",
-        "description": "Execute Python code and return the result.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string",
-                    "description": "Python code to execute",
-                }
-            },
-            "required": ["code"],
-            "additionalProperties": False,
-        },
-        "strict": False,
-    },
-    {
-        "type": "function",
-        "name": "web_search",
-        "description": "Search the web for information.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "query": {
-                    "type": "string",
-                    "description": "Search query",
-                }
-            },
-            "required": ["query"],
-            "additionalProperties": False,
-        },
-        "strict": False,
-    },
-]
+# Global model and processor instances
+MODEL_PATH = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
+PROCESSOR = None
+MODEL = None
 
 
 def normalize_content(content: str | list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -329,56 +262,6 @@ def format_tool_definitions(tools: list[dict[str, Any]]) -> str:
 
     tool_content += "To use a tool, respond with:\n<tool_call>\n{ ... }\n</tool_call>"
     return tool_content.strip()
-
-
-def build_messages(
-    user_input: str | list[dict[str, Any]],
-    system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
-    developer_message: str | None = None,
-    tools: list[dict[str, Any]] | None = None,
-    conversation_history: list[dict[str, str | list[dict[str, Any]]]] | None = None,
-) -> list[dict[str, list[dict[str, Any]]]]:
-    """
-    Build messages in multimodal format that works with any chat template.
-
-    Args:
-        user_input: The current user message (string or content list)
-        system_message: Base system prompt
-        developer_message: Developer instructions (merged into system)
-        tools: Tool definitions (formatted and merged into system)
-        conversation_history: Previous messages with content as string or list
-
-    Returns:
-        List of messages with normalized content structure
-    """
-    messages = []
-
-    # Build combined system message
-    system_parts = _build_system_message_parts(system_message, developer_message, tools)
-
-    # Add combined system message if any parts exist
-    if system_parts:
-        messages.append(_create_system_message(system_parts))
-
-    # Add conversation history with normalized content
-    if conversation_history:
-        for msg in conversation_history:
-            # Convert tool_calls to content if present
-            msg = convert_tool_calls_to_content(msg)
-
-            normalized_msg = {
-                "role": msg["role"],
-                "content": normalize_content(msg["content"]),
-            }
-            # Preserve weight if present
-            if "weight" in msg:
-                normalized_msg["weight"] = msg["weight"]
-            messages.append(normalized_msg)
-
-    # Add current user input
-    messages.append({"role": "user", "content": normalize_content(user_input)})
-
-    return messages
 
 
 def prepare_training_example(
@@ -835,17 +718,6 @@ def assert_training_correctness(example: dict[str, Any], processor):
                 )
 
 
-# ============================================================================
-# EXAMPLE USAGE AND INTEGRATION
-# ============================================================================
-
-
-# Global model and processor instances
-MODEL_PATH = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
-PROCESSOR = None
-MODEL = None
-
-
 def get_processor():
     """
     Get or create the processor instance.
@@ -885,7 +757,7 @@ def get_model(with_peft: bool = False):
         Exception: If CUDA is not available or model loading fails
     """
     global MODEL
-    
+
     if with_peft:
         # For training with QLoRA, load fresh quantized model each time
         # Configuration matching the working script
@@ -899,7 +771,7 @@ def get_model(with_peft: bool = False):
             task_type=TaskType.CAUSAL_LM,
         )
         lora_config.inference_mode = False
-        
+
         bnb_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_use_double_quant=True,
@@ -913,21 +785,21 @@ def get_model(with_peft: bool = False):
             quantization_config=bnb_config,
             device_map="auto"
         )
-        
+
         # Apply LoRA following the working script sequence
         model.add_adapter(lora_config)
         model.enable_adapters()
         model = prepare_model_for_kbit_training(model)
         peft_model = get_peft_model(model, lora_config)
-        
+
         return peft_model
-    
+
     # For inference, use cached full precision model
     if MODEL is None:
         MODEL = AutoModelForImageTextToText.from_pretrained(
             MODEL_PATH, torch_dtype=torch.float16
         ).to("cuda")
-    
+
     return MODEL
 
 
