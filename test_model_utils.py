@@ -9,7 +9,9 @@ from constants import EXAMPLE_CONVERSATIONS
 from model_utils import (
     get_model,
     get_processor,
-    prepare_inference_messages,
+    prepare_model_inputs,
+    process_model_inputs,
+    process_model_outputs,
 )
 
 
@@ -41,67 +43,34 @@ class TestMultimodalMessageProcessor:
 
         conversation_dict = EXAMPLE_CONVERSATIONS[conversation_idx]
 
+        print(f"\n🤖 RUNNING INFERENCE FOR CONVERSATION {conversation_idx + 1}...")
+
         expected = conversation_dict["expected"]
         messages = conversation_dict["messages"]
         tools = conversation_dict["tools"]
 
-        print("messages:")
-        print(messages)
+        ### PREPARE INPUTS
+        print("Preparing inputs...")
 
-        # If any message has a system role, raise an error
-        for msg in messages:
-            if msg["role"] == "system":
-                raise ValueError("System messages are not allowed in messages")
-
-        ### PREPARE
-
-        inference_inputs, inference_messages, inference_prompt = (
-            prepare_inference_messages(
-                messages=messages,
-                processor=processor,
-                # system_message=None,
-                developer_message=None,
-                tools=tools,
-            )
+        model_inputs, inference_messages, inference_prompt = prepare_model_inputs(
+            messages=messages,
+            processor=processor,
+            tools=tools,
         )
 
+        print("Testing inputs...")
         assert inference_messages == expected["messages"]
         assert inference_prompt == expected["prompt"]
 
-        print(f"\n🤖 RUNNING INFERENCE FOR CONVERSATION {conversation_idx + 1}...")
+        ### PROCESS INPUTS
+        print("Processing inputs...")
 
-        ### PROCESS
+        model_outputs = process_model_inputs(model_inputs, model, processor)
 
-        # Move inputs to the same device as the model
-        device = next(model.parameters()).device
-        inference_inputs = {
-            k: v.to(device=device) if hasattr(v, "to") else v
-            for k, v in inference_inputs.items()
-        }
+        ### PROCESS OUTPUTS
+        print("Processing outputs...")
 
-        # Convert pixel_values to float16 if present (but keep input_ids as long)
-        if "pixel_values" in inference_inputs:
-            inference_inputs["pixel_values"] = inference_inputs["pixel_values"].to(
-                dtype=torch.float16
-            )
-
-        # Run actual inference (exact from original)
-        with torch.no_grad():
-            generated_ids = model.generate(
-                **inference_inputs,
-                max_new_tokens=100,
-                do_sample=False,
-                temperature=0.0,
-                pad_token_id=processor.tokenizer.eos_token_id,
-            )
-
-        ### RESPOND
-
-        # Decode the response
-        response = processor.tokenizer.decode(
-            generated_ids[0][inference_inputs["input_ids"].shape[-1] :],
-            skip_special_tokens=True,
-        )
+        response = process_model_outputs(model_inputs, model_outputs, processor)
 
         print("✅ Inference completed!")
         print(f"🤖 Model response: {response}")

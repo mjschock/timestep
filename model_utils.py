@@ -215,7 +215,7 @@ def _create_n_shot_example(n: int = 0) -> str:
         return ""
 
     examples = [
-        "User: How many r's are in the word 'strawberry'?<end_of_utterance>\nAssistant: <tool_call>\n{\"arguments\": {\"code\": \"\'strawberry'.count('r')\"}, \"name\": \"code_interpreter\"}\n</tool_call><end_of_utterance>\nTool: 3<end_of_utterance>\nAssistant: There are 3 r's in the word 'strawberry'.",
+        "User: How many r's are in the word 'strawberry'?<end_of_utterance>\nAssistant: <tool_call>\n{\"arguments\": {\"code\": \"'strawberry'.count('r')\"}, \"name\": \"code_interpreter\"}\n</tool_call><end_of_utterance>\nTool: 3<end_of_utterance>\nAssistant: There are 3 r's in the word 'strawberry'.",
         "User: What are the Three Laws of Robotics?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\nAssistant: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.",
         "User: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>\nAssistant: 42",
     ]
@@ -264,72 +264,158 @@ def format_tool_definitions(tools: list[dict[str, Any]]) -> str:
     return tool_content.strip()
 
 
-def prepare_training_example(
-    conversation: list[dict[str, str | list[dict[str, Any]] | float]],
+def prepare_model_inputs(
+    messages: list[dict[str, Any]],
     processor,
-    system_message: str | None = None,
+    system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
     developer_message: str | None = None,
     tools: list[dict[str, Any]] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """
-    Prepare a complete conversation for training with message-level weights.
-    Works with both tokenizers and processors (for multimodal models).
+    Prepare messages for inference with multimodal support.
 
     Args:
-        conversation: List of messages with optional weights
-        processor: Processor or tokenizer with chat_template
+        messages: List of messages with content and optional weight values.
+                 Each message should have 'role', 'content', and optionally 'weight' keys.
+        processor: Processor with chat_template
         system_message: System prompt
         developer_message: Developer instructions
         tools: Available tools
 
     Returns:
-        Tuple of (training_example, messages, prompt) where:
-        - training_example: Dictionary with training data containing at minimum:
-          * "input_ids": List of token IDs for the conversation
-          * "labels": List of label IDs (-100 for ignored, token IDs for training)
-          * "attention_mask": List of attention mask values
-          * "pixel_values": Image tensors (only present for vision models with images)
-        - messages: List of processed messages with normalized content and weights
-        - prompt: Formatted text prompt string from apply_chat_template
+        Tuple of (inputs, messages, prompt) where:
+        - inputs: Dictionary with inference data as PyTorch tensors:
+          * "input_ids": Token ID tensor for the conversation
+          * "attention_mask": Attention mask tensor
+          * "pixel_values": Image tensor (only present for vision models with images)
+        - messages: List of processed messages with normalized content structure
+        - prompt: Formatted text prompt string from apply_chat_template with generation prompt
     """
-    # Validate input
-    if not conversation:
-        raise ValueError("Conversation cannot be empty")
-
     # Build system message parts
     system_parts = _build_system_message_parts(system_message, developer_message, tools)
 
-    # Prepare full conversation with system message
-    messages = []
+    print("system_parts:")
+    print(system_parts)
+
+    # if system_parts and messages has system message raise a NotImplementedError
+    if system_parts and any(msg["role"] == "system" for msg in messages):
+        raise NotImplementedError("TODO: Merge system message into system_parts")
+
+    # Add combined system message if any parts exist
     if system_parts:
-        system_msg = _create_system_message(system_parts)
-        system_msg["weight"] = 0.0  # Never train on system message
-        messages.append(system_msg)
+        messages.insert(0, _create_system_message(system_parts))
 
-    # Add conversation messages with default weights and normalized content
-    for msg in conversation:
-        # Convert tool_calls to content if present
-        msg = convert_tool_calls_to_content(msg)
+    print("messages [before]:")
+    print(messages)
 
-        message = {"role": msg["role"], "content": normalize_content(msg["content"])}
-        # Default weights: assistant=1.0, others=0.0
-        if "weight" not in msg:
-            message["weight"] = 1.0 if message["role"] == "assistant" else 0.0
-        else:
-            message["weight"] = msg["weight"]
-        messages.append(message)
+    # Convert message to processor format with content array and tool_calls converted to content
+    def convert_message(msg):
+        content = msg.get("content")
+        role = msg["role"]
+        tool_calls = msg.get("tool_calls", [])
 
-    # Create labels with message-level weights
-    result = _create_weighted_labels_multimodal(messages, processor)
+        if tool_calls:
+            assert content is None, (
+                "Content cannot be provided when tool calls are present"
+            )
+            assert role == "assistant", (
+                "Tool calls are only allowed for assistant messages"
+            )
+
+            content = [
+                {
+                    "text": f"<tool_call>\n{json.dumps(tool_call)}\n</tool_call>",
+                    "type": "text",
+                }
+                for tool_call in tool_calls
+            ]
+
+        assert content is not None, "Content is required"
+
+        if isinstance(content, str):
+            content = [{"text": content, "type": "text"}]
+
+        assert isinstance(content, list), "Content must be a list"
+
+        for item in content:
+            assert "type" in item, "Each item in content must have a type"
+            # assert "text" in item or "image" in item or "video" in item, "Each item in content must have a text, image, or video"
+            assert (
+                "image" in item
+                or "path" in item
+                or "text" in item
+                or "url" in item
+                or "video" in item
+            ), "Each item in content must have an image, path, text, url, or video"
+
+        return {
+            "role": role,
+            "content": content,
+        }
+
+    messages = [convert_message(msg) for msg in messages]
+
+    print("messages [after]:")
+    print(messages)
+
+    # raise ValueError('stop here')
+
+    # Apply chat template
+    inputs = processor.apply_chat_template(
+        messages,
+        tokenize=True,
+        add_generation_prompt=True,
+        return_tensors="pt",
+        return_dict=True,
+    )
 
     # Generate formatted prompt text
     prompt = processor.apply_chat_template(
-        _prepare_messages_for_tokenizer(messages),
-        add_generation_prompt=False,
+        messages,
+        add_generation_prompt=True,
         tokenize=False,
     )
 
-    return result, messages, prompt
+    return inputs, messages, prompt
+
+
+def process_model_inputs(inputs, model, processor, train=False):
+    if train:
+        raise NotImplementedError("TODO: Implement training for process_model_inputs")
+
+    # Move inputs to the same device as the model
+    device = next(model.parameters()).device
+
+    inputs = {
+        k: v.to(device=device) if hasattr(v, "to") else v for k, v in inputs.items()
+    }
+
+    # Convert pixel_values to float16 if present (but keep input_ids as long)
+    if "pixel_values" in inputs:
+        inputs["pixel_values"] = inputs["pixel_values"].to(dtype=torch.float16)
+
+    with torch.no_grad():
+        model_outputs = model.generate(
+            **inputs,
+            max_new_tokens=100,
+            do_sample=False,
+            temperature=0.0,
+            pad_token_id=processor.tokenizer.eos_token_id,
+        )
+
+    return model_outputs
+
+
+def process_model_outputs(model_inputs, model_outputs, processor, train=False):
+    if train:
+        raise NotImplementedError("TODO: Implement training for process_model_outputs")
+
+    response = processor.tokenizer.decode(
+        model_outputs[0][model_inputs["input_ids"].shape[-1] :],
+        skip_special_tokens=True,
+    )
+
+    return response
 
 
 def _create_weighted_labels_multimodal(
@@ -427,103 +513,55 @@ def _create_weighted_labels_multimodal(
     return result
 
 
-def prepare_inference_messages(
-    messages: list[dict[str, Any]],
+def blah(
+    conversation: list[dict[str, str | list[dict[str, Any]] | float]],
     processor,
-    system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
+    system_message: str | None = None,
     developer_message: str | None = None,
     tools: list[dict[str, Any]] | None = None,
+    train: bool = False,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    """
-    Prepare messages for inference with multimodal support.
+    if train:
+        raise NotImplementedError("TODO: Implement training for prepare_model_inputs")
 
-    Args:
-        messages: List of messages with content and optional weight values.
-                 Each message should have 'role', 'content', and optionally 'weight' keys.
-        processor: Processor with chat_template
-        system_message: System prompt
-        developer_message: Developer instructions
-        tools: Available tools
+    # Validate input
+    if not conversation:
+        raise ValueError("Conversation cannot be empty")
 
-    Returns:
-        Tuple of (inputs, messages, prompt) where:
-        - inputs: Dictionary with inference data as PyTorch tensors:
-          * "input_ids": Token ID tensor for the conversation
-          * "attention_mask": Attention mask tensor
-          * "pixel_values": Image tensor (only present for vision models with images)
-        - messages: List of processed messages with normalized content structure
-        - prompt: Formatted text prompt string from apply_chat_template with generation prompt
-    """
     # Build system message parts
     system_parts = _build_system_message_parts(system_message, developer_message, tools)
 
-    print('system_parts:')
-    print(system_parts)
-
-    # if system_parts and messages has system message raise a NotImplementedError
-    if system_parts and any(msg["role"] == "system" for msg in messages):
-        raise NotImplementedError("TODO: Merge system message into system_parts")
-
-    # Add combined system message if any parts exist
+    # Prepare full conversation with system message
+    messages = []
     if system_parts:
-        messages.insert(0, _create_system_message(system_parts))
+        system_msg = _create_system_message(system_parts)
+        system_msg["weight"] = 0.0  # Never train on system message
+        messages.append(system_msg)
 
-    print('messages [before]:')
-    print(messages)
+    # Add conversation messages with default weights and normalized content
+    for msg in conversation:
+        # Convert tool_calls to content if present
+        msg = convert_tool_calls_to_content(msg)
 
-    # Convert message to processor format with content array and tool_calls converted to content
-    def convert_message(msg):
-        content = msg.get("content")
-        role = msg["role"]
-        tool_calls = msg.get("tool_calls", [])
+        message = {"role": msg["role"], "content": normalize_content(msg["content"])}
+        # Default weights: assistant=1.0, others=0.0
+        if "weight" not in msg:
+            message["weight"] = 1.0 if message["role"] == "assistant" else 0.0
+        else:
+            message["weight"] = msg["weight"]
+        messages.append(message)
 
-        if tool_calls:
-            assert content is None, "Content cannot be provided when tool calls are present"
-            assert role == "assistant", "Tool calls are only allowed for assistant messages"
-
-            content = [{"text": f"<tool_call>\n{json.dumps(tool_call)}\n</tool_call>", "type": "text"} for tool_call in tool_calls]
-
-        assert content is not None, "Content is required"
-
-        if isinstance(content, str):
-            content = [{"text": content, "type": "text"}]
-
-        assert isinstance(content, list), "Content must be a list"
-
-        for item in content:
-            assert "type" in item, "Each item in content must have a type"
-            # assert "text" in item or "image" in item or "video" in item, "Each item in content must have a text, image, or video"
-            assert "image" in item or "path" in item or "text" in item or "url" in item or "video" in item, "Each item in content must have an image, path, text, url, or video"
-
-        return {
-            "role": role,
-            "content": content,
-        }
-
-    messages = [convert_message(msg) for msg in messages]
-
-    print('messages [after]:')
-    print(messages)
-
-    # raise ValueError('stop here')
-
-    # Apply chat template
-    inputs = processor.apply_chat_template(
-        messages,
-        tokenize=True,
-        add_generation_prompt=True,
-        return_tensors="pt",
-        return_dict=True,
-    )
+    # Create labels with message-level weights
+    result = _create_weighted_labels_multimodal(messages, processor)
 
     # Generate formatted prompt text
     prompt = processor.apply_chat_template(
-        messages,
-        add_generation_prompt=True,
+        _prepare_messages_for_tokenizer(messages),
+        add_generation_prompt=False,
         tokenize=False,
     )
 
-    return inputs, messages, prompt
+    return result, messages, prompt
 
 
 def _validate_basic_structure(
@@ -781,9 +819,7 @@ def get_model(with_peft: bool = False):
 
         # Load model with quantization - following the working script pattern
         model = AutoModelForImageTextToText.from_pretrained(
-            MODEL_PATH,
-            quantization_config=bnb_config,
-            device_map="auto"
+            MODEL_PATH, quantization_config=bnb_config, device_map="auto"
         )
 
         # Apply LoRA following the working script sequence
