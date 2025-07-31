@@ -294,46 +294,46 @@ EXAMPLE_CONVERSATIONS = [
 
 # Fine-tuned model expected responses (updated based on actual fine-tuned model outputs)
 FINE_TUNED_EXAMPLE_CONVERSATIONS = [
-    # {
-    #     "expected": {
-    #         "messages": [
-    #             {
-    #                 "role": "system",
-    #                 "content": [
-    #                     {
-    #                         "type": "text",
-    #                         "text": "You are a helpful assistant.",
-    #                     }
-    #                 ],
-    #             },
-    #             {
-    #                 "role": "user",
-    #                 "content": [
-    #                     {"type": "text", "text": "What's in this image?"},
-    #                     {
-    #                         "type": "image",
-    #                         "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
-    #                     },
-    #                 ],
-    #             },
-    #         ],
-    #         "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: What's in this image?<image><end_of_utterance>\nAssistant:",
-    #         "response": " The image shows a bee on a pink flower. The flower has a yellow center and a pinkish-purple petals. The bee is in the center of the flower, and it is surrounded by the petals. The background is blurred, but it appears to be a garden or a field with green foliage.",
-    #     },
-    #     "messages": [
-    #         {
-    #             "role": "user",
-    #             "content": [
-    #                 {"type": "text", "text": "What's in this image?"},
-    #                 {
-    #                     "type": "image",
-    #                     "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
-    #                 },
-    #             ],
-    #         },
-    #     ],
-    #     "tools": None,
-    # },
+    {
+        "expected": {
+            "messages": [
+                {
+                    "role": "system",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "You are a helpful assistant.",
+                        }
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "What's in this image?"},
+                        {
+                            "type": "image",
+                            "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+                        },
+                    ],
+                },
+            ],
+            "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: What's in this image?<image><end_of_utterance>\nAssistant:",
+            "response": " The image shows a bee on a pink flower. The flower has a yellow center and a pinkish-purple petals. The bee is in the center of the flower, and it is surrounded by the petals. The background is blurred, but it appears to be a garden or a field with green foliage.",
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "What's in this image?"},
+                    {
+                        "type": "image",
+                        "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+                    },
+                ],
+            },
+        ],
+        "tools": None,
+    },
     {
         "expected": {
             "messages": [
@@ -371,58 +371,63 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
         ],
         "tools": None,
     },
-    # Weather conversation with tool call in content format
-#     {
-#         "expected": {
-#             "messages": copy.deepcopy(
-#                 BASE_WEATHER_CONVERSATION["expected"]["messages"]
-#             ),
-#             "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
-#             "response": """ <tool_call>
-# {'arguments': {'query': 'What is the weather like in Oakland today?'}
-# {'name': 'weather_weather'}
-# </tool_call>""",
-#         },
-#         "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
-#         + [
-#             {
-#                 "role": "assistant",
-#                 "content": [
-#                     {
-#                         "type": "text",
-#                         "text": """<tool_call>
-# {'arguments': {'location': 'Oakland, CA'}}
-# </tool_call>""",
-#                     }
-#                 ],
-#             },
-#         ],
-#         "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
-#     },
-    # Weather conversation with tool call in tool_calls array format (tests convert_tool_calls_to_content)
-#     {
-#         "expected": {
-#             "messages": copy.deepcopy(
-#                 BASE_WEATHER_CONVERSATION["expected"]["messages"]
-#             ),
-#             "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
-#             "response": """ <tool_call>
-# {"arguments": {"query": 'What is the weather like in Oakland today?'}
-# "name": 'weather_weather'}
-# </tool_call>""",
-#         },
-#         "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
-#         + [
-#             {
-#                 "role": "assistant",
-#                 "tool_calls": [
-#                     {
-#                         "arguments": {"location": "Oakland, CA"},
-#                         "name": "get_weather",
-#                     }
-#                 ],
-#             },
-#         ],
-#         "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
-#     },
+    # Note: Weather conversation examples are commented out due to memory constraints.
+    # The BASE_WEATHER_CONVERSATION includes very long system messages with tool definitions
+    # and n-shot examples that exceed GPU memory limits during training (requires ~12GB).
+    # These would work with larger GPUs or modified system message configurations.
+    
+    # # Weather conversation with tool call in content format
+    # {
+    #     "expected": {
+    #         "messages": copy.deepcopy(
+    #             BASE_WEATHER_CONVERSATION["expected"]["messages"]
+    #         ),
+    #         "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
+    #         "response": """ <tool_call>
+    # {'arguments': {'query': 'What is the weather like in Oakland today?'}
+    # {'name': 'weather_weather'}
+    # </tool_call>""",
+    #     },
+    #     "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
+    #     + [
+    #         {
+    #             "role": "assistant",
+    #             "content": [
+    #                 {
+    #                     "type": "text",
+    #                     "text": """<tool_call>
+    # {'arguments': {'location': 'Oakland, CA'}}
+    # </tool_call>""",
+    #                 }
+    #             ],
+    #         },
+    #     ],
+    #     "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
+    # },
+    # # Weather conversation with tool call in tool_calls array format (tests convert_tool_calls_to_content)
+    # {
+    #     "expected": {
+    #         "messages": copy.deepcopy(
+    #             BASE_WEATHER_CONVERSATION["expected"]["messages"]
+    #         ),
+    #         "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
+    #         "response": """ <tool_call>
+    # {"arguments": {"query": 'What is the weather like in Oakland today?'}
+    # "name": 'weather_weather'}
+    # </tool_call>""",
+    #     },
+    #     "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
+    #     + [
+    #         {
+    #             "role": "assistant",
+    #             "tool_calls": [
+    #                 {
+    #                     "arguments": {"location": "Oakland, CA"},
+    #                     "name": "get_weather",
+    #                 }
+    #             ],
+    #         },
+    #     ],
+    #     "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
+    # },
 ]
