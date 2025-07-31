@@ -981,3 +981,162 @@ class TestMultimodalMessageProcessor:
                 f"Response mismatch: expected '{expected_response}', got '{response}'"
             )
             print("  ✅ Response assertion passed!")
+
+    @pytest.mark.parametrize("conversation_idx", range(len(EXAMPLE_CONVERSATIONS)))
+    @pytest.mark.slow
+    def test_example_conversations_with_model_training(
+        self, processor, conversation_idx
+    ):
+        """Test example conversations with actual model training using QLoRA (single SFT iteration, requires GPU)."""
+        try:
+            # Load model with QLoRA (4-bit quantized LoRA) for parameter-efficient training
+            model = get_model(with_peft=True)
+        except Exception as e:
+            pytest.skip(f"Model loading failed (GPU required): {e}")
+
+        conversation_dict = EXAMPLE_CONVERSATIONS[conversation_idx]
+        conversation = conversation_dict["messages"]
+        tools = conversation_dict.get("tools")
+
+        print(f"\n🎓 RUNNING QLORA TRAINING FOR CONVERSATION {conversation_idx + 1}...")
+
+        # Prepare training example
+        training_example, messages, training_prompt = prepare_training_example(
+            conversation=conversation,
+            processor=processor,
+            system_message="You are a helpful assistant.",
+            tools=tools,
+        )
+
+        # Move training data to device and ensure correct dtypes
+        device = next(model.parameters()).device
+
+        # Prepare inputs for training
+        input_ids = (
+            torch.tensor(training_example["input_ids"], dtype=torch.long)
+            .unsqueeze(0)
+            .to(device)
+        )
+        labels = (
+            torch.tensor(training_example["labels"], dtype=torch.long)
+            .unsqueeze(0)
+            .to(device)
+        )
+        attention_mask = (
+            torch.tensor(training_example["attention_mask"], dtype=torch.long)
+            .unsqueeze(0)
+            .to(device)
+        )
+
+        training_inputs = {
+            "input_ids": input_ids,
+            "labels": labels,
+            "attention_mask": attention_mask,
+        }
+
+        # Add pixel_values if present (for multimodal examples)
+        if "pixel_values" in training_example:
+            pixel_values = training_example["pixel_values"]
+            if hasattr(pixel_values, "to"):
+                # Use model.dtype to match the vision model weights
+                pixel_values = pixel_values.to(device=device, dtype=model.dtype)
+            elif isinstance(pixel_values, list):
+                # Convert list to tensor if needed
+                pixel_values = torch.tensor(pixel_values, dtype=model.dtype).to(device)
+            training_inputs["pixel_values"] = pixel_values
+
+        print(f"  Training tokens: {len(training_example['input_ids'])}")
+        print(
+            f"  Training labels: {sum(1 for x in training_example['labels'] if x != -100)}"
+        )
+
+        # Print QLoRA model info
+        model.print_trainable_parameters()
+
+        # Debug model dtype
+        print(f"  Model dtype: {model.dtype}")
+        try:
+            vision_patch_dtype = (
+                model.model.vision_model.embeddings.patch_embedding.weight.dtype
+            )
+            print(f"  Vision model patch_embedding weight dtype: {vision_patch_dtype}")
+        except AttributeError:
+            try:
+                vision_patch_dtype = model.base_model.model.vision_model.embeddings.patch_embedding.weight.dtype
+                print(
+                    f"  Vision model patch_embedding weight dtype: {vision_patch_dtype}"
+                )
+            except AttributeError:
+                print("  Could not access vision model")
+
+        # Set model to training mode
+        model.train()
+
+        # Create optimizer for this test (AdamW works better with QLoRA)
+        import torch.optim as optim
+
+        optimizer = optim.AdamW(model.parameters(), lr=1e-4)
+
+        # Record initial loss for comparison
+        with torch.no_grad():
+            initial_outputs = model(**training_inputs)
+            initial_loss = initial_outputs.loss.item()
+
+        print(f"  Initial loss: {initial_loss:.4f}")
+
+        # Perform single training step
+        optimizer.zero_grad()
+        outputs = model(**training_inputs)
+        loss = outputs.loss
+
+        # Verify loss is computed
+        assert loss is not None, "Loss should not be None"
+        assert loss.requires_grad, "Loss should require gradients"
+
+        loss.backward()
+        optimizer.step()
+
+        final_loss = loss.item()
+        print(f"  Final loss: {final_loss:.4f}")
+        print(f"  Loss change: {final_loss - initial_loss:.4f}")
+
+        # Verify training step expectations
+        assert isinstance(final_loss, float), "Loss should be a float"
+        assert final_loss >= 0, "Loss should be non-negative"
+
+        # Check that gradients were computed (only for trainable parameters in QLoRA)
+        has_gradients = False
+        trainable_params = 0
+        total_params = 0
+
+        for _name, param in model.named_parameters():
+            total_params += param.numel()
+            if param.requires_grad:
+                trainable_params += param.numel()
+                if param.grad is not None and param.grad.abs().sum() > 0:
+                    has_gradients = True
+
+        print(
+            f"  Trainable parameters: {trainable_params:,} / {total_params:,} ({trainable_params / total_params:.2%})"
+        )
+        assert has_gradients, "Model should have gradients after backward pass"
+        assert trainable_params < total_params, (
+            "QLoRA should have fewer trainable parameters than total"
+        )
+
+        # Verify model outputs structure
+        assert hasattr(outputs, "loss"), "Outputs should have loss attribute"
+        assert hasattr(outputs, "logits"), "Outputs should have logits attribute"
+
+        logits_shape = outputs.logits.shape
+        expected_vocab_size = len(processor.tokenizer)
+
+        assert logits_shape[-1] == expected_vocab_size, (
+            f"Logits last dimension {logits_shape[-1]} should match vocab size {expected_vocab_size}"
+        )
+
+        print(f"  Logits shape: {logits_shape}")
+        print("  ✅ QLoRA training step completed successfully!")
+
+        # Set model back to eval mode
+        model.eval()

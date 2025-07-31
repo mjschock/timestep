@@ -42,7 +42,8 @@ import json
 from typing import Any
 
 import torch
-from transformers import AutoModelForImageTextToText, AutoProcessor, StoppingCriteria
+from transformers import AutoModelForImageTextToText, AutoProcessor, StoppingCriteria, BitsAndBytesConfig
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, TaskType
 
 # Constants
 DEFAULT_N_SHOT = 3
@@ -819,25 +820,79 @@ def get_processor():
     return PROCESSOR
 
 
-def get_model():
+def get_model(with_peft: bool = False):
     """
     Get or create the model instance.
 
+    Args:
+        with_peft: If True, return model with QLoRA (4-bit quantized LoRA) for training.
+                  If False, return the base model for inference.
+
     Returns:
-        AutoModelForImageTextToText instance loaded with float16 precision on CUDA
+        AutoModelForImageTextToText instance.
+        If with_peft=False: loaded with float16 precision on CUDA.
+        If with_peft=True: loaded with 4-bit quantization and LoRA adapters.
 
     Note:
-        Uses global MODEL variable for caching. Model is automatically moved to CUDA device.
+        Uses global MODEL variable for caching base model. PEFT model is created fresh each time.
+        Model is automatically moved to CUDA device.
         No parameters required - uses global MODEL_PATH constant.
 
     Raises:
         Exception: If CUDA is not available or model loading fails
     """
     global MODEL
+    
+    if with_peft:
+        # For training with QLoRA, load fresh quantized model each time
+        # Configuration matching the working script
+        lora_config = LoraConfig(
+            r=8,
+            lora_alpha=8,
+            lora_dropout=0.1,
+            target_modules=[
+                "down_proj",
+                "o_proj", 
+                "k_proj",
+                "q_proj",
+                "gate_proj",
+                "up_proj",
+                "v_proj",
+            ],
+            use_dora=False,  # False for QLoRA
+            init_lora_weights="gaussian",
+            task_type=TaskType.CAUSAL_LM,
+        )
+        lora_config.inference_mode = False
+        
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.bfloat16,
+        )
+
+        # Load model with quantization - following the working script pattern
+        model = AutoModelForImageTextToText.from_pretrained(
+            MODEL_PATH,
+            quantization_config=bnb_config,
+            device_map="auto"
+        )
+        
+        # Apply LoRA following the working script sequence
+        model.add_adapter(lora_config)
+        model.enable_adapters()
+        model = prepare_model_for_kbit_training(model)
+        peft_model = get_peft_model(model, lora_config)
+        
+        return peft_model
+    
+    # For inference, use cached full precision model
     if MODEL is None:
         MODEL = AutoModelForImageTextToText.from_pretrained(
             MODEL_PATH, torch_dtype=torch.float16
         ).to("cuda")
+    
     return MODEL
 
 
