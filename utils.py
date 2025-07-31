@@ -1,17 +1,89 @@
 """
 Unified message processor for multimodal conversations.
 
-This module provides functions to process both text-only and multimodal conversations
-for training and inference with vision-language models.
+This module provides comprehensive functions to process both text-only and multimodal
+conversations for training and inference with vision-language models. Key features include:
+
+- Message normalization and content formatting
+- Tool call conversion between different formats (content vs tool_calls array)
+- Training example preparation with message-level weighting
+- Inference message preparation with multimodal support
+- Comprehensive validation and error checking
+- N-shot example generation and tool definition formatting
+
+Main Functions:
+    - build_messages: Build messages for any chat template
+    - prepare_training_example: Create weighted training examples
+    - prepare_inference_messages: Prepare inputs for model inference
+    - convert_tool_calls_to_content: Convert tool_calls to XML content format
+    - validate_training_example: Comprehensive training data validation
+
+Example Usage:
+    # Prepare training data
+    example, messages, prompt = prepare_training_example(
+        conversation=[
+            {"role": "user", "content": "Hello"},
+            {"role": "assistant", "content": "Hi there!"}
+        ],
+        processor=processor,
+        system_message="You are helpful"
+    )
+
+    # Prepare inference
+    inputs, messages, prompt = prepare_inference_messages(
+        user_input="What's the weather?",
+        processor=processor,
+        tools=weather_tools
+    )
 """
 # ruff: noqa: S101
 
 import json
-from pprint import pprint
 from typing import Any
 
 import torch
 from transformers import AutoProcessor, StoppingCriteria
+
+# Constants
+DEFAULT_N_SHOT = 3
+DEFAULT_SYSTEM_MESSAGE = "You are a helpful assistant."
+
+DEFAULT_TOOLS = [
+    {
+        "type": "function",
+        "name": "code_interpreter",
+        "description": "Execute Python code and return the result.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "description": "Python code to execute",
+                }
+            },
+            "required": ["code"],
+            "additionalProperties": False,
+        },
+        "strict": False,
+    },
+    {
+        "type": "function",
+        "name": "web_search",
+        "description": "Search the web for information.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "Search query",
+                }
+            },
+            "required": ["query"],
+            "additionalProperties": False,
+        },
+        "strict": False,
+    },
+]
 
 
 def normalize_content(content: str | list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -53,7 +125,7 @@ def convert_tool_calls_to_content(message: dict[str, Any]) -> dict[str, Any]:
             tool_call_json = json.dumps(
                 tool_call, separators=(",", ":"), sort_keys=True
             )
-            tool_call_parts.append(f"<tool_call>{tool_call_json}</tool_call>")
+            tool_call_parts.append(f"<tool_call>\n{tool_call_json}\n</tool_call>")
 
         # Concatenate all tool calls
         tool_call_content = "".join(tool_call_parts)
@@ -70,17 +142,65 @@ def convert_tool_calls_to_content(message: dict[str, Any]) -> dict[str, Any]:
 
 
 def _tensor_to_list(tensor_or_list):
-    """Convert tensor to list if needed, otherwise return as-is."""
+    """
+    Convert tensor to list if needed, otherwise return as-is.
+
+    Args:
+        tensor_or_list: A tensor with .tolist() method or any other object
+
+    Returns:
+        List representation if input has .tolist() method, otherwise original input
+    """
     if hasattr(tensor_or_list, "tolist"):
         return tensor_or_list.tolist()
     return tensor_or_list
 
 
 def _flatten_if_nested(lst):
-    """Flatten list if it's a list of lists."""
+    """
+    Flatten list if it's a list of lists.
+
+    Args:
+        lst: Input list that may contain nested sublists
+
+    Returns:
+        Flattened list if input contains sublists, otherwise original list
+
+    Note:
+        Only flattens one level deep. Assumes all elements are lists if first element is a list.
+    """
     if lst and isinstance(lst[0], list):
         return [item for sublist in lst for item in sublist]
     return lst
+
+
+def _process_tensor_data(data):
+    """
+    Convert tensor to list and flatten if nested - common pattern.
+
+    Args:
+        data: Tensor or nested list structure to process
+
+    Returns:
+        Flattened list representation of the input data
+    """
+    return _flatten_if_nested(_tensor_to_list(data))
+
+
+def _create_system_message(system_parts: list[str]) -> dict[str, Any]:
+    """
+    Create a system message with proper content structure.
+
+    Args:
+        system_parts: List of string components to join into system message
+
+    Returns:
+        Dictionary with 'role': 'system' and 'content' as list of text content
+    """
+    return {
+        "role": "system",
+        "content": [{"type": "text", "text": "\n\n".join(system_parts)}],
+    }
 
 
 def _prepare_messages_for_tokenizer(
@@ -102,7 +222,7 @@ def _build_system_message_parts(
     system_message: str | None = None,
     developer_message: str | None = None,
     tools: list[dict[str, Any]] | None = None,
-    n_shot: int = 0,
+    n_shot: int = DEFAULT_N_SHOT,
 ) -> list[str]:
     """
     Build system message parts from components.
@@ -126,47 +246,10 @@ def _build_system_message_parts(
 
     # Only include n-shot examples if there are tools
     if tools:
-        # Add default tools if n_shot > 0 and not already present
-        default_tools = [
-            {
-                "type": "function",
-                "name": "code_interpreter",
-                "description": "Execute Python code and return the result.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "code": {
-                            "type": "string",
-                            "description": "Python code to execute",
-                        }
-                    },
-                    "required": ["code"],
-                    "additionalProperties": False,
-                },
-                "strict": False,
-            },
-            {
-                "type": "function",
-                "name": "web_search",
-                "description": "Search the web for information.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "query": {
-                            "type": "string",
-                            "description": "Search query",
-                        }
-                    },
-                    "required": ["query"],
-                    "additionalProperties": False,
-                },
-                "strict": False,
-            },
-        ]
         # Merge default tools if not present
         tool_names = {tool["name"] for tool in tools}
         merged_tools = tools.copy()
-        for default_tool in default_tools:
+        for default_tool in DEFAULT_TOOLS:
             if default_tool["name"] not in tool_names:
                 merged_tools.append(default_tool)
         # Sort tools by name
@@ -183,12 +266,21 @@ def _build_system_message_parts(
 
 
 def _create_n_shot_example(n: int = 0) -> str:
-    """Create a generic n-shot example for tool calling."""
+    """
+    Create a generic n-shot example for tool calling.
+
+    Args:
+        n: Number of examples to include (0 returns empty string)
+
+    Returns:
+        String containing n example conversations, or all available if n exceeds count.
+        Empty string if n is 0.
+    """
     if n == 0:
         return ""
 
     examples = [
-        "User: How many r's are in the word 'strawberry'?<end_of_utterance>\nAssistant: <tool_call>{\"arguments\": {\"code\": 'strawberry'.count('r'\")}, \"name\": \"code_interpreter\"}</tool_call><end_of_utterance>\nTool: 3<end_of_utterance>\nAssistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>",
+        "User: How many r's are in the word 'strawberry'?<end_of_utterance>\nAssistant: <tool_call>\n{\"arguments\": {\"code\": 'strawberry'.count('r'\")}, \"name\": \"code_interpreter\"}\n</tool_call><end_of_utterance>\nTool: 3<end_of_utterance>\nAssistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>",
         "User: What are the Three Laws of Robotics?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\nAssistant: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>",
         "User: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>\nAssistant: 42<end_of_utterance>",
     ]
@@ -199,7 +291,20 @@ def _create_n_shot_example(n: int = 0) -> str:
 
 
 def format_tool_definitions(tools: list[dict[str, Any]]) -> str:
-    """Format tools into a readable string for the system message."""
+    """
+    Format tools into a readable string for the system message.
+
+    Args:
+        tools: List of tool definition dictionaries with 'type', 'name', 'description',
+               and 'parameters' keys
+
+    Returns:
+        Formatted string describing available tools and usage instructions.
+        Empty string if no tools provided.
+
+    Note:
+        Tools are automatically sorted by name for consistent output.
+    """
     if not tools:
         return ""
 
@@ -247,18 +352,11 @@ def build_messages(
     messages = []
 
     # Build combined system message
-    system_parts = _build_system_message_parts(
-        system_message, developer_message, tools, n_shot=3
-    )
+    system_parts = _build_system_message_parts(system_message, developer_message, tools)
 
     # Add combined system message if any parts exist
     if system_parts:
-        messages.append(
-            {
-                "role": "system",
-                "content": [{"type": "text", "text": "\n\n".join(system_parts)}],
-            }
-        )
+        messages.append(_create_system_message(system_parts))
 
     # Add conversation history with normalized content
     if conversation_history:
@@ -301,30 +399,27 @@ def prepare_training_example(
 
     Returns:
         Tuple of (training_example, messages, prompt) where:
-        - training_example: {"input_ids": [...], "attention_mask": [...], "labels": [...],
-                           "pixel_values": [...]}  # pixel_values only for vision models
-        - messages: List of processed messages used to create the training example
-        - prompt: Formatted text prompt from apply_chat_template
+        - training_example: Dictionary with training data containing at minimum:
+          * "input_ids": List of token IDs for the conversation
+          * "labels": List of label IDs (-100 for ignored, token IDs for training)
+          * "attention_mask": List of attention mask values
+          * "pixel_values": Image tensors (only present for vision models with images)
+        - messages: List of processed messages with normalized content and weights
+        - prompt: Formatted text prompt string from apply_chat_template
     """
     # Validate input
     if not conversation:
         raise ValueError("Conversation cannot be empty")
 
     # Build system message parts
-    system_parts = _build_system_message_parts(
-        system_message, developer_message, tools, n_shot=3
-    )
+    system_parts = _build_system_message_parts(system_message, developer_message, tools)
 
     # Prepare full conversation with system message
     messages = []
     if system_parts:
-        messages.append(
-            {
-                "role": "system",
-                "content": [{"type": "text", "text": "\n\n".join(system_parts)}],
-                "weight": 0.0,  # Never train on system message
-            }
-        )
+        system_msg = _create_system_message(system_parts)
+        system_msg["weight"] = 0.0  # Never train on system message
+        messages.append(system_msg)
 
     # Add conversation messages with default weights and normalized content
     for msg in conversation:
@@ -357,6 +452,23 @@ def _create_weighted_labels_multimodal(
 ) -> dict[str, Any]:
     """
     Create input_ids and labels with message-level weighting for multimodal models.
+
+    Args:
+        messages: List of messages with content and optional weight values.
+                 Each message should have 'role', 'content', and optionally 'weight' keys.
+        processor: Processor or tokenizer with apply_chat_template method
+
+    Returns:
+        Dictionary containing:
+        - 'input_ids': List of token IDs for the full conversation
+        - 'labels': List of label IDs (-100 for ignored tokens, token IDs for training)
+        - 'attention_mask': List of attention mask values (1 for valid tokens)
+        - Additional modality fields (e.g., 'pixel_values' for vision models)
+
+    Note:
+        Processes messages incrementally to determine token boundaries for each message.
+        Tokens from messages with weight > 0 are included in training (labels = token IDs).
+        Tokens from messages with weight = 0 are ignored in training (labels = -100).
     """
     # Initialize result
     result = {"input_ids": [], "labels": [], "attention_mask": []}
@@ -427,11 +539,6 @@ def _create_weighted_labels_multimodal(
         if key not in result and key not in ["input_ids", "attention_mask"]:
             result[key] = value
 
-    # Convert lists to tensors if needed for consistency
-    result["input_ids"] = result["input_ids"]
-    result["labels"] = result["labels"]
-    result["attention_mask"] = result["attention_mask"]
-
     return result
 
 
@@ -454,24 +561,20 @@ def prepare_inference_messages(
 
     Returns:
         Tuple of (inputs, messages, prompt) where:
-        - inputs: {"input_ids": [...], "attention_mask": [...], "pixel_values": [...]}
-        - messages: List of processed messages used for inference
-        - prompt: Formatted text prompt from apply_chat_template
+        - inputs: Dictionary with inference data as PyTorch tensors:
+          * "input_ids": Token ID tensor for the conversation
+          * "attention_mask": Attention mask tensor
+          * "pixel_values": Image tensor (only present for vision models with images)
+        - messages: List of processed messages with normalized content structure
+        - prompt: Formatted text prompt string from apply_chat_template with generation prompt
     """
     # Build system message parts
-    system_parts = _build_system_message_parts(
-        system_message, developer_message, tools, n_shot=3
-    )
+    system_parts = _build_system_message_parts(system_message, developer_message, tools)
 
     # Prepare messages
     messages = []
     if system_parts:
-        messages.append(
-            {
-                "role": "system",
-                "content": [{"type": "text", "text": "\n\n".join(system_parts)}],
-            }
-        )
+        messages.append(_create_system_message(system_parts))
 
     # Add user message
     user_content = normalize_content(user_input)
@@ -499,21 +602,28 @@ def prepare_inference_messages(
 def _validate_basic_structure(
     example: dict[str, Any],
 ) -> tuple[list[str], list, list, list]:
-    """Validate basic structure of training example."""
+    """
+    Validate basic structure of training example.
+
+    Args:
+        example: Dictionary containing 'input_ids', 'labels', and optionally 'attention_mask'
+
+    Returns:
+        Tuple of (issues, input_ids, labels, attention_mask) where:
+        - issues: List of validation error messages
+        - input_ids: Processed input_ids as flat list
+        - labels: Processed labels as flat list
+        - attention_mask: Processed attention_mask as flat list
+    """
     issues = []
     input_ids = example["input_ids"]
     labels = example["labels"]
     attention_mask = example.get("attention_mask", [])
 
-    # Convert tensors to lists if needed
-    input_ids = _tensor_to_list(input_ids)
-    labels = _tensor_to_list(labels)
-    attention_mask = _tensor_to_list(attention_mask)
-
-    # Flatten if nested
-    input_ids = _flatten_if_nested(input_ids)
-    labels = _flatten_if_nested(labels)
-    attention_mask = _flatten_if_nested(attention_mask)
+    # Convert tensors to lists and flatten if needed
+    input_ids = _process_tensor_data(input_ids)
+    labels = _process_tensor_data(labels)
+    attention_mask = _process_tensor_data(attention_mask)
 
     # Basic length checks
     if len(input_ids) != len(labels):
@@ -530,7 +640,19 @@ def _validate_basic_structure(
 
 
 def _validate_token_alignment(input_ids: list, labels: list) -> list[str]:
-    """Validate token alignment between input_ids and labels."""
+    """
+    Validate token alignment between input_ids and labels.
+
+    Args:
+        input_ids: List of input token IDs
+        labels: List of label token IDs (may contain -100 for ignored tokens)
+
+    Returns:
+        List of validation issues. Empty list if no alignment problems found.
+
+    Note:
+        Checks that non-ignored labels (not -100) match corresponding input_ids.
+    """
     issues = []
     # Check for mismatched tokens (where label != input_id when label != -100)
     mismatched = []
@@ -551,7 +673,20 @@ def _validate_token_alignment(input_ids: list, labels: list) -> list[str]:
 
 
 def _validate_vocabulary(input_ids: list, processor) -> list[str]:
-    """Validate token IDs against vocabulary."""
+    """
+    Validate token IDs against vocabulary.
+
+    Args:
+        input_ids: List of token IDs to validate
+        processor: Processor or tokenizer with vocabulary size information
+
+    Returns:
+        List of validation issues. Empty list if all token IDs are valid.
+
+    Note:
+        Checks that all token IDs are within valid vocabulary range [0, vocab_size).
+        Skips nested structures and non-numeric tokens gracefully.
+    """
     issues = []
     # Check for valid token IDs
     if hasattr(processor, "tokenizer"):
@@ -644,9 +779,9 @@ def assert_training_correctness(example: dict[str, Any], processor):
     input_ids = example["input_ids"]
     labels = example["labels"]
 
-    # Convert tensors to lists if needed
-    input_ids = _tensor_to_list(input_ids)
-    labels = _tensor_to_list(labels)
+    # Convert tensors to lists and flatten if needed
+    input_ids = _process_tensor_data(input_ids)
+    labels = _process_tensor_data(labels)
 
     for i, (inp, lab) in enumerate(zip(input_ids, labels, strict=True)):
         if lab != -100:
@@ -668,7 +803,16 @@ MODEL = None
 
 
 def get_processor():
-    """Get or create the processor instance."""
+    """
+    Get or create the processor instance.
+
+    Returns:
+        AutoProcessor instance for MODEL_PATH, cached globally after first call
+
+    Note:
+        Uses global PROCESSOR variable for caching to avoid repeated loading.
+        No parameters required - uses global MODEL_PATH constant.
+    """
     global PROCESSOR
     if PROCESSOR is None:
         PROCESSOR = AutoProcessor.from_pretrained(MODEL_PATH)
@@ -676,7 +820,19 @@ def get_processor():
 
 
 def get_model():
-    """Get or create the model instance."""
+    """
+    Get or create the model instance.
+
+    Returns:
+        AutoModelForImageTextToText instance loaded with float16 precision on CUDA
+
+    Note:
+        Uses global MODEL variable for caching. Model is automatically moved to CUDA device.
+        No parameters required - uses global MODEL_PATH constant.
+
+    Raises:
+        Exception: If CUDA is not available or model loading fails
+    """
     global MODEL
     if MODEL is None:
         from transformers import AutoModelForImageTextToText
@@ -687,8 +843,19 @@ def get_model():
     return MODEL
 
 
-# Custom stopping criteria for </tool_call>
 class ToolCallStoppingCriteria(StoppingCriteria):
+    """
+    Custom stopping criteria for model generation that stops on tool call end tags.
+
+    This stopping criteria monitors generated text for the presence of '</tool_call>'
+    and stops generation when this end tag is encountered.
+
+    Args:
+        tokenizer: Tokenizer used for decoding generated tokens
+        start_length: Initial input length to skip when checking for stop condition
+        stop_str: String pattern to stop on (default: "</tool_call>")
+    """
+
     def __init__(self, tokenizer, start_length, stop_str="</tool_call>"):
         super().__init__()
         self.tokenizer = tokenizer
@@ -701,6 +868,174 @@ class ToolCallStoppingCriteria(StoppingCriteria):
             input_ids[0][self.start_length :], skip_special_tokens=True
         )
         return self.stop_str in decoded
+
+
+def _create_weather_conversation_base():
+    """
+    Create base weather conversation data that can be used with different tool call formats.
+
+    Returns:
+        Dictionary containing:
+        - 'user_message': User message asking about weather
+        - 'tools': Tool definitions including get_weather function
+        - 'expected_base': Expected message structure and prompts for testing
+    """
+    return {
+        "user_message": {
+            "role": "user",
+            "content": "What is the weather like in Oakland today?",
+        },
+        "tools": [
+            {
+                "type": "function",
+                "name": "get_weather",
+                "description": "Get current temperature for a given location.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "City and country e.g. Bogotá, Colombia",
+                        }
+                    },
+                    "required": ["location"],
+                    "additionalProperties": False,
+                },
+                "strict": False,
+            }
+        ],
+        "expected_base": {
+            "messages": [
+                {
+                    "role": "system",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "You are a helpful assistant.\n\nThe following tools are available:\n\nTool name: code_interpreter\nDescription: Execute Python code and return the result.\nParameters:\n- code (string): Python code to execute\n\nTool name: get_weather\nDescription: Get current temperature for a given location.\nParameters:\n- location (string): City and country e.g. Bogotá, Colombia\n\nTool name: web_search\nDescription: Search the web for information.\nParameters:\n- query (string): Search query\n\nTo use a tool, respond with:\n<tool_call>{ ... }</tool_call>\n\nUser: How many r's are in the word 'strawberry'?<end_of_utterance>\nAssistant: <tool_call>\n{\"arguments\": {\"code\": 'strawberry'.count('r'\")}, \"name\": \"code_interpreter\"}\n</tool_call><end_of_utterance>\nTool: 3<end_of_utterance>\nAssistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>\n\nUser: What are the Three Laws of Robotics?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\nAssistant: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\n\nUser: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>\nAssistant: 42<end_of_utterance>",
+                        }
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "What is the weather like in Oakland today?",
+                        }
+                    ],
+                },
+            ],
+            "prompt": """<|im_start|>System: You are a helpful assistant.
+
+The following tools are available:
+
+Tool name: code_interpreter
+Description: Execute Python code and return the result.
+Parameters:
+- code (string): Python code to execute
+
+Tool name: get_weather
+Description: Get current temperature for a given location.
+Parameters:
+- location (string): City and country e.g. Bogotá, Colombia
+
+Tool name: web_search
+Description: Search the web for information.
+Parameters:
+- query (string): Search query
+
+To use a tool, respond with:
+<tool_call>{ ... }</tool_call>
+
+User: How many r's are in the word 'strawberry'?<end_of_utterance>
+Assistant: <tool_call>
+{"arguments": {"code": 'strawberry'.count('r'\")}, "name": "code_interpreter"}
+</tool_call><end_of_utterance>
+Tool: 3<end_of_utterance>
+Assistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>
+
+User: What are the Three Laws of Robotics?<end_of_utterance>
+Assistant: <tool_call>
+{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}
+</tool_call><end_of_utterance>
+Tool: The Three Laws of Robotics are:
+1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
+2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.
+3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>
+Assistant: The Three Laws of Robotics are:
+1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
+2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.
+3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>
+
+User: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>
+Assistant: <tool_call>
+{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}
+</tool_call><end_of_utterance>
+Tool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>
+Assistant: 42<end_of_utterance><end_of_utterance>
+User: What is the weather like in Oakland today?<end_of_utterance>
+Assistant:""",
+            # "response": " <tool_call>\n{'arguments': {'city': 'Oakland', 'country': 'CA'}}\n</tool_call>",
+            "response": """ <tool_call>
+{'arguments': {'city': 'Oakland', 'country': 'CA'}}
+</tool_call>"""
+        },
+    }
+
+
+def create_weather_conversation_with_content():
+    """
+    Create weather conversation with tool call in content format.
+
+    Returns:
+        Dictionary with weather conversation where tool call is embedded as XML string
+        in the assistant message content field.
+    """
+    base = _create_weather_conversation_base()
+    return {
+        "expected": base["expected_base"],
+        "messages": [
+            base["user_message"],
+            {
+                "role": "assistant",
+                # "content": "<tool_call>{'arguments': {'location': 'Oakland, CA'}, 'name': 'get_weather'}</tool_call>",
+#                 "content": """<tool_call>
+# {'arguments': {'city': 'Oakland', 'country': 'CA'}}
+# </tool_call>""",
+                "content": """<tool_call>
+{'arguments': {'location': 'Oakland, CA'}}
+</tool_call>""",
+            },
+        ],
+        "tools": base["tools"],
+    }
+
+
+def create_weather_conversation_with_tool_calls():
+    """
+    Create weather conversation with tool call in tool_calls array format.
+
+    Returns:
+        Dictionary with weather conversation where tool call is in structured
+        tool_calls array format. This tests the convert_tool_calls_to_content function.
+    """
+    base = _create_weather_conversation_base()
+    return {
+        "expected": base["expected_base"],
+        "messages": [
+            base["user_message"],
+            {
+                "role": "assistant",
+                "tool_calls": [
+                    {
+                        "arguments": {"location": "Oakland, CA"},
+                        "name": "get_weather",
+                    }
+                ],
+            },
+        ],
+        "tools": base["tools"],
+    }
 
 
 # Example conversations for testing and demonstration
@@ -746,444 +1081,16 @@ EXAMPLE_CONVERSATIONS = [
         ],
         "tools": None,
     },
-    {
-        "expected": {
-            "messages": [
-                {
-                    "role": "system",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "You are a helpful assistant.\n\nThe following tools are available:\n\nTool name: code_interpreter\nDescription: Execute Python code and return the result.\nParameters:\n- code (string): Python code to execute\n\nTool name: get_weather\nDescription: Get current temperature for a given location.\nParameters:\n- location (string): City and country e.g. Bogotá, Colombia\n\nTool name: web_search\nDescription: Search the web for information.\nParameters:\n- query (string): Search query\n\nTo use a tool, respond with:\n<tool_call>{ ... }</tool_call>\n\nUser: How many r's are in the word 'strawberry'?<end_of_utterance>\nAssistant: <tool_call>{\"arguments\": {\"code\": 'strawberry'.count('r'\")}, \"name\": \"code_interpreter\"}</tool_call><end_of_utterance>\nTool: 3<end_of_utterance>\nAssistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>\n\nUser: What are the Three Laws of Robotics?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\nAssistant: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\n\nUser: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>\nAssistant: 42<end_of_utterance>",
-                        }
-                    ],
-                },
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "What is the weather like in Oakland today?",
-                        }
-                    ],
-                },
-            ],
-            "prompt": """<|im_start|>System: You are a helpful assistant.
-
-The following tools are available:
-
-Tool name: code_interpreter
-Description: Execute Python code and return the result.
-Parameters:
-- code (string): Python code to execute
-
-Tool name: get_weather
-Description: Get current temperature for a given location.
-Parameters:
-- location (string): City and country e.g. Bogotá, Colombia
-
-Tool name: web_search
-Description: Search the web for information.
-Parameters:
-- query (string): Search query
-
-To use a tool, respond with:
-<tool_call>{ ... }</tool_call>
-
-User: How many r's are in the word 'strawberry'?<end_of_utterance>
-Assistant: <tool_call>{"arguments": {"code": 'strawberry'.count('r'")}, "name": "code_interpreter"}</tool_call><end_of_utterance>
-Tool: 3<end_of_utterance>
-Assistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>
-
-User: What are the Three Laws of Robotics?<end_of_utterance>
-Assistant: <tool_call>
-{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}
-</tool_call><end_of_utterance>
-Tool: The Three Laws of Robotics are:
-1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
-2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.
-3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>
-Assistant: The Three Laws of Robotics are:
-1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
-2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.
-3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>
-
-User: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>
-Assistant: <tool_call>
-{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}
-</tool_call><end_of_utterance>
-Tool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>
-Assistant: 42<end_of_utterance><end_of_utterance>
-User: What is the weather like in Oakland today?<end_of_utterance>
-Assistant:""",
-            "response": " <tool_call>\n{'arguments': {'weather': 'Oakland is currently experiencing a mix of rainy and windy conditions, with temperatures ranging from 55°F to 60°F (13°C to 15°C) and winds ranging from 10 mph to 15 mph (16 km/h to 22 km/h)'}\n</tool_call>\n</tool_call>",
-        },
-        "messages": [
-            {"role": "user", "content": "What is the weather like in Oakland today?"},
-            {
-                "role": "assistant",
-                "content": "<tool_call>{'arguments': {'location': 'Oakland, CA'}, 'name': 'get_weather'}</tool_call>",
-            },
-        ],
-        "tools": [
-            {
-                "type": "function",
-                "name": "get_weather",
-                "description": "Get current temperature for a given location.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "location": {
-                            "type": "string",
-                            "description": "City and country e.g. Bogotá, Colombia",
-                        }
-                    },
-                    "required": ["location"],
-                    "additionalProperties": False,
-                },
-                "strict": False,
-            }
-        ],
-    },
-    {
-        "expected": {
-            "messages": [
-                {
-                    "role": "system",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "You are a helpful assistant.\n\nThe following tools are available:\n\nTool name: code_interpreter\nDescription: Execute Python code and return the result.\nParameters:\n- code (string): Python code to execute\n\nTool name: get_weather\nDescription: Get current temperature for a given location.\nParameters:\n- location (string): City and country e.g. Bogotá, Colombia\n\nTool name: web_search\nDescription: Search the web for information.\nParameters:\n- query (string): Search query\n\nTo use a tool, respond with:\n<tool_call>{ ... }</tool_call>\n\nUser: How many r's are in the word 'strawberry'?<end_of_utterance>\nAssistant: <tool_call>{\"arguments\": {\"code\": 'strawberry'.count('r'\")}, \"name\": \"code_interpreter\"}</tool_call><end_of_utterance>\nTool: 3<end_of_utterance>\nAssistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>\n\nUser: What are the Three Laws of Robotics?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\nAssistant: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\n\nUser: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>\nAssistant: 42<end_of_utterance>",
-                        }
-                    ],
-                },
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "What is the weather like in Oakland today?",
-                        }
-                    ],
-                },
-            ],
-            "prompt": """<|im_start|>System: You are a helpful assistant.
-
-The following tools are available:
-
-Tool name: code_interpreter
-Description: Execute Python code and return the result.
-Parameters:
-- code (string): Python code to execute
-
-Tool name: get_weather
-Description: Get current temperature for a given location.
-Parameters:
-- location (string): City and country e.g. Bogotá, Colombia
-
-Tool name: web_search
-Description: Search the web for information.
-Parameters:
-- query (string): Search query
-
-To use a tool, respond with:
-<tool_call>{ ... }</tool_call>
-
-User: How many r's are in the word 'strawberry'?<end_of_utterance>
-Assistant: <tool_call>{"arguments": {"code": 'strawberry'.count('r'")}, "name": "code_interpreter"}</tool_call><end_of_utterance>
-Tool: 3<end_of_utterance>
-Assistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>
-
-User: What are the Three Laws of Robotics?<end_of_utterance>
-Assistant: <tool_call>
-{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}
-</tool_call><end_of_utterance>
-Tool: The Three Laws of Robotics are:
-1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
-2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.
-3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>
-Assistant: The Three Laws of Robotics are:
-1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
-2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.
-3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>
-
-User: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>
-Assistant: <tool_call>
-{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}
-</tool_call><end_of_utterance>
-Tool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>
-Assistant: 42<end_of_utterance><end_of_utterance>
-User: What is the weather like in Oakland today?<end_of_utterance>
-Assistant:""",
-            "response": " <tool_call>\n{'arguments': {'weather': 'Oakland is currently experiencing a mix of rainy and windy conditions, with temperatures ranging from 55°F to 60°F (13°C to 15°C) and winds ranging from 10 mph to 15 mph (16 km/h to 22 km/h)'}\n</tool_call>\n</tool_call>",
-        },
-        "messages": [
-            {"role": "user", "content": "What is the weather like in Oakland today?"},
-            {
-                "role": "assistant",
-                "tool_calls": [
-                    {
-                        "arguments": {"location": "Oakland, CA"},
-                        "name": "get_weather",
-                    }
-                ],
-            },
-        ],
-        "tools": [
-            {
-                "type": "function",
-                "name": "get_weather",
-                "description": "Get current temperature for a given location.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "location": {
-                            "type": "string",
-                            "description": "City and country e.g. Bogotá, Colombia",
-                        }
-                    },
-                    "required": ["location"],
-                    "additionalProperties": False,
-                },
-                "strict": False,
-            }
-        ],
-    },
+    # Weather conversation with tool call in content format
+    create_weather_conversation_with_content(),
+    # Weather conversation with tool call in tool_calls array format (tests convert_tool_calls_to_content)
+    create_weather_conversation_with_tool_calls(),
 ]
 
 
-def example_usage():  # noqa: C901
-    """Example of how to use the multimodal processor."""
-    try:
-        # Get processor and model instances
-        processor = get_processor()
-        model = get_model()
-
-        # Array of conversations - each conversation is a complete dialogue
-        conversations = EXAMPLE_CONVERSATIONS
-
-        # Iterate through conversations
-        for i, conversation_dict in enumerate(conversations):
-            print(f"\n{'=' * 60}")
-            print(f"PROCESSING CONVERSATION {i + 1}")
-            print(f"{'=' * 60}")
-
-            # Extract messages and tools from conversation dictionary
-            conversation = conversation_dict["messages"]
-            tools = conversation_dict.get("tools")
-
-            # Create training conversation (full conversation)
-            training_conversation = conversation.copy()
-
-            # Create inference conversation (without last assistant message)
-            inference_conversation = []
-            for msg in conversation:
-                if msg["role"] == "assistant":
-                    # Stop before the last assistant message for inference
-                    break
-                inference_conversation.append(msg)
-
-            print(
-                f"\n📊 Training conversation has {len(training_conversation)} messages"
-            )
-            print(
-                f"📊 Inference conversation has {len(inference_conversation)} messages"
-            )
-
-            # TRAINING PROCESSING
-            print("\n🎓 TRAINING PROCESSING")
-            print("─" * 40)
-
-            training_example, messages, training_prompt = prepare_training_example(
-                conversation=training_conversation,
-                processor=processor,
-                system_message="You are a helpful assistant.",
-                tools=tools,
-            )
-
-            print("✅ Training example prepared successfully!")
-            print(f"Total tokens: {len(training_example['input_ids'])}")
-            print(
-                f"Training tokens: {sum(1 for x in training_example['labels'] if x != -100)}"
-            )
-
-            # Print the messages used for training
-            print("\n📝 Messages used for training:")
-            pprint(messages)
-
-            # Print the formatted training prompt
-            print("\n📄 Training prompt:")
-            print(training_prompt)
-
-            # Validate the example
-            try:
-                analysis = validate_training_example(
-                    training_example, processor, messages
-                )
-                print("\n✅ Validation results:")
-                print(f"  Valid: {analysis['valid']}")
-                print(f"  Training ratio: {analysis['training_ratio']:.2%}")
-                print(f"  Total tokens: {analysis['total_tokens']}")
-                print(f"  Training tokens: {analysis['training_tokens']}")
-                print(f"  Ignored tokens: {analysis['ignored_tokens']}")
-                if analysis["issues"]:
-                    print(f"  Issues: {analysis['issues']}")
-            except Exception as e:
-                print(f"❌ Validation failed: {e}")
-                import traceback
-
-                traceback.print_exc()
-
-            # INFERENCE PROCESSING
-            print("\n🔮 INFERENCE PROCESSING")
-            print("─" * 40)
-
-            if inference_conversation:
-                # Use the last user message for inference
-                last_user_message = inference_conversation[-1]
-
-                inference_inputs, inference_messages, inference_prompt = (
-                    prepare_inference_messages(
-                        user_input=last_user_message["content"],
-                        processor=processor,
-                        system_message="You are a helpful assistant.",
-                        tools=tools,
-                    )
-                )
-
-                print("✅ Inference inputs prepared successfully!")
-                if hasattr(inference_inputs, "shape"):
-                    print(f"  Input shape: {inference_inputs.shape}")
-                elif (
-                    isinstance(inference_inputs, dict)
-                    and "input_ids" in inference_inputs
-                ):
-                    if hasattr(inference_inputs["input_ids"], "shape"):
-                        print(f"  Input shape: {inference_inputs['input_ids'].shape}")
-                    else:
-                        print(
-                            f"  Input shape: {len(inference_inputs['input_ids'])} tokens"
-                        )
-                else:
-                    print(f"  Input type: {type(inference_inputs)}")
-
-                print("\n📝 Messages used for inference:")
-                pprint(inference_messages)
-
-                # Print the formatted inference prompt
-                print("\n📄 Inference prompt:")
-                print(inference_prompt)
-
-                # Run actual inference
-                print("\n🤖 RUNNING INFERENCE...")
-                try:
-                    # Move inputs to the same device as the model
-                    device = next(model.parameters()).device
-                    inference_inputs = {
-                        k: v.to(device=device) if hasattr(v, "to") else v
-                        for k, v in inference_inputs.items()
-                    }
-                    # Convert pixel_values to float16 if present (but keep input_ids as long)
-                    if "pixel_values" in inference_inputs:
-                        inference_inputs["pixel_values"] = inference_inputs[
-                            "pixel_values"
-                        ].to(dtype=torch.float16)
-
-                    # Add stopping criteria for </tool_call>
-                    # start_length = inference_inputs["input_ids"].shape[-1]
-                    # stopping_criteria = StoppingCriteriaList([
-                    #     ToolCallStoppingCriteria(processor.tokenizer, start_length)
-                    # ])
-                    # TODO: This does not handle multiple tool calls in a single generation. We'll need to address that later.
-                    with torch.no_grad():
-                        generated_ids = model.generate(
-                            **inference_inputs,
-                            max_new_tokens=100,
-                            do_sample=False,
-                            temperature=0.0,
-                            pad_token_id=processor.tokenizer.eos_token_id,
-                            # stopping_criteria=stopping_criteria,
-                        )
-
-                    # Decode the response
-                    response = processor.tokenizer.decode(
-                        generated_ids[0][inference_inputs["input_ids"].shape[-1] :],
-                        skip_special_tokens=True,
-                    )
-
-                    print("✅ Inference completed!")
-                    print(f"🤖 Model response: {response}")
-
-                    # Extract expected values from conversation
-                    expected = conversation_dict.get("expected", {})
-                    expected_response = expected.get("response")
-                    expected_messages = expected.get("messages", [])
-                    expected_prompt = expected.get("prompt")
-
-                    # Make assertions if expected values are provided
-                    if expected_messages:
-                        print("\n🔍 ASSERTING MESSAGES:")
-                        print(f"  Expected messages: {len(expected_messages)}")
-                        print(f"  Actual messages:   {len(inference_messages)}")
-                        assert len(inference_messages) == len(expected_messages), (
-                            f"Message count mismatch: expected {len(expected_messages)}, got {len(inference_messages)}"
-                        )
-
-                        for i, (expected_msg, actual_msg) in enumerate(
-                            zip(expected_messages, inference_messages, strict=True)
-                        ):
-                            print(f"  Message {i + 1}:")
-                            print(f"    Expected: {expected_msg}")
-                            print(f"    Actual:   {actual_msg}")
-                            assert actual_msg["role"] == expected_msg["role"], (
-                                f"Role mismatch in message {i + 1}: expected '{expected_msg['role']}', got '{actual_msg['role']}'"
-                            )
-                            assert actual_msg["content"] == expected_msg["content"], (
-                                f"Content mismatch in message {i + 1}: expected '{expected_msg['content']}', got '{actual_msg['content']}'"
-                            )
-                            print(f"    ✅ Message {i + 1} assertion passed!")
-
-                        print("  ✅ All message assertions passed!")
-
-                    if expected_prompt:
-                        print("\n🔍 ASSERTING PROMPT:")
-                        print(f"  Expected: {expected_prompt}")
-                        print(f"  Actual:   {inference_prompt}")
-                        assert inference_prompt == expected_prompt, (
-                            f"Prompt mismatch: expected '{expected_prompt}', got '{inference_prompt}'"
-                        )
-                        print("  ✅ Prompt assertion passed!")
-
-                    if expected_response:
-                        print("\n🔍 ASSERTING RESPONSE:")
-                        print(f"  Expected: {expected_response}")
-                        print(f"  Actual:   {response}")
-                        assert response == expected_response, (
-                            f"Response mismatch: expected '{expected_response}', got '{response}'"
-                        )
-                        print("  ✅ Response assertion passed!")
-
-                except Exception as e:
-                    # print(f"❌ Inference failed: {e}")
-                    # import traceback
-
-                    # traceback.print_exc()
-                    raise e
-            else:
-                print("⚠️ No user messages found for inference")
-
-    except Exception as e:
-        # print(f"❌ Example failed: {e}")
-        # import traceback
-
-        # traceback.print_exc()
-        raise e
-
-
 if __name__ == "__main__":
-    # Run example
-    example_usage()
-
-    # To run tests, use: pytest -v unified_message_processor.py
-    print("\nTo run the full test suite:")
-    print("pytest -v -s unified_message_processor.py")
+    # To run tests, use: pytest -v test_utils.py
+    print("To run the full test suite:")
+    print("pytest -v -s test_utils.py")
+    print("To run with model inference (requires GPU):")
+    print("pytest -v -s test_utils.py -m slow")

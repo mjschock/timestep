@@ -1,10 +1,14 @@
+# ruff: noqa: S101
 import pytest
 import torch
 
-from model_utils import (
-    get_processor,
+from utils import (
+    EXAMPLE_CONVERSATIONS,
     assert_training_correctness,
     build_messages,
+    convert_tool_calls_to_content,
+    get_model,
+    get_processor,
     normalize_content,
     prepare_inference_messages,
     prepare_training_example,
@@ -13,6 +17,15 @@ from model_utils import (
 
 
 class TestMultimodalMessageProcessor:
+    """
+    Test suite for multimodal message processing functionality.
+
+    Tests cover text-only and multimodal conversations, training example preparation,
+    inference processing, validation functions, and edge cases for robust functionality.
+    Includes comprehensive testing of tool call conversion, message building, and
+    training example validation.
+    """
+
     @pytest.fixture(scope="class")
     def processor(self):
         """Load the SmolVLM2 processor for testing."""
@@ -83,6 +96,45 @@ class TestMultimodalMessageProcessor:
         # Invalid input
         with pytest.raises(ValueError):
             normalize_content(123)
+
+    def test_convert_tool_calls_to_content(self):
+        """Test conversion of tool_calls to content format."""
+        # Test message with tool_calls
+        message_with_tool_calls = {
+            "role": "assistant",
+            "tool_calls": [
+                {
+                    "arguments": {"location": "Oakland, CA"},
+                    "name": "get_weather",
+                }
+            ],
+        }
+
+        converted = convert_tool_calls_to_content(message_with_tool_calls)
+
+        # Should have content instead of tool_calls
+        assert "content" in converted
+        assert "tool_calls" not in converted
+        assert converted["role"] == "assistant"
+
+        # Content should contain the tool call wrapped in XML tags
+        content = converted["content"]
+        assert "<tool_call>" in content
+        assert "</tool_call>" in content
+        assert "get_weather" in content
+        assert "Oakland, CA" in content
+
+        # Test message without tool_calls (should pass through unchanged)
+        message_without_tool_calls = {"role": "user", "content": "Hello world"}
+
+        unchanged = convert_tool_calls_to_content(message_without_tool_calls)
+        assert unchanged == message_without_tool_calls
+
+        # Test message with empty tool_calls
+        message_with_empty_tool_calls = {"role": "assistant", "tool_calls": []}
+
+        unchanged_empty = convert_tool_calls_to_content(message_with_empty_tool_calls)
+        assert unchanged_empty == message_with_empty_tool_calls
 
     def test_build_messages_text_only(self):
         """Test message building with text-only content."""
@@ -286,3 +338,411 @@ class TestMultimodalMessageProcessor:
         assert training_tokens == 0, (
             "Should have no training tokens for user-only conversation"
         )
+
+    def test_helper_functions_edge_cases(self):
+        """Test edge cases in helper functions for full coverage."""
+        from utils import (
+            _create_n_shot_example,
+            _flatten_if_nested,
+            _tensor_to_list,
+            format_tool_definitions,
+        )
+
+        # Test _tensor_to_list with non-tensor input (should return as-is)
+        regular_list = [1, 2, 3]
+        assert _tensor_to_list(regular_list) == regular_list
+
+        # Test _flatten_if_nested with nested lists
+        nested_list = [[1, 2], [3, 4]]
+        flattened = _flatten_if_nested(nested_list)
+        assert flattened == [1, 2, 3, 4]
+
+        # Test _flatten_if_nested with regular list (should return as-is)
+        regular_list = [1, 2, 3]
+        assert _flatten_if_nested(regular_list) == regular_list
+
+        # Test _flatten_if_nested with empty list
+        assert _flatten_if_nested([]) == []
+
+        # Test _create_n_shot_example with n=0
+        assert _create_n_shot_example(0) == ""
+
+        # Test format_tool_definitions with empty tools
+        assert format_tool_definitions([]) == ""
+
+        # Test format_tool_definitions with tool that has enum parameters
+        tool_with_enum = [
+            {
+                "type": "function",
+                "name": "test_tool",
+                "description": "Test tool",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "choice": {
+                            "type": "string",
+                            "description": "A choice parameter",
+                            "enum": ["option1", "option2", "option3"],
+                        }
+                    },
+                },
+            }
+        ]
+        result = format_tool_definitions(tool_with_enum)
+        assert "One of: option1, option2, option3" in result
+
+    def test_validation_error_cases(self, processor):
+        """Test validation functions with error cases for full coverage."""
+        from utils import (
+            _validate_token_alignment,
+            _validate_vocabulary,
+            validate_training_example,
+        )
+
+        # Test validation with mismatched lengths
+        bad_example = {
+            "input_ids": [1, 2, 3],
+            "labels": [1, 2],  # Different length
+            "attention_mask": [1, 1, 1],
+        }
+        analysis = validate_training_example(bad_example, processor)
+        assert not analysis["valid"]
+        assert any("Length mismatch" in issue for issue in analysis["issues"])
+
+        # Test validation with mismatched attention mask
+        bad_example2 = {
+            "input_ids": [1, 2, 3],
+            "labels": [1, 2, 3],
+            "attention_mask": [1, 1],  # Different length
+        }
+        analysis2 = validate_training_example(bad_example2, processor)
+        assert not analysis2["valid"]
+        assert any("Attention mask mismatch" in issue for issue in analysis2["issues"])
+
+        # Test token alignment with mismatched tokens
+        input_ids = [1, 2, 3]
+        labels = [1, 999, 3]  # Token 999 doesn't match input token 2
+        issues = _validate_token_alignment(input_ids, labels)
+        assert len(issues) > 0
+        assert any("Token mismatches" in issue for issue in issues)
+
+        # Test vocabulary validation with invalid token IDs
+        vocab_size = (
+            len(processor.tokenizer)
+            if hasattr(processor, "tokenizer")
+            else len(processor)
+        )
+        invalid_input_ids = [1, vocab_size + 1000, 3]  # Token ID beyond vocab
+        issues = _validate_vocabulary(invalid_input_ids, processor)
+        assert len(issues) > 0
+        assert any("Invalid token IDs" in issue for issue in issues)
+
+    def test_tool_call_stopping_criteria(self):
+        """Test ToolCallStoppingCriteria class for full coverage."""
+        from utils import ToolCallStoppingCriteria, get_processor
+
+        processor = get_processor()
+        tokenizer = (
+            processor.tokenizer if hasattr(processor, "tokenizer") else processor
+        )
+
+        # Create stopping criteria
+        stopping_criteria = ToolCallStoppingCriteria(tokenizer, start_length=10)
+
+        # Test with input that doesn't contain stop string
+        input_ids = torch.tensor([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]])
+        scores = None
+        result = stopping_criteria(input_ids, scores)
+        # Should not stop since no </tool_call> in decoded text
+        assert isinstance(result, bool)
+
+        # Test with input that contains stop string (if we can construct it)
+        # This is harder to test directly since we need specific token IDs
+        # that decode to "</tool_call>", but at least we've covered the class initialization
+
+    def test_build_system_message_parts_edge_cases(self):
+        """Test _build_system_message_parts with various configurations."""
+        from utils import _build_system_message_parts
+
+        # Test with no tools and n_shot > 0 (should not add n-shot examples)
+        parts = _build_system_message_parts(
+            system_message="Test system",
+            developer_message="Test dev",
+            tools=None,
+            n_shot=3,
+        )
+        # Should have system and developer message but no n-shot examples
+        assert len(parts) == 2
+        assert "Test system" in parts[0]
+        assert "[Developer Instructions]: Test dev" in parts[1]
+
+        # Test with empty system and developer messages
+        parts = _build_system_message_parts(
+            system_message=None, developer_message=None, tools=None, n_shot=0
+        )
+        assert len(parts) == 0
+
+    def test_additional_edge_cases_for_100_percent_coverage(self, processor):
+        """Test remaining edge cases to achieve 100% coverage."""
+        import torch
+
+        from utils import (
+            _tensor_to_list,
+            _validate_vocabulary,
+            build_messages,
+        )
+
+        # Test _tensor_to_list with actual tensor
+        tensor_input = torch.tensor([1, 2, 3])
+        result = _tensor_to_list(tensor_input)
+        assert result == [1, 2, 3]
+
+        # Test build_messages with conversation_history including weights
+        messages = build_messages(
+            user_input="Current question",
+            system_message="System prompt",
+            conversation_history=[
+                {"role": "user", "content": "Previous question"},
+                {"role": "assistant", "content": "Previous answer", "weight": 0.5},
+            ],
+        )
+        # Should have system + 2 history + current user = 4 messages
+        assert len(messages) == 4
+        # Check that weight is preserved
+        assert messages[2]["weight"] == 0.5
+
+        # Test _validate_vocabulary edge cases
+
+        # Create a mock processor without tokenizer attribute
+        class MockProcessor:
+            def __len__(self):
+                return 1000
+
+        mock_processor = MockProcessor()
+
+        # Test with nested token structures
+        input_ids_with_nested = [1, [2, 3], 4]  # Contains nested list
+        _validate_vocabulary(input_ids_with_nested, mock_processor)
+        # Should handle nested structures gracefully
+
+        # Test with non-numeric tokens
+        input_ids_with_strings = [1, "invalid", 3]  # Contains string
+        _validate_vocabulary(input_ids_with_strings, mock_processor)
+        # Should handle non-numeric tokens gracefully
+
+        # Test vocabulary validation with mock processor
+        # This tests the case where the validation uses a processor without tokenizer
+        _validate_vocabulary([1, 2, 3], mock_processor)
+
+    @pytest.mark.parametrize("conversation_idx", range(len(EXAMPLE_CONVERSATIONS)))
+    def test_example_conversations(self, processor, conversation_idx):  # noqa: C901
+        """Test processing of example conversations with training and inference (exact port from example_usage)."""
+        conversation_dict = EXAMPLE_CONVERSATIONS[conversation_idx]
+        conversation = conversation_dict["messages"]
+        tools = conversation_dict.get("tools")
+        expected = conversation_dict.get("expected", {})
+
+        print(f"\n{'=' * 60}")
+        print(f"PROCESSING CONVERSATION {conversation_idx + 1}")
+        print(f"{'=' * 60}")
+
+        # Create training conversation (full conversation)
+        training_conversation = conversation.copy()
+
+        # Create inference conversation (without last assistant message)
+        inference_conversation = []
+        for msg in conversation:
+            if msg["role"] == "assistant":
+                # Stop before the last assistant message for inference
+                break
+            inference_conversation.append(msg)
+
+        print(f"\n📊 Training conversation has {len(training_conversation)} messages")
+        print(f"📊 Inference conversation has {len(inference_conversation)} messages")
+
+        # TRAINING PROCESSING
+        print("\n🎓 TRAINING PROCESSING")
+        print("─" * 40)
+
+        training_example, messages, training_prompt = prepare_training_example(
+            conversation=training_conversation,
+            processor=processor,
+            system_message="You are a helpful assistant.",
+            tools=tools,
+        )
+
+        print("✅ Training example prepared successfully!")
+        print(f"Total tokens: {len(training_example['input_ids'])}")
+        print(
+            f"Training tokens: {sum(1 for x in training_example['labels'] if x != -100)}"
+        )
+
+        # Validate the example
+        analysis = validate_training_example(training_example, processor, messages)
+        print("\n✅ Validation results:")
+        print(f"  Valid: {analysis['valid']}")
+        print(f"  Training ratio: {analysis['training_ratio']:.2%}")
+        print(f"  Total tokens: {analysis['total_tokens']}")
+        print(f"  Training tokens: {analysis['training_tokens']}")
+        print(f"  Ignored tokens: {analysis['ignored_tokens']}")
+        if analysis["issues"]:
+            print(f"  Issues: {analysis['issues']}")
+
+        assert analysis["valid"], f"Validation failed: {analysis.get('issues', [])}"
+        assert analysis["total_tokens"] > 0, "Should have total tokens"
+
+        # INFERENCE PROCESSING
+        print("\n🔮 INFERENCE PROCESSING")
+        print("─" * 40)
+
+        if inference_conversation:
+            # Use the last user message for inference
+            last_user_message = inference_conversation[-1]
+
+            inference_inputs, inference_messages, inference_prompt = (
+                prepare_inference_messages(
+                    user_input=last_user_message["content"],
+                    processor=processor,
+                    system_message="You are a helpful assistant.",
+                    tools=tools,
+                )
+            )
+
+            print("✅ Inference inputs prepared successfully!")
+            if hasattr(inference_inputs, "shape"):
+                print(f"  Input shape: {inference_inputs.shape}")
+            elif isinstance(inference_inputs, dict) and "input_ids" in inference_inputs:
+                if hasattr(inference_inputs["input_ids"], "shape"):
+                    print(f"  Input shape: {inference_inputs['input_ids'].shape}")
+                else:
+                    print(f"  Input shape: {len(inference_inputs['input_ids'])} tokens")
+            else:
+                print(f"  Input type: {type(inference_inputs)}")
+
+            # Validate inference inputs
+            assert "input_ids" in inference_inputs, "Missing input_ids in inference"
+            assert isinstance(inference_inputs["input_ids"], list | torch.Tensor), (
+                "input_ids should be list or tensor"
+            )
+
+            # Extract expected values from conversation
+            expected_messages = expected.get("messages", [])
+            expected_prompt = expected.get("prompt")
+
+            # Make assertions if expected values are provided (exact from original)
+            if expected_messages:
+                print("\n🔍 ASSERTING MESSAGES:")
+                print(f"  Expected messages: {len(expected_messages)}")
+                print(f"  Actual messages:   {len(inference_messages)}")
+                assert len(inference_messages) == len(expected_messages), (
+                    f"Message count mismatch: expected {len(expected_messages)}, got {len(inference_messages)}"
+                )
+
+                for i, (expected_msg, actual_msg) in enumerate(
+                    zip(expected_messages, inference_messages, strict=True)
+                ):
+                    print(f"  Message {i + 1}:")
+                    print(f"    Expected: {expected_msg}")
+                    print(f"    Actual:   {actual_msg}")
+                    assert actual_msg["role"] == expected_msg["role"], (
+                        f"Role mismatch in message {i + 1}: expected '{expected_msg['role']}', got '{actual_msg['role']}'"
+                    )
+                    assert actual_msg["content"] == expected_msg["content"], (
+                        f"Content mismatch in message {i + 1}: expected '{expected_msg['content']}', got '{actual_msg['content']}'"
+                    )
+                    print(f"    ✅ Message {i + 1} assertion passed!")
+
+                print("  ✅ All message assertions passed!")
+
+            if expected_prompt:
+                print("\n🔍 ASSERTING PROMPT:")
+                print(f"  Expected: {expected_prompt}")
+                print(f"  Actual:   {inference_prompt}")
+                assert inference_prompt == expected_prompt, (
+                    f"Prompt mismatch: expected '{expected_prompt}', got '{inference_prompt}'"
+                )
+                print("  ✅ Prompt assertion passed!")
+
+        else:
+            print("⚠️ No user messages found for inference")
+
+    @pytest.mark.parametrize("conversation_idx", range(len(EXAMPLE_CONVERSATIONS)))
+    @pytest.mark.slow
+    def test_example_conversations_with_model_inference(
+        self, processor, conversation_idx
+    ):
+        """Test example conversations with actual model inference (requires GPU)."""
+        try:
+            model = get_model()
+        except Exception as e:
+            pytest.skip(f"Model loading failed (GPU required): {e}")
+
+        conversation_dict = EXAMPLE_CONVERSATIONS[conversation_idx]
+        conversation = conversation_dict["messages"]
+        tools = conversation_dict.get("tools")
+        expected = conversation_dict.get("expected", {})
+
+        # Create inference conversation (without last assistant message)
+        inference_conversation = []
+        for msg in conversation:
+            if msg["role"] == "assistant":
+                break
+            inference_conversation.append(msg)
+
+        if not inference_conversation:
+            pytest.skip("No user messages found for inference")
+
+        last_user_message = inference_conversation[-1]
+        inference_inputs, inference_messages, inference_prompt = (
+            prepare_inference_messages(
+                user_input=last_user_message["content"],
+                processor=processor,
+                system_message="You are a helpful assistant.",
+                tools=tools,
+            )
+        )
+
+        print(f"\n🤖 RUNNING INFERENCE FOR CONVERSATION {conversation_idx + 1}...")
+
+        # Move inputs to the same device as the model
+        device = next(model.parameters()).device
+        inference_inputs = {
+            k: v.to(device=device) if hasattr(v, "to") else v
+            for k, v in inference_inputs.items()
+        }
+
+        # Convert pixel_values to float16 if present (but keep input_ids as long)
+        if "pixel_values" in inference_inputs:
+            inference_inputs["pixel_values"] = inference_inputs["pixel_values"].to(
+                dtype=torch.float16
+            )
+
+        # Run actual inference (exact from original)
+        with torch.no_grad():
+            generated_ids = model.generate(
+                **inference_inputs,
+                max_new_tokens=100,
+                do_sample=False,
+                temperature=0.0,
+                pad_token_id=processor.tokenizer.eos_token_id,
+            )
+
+        # Decode the response
+        response = processor.tokenizer.decode(
+            generated_ids[0][inference_inputs["input_ids"].shape[-1] :],
+            skip_special_tokens=True,
+        )
+
+        print("✅ Inference completed!")
+        print(f"🤖 Model response: {response}")
+
+        # Test expected response if provided (exact from original)
+        expected_response = expected.get("response")
+        if expected_response:
+            print("\n🔍 ASSERTING RESPONSE:")
+            print(f"  Expected: {expected_response}")
+            print(f"  Actual:   {response}")
+            assert response == expected_response, (
+                f"Response mismatch: expected '{expected_response}', got '{response}'"
+            )
+            print("  ✅ Response assertion passed!")
