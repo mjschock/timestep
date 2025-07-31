@@ -8,6 +8,7 @@ dev = [
   "psutil>=5.9.0",
   "pylint>=3.3.7",
   "pytest-cov>=5.0.0",
+  "pytest-icdiff>=0.9",
   "pytest-mypy>=1.0.1",
   "pytest-ruff>=0.5",
   "pytest==8.3.5",
@@ -17,7 +18,7 @@ dev = [
   "types-psutil>=7.0.0.20250601",
   "types-pyyaml>=6.0.12.20250516",
   "types-requests>=2.32.4.20250611",
-  "types-tqdm>=4.67.0.20250516"
+  "types-tqdm>=4.67.0.20250516",
 ]
 
 [project]

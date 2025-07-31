@@ -42,7 +42,7 @@ import json
 from typing import Any
 
 import torch
-from transformers import AutoModelForImageTextToText, AutoProcessor, StoppingCriteria, BitsAndBytesConfig
+from transformers import AutoModelForImageTextToText, AutoProcessor, StoppingCriteria, BitsAndBytesConfig, Trainer, TrainingArguments
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, TaskType
 
 # Constants
@@ -220,7 +220,7 @@ def _prepare_messages_for_tokenizer(
 
 
 def _build_system_message_parts(
-    system_message: str | None = None,
+    system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
     developer_message: str | None = None,
     tools: list[dict[str, Any]] | None = None,
     n_shot: int = DEFAULT_N_SHOT,
@@ -263,6 +263,7 @@ def _build_system_message_parts(
                 n_shot_example = _create_n_shot_example(n_shot)
                 if n_shot_example:
                     system_parts.append(n_shot_example)
+
     return system_parts
 
 
@@ -281,14 +282,14 @@ def _create_n_shot_example(n: int = 0) -> str:
         return ""
 
     examples = [
-        "User: How many r's are in the word 'strawberry'?<end_of_utterance>\nAssistant: <tool_call>\n{\"arguments\": {\"code\": 'strawberry'.count('r'\")}, \"name\": \"code_interpreter\"}\n</tool_call><end_of_utterance>\nTool: 3<end_of_utterance>\nAssistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>",
-        "User: What are the Three Laws of Robotics?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\nAssistant: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>",
-        "User: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>\nAssistant: 42<end_of_utterance>",
+        "User: How many r's are in the word 'strawberry'?<end_of_utterance>\nAssistant: <tool_call>\n{\"arguments\": {\"code\": \"\'strawberry'.count('r')\"}, \"name\": \"code_interpreter\"}\n</tool_call><end_of_utterance>\nTool: 3<end_of_utterance>\nAssistant: There are 3 r's in the word 'strawberry'.",
+        "User: What are the Three Laws of Robotics?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\nAssistant: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.",
+        "User: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>\nAssistant: 42",
     ]
 
     # Return the first n examples, or all if n > number of examples
     selected_examples = examples[:n] if n <= len(examples) else examples
-    return "\n\n".join(selected_examples)
+    return "<end_of_utterance>\n\n".join(selected_examples)
 
 
 def format_tool_definitions(tools: list[dict[str, Any]]) -> str:
@@ -332,7 +333,7 @@ def format_tool_definitions(tools: list[dict[str, Any]]) -> str:
 
 def build_messages(
     user_input: str | list[dict[str, Any]],
-    system_message: str | None = None,
+    system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
     developer_message: str | None = None,
     tools: list[dict[str, Any]] | None = None,
     conversation_history: list[dict[str, str | list[dict[str, Any]]]] | None = None,
@@ -544,9 +545,9 @@ def _create_weighted_labels_multimodal(
 
 
 def prepare_inference_messages(
-    user_input: str | list[dict[str, Any]],
+    messages: list[dict[str, Any]],
     processor,
-    system_message: str | None = None,
+    system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
     developer_message: str | None = None,
     tools: list[dict[str, Any]] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -554,7 +555,8 @@ def prepare_inference_messages(
     Prepare messages for inference with multimodal support.
 
     Args:
-        user_input: Text string or multimodal content list
+        messages: List of messages with content and optional weight values.
+                 Each message should have 'role', 'content', and optionally 'weight' keys.
         processor: Processor with chat_template
         system_message: System prompt
         developer_message: Developer instructions
@@ -572,14 +574,55 @@ def prepare_inference_messages(
     # Build system message parts
     system_parts = _build_system_message_parts(system_message, developer_message, tools)
 
-    # Prepare messages
-    messages = []
-    if system_parts:
-        messages.append(_create_system_message(system_parts))
+    print('system_parts:')
+    print(system_parts)
 
-    # Add user message
-    user_content = normalize_content(user_input)
-    messages.append({"role": "user", "content": user_content})
+    # if system_parts and messages has system message raise a NotImplementedError
+    if system_parts and any(msg["role"] == "system" for msg in messages):
+        raise NotImplementedError("TODO: Merge system message into system_parts")
+
+    # Add combined system message if any parts exist
+    if system_parts:
+        messages.insert(0, _create_system_message(system_parts))
+
+    print('messages [before]:')
+    print(messages)
+
+    # Convert message to processor format with content array and tool_calls converted to content
+    def convert_message(msg):
+        content = msg.get("content")
+        role = msg["role"]
+        tool_calls = msg.get("tool_calls", [])
+
+        if tool_calls:
+            assert content is None, "Content cannot be provided when tool calls are present"
+            assert role == "assistant", "Tool calls are only allowed for assistant messages"
+
+            content = [{"text": f"<tool_call>\n{json.dumps(tool_call)}\n</tool_call>", "type": "text"} for tool_call in tool_calls]
+
+        assert content is not None, "Content is required"
+
+        if isinstance(content, str):
+            content = [{"text": content, "type": "text"}]
+
+        assert isinstance(content, list), "Content must be a list"
+
+        for item in content:
+            assert "type" in item, "Each item in content must have a type"
+            # assert "text" in item or "image" in item or "video" in item, "Each item in content must have a text, image, or video"
+            assert "image" in item or "path" in item or "text" in item or "url" in item or "video" in item, "Each item in content must have an image, path, text, url, or video"
+
+        return {
+            "role": role,
+            "content": content,
+        }
+
+    messages = [convert_message(msg) for msg in messages]
+
+    print('messages [after]:')
+    print(messages)
+
+    # raise ValueError('stop here')
 
     # Apply chat template
     inputs = processor.apply_chat_template(
@@ -850,15 +893,7 @@ def get_model(with_peft: bool = False):
             r=8,
             lora_alpha=8,
             lora_dropout=0.1,
-            target_modules=[
-                "down_proj",
-                "o_proj", 
-                "k_proj",
-                "q_proj",
-                "gate_proj",
-                "up_proj",
-                "v_proj",
-            ],
+            target_modules=r".*text_model\.layers\.\d+\.(self_attn\.(q_proj|k_proj|v_proj|o_proj)|mlp\.(gate_proj|up_proj|down_proj))",
             use_dora=False,  # False for QLoRA
             init_lora_weights="gaussian",
             task_type=TaskType.CAUSAL_LM,
