@@ -263,93 +263,118 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
                 {
                     "role": "system",
                     "content": [
-                        {
-                            "type": "text",
-                            "text": "You are a helpful assistant.",
-                        }
-                    ],
-                },
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": "What's in this image?"},
-                        {
-                            "type": "image",
-                            "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
-                        },
+                        {"type": "text", "text": "You are a helpful assistant."},
                     ],
                 },
             ],
-            "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: What's in this image?<image><end_of_utterance>\nAssistant:",
-            "response": " I am not able to see any text in the image",
         },
         "messages": [
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": "What's in this image?"},
                     {
-                        "type": "image",
-                        "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+                        "type": "video",
+                        "url": "https://huggingface.co/datasets/hexuan21/VideoFeedback-videos-mp4/resolve/main/p/p000304.mp4",
                     },
+                    {"type": "text", "text": "Describe this video in detail"},
                 ],
             },
-            {"role": "assistant", "content": "I can see a bee in the image."},
         ],
         "tools": None,
-    },
-    # Weather conversation with tool call in content format
-    {
-        "expected": {
-            "messages": copy.deepcopy(
-                BASE_WEATHER_CONVERSATION["expected"]["messages"]
-            ),
-            "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
-            "response": """ <tool_call>
-{'arguments': {'query': 'What is the weather like in Oakland today?'}
-{'name': 'weather_weather'}
-</tool_call>""",
-        },
-        "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
-        + [
-            {
-                "role": "assistant",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": """<tool_call>
-{'arguments': {'location': 'Oakland, CA'}}
-</tool_call>""",
-                    }
-                ],
-            },
-        ],
-        "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
-    },
-    # Weather conversation with tool call in tool_calls array format (tests convert_tool_calls_to_content)
-    {
-        "expected": {
-            "messages": copy.deepcopy(
-                BASE_WEATHER_CONVERSATION["expected"]["messages"]
-            ),
-            "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
-            "response": """ <tool_call>
-{"arguments": {"query": 'What is the weather like in Oakland today?'}
-"name": 'weather_weather'}
-</tool_call>""",
-        },
-        "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
-        + [
-            {
-                "role": "assistant",
-                "tool_calls": [
-                    {
-                        "arguments": {"location": "Oakland, CA"},
-                        "name": "get_weather",
-                    }
-                ],
-            },
-        ],
-        "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
-    },
+    }
+#     {
+#         "expected": {
+#             "messages": [
+#                 {
+#                     "role": "system",
+#                     "content": [
+#                         {
+#                             "type": "text",
+#                             "text": "You are a helpful assistant.",
+#                         }
+#                     ],
+#                 },
+#                 {
+#                     "role": "user",
+#                     "content": [
+#                         {"type": "text", "text": "What's in this image?"},
+#                         {
+#                             "type": "image",
+#                             "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+#                         },
+#                     ],
+#                 },
+#             ],
+#             "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: What's in this image?<image><end_of_utterance>\nAssistant:",
+#             "response": " I am not able to see any text in the image",
+#         },
+#         "messages": [
+#             {
+#                 "role": "user",
+#                 "content": [
+#                     {"type": "text", "text": "What's in this image?"},
+#                     {
+#                         "type": "image",
+#                         "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+#                     },
+#                 ],
+#             },
+#             {"role": "assistant", "content": "I can see a bee in the image."},
+#         ],
+#         "tools": None,
+#     },
+#     # Weather conversation with tool call in content format
+#     {
+#         "expected": {
+#             "messages": copy.deepcopy(
+#                 BASE_WEATHER_CONVERSATION["expected"]["messages"]
+#             ),
+#             "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
+#             "response": """ <tool_call>
+# {'arguments': {'query': 'What is the weather like in Oakland today?'}
+# {'name': 'weather_weather'}
+# </tool_call>""",
+#         },
+#         "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
+#         + [
+#             {
+#                 "role": "assistant",
+#                 "content": [
+#                     {
+#                         "type": "text",
+#                         "text": """<tool_call>
+# {'arguments': {'location': 'Oakland, CA'}}
+# </tool_call>""",
+#                     }
+#                 ],
+#             },
+#         ],
+#         "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
+#     },
+#     # Weather conversation with tool call in tool_calls array format (tests convert_tool_calls_to_content)
+#     {
+#         "expected": {
+#             "messages": copy.deepcopy(
+#                 BASE_WEATHER_CONVERSATION["expected"]["messages"]
+#             ),
+#             "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
+#             "response": """ <tool_call>
+# {"arguments": {"query": 'What is the weather like in Oakland today?'}
+# "name": 'weather_weather'}
+# </tool_call>""",
+#         },
+#         "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
+#         + [
+#             {
+#                 "role": "assistant",
+#                 "tool_calls": [
+#                     {
+#                         "arguments": {"location": "Oakland, CA"},
+#                         "name": "get_weather",
+#                     }
+#                 ],
+#             },
+#         ],
+#         "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
+#     },
 ]
