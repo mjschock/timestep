@@ -265,8 +265,8 @@ Assistant:""",
 }
 
 
-# Example conversations for testing and demonstration
-EXAMPLE_CONVERSATIONS = [
+# Base model inference conversations for testing and demonstration
+BASE_MODEL_INFERENCE_CONVERSATIONS = [
     {
         "expected": {
             "messages": [
@@ -358,8 +358,8 @@ EXAMPLE_CONVERSATIONS = [
     },
 ]
 
-# Fine-tuned model expected responses (updated based on actual fine-tuned model outputs)
-FINE_TUNED_EXAMPLE_CONVERSATIONS = [
+# Base model training conversations (used for fine-tuning)
+BASE_MODEL_TRAINING_CONVERSATIONS = [
     {
         "expected": {
             "messages": [
@@ -384,7 +384,7 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
                 },
             ],
             "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: What's in this image?<image><end_of_utterance>\nAssistant:",
-            "response": " The image shows a bee on a pink flower. The flower has a yellow center and a pinkish-purple petals. The bee is in the center of the flower, and it is surrounded by the petals. The background is blurred, but it appears to be a garden or a field with green foliage.",
+            "response": " Image of a flower with a bee on it",
         },
         "messages": [
             {
@@ -395,6 +395,15 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
                         "type": "image",
                         "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
                     },
+                ],
+            },
+            {
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "This image shows a close-up of a bumblebee on a pink cosmos flower. The bee is collecting nectar or pollen from the center of the flower. Surrounding the main flower are other cosmos flowers, some wilted, as well as green foliage and a few bright red flowers in the background. The focus is sharp on the bee and the flower it's on, with the background softly blurred to emphasize the subject.",
+                    }
                 ],
             },
         ],
@@ -421,7 +430,7 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
                 },
             ],
             "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: <video>Describe this video in detail<end_of_utterance>\nAssistant:",
-            "response": " I am not able to see any text in the image",
+            "response": " The video features a scene set in a dimly lit auditorium, where a person is standing at a podium, holding a microphone labeled \"VOLTRA.\" The podium is positioned in front of a microphone stand, with a microphone attached to it. The person is wearing a white shirt and gray pants, and the microphone is positioned in front of them. The background includes a wooden panel wall, a microphone stand, and a curtain behind them. The lighting is dim, with the focus",
         },
         "messages": [
             {
@@ -432,6 +441,15 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
                         "url": "https://huggingface.co/datasets/hexuan21/VideoFeedback-videos-mp4/resolve/main/p/p000304.mp4",
                     },
                     {"type": "text", "text": "Describe this video in detail"},
+                ],
+            },
+            {
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "A woman in a white shirt speaks at a podium with a \"VOLUNTEER\" sign, gesturing into a microphone against a wood-paneled backdrop.",
+                    }
                 ],
             },
         ],
@@ -487,6 +505,114 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
                 ],
             },
         ],
+        "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
+    },
+]
+
+
+# Fine-tuned model inference conversations (expected responses from trained models)
+FINE_TUNED_MODEL_INFERENCE_CONVERSATIONS = [
+    {
+        "expected": {
+            "messages": [
+                {
+                    "role": "system",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "You are a helpful assistant.",
+                        }
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "What's in this image?"},
+                        {
+                            "type": "image",
+                            "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+                        },
+                    ],
+                },
+            ],
+            "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: What's in this image?<image><end_of_utterance>\nAssistant:",
+            "response": " Image of a flower with a bee on it",
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "What's in this image?"},
+                    {
+                        "type": "image",
+                        "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
+                    },
+                ],
+            },
+        ],
+        "tools": None,
+    },
+    {
+        "expected": {
+            "messages": [
+                {
+                    "role": "system",
+                    "content": [
+                        {"type": "text", "text": "You are a helpful assistant."},
+                    ],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "video",
+                            "url": "https://huggingface.co/datasets/hexuan21/VideoFeedback-videos-mp4/resolve/main/p/p000304.mp4",
+                        },
+                        {"type": "text", "text": "Describe this video in detail"},
+                    ],
+                },
+            ],
+            "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: <video>Describe this video in detail<end_of_utterance>\nAssistant:",
+            "response": " The video features a scene set in a dimly lit auditorium, where a person is standing at a podium, holding a microphone labeled \"VOLTRA.\" The podium is positioned in front of a microphone stand, with a microphone attached to it. The person is wearing a white shirt and gray pants, and the microphone is positioned in front of them. The background includes a wooden panel wall, a microphone stand, and a curtain behind them. The lighting is dim, with the focus",
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "video",
+                        "url": "https://huggingface.co/datasets/hexuan21/VideoFeedback-videos-mp4/resolve/main/p/p000304.mp4",
+                    },
+                    {"type": "text", "text": "Describe this video in detail"},
+                ],
+            },
+        ],
+        "tools": None,
+    },
+    {
+        "expected": {
+            "messages": copy.deepcopy(
+                BASE_WEATHER_CONVERSATION["expected"]["messages"]
+            ),
+            "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
+            "response": """ <tool_call>
+{"arguments": {"query": "What is the weather like in Oakland today?"}, "name": "weather_search"}
+</tool_call>""",
+        },
+        "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"]),
+        "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
+    },
+    {
+        "expected": {
+            "messages": copy.deepcopy(
+                BASE_WEATHER_CONVERSATION["expected"]["messages"]
+            ),
+            "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
+            "response": """ <tool_call>
+{"arguments": {"query": "What is the weather like in Oakland today?"}, "name": "weather_search"}
+</tool_call>""",
+        },
+        "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"]),
         "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
     },
 ]

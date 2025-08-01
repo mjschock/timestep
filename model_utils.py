@@ -4,9 +4,10 @@ import json
 import os
 from datetime import datetime
 from typing import Any
+from copy import deepcopy
 
 import torch
-from peft import LoraConfig, TaskType, get_peft_model, prepare_model_for_kbit_training
+from peft import LoraConfig, TaskType, get_peft_model, prepare_model_for_kbit_training, PeftModel
 from transformers import (
     AutoModelForImageTextToText,
     AutoProcessor,
@@ -24,7 +25,7 @@ from constants import (
 )
 
 # Global model and processor instances
-MODEL_PATH = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
+PRETRAINED_MODEL_NAME_OR_PATH = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
 PROCESSOR = None
 MODEL = None
 
@@ -106,13 +107,13 @@ def _build_system_message_parts(
     tools: list[dict[str, Any]] | None = None,
     n_shot: int = DEFAULT_N_SHOT,
 ) -> list[str]:
-    system_parts = []
+    parts = []
 
     if system_message:
-        system_parts.append(system_message)
+        parts.append(system_message)
 
     if developer_message:
-        system_parts.append(f"[Developer Instructions]: {developer_message}")
+        parts.append(f"[Developer Instructions]: {developer_message}")
 
     # Only include n-shot examples if there are tools
     if tools:
@@ -126,22 +127,21 @@ def _build_system_message_parts(
         merged_tools = sorted(merged_tools, key=lambda t: t["name"])
         tool_content = format_tool_definitions(merged_tools)
         if tool_content:
-            system_parts.append(tool_content)
+            parts.append(tool_content)
             # Add n-shot example after tool definitions
             if n_shot > 0:
                 n_shot_example = _create_n_shot_example(n_shot)
                 if n_shot_example:
-                    system_parts.append(n_shot_example)
+                    parts.append(n_shot_example)
 
-    return system_parts
+    return parts
 
 
-def get_model(with_peft: bool = False):
+def get_model(pretrained_model_name_or_path: str | None = PRETRAINED_MODEL_NAME_OR_PATH, train: bool = False):
     global MODEL
 
-    if with_peft:
-        # For training with QLoRA, load fresh quantized model each time
-        # Configuration matching the working script
+    if train:
+        # For training, load fresh quantized model with PEFT adapters
         lora_config = LoraConfig(
             r=8,
             lora_alpha=8,
@@ -160,12 +160,12 @@ def get_model(with_peft: bool = False):
             bnb_4bit_compute_dtype=torch.bfloat16,
         )
 
-        # Load model with quantization - following the working script pattern
+        # Load model with quantization
         model = AutoModelForImageTextToText.from_pretrained(
-            MODEL_PATH, quantization_config=bnb_config, device_map="auto"
+            pretrained_model_name_or_path, quantization_config=bnb_config, device_map="auto"
         )
 
-        # Apply LoRA following the working script sequence
+        # Apply LoRA for training
         model.add_adapter(lora_config)
         model.enable_adapters()
         model = prepare_model_for_kbit_training(model)
@@ -173,10 +173,31 @@ def get_model(with_peft: bool = False):
 
         return peft_model
 
-    # For inference, use cached full precision model
+    # For inference
+    if pretrained_model_name_or_path != PRETRAINED_MODEL_NAME_OR_PATH and os.path.exists(pretrained_model_name_or_path):
+        # Load fine-tuned model for inference
+        print(f"Loading fine-tuned model from: {pretrained_model_name_or_path}")
+        
+        # Load the base model with quantization for inference
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.bfloat16,
+        )
+        
+        model = AutoModelForImageTextToText.from_pretrained(
+            PRETRAINED_MODEL_NAME_OR_PATH, quantization_config=bnb_config, device_map="auto", torch_dtype=torch.bfloat16
+        )
+        
+        # Load the fine-tuned adapters
+        model = PeftModel.from_pretrained(model, pretrained_model_name_or_path)
+        return model
+    
+    # For inference with base model, use cached full precision model
     if MODEL is None:
         MODEL = AutoModelForImageTextToText.from_pretrained(
-            MODEL_PATH, torch_dtype=torch.float16
+            pretrained_model_name_or_path, torch_dtype=torch.float16
         ).to("cuda")
 
     return MODEL
@@ -185,7 +206,7 @@ def get_model(with_peft: bool = False):
 def get_processor():
     global PROCESSOR
     if PROCESSOR is None:
-        PROCESSOR = AutoProcessor.from_pretrained(MODEL_PATH)
+        PROCESSOR = AutoProcessor.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     return PROCESSOR
 
 
@@ -197,6 +218,10 @@ def prepare_model_inputs(
     tools: list[dict[str, Any]] | None = None,
     train: bool = False,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    # Create deep copies to avoid mutating the original conversation data
+    messages = deepcopy(messages)
+    tools = deepcopy(tools) if tools is not None else None
+    
     # For training, return a processed dataset format
     if train:
         # Build system message parts for training
@@ -267,9 +292,6 @@ def prepare_model_inputs(
     # Build system message parts
     system_parts = _build_system_message_parts(system_message, developer_message, tools)
 
-    print("system_parts:")
-    print(system_parts)
-
     # if system_parts and messages has system message raise a NotImplementedError
     if system_parts and any(msg["role"] == "system" for msg in messages):
         raise NotImplementedError("TODO: Merge system message into system_parts")
@@ -278,8 +300,6 @@ def prepare_model_inputs(
     if system_parts:
         messages.insert(0, _create_system_message(system_parts))
 
-    print("messages [before]:")
-    print(messages)
 
     # Convert message to processor format with content array and tool_calls converted to content
     def convert_message(msg):
@@ -312,7 +332,6 @@ def prepare_model_inputs(
 
         for item in content:
             assert "type" in item, "Each item in content must have a type"
-            # assert "text" in item or "image" in item or "video" in item, "Each item in content must have a text, image, or video"
             assert (
                 "image" in item
                 or "path" in item
@@ -328,8 +347,6 @@ def prepare_model_inputs(
 
     messages = [convert_message(msg) for msg in messages]
 
-    print("messages [after]:")
-    print(messages)
 
     # Apply chat template
     inputs = processor.apply_chat_template(
@@ -408,14 +425,15 @@ def process_model_inputs(inputs, model, processor, train=False):
     # For inference, use the original logic
     # Move inputs to the same device as the model
     device = next(model.parameters()).device
+    model_dtype = next(model.parameters()).dtype
 
     inputs = {
         k: v.to(device=device) if hasattr(v, "to") else v for k, v in inputs.items()
     }
 
-    # Convert pixel_values to float16 if present (but keep input_ids as long)
+    # Convert pixel_values to the same dtype as the model if present (but keep input_ids as long)
     if "pixel_values" in inputs:
-        inputs["pixel_values"] = inputs["pixel_values"].to(dtype=torch.float16)
+        inputs["pixel_values"] = inputs["pixel_values"].to(dtype=model_dtype)
 
     with torch.no_grad():
         model_outputs = model.generate(
@@ -451,10 +469,10 @@ def process_model_outputs(
             learning_rate=1e-4,
             weight_decay=0.01,
             logging_steps=25,
-            save_strategy="no",
+            save_strategy="epoch",
             optim="paged_adamw_8bit",
             bf16=True,
-            output_dir=f"data/models/{os.getenv('HF_USERNAME', os.getenv('USER'))}/{MODEL_PATH.split('/')[-1]}-{conversation_idx}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
+            output_dir=f"data/models/{os.getenv('HF_USERNAME', os.getenv('USER'))}/{PRETRAINED_MODEL_NAME_OR_PATH.split('/')[-1]}-{conversation_idx}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
             remove_unused_columns=False,
             report_to=[],
             label_names=["labels"],
@@ -492,8 +510,6 @@ def process_model_outputs(
         model.train()
         train_result = trainer.train()
 
-        print("train_result:")
-        print(train_result)
 
         print("  Training completed!")
         print(f"  Final loss: {train_result.training_loss:.4f}")
@@ -504,7 +520,11 @@ def process_model_outputs(
             "Training should improve the model"
         )
 
-        return train_result
+        # Return both the training result and the model path
+        return {
+            "train_result": train_result,
+            "model_path": training_args.output_dir
+        }
 
     # For inference, use the original logic
     response = processor.tokenizer.decode(
