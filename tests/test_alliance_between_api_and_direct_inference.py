@@ -1,11 +1,6 @@
 import pytest
 import torch
 
-from backend._shared.utils.model_utils import (
-    BUILTIN_TOOLS,
-    create_base_messages,
-)
-
 # Common test configuration
 MODEL_NAME = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
 DEFAULT_MAX_TOKENS = 64
@@ -47,8 +42,7 @@ CUSTOM_TOOLS = [
     },
 ]
 
-# Tool combinations for different test scenarios
-TOOLS = BUILTIN_TOOLS + CUSTOM_TOOLS
+# Note: TOOLS will be created in test functions using fixtures
 
 # Shared test data for simple inference
 SIMPLE_INFERENCE_MESSAGES = [
@@ -123,23 +117,13 @@ VIDEO_CAPTION_EXPECTED_RESPONSE = (
     "A woman in a white shirt is speaking into a microphone at a podium."
 )
 
-# Tool calling test data
-TOOL_CALLING_MESSAGES = create_base_messages(TOOLS) + [
-    {
-        "content": "What's the stock price for Nvidia?",
-        "role": "user",
-    },
-]
+# Tool calling test data (will be created in test functions using fixtures)
 
 TOOL_CALLING_EXPECTED_RESPONSE = """<observation>The user is asking me to find the stock price for Nvidia. I should search the stock price data on the Nvidia website.</observation><thought>I have the stock price data from the Nvidia website. I should communicate this to the user.</thought><tool_call>
 {'name': 'web_search', 'arguments': {'query': 'What is the stock price for Nvidia?'}}
 </tool_call>"""
 
-# Format messages for tool calling tests
-TOOL_CALLING_FORMATTED_MESSAGES = [
-    {"role": message["role"], "content": [{"type": "text", "text": message["content"]}]}
-    for message in TOOL_CALLING_MESSAGES
-]
+# Tool calling messages will be created in test functions
 
 
 # Helper functions for DRY testing
@@ -424,27 +408,57 @@ def test_video_caption_api(async_client):
 
 
 # Tool calling tests
-def test_stock_price_tool_direct():
+def test_stock_price_tool_direct(builtin_tools, builtin_tool_examples):
     """Test SmolVLM2 model inference directly with transformers (no server) with tools."""
+    tools = builtin_tools + CUSTOM_TOOLS
+    tool_calling_messages = create_base_messages(tools, builtin_tool_examples) + [
+        {
+            "content": "What's the stock price for Nvidia?",
+            "role": "user",
+        },
+    ]
+    tool_calling_formatted_messages = [
+        {
+            "role": message["role"],
+            "content": [{"type": "text", "text": message["content"]}],
+        }
+        for message in tool_calling_messages
+    ]
+
     run_direct_inference(
-        TOOL_CALLING_FORMATTED_MESSAGES,
+        tool_calling_formatted_messages,
         TOOL_CALLING_EXPECTED_RESPONSE,
         TOOL_CALLING_MAX_TOKENS,
-        tools=TOOLS,
+        tools=tools,
     )
 
 
-def test_stock_price_tool_api(async_client):
+def test_stock_price_tool_api(async_client, builtin_tools, builtin_tool_examples):
     """Test SmolVLM2 model inference via chat completions API with tools."""
     import asyncio
+
+    tools = builtin_tools + CUSTOM_TOOLS
+    tool_calling_messages = create_base_messages(tools, builtin_tool_examples) + [
+        {
+            "content": "What's the stock price for Nvidia?",
+            "role": "user",
+        },
+    ]
+    tool_calling_formatted_messages = [
+        {
+            "role": message["role"],
+            "content": [{"type": "text", "text": message["content"]}],
+        }
+        for message in tool_calling_messages
+    ]
 
     asyncio.run(
         run_api_test(
             async_client,
-            TOOL_CALLING_FORMATTED_MESSAGES,
+            tool_calling_formatted_messages,
             TOOL_CALLING_EXPECTED_RESPONSE,
             TOOL_CALLING_MAX_TOKENS,
-            tools=TOOLS,
+            tools=tools,
             tool_choice="required",
         )
     )

@@ -5,12 +5,12 @@ import tempfile
 
 import pytest
 
-from constants import (
+from backend._shared.config.constants import (
     BASE_MODEL_INFERENCE_CONVERSATIONS,
     BASE_MODEL_TRAINING_CONVERSATIONS,
     FINE_TUNED_MODEL_INFERENCE_CONVERSATIONS,
 )
-from model_utils import (
+from backend._shared.utils.model_utils import (
     get_model,
     get_processor,
     prepare_model_inputs,

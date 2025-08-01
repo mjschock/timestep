@@ -430,7 +430,7 @@ BASE_MODEL_TRAINING_CONVERSATIONS = [
                 },
             ],
             "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: <video>Describe this video in detail<end_of_utterance>\nAssistant:",
-            "response": " The video features a scene set in a dimly lit auditorium, where a person is standing at a podium, holding a microphone labeled \"VOLTRA.\" The podium is positioned in front of a microphone stand, with a microphone attached to it. The person is wearing a white shirt and gray pants, and the microphone is positioned in front of them. The background includes a wooden panel wall, a microphone stand, and a curtain behind them. The lighting is dim, with the focus",
+            "response": ' The video features a scene set in a dimly lit auditorium, where a person is standing at a podium, holding a microphone labeled "VOLTRA." The podium is positioned in front of a microphone stand, with a microphone attached to it. The person is wearing a white shirt and gray pants, and the microphone is positioned in front of them. The background includes a wooden panel wall, a microphone stand, and a curtain behind them. The lighting is dim, with the focus',
         },
         "messages": [
             {
@@ -448,7 +448,7 @@ BASE_MODEL_TRAINING_CONVERSATIONS = [
                 "content": [
                     {
                         "type": "text",
-                        "text": "A woman in a white shirt speaks at a podium with a \"VOLUNTEER\" sign, gesturing into a microphone against a wood-paneled backdrop.",
+                        "text": 'A woman in a white shirt speaks at a podium with a "VOLUNTEER" sign, gesturing into a microphone against a wood-paneled backdrop.',
                     }
                 ],
             },
@@ -573,7 +573,7 @@ FINE_TUNED_MODEL_INFERENCE_CONVERSATIONS = [
                 },
             ],
             "prompt": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: <video>Describe this video in detail<end_of_utterance>\nAssistant:",
-            "response": " The video features a scene set in a dimly lit auditorium, where a person is standing at a podium, holding a microphone labeled \"VOLTRA.\" The podium is positioned in front of a microphone stand, with a microphone attached to it. The person is wearing a white shirt and gray pants, and the microphone is positioned in front of them. The background includes a wooden panel wall, a microphone stand, and a curtain behind them. The lighting is dim, with the focus",
+            "response": ' The video features a scene set in a dimly lit auditorium, where a person is standing at a podium, holding a microphone labeled "VOLTRA." The podium is positioned in front of a microphone stand, with a microphone attached to it. The person is wearing a white shirt and gray pants, and the microphone is positioned in front of them. The background includes a wooden panel wall, a microphone stand, and a curtain behind them. The lighting is dim, with the focus',
         },
         "messages": [
             {

@@ -1,423 +1,556 @@
-import pprint
+# ruff: noqa: S101
+
+import json
+import os
+from copy import deepcopy
+from datetime import datetime
 from typing import Any
 
 import torch
-from transformers import StoppingCriteria
+from peft import (
+    LoraConfig,
+    PeftModel,
+    TaskType,
+    get_peft_model,
+    prepare_model_for_kbit_training,
+)
+from transformers import (
+    AutoModelForImageTextToText,
+    AutoProcessor,
+    BitsAndBytesConfig,
+    StoppingCriteria,
+    Trainer,
+    TrainingArguments,
+)
+
+from backend._shared.config.constants import (
+    DEFAULT_N_SHOT,
+    DEFAULT_SYSTEM_MESSAGE,
+    DEFAULT_TOOLS,
+    N_SHOT_EXAMPLES,
+)
+
+# Global model and processor instances
+PRETRAINED_MODEL_NAME_OR_PATH = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
+PROCESSOR = None
+MODEL = None
+
+
+def _add_system_message_to_messages(
+    messages: list[dict[str, Any]],
+    system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
+    developer_message: str | None = None,
+    tools: list[dict[str, Any]] | None = None,
+) -> None:
+    """
+    Add a system message to the beginning of the messages list if system parts exist.
+    
+    Args:
+        messages: The messages list to modify
+        system_message: The system message to include
+        developer_message: Developer instructions to include
+        tools: Tools to include in system message
+    """
+    # Build system message parts
+    parts = []
+
+    if system_message:
+        parts.append(system_message)
+
+    if developer_message:
+        parts.append(f"[Developer Instructions]: {developer_message}")
+
+    # Only include n-shot examples if there are tools
+    if tools:
+        # Merge default tools if not present
+        tool_names = {tool["name"] for tool in tools}
+        merged_tools = tools.copy()
+        for default_tool in DEFAULT_TOOLS:
+            if default_tool["name"] not in tool_names:
+                merged_tools.append(default_tool)
+        # Sort tools by name
+        merged_tools = sorted(merged_tools, key=lambda t: t["name"])
+        tool_content = format_tool_definitions(merged_tools)
+        if tool_content:
+            parts.append(tool_content)
+            # Add n-shot example after tool definitions
+            if DEFAULT_N_SHOT > 0:
+                n_shot_example = _create_n_shot_example(DEFAULT_N_SHOT)
+                if n_shot_example:
+                    parts.append(n_shot_example)
+
+    # Check if system message already exists and raise error if system parts also exist
+    if parts and any(msg["role"] == "system" for msg in messages):
+        raise NotImplementedError("TODO: Merge system message into system_parts")
+
+    # Add combined system message if any parts exist
+    if parts:
+        system_message_dict = {
+            "role": "system",
+            "content": [{"type": "text", "text": "\n\n".join(parts)}],
+        }
+        messages.insert(0, system_message_dict)
+
+
+def _create_n_shot_example(n: int = 0) -> str:
+    if n == 0:
+        return ""
+
+    # Return the first n examples, or all if n > number of examples
+    selected_examples = (
+        N_SHOT_EXAMPLES[:n] if n <= len(N_SHOT_EXAMPLES) else N_SHOT_EXAMPLES
+    )
+
+    # Convert each example (list of messages) to the expected string format
+    formatted_examples = []
+    for example in selected_examples:
+        formatted_parts = []
+        for message in example:
+            if message["role"] == "user":
+                formatted_parts.append(f"User: {message['content']}<end_of_utterance>")
+            elif message["role"] == "assistant":
+                if "tool_calls" in message:
+                    # Format tool calls with proper JSON formatting
+                    for tool_call in message["tool_calls"]:
+                        tool_call_json = json.dumps(
+                            {
+                                "arguments": tool_call["arguments"],
+                                "name": tool_call["name"],
+                            }
+                        )
+                        formatted_parts.append(
+                            f"Assistant: <tool_call>\n{tool_call_json}\n</tool_call><end_of_utterance>"
+                        )
+                else:
+                    # Regular assistant message
+                    formatted_parts.append(f"Assistant: {message['content']}")
+            elif message["role"] == "tool":
+                formatted_parts.append(f"Tool: {message['content']}<end_of_utterance>")
+
+        formatted_examples.append("\n".join(formatted_parts))
+
+    return "<end_of_utterance>\n\n".join(formatted_examples)
+
+
+def format_tool_definitions(tools: list[dict[str, Any]]) -> str:
+    if not tools:
+        return ""
+
+    tools = sorted(tools, key=lambda t: t["name"])
+
+    tool_content = "The following tools are available:\n\n"
+
+    for tool in tools:
+        if tool["type"] == "function":
+            tool_content += f"Tool name: {tool['name']}\n"
+            tool_content += f"Description: {tool['description']}\n"
+            tool_content += "Parameters:\n"
+            for name, spec in tool["parameters"]["properties"].items():
+                line = f"- {name} ({spec['type']}): {spec.get('description', '')}"
+                if "enum" in spec:
+                    line += f" (One of: {', '.join(spec['enum'])})"
+                tool_content += line + "\n"
+            tool_content += "\n"
+
+    tool_content += "To use a tool, respond with:\n<tool_call>\n{ ... }\n</tool_call>"
+    return tool_content.strip()
+
+
+def get_model(
+    pretrained_model_name_or_path: str | None = PRETRAINED_MODEL_NAME_OR_PATH,
+    train: bool = False,
+):
+    global MODEL
+
+    if train:
+        # For training, load fresh quantized model with PEFT adapters
+        lora_config = LoraConfig(
+            r=8,
+            lora_alpha=8,
+            lora_dropout=0.1,
+            target_modules=r".*text_model\.layers\.\d+\.(self_attn\.(q_proj|k_proj|v_proj|o_proj)|mlp\.(gate_proj|up_proj|down_proj))",
+            use_dora=False,  # False for QLoRA
+            init_lora_weights="gaussian",
+            task_type=TaskType.CAUSAL_LM,
+        )
+        lora_config.inference_mode = False
+
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.bfloat16,
+        )
+
+        # Load model with quantization
+        model = AutoModelForImageTextToText.from_pretrained(
+            pretrained_model_name_or_path,
+            quantization_config=bnb_config,
+            device_map="auto",
+        )
+
+        # Apply LoRA for training
+        model.add_adapter(lora_config)
+        model.enable_adapters()
+        model = prepare_model_for_kbit_training(model)
+        peft_model = get_peft_model(model, lora_config)
+
+        return peft_model
+
+    # For inference
+    if (
+        pretrained_model_name_or_path != PRETRAINED_MODEL_NAME_OR_PATH
+        and os.path.exists(pretrained_model_name_or_path)
+    ):
+        # Load fine-tuned model for inference
+        print(f"Loading fine-tuned model from: {pretrained_model_name_or_path}")
+
+        # Load the base model with quantization for inference
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.bfloat16,
+        )
+
+        model = AutoModelForImageTextToText.from_pretrained(
+            PRETRAINED_MODEL_NAME_OR_PATH,
+            quantization_config=bnb_config,
+            device_map="auto",
+            torch_dtype=torch.bfloat16,
+        )
+
+        # Load the fine-tuned adapters
+        model = PeftModel.from_pretrained(model, pretrained_model_name_or_path)
+        return model
+
+    # For inference with base model, use cached full precision model
+    if MODEL is None:
+        MODEL = AutoModelForImageTextToText.from_pretrained(
+            pretrained_model_name_or_path, torch_dtype=torch.float16
+        ).to("cuda")
+
+    return MODEL
+
+
+def get_processor():
+    global PROCESSOR
+    if PROCESSOR is None:
+        PROCESSOR = AutoProcessor.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    return PROCESSOR
+
+
+def prepare_model_inputs(
+    messages: list[dict[str, Any]],
+    processor,
+    system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
+    developer_message: str | None = None,
+    tools: list[dict[str, Any]] | None = None,
+    train: bool = False,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    # Create deep copies to avoid mutating the original conversation data
+    messages = deepcopy(messages)
+    tools = deepcopy(tools) if tools is not None else None
+
+    # For training, return a processed dataset format
+    if train:
+        # Add system message to messages
+        _add_system_message_to_messages(messages, system_message, developer_message, tools)
+
+        # Convert messages to processor format
+        def convert_message(msg):
+            content = msg.get("content")
+            role = msg["role"]
+            tool_calls = msg.get("tool_calls", [])
+
+            if tool_calls:
+                assert content is None, (
+                    "Content cannot be provided when tool calls are present"
+                )
+                assert role == "assistant", (
+                    "Tool calls are only allowed for assistant messages"
+                )
+
+                content = [
+                    {
+                        "text": f"<tool_call>\n{json.dumps(tool_call)}\n</tool_call>",
+                        "type": "text",
+                    }
+                    for tool_call in tool_calls
+                ]
+
+            assert content is not None, "Content is required"
+
+            if isinstance(content, str):
+                content = [{"text": content, "type": "text"}]
+
+            assert isinstance(content, list), "Content must be a list"
+
+            for item in content:
+                assert "type" in item, "Each item in content must have a type"
+                assert (
+                    "image" in item
+                    or "path" in item
+                    or "text" in item
+                    or "url" in item
+                    or "video" in item
+                ), "Each item in content must have an image, path, text, url, or video"
+
+            return {
+                "role": role,
+                "content": content,
+            }
+
+        processed_messages = [convert_message(msg) for msg in messages]
+
+        # Return training dataset format
+        processed_dataset = [{"messages": processed_messages}]
+
+        return processed_dataset, processed_messages, None
+
+    # For inference, use the original logic
+    # Add system message to messages
+    _add_system_message_to_messages(messages, system_message, developer_message, tools)
+
+    # Convert message to processor format with content array and tool_calls converted to content
+    def convert_message(msg):
+        content = msg.get("content")
+        role = msg["role"]
+        tool_calls = msg.get("tool_calls", [])
+
+        if tool_calls:
+            assert content is None, (
+                "Content cannot be provided when tool calls are present"
+            )
+            assert role == "assistant", (
+                "Tool calls are only allowed for assistant messages"
+            )
+
+            content = [
+                {
+                    "text": f"<tool_call>\n{json.dumps(tool_call)}\n</tool_call>",
+                    "type": "text",
+                }
+                for tool_call in tool_calls
+            ]
+
+        assert content is not None, "Content is required"
+
+        if isinstance(content, str):
+            content = [{"text": content, "type": "text"}]
+
+        assert isinstance(content, list), "Content must be a list"
+
+        for item in content:
+            assert "type" in item, "Each item in content must have a type"
+            assert (
+                "image" in item
+                or "path" in item
+                or "text" in item
+                or "url" in item
+                or "video" in item
+            ), "Each item in content must have an image, path, text, url, or video"
+
+        return {
+            "role": role,
+            "content": content,
+        }
+
+    messages = [convert_message(msg) for msg in messages]
+
+    # Apply chat template
+    inputs = processor.apply_chat_template(
+        messages,
+        tokenize=True,
+        add_generation_prompt=True,
+        return_tensors="pt",
+        return_dict=True,
+    )
+
+    # Generate formatted prompt text
+    prompt = processor.apply_chat_template(
+        messages,
+        add_generation_prompt=True,
+        tokenize=False,
+    )
+
+    return inputs, messages, prompt
+
+
+def process_model_inputs(inputs, model, processor, train=False):
+    if train:
+        # For training, inputs is actually a processed_dataset
+        # Create collate function for training
+        image_token_id = processor.tokenizer.additional_special_tokens_ids[
+            processor.tokenizer.additional_special_tokens.index("<image>")
+        ]
+
+        def collate_fn(examples):
+            original_do_image_splitting = processor.image_processor.do_image_splitting
+            original_video_size = processor.image_processor.video_sampling[
+                "video_size"
+            ]["longest_edge"]
+
+            processor.image_processor.do_image_splitting = False
+            processor.image_processor.video_sampling["video_size"]["longest_edge"] = 512
+
+            try:
+                example = examples[0]
+                messages = example["messages"]
+                instance = processor.apply_chat_template(
+                    messages,
+                    add_generation_prompt=False,
+                    tokenize=True,
+                    return_dict=True,
+                    return_tensors="pt",
+                )
+
+                for key in instance.keys():
+                    if hasattr(instance[key], "to"):
+                        instance[key] = instance[key].to(device=model.device)
+
+            finally:
+                processor.image_processor.do_image_splitting = (
+                    original_do_image_splitting
+                )
+                processor.image_processor.video_sampling["video_size"][
+                    "longest_edge"
+                ] = original_video_size
+
+            out = {
+                "input_ids": instance["input_ids"],
+                "attention_mask": instance["attention_mask"],
+                "labels": instance["input_ids"].clone(),
+            }
+
+            out["labels"][out["labels"] == image_token_id] = -100
+
+            if "pixel_values" in instance and instance["pixel_values"] is not None:
+                out["pixel_values"] = instance["pixel_values"]
+
+            return out
+
+        return collate_fn
+
+    # For inference, use the original logic
+    # Move inputs to the same device as the model
+    device = next(model.parameters()).device
+    model_dtype = next(model.parameters()).dtype
+
+    inputs = {
+        k: v.to(device=device) if hasattr(v, "to") else v for k, v in inputs.items()
+    }
+
+    # Convert pixel_values to the same dtype as the model if present (but keep input_ids as long)
+    if "pixel_values" in inputs:
+        inputs["pixel_values"] = inputs["pixel_values"].to(dtype=model_dtype)
+
+    with torch.no_grad():
+        model_outputs = model.generate(
+            **inputs,
+            max_new_tokens=100,
+            do_sample=False,
+            temperature=0.0,
+            pad_token_id=processor.tokenizer.eos_token_id,
+        )
+
+    return model_outputs
+
+
+def process_model_outputs(
+    model_inputs, model_outputs, processor, train=False, conversation_idx=0
+):
+    if train:
+        # For training, model_inputs is processed_dataset and model_outputs is collate_fn
+        processed_dataset = model_inputs
+        collate_fn = model_outputs
+        model = processor  # In training mode, processor parameter contains the model
+        processor = train  # And train parameter contains the actual processor
+
+        # Print model info
+        model.print_trainable_parameters()
+        print(f"  Model dtype: {model.dtype}")
+
+        training_args = TrainingArguments(
+            num_train_epochs=1,
+            per_device_train_batch_size=1,
+            gradient_accumulation_steps=1,
+            warmup_steps=50,
+            learning_rate=1e-4,
+            weight_decay=0.01,
+            logging_steps=25,
+            save_strategy="epoch",
+            optim="paged_adamw_8bit",
+            bf16=True,
+            output_dir=f"data/models/{os.getenv('HF_USERNAME', os.getenv('USER'))}/{PRETRAINED_MODEL_NAME_OR_PATH.split('/')[-1]}-{conversation_idx}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
+            remove_unused_columns=False,
+            report_to=[],
+            label_names=["labels"],
+            dataloader_pin_memory=False,
+            gradient_checkpointing=True,
+            gradient_checkpointing_kwargs={"use_reentrant": False},
+            dataloader_num_workers=0,
+        )
+
+        # Create trainer
+        trainer = Trainer(
+            model=model,
+            args=training_args,
+            data_collator=collate_fn,
+            train_dataset=processed_dataset,
+        )
+
+        # Record initial loss for comparison
+        model.eval()
+        with torch.no_grad():
+            # Get a sample batch to compute initial loss
+            sample_batch = collate_fn([processed_dataset[0]])
+            device = next(model.parameters()).device
+            sample_batch = {
+                k: v.to(device) if hasattr(v, "to") else v
+                for k, v in sample_batch.items()
+            }
+
+            initial_outputs = model(**sample_batch)
+            initial_loss = initial_outputs.loss.item()
+
+        print(f"  Initial loss: {initial_loss:.4f}")
+
+        # Train for one epoch
+        model.train()
+        train_result = trainer.train()
+
+        print("  Training completed!")
+        print(f"  Final loss: {train_result.training_loss:.4f}")
+        print(f"  Loss improvement: {initial_loss - train_result.training_loss:.4f}")
+
+        # Verify that training actually improved the model
+        assert train_result.training_loss < initial_loss, (
+            "Training should improve the model"
+        )
+
+        # Return both the training result and the model path
+        return {"train_result": train_result, "model_path": training_args.output_dir}
+
+    # For inference, use the original logic
+    response = processor.tokenizer.decode(
+        model_outputs[0][model_inputs["input_ids"].shape[-1] :],
+        skip_special_tokens=True,
+    )
+
+    return response
 
 
 class ToolCallStoppingCriteria(StoppingCriteria):
-    def __init__(self, tokenizer: Any, stop_string: str = "</tool_call>") -> None:
+    def __init__(self, tokenizer, start_length, stop_str="</tool_call>"):
+        super().__init__()
         self.tokenizer = tokenizer
-        self.stop_string = stop_string
-        # Encode the stop string
-        self.stop_token_ids = tokenizer.encode(stop_string, add_special_tokens=False)
+        self.start_length = start_length
+        self.stop_str = stop_str
 
-    def __call__(
-        self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs: Any
-    ) -> bool:
-        # Check if the last generated tokens match our stop sequence
-        for batch_idx in range(input_ids.shape[0]):
-            # Get the last few tokens to check
-            last_tokens = input_ids[batch_idx, -len(self.stop_token_ids) :].tolist()
-            if last_tokens == self.stop_token_ids:
-                return True
-        return False
-
-
-# All built-in tools (alphabetical order by name)
-BUILTIN_TOOLS = [
-    {
-        "type": "function",
-        "function": {
-            "name": "code_interpreter",
-            "description": "Execute Python code to perform calculations or data processing.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "code": {
-                        "type": "string",
-                        "description": "The Python code to execute",
-                    }
-                },
-                "required": ["code"],
-                "additionalProperties": False,
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "talk_to_user",
-            "description": "Communicate with the user by providing a text response",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "response": {
-                        "type": "string",
-                        "description": "The message to communicate to the user",
-                    }
-                },
-                "required": ["response"],
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "web_search",
-            "description": "Search the web for information.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "query": {
-                        "type": "string",
-                        "description": "The search query to look up",
-                    }
-                },
-                "required": ["query"],
-                "additionalProperties": False,
-            },
-        },
-    },
-]
-
-# Mapping of built-in tools to their 1-shot examples (excluding talk_to_user)
-BUILTIN_TOOL_EXAMPLES = {
-    "code_interpreter": {
-        "user_message": "How many r's are in the word 'strawberry'?",
-        "assistant_response": "<observation>The user is asking me to count the letter 'r' in the word 'strawberry'.</observation><thought>I need to count the occurrences of the letter 'r' in 'strawberry'. I can use Python code to do this accurately with the count() method.</thought><tool_call>\n{'name': 'code_interpreter', 'arguments': {'code': \"'strawberry'.count('r')\"}}\n</tool_call>",
-        "tool_response": "3",
-        "final_response": "<observation>The code execution returned 3, indicating there are 3 r's in 'strawberry'.</observation><thought>I have the answer to the user's question. I should communicate this result clearly to the user.</thought><tool_call>\n{'name': 'talk_to_user', 'arguments': {'response': \"There are 3 r's in the word 'strawberry'.\"}}\n</tool_call>",
-    },
-    "web_search": {
-        "user_message": "What is the answer to the Ultimate Question of Life, the Universe, and Everything?",
-        "assistant_response": "<observation>The user is asking about the Ultimate Question of Life, the Universe, and Everything.</observation><thought>This is a reference to Douglas Adams' 'The Hitchhiker's Guide to the Galaxy'. I should search the web to get accurate information about this famous question and its answer.</thought><tool_call>\n{'name': 'web_search', 'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}}\n</tool_call>",
-        "tool_response": "The answer to the Ultimate Question of Life, the Universe, and Everything is 42.",
-        "final_response": "<observation>The web search returned that the answer to the Ultimate Question of Life, the Universe, and Everything is 42.</observation><thought>I have the answer from the web search. This is the famous answer from Douglas Adams' work. I should communicate this to the user.</thought><tool_call>\n{'name': 'talk_to_user', 'arguments': {'response': '42'}}\n</tool_call>",
-    },
-}
-
-
-def create_base_messages(tools: list[dict[str, Any]]) -> list[dict[str, str]]:
-    """Create the base conversation messages for tool calling demonstrations."""
-    messages = [
-        {
-            "content": f"""You are an AI agent acting as an assistant on behalf of a human user.
-
-You are aware of the following tools available to the human user in this environment:
-{pprint.pformat(tools)}
-
-You MUST always respond in exactly this format:
-1. <observation></observation> - Your observation of the user message or tool response
-2. <thought></thought> - Your reasoning about what to do next
-3. <tool_call></tool_call> - A tool call (use talk_to_user to communicate responses)
-
-For tool calls, use this exact JSON format:
-{{'name': 'function_name', 'arguments': {{'parameter': 'value'}}}}
-
-To communicate with the user, use:
-{{'name': 'talk_to_user', 'arguments': {{'response': 'your message here'}}}}
-
-You will follow this agent-environment cycle of sensing, thinking, and acting consistently.""",
-            "role": "system",
-        }
-    ]
-
-    # Find which built-in tools are present in the tools list (excluding talk_to_user)
-    tool_names = {
-        tool["function"]["name"] for tool in tools if tool.get("type") == "function"
-    }
-
-    # Add 1-shot examples for built-in tools that are present (in a consistent order)
-    for tool_name in ["code_interpreter", "web_search"]:  # Maintain consistent order
-        if tool_name in tool_names and tool_name in BUILTIN_TOOL_EXAMPLES:
-            example = BUILTIN_TOOL_EXAMPLES[tool_name]
-
-            # Add the example conversation
-            messages.extend(
-                [
-                    {
-                        "content": example["user_message"],
-                        "role": "user",
-                    },
-                    {
-                        "content": example["assistant_response"],
-                        "role": "assistant",
-                    },
-                    {
-                        "content": example["tool_response"],
-                        "role": "tool",
-                    },
-                    {
-                        "content": example["final_response"],
-                        "role": "assistant",
-                    },
-                ]
-            )
-
-    return messages
-
-
-def validate_chat_template(processor: Any, original_chat_template: str = "") -> None:
-    """Validate that the chat template works correctly with expected message formats.
-
-    WARNING: Do not pass chat_template explicitly to apply_chat_template() as it bypasses
-    video preprocessing and will break video content handling (<video> tags).
-    """
-    from backend._shared.logging_config import logger
-
-    # Test messages with different scenarios our training data will have
-    test_cases = [
-        {
-            "name": "simple_text_message",
-            "messages": [
-                {
-                    "role": "system",
-                    "content": [
-                        {"type": "text", "text": "You are a helpful assistant."}
-                    ],
-                },
-                {
-                    "role": "user",
-                    "content": [{"type": "text", "text": "Hello, how are you?"}],
-                },
-                {
-                    "role": "assistant",
-                    "content": [{"type": "text", "text": "I'm doing well, thank you!"}],
-                },
-            ],
-            "expected": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: Hello, how are you?<end_of_utterance>\nAssistant: I'm doing well, thank you!<end_of_utterance>\n",
-            "add_generation_prompt": False,
-            "tools": None,
-        },
-        {
-            "name": "simple_text_message_with_generation",
-            "messages": [
-                {
-                    "role": "system",
-                    "content": [
-                        {"type": "text", "text": "You are a helpful assistant."}
-                    ],
-                },
-                {
-                    "role": "user",
-                    "content": [{"type": "text", "text": "Hello, how are you?"}],
-                },
-            ],
-            "expected": "<|im_start|>System: You are a helpful assistant.<end_of_utterance>\nUser: Hello, how are you?<end_of_utterance>\nAssistant:",
-            "add_generation_prompt": True,
-            "tools": None,
-        },
-        {
-            "name": "assistant_with_tool_calls_only",
-            "messages": [
-                {
-                    "role": "system",
-                    "content": [
-                        {"type": "text", "text": "You are a drone controller."}
-                    ],
-                },
-                {
-                    "role": "user",
-                    "content": [{"type": "text", "text": "Take off to 100 meters"}],
-                },
-                {
-                    "role": "assistant",
-                    "content": [],
-                    "tool_calls": [
-                        {
-                            "id": "call_1",
-                            "type": "function",
-                            "function": {
-                                "name": "takeoff_drone",
-                                "arguments": '{"altitude": 100}',
-                            },
-                        }
-                    ],
-                },
-            ],
-            "expected": '<|im_start|>System: You are a drone controller.<end_of_utterance>\nUser: Take off to 100 meters<end_of_utterance>\nAssistant: <tool_call>\n{"arguments": {"altitude": 100}, "name": "takeoff_drone"}\n</tool_call><end_of_utterance>\n',
-            "add_generation_prompt": False,
-            "tools": [
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "takeoff_drone",
-                        "description": "Control the drone to take off to a specified altitude",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "altitude": {
-                                    "type": "integer",
-                                    "description": "The altitude in meters to take off to",
-                                }
-                            },
-                            "required": ["altitude"],
-                        },
-                    },
-                }
-            ],
-        },
-        {
-            "name": "user_with_image_content",
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
-                        },
-                        {"type": "text", "text": "Can you describe this image?"},
-                    ],
-                },
-            ],
-            "expected": "<|im_start|>User:<image>Can you describe this image?<end_of_utterance>\nAssistant:",
-            "add_generation_prompt": True,
-            "tools": None,
-        },
-        {
-            "name": "user_with_video_content",
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "video",
-                            "path": "https://huggingface.co/datasets/hexuan21/VideoFeedback-videos-mp4/resolve/main/p/p110924.mp4",
-                        },
-                        {"type": "text", "text": "Describe this video in detail"},
-                    ],
-                },
-            ],
-            # TODO: Video content should be handled by processor, not template - will revisit later
-            "expected": "<|im_start|>User: <video>Describe this video in detail<end_of_utterance>\nAssistant:",
-            "add_generation_prompt": True,
-            "tools": None,
-        },
-        {
-            "name": "user_with_multiple_images",
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "What is the similarity between these two images?",
-                        },
-                        {
-                            "type": "image",
-                            "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
-                        },
-                        {
-                            "type": "image",
-                            "url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/0052a70beed5bf71b92610a43a52df6d286cd5f3/diffusers/rabbit.jpg",
-                        },
-                    ],
-                },
-            ],
-            "expected": "<|im_start|>User: What is the similarity between these two images?<image><image><end_of_utterance>\nAssistant:",
-            "add_generation_prompt": True,
-            "tools": None,
-        },
-    ]
-
-    logger.info("🧪 Starting chat template validation...")
-
-    # First validate with the original chat template if provided
-    if original_chat_template:
-        logger.info("🧪 Validating original chat template...")
-
-        # Save current template and set original template on processor
-        current_template = processor.chat_template
-        processor.chat_template = original_chat_template
-
-        try:
-            for test_case in test_cases:
-                # Skip test cases with tools for original template validation
-                if test_case["tools"] is not None:
-                    logger.info(
-                        f"Skipping original template validation for {test_case['name']} (has tools)"
-                    )
-                    continue
-
-                try:
-                    logger.info(f"Testing original template: {test_case['name']}")
-
-                    # Apply chat template without explicit template parameter to enable video preprocessing
-                    result = processor.apply_chat_template(
-                        test_case["messages"],
-                        add_generation_prompt=test_case["add_generation_prompt"],
-                        tools=test_case["tools"],
-                        tokenize=False,
-                        return_dict=False,
-                    )
-
-                    logger.info(f"Original template output for {test_case['name']}:")
-                    logger.info(f"'{result}'")
-
-                    # Exact assertion for original template
-                    assert test_case["expected"] == result, (  # noqa: S101
-                        f"Original template failed: {test_case['expected']}\n!=\n{result}"
-                    )
-
-                    logger.info(
-                        f"✅ Original template {test_case['name']} validation passed"
-                    )
-
-                except Exception as e:
-                    logger.error(
-                        f"❌ Original chat template validation failed for {test_case['name']}: {e}"
-                    )
-                    logger.error(f"Messages: {test_case['messages']}")
-                    raise RuntimeError(
-                        f"Original chat template validation failed: {e}"
-                    ) from e
-        finally:
-            # Restore current template
-            processor.chat_template = current_template
-
-    # Then validate with the current chat template
-    logger.info("🧪 Validating custom chat template...")
-
-    # Assert that the required generation tags are present in the chat template
-    chat_template = processor.chat_template
-    assert (  # noqa: S101
-        "{% if message['role'] == 'assistant' and message.get('weight', 1) == 1 %}{% generation %}"
-        in chat_template
-    ), "Chat template must contain the exact generation start pattern"
-    assert "{% endgeneration %}" in chat_template, (  # noqa: S101
-        "Chat template must contain '{% endgeneration %}' tag"
-    )
-
-    for test_case in test_cases:
-        try:
-            logger.info(f"Testing: {test_case['name']}")
-
-            # Apply chat template without tokenization to see the text output
-            result = processor.apply_chat_template(
-                test_case["messages"],
-                add_generation_prompt=test_case["add_generation_prompt"],
-                tools=test_case["tools"],
-                tokenize=False,
-                return_dict=False,
-            )
-
-            logger.info(f"Chat template output for {test_case['name']}:")
-            logger.info(f"'{result}'")
-
-            # Exact assertion
-            assert test_case["expected"] == result, (  # noqa: S101
-                f"{test_case['expected']}\n!=\n{result}"
-            )
-
-            logger.info(f"✅ {test_case['name']} validation passed")
-
-        except Exception as e:
-            logger.error(
-                f"❌ Chat template validation failed for {test_case['name']}: {e}"
-            )
-            logger.error(f"Messages: {test_case['messages']}")
-            raise RuntimeError(f"Chat template validation failed: {e}") from e
-
-    logger.info("🎉 All chat template validations passed!")
+    def __call__(self, input_ids, scores, **kwargs):
+        # Only check the newly generated tokens
+        decoded = self.tokenizer.decode(
+            input_ids[0][self.start_length :], skip_special_tokens=True
+        )
+        return self.stop_str in decoded
