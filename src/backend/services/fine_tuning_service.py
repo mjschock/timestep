@@ -26,11 +26,13 @@ class FineTuningService:
         processor = get_processor()
 
         # Process training data
-        processed_dataset, processed_messages, _ = prepare_model_inputs(
+        _, processed_messages, _ = prepare_model_inputs(
             messages=dataset[0]["messages"],  # First example
             processor=processor,
             train=True,
         )
+
+        processed_dataset = [{"messages": processed_messages}]
 
         # Get collate function
         collate_fn = process_model_inputs(

@@ -2,11 +2,12 @@
 
 import json
 import os
+import uuid
 from copy import deepcopy
-from datetime import datetime
 from typing import Any
 
 import torch
+from datasets import Dataset
 from peft import (
     LoraConfig,
     PeftModel,
@@ -14,6 +15,7 @@ from peft import (
     get_peft_model,
     prepare_model_for_kbit_training,
 )
+from torch.utils.data import Dataset as TorchDataset, IterableDataset
 from transformers import (
     AutoModelForImageTextToText,
     AutoProcessor,
@@ -243,76 +245,20 @@ def get_processor():
 def prepare_model_inputs(
     messages: list[dict[str, Any]],
     processor,
+    model=None,
     system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
     developer_message: str | None = None,
     tools: list[dict[str, Any]] | None = None,
     train: bool = False,
-) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+) -> tuple[dict[str, Any], Any]:
     # Create deep copies to avoid mutating the original conversation data
     messages = deepcopy(messages)
     tools = deepcopy(tools) if tools is not None else None
 
-    # For training, return a processed dataset format
-    if train:
-        # Add system message to messages
-        _add_system_message_to_messages(messages, system_message, developer_message, tools)
-
-        # Convert messages to processor format
-        def convert_message(msg):
-            content = msg.get("content")
-            role = msg["role"]
-            tool_calls = msg.get("tool_calls", [])
-
-            if tool_calls:
-                assert content is None, (
-                    "Content cannot be provided when tool calls are present"
-                )
-                assert role == "assistant", (
-                    "Tool calls are only allowed for assistant messages"
-                )
-
-                content = [
-                    {
-                        "text": f"<tool_call>\n{json.dumps(tool_call)}\n</tool_call>",
-                        "type": "text",
-                    }
-                    for tool_call in tool_calls
-                ]
-
-            assert content is not None, "Content is required"
-
-            if isinstance(content, str):
-                content = [{"text": content, "type": "text"}]
-
-            assert isinstance(content, list), "Content must be a list"
-
-            for item in content:
-                assert "type" in item, "Each item in content must have a type"
-                assert (
-                    "image" in item
-                    or "path" in item
-                    or "text" in item
-                    or "url" in item
-                    or "video" in item
-                ), "Each item in content must have an image, path, text, url, or video"
-
-            return {
-                "role": role,
-                "content": content,
-            }
-
-        processed_messages = [convert_message(msg) for msg in messages]
-
-        # Return training dataset format
-        processed_dataset = [{"messages": processed_messages}]
-
-        return processed_dataset, processed_messages, None
-
-    # For inference, use the original logic
     # Add system message to messages
     _add_system_message_to_messages(messages, system_message, developer_message, tools)
 
-    # Convert message to processor format with content array and tool_calls converted to content
+    # Convert messages to processor format
     def convert_message(msg):
         content = msg.get("content")
         role = msg["role"]
@@ -356,36 +302,19 @@ def prepare_model_inputs(
             "content": content,
         }
 
-    messages = [convert_message(msg) for msg in messages]
+    processed_messages = [convert_message(msg) for msg in messages]
 
-    # Apply chat template
-    inputs = processor.apply_chat_template(
-        messages,
-        tokenize=True,
-        add_generation_prompt=True,
-        return_tensors="pt",
-        return_dict=True,
-    )
-
-    # Generate formatted prompt text
-    prompt = processor.apply_chat_template(
-        messages,
-        add_generation_prompt=True,
-        tokenize=False,
-    )
-
-    return inputs, messages, prompt
-
-
-def process_model_inputs(inputs, model, processor, train=False):
+    # Create dataset format (consistent for both training and inference)
+    processed_dataset = [{"messages": processed_messages}]
+    
+    # Create collate function based on training mode
     if train:
-        # For training, inputs is actually a processed_dataset
-        # Create collate function for training
+        # Create training collate function
         image_token_id = processor.tokenizer.additional_special_tokens_ids[
             processor.tokenizer.additional_special_tokens.index("<image>")
         ]
 
-        def collate_fn(examples):
+        def data_collator(examples):
             original_do_image_splitting = processor.image_processor.do_image_splitting
             original_video_size = processor.image_processor.video_sampling[
                 "video_size"
@@ -430,47 +359,75 @@ def process_model_inputs(inputs, model, processor, train=False):
 
             return out
 
-        return collate_fn
+        # Return for training mode
+        return {
+            "data_collator": data_collator,
+            "train_dataset": processed_dataset,
+            "eval_dataset": None,
+            "test_dataset": None,
+        }
+    
+    else:
+        # Create inference collate function
+        def data_collator(examples):
+            # For inference, process the dataset format to get inputs
+            example = examples[0]
+            messages = example["messages"]
+            
+            inputs = processor.apply_chat_template(
+                messages,
+                tokenize=True,
+                add_generation_prompt=True,
+                return_tensors="pt",
+                return_dict=True,
+            )
 
-    # For inference, use the original logic
-    # Move inputs to the same device as the model
-    device = next(model.parameters()).device
-    model_dtype = next(model.parameters()).dtype
+            # Move inputs to the same device as the model
+            device = next(model.parameters()).device
+            model_dtype = next(model.parameters()).dtype
 
-    inputs = {
-        k: v.to(device=device) if hasattr(v, "to") else v for k, v in inputs.items()
-    }
+            processed_inputs = {
+                k: v.to(device=device) if hasattr(v, "to") else v 
+                for k, v in inputs.items()
+            }
 
-    # Convert pixel_values to the same dtype as the model if present (but keep input_ids as long)
-    if "pixel_values" in inputs:
-        inputs["pixel_values"] = inputs["pixel_values"].to(dtype=model_dtype)
+            # Convert pixel_values to the same dtype as the model if present
+            if "pixel_values" in processed_inputs:
+                processed_inputs["pixel_values"] = processed_inputs["pixel_values"].to(dtype=model_dtype)
 
-    with torch.no_grad():
-        model_outputs = model.generate(
-            **inputs,
-            max_new_tokens=100,
-            do_sample=False,
-            temperature=0.0,
-            pad_token_id=processor.tokenizer.eos_token_id,
-        )
+            return processed_inputs
 
-    return model_outputs
+        # Return for inference mode
+        return {
+            "data_collator": data_collator,
+            "train_dataset": None,
+            "eval_dataset": None,
+            "test_dataset": processed_dataset,
+        }
 
 
-def process_model_outputs(
-    model_inputs, model_outputs, processor, train=False, conversation_idx=0
+def process_model_inputs(
+    model,
+    processor,
+    data_collator: Any | None = None,
+    train_dataset: TorchDataset | IterableDataset | Dataset | None = None,
+    eval_dataset: TorchDataset | dict[str, TorchDataset] | Dataset | None = None,
+    test_dataset: TorchDataset | dict[str, TorchDataset] | Dataset | None = None,
 ):
-    if train:
-        # For training, model_inputs is processed_dataset and model_outputs is collate_fn
-        processed_dataset = model_inputs
-        collate_fn = model_outputs
-        model = processor  # In training mode, processor parameter contains the model
-        processor = train  # And train parameter contains the actual processor
-
+    if data_collator is None:
+        raise ValueError("data_collator is required")
+    
+    if train_dataset is not None:
+        # For training, run the training process
+            
         # Print model info
         model.print_trainable_parameters()
         print(f"  Model dtype: {model.dtype}")
 
+        # Generate unique output directory using GUID
+        model_guid = str(uuid.uuid4())
+        output_dir = f"data/models/{os.getenv('HF_USERNAME', os.getenv('USER'))}/{PRETRAINED_MODEL_NAME_OR_PATH.split('/')[-1]}-{model_guid}"
+        
         training_args = TrainingArguments(
             num_train_epochs=1,
             per_device_train_batch_size=1,
@@ -482,7 +439,7 @@ def process_model_outputs(
             save_strategy="epoch",
             optim="paged_adamw_8bit",
             bf16=True,
-            output_dir=f"data/models/{os.getenv('HF_USERNAME', os.getenv('USER'))}/{PRETRAINED_MODEL_NAME_OR_PATH.split('/')[-1]}-{conversation_idx}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
+            output_dir=output_dir,
             remove_unused_columns=False,
             report_to=[],
             label_names=["labels"],
@@ -492,19 +449,20 @@ def process_model_outputs(
             dataloader_num_workers=0,
         )
 
-        # Create trainer
+        # Create trainer with train and eval datasets
         trainer = Trainer(
             model=model,
             args=training_args,
-            data_collator=collate_fn,
-            train_dataset=processed_dataset,
+            data_collator=data_collator,
+            train_dataset=train_dataset,
+            eval_dataset=eval_dataset,
         )
 
         # Record initial loss for comparison
         model.eval()
         with torch.no_grad():
             # Get a sample batch to compute initial loss
-            sample_batch = collate_fn([processed_dataset[0]])
+            sample_batch = data_collator([train_dataset[0]])
             device = next(model.parameters()).device
             sample_batch = {
                 k: v.to(device) if hasattr(v, "to") else v
@@ -529,16 +487,124 @@ def process_model_outputs(
             "Training should improve the model"
         )
 
-        # Return both the training result and the model path
-        return {"train_result": train_result, "model_path": training_args.output_dir}
+        # Return training results
+        train_result = train_result
+        model_path = training_args.output_dir
 
-    # For inference, use the original logic
-    response = processor.tokenizer.decode(
-        model_outputs[0][model_inputs["input_ids"].shape[-1] :],
-        skip_special_tokens=True,
-    )
+    else:
+        # For inference mode
+        if test_dataset is None:
+            raise ValueError("test_dataset is required for inference")
+        
+        # Initialize training-specific results as None for inference
+        train_result = None
+        model_path = None
 
-    return response
+    # Process test_dataset if provided (works for both training and inference)
+    model_outputs = None
+    input_length = None
+    if test_dataset is not None:
+        if train_dataset is not None:
+            print("  Running inference on test dataset after training...")
+        
+        model.eval()
+        with torch.no_grad():
+            # Process test dataset with data_collator
+            test_batch = data_collator([test_dataset[0]])
+            device = next(model.parameters()).device
+            test_batch = {
+                k: v.to(device) if hasattr(v, "to") else v
+                for k, v in test_batch.items()
+            }
+            
+            # Remove labels for inference if present
+            inference_inputs = {k: v for k, v in test_batch.items() if k != "labels"}
+            
+            # Store input length for proper decoding
+            input_length = inference_inputs["input_ids"].shape[-1]
+
+            model_outputs = model.generate(
+                **inference_inputs,
+                max_new_tokens=100,
+                do_sample=False,
+                temperature=0.0,
+                pad_token_id=processor.tokenizer.eos_token_id,
+            )
+
+    # Always return consistent format
+    return {
+        "train_result": train_result,
+        "model_path": model_path, 
+        "model_outputs": model_outputs,
+        "input_length": input_length
+    }
+
+
+def process_model_outputs(result, processor):
+    """Process results from process_model_inputs.
+    
+    Args:
+        result: Dictionary with 'model_outputs' and/or 'train_result' keys
+        processor: The processor for decoding
+        
+    Returns:
+        For training: {"train_result": ..., "model_path": ..., "response": ...}
+        For inference: {"response": ...}
+    """
+    # Auto-detect training mode based on presence of train_result
+    is_training = result.get("train_result") is not None
+    
+    if is_training:
+        # For training, we may have both training results and model outputs
+        train_result = result.get("train_result")
+        model_path = result.get("model_path")
+        model_outputs = result.get("model_outputs")
+        
+        output = {
+            "train_result": train_result,
+            "model_path": model_path
+        }
+        
+        # If we have model outputs from post-training inference, decode them
+        if model_outputs is not None:
+            input_length = result.get("input_length")
+            if input_length is not None:
+                # Decode only the newly generated tokens
+                response = processor.tokenizer.decode(
+                    model_outputs[0][input_length:],
+                    skip_special_tokens=True,
+                )
+            else:
+                # Fallback to full decode (shouldn't happen)
+                response = processor.tokenizer.decode(
+                    model_outputs[0],
+                    skip_special_tokens=True,
+                )
+            output["response"] = response
+            
+        return output
+
+    else:
+        # For inference, decode the response
+        model_outputs = result.get("model_outputs")
+        input_length = result.get("input_length")
+        if model_outputs is None:
+            raise ValueError("No model outputs found in result")
+        
+        if input_length is not None:
+            # Decode only the newly generated tokens
+            response = processor.tokenizer.decode(
+                model_outputs[0][input_length:],
+                skip_special_tokens=True,
+            )
+        else:
+            # Fallback to full decode (shouldn't happen)
+            response = processor.tokenizer.decode(
+                model_outputs[0],
+                skip_special_tokens=True,
+            )
+
+        return {"response": response}
 
 
 class ToolCallStoppingCriteria(StoppingCriteria):
