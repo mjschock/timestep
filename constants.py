@@ -2,16 +2,75 @@
 
 import copy
 
-
 # Constants
 DEFAULT_N_SHOT = 3
 DEFAULT_SYSTEM_MESSAGE = "You are a helpful assistant."
 
 # N-shot examples for tool usage demonstrations
+# Each example is a list of OpenAI message format conversations
 N_SHOT_EXAMPLES = [
-    "User: How many r's are in the word 'strawberry'?<end_of_utterance>\nAssistant: <tool_call>\n{\"arguments\": {\"code\": \"'strawberry'.count('r')\"}, \"name\": \"code_interpreter\"}\n</tool_call><end_of_utterance>\nTool: 3<end_of_utterance>\nAssistant: There are 3 r's in the word 'strawberry'.",
-    "User: What are the Three Laws of Robotics?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.<end_of_utterance>\nAssistant: The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.",
-    "User: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>\nAssistant: <tool_call>\n{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}\n</tool_call><end_of_utterance>\nTool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>\nAssistant: 42",
+    [
+        {"role": "user", "content": "How many r's are in the word 'strawberry'?"},
+        {
+            "role": "assistant",
+            "tool_calls": [
+                {
+                    "name": "code_interpreter",
+                    "arguments": {"code": "'strawberry'.count('r')"},
+                }
+            ],
+        },
+        {
+            "role": "tool",
+            "tool_call_id": "call_1",
+            "name": "code_interpreter",
+            "content": "3",
+        },
+        {"role": "assistant", "content": "There are 3 r's in the word 'strawberry'."},
+    ],
+    [
+        {"role": "user", "content": "What are the Three Laws of Robotics?"},
+        {
+            "role": "assistant",
+            "tool_calls": [
+                {"name": "web_search", "arguments": {"query": "Three Laws of Robotics"}}
+            ],
+        },
+        {
+            "role": "tool",
+            "tool_call_id": "call_2",
+            "name": "web_search",
+            "content": "The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.",
+        },
+        {
+            "role": "assistant",
+            "content": "The Three Laws of Robotics are:\n1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws.",
+        },
+    ],
+    [
+        {
+            "role": "user",
+            "content": "What is the answer to the Ultimate Question of Life, the Universe, and Everything?",
+        },
+        {
+            "role": "assistant",
+            "tool_calls": [
+                {
+                    "name": "web_search",
+                    "arguments": {
+                        "query": "What is the answer to the Ultimate Question of Life, the Universe, and Everything?"
+                    },
+                }
+            ],
+        },
+        {
+            "role": "tool",
+            "tool_call_id": "call_3",
+            "name": "web_search",
+            "content": "The answer to the Ultimate Question of Life, the Universe, and Everything is 42.",
+        },
+        {"role": "assistant", "content": "42"},
+    ],
 ]
 
 DEFAULT_TOOLS = [
@@ -92,7 +151,7 @@ Assistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>
 
 User: What are the Three Laws of Robotics?<end_of_utterance>
 Assistant: <tool_call>
-{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}
+{"arguments": {"query": "Three Laws of Robotics"}, "name": "web_search"}
 </tool_call><end_of_utterance>
 Tool: The Three Laws of Robotics are:
 1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
@@ -105,7 +164,7 @@ Assistant: The Three Laws of Robotics are:
 
 User: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>
 Assistant: <tool_call>
-{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}
+{"arguments": {"query": "What is the answer to the Ultimate Question of Life, the Universe, and Everything?"}, "name": "web_search"}
 </tool_call><end_of_utterance>
 Tool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>
 Assistant: 42""",
@@ -155,7 +214,7 @@ Assistant: There are 3 r's in the word 'strawberry'.<end_of_utterance>
 
 User: What are the Three Laws of Robotics?<end_of_utterance>
 Assistant: <tool_call>
-{'arguments': {'query': 'Three Laws of Robotics'}, 'name': 'web_search'}
+{"arguments": {"query": "Three Laws of Robotics"}, "name": "web_search"}
 </tool_call><end_of_utterance>
 Tool: The Three Laws of Robotics are:
 1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
@@ -168,14 +227,14 @@ Assistant: The Three Laws of Robotics are:
 
 User: What is the answer to the Ultimate Question of Life, the Universe, and Everything?<end_of_utterance>
 Assistant: <tool_call>
-{'arguments': {'query': 'What is the answer to the Ultimate Question of Life, the Universe, and Everything?'}, 'name': 'web_search'}
+{"arguments": {"query": "What is the answer to the Ultimate Question of Life, the Universe, and Everything?"}, "name": "web_search"}
 </tool_call><end_of_utterance>
 Tool: The answer to the Ultimate Question of Life, the Universe, and Everything is 42.<end_of_utterance>
 Assistant: 42<end_of_utterance>
 User: What is the weather like in Oakland today?<end_of_utterance>
 Assistant:""",
         "response": """ <tool_call>
-{'arguments': {'city': 'Oakland', 'country': 'CA'}}
+{"arguments": {"query": "What is the weather like in Oakland today?"}, "name": "weather_weather"}
 </tool_call>""",
     },
     "messages": [
@@ -378,63 +437,56 @@ FINE_TUNED_EXAMPLE_CONVERSATIONS = [
         ],
         "tools": None,
     },
-    # Note: Weather conversation examples are commented out due to memory constraints.
-    # The BASE_WEATHER_CONVERSATION includes very long system messages with tool definitions
-    # and n-shot examples that exceed GPU memory limits during training (requires ~12GB).
-    # These would work with larger GPUs or modified system message configurations.
-    
-    # # Weather conversation with tool call in content format
-    # {
-    #     "expected": {
-    #         "messages": copy.deepcopy(
-    #             BASE_WEATHER_CONVERSATION["expected"]["messages"]
-    #         ),
-    #         "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
-    #         "response": """ <tool_call>
-    # {'arguments': {'query': 'What is the weather like in Oakland today?'}
-    # {'name': 'weather_weather'}
-    # </tool_call>""",
-    #     },
-    #     "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
-    #     + [
-    #         {
-    #             "role": "assistant",
-    #             "content": [
-    #                 {
-    #                     "type": "text",
-    #                     "text": """<tool_call>
-    # {'arguments': {'location': 'Oakland, CA'}}
-    # </tool_call>""",
-    #                 }
-    #             ],
-    #         },
-    #     ],
-    #     "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
-    # },
-    # # Weather conversation with tool call in tool_calls array format (tests convert_tool_calls_to_content)
-    # {
-    #     "expected": {
-    #         "messages": copy.deepcopy(
-    #             BASE_WEATHER_CONVERSATION["expected"]["messages"]
-    #         ),
-    #         "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
-    #         "response": """ <tool_call>
-    # {"arguments": {"query": 'What is the weather like in Oakland today?'}
-    # "name": 'weather_weather'}
-    # </tool_call>""",
-    #     },
-    #     "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
-    #     + [
-    #         {
-    #             "role": "assistant",
-    #             "tool_calls": [
-    #                 {
-    #                     "arguments": {"location": "Oakland, CA"},
-    #                     "name": "get_weather",
-    #                 }
-    #             ],
-    #         },
-    #     ],
-    #     "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
-    # },
+    # Weather conversation with tool call in content format
+    {
+        "expected": {
+            "messages": copy.deepcopy(
+                BASE_WEATHER_CONVERSATION["expected"]["messages"]
+            ),
+            "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
+            "response": """ <tool_call>
+{"arguments": {"location": "Oakland, CA"}, "name": "get_weather"}
+</tool_call>""",
+        },
+        "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
+        + [
+            {
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": """<tool_call>
+{"arguments": {"location": "Oakland, CA"}, "name": "get_weather"}
+</tool_call>""",
+                    }
+                ],
+            },
+        ],
+        "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
+    },
+    # Weather conversation with tool call in tool_calls array format (tests convert_tool_calls_to_content)
+    {
+        "expected": {
+            "messages": copy.deepcopy(
+                BASE_WEATHER_CONVERSATION["expected"]["messages"]
+            ),
+            "prompt": copy.deepcopy(BASE_WEATHER_CONVERSATION["expected"]["prompt"]),
+            "response": """ <tool_call>
+{"arguments": {"location": "Oakland, CA"}, "name": "get_weather"}
+</tool_call>""",
+        },
+        "messages": copy.deepcopy(BASE_WEATHER_CONVERSATION["messages"])
+        + [
+            {
+                "role": "assistant",
+                "tool_calls": [
+                    {
+                        "arguments": {"location": "Oakland, CA"},
+                        "name": "get_weather",
+                    }
+                ],
+            },
+        ],
+        "tools": copy.deepcopy(BASE_WEATHER_CONVERSATION["tools"]),
+    },
 ]

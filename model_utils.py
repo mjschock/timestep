@@ -6,7 +6,6 @@ from datetime import datetime
 from typing import Any
 
 import torch
-from torch.nn.utils.rnn import pad_sequence
 from peft import LoraConfig, TaskType, get_peft_model, prepare_model_for_kbit_training
 from transformers import (
     AutoModelForImageTextToText,
@@ -17,7 +16,12 @@ from transformers import (
     TrainingArguments,
 )
 
-from constants import DEFAULT_N_SHOT, DEFAULT_SYSTEM_MESSAGE, DEFAULT_TOOLS, N_SHOT_EXAMPLES
+from constants import (
+    DEFAULT_N_SHOT,
+    DEFAULT_SYSTEM_MESSAGE,
+    DEFAULT_TOOLS,
+    N_SHOT_EXAMPLES,
+)
 
 # Global model and processor instances
 MODEL_PATH = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
@@ -37,8 +41,39 @@ def _create_n_shot_example(n: int = 0) -> str:
         return ""
 
     # Return the first n examples, or all if n > number of examples
-    selected_examples = N_SHOT_EXAMPLES[:n] if n <= len(N_SHOT_EXAMPLES) else N_SHOT_EXAMPLES
-    return "<end_of_utterance>\n\n".join(selected_examples)
+    selected_examples = (
+        N_SHOT_EXAMPLES[:n] if n <= len(N_SHOT_EXAMPLES) else N_SHOT_EXAMPLES
+    )
+
+    # Convert each example (list of messages) to the expected string format
+    formatted_examples = []
+    for example in selected_examples:
+        formatted_parts = []
+        for message in example:
+            if message["role"] == "user":
+                formatted_parts.append(f"User: {message['content']}<end_of_utterance>")
+            elif message["role"] == "assistant":
+                if "tool_calls" in message:
+                    # Format tool calls with proper JSON formatting
+                    for tool_call in message["tool_calls"]:
+                        tool_call_json = json.dumps(
+                            {
+                                "arguments": tool_call["arguments"],
+                                "name": tool_call["name"],
+                            }
+                        )
+                        formatted_parts.append(
+                            f"Assistant: <tool_call>\n{tool_call_json}\n</tool_call><end_of_utterance>"
+                        )
+                else:
+                    # Regular assistant message
+                    formatted_parts.append(f"Assistant: {message['content']}")
+            elif message["role"] == "tool":
+                formatted_parts.append(f"Tool: {message['content']}<end_of_utterance>")
+
+        formatted_examples.append("\n".join(formatted_parts))
+
+    return "<end_of_utterance>\n\n".join(formatted_examples)
 
 
 def format_tool_definitions(tools: list[dict[str, Any]]) -> str:
@@ -165,14 +200,18 @@ def prepare_model_inputs(
     # For training, return a processed dataset format
     if train:
         # Build system message parts for training
-        system_parts = _build_system_message_parts(system_message, developer_message, tools)
-        
+        system_parts = _build_system_message_parts(
+            system_message, developer_message, tools
+        )
+
         # Add combined system message if any parts exist
         if system_parts:
             if any(msg["role"] == "system" for msg in messages):
-                raise NotImplementedError("TODO: Merge system message into system_parts")
+                raise NotImplementedError(
+                    "TODO: Merge system message into system_parts"
+                )
             messages.insert(0, _create_system_message(system_parts))
-        
+
         # Convert messages to processor format
         def convert_message(msg):
             content = msg.get("content")
@@ -218,10 +257,10 @@ def prepare_model_inputs(
             }
 
         processed_messages = [convert_message(msg) for msg in messages]
-        
+
         # Return training dataset format
         processed_dataset = [{"messages": processed_messages}]
-        
+
         return processed_dataset, processed_messages, None
 
     # For inference, use the original logic
@@ -314,103 +353,56 @@ def prepare_model_inputs(
 def process_model_inputs(inputs, model, processor, train=False):
     if train:
         # For training, inputs is actually a processed_dataset
-        processed_dataset = inputs
-        
         # Create collate function for training
         image_token_id = processor.tokenizer.additional_special_tokens_ids[
             processor.tokenizer.additional_special_tokens.index("<image>")
         ]
 
         def collate_fn(examples):
-            # Configure image processor to be more memory efficient like video processing
-            # Disable image splitting to match video processing behavior
             original_do_image_splitting = processor.image_processor.do_image_splitting
-            original_video_size = processor.image_processor.video_sampling["video_size"]["longest_edge"]
-            
-            # Temporarily modify processor to match video processing efficiency
+            original_video_size = processor.image_processor.video_sampling[
+                "video_size"
+            ]["longest_edge"]
+
             processor.image_processor.do_image_splitting = False
             processor.image_processor.video_sampling["video_size"]["longest_edge"] = 512
-            
+
             try:
-                instances = []
-                for example in examples:
-                    messages = example["messages"]
-                    instance = (
-                        processor.apply_chat_template(
-                            messages,
-                            add_generation_prompt=False,
-                            tokenize=True,
-                            return_dict=True,
-                            return_tensors="pt",
-                        )
-                        .to("cuda")
-                        .to(model.dtype)
-                    )
-                    instances.append(instance)
+                example = examples[0]
+                messages = example["messages"]
+                instance = processor.apply_chat_template(
+                    messages,
+                    add_generation_prompt=False,
+                    tokenize=True,
+                    return_dict=True,
+                    return_tensors="pt",
+                )
+
+                for key in instance.keys():
+                    if hasattr(instance[key], "to"):
+                        instance[key] = instance[key].to(device=model.device)
+
             finally:
-                # Restore original processor configuration
-                processor.image_processor.do_image_splitting = original_do_image_splitting
-                processor.image_processor.video_sampling["video_size"]["longest_edge"] = original_video_size
-
-            input_ids = pad_sequence(
-                [inst["input_ids"].squeeze(0) for inst in instances],
-                batch_first=True,
-                padding_value=processor.tokenizer.pad_token_id,
-            )
-            attention_mask = pad_sequence(
-                [inst["attention_mask"].squeeze(0) for inst in instances],
-                batch_first=True,
-                padding_value=0,
-            )
-            labels = pad_sequence(
-                [inst["input_ids"].squeeze(0).clone() for inst in instances],
-                batch_first=True,
-                padding_value=-100,
-            )
-
-            labels[labels == image_token_id] = -100
+                processor.image_processor.do_image_splitting = (
+                    original_do_image_splitting
+                )
+                processor.image_processor.video_sampling["video_size"][
+                    "longest_edge"
+                ] = original_video_size
 
             out = {
-                "input_ids": input_ids,
-                "attention_mask": attention_mask,
-                "labels": labels,
+                "input_ids": instance["input_ids"],
+                "attention_mask": instance["attention_mask"],
+                "labels": instance["input_ids"].clone(),
             }
 
-            # Step 1: figure out maximum frames, height, width across the batch
-            pvs = [
-                inst["pixel_values"].squeeze(0)
-                for inst in instances
-                if "pixel_values" in inst
-            ]
-            if pvs:  # there is at least one non-None pixel_values
-                max_frames = max(pv.shape[0] for pv in pvs)
-                max_h = max(pv.shape[-2] for pv in pvs)
-                max_w = max(pv.shape[-1] for pv in pvs)
-            else:
-                max_h = max_w = processor.video_processor.video_sampling["video_size"]["longest_edge"]
-                max_frames = 1
+            out["labels"][out["labels"] == image_token_id] = -100
 
-            padded_pixel_values_list = []
-            for ex in instances:
-                pv = ex.get("pixel_values", None)
-                
-                if pv is None:
-                    # text-only => fill pixel data + mask with zeros
-                    shape_pv = (max_frames, 3, max_h, max_w)
-                    padded_pv = torch.zeros(shape_pv, dtype=torch.float32)
-                else:
-                    pv = pv.squeeze(0)
-                    f, c, h, w = pv.shape
-                    # Prepare final storage
-                    padded_pv = torch.zeros(
-                        (max_frames, c, max_h, max_w), dtype=pv.dtype, device=pv.device
-                    )
-                    padded_pv[:f, :, :h, :w] = pv
-                padded_pixel_values_list.append(padded_pv)
+            if "pixel_values" in instance and instance["pixel_values"] is not None:
+                out["pixel_values"] = instance["pixel_values"]
 
-            out["pixel_values"] = torch.stack(padded_pixel_values_list, dim=0)
             return out
-        
+
         return collate_fn
 
     # For inference, use the original logic
@@ -437,40 +429,39 @@ def process_model_inputs(inputs, model, processor, train=False):
     return model_outputs
 
 
-def process_model_outputs(model_inputs, model_outputs, processor, train=False, conversation_idx=0):
+def process_model_outputs(
+    model_inputs, model_outputs, processor, train=False, conversation_idx=0
+):
     if train:
         # For training, model_inputs is processed_dataset and model_outputs is collate_fn
         processed_dataset = model_inputs
         collate_fn = model_outputs
         model = processor  # In training mode, processor parameter contains the model
         processor = train  # And train parameter contains the actual processor
-        
+
         # Print model info
         model.print_trainable_parameters()
         print(f"  Model dtype: {model.dtype}")
 
-        # Create training arguments exactly like the working example
         training_args = TrainingArguments(
             num_train_epochs=1,
-            per_device_train_batch_size=1,  # Reduced batch size for longer text sequences
+            per_device_train_batch_size=1,
             gradient_accumulation_steps=1,
             warmup_steps=50,
             learning_rate=1e-4,
             weight_decay=0.01,
             logging_steps=25,
-            save_strategy="steps",
-            save_steps=250,
-            save_total_limit=1,
-            optim="paged_adamw_8bit",  # appropriate optimizer for QLoRA
+            save_strategy="no",
+            optim="paged_adamw_8bit",
             bf16=True,
             output_dir=f"data/models/{os.getenv('HF_USERNAME', os.getenv('USER'))}/{MODEL_PATH.split('/')[-1]}-{conversation_idx}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
-            hub_model_id=f"{os.getenv('HF_USERNAME', os.getenv('USER'))}/{MODEL_PATH.split('/')[-1]}-{conversation_idx}-{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}",
             remove_unused_columns=False,
-            report_to="tensorboard",
+            report_to=[],
             label_names=["labels"],
             dataloader_pin_memory=False,
             gradient_checkpointing=True,
             gradient_checkpointing_kwargs={"use_reentrant": False},
+            dataloader_num_workers=0,
         )
 
         # Create trainer
@@ -522,6 +513,7 @@ def process_model_outputs(model_inputs, model_outputs, processor, train=False, c
     )
 
     return response
+
 
 class ToolCallStoppingCriteria(StoppingCriteria):
     def __init__(self, tokenizer, start_length, stop_str="</tool_call>"):
