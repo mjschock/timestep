@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  timestep-oai-app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+    volumes:
+      # Mount for development (optional)
+      - ./APIs:/app/APIs
+      - ./main.py:/app/main.py
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a database for production use
+  # postgres:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_DB: timestep_oai
+  #     POSTGRES_USER: timestep
+  #     POSTGRES_PASSWORD: password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+# volumes:
+#   postgres_data:
