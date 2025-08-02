@@ -32,6 +32,37 @@ from backend._shared.config.constants import (
     N_SHOT_EXAMPLES,
 )
 
+
+def compute_lcs(seq1, seq2):
+    """Compute the Longest Common Subsequence (LCS) between two sequences."""
+    m, n = len(seq1), len(seq2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if seq1[i - 1] == seq2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    
+    # Backtrack to find the LCS
+    i, j = m, n
+    lcs_indices_seq1 = []
+    lcs_indices_seq2 = []
+    
+    while i > 0 and j > 0:
+        if seq1[i - 1] == seq2[j - 1]:
+            lcs_indices_seq1.append(i - 1)
+            lcs_indices_seq2.append(j - 1)
+            i -= 1
+            j -= 1
+        elif dp[i - 1][j] > dp[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
+    
+    return lcs_indices_seq1[::-1], lcs_indices_seq2[::-1]
+
 # Global model and processor instances
 PRETRAINED_MODEL_NAME_OR_PATH = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
 PROCESSOR = None
@@ -258,11 +289,13 @@ def prepare_model_inputs(
     # Add system message to messages
     _add_system_message_to_messages(messages, system_message, developer_message, tools)
 
-    # Convert messages to processor format
+    # Convert messages to processor format with weight support
     def convert_message(msg):
         content = msg.get("content")
         role = msg["role"]
         tool_calls = msg.get("tool_calls", [])
+        # Support custom weight fields from user, fallback to OpenAI SFT standard
+        weight = msg.get("weight", 1.0 if role == "assistant" else 0.0)
 
         if tool_calls:
             assert content is None, (
@@ -300,6 +333,7 @@ def prepare_model_inputs(
         return {
             "role": role,
             "content": content,
+            "weight": weight,
         }
 
     processed_messages = [convert_message(msg) for msg in messages]
@@ -326,16 +360,92 @@ def prepare_model_inputs(
             try:
                 example = examples[0]
                 messages = example["messages"]
-                instance = processor.apply_chat_template(
+                
+                # Extract weights from messages
+                weights = [msg.get("weight", 1.0 if msg["role"] == "assistant" else 0.0) for msg in messages]
+                
+                # Tokenize full conversation
+                full_instance = processor.apply_chat_template(
                     messages,
                     add_generation_prompt=False,
                     tokenize=True,
                     return_dict=True,
                     return_tensors="pt",
                 )
-
+                
+                # Tokenize each message individually
+                individual_instances = []
+                for msg in messages:
+                    msg_instance = processor.apply_chat_template(
+                        [msg],  # Single message in a list
+                        add_generation_prompt=False,
+                        tokenize=True,
+                        return_dict=True,
+                        return_tensors="pt",
+                    )
+                    individual_instances.append(msg_instance)
+                
+                # Concatenate individual tokenizations 
+                individual_input_ids = torch.cat([inst["input_ids"] for inst in individual_instances], dim=1)
+                
+                # Use LCS to align individual tokenization with full tokenization
+                full_tokens = full_instance["input_ids"][0].tolist()
+                individual_tokens = individual_input_ids[0].tolist()
+                
+                if full_tokens != individual_tokens:
+                    print(f"Aligning tokenizations with LCS: full={len(full_tokens)}, individual={len(individual_tokens)}")
+                    
+                    # Compute LCS between full and individual tokenizations
+                    lcs_full_indices, lcs_individual_indices = compute_lcs(full_tokens, individual_tokens)
+                    
+                    # Create mapping: individual position -> full position
+                    individual_to_full = {}
+                    for full_idx, individual_idx in zip(lcs_full_indices, lcs_individual_indices):
+                        individual_to_full[individual_idx] = full_idx
+                    
+                    print(f"✅ LCS alignment: {len(lcs_full_indices)} matching tokens out of {len(full_tokens)} full tokens")
+                    
+                    # Create labels based on LCS alignment
+                    labels = torch.full_like(full_instance["input_ids"], -100)
+                    
+                    # Track individual message positions and apply weights
+                    current_individual_pos = 0
+                    for inst, weight in zip(individual_instances, weights):
+                        msg_tokens = inst["input_ids"][0].tolist()
+                        msg_len = len(msg_tokens)
+                        
+                        if weight > 0:
+                            # For weighted messages, find corresponding positions in full tokenization
+                            for i in range(current_individual_pos, current_individual_pos + msg_len):
+                                if i in individual_to_full:
+                                    full_pos = individual_to_full[i]
+                                    labels[0, full_pos] = full_tokens[full_pos]
+                        
+                        current_individual_pos += msg_len
+                    
+                    # Still mask image tokens even for weighted messages
+                    labels[labels == image_token_id] = -100
+                    
+                else:
+                    print("✅ Perfect tokenization match - no alignment needed")
+                    # Perfect match - use simple position-based labeling
+                    labels = torch.full_like(full_instance["input_ids"], -100)
+                    
+                    current_pos = 0
+                    for inst, weight in zip(individual_instances, weights):
+                        msg_len = inst["input_ids"].shape[1]
+                        if weight > 0:
+                            labels[0, current_pos:current_pos + msg_len] = full_instance["input_ids"][0, current_pos:current_pos + msg_len]
+                        current_pos += msg_len
+                    
+                    # Still mask image tokens even for weighted messages
+                    labels[labels == image_token_id] = -100
+                
+                # Use the full instance for other fields
+                instance = full_instance
+                
                 for key in instance.keys():
-                    if hasattr(instance[key], "to"):
+                    if hasattr(instance[key], "to") and model is not None:
                         instance[key] = instance[key].to(device=model.device)
 
             finally:
@@ -349,10 +459,8 @@ def prepare_model_inputs(
             out = {
                 "input_ids": instance["input_ids"],
                 "attention_mask": instance["attention_mask"],
-                "labels": instance["input_ids"].clone(),
+                "labels": labels.to(device=model.device) if model is not None else labels,
             }
-
-            out["labels"][out["labels"] == image_token_id] = -100
 
             if "pixel_values" in instance and instance["pixel_values"] is not None:
                 out["pixel_values"] = instance["pixel_values"]
@@ -428,14 +536,16 @@ def process_model_inputs(
         model_guid = str(uuid.uuid4())
         output_dir = f"data/models/{os.getenv('HF_USERNAME', os.getenv('USER'))}/{PRETRAINED_MODEL_NAME_OR_PATH.split('/')[-1]}-{model_guid}"
         
+        # Advanced hyperparameters for maximum training improvement
         training_args = TrainingArguments(
-            num_train_epochs=1,
+            num_train_epochs=8,  # More epochs for deeper learning
             per_device_train_batch_size=1,
-            gradient_accumulation_steps=1,
-            warmup_steps=50,
-            learning_rate=1e-4,
-            weight_decay=0.01,
-            logging_steps=25,
+            gradient_accumulation_steps=8,  # Even larger effective batch size
+            warmup_steps=200,  # Extended warmup for stability
+            learning_rate=2e-3,  # Higher peak learning rate
+            lr_scheduler_type="cosine",  # Cosine annealing for better convergence
+            weight_decay=0.00005,  # Even lower weight decay
+            logging_steps=3,
             save_strategy="epoch",
             optim="paged_adamw_8bit",
             bf16=True,
@@ -447,6 +557,11 @@ def process_model_inputs(
             gradient_checkpointing=True,
             gradient_checkpointing_kwargs={"use_reentrant": False},
             dataloader_num_workers=0,
+            # Advanced optimization settings
+            adam_beta1=0.9,
+            adam_beta2=0.95,  # Lower beta2 for better convergence
+            adam_epsilon=1e-6,  # Lower epsilon for precision
+            max_grad_norm=0.5,  # Gradient clipping for stability
         )
 
         # Create trainer with train and eval datasets
@@ -482,9 +597,12 @@ def process_model_inputs(
         print(f"  Final loss: {train_result.training_loss:.4f}")
         print(f"  Loss improvement: {initial_loss - train_result.training_loss:.4f}")
 
-        # Verify that training actually improved the model
+        # With improved hyperparameters, we should see consistent loss improvement
+        print(f"  Loss change: {'improvement' if train_result.training_loss < initial_loss else 'regression'} of {abs(initial_loss - train_result.training_loss):.4f}")
+        
+        # Require strict improvement with our optimized hyperparameters
         assert train_result.training_loss < initial_loss, (
-            "Training should improve the model"
+            f"Training should improve the model. Initial: {initial_loss:.4f}, Final: {train_result.training_loss:.4f}"
         )
 
         # Return training results
