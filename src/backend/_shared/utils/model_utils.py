@@ -274,75 +274,102 @@ def get_processor():
 
 
 def prepare_model_inputs(
-    messages: list[dict[str, Any]],
-    processor,
+    conversations: dict[str, dict[str, Any]],
     model=None,
-    system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
-    developer_message: str | None = None,
-    tools: list[dict[str, Any]] | None = None,
-    train: bool = False,
-) -> tuple[dict[str, Any], Any]:
-    # Create deep copies to avoid mutating the original conversation data
-    messages = deepcopy(messages)
-    tools = deepcopy(tools) if tools is not None else None
-
-    # Add system message to messages
-    _add_system_message_to_messages(messages, system_message, developer_message, tools)
-
-    # Convert messages to processor format with weight support
-    def convert_message(msg):
-        content = msg.get("content")
-        role = msg["role"]
-        tool_calls = msg.get("tool_calls", [])
-        # Support custom weight fields from user, fallback to OpenAI SFT standard
-        weight = msg.get("weight", 1.0 if role == "assistant" else 0.0)
-
-        if tool_calls:
-            assert content is None, (
-                "Content cannot be provided when tool calls are present"
-            )
-            assert role == "assistant", (
-                "Tool calls are only allowed for assistant messages"
-            )
-
-            content = [
-                {
-                    "text": f"<tool_call>\n{json.dumps(tool_call)}\n</tool_call>",
-                    "type": "text",
-                }
-                for tool_call in tool_calls
-            ]
-
-        assert content is not None, "Content is required"
-
-        if isinstance(content, str):
-            content = [{"text": content, "type": "text"}]
-
-        assert isinstance(content, list), "Content must be a list"
-
-        for item in content:
-            assert "type" in item, "Each item in content must have a type"
-            assert (
-                "image" in item
-                or "path" in item
-                or "text" in item
-                or "url" in item
-                or "video" in item
-            ), "Each item in content must have an image, path, text, url, or video"
-
-        return {
-            "role": role,
-            "content": content,
-            "weight": weight,
-        }
-
-    processed_messages = [convert_message(msg) for msg in messages]
-
-    # Create dataset format (consistent for both training and inference)
-    processed_dataset = [{"messages": processed_messages}]
+    processor=None,
+) -> dict[str, Any]:
+    # Validate required parameters
+    if not conversations:
+        raise ValueError("conversations dictionary is required")
     
-    # Create collate function based on training mode
-    if train:
+    if processor is None:
+        processor = get_processor()
+    
+    # Initialize model inputs dictionary
+    model_inputs = {
+        "data_collator": None,
+        "eval_dataset": None,
+        "test_dataset": None,
+        "train_dataset": None,
+    }
+    
+    # Process each conversation type (eval, test, train)
+    for dataset_type in ["eval", "test", "train"]:
+        if dataset_type not in conversations:
+            continue
+            
+        conversation = conversations[dataset_type]
+        
+        # Extract conversation components (alphabetical order)
+        developer_message = conversation.get("developer_message")
+        messages = conversation.get("messages", [])
+        system_message = conversation.get("system_message", DEFAULT_SYSTEM_MESSAGE)
+        tools = deepcopy(conversation.get("tools")) if conversation.get("tools") else None
+        
+        if not messages:
+            continue
+            
+        # Create deep copies to avoid mutating the original conversation data
+        messages = deepcopy(messages)
+
+        # Add system message to messages
+        _add_system_message_to_messages(messages, system_message, developer_message, tools)
+
+        # Convert messages to processor format with weight support
+        def convert_message(msg):
+            content = msg.get("content")
+            role = msg["role"]
+            tool_calls = msg.get("tool_calls", [])
+            # Support custom weight fields from user, fallback to OpenAI SFT standard
+            weight = msg.get("weight", 1.0 if role == "assistant" else 0.0)
+
+            if tool_calls:
+                assert content is None, (
+                    "Content cannot be provided when tool calls are present"
+                )
+                assert role == "assistant", (
+                    "Tool calls are only allowed for assistant messages"
+                )
+
+                content = [
+                    {
+                        "text": f"<tool_call>\n{json.dumps(tool_call)}\n</tool_call>",
+                        "type": "text",
+                    }
+                    for tool_call in tool_calls
+                ]
+
+            assert content is not None, "Content is required"
+
+            if isinstance(content, str):
+                content = [{"text": content, "type": "text"}]
+
+            assert isinstance(content, list), "Content must be a list"
+
+            for item in content:
+                assert "type" in item, "Each item in content must have a type"
+                assert (
+                    "image" in item
+                    or "path" in item
+                    or "text" in item
+                    or "url" in item
+                    or "video" in item
+                ), "Each item in content must have an image, path, text, url, or video"
+
+            return {
+                "role": role,
+                "content": content,
+                "weight": weight,
+            }
+
+        processed_messages = [convert_message(msg) for msg in messages]
+        processed_dataset = [{"messages": processed_messages}]
+        
+        # Store the dataset in the appropriate key  
+        model_inputs[f"{dataset_type}_dataset"] = processed_dataset
+
+    # Create collate function for training mode (auto-detected from train dataset presence)
+    if model_inputs.get("train_dataset"):
         # Create training collate function
         image_token_id = processor.tokenizer.additional_special_tokens_ids[
             processor.tokenizer.additional_special_tokens.index("<image>")
@@ -365,7 +392,7 @@ def prepare_model_inputs(
                 weights = [msg.get("weight", 1.0 if msg["role"] == "assistant" else 0.0) for msg in messages]
                 
                 # Tokenize full conversation
-                full_instance = processor.apply_chat_template(
+                full_inputs = processor.apply_chat_template(
                     messages,
                     add_generation_prompt=False,
                     tokenize=True,
@@ -374,22 +401,22 @@ def prepare_model_inputs(
                 )
                 
                 # Tokenize each message individually
-                individual_instances = []
+                individual_inputs = []
                 for msg in messages:
-                    msg_instance = processor.apply_chat_template(
+                    msg_inputs = processor.apply_chat_template(
                         [msg],  # Single message in a list
                         add_generation_prompt=False,
                         tokenize=True,
                         return_dict=True,
                         return_tensors="pt",
                     )
-                    individual_instances.append(msg_instance)
+                    individual_inputs.append(msg_inputs)
                 
                 # Concatenate individual tokenizations 
-                individual_input_ids = torch.cat([inst["input_ids"] for inst in individual_instances], dim=1)
+                individual_input_ids = torch.cat([inputs["input_ids"] for inputs in individual_inputs], dim=1)
                 
                 # Use LCS to align individual tokenization with full tokenization
-                full_tokens = full_instance["input_ids"][0].tolist()
+                full_tokens = full_inputs["input_ids"][0].tolist()
                 individual_tokens = individual_input_ids[0].tolist()
                 
                 if full_tokens != individual_tokens:
@@ -406,12 +433,12 @@ def prepare_model_inputs(
                     print(f"✅ LCS alignment: {len(lcs_full_indices)} matching tokens out of {len(full_tokens)} full tokens")
                     
                     # Create labels based on LCS alignment
-                    labels = torch.full_like(full_instance["input_ids"], -100)
+                    labels = torch.full_like(full_inputs["input_ids"], -100)
                     
                     # Track individual message positions and apply weights
                     current_individual_pos = 0
-                    for inst, weight in zip(individual_instances, weights):
-                        msg_tokens = inst["input_ids"][0].tolist()
+                    for inputs, weight in zip(individual_inputs, weights):
+                        msg_tokens = inputs["input_ids"][0].tolist()
                         msg_len = len(msg_tokens)
                         
                         if weight > 0:
@@ -429,24 +456,24 @@ def prepare_model_inputs(
                 else:
                     print("✅ Perfect tokenization match - no alignment needed")
                     # Perfect match - use simple position-based labeling
-                    labels = torch.full_like(full_instance["input_ids"], -100)
+                    labels = torch.full_like(full_inputs["input_ids"], -100)
                     
                     current_pos = 0
-                    for inst, weight in zip(individual_instances, weights):
-                        msg_len = inst["input_ids"].shape[1]
+                    for inputs, weight in zip(individual_inputs, weights):
+                        msg_len = inputs["input_ids"].shape[1]
                         if weight > 0:
-                            labels[0, current_pos:current_pos + msg_len] = full_instance["input_ids"][0, current_pos:current_pos + msg_len]
+                            labels[0, current_pos:current_pos + msg_len] = full_inputs["input_ids"][0, current_pos:current_pos + msg_len]
                         current_pos += msg_len
                     
                     # Still mask image tokens even for weighted messages
                     labels[labels == image_token_id] = -100
                 
-                # Use the full instance for other fields
-                instance = full_instance
+                # Use the full inputs for other fields
+                inputs = full_inputs
                 
-                for key in instance.keys():
-                    if hasattr(instance[key], "to") and model is not None:
-                        instance[key] = instance[key].to(device=model.device)
+                for key in inputs.keys():
+                    if hasattr(inputs[key], "to") and model is not None:
+                        inputs[key] = inputs[key].to(device=model.device)
 
             finally:
                 processor.image_processor.do_image_splitting = (
@@ -457,24 +484,16 @@ def prepare_model_inputs(
                 ] = original_video_size
 
             out = {
-                "input_ids": instance["input_ids"],
-                "attention_mask": instance["attention_mask"],
+                "input_ids": inputs["input_ids"],
+                "attention_mask": inputs["attention_mask"],
                 "labels": labels.to(device=model.device) if model is not None else labels,
             }
 
-            if "pixel_values" in instance and instance["pixel_values"] is not None:
-                out["pixel_values"] = instance["pixel_values"]
+            if "pixel_values" in inputs and inputs["pixel_values"] is not None:
+                out["pixel_values"] = inputs["pixel_values"]
 
             return out
 
-        # Return for training mode
-        return {
-            "data_collator": data_collator,
-            "train_dataset": processed_dataset,
-            "eval_dataset": None,
-            "test_dataset": None,
-        }
-    
     else:
         # Create inference collate function
         def data_collator(examples):
@@ -505,25 +524,30 @@ def prepare_model_inputs(
 
             return processed_inputs
 
-        # Return for inference mode
-        return {
-            "data_collator": data_collator,
-            "train_dataset": None,
-            "eval_dataset": None,
-            "test_dataset": processed_dataset,
-        }
+    # Store the data collator  
+    model_inputs["data_collator"] = data_collator
+
+    # Return model inputs dictionary
+    return model_inputs
 
 
 def process_model_inputs(
-    model,
-    processor,
     data_collator: Any | None = None,
-    train_dataset: TorchDataset | IterableDataset | Dataset | None = None,
     eval_dataset: TorchDataset | dict[str, TorchDataset] | Dataset | None = None,
+    model=None,
+    processor=None,
     test_dataset: TorchDataset | dict[str, TorchDataset] | Dataset | None = None,
+    train_dataset: TorchDataset | IterableDataset | Dataset | None = None,
 ):
+    # Validate required parameters
     if data_collator is None:
         raise ValueError("data_collator is required")
+    
+    if model is None:
+        model = get_model()
+    
+    if processor is None:
+        processor = get_processor()
     
     if train_dataset is not None:
         # For training, run the training process
@@ -538,39 +562,38 @@ def process_model_inputs(
         
         # Advanced hyperparameters for maximum training improvement
         training_args = TrainingArguments(
-            num_train_epochs=8,  # More epochs for deeper learning
-            per_device_train_batch_size=1,
-            gradient_accumulation_steps=8,  # Even larger effective batch size
-            warmup_steps=200,  # Extended warmup for stability
-            learning_rate=2e-3,  # Higher peak learning rate
-            lr_scheduler_type="cosine",  # Cosine annealing for better convergence
-            weight_decay=0.00005,  # Even lower weight decay
-            logging_steps=3,
-            save_strategy="epoch",
-            optim="paged_adamw_8bit",
-            bf16=True,
-            output_dir=output_dir,
-            remove_unused_columns=False,
-            report_to=[],
-            label_names=["labels"],
-            dataloader_pin_memory=False,
-            gradient_checkpointing=True,
-            gradient_checkpointing_kwargs={"use_reentrant": False},
-            dataloader_num_workers=0,
-            # Advanced optimization settings
             adam_beta1=0.9,
             adam_beta2=0.95,  # Lower beta2 for better convergence
             adam_epsilon=1e-6,  # Lower epsilon for precision
+            bf16=True,
+            dataloader_num_workers=0,
+            dataloader_pin_memory=False,
+            gradient_accumulation_steps=8,  # Even larger effective batch size
+            gradient_checkpointing=True,
+            gradient_checkpointing_kwargs={"use_reentrant": False},
+            label_names=["labels"],
+            learning_rate=2e-3,  # Higher peak learning rate
+            logging_steps=3,
+            lr_scheduler_type="cosine",  # Cosine annealing for better convergence
             max_grad_norm=0.5,  # Gradient clipping for stability
+            num_train_epochs=8,  # More epochs for deeper learning
+            optim="paged_adamw_8bit",
+            output_dir=output_dir,
+            per_device_train_batch_size=1,
+            remove_unused_columns=False,
+            report_to=[],
+            save_strategy="epoch",
+            warmup_steps=200,  # Extended warmup for stability
+            weight_decay=0.00005,  # Even lower weight decay
         )
 
         # Create trainer with train and eval datasets
         trainer = Trainer(
-            model=model,
             args=training_args,
             data_collator=data_collator,
-            train_dataset=train_dataset,
             eval_dataset=eval_dataset,
+            model=model,
+            train_dataset=train_dataset,
         )
 
         # Record initial loss for comparison
@@ -651,14 +674,14 @@ def process_model_inputs(
 
     # Always return consistent format
     return {
-        "train_result": train_result,
-        "model_path": model_path, 
+        "input_length": input_length,
         "model_outputs": model_outputs,
-        "input_length": input_length
+        "model_path": model_path, 
+        "train_result": train_result,
     }
 
 
-def process_model_outputs(result, processor):
+def process_model_outputs(model_outputs=None, processor=None):
     """Process results from process_model_inputs.
     
     Args:
@@ -669,60 +692,70 @@ def process_model_outputs(result, processor):
         For training: {"train_result": ..., "model_path": ..., "response": ...}
         For inference: {"response": ...}
     """
+    # Validate required parameters
+    if model_outputs is None:
+        raise ValueError("model_outputs is required")
+    
+    if processor is None:
+        processor = get_processor()
+    
     # Auto-detect training mode based on presence of train_result
-    is_training = result.get("train_result") is not None
+    is_training = model_outputs.get("train_result") is not None
+
+    results = {}
     
     if is_training:
         # For training, we may have both training results and model outputs
-        train_result = result.get("train_result")
-        model_path = result.get("model_path")
-        model_outputs = result.get("model_outputs")
-        
-        output = {
-            "train_result": train_result,
-            "model_path": model_path
-        }
+        train_result = model_outputs.get("train_result")
+        model_path = model_outputs.get("model_path")
+        model_outputs_data = model_outputs.get("model_outputs")
+
+        results["model_path"] = model_path
+        results["train_result"] = train_result
         
         # If we have model outputs from post-training inference, decode them
-        if model_outputs is not None:
-            input_length = result.get("input_length")
+        if model_outputs_data is not None:
+            input_length = model_outputs.get("input_length")
             if input_length is not None:
                 # Decode only the newly generated tokens
                 response = processor.tokenizer.decode(
-                    model_outputs[0][input_length:],
+                    model_outputs_data[0][input_length:],
                     skip_special_tokens=True,
                 )
+
             else:
                 # Fallback to full decode (shouldn't happen)
                 response = processor.tokenizer.decode(
-                    model_outputs[0],
+                    model_outputs_data[0],
                     skip_special_tokens=True,
                 )
-            output["response"] = response
-            
-        return output
+
+            results["response"] = response
 
     else:
         # For inference, decode the response
-        model_outputs = result.get("model_outputs")
-        input_length = result.get("input_length")
-        if model_outputs is None:
-            raise ValueError("No model outputs found in result")
+        model_outputs_data = model_outputs.get("model_outputs")
+        input_length = model_outputs.get("input_length")
+        if model_outputs_data is None:
+            raise ValueError("No model outputs found in model_outputs")
         
         if input_length is not None:
             # Decode only the newly generated tokens
             response = processor.tokenizer.decode(
-                model_outputs[0][input_length:],
-                skip_special_tokens=True,
-            )
-        else:
-            # Fallback to full decode (shouldn't happen)
-            response = processor.tokenizer.decode(
-                model_outputs[0],
+                model_outputs_data[0][input_length:],
                 skip_special_tokens=True,
             )
 
-        return {"response": response}
+        else:
+            # Fallback to full decode (shouldn't happen)
+            response = processor.tokenizer.decode(
+                model_outputs_data[0],
+                skip_special_tokens=True,
+            )
+
+        results["response"] = response
+
+    return results
 
 
 class ToolCallStoppingCriteria(StoppingCriteria):

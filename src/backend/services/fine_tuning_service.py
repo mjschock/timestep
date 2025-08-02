@@ -26,30 +26,28 @@ class FineTuningService:
         processor = get_processor()
 
         # Process training data
-        _, processed_messages, _ = prepare_model_inputs(
+        model_inputs = prepare_model_inputs(
             messages=dataset[0]["messages"],  # First example
             processor=processor,
             train=True,
         )
 
-        processed_dataset = [{"messages": processed_messages}]
-
-        # Get collate function
-        collate_fn = process_model_inputs(
-            processed_dataset, model, processor, train=True
+        # Get collate function and run training
+        model_outputs = process_model_inputs(
+            data_collator=model_inputs["data_collator"],
+            model=model,
+            processor=processor,
+            train_dataset=model_inputs["train_dataset"],
         )
 
         # Run training
-        training_result = process_model_outputs(
-            processed_dataset,
-            collate_fn,
-            model,
-            train=processor,
-            conversation_idx=0,
+        results = process_model_outputs(
+            model_outputs=model_outputs,
+            processor=processor,
         )
 
         self.logger.info("Fine-tuning completed successfully")
-        return training_result
+        return results
 
 
 # Global service instance

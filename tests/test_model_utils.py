@@ -76,11 +76,17 @@ class TestMultimodalMessageProcessor:
         ### PREPARE INPUTS
         print("Preparing inputs...")
 
-        datasets = prepare_model_inputs(
-            messages=messages,
-            processor=processor,
+        conversations = {
+            "test": {
+                "messages": messages,
+                "tools": tools,
+            }
+        }
+
+        model_inputs = prepare_model_inputs(
+            conversations=conversations,
             model=model,
-            tools=tools,
+            processor=processor,
         )
 
         print("Testing inputs...")
@@ -91,20 +97,23 @@ class TestMultimodalMessageProcessor:
         ### PROCESS INPUTS
         print("Processing inputs...")
 
-        result = process_model_inputs(
+        model_outputs = process_model_inputs(
+            data_collator=model_inputs["data_collator"],
+            eval_dataset=model_inputs["eval_dataset"],
             model=model,
             processor=processor,
-            data_collator=datasets["data_collator"],
-            train_dataset=datasets["train_dataset"],
-            eval_dataset=datasets["eval_dataset"],
-            test_dataset=datasets["test_dataset"],
+            test_dataset=model_inputs["test_dataset"],
+            train_dataset=model_inputs["train_dataset"],
         )
 
         ### PROCESS OUTPUTS
         print("Processing outputs...")
 
-        output = process_model_outputs(result, processor)
-        response = output["response"]
+        results = process_model_outputs(
+            model_outputs=model_outputs, processor=processor
+        )
+
+        response = results["response"]
 
         print("✅ Inference completed!")
         print(f"🤖 Model response: {response}")
@@ -137,12 +146,17 @@ class TestMultimodalMessageProcessor:
         ### PREPARE INPUTS
         print("Preparing inputs...")
 
-        datasets = prepare_model_inputs(
-            messages=messages,
-            processor=processor,
+        conversations = {
+            "train": {
+                "messages": messages,
+                "tools": tools,
+            }
+        }
+
+        model_inputs = prepare_model_inputs(
+            conversations=conversations,
             model=model,
-            tools=tools,
-            train=True,
+            processor=processor,
         )
 
         # TODO: Re-enable input validation for training
@@ -153,19 +167,19 @@ class TestMultimodalMessageProcessor:
         ### PROCESS INPUTS
         print("Processing inputs...")
 
-        result = process_model_inputs(
+        model_outputs = process_model_inputs(
+            data_collator=model_inputs["data_collator"],
+            eval_dataset=model_inputs["eval_dataset"],
             model=model,
             processor=processor,
-            data_collator=datasets["data_collator"],
-            train_dataset=datasets["train_dataset"],
-            eval_dataset=datasets["eval_dataset"],
-            test_dataset=datasets["test_dataset"],
+            test_dataset=model_inputs["test_dataset"],
+            train_dataset=model_inputs["train_dataset"],
         )
 
         ### PROCESS OUTPUTS
         print("Processing outputs...")
 
-        output = process_model_outputs(result, processor)
+        output = process_model_outputs(model_outputs=model_outputs, processor=processor)
 
         # Store the model path for use in inference test
         model_path = output["model_path"]
@@ -210,11 +224,17 @@ class TestMultimodalMessageProcessor:
         ### PREPARE INPUTS
         print("Preparing inputs...")
 
-        datasets = prepare_model_inputs(
-            messages=messages,
-            processor=processor,
+        conversations = {
+            "test": {
+                "messages": messages,
+                "tools": tools,
+            }
+        }
+
+        model_inputs = prepare_model_inputs(
+            conversations=conversations,
             model=model,
-            tools=tools,
+            processor=processor,
         )
 
         print("Testing inputs...")
@@ -225,19 +245,19 @@ class TestMultimodalMessageProcessor:
         ### PROCESS INPUTS
         print("Processing inputs...")
 
-        result = process_model_inputs(
+        model_outputs = process_model_inputs(
+            data_collator=model_inputs["data_collator"],
+            eval_dataset=model_inputs["eval_dataset"],
             model=model,
             processor=processor,
-            data_collator=datasets["data_collator"],
-            train_dataset=datasets["train_dataset"],
-            eval_dataset=datasets["eval_dataset"],
-            test_dataset=datasets["test_dataset"],
+            test_dataset=model_inputs["test_dataset"],
+            train_dataset=model_inputs["train_dataset"],
         )
 
         ### PROCESS OUTPUTS
         print("Processing outputs...")
 
-        output = process_model_outputs(result, processor)
+        output = process_model_outputs(model_outputs=model_outputs, processor=processor)
         response = output["response"]
 
         print("✅ Fine-tuned model inference completed!")
