@@ -415,6 +415,12 @@ class FilesService:
         with open(file_path, "rb") as f:
             return f.read()
 
+    def get_file(self, file_id: str) -> str:
+        """Get the content of a file as a string."""
+        file_path = self.download_file(file_id)
+        with open(file_path, encoding="utf-8") as f:
+            return f.read()
+
 
 def get_files_metadata_dict() -> dict[str, dict[str, Any]]:
     """Get all files as a dictionary for backward compatibility with FILES_METADATA."""
@@ -454,6 +460,25 @@ class FilesMetadataDict:
     def __len__(self):
         files_dict = get_files_metadata_dict()
         return len(files_dict)
+
+
+# Global service instance
+_files_service = None
+_lock = None
+
+
+def get_files_service() -> FilesService:
+    """Get the global files service instance."""
+    global _files_service, _lock
+    if _files_service is None:
+        import threading
+
+        if _lock is None:
+            _lock = threading.Lock()
+        with _lock:
+            if _files_service is None:
+                _files_service = FilesService()
+    return _files_service
 
 
 # Provide backward compatibility

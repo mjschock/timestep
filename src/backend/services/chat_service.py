@@ -5,9 +5,15 @@ import uuid
 from typing import Any
 
 import torch
+from datasets import Dataset, DatasetDict
 from fastapi import HTTPException
 
 from backend._shared.logging_config import logger
+from backend._shared.utils.model_utils import (
+    prepare_model_inputs,
+    process_model_inputs,
+    process_model_outputs,
+)
 from backend.services.models_service import get_models_service
 
 
@@ -18,6 +24,121 @@ class ChatService:
     def __init__(self) -> None:
         # No need for instance-level storage anymore
         pass
+
+    def _convert_chat_to_dataset(self, messages, tools=None):
+        """Convert chat messages to DatasetDict format for model_utils."""
+        # Create a single conversation example
+        conversation_data = {
+            "messages": messages,
+            "tools": tools or [],
+            "parallel_tool_calls": None,
+        }
+
+        # Create DatasetDict with test split for inference
+        dataset = DatasetDict({"test": Dataset.from_list([conversation_data])})
+
+        return dataset
+
+    def _create_non_streaming_response_from_model_utils(
+        self,
+        results,
+        model_name,
+        max_tokens,
+        temperature,
+        top_p,
+        n,
+        stop,
+        user,
+    ):
+        """Create a non-streaming response from model_utils results."""
+        # Get the response text from model_utils
+        response_text = results.get("response", "")
+
+        # Parse tool calls from the response text
+        tool_calls = self._parse_tool_calls_from_text(response_text)
+
+        # Create the message
+        message = {
+            "role": "assistant",
+            "content": response_text,
+        }
+
+        # Add tool_calls if found
+        if tool_calls:
+            message["tool_calls"] = tool_calls
+
+        # Create choice
+        choice = {
+            "index": 0,
+            "message": message,
+            "finish_reason": "stop",
+        }
+
+        # Calculate usage (simplified - model_utils doesn't return detailed usage info yet)
+        usage = {
+            "prompt_tokens": 0,  # TODO: Get from model_utils if needed
+            "completion_tokens": len(response_text.split()) if response_text else 0,
+            "total_tokens": len(response_text.split()) if response_text else 0,
+        }
+
+        # Build final response
+        return self._build_non_streaming_response(model_name, [choice], usage)
+
+    def _create_streaming_response_from_model_utils(
+        self,
+        results,
+        model_name,
+        max_tokens,
+        temperature,
+        top_p,
+        stop,
+        logprobs=False,
+        top_logprobs=5,
+        tool_choice=None,
+        tools=None,
+    ):
+        """Create a streaming response from model_utils results."""
+        from fastapi.responses import StreamingResponse
+
+        # Get the response stream from model_utils
+        response_stream = results.get("response_stream")
+
+        return StreamingResponse(
+            self._streaming_event_generator_from_model_utils(
+                response_stream,
+                model_name,
+                logprobs,
+                tool_choice,
+                tools,
+            ),
+            media_type="text/event-stream",
+        )
+
+    def _streaming_event_generator_from_model_utils(
+        self,
+        response_stream,
+        model_name,
+        logprobs,
+        tool_choice,
+        tools,
+    ):
+        """Generate streaming events from model_utils response stream."""
+        generated_text = ""
+
+        # Stream tokens from model_utils TextIteratorStreamer
+        for token in response_stream:
+            if token:
+                generated_text += token
+                yield self._create_token_chunk(token, model_name, logprobs)
+
+        # Handle tool choice fallback if needed
+        tool_calls = self._handle_streaming_tool_choice_fallback(
+            generated_text, tool_choice, tools
+        )
+
+        # Send final chunk
+        yield self._create_final_chunk(model_name, tool_calls)
+        yield "data: [DONE]\n\n"
 
     def list_chat_completions(
         self, model=None, metadata=None, after=None, limit=None, order=None
@@ -111,8 +232,10 @@ class ChatService:
                 max_tokens, temperature, top_p, n, presence_penalty, frequency_penalty
             )
 
-            # Get model instance
-            model, processor = get_models_service().get_model_instance(model_name)
+            # Get model and processor instances
+            models_service = get_models_service()
+            model = models_service.get_model(model_name)
+            processor = models_service.get_processor(model_name)
             logger.info(
                 f"Model: {model_name}, max_tokens: {max_tokens}, temperature: {temperature}, n: {n}"
             )
@@ -124,33 +247,34 @@ class ChatService:
                 f"Normalized messages: {json.dumps(normalized_messages, indent=2, default=str)}"
             )
 
-            # Log the prompt as a string for debugging
-            prompt = processor.apply_chat_template(
-                normalized_messages,
-                add_generation_prompt=True,
-                tokenize=False,
-                return_dict=True,
-                tools=tools,
-            )
-            logger.info(f"Prompt:\n{prompt}")
+            # Convert to DatasetDict format for model_utils
+            dataset = self._convert_chat_to_dataset(normalized_messages, tools)
 
-            inputs = processor.apply_chat_template(
-                normalized_messages,
-                add_generation_prompt=True,
-                tokenize=True,
-                return_dict=True,
-                return_tensors="pt",
-                tools=tools,
+            # Use model_utils for inference
+            model_inputs = prepare_model_inputs(
+                dataset=dataset,
+                model=model,
+                processor=processor,
+                stream=stream,
             )
-            # Use the model's actual dtype instead of hardcoding bfloat16
-            model_dtype = next(model.parameters()).dtype
-            inputs = inputs.to(model.device, dtype=model_dtype)
+
+            model_outputs = process_model_inputs(
+                data_collator=model_inputs["data_collator"],
+                eval_dataset=model_inputs["eval_dataset"],
+                model=model,
+                processor=processor,
+                stream=stream,
+                test_dataset=model_inputs["test_dataset"],
+                train_dataset=model_inputs["train_dataset"],
+            )
+
+            results = process_model_outputs(
+                model_outputs=model_outputs, processor=processor, stream=stream
+            )
 
             if stream:
-                return self._create_streaming_response(
-                    model,
-                    processor,
-                    inputs,
+                return self._create_streaming_response_from_model_utils(
+                    results,
                     model_name,
                     max_tokens,
                     temperature,
@@ -162,10 +286,8 @@ class ChatService:
                     tools,
                 )
             else:
-                response = self._create_non_streaming_response(
-                    model,
-                    processor,
-                    inputs,
+                response = self._create_non_streaming_response_from_model_utils(
+                    results,
                     model_name,
                     max_tokens,
                     temperature,

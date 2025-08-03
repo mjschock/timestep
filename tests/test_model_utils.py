@@ -4,6 +4,7 @@ import json
 import tempfile
 
 import pytest
+from datasets import Dataset, DatasetDict
 
 from backend._shared.config.constants import (
     BASE_MODEL_INFERENCE_CONVERSATIONS,
@@ -76,15 +77,30 @@ class TestMultimodalMessageProcessor:
         ### PREPARE INPUTS
         print("Preparing inputs...")
 
-        conversations = {
-            "test": {
+        # Create DatasetDict with Dataset for inference
+        test_data = [
+            {
                 "messages": messages,
                 "tools": tools,
+                "parallel_tool_calls": None,  # Add this field as mentioned in comment
             }
-        }
+        ]
+
+        dataset = DatasetDict({"test": Dataset.from_list(test_data)})
+
+        # Verify the dataset structure matches expected format
+        assert "test" in dataset
+        assert len(dataset["test"]) == 1
+        test_example = dataset["test"][0]
+        assert "messages" in test_example
+        assert "tools" in test_example
+        assert "parallel_tool_calls" in test_example
+        print(
+            f"✅ Dataset structure verified: {list(dataset.keys())} with features {dataset['test'].features}"
+        )
 
         model_inputs = prepare_model_inputs(
-            conversations=conversations,
+            dataset=dataset,
             model=model,
             processor=processor,
         )
@@ -146,15 +162,30 @@ class TestMultimodalMessageProcessor:
         ### PREPARE INPUTS
         print("Preparing inputs...")
 
-        conversations = {
-            "train": {
+        # Create DatasetDict with Dataset for training
+        train_data = [
+            {
                 "messages": messages,
                 "tools": tools,
+                "parallel_tool_calls": None,  # Add this field as mentioned in comment
             }
-        }
+        ]
+
+        dataset = DatasetDict({"train": Dataset.from_list(train_data)})
+
+        # Verify the dataset structure matches expected format
+        assert "train" in dataset
+        assert len(dataset["train"]) == 1
+        train_example = dataset["train"][0]
+        assert "messages" in train_example
+        assert "tools" in train_example
+        assert "parallel_tool_calls" in train_example
+        print(
+            f"✅ Dataset structure verified: {list(dataset.keys())} with features {dataset['train'].features}"
+        )
 
         model_inputs = prepare_model_inputs(
-            conversations=conversations,
+            dataset=dataset,
             model=model,
             processor=processor,
         )
@@ -224,15 +255,30 @@ class TestMultimodalMessageProcessor:
         ### PREPARE INPUTS
         print("Preparing inputs...")
 
-        conversations = {
-            "test": {
+        # Create DatasetDict with Dataset for fine-tuned inference
+        test_data = [
+            {
                 "messages": messages,
                 "tools": tools,
+                "parallel_tool_calls": None,  # Add this field as mentioned in comment
             }
-        }
+        ]
+
+        dataset = DatasetDict({"test": Dataset.from_list(test_data)})
+
+        # Verify the dataset structure matches expected format
+        assert "test" in dataset
+        assert len(dataset["test"]) == 1
+        test_example = dataset["test"][0]
+        assert "messages" in test_example
+        assert "tools" in test_example
+        assert "parallel_tool_calls" in test_example
+        print(
+            f"✅ Dataset structure verified: {list(dataset.keys())} with features {dataset['test'].features}"
+        )
 
         model_inputs = prepare_model_inputs(
-            conversations=conversations,
+            dataset=dataset,
             model=model,
             processor=processor,
         )

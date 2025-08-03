@@ -1,6 +1,8 @@
-from fastapi import APIRouter, BackgroundTasks, Depends, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from pydantic import TypeAdapter
 
 from backend.services.fine_tuning_service import FineTuningService
+from openai.types.fine_tuning import FineTuningJob, JobCreateParams
 
 fine_tuning_router = APIRouter()
 
@@ -83,7 +85,44 @@ async def create_fine_tuning_job(
 
     [Learn more about fine-tuning](/docs/guides/model-optimization)
     """
-    return await service.create_fine_tuning_job(request, background_tasks)
+    # Get and validate the request body
+    body = await request.json()
+    try:
+        # JobCreateParams is a TypedDict, use TypeAdapter for validation
+        adapter = TypeAdapter(JobCreateParams)
+        validated_request = adapter.validate_python(body)
+        validated_body = dict(validated_request)
+    except Exception as e:
+        raise HTTPException(
+            status_code=400, detail=f"Invalid request format: {e}"
+        ) from e
+
+    # Create the job in the database with "queued" status
+    # Create a mock request object with the validated body
+    class MockRequest:
+        def __init__(self, data):
+            self._data = data
+
+        async def json(self):
+            return self._data
+
+    mock_request = MockRequest(validated_body)
+    job = await service.create_fine_tuning_job(mock_request)
+
+    # Validate the response
+    try:
+        validated_response = FineTuningJob.model_validate(
+            job.model_dump() if hasattr(job, "model_dump") else job
+        )
+    except ValueError:
+        raise HTTPException(
+            status_code=500, detail="Internal server error: invalid response format"
+        ) from None
+
+    # Add background task to start the fine-tuning process
+    background_tasks.add_task(service.start_fine_tuning_job, job.id)
+
+    return validated_response.model_dump(exclude_unset=True)
 
 
 @fine_tuning_router.get("/fine_tuning/jobs")
@@ -109,12 +148,20 @@ def retrieve_fine_tuning_job(
 
     [Learn more about fine-tuning](/docs/guides/model-optimization)
     """
-    from fastapi import HTTPException
-
     result = service.retrieve_fine_tuning_job(fine_tuning_job_id)
     if result is None:
         raise HTTPException(status_code=404, detail="Fine-tuning job not found")
-    return result
+
+    # Validate the response
+    try:
+        validated_response = FineTuningJob.model_validate(
+            result.model_dump() if hasattr(result, "model_dump") else result
+        )
+        return validated_response.model_dump(exclude_unset=True)
+    except ValueError:
+        raise HTTPException(
+            status_code=500, detail="Internal server error: invalid response format"
+        ) from None
 
 
 @fine_tuning_router.post("/fine_tuning/jobs/{fine_tuning_job_id}/cancel")
@@ -124,12 +171,20 @@ async def cancel_fine_tuning_job(
     service: FineTuningService = Depends(),  # noqa: B008
 ):
     """Immediately cancel a fine-tune job."""
-    from fastapi import HTTPException
-
     result = service.cancel_fine_tuning_job(fine_tuning_job_id)
     if result is None:
         raise HTTPException(status_code=404, detail="Fine-tuning job not found")
-    return result
+
+    # Validate the response
+    try:
+        validated_response = FineTuningJob.model_validate(
+            result.model_dump() if hasattr(result, "model_dump") else result
+        )
+        return validated_response.model_dump(exclude_unset=True)
+    except ValueError:
+        raise HTTPException(
+            status_code=500, detail="Internal server error: invalid response format"
+        ) from None
 
 
 @fine_tuning_router.get("/fine_tuning/jobs/{fine_tuning_job_id}/checkpoints")

@@ -2,7 +2,7 @@
 import json
 import time
 import uuid
-from typing import Never
+from typing import Any, Never
 
 from fastapi import HTTPException
 
@@ -11,6 +11,54 @@ from backend.services.chat_service import ChatService
 
 
 class ResponsesService:
+    def _convert_responses_tools_to_chat_completion_tools(
+        self, responses_tools: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
+        """
+        Convert tools from Responses API format to Chat Completions API format.
+        Args:
+            responses_tools: Tools in Responses API format (FunctionToolParam)
+        Returns:
+            Tools in Chat Completions API format (ChatCompletionTool)
+        """
+        chat_completion_tools = []
+        for tool in responses_tools:
+            # Responses API format is flattened, Chat Completions API format is nested
+            chat_completion_tool = {
+                "type": "function",
+                "function": {
+                    "name": tool.get("name"),
+                    "description": tool.get("description", ""),
+                    "parameters": tool.get("parameters", {}),
+                },
+            }
+            chat_completion_tools.append(chat_completion_tool)
+        return chat_completion_tools
+
+    def _convert_chat_completion_tools_to_responses_tools(
+        self, chat_completion_tools: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
+        """
+        Convert tools from Chat Completions API format to Responses API format.
+        Args:
+            chat_completion_tools: Tools in Chat Completions API format (ChatCompletionTool)
+        Returns:
+            Tools in Responses API format (FunctionToolParam)
+        """
+        responses_tools = []
+        for tool in chat_completion_tools:
+            if tool.get("type") == "function" and "function" in tool:
+                function_data = tool["function"]
+                # Chat Completions API format is nested, Responses API format is flattened
+                responses_tool = {
+                    "type": "function",
+                    "name": function_data.get("name"),
+                    "description": function_data.get("description", ""),
+                    "parameters": function_data.get("parameters", {}),
+                }
+                responses_tools.append(responses_tool)
+        return responses_tools
+
     async def create_response(self, body=None):
         # Reuse chat completion logic for responses
         logger.info("Creating response")
@@ -574,13 +622,19 @@ class ResponsesService:
             "temperature",
             "top_p",
             "max_tokens",
-            "tools",
             "tool_choice",
         ]
 
         for field in common_fields:
             if field in body:
                 chat_body[field] = body[field]
+
+        # Handle tools separately for format conversion
+        if "tools" in body and body["tools"]:
+            # Convert from Responses API format (flattened) to Chat Completions API format (nested)
+            chat_body["tools"] = self._convert_responses_tools_to_chat_completion_tools(
+                body["tools"]
+            )
 
         return chat_body
 

@@ -4,6 +4,7 @@ import json
 import time
 
 from openai.types.fine_tuning.fine_tuning_job import (
+    Error,
     FineTuningJob,
     Hyperparameters,
     Method,
@@ -38,10 +39,7 @@ class FineTuningJobConverter:
             training_file=job.training_file,
             validation_file=getattr(job, "validation_file", None),
             result_files=json.dumps(job.result_files) if job.result_files else None,
-            error=json.dumps(getattr(job, "error", None))
-            if getattr(job, "error", None)
-            and isinstance(getattr(job, "error", None), dict)
-            else getattr(job, "error", None),
+            error=json.dumps(job.error.model_dump()) if job.error else None,
             estimated_finish=getattr(job, "estimated_finish", None),
             seed=getattr(job, "seed", None),
             organization_id=getattr(job, "organization_id", "org-default"),
@@ -82,9 +80,7 @@ class FineTuningJobConverter:
             training_file=table.training_file,
             validation_file=table.validation_file,
             result_files=json.loads(table.result_files) if table.result_files else [],
-            error=json.loads(table.error)
-            if table.error and table.error.startswith("{")
-            else table.error,
+            error=Error(**json.loads(table.error)) if table.error else None,
             estimated_finish=table.estimated_finish,
             seed=table.seed,
             method=method,

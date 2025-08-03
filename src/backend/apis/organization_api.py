@@ -98,7 +98,7 @@ def upload_certificate(
     """
     Upload a certificate to the organization. This does **not** automatically activate the certificate.
 
-    Organizations can upload up to 50 certificates.
+    You can upload a certificate regardless of whether it is active or not.
     """
     return service.upload_certificate()
 
@@ -146,24 +146,22 @@ def get_certificate(
 
 @organization_router.post("/organization/certificates/{certificate_id}")
 def modify_certificate(
+    certificate_id: str,
     request: Request,
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
-    """Modify a certificate. Note that only the name can be modified."""
-    return service.modify_certificate()
+    """Modify a certificate."""
+    return service.modify_certificate(certificate_id=certificate_id)
 
 
 @organization_router.delete("/organization/certificates/{certificate_id}")
 def delete_certificate(
+    certificate_id: str,
     request: Request,
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
-    """
-    Delete a certificate from the organization.
-
-    The certificate must be inactive for the organization and all projects.
-    """
-    return service.delete_certificate()
+    """Delete a certificate."""
+    return service.delete_certificate(certificate_id=certificate_id)
 
 
 @organization_router.get("/organization/costs")
@@ -186,7 +184,7 @@ def usage_costs(
         project_ids=project_ids,
         group_by=group_by,
         limit=int(limit) if limit else None,
-        page=page,
+        page=int(page) if page else None,
     )
 
 
@@ -198,7 +196,9 @@ def list_invites(
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
     """Returns a list of invites in the organization."""
-    return service.list_invites(limit=int(limit) if limit else None, after=after)
+    return service.list_invites(
+        limit=int(limit) if limit else None, after=after
+    )
 
 
 @organization_router.post("/organization/invites")
@@ -225,9 +225,7 @@ def delete_invite(
     request: Request,
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
-    """
-    Delete an invite. If the invite has already been accepted, it cannot be deleted.
-    """
+    """Delete an invite. If the invite has already been accepted, it cannot be deleted."""
     return service.delete_invite(invite_id=invite_id)
 
 
@@ -249,9 +247,7 @@ def list_projects(
 
 @organization_router.post("/organization/projects")
 def create_project(request: Request, service: OrganizationService = Depends()) -> None:  # noqa: B008
-    """
-    Create a new project in the organization. Projects can be created and archived, but cannot be deleted.
-    """
+    """Create a new project in the organization. Projects can be created and archived, but cannot be deleted."""
     return service.create_project()
 
 
@@ -285,7 +281,9 @@ def list_project_api_keys(
 ) -> None:
     """Returns a list of API keys in the project."""
     return service.list_project_api_keys(
-        project_id=project_id, limit=int(limit) if limit else None, after=after
+        project_id=project_id,
+        limit=int(limit) if limit else None,
+        after=after,
     )
 
 
@@ -297,7 +295,9 @@ def retrieve_project_api_key(
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
     """Retrieves an API key in the project."""
-    return service.retrieve_project_api_key(project_id=project_id, key_id=key_id)
+    return service.retrieve_project_api_key(
+        project_id=project_id, key_id=key_id
+    )
 
 
 @organization_router.delete("/organization/projects/{project_id}/api_keys/{key_id}")
@@ -308,7 +308,9 @@ def delete_project_api_key(
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
     """Deletes an API key from the project."""
-    return service.delete_project_api_key(project_id=project_id, key_id=key_id)
+    return service.delete_project_api_key(
+        project_id=project_id, key_id=key_id
+    )
 
 
 @organization_router.post("/organization/projects/{project_id}/archive")
@@ -317,9 +319,7 @@ def archive_project(
     request: Request,
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
-    """
-    Archives a project in the organization. Archived projects cannot be used or updated.
-    """
+    """Archives a project in the organization. Archived projects cannot be used or updated."""
     return service.archive_project(project_id=project_id)
 
 
@@ -362,8 +362,7 @@ def deactivate_project_certificates(
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
     """
-    Deactivate certificates at the project level. You can atomically and
-    idempotently deactivate up to 10 certificates at a time.
+    Deactivate certificates at the project level. You can atomically and idempotently deactivate up to 10 certificates at a time.
     """
     return service.deactivate_project_certificates(project_id=project_id)
 
@@ -411,7 +410,9 @@ def list_project_service_accounts(
 ) -> None:
     """Returns a list of service accounts in the project."""
     return service.list_project_service_accounts(
-        project_id=project_id, limit=int(limit) if limit else None, after=after
+        project_id=project_id,
+        limit=int(limit) if limit else None,
+        after=after,
     )
 
 
@@ -467,7 +468,9 @@ def list_project_users(
 ) -> None:
     """Returns a list of users in the project."""
     return service.list_project_users(
-        project_id=project_id, limit=int(limit) if limit else None, after=after
+        project_id=project_id,
+        limit=int(limit) if limit else None,
+        after=after,
     )
 
 
@@ -491,7 +494,9 @@ def retrieve_project_user(
     service: OrganizationService = Depends(OrganizationService),  # noqa: B008
 ) -> None:
     """Retrieves a user in the project."""
-    return service.retrieve_project_user(project_id=project_id, user_id=user_id)
+    return service.retrieve_project_user(
+        project_id=project_id, user_id=user_id
+    )
 
 
 @organization_router.post("/organization/projects/{project_id}/users/{user_id}")
@@ -502,7 +507,9 @@ def modify_project_user(
     service: OrganizationService = Depends(OrganizationService),  # noqa: B008
 ) -> None:
     """Modifies a user's role in the project."""
-    return service.modify_project_user(project_id=project_id, user_id=user_id)
+    return service.modify_project_user(
+        project_id=project_id, user_id=user_id
+    )
 
 
 @organization_router.delete("/organization/projects/{project_id}/users/{user_id}")
@@ -513,7 +520,9 @@ def delete_project_user(
     service: OrganizationService = Depends(OrganizationService),  # noqa: B008
 ) -> None:
     """Deletes a user from the project."""
-    return service.delete_project_user(project_id=project_id, user_id=user_id)
+    return service.delete_project_user(
+        project_id=project_id, user_id=user_id
+    )
 
 
 @organization_router.get("/organization/usage/audio_speeches")
@@ -542,7 +551,7 @@ def usage_audio_speeches(
         models=models,
         group_by=group_by,
         limit=int(limit) if limit else None,
-        page=page,
+        page=int(page) if page else None,
     )
 
 
@@ -572,7 +581,7 @@ def usage_audio_transcriptions(
         models=models,
         group_by=group_by,
         limit=int(limit) if limit else None,
-        page=page,
+        page=int(page) if page else None,
     )
 
 
@@ -597,9 +606,12 @@ def usage_code_interpreter_sessions(
         end_time=int(end_time) if end_time else None,
         bucket_width=bucket_width,
         project_ids=project_ids,
+        user_ids=user_ids,
+        api_key_ids=api_key_ids,
+        models=models,
         group_by=group_by,
         limit=int(limit) if limit else None,
-        page=page,
+        page=int(page) if page else None,
     )
 
 
@@ -628,10 +640,10 @@ def usage_completions(
         user_ids=user_ids,
         api_key_ids=api_key_ids,
         models=models,
-        batch=batch == "true" if batch else None,
         group_by=group_by,
         limit=int(limit) if limit else None,
-        page=page,
+        page=int(page) if page else None,
+        batch=batch,
     )
 
 
@@ -661,7 +673,7 @@ def usage_embeddings(
         models=models,
         group_by=group_by,
         limit=int(limit) if limit else None,
-        page=page,
+        page=int(page) if page else None,
     )
 
 
@@ -695,7 +707,7 @@ def usage_images(
         models=models,
         group_by=group_by,
         limit=int(limit) if limit else None,
-        page=page,
+        page=int(page) if page else None,
     )
 
 
@@ -725,7 +737,7 @@ def usage_moderations(
         models=models,
         group_by=group_by,
         limit=int(limit) if limit else None,
-        page=page,
+        page=int(page) if page else None,
     )
 
 
@@ -750,9 +762,12 @@ def usage_vector_stores(
         end_time=int(end_time) if end_time else None,
         bucket_width=bucket_width,
         project_ids=project_ids,
+        user_ids=user_ids,
+        api_key_ids=api_key_ids,
+        models=models,
         group_by=group_by,
         limit=int(limit) if limit else None,
-        page=page,
+        page=int(page) if page else None,
     )
 
 
@@ -765,8 +780,10 @@ def list_organization_users(
     service: OrganizationService = Depends(OrganizationService),  # noqa: B008
 ) -> None:
     """Lists all of the users in the organization."""
-    return service.list_users(
-        limit=int(limit) if limit else None, after=after, emails=emails
+    return service.list_organization_users(
+        limit=int(limit) if limit else None,
+        after=after,
+        emails=emails,
     )
 
 
@@ -777,7 +794,7 @@ def retrieve_organization_user(
     service: OrganizationService = Depends(OrganizationService),  # noqa: B008
 ) -> None:
     """Retrieves a user by their identifier."""
-    return service.retrieve_user(user_id=user_id)
+    return service.retrieve_organization_user(user_id=user_id)
 
 
 @organization_router.post("/organization/users/{user_id}")
@@ -787,7 +804,7 @@ def modify_organization_user(
     service: OrganizationService = Depends(OrganizationService),  # noqa: B008
 ) -> None:
     """Modifies a user's role in the organization."""
-    return service.modify_user(user_id=user_id)
+    return service.modify_organization_user(user_id=user_id)
 
 
 @organization_router.delete("/organization/users/{user_id}")
@@ -797,4 +814,4 @@ def delete_organization_user(
     service: OrganizationService = Depends(OrganizationService),  # noqa: B008
 ) -> None:
     """Deletes a user from the organization."""
-    return service.delete_user(user_id=user_id)
+    return service.delete_organization_user(user_id=user_id)

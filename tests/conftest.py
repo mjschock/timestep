@@ -475,6 +475,7 @@ def builtin_tool_examples():
 @pytest.fixture
 def create_base_messages():
     """Fixture that provides the create_base_messages function."""
+
     def _create_base_messages(tools, builtin_tool_examples):
         """Create the base conversation messages for tool calling demonstrations."""
         import pprint
@@ -508,7 +509,10 @@ You will follow this agent-environment cycle of sensing, thinking, and acting co
         }
 
         # Add 1-shot examples for built-in tools that are present (in a consistent order)
-        for tool_name in ["code_interpreter", "web_search"]:  # Maintain consistent order
+        for tool_name in [
+            "code_interpreter",
+            "web_search",
+        ]:  # Maintain consistent order
             if tool_name in tool_names and tool_name in builtin_tool_examples:
                 example = builtin_tool_examples[tool_name]
 
@@ -535,5 +539,5 @@ You will follow this agent-environment cycle of sensing, thinking, and acting co
                 )
 
         return messages
-    
+
     return _create_base_messages

@@ -1,7 +1,13 @@
-from fastapi import APIRouter, Depends, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from pydantic import TypeAdapter
 
 from backend._shared.logging_config import logger
 from backend.services.chat_service import ChatService
+from openai.types.chat import ChatCompletion
+from openai.types.chat.completion_create_params import (
+    CompletionCreateParamsNonStreaming,
+    CompletionCreateParamsStreaming,
+)
 
 chat_router = APIRouter()
 
@@ -52,9 +58,45 @@ async def create_chat_completion(
             f"API received request for chat completion: {request.method} {request.url}"
         )
 
+        # Validate the entire request using OpenAI types
+        try:
+            # Check if streaming is requested to use the correct validation model
+            is_streaming = body.get("stream", False)
+            
+            if is_streaming:
+                adapter = TypeAdapter(CompletionCreateParamsStreaming)
+                validated_request = adapter.validate_python(body)
+            else:
+                adapter = TypeAdapter(CompletionCreateParamsNonStreaming)
+                validated_request = adapter.validate_python(body)
+                
+            validated_body = dict(validated_request)
+        except Exception as e:
+            # Add detailed error logging for debugging
+            import json
+            print(f"DEBUG: Validation failed for request: {json.dumps(body, indent=2)}")
+            print(f"DEBUG: Full error details: {repr(e)}")
+            if hasattr(e, 'errors'):
+                print(f"DEBUG: Validation errors: {e.errors()}")
+            raise HTTPException(
+                status_code=400, detail=f"Invalid request format: {e}"
+            ) from e
+
         # Set proper headers for OpenAI client compatibility
         response.headers["Content-Type"] = "application/json"
-        result = await service.create_chat_completion(body)
+        result = await service.create_chat_completion(validated_body)
+
+        # Validate the response using OpenAI types
+        if isinstance(result, dict):
+            try:
+                validated_response = ChatCompletion.model_validate(result)
+                result = validated_response.model_dump(exclude_unset=True)
+            except Exception as e:
+                logger.error(f"Invalid response format from service: {e}")
+                raise HTTPException(
+                    status_code=500,
+                    detail="Internal server error: invalid response format",
+                ) from e
 
         # Log meaningful response information
         if isinstance(result, dict):
@@ -88,6 +130,8 @@ async def create_chat_completion(
             logger.info(f"Chat completion response: {type(result).__name__}")
 
         return result
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Exception in API endpoint: {e}", exc_info=True)
         raise

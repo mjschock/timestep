@@ -1,10 +1,11 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends, File, Form, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import Response
 
 from backend._shared.logging_config import logger
 from backend.services.files_service import FilesService
+from openai.types import FileObject
 
 files_router = APIRouter()
 
@@ -22,7 +23,7 @@ def list_files(
     service: FilesService = Depends(FilesService),  # noqa: B008
 ) -> dict[str, Any]:
     """
-    Lists the files that have been uploaded. All query parameters are optional for OpenAI compatibility.
+    Returns a list of files.
     """
     logger.info(f"Listing files with purpose={purpose}, limit={limit}")
     return service.list_files(purpose, str(limit) if limit else None, order, after)
@@ -38,21 +39,51 @@ async def create_file(
     Upload a file that can be used across various endpoints. Individual files can be up to 512 MB, and the size of all files uploaded by one organization can be up to 100 GB.
     """
     logger.info(f"Creating file: {file.filename}, purpose: {purpose}")
-    return await service.create_file_with_upload(file, purpose)
+    result = await service.create_file_with_upload(file, purpose)
+
+    # Validate the response using OpenAI types
+    try:
+        validated_file = FileObject.model_validate(result)
+        return validated_file.model_dump(exclude_unset=True)
+    except Exception as e:
+        logger.error(f"Invalid file object response from service: {e}")
+        raise HTTPException(
+            status_code=500, detail="Internal server error: invalid response format"
+        ) from e
 
 
 @files_router.delete("/files/{file_id}")
 def delete_file(file_id: str, service: FilesService = Depends()) -> dict[str, Any]:  # noqa: B008
     """Delete a file."""
     logger.info(f"Deleting file: {file_id}")
-    return service.delete_file(file_id)
+    result = service.delete_file(file_id)
+
+    # For delete operations, typically returns a deletion status object, not a FileObject
+    # The OpenAI API returns a simple deletion confirmation, so we'll validate that it's a dict
+    if not isinstance(result, dict):
+        logger.error(f"Invalid delete response format from service: {type(result)}")
+        raise HTTPException(
+            status_code=500, detail="Internal server error: invalid response format"
+        )
+
+    return result
 
 
 @files_router.get("/files/{file_id}")
 def retrieve_file(file_id: str, service: FilesService = Depends()) -> dict[str, Any]:  # noqa: B008
     """Returns information about a specific file."""
     logger.info(f"Retrieving file: {file_id}")
-    return service.retrieve_file(file_id)
+    result = service.retrieve_file(file_id)
+
+    # Validate the response using OpenAI types
+    try:
+        validated_file = FileObject.model_validate(result)
+        return validated_file.model_dump(exclude_unset=True)
+    except Exception as e:
+        logger.error(f"Invalid file object response from service: {e}")
+        raise HTTPException(
+            status_code=500, detail="Internal server error: invalid response format"
+        ) from e
 
 
 @files_router.get("/files/{file_id}/content")

@@ -24,13 +24,3 @@ def retrieve_model(model: str, request: Request):
     service = get_models_service()
     logger.info(f"Retrieving model: {model}")
     return service.retrieve_model(model)
-
-
-@models_router.delete("/models/{model}")
-def delete_model(model: str, request: Request):
-    """
-    Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
-    """
-    service = get_models_service()
-    logger.info(f"Deleting model: {model}")
-    return service.delete_model(model)

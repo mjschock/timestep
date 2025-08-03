@@ -189,7 +189,8 @@ def run_direct_inference(
     models_service = get_models_service()
 
     print(f"Getting model {MODEL_NAME} from singleton models service")
-    model, processor = models_service.get_model_instance(MODEL_NAME, use_cache=True)
+    model = models_service.get_model(MODEL_NAME)
+    processor = models_service.get_processor(MODEL_NAME)
 
     # Log the actual dtype of the model parameters to verify
     if hasattr(model, "parameters"):
@@ -408,7 +409,9 @@ def test_video_caption_api(async_client):
 
 
 # Tool calling tests
-def test_stock_price_tool_direct(builtin_tools, builtin_tool_examples):
+def test_stock_price_tool_direct(
+    builtin_tools, builtin_tool_examples, create_base_messages
+):
     """Test SmolVLM2 model inference directly with transformers (no server) with tools."""
     tools = builtin_tools + CUSTOM_TOOLS
     tool_calling_messages = create_base_messages(tools, builtin_tool_examples) + [
@@ -433,7 +436,9 @@ def test_stock_price_tool_direct(builtin_tools, builtin_tool_examples):
     )
 
 
-def test_stock_price_tool_api(async_client, builtin_tools, builtin_tool_examples):
+def test_stock_price_tool_api(
+    async_client, builtin_tools, builtin_tool_examples, create_base_messages
+):
     """Test SmolVLM2 model inference via chat completions API with tools."""
     import asyncio
 
