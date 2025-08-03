@@ -182,7 +182,6 @@ def run_direct_inference(
     n=1,
 ):
     """Use the same singleton model as the API for exact response matching."""
-    from backend.services.chat_service import normalize_messages
     from backend.services.models_service import get_models_service
 
     # Use the same singleton models service as the API
@@ -201,12 +200,11 @@ def run_direct_inference(
     print(f"Model dtype: {next(model.parameters()).dtype}")
 
     try:
-        # Normalize messages like the server does
-        normalized_messages = normalize_messages(messages)
-        print(f"Normalized messages: {normalized_messages}")
+        raise Exception("TODO: Use the functions from model_utils to run inference")
 
+        # Normalize messages like the server does
         inputs = processor.apply_chat_template(
-            normalized_messages,
+            messages,
             tools=tools,
             add_generation_prompt=True,
             tokenize=True,

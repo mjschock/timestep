@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
-from pydantic import TypeAdapter
 
 from backend._shared.logging_config import logger
+from backend._shared.utils.common_utils import validate_and_convert_openai_request
 from backend.services.chat_service import ChatService
 from openai.types.chat import ChatCompletion
 from openai.types.chat.completion_create_params import (
@@ -64,13 +64,15 @@ async def create_chat_completion(
             is_streaming = body.get("stream", False)
             
             if is_streaming:
-                adapter = TypeAdapter(CompletionCreateParamsStreaming)
-                validated_request = adapter.validate_python(body)
+                completion_create_params_streaming: CompletionCreateParamsStreaming = validate_and_convert_openai_request(
+                    body, CompletionCreateParamsStreaming, "completion_create_params_streaming"
+                )
+                validated_request = completion_create_params_streaming
             else:
-                adapter = TypeAdapter(CompletionCreateParamsNonStreaming)
-                validated_request = adapter.validate_python(body)
-                
-            validated_body = dict(validated_request)
+                completion_create_params_non_streaming: CompletionCreateParamsNonStreaming = validate_and_convert_openai_request(
+                    body, CompletionCreateParamsNonStreaming, "completion_create_params_non_streaming"
+                )
+                validated_request = completion_create_params_non_streaming
         except Exception as e:
             # Add detailed error logging for debugging
             import json
@@ -84,7 +86,7 @@ async def create_chat_completion(
 
         # Set proper headers for OpenAI client compatibility
         response.headers["Content-Type"] = "application/json"
-        result = await service.create_chat_completion(validated_body)
+        result = await service.create_chat_completion(validated_request)
 
         # Validate the response using OpenAI types
         if isinstance(result, dict):

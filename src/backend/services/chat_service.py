@@ -19,25 +19,7 @@ from backend.services.models_service import get_models_service
 
 class ChatService:
     # Class-level storage for chat completions to persist across instances
-    _stored_completions: dict[str, dict[str, Any]] = {}
-
-    def __init__(self) -> None:
-        # No need for instance-level storage anymore
-        pass
-
-    def _convert_chat_to_dataset(self, messages, tools=None):
-        """Convert chat messages to DatasetDict format for model_utils."""
-        # Create a single conversation example
-        conversation_data = {
-            "messages": messages,
-            "tools": tools or [],
-            "parallel_tool_calls": None,
-        }
-
-        # Create DatasetDict with test split for inference
-        dataset = DatasetDict({"test": Dataset.from_list([conversation_data])})
-
-        return dataset
+    _stored_completions: dict[str, dict[str, Any]] = {} # TODO: Persist to DB
 
     def _create_non_streaming_response_from_model_utils(
         self,
@@ -194,43 +176,28 @@ class ChatService:
                 status_code=500, detail=f"Failed to list chat completions: {str(e)}"
             ) from e
 
-    async def create_chat_completion(self, body=None):
+    async def create_chat_completion(self, completion_create_params: dict[str, Any]):
         """Creates a model response for the given chat conversation."""
         try:
             logger.info("create_chat_completion called!")
-            if not body:
-                body = {}
-            logger.debug(f"Request body: {json.dumps(body, indent=2, default=str)}")
+            logger.debug(f"Request params: {json.dumps(completion_create_params, indent=2, default=str)}")
 
-            # Extract and normalize parameters
-            params = self._extract_chat_params(body)
-            (
-                model_name,
-                messages,
-                stream,
-                max_tokens,
-                temperature,
-                top_p,
-                n,
-                stop,
-                presence_penalty,
-                frequency_penalty,
-                user,
-                response_format,
-                user_tools,
-                tool_choice,
-                parallel_tool_calls,
-                logprobs,
-                top_logprobs,
-                store,
-                tools,
-            ) = params
-
-            # Validate messages
-            self._validate_messages(messages)
-            self._validate_chat_params(
-                max_tokens, temperature, top_p, n, presence_penalty, frequency_penalty
-            )
+            # Extract parameters directly from validated OpenAI request
+            model_name = completion_create_params.get("model", "HuggingFaceTB/SmolVLM2-256M-Video-Instruct")
+            messages = completion_create_params["messages"]
+            stream = completion_create_params.get("stream", False)
+            max_tokens = completion_create_params.get("max_tokens", 100)
+            temperature = completion_create_params.get("temperature", 1.0)
+            top_p = completion_create_params.get("top_p", 1.0)
+            n = completion_create_params.get("n", 1)
+            stop = completion_create_params.get("stop", None)
+            tools = completion_create_params.get("tools", [])
+            tool_choice = completion_create_params.get("tool_choice", None)
+            parallel_tool_calls = completion_create_params.get("parallel_tool_calls", True)
+            logprobs = completion_create_params.get("logprobs", False)
+            top_logprobs = completion_create_params.get("top_logprobs", None)
+            store = completion_create_params.get("store", False)
+            user = completion_create_params.get("user", None)
 
             # Get model and processor instances
             models_service = get_models_service()
@@ -240,15 +207,15 @@ class ChatService:
                 f"Model: {model_name}, max_tokens: {max_tokens}, temperature: {temperature}, n: {n}"
             )
 
-            # Normalize and log messages
+            # Log messages for debugging
             logger.debug(f"Messages: {json.dumps(messages, indent=2, default=str)}")
-            normalized_messages = normalize_messages(messages)
-            logger.debug(
-                f"Normalized messages: {json.dumps(normalized_messages, indent=2, default=str)}"
-            )
 
-            # Convert to DatasetDict format for model_utils
-            dataset = self._convert_chat_to_dataset(normalized_messages, tools)
+            # Create DatasetDict directly for model_utils
+            dataset = DatasetDict({"test": Dataset.from_list([{
+                "messages": messages,
+                "tools": tools or [],
+                "parallel_tool_calls": None,
+            }])})
 
             # Use model_utils for inference
             model_inputs = prepare_model_inputs(
@@ -329,7 +296,7 @@ class ChatService:
                 if store:
                     self._stored_completions[response["id"]] = {
                         **response,
-                        "metadata": body.get("metadata", {}),
+                        "metadata": completion_create_params.get("metadata", {}),
                         "messages": messages,
                     }
                 return response
@@ -1000,45 +967,6 @@ class ChatService:
                 }
         return None
 
-    def _normalize_tool_format(self, tool):
-        """
-        Normalize tool format to standard OpenAI format.
-        Handles both Agents SDK FunctionTool objects and standard OpenAI tool format.
-        """
-        try:
-            if hasattr(tool, "name"):
-                # Agents SDK FunctionTool object
-                return {
-                    "type": "function",
-                    "function": {
-                        "name": tool.name,
-                        "description": getattr(tool, "description", ""),
-                        "parameters": getattr(tool, "params_json_schema", {}),
-                    },
-                }
-            elif isinstance(tool, dict):
-                if "function" in tool:
-                    # Already in standard OpenAI format
-                    return tool
-                elif "name" in tool:
-                    # Convert from simplified format to standard format
-                    return {
-                        "type": "function",
-                        "function": {
-                            "name": tool["name"],
-                            "description": tool.get("description", ""),
-                            "parameters": tool.get("parameters", {}),
-                        },
-                    }
-                else:
-                    logger.warning(f"Unknown tool format: {tool}")
-                    return None
-            else:
-                logger.warning(f"Unknown tool type: {type(tool)}")
-                return None
-        except Exception as e:
-            logger.error(f"Error normalizing tool format: {e}")
-            return None
 
     def _detect_tool_calls_in_text(self, text) -> bool:
         """
@@ -1063,109 +991,8 @@ class ChatService:
 
         return False
 
-    def _extract_chat_params(self, body):
-        model_name = body.get("model", "HuggingFaceTB/SmolVLM2-256M-Video-Instruct")
-        messages = body.get("messages", [])
-        stream = body.get("stream", False)
-        max_tokens = body.get("max_tokens", 100)
-        temperature = body.get("temperature", 1.0)
-        top_p = body.get("top_p", 1.0)
-        n = body.get("n", 1)
-        stop = body.get("stop", None)
-        presence_penalty = body.get("presence_penalty", 0.0)
-        frequency_penalty = body.get("frequency_penalty", 0.0)
-        user = body.get("user", None)
-        response_format = body.get("response_format", None)
-        user_tools = body.get("tools", None)
-        tool_choice = body.get("tool_choice", None)
-        parallel_tool_calls = body.get("parallel_tool_calls", True)
-        logprobs = body.get("logprobs", False)
-        top_logprobs = body.get("top_logprobs", None)
-        if top_logprobs is not None:
-            logprobs = True
-            if not (0 <= top_logprobs <= 20):
-                top_logprobs = min(max(top_logprobs, 0), 20)
-        else:
-            top_logprobs = 5 if logprobs else 0
-        if stream and not logprobs:
-            logprobs = True
-            top_logprobs = 5
-        store = body.get("store", False)
-        tools = []
-        if user_tools:
-            for tool in user_tools:
-                normalized_tool = self._normalize_tool_format(tool)
-                if normalized_tool:
-                    tools.append(normalized_tool)
-        return (
-            model_name,
-            messages,
-            stream,
-            max_tokens,
-            temperature,
-            top_p,
-            n,
-            stop,
-            presence_penalty,
-            frequency_penalty,
-            user,
-            response_format,
-            user_tools,
-            tool_choice,
-            parallel_tool_calls,
-            logprobs,
-            top_logprobs,
-            store,
-            tools,
-        )
 
-    def _validate_messages(self, messages) -> None:
-        if not messages:
-            raise HTTPException(status_code=400, detail="'messages' is required")
-        for i, msg in enumerate(messages):
-            if not isinstance(msg, dict):
-                raise HTTPException(
-                    status_code=400, detail=f"Message {i} must be an object"
-                )
-            if "role" not in msg:
-                raise HTTPException(
-                    status_code=400, detail=f"Message {i} must have a 'role' field"
-                )
-            if "content" not in msg:
-                raise HTTPException(
-                    status_code=400, detail=f"Message {i} must have a 'content' field"
-                )
-            if msg["role"] not in ["system", "user", "assistant", "tool"]:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"Message {i} has invalid role: {msg['role']}",
-                )
 
-    def _validate_chat_params(
-        self, max_tokens, temperature, top_p, n, presence_penalty, frequency_penalty
-    ) -> None:
-        if max_tokens is not None and max_tokens < 1:
-            raise HTTPException(status_code=400, detail="max_tokens must be at least 1")
-        if temperature is not None and (temperature < 0 or temperature > 2):
-            raise HTTPException(
-                status_code=400, detail="temperature must be between 0 and 2"
-            )
-        if top_p is not None and (top_p < 0 or top_p > 1):
-            raise HTTPException(status_code=400, detail="top_p must be between 0 and 1")
-        if n is not None and n < 1:
-            raise HTTPException(status_code=400, detail="n must be at least 1")
-        if presence_penalty is not None and (
-            presence_penalty < -2 or presence_penalty > 2
-        ):
-            raise HTTPException(
-                status_code=400, detail="presence_penalty must be between -2 and 2"
-            )
-        if frequency_penalty is not None and (
-            frequency_penalty < -2 or frequency_penalty > 2
-        ):
-            raise HTTPException(
-                status_code=400, detail="frequency_penalty must be between -2 and 2"
-            )
 
     def _ensure_tool_call_in_response(self, response, tools) -> None:
         # Handle tool_choice="required" - must have tool calls
@@ -1202,12 +1029,3 @@ class ChatService:
                 )
 
 
-def normalize_messages(messages):
-    """Ensure each message's content is a list of dicts for HF processors."""
-    normalized = []
-    for msg in messages:
-        new_msg = dict(msg)
-        if isinstance(new_msg["content"], str):
-            new_msg["content"] = [{"type": "text", "text": new_msg["content"]}]
-        normalized.append(new_msg)
-    return normalized
