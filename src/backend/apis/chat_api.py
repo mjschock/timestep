@@ -114,9 +114,12 @@ async def create_chat_completion(
                 first_choice = choices[0]
                 message = first_choice.get("message", {})
                 content = message.get("content", "")
-                content_preview = (
-                    content[:100] + "..." if len(content) > 100 else content
-                )
+                if content is None:
+                    content_preview = "null (tool calls present)"
+                else:
+                    content_preview = (
+                        content[:100] + "..." if len(content) > 100 else content
+                    )
                 finish_reason = first_choice.get("finish_reason", "unknown")
             else:
                 content_preview = "no content"

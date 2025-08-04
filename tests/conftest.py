@@ -16,8 +16,66 @@ import soundfile as sf
 from openai import AsyncOpenAI, OpenAI
 from PIL import Image
 
-BASE_URL = "http://localhost:8000/v1"
-MODEL_NAME = "openai/HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
+
+def pytest_addoption(parser):
+    """Add command line options for configuring API settings."""
+    parser.addoption(
+        "--api-key",
+        action="store",
+        default=None,
+        help="OpenAI API key to use for tests"
+    )
+    parser.addoption(
+        "--base-url", 
+        action="store",
+        default=None,
+        help="Base URL for OpenAI API (e.g., https://api.openai.com/v1 or http://localhost:8000/v1)"
+    )
+    parser.addoption(
+        "--model-name",
+        action="store", 
+        default=None,
+        help="Model name to use for tests"
+    )
+    parser.addoption(
+        "--skip-local-server",
+        action="store_true",
+        default=False,
+        help="Skip starting local server and use external API"
+    )
+
+# Default values - can be overridden by environment variables or command line
+DEFAULT_BASE_URL = "http://localhost:8000/v1"
+DEFAULT_MODEL_NAME = "openai/HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
+DEFAULT_API_KEY = "api_key"
+
+
+def get_test_config(request=None):
+    """Get test configuration from command line args, environment variables, or defaults."""
+    # Priority: command line args > environment variables > defaults
+    
+    if request:
+        # Get from pytest command line options
+        api_key = request.config.getoption("--api-key")
+        base_url = request.config.getoption("--base-url") 
+        model_name = request.config.getoption("--model-name")
+        skip_local_server = request.config.getoption("--skip-local-server")
+    else:
+        api_key = base_url = model_name = skip_local_server = None
+    
+    return {
+        "api_key": api_key or os.getenv("AGENTS_SDK_API_KEY") or DEFAULT_API_KEY,
+        "base_url": base_url or os.getenv("AGENTS_SDK_BASE_URL") or DEFAULT_BASE_URL,
+        "model_name": model_name or os.getenv("AGENTS_SDK_MODEL_NAME") or DEFAULT_MODEL_NAME,
+        "skip_local_server": skip_local_server or os.getenv("AGENTS_SDK_SKIP_LOCAL_SERVER", "").lower() in ("true", "1", "yes")
+    }
+
+
+# Get global config (will be used by fixtures that don't have request access)
+_GLOBAL_CONFIG = get_test_config()
+BASE_URL = _GLOBAL_CONFIG["base_url"]
+MODEL_NAME = _GLOBAL_CONFIG["model_name"] 
+API_KEY = _GLOBAL_CONFIG["api_key"]
 
 
 def wait_for_server_ready(
@@ -56,12 +114,22 @@ def wait_for_server_ready(
 
 
 @pytest.fixture(scope="session", autouse=True)
-def api_server_with_coverage() -> Generator[str, None, None]:
+def api_server_with_coverage(request) -> Generator[str, None, None]:
     """
     Automatically starts FastAPI server with coverage for all tests.
     Uses OpenAI client to test API endpoints with full coverage tracking.
     Ensures proper cleanup regardless of how tests exit.
+    Can be skipped with --skip-local-server flag.
     """
+    config = get_test_config(request)
+    
+    if config["skip_local_server"]:
+        print("\n⏭️  Skipping local server startup (using external API)")
+        # Extract base URL without /v1 suffix for consistency with other fixtures
+        base_url = config["base_url"].rstrip('/v1')
+        yield base_url
+        return
+
     print("\n🚀 Starting FastAPI server with coverage...")
 
     _cleanup_existing_processes()
@@ -326,15 +394,40 @@ def api_base_url(api_server_with_coverage: str) -> str:
 
 
 @pytest.fixture
-def async_client(api_base_url: str) -> AsyncOpenAI:
-    """Async OpenAI client configured for the test server"""
-    return AsyncOpenAI(api_key="api_key", base_url=f"{api_base_url}/v1")
+def model_name(request) -> str:
+    """Fixture for model name that respects configuration"""
+    config = get_test_config(request)
+    return config["model_name"]
 
 
 @pytest.fixture
-def sync_client(api_base_url: str) -> OpenAI:
+def async_client(api_base_url: str, request) -> AsyncOpenAI:
+    """Async OpenAI client configured for the test server"""
+    config = get_test_config(request)
+    
+    # Use configured base_url if provided, otherwise use the local server
+    if config["skip_local_server"]:
+        base_url = config["base_url"]
+    else:
+        base_url = f"{api_base_url}/v1"
+    
+    print(f"🔌 Using API: {base_url} with model: {config['model_name']}")
+    return AsyncOpenAI(api_key=config["api_key"], base_url=base_url)
+
+
+@pytest.fixture
+def sync_client(api_base_url: str, request) -> OpenAI:
     """Sync OpenAI client configured for the test server"""
-    return OpenAI(api_key="api_key", base_url=f"{api_base_url}/v1")
+    config = get_test_config(request)
+    
+    # Use configured base_url if provided, otherwise use the local server
+    if config["skip_local_server"]:
+        base_url = config["base_url"]
+    else:
+        base_url = f"{api_base_url}/v1"
+    
+    print(f"🔌 Using API: {base_url} with model: {config['model_name']}")
+    return OpenAI(api_key=config["api_key"], base_url=base_url)
 
 
 @pytest.fixture

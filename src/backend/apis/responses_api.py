@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from pydantic import TypeAdapter
 
+from backend._shared.utils.common_utils import validate_and_convert_openai_request
 from backend.services.responses_service import ResponsesService
 from openai.types.responses import Response as ResponsesAPIResponse
 from openai.types.responses.response_create_params import (
@@ -34,19 +34,21 @@ async def create_response(
             is_streaming = body.get("stream", False)
             
             if is_streaming:
-                adapter = TypeAdapter(ResponseCreateParamsStreaming)
-                validated_request = adapter.validate_python(body)
+                response_create_params_streaming: ResponseCreateParamsStreaming = validate_and_convert_openai_request(
+                    body, ResponseCreateParamsStreaming, "response_create_params_streaming"
+                )
+                validated_request = response_create_params_streaming
             else:
-                adapter = TypeAdapter(ResponseCreateParamsNonStreaming)
-                validated_request = adapter.validate_python(body)
-                
-            validated_body = dict(validated_request)
+                response_create_params_non_streaming: ResponseCreateParamsNonStreaming = validate_and_convert_openai_request(
+                    body, ResponseCreateParamsNonStreaming, "response_create_params_non_streaming"
+                )
+                validated_request = response_create_params_non_streaming
         except Exception as e:
             raise HTTPException(
                 status_code=400, detail=f"Invalid request format: {e}"
             ) from e
 
-        result = await service.create_response(validated_body)
+        result = await service.create_response(validated_request)
 
         # Validate the response using OpenAI Responses API types
         if isinstance(result, dict):

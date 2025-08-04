@@ -7,7 +7,6 @@ from agents import (
     Runner,
     function_tool,
 )
-from conftest import MODEL_NAME
 
 # Shared test constants
 DEFAULT_INSTRUCTIONS = "You are a helpful assistant."
@@ -22,6 +21,7 @@ def get_weather(city: str):
 # Helper functions for creating agents
 def create_agent(
     openai_client=None,
+    model_name=None,
     api_type="responses",
     instructions=DEFAULT_INSTRUCTIONS,
     tool_choice="required",
@@ -30,19 +30,22 @@ def create_agent(
 
     Args:
         openai_client: OpenAI client (required for both API types)
+        model_name: Model name to use (required)
         api_type: "chat_completions" or "responses" (default: "responses")
         instructions: Agent instructions
         tool_choice: Tool choice setting
     """
     if openai_client is None:
         raise ValueError("openai_client is required for both API types")
+    if model_name is None:
+        raise ValueError("model_name is required")
 
     if api_type == "chat_completions":
         model = OpenAIChatCompletionsModel(
-            model=MODEL_NAME, openai_client=openai_client
+            model=model_name, openai_client=openai_client
         )
     elif api_type == "responses":
-        model = OpenAIResponsesModel(model=MODEL_NAME, openai_client=openai_client)
+        model = OpenAIResponsesModel(model=model_name, openai_client=openai_client)
     else:
         raise ValueError(
             f"Unknown api_type: {api_type}. Must be 'chat_completions' or 'responses'"
@@ -65,9 +68,44 @@ def create_agent(
 async def run_async_test(agent, prompt=DEFAULT_PROMPT):
     """Run async non-streaming test and return result"""
     result = await Runner.run(agent, prompt)
+
+    # Debug logging
+    print(f"DEBUG: final_output type: {type(result.final_output)}")
+    print(f"DEBUG: final_output repr: {repr(result.final_output)}")
+    print(
+        f"DEBUG: final_output length: {len(result.final_output) if hasattr(result.final_output, '__len__') else 'N/A'}"
+    )
+    if hasattr(result, "new_items"):
+        print(f"DEBUG: new_items count: {len(result.new_items)}")
+        for i, item in enumerate(result.new_items):
+            print(f"DEBUG: new_items[{i}] type: {type(item).__name__}")
+
+    # Exact assertions based on real OpenAI API behavior
     assert hasattr(result, "final_output")
     assert isinstance(result.final_output, str)
-    assert len(result.final_output) > 0
+    # assert (
+    #     result.final_output
+    #     == "The weather in Oakland is currently sunny. If you need more details like temperature or forecast, let me know!"
+    # )
+    assert "The weather in Oakland is sunny." in result.final_output
+    assert len(result.final_output) >= len("The weather in Oakland is sunny.")
+
+    # Structure assertions
+    assert hasattr(result, "new_items")
+    assert len(result.new_items) == 3
+    assert result.new_items[0].type == "tool_call_item"
+    assert result.new_items[1].type == "tool_call_output_item"
+    assert result.new_items[2].type == "message_output_item"
+
+    # Tool call assertions
+    assert result.new_items[0].raw_item.name == "get_weather"
+    assert result.new_items[0].raw_item.arguments == '{"city":"Oakland"}'
+    assert result.new_items[1].output == "The weather in Oakland is sunny."
+
+    # Usage assertions
+    assert hasattr(result, "raw_responses")
+    assert len(result.raw_responses) == 2
+
     return result
 
 
@@ -78,18 +116,85 @@ async def run_async_streaming_test(agent, prompt=DEFAULT_PROMPT):
     async for event in streamed.stream_events():
         events.append(event)
         print(f"DEBUG: Streaming event: {type(event)} - {event}")
+
+    # Exact assertions based on real OpenAI API behavior
     assert hasattr(streamed, "final_output")
     assert isinstance(streamed.final_output, str)
-    assert len(streamed.final_output) > 0
+    # assert (
+    #     streamed.final_output
+    #     == "The weather in Oakland is currently sunny. If you need more details like temperature or forecast, let me know!"
+    # )
+    # assert len(streamed.final_output) == 110
+    assert "The weather in Oakland is sunny." in streamed.final_output
+    assert len(streamed.final_output) >= len("The weather in Oakland is sunny.")
+
+    # Structure assertions
+    assert hasattr(streamed, "new_items")
+    assert len(streamed.new_items) == 3
+    assert streamed.new_items[0].type == "tool_call_item"
+    assert streamed.new_items[1].type == "tool_call_output_item"
+    assert streamed.new_items[2].type == "message_output_item"
+
+    # Tool call assertions
+    assert streamed.new_items[0].raw_item.name == "get_weather"
+    assert streamed.new_items[0].raw_item.arguments == '{"city":"Oakland"}'
+    assert streamed.new_items[1].output == "The weather in Oakland is sunny."
+
+    # Usage assertions
+    assert hasattr(streamed, "raw_responses")
+    assert len(streamed.raw_responses) == 2
+
+    # Streaming specific assertions
+    assert hasattr(streamed, "current_turn")
+    assert streamed.current_turn == 2
+    assert hasattr(streamed, "is_complete")
+    assert streamed.is_complete
+
     return streamed
 
 
 def run_sync_test(agent, prompt=DEFAULT_PROMPT):
     """Run sync non-streaming test and return result"""
     result = Runner.run_sync(agent, prompt)
+
+    # Debug logging
+    print(f"DEBUG: final_output type: {type(result.final_output)}")
+    print(f"DEBUG: final_output repr: {repr(result.final_output)}")
+    print(
+        f"DEBUG: final_output length: {len(result.final_output) if hasattr(result.final_output, '__len__') else 'N/A'}"
+    )
+    if hasattr(result, "new_items"):
+        print(f"DEBUG: new_items count: {len(result.new_items)}")
+        for i, item in enumerate(result.new_items):
+            print(f"DEBUG: new_items[{i}] type: {type(item).__name__}")
+
+    # Exact assertions based on real OpenAI API behavior
     assert hasattr(result, "final_output")
     assert isinstance(result.final_output, str)
-    assert len(result.final_output) > 0
+    # assert (
+    #     result.final_output
+    #     == "The weather in Oakland is currently sunny. If you need more details like temperature or forecast, let me know!"
+    # )
+    # assert len(result.final_output) == 110
+    assert "The weather in Oakland is sunny." in result.final_output
+    assert len(result.final_output) >= len("The weather in Oakland is sunny.")
+
+    # Structure assertions
+    assert hasattr(result, "new_items")
+    assert len(result.new_items) == 3
+    assert result.new_items[0].type == "tool_call_item"
+    assert result.new_items[1].type == "tool_call_output_item"
+    assert result.new_items[2].type == "message_output_item"
+
+    # Tool call assertions
+    assert result.new_items[0].raw_item.name == "get_weather"
+    assert result.new_items[0].raw_item.arguments == '{"city":"Oakland"}'
+    assert result.new_items[1].output == "The weather in Oakland is sunny."
+
+    # Usage assertions
+    assert hasattr(result, "raw_responses")
+    assert len(result.raw_responses) == 2
+
     return result
 
 
@@ -178,48 +283,60 @@ def _check_fallback_formats(result, expected_tool_name):
 
 
 @pytest.mark.asyncio
-async def test_agent_sdk_async_chat_completions_non_streaming(async_client):
+async def test_agent_sdk_async_chat_completions_non_streaming(async_client, model_name):
     """Test agent SDK with OpenAIChatCompletionsModel (uses chat completions API) - non-streaming"""
-    agent = create_agent(openai_client=async_client, api_type="chat_completions")
+    agent = create_agent(
+        openai_client=async_client, model_name=model_name, api_type="chat_completions"
+    )
     result = await run_async_test(agent)
     check_tool_call(result)
 
 
 @pytest.mark.asyncio
-async def test_agent_sdk_async_responses_non_streaming(async_client):
+async def test_agent_sdk_async_responses_non_streaming(async_client, model_name):
     """Test agent SDK with OpenAIResponsesModel (uses responses API) - non-streaming"""
-    agent = create_agent(openai_client=async_client, api_type="responses")
+    agent = create_agent(
+        openai_client=async_client, model_name=model_name, api_type="responses"
+    )
     result = await run_async_test(agent)
     check_tool_call(result)
 
 
 @pytest.mark.asyncio
-async def test_agent_sdk_async_chat_completions_streaming(async_client):
+async def test_agent_sdk_async_chat_completions_streaming(async_client, model_name):
     """Test agent SDK with OpenAIChatCompletionsModel (uses chat completions API) - streaming"""
-    agent = create_agent(openai_client=async_client, api_type="chat_completions")
+    agent = create_agent(
+        openai_client=async_client, model_name=model_name, api_type="chat_completions"
+    )
     result = await run_async_streaming_test(agent)
     check_tool_call(result)
 
 
 @pytest.mark.asyncio
-async def test_agent_sdk_async_responses_streaming(async_client):
+async def test_agent_sdk_async_responses_streaming(async_client, model_name):
     """Test agent SDK with OpenAIResponsesModel (uses responses API) - streaming"""
-    agent = create_agent(openai_client=async_client, api_type="responses")
+    agent = create_agent(
+        openai_client=async_client, model_name=model_name, api_type="responses"
+    )
     result = await run_async_streaming_test(agent)
     check_tool_call(result)
 
 
-def test_agent_sdk_sync_chat_completions_non_streaming(async_client):
+def test_agent_sdk_sync_chat_completions_non_streaming(async_client, model_name):
     """Test agent SDK with OpenAIChatCompletionsModel (uses chat completions API) - sync non-streaming"""
     # Use async_client for sync test since agents SDK requires async client
-    agent = create_agent(openai_client=async_client, api_type="chat_completions")
+    agent = create_agent(
+        openai_client=async_client, model_name=model_name, api_type="chat_completions"
+    )
     result = run_sync_test(agent)
     check_tool_call(result)
 
 
-def test_agent_sdk_sync_responses_non_streaming(async_client):
+def test_agent_sdk_sync_responses_non_streaming(async_client, model_name):
     """Test agent SDK with OpenAIResponsesModel (uses responses API) - sync non-streaming"""
     # Use async_client for sync test since agents SDK requires async client
-    agent = create_agent(openai_client=async_client, api_type="responses")
+    agent = create_agent(
+        openai_client=async_client, model_name=model_name, api_type="responses"
+    )
     result = run_sync_test(agent)
     check_tool_call(result)

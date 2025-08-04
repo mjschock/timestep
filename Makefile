@@ -27,5 +27,13 @@ default:
 		--project backend \
 		--source-roots src
 
+skip-local:
+	uv run pytest \
+		tests/test_agents_sdk.py \
+		--api-key=$$OPENAI_API_KEY \
+		--base-url=https://api.openai.com/v1 \
+		--model-name=gpt-4.1-mini \
+		--skip-local-server
+
 up:
 	PYTHONPATH=src uv run uvicorn src.backend.main:app --host 0.0.0.0 --port 8000

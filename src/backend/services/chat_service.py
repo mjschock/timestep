@@ -42,12 +42,14 @@ class ChatService:
         # Create the message
         message = {
             "role": "assistant",
-            "content": response_text,
         }
 
-        # Add tool_calls if found
+        # According to OpenAI spec: when tool_calls are present, content should be null
         if tool_calls:
             message["tool_calls"] = tool_calls
+            message["content"] = None
+        else:
+            message["content"] = response_text
 
         # Create choice
         choice = {
@@ -765,12 +767,14 @@ class ChatService:
 
             message = {
                 "role": "assistant",
-                "content": response_text,
             }
 
-            # Add tool_calls to message if found
+            # According to OpenAI spec: when tool_calls are present, content should be null
             if tool_calls:
                 message["tool_calls"] = tool_calls
+                message["content"] = None
+            else:
+                message["content"] = response_text
 
             choices.append(
                 {
@@ -1024,6 +1028,8 @@ class ChatService:
             first_choice = response["choices"][0]
             if "message" in first_choice:
                 first_choice["message"]["tool_calls"] = [fallback_tool_call]
+                # According to OpenAI spec: when tool_calls are present, content should be null
+                first_choice["message"]["content"] = None
                 logger.info(
                     f"✅ Added deterministic fallback tool call: {fallback_tool_call['function']['name']}"
                 )

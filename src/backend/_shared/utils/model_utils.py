@@ -902,6 +902,9 @@ def process_model_inputs(
                     full_generated_text, return_tensors="pt", add_special_tokens=False
                 )
 
+                # Ensure generated_ids is on the same device as inference_inputs
+                generated_ids = generated_ids.to(device=inference_inputs["input_ids"].device)
+
                 # Combine input and generated tokens to match expected format
                 model_outputs = torch.cat(
                     [inference_inputs["input_ids"], generated_ids], dim=1

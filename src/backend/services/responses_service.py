@@ -59,26 +59,29 @@ class ResponsesService:
                 responses_tools.append(responses_tool)
         return responses_tools
 
-    async def create_response(self, body=None):
+    async def create_response(self, response_create_params: dict[str, Any]):
         # Reuse chat completion logic for responses
         logger.info("Creating response")
         chat_service = ChatService()
-        stream = body.get("stream", False)
-        chat_body = self._convert_responses_to_chat_format(body)
+        stream = response_create_params.get("stream", False)
+        
+        # Convert responses format to chat completions format
+        completion_create_params = self._convert_responses_to_chat_format(response_create_params)
         logger.debug("Converting responses to chat format:")
         logger.debug(
-            f"  Original body: {json.dumps(body, indent=2) if body else 'None'}"
+            f"  Original params: {json.dumps(response_create_params, indent=2)}"
         )
-        logger.debug(f"  Converted chat_body: {json.dumps(chat_body, indent=2)}")
+        logger.debug(f"  Converted chat params: {json.dumps(completion_create_params, indent=2)}")
+        
         if stream:
             from fastapi.responses import StreamingResponse
 
             return StreamingResponse(
-                self._response_event_stream(chat_service, chat_body, body),
+                self._response_event_stream(chat_service, completion_create_params, response_create_params),
                 media_type="text/event-stream",
             )
         else:
-            chat_result = await chat_service.create_chat_completion(chat_body)
+            chat_result = await chat_service.create_chat_completion(completion_create_params)
             logger.debug("Chat service result:")
             logger.debug(
                 f"  Result: {json.dumps(chat_result, indent=2) if chat_result else 'None'}"
@@ -86,9 +89,9 @@ class ResponsesService:
             tool_calls = self._extract_tool_calls(chat_result)
             if tool_calls:
                 return self._format_tool_call_response(
-                    chat_result, chat_body, tool_calls, body
+                    chat_result, completion_create_params, tool_calls, response_create_params
                 )
-            return self._format_standard_response(chat_result)
+            return self._format_standard_response(chat_result, completion_create_params, response_create_params)
 
     def _extract_tool_calls(self, chat_result):
         if chat_result and "choices" in chat_result and chat_result["choices"]:
@@ -101,7 +104,7 @@ class ResponsesService:
                 return message["tool_calls"]
         return None
 
-    def _format_tool_call_response(self, chat_result, chat_body, tool_calls, body):
+    def _format_tool_call_response(self, chat_result, completion_create_params, tool_calls, response_create_params):
         usage = chat_result.get("usage", {}) if chat_result else {}
         input_tokens = usage.get("prompt_tokens", 0) if usage else 0
         output_tokens = usage.get("completion_tokens", 0) if usage else 0
@@ -131,8 +134,11 @@ class ResponsesService:
             "id": f"resp_{uuid.uuid4().hex[:16]}",
             "object": "response",
             "created_at": int(time.time()),
-            "model": chat_body.get("model", "unknown-model"),
+            "model": completion_create_params.get("model", "unknown-model"),
             "status": "completed",
+            "parallel_tool_calls": response_create_params.get("parallel_tool_calls", True),
+            "tool_choice": response_create_params.get("tool_choice", "auto"),
+            "tools": response_create_params.get("tools", []),
             "output": [
                 {
                     "id": f"msg_{uuid.uuid4().hex[:16]}",
@@ -153,7 +159,7 @@ class ResponsesService:
         }
         return response
 
-    def _format_standard_response(self, chat_result):
+    def _format_standard_response(self, chat_result, completion_create_params, response_create_params):
         assistant_text = None
         if chat_result and "choices" in chat_result and chat_result["choices"]:
             assistant_text = chat_result["choices"][0]["message"]["content"]
@@ -179,8 +185,11 @@ class ResponsesService:
             "id": f"resp_{uuid.uuid4().hex[:16]}",
             "object": "response",
             "created_at": int(time.time()),
-            "model": chat_result.get("model", "unknown-model"),
+            "model": completion_create_params.get("model", "unknown-model"),
             "status": "completed",
+            "parallel_tool_calls": response_create_params.get("parallel_tool_calls", True),
+            "tool_choice": response_create_params.get("tool_choice", "auto"),
+            "tools": response_create_params.get("tools", []),
             "output": [
                 {
                     "id": f"msg_{uuid.uuid4().hex[:16]}",
@@ -200,10 +209,10 @@ class ResponsesService:
         }
         return response
 
-    def _response_event_stream(self, chat_service, chat_body, body):
+    def _response_event_stream(self, chat_service, completion_create_params, response_create_params):
         async def event_stream():
             # Initialize response parameters
-            response_params = self._initialize_response_params(chat_body, body)
+            response_params = self._initialize_response_params(completion_create_params, response_create_params)
 
             # Send initial events
             yield self._create_response_created_event(response_params)
@@ -213,7 +222,7 @@ class ResponsesService:
 
             # Stream content
             output_text, tool_calls, content_index = await self._stream_content(
-                chat_service, chat_body, response_params
+                chat_service, completion_create_params, response_params
             )
 
             # Send completion events
@@ -232,13 +241,13 @@ class ResponsesService:
 
         return event_stream()
 
-    def _initialize_response_params(self, chat_body, body):
+    def _initialize_response_params(self, completion_create_params, response_create_params):
         """Initialize response parameters."""
         model_name = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
-        if body and isinstance(body, dict):
-            model_name = body.get("model", model_name)
+        if response_create_params and isinstance(response_create_params, dict):
+            model_name = response_create_params.get("model", model_name)
 
-        messages = chat_body.get("messages", [])
+        messages = completion_create_params.get("messages", [])
         if not messages:
             messages = [
                 {
@@ -369,14 +378,14 @@ class ResponsesService:
             + "\n\n"
         )
 
-    async def _stream_content(self, chat_service, chat_body, params):
+    async def _stream_content(self, chat_service, completion_create_params, params):
         """Stream content from chat service."""
         content_index = 0
         output_text = ""
         tool_calls = []
 
         # Get the streaming response from chat service for text streaming
-        streaming_response = await chat_service.create_chat_completion(chat_body)
+        streaming_response = await chat_service.create_chat_completion(completion_create_params)
 
         # Stream through the chat service's streaming response for text content
         if hasattr(streaming_response, "body_iterator"):
