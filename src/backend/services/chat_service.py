@@ -121,8 +121,12 @@ class ChatService:
             generated_text, tool_choice, tools
         )
 
-        # Send final chunk
-        yield self._create_final_chunk(model_name, tool_calls)
+        # If we have tool calls, send them in a separate chunk before the final chunk
+        if tool_calls:
+            yield self._create_tool_calls_chunk(model_name, tool_calls)
+
+        # Send final chunk with empty delta
+        yield self._create_final_chunk(model_name, None)
         yield "data: [DONE]\n\n"
 
     def list_chat_completions(
@@ -629,6 +633,28 @@ class ChatService:
 
         return tool_calls
 
+    def _create_tool_calls_chunk(self, model_name, tool_calls) -> str:
+        """Create a streaming chunk containing tool calls."""
+        import json
+        import uuid
+
+        tool_chunk = {
+            "id": f"chatcmpl-{uuid.uuid4().hex[:8]}",
+            "object": "chat.completion.chunk",
+            "created": int(time.time()),
+            "model": model_name,
+            "choices": [
+                {
+                    "index": 0,
+                    "delta": {"tool_calls": tool_calls},
+                    "logprobs": None,
+                    "finish_reason": None,
+                }
+            ],
+        }
+
+        return f"data: {json.dumps(tool_chunk)}\n\n"
+
     def _create_final_chunk(self, model_name, tool_calls) -> str:
         """Create the final streaming chunk."""
         import json
@@ -649,6 +675,7 @@ class ChatService:
             ],
         }
 
+        # Only add tool_calls to delta if they exist (for backwards compatibility)
         if tool_calls:
             final_chunk["choices"][0]["delta"]["tool_calls"] = tool_calls
 

@@ -5,7 +5,10 @@ import uuid
 from typing import Any, Never
 
 from fastapi import HTTPException
+from sqlmodel import Session
 
+from backend._shared.dao.response_dao import ResponseDAO
+from backend._shared.database import get_session
 from backend._shared.logging_config import logger
 from backend.services.chat_service import ChatService
 
@@ -62,10 +65,15 @@ class ResponsesService:
     async def create_response(self, response_create_params: dict[str, Any]):
         # Reuse chat completion logic for responses
         logger.info("Creating response")
+        logger.debug("=== RESPONSES SERVICE DEBUG ===")
+        logger.debug(f"  Input params: {json.dumps(response_create_params, indent=2)}")
+        
         chat_service = ChatService()
         stream = response_create_params.get("stream", False)
+        logger.debug(f"  Stream: {stream}")
         
         # Convert responses format to chat completions format
+        logger.debug("  Converting responses to chat format...")
         completion_create_params = self._convert_responses_to_chat_format(response_create_params)
         logger.debug("Converting responses to chat format:")
         logger.debug(
@@ -82,29 +90,130 @@ class ResponsesService:
             )
         else:
             chat_result = await chat_service.create_chat_completion(completion_create_params)
-            logger.debug("Chat service result:")
-            logger.debug(
-                f"  Result: {json.dumps(chat_result, indent=2) if chat_result else 'None'}"
-            )
-            tool_calls = self._extract_tool_calls(chat_result)
-            if tool_calls:
-                return self._format_tool_call_response(
-                    chat_result, completion_create_params, tool_calls, response_create_params
-                )
-            return self._format_standard_response(chat_result, completion_create_params, response_create_params)
+            logger.debug("=== CHAT SERVICE RESULT ===")
+            logger.debug(f"  Raw result: {json.dumps(chat_result, indent=2) if chat_result else 'None'}")
+            
+            # Debug: Extract and log key parts
+            if chat_result and "choices" in chat_result and chat_result["choices"]:
+                first_choice = chat_result["choices"][0]
+                message = first_choice.get("message", {})
+                content = message.get("content", "")
+                tool_calls = message.get("tool_calls", [])
+                logger.debug(f"  Content: '{content}'")
+                logger.debug(f"  Tool calls: {json.dumps(tool_calls, indent=2)}")
+                logger.debug(f"  Message keys: {list(message.keys())}")
+            else:
+                logger.debug("  No choices found in chat result")
+            
+            # Create response and store in database
+            response_data = self._create_simple_response(chat_result, response_create_params)
+            
+            # Store in database
+            with get_session() as session:
+                response_dao = ResponseDAO(session)
+                stored_response = response_dao.create_response(response_data)
+                logger.debug(f"  Stored response in database with ID: {stored_response.id}")
+            
+            return response_data
 
-    def _extract_tool_calls(self, chat_result):
+    def _create_simple_response(self, chat_result, response_create_params):
+        """Create a simple responses API response from chat result."""
+        logger.debug("=== CREATING SIMPLE RESPONSE ===")
+        
+        # Extract content and tool calls
+        content = ""
+        tool_calls = []
+        usage = {}
+        
         if chat_result and "choices" in chat_result and chat_result["choices"]:
             first_choice = chat_result["choices"][0]
             message = first_choice.get("message", {})
-            if "tool_calls" in message and message["tool_calls"]:
-                logger.debug(
-                    f"Found tool calls: {json.dumps(message['tool_calls'], indent=2)}"
-                )
-                return message["tool_calls"]
-        return None
+            content = message.get("content", "")
+            tool_calls = message.get("tool_calls", [])
+            usage = chat_result.get("usage", {})
+            logger.debug(f"  Extracted content: '{content}'")
+            logger.debug(f"  Extracted tool calls: {json.dumps(tool_calls, indent=2)}")
+        
+        # Ensure content is a string, not None
+        if content is None:
+            content = ""
+        
+        # Create usage object
+        input_tokens = usage.get("prompt_tokens", 0)
+        output_tokens = usage.get("completion_tokens", 0)
+        total_tokens = usage.get("total_tokens", input_tokens + output_tokens)
+        
+        usage_obj = {
+            "input_tokens": input_tokens,
+            "input_tokens_details": {
+                "audio_tokens": None,
+                "cached_tokens": 0,
+                "text_tokens": input_tokens,
+            },
+            "output_tokens": output_tokens,
+            "output_tokens_details": {
+                "reasoning_tokens": 0,
+                "text_tokens": output_tokens,
+            },
+            "total_tokens": total_tokens,
+        }
+        
+        # Create response
+        response = {
+            "id": f"resp_{uuid.uuid4().hex[:16]}",
+            "object": "response",
+            "created_at": int(time.time()),
+            "model": response_create_params.get("model", "unknown-model"),
+            "status": "completed",
+            "parallel_tool_calls": response_create_params.get("parallel_tool_calls", True),
+            "tool_choice": response_create_params.get("tool_choice", "auto"),
+            "tools": response_create_params.get("tools", []),
+            "previous_response_id": response_create_params.get("previous_response_id"),
+            "output": [],
+            "usage": usage_obj,
+        }
+        
+        # Add message output if there's content
+        if content:
+            response["output"].append({
+                "id": f"msg_{uuid.uuid4().hex[:16]}",
+                "type": "message",
+                "status": "completed",
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "output_text",
+                        "text": content,
+                        "annotations": [],
+                    }
+                ],
+            })
+        
+        # Add tool calls as proper ResponseFunctionToolCall format
+        for tool_call in tool_calls:
+            response["output"].append({
+                "type": "function_call",
+                "call_id": tool_call.get("id", f"call_{uuid.uuid4().hex[:16]}"),
+                "name": tool_call["function"]["name"],
+                "arguments": tool_call["function"]["arguments"],
+                "status": "incomplete",
+            })
+        
+        logger.debug(f"  Final response: {json.dumps(response, indent=2)}")
+        return response
 
-    def _format_tool_call_response(self, chat_result, completion_create_params, tool_calls, response_create_params):
+    # COMMENTED OUT: def _extract_tool_calls(self, chat_result):
+    #     if chat_result and "choices" in chat_result and chat_result["choices"]:
+    #         first_choice = chat_result["choices"][0]
+    #         message = first_choice.get("message", {})
+    #         if "tool_calls" in message and message["tool_calls"]:
+    #             logger.debug(
+    #                 f"Found tool calls: {json.dumps(message['tool_calls'], indent=2)}"
+    #             )
+    #             return message["tool_calls"]
+    #     return None
+
+    # COMMENTED OUT: def _format_tool_call_response(self, chat_result, completion_create_params, tool_calls, response_create_params):
         usage = chat_result.get("usage", {}) if chat_result else {}
         input_tokens = usage.get("prompt_tokens", 0) if usage else 0
         output_tokens = usage.get("completion_tokens", 0) if usage else 0
@@ -159,7 +268,7 @@ class ResponsesService:
         }
         return response
 
-    def _format_standard_response(self, chat_result, completion_create_params, response_create_params):
+    # COMMENTED OUT: def _format_standard_response(self, chat_result, completion_create_params, response_create_params):
         assistant_text = None
         if chat_result and "choices" in chat_result and chat_result["choices"]:
             assistant_text = chat_result["choices"][0]["message"]["content"]
@@ -267,8 +376,8 @@ class ResponsesService:
         model = model_name
 
         # Extract tools and tool_choice from the request body
-        tools = body.get("tools", []) if body else []
-        tool_choice = body.get("tool_choice", "auto") if body else "auto"
+        tools = response_create_params.get("tools", []) if response_create_params else []
+        tool_choice = response_create_params.get("tool_choice", "auto") if response_create_params else "auto"
 
         return {
             "response_id": response_id,
@@ -277,7 +386,7 @@ class ResponsesService:
             "model": model,
             "tools": tools,
             "tool_choice": tool_choice,
-            "body": body,
+            "body": response_create_params,
         }
 
     def _create_response_created_event(self, params):
@@ -322,7 +431,7 @@ class ResponsesService:
             "model": params["model"],
             "output": output,
             "parallel_tool_calls": False,
-            "previous_response_id": None,
+            "previous_response_id": params["body"].get("previous_response_id") if params["body"] else None,
             "reasoning": {"effort": None, "summary": None},
             "store": True,
             "temperature": params["body"].get("temperature", 1.0)
@@ -596,11 +705,31 @@ class ResponsesService:
             + "\n\n"
         )
 
-    def get_response(self, response_id, include, stream, starting_after) -> Never:
-        raise HTTPException(status_code=501, detail="Not implemented")
+    def get_response(self, response_id: str, include: list[str], stream: str, starting_after: str) -> dict:
+        """Get a response by its ID."""
+        logger.info(f"Getting response with ID: {response_id}")
+        
+        with get_session() as session:
+            response_dao = ResponseDAO(session)
+            response = response_dao.get_response_by_id(response_id)
+            
+            if not response:
+                raise HTTPException(status_code=404, detail=f"Response with ID {response_id} not found")
+            
+            return response.to_dict()
 
-    def delete_response(self, response_id) -> Never:
-        raise HTTPException(status_code=501, detail="Not implemented")
+    def delete_response(self, response_id: str) -> dict:
+        """Delete a response by its ID."""
+        logger.info(f"Deleting response with ID: {response_id}")
+        
+        with get_session() as session:
+            response_dao = ResponseDAO(session)
+            success = response_dao.delete_response(response_id)
+            
+            if not success:
+                raise HTTPException(status_code=404, detail=f"Response with ID {response_id} not found")
+            
+            return {"id": response_id, "object": "response", "deleted": True}
 
     def cancel_response(self, response_id) -> Never:
         raise HTTPException(status_code=501, detail="Not implemented")
@@ -612,14 +741,24 @@ class ResponsesService:
 
     def _convert_responses_to_chat_format(self, body):
         """Convert responses API format to chat completions format."""
+        logger.debug("  _convert_responses_to_chat_format called")
+        logger.debug(f"    Input body: {json.dumps(body, indent=2)}")
+        
         if not body or not isinstance(body, dict):
+            logger.debug("    Body is empty or not dict, returning empty messages")
             return {"messages": []}
 
         chat_body = self._copy_common_fields(body)
+        logger.debug(f"    Common fields: {json.dumps(chat_body, indent=2)}")
+        
         messages = self._convert_input_to_messages(body)
+        logger.debug(f"    Converted messages: {json.dumps(messages, indent=2)}")
+        
         messages = self._add_instructions_as_system_message(body, messages)
+        logger.debug(f"    Messages with instructions: {json.dumps(messages, indent=2)}")
 
         chat_body["messages"] = messages
+        logger.debug(f"    Final chat body: {json.dumps(chat_body, indent=2)}")
         return chat_body
 
     def _copy_common_fields(self, body):

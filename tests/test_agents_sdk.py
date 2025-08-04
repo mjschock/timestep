@@ -310,6 +310,8 @@ def _check_fallback_formats(result, expected_tool_name):
 
 
 @pytest.mark.asyncio
+@pytest.mark.chat_completions
+@pytest.mark.non_streaming
 async def test_agent_sdk_async_chat_completions_non_streaming(
     async_client, model_name, expected_responses
 ):
@@ -322,6 +324,8 @@ async def test_agent_sdk_async_chat_completions_non_streaming(
 
 
 @pytest.mark.asyncio
+@pytest.mark.chat_completions
+@pytest.mark.streaming
 async def test_agent_sdk_async_chat_completions_streaming(
     async_client, model_name, expected_responses
 ):
@@ -335,19 +339,9 @@ async def test_agent_sdk_async_chat_completions_streaming(
     check_tool_call(result)
 
 
-def test_agent_sdk_sync_chat_completions_non_streaming(
-    async_client, model_name, expected_responses
-):
-    """Test agent SDK with OpenAIChatCompletionsModel (uses chat completions API) - sync non-streaming"""
-    # Use async_client for sync test since agents SDK requires async client
-    agent = create_agent(
-        openai_client=async_client, model_name=model_name, api_type="chat_completions"
-    )
-    result = run_sync_test(agent, expected_responses=expected_responses)
-    check_tool_call(result)
-
-
 @pytest.mark.asyncio
+@pytest.mark.responses
+@pytest.mark.non_streaming
 async def test_agent_sdk_async_responses_non_streaming(
     async_client, model_name, expected_responses
 ):
@@ -360,6 +354,8 @@ async def test_agent_sdk_async_responses_non_streaming(
 
 
 @pytest.mark.asyncio
+@pytest.mark.responses
+@pytest.mark.streaming
 async def test_agent_sdk_async_responses_streaming(
     async_client, model_name, expected_responses
 ):
@@ -373,6 +369,24 @@ async def test_agent_sdk_async_responses_streaming(
     check_tool_call(result)
 
 
+@pytest.mark.chat_completions
+@pytest.mark.non_streaming
+@pytest.mark.sync
+def test_agent_sdk_sync_chat_completions_non_streaming(
+    async_client, model_name, expected_responses
+):
+    """Test agent SDK with OpenAIChatCompletionsModel (uses chat completions API) - sync non-streaming"""
+    # Use async_client for sync test since agents SDK requires async client
+    agent = create_agent(
+        openai_client=async_client, model_name=model_name, api_type="chat_completions"
+    )
+    result = run_sync_test(agent, expected_responses=expected_responses)
+    check_tool_call(result)
+
+
+@pytest.mark.responses
+@pytest.mark.non_streaming
+@pytest.mark.sync
 def test_agent_sdk_sync_responses_non_streaming(
     async_client, model_name, expected_responses
 ):

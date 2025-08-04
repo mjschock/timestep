@@ -27,6 +27,9 @@ async def create_response(
     """
     try:
         body = await request.json()
+        print(f"=== RESPONSES API DEBUG ===")
+        print(f"  Raw body: {body}")
+        print(f"  Previous response ID: {body.get('previous_response_id', 'None')}")
 
         # Validate the entire request using OpenAI Responses API types
         try:
@@ -49,13 +52,17 @@ async def create_response(
             ) from e
 
         result = await service.create_response(validated_request)
+        print(f"  Service result: {result}")
 
         # Validate the response using OpenAI Responses API types
         if isinstance(result, dict):
             try:
+                print(f"  Attempting to validate response...")
                 validated_response = ResponsesAPIResponse.model_validate(result)
                 result = validated_response.model_dump(exclude_unset=True)
+                print(f"  Validation successful")
             except Exception as e:
+                print(f"  Validation failed: {e}")
                 # Log the error but don't expose internal details
                 raise HTTPException(
                     status_code=500,
@@ -74,10 +81,10 @@ async def create_response(
 @responses_router.get("/responses/{response_id}")
 def get_response(
     response_id: str,
-    include: list[str],
-    stream: str,
-    starting_after: str,
     request: Request,
+    include: list[str] = [],
+    stream: str = "",
+    starting_after: str = "",
     service: ResponsesService = Depends(ResponsesService),  # noqa: B008
 ):
     """Retrieves a model response with the given ID."""
