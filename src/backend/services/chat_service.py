@@ -111,19 +111,23 @@ class ChatService:
         generated_text = ""
 
         # Stream tokens from model_utils TextIteratorStreamer
+        # First collect all tokens to determine if we need fallback tool calls
         for token in response_stream:
             if token:
                 generated_text += token
-                yield self._create_token_chunk(token, model_name, logprobs)
 
         # Handle tool choice fallback if needed
         tool_calls = self._handle_streaming_tool_choice_fallback(
             generated_text, tool_choice, tools
         )
 
-        # If we have tool calls, send them in a separate chunk before the final chunk
+        # If we have tool calls, ONLY send tool calls (not content)
         if tool_calls:
             yield self._create_tool_calls_chunk(model_name, tool_calls)
+        else:
+            # If no tool calls, stream the content tokens
+            for token in generated_text:
+                yield self._create_token_chunk(token, model_name, logprobs)
 
         # Send final chunk with empty delta
         yield self._create_final_chunk(model_name, None)

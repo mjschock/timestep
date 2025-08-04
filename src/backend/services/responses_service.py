@@ -329,17 +329,38 @@ class ResponsesService:
             yield self._create_output_item_added_event(response_params)
             yield self._create_content_part_added_event(response_params)
 
-            # Stream content
-            output_text, tool_calls, content_index = await self._stream_content(
-                chat_service, completion_create_params, response_params
-            )
+            # For now, get non-streaming response and emit all content at once
+            # This is a simpler approach that leverages the working non-streaming logic
+            completion_create_params_copy = dict(completion_create_params)
+            completion_create_params_copy["stream"] = False  # Get non-streaming response
+            
+            chat_result = await chat_service.create_chat_completion(completion_create_params_copy)
+            
+            # Extract content from the chat result
+            output_text = ""
+            tool_calls = []
+            
+            if chat_result and "choices" in chat_result and chat_result["choices"]:
+                first_choice = chat_result["choices"][0]
+                message = first_choice.get("message", {})
+                content = message.get("content", "")
+                extracted_tool_calls = message.get("tool_calls", [])
+                
+                if content:
+                    output_text = content
+                    # Emit content as delta events (simulate streaming)
+                    for char in content:
+                        yield self._create_delta_event(response_params, char, 0)
+                
+                if extracted_tool_calls:
+                    tool_calls = extracted_tool_calls
 
             # Send completion events
             yield self._create_output_text_done_event(
-                response_params, output_text, content_index
+                response_params, output_text, 0
             )
             yield self._create_content_part_done_event(
-                response_params, output_text, content_index
+                response_params, output_text, 0
             )
             yield self._create_output_item_done_event(
                 response_params, output_text, tool_calls
@@ -548,6 +569,49 @@ class ResponsesService:
             return await self._extract_delta_content(
                 data, params, content_index, output_text, tool_calls
             )
+
+        except json.JSONDecodeError:
+            # Skip non-JSON chunks
+            return content_index, output_text, tool_calls
+
+    async def _process_chunk_data_with_deltas(
+        self, chunk_str, params, content_index, output_text, tool_calls
+    ):
+        """Process chunk data and yield delta events, then return updated state."""
+        try:
+            data_str = chunk_str[6:]  # Remove 'data: ' prefix
+            if data_str.strip() == "[DONE]":
+                return None  # Signal to break
+
+            data = json.loads(data_str)
+            
+            # Extract delta content
+            if "choices" not in data or not data["choices"]:
+                return content_index, output_text, tool_calls
+
+            choice = data["choices"][0]
+            if "delta" not in choice:
+                return content_index, output_text, tool_calls
+
+            delta = choice["delta"]
+
+            # Handle text content with delta events
+            if "content" in delta and delta["content"]:
+                token = delta["content"]
+                output_text += token
+                content_index += 1
+                
+                # Return delta event
+                return self._create_delta_event(params, token, content_index - 1)
+
+            # Handle tool calls in the delta (usually in final chunk)
+            if "tool_calls" in delta and delta["tool_calls"]:
+                tool_calls = delta["tool_calls"]
+                logger.debug(
+                    f"Found tool calls in streaming delta: {json.dumps(tool_calls, indent=2)}"
+                )
+
+            return content_index, output_text, tool_calls
 
         except json.JSONDecodeError:
             # Skip non-JSON chunks

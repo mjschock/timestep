@@ -27,7 +27,23 @@ default:
 		--project backend \
 		--source-roots src
 
-skip-local:
+test-agents-sdk-anthropic-skip-local:
+	uv run pytest \
+		tests/test_agents_sdk.py \
+		--api-key=$$ANTHROPIC_API_KEY \
+		--base-url=https://api.anthropic.com/v1 \
+		--model-name=claude-opus-4-0 \
+		--skip-local-server
+
+test-agents-sdk-deepseek-skip-local:
+	uv run pytest \
+		tests/test_agents_sdk.py \
+		--api-key=$$DEEPSEEK_API_KEY \
+		--base-url=https://api.deepseek.com/v1 \
+		--model-name=deepseek-chat \
+		--skip-local-server
+
+test-agents-sdk-openai-skip-local:
 	uv run pytest \
 		tests/test_agents_sdk.py \
 		--api-key=$$OPENAI_API_KEY \

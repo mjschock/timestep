@@ -886,6 +886,8 @@ def process_model_inputs(
 
             if stream:
                 # For streaming mode, return the streamer for external consumption
+                # Store thread reference in streamer to prevent garbage collection
+                streamer._generation_thread = generation_thread
                 model_outputs = streamer
             else:
                 # For non-streaming mode, collect all tokens and return full result
