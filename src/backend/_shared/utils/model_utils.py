@@ -732,11 +732,13 @@ def prepare_model_inputs(
 def process_model_inputs(
     data_collator: Any | None = None,
     eval_dataset: TorchDataset | dict[str, TorchDataset] | Dataset | None = None,
+    generation_kwargs: dict[str, Any] | None = None,
     model=None,
     processor=None,
     stream: bool = False,
     test_dataset: TorchDataset | dict[str, TorchDataset] | Dataset | None = None,
     train_dataset: TorchDataset | IterableDataset | Dataset | None = None,
+    training_kwargs: dict[str, Any] | None = None,
 ):
     # Validate required parameters
     if data_collator is None:
@@ -761,29 +763,32 @@ def process_model_inputs(
 
         # Advanced hyperparameters for maximum training improvement
         training_args = TrainingArguments(
-            adam_beta1=0.9,
-            adam_beta2=0.95,  # Lower beta2 for better convergence
-            adam_epsilon=1e-6,  # Lower epsilon for precision
-            bf16=True,
-            dataloader_num_workers=0,
-            dataloader_pin_memory=False,
-            gradient_accumulation_steps=8,  # Even larger effective batch size
-            gradient_checkpointing=True,
-            gradient_checkpointing_kwargs={"use_reentrant": False},
-            label_names=["labels"],
-            learning_rate=2e-3,  # Higher peak learning rate
-            logging_steps=3,
-            lr_scheduler_type="cosine",  # Cosine annealing for better convergence
-            max_grad_norm=0.5,  # Gradient clipping for stability
-            num_train_epochs=8,  # More epochs for deeper learning
-            optim="paged_adamw_8bit",
-            output_dir=output_dir,
-            per_device_train_batch_size=1,
-            remove_unused_columns=False,
-            report_to=[],
-            save_strategy="epoch",
-            warmup_steps=200,  # Extended warmup for stability
-            weight_decay=0.00005,  # Even lower weight decay
+            **{
+                "adam_beta1": 0.9,
+                "adam_beta2": 0.95,  # Lower beta2 for better convergence
+                "adam_epsilon": 1e-6,  # Lower epsilon for precision
+                "bf16": True,
+                "dataloader_num_workers": 0,
+                "dataloader_pin_memory": False,
+                "gradient_accumulation_steps": 8,  # Even larger effective batch size
+                "gradient_checkpointing": True,
+                "gradient_checkpointing_kwargs": {"use_reentrant": False},
+                "label_names": ["labels"],
+                "learning_rate": 2e-3,  # Higher peak learning rate
+                "logging_steps": 3,
+                "lr_scheduler_type": "cosine",  # Cosine annealing for better convergence
+                "max_grad_norm": 0.5,  # Gradient clipping for stability
+                "num_train_epochs": 8,  # More epochs for deeper learning
+                "optim": "paged_adamw_8bit",
+                "output_dir": output_dir,
+                "per_device_train_batch_size": 1,
+                "remove_unused_columns": False,
+                "report_to": [],
+                "save_strategy": "epoch",
+                "warmup_steps": 200,  # Extended warmup for stability
+                "weight_decay": 0.00005,  # Even lower weight decay
+            },
+            **training_kwargs,
         )
 
         # Create trainer with train and eval datasets
@@ -874,19 +879,18 @@ def process_model_inputs(
             # Import threading for streaming
             import threading
 
-            # Generate with streaming
-            generation_kwargs = {
-                **inference_inputs,
-                "max_new_tokens": 100,
-                "do_sample": False,
-                "temperature": 0.0,
-                "pad_token_id": processor.tokenizer.eos_token_id,
-                "streamer": streamer,
-            }
-
             # Start generation in a separate thread
             generation_thread = threading.Thread(
-                target=model.generate, kwargs=generation_kwargs
+                target=model.generate,
+                kwargs={
+                    **inference_inputs,
+                    "max_new_tokens": 100,
+                    "do_sample": False,
+                    "temperature": 0.0,
+                    "pad_token_id": processor.tokenizer.eos_token_id,
+                    "streamer": streamer,
+                    **(generation_kwargs or {}),
+                },
             )
             generation_thread.start()
 

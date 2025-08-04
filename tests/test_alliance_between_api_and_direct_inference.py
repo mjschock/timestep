@@ -123,63 +123,11 @@ TOOL_CALLING_EXPECTED_RESPONSE = """<observation>The user is asking me to find t
 {'name': 'web_search', 'arguments': {'query': 'What is the stock price for Nvidia?'}}
 </tool_call>"""
 
-# Tool calling messages will be created in test functions
-
-
-# Helper functions for DRY testing
-
-
-def _prepare_generation_kwargs(temperature, max_tokens, top_p, n, processor):
-    """Prepare generation kwargs based on parameters."""
-    if temperature == 0.0:
-        generation_kwargs = {
-            "do_sample": False,
-            "max_new_tokens": max_tokens,
-        }
-    else:
-        generation_kwargs = {
-            "max_new_tokens": max_tokens,
-            "do_sample": True,
-            "temperature": temperature,
-            "top_p": top_p,
-            "num_return_sequences": n,
-            "pad_token_id": getattr(processor, "pad_token_id", None),
-            "eos_token_id": getattr(processor, "eos_token_id", None),
-        }
-
-    # Remove None values
-    return {k: v for k, v in generation_kwargs.items() if v is not None}
-
-
-def _process_response_text(response_text, inputs, processor, stop_sequences):
-    """Process response text by removing input and applying stop sequences."""
-    # Remove the input text from the response like the server
-    input_text = processor.decode(inputs["input_ids"][0], skip_special_tokens=True)
-    if response_text.startswith(input_text):
-        response_text = response_text[len(input_text) :].strip()
-
-    # Apply stop sequences like the server
-    if stop_sequences:
-        for stop_seq in stop_sequences:
-            if isinstance(stop_seq, str) and stop_seq in response_text:
-                # Find the position and truncate
-                stop_pos = response_text.find(stop_seq)
-                if stop_pos != -1:
-                    response_text = response_text[: stop_pos + len(stop_seq)]
-                    break
-
-    return response_text
-
 
 def run_direct_inference(
     messages,
     expected_response,
-    max_tokens=DEFAULT_MAX_TOKENS,
     tools=None,
-    tool_choice=None,
-    temperature=0.0,
-    top_p=1.0,
-    n=1,
 ):
     """Use the same singleton model as the API for exact response matching."""
     from backend.services.models_service import get_models_service
@@ -200,55 +148,53 @@ def run_direct_inference(
     print(f"Model dtype: {next(model.parameters()).dtype}")
 
     try:
-        raise Exception("TODO: Use the functions from model_utils to run inference")
+        # Import the model_utils functions
+        from datasets import Dataset, DatasetDict
 
-        # Normalize messages like the server does
-        inputs = processor.apply_chat_template(
-            messages,
-            tools=tools,
-            add_generation_prompt=True,
-            tokenize=True,
-            return_dict=True,
-            return_tensors="pt",
+        from backend._shared.utils.model_utils import (
+            prepare_model_inputs,
+            process_model_inputs,
+            process_model_outputs,
         )
 
-        # Use the model's actual dtype instead of hardcoding
-        model_dtype = next(model.parameters()).dtype
-        inputs = inputs.to(model.device, dtype=model_dtype)
+        # Create a test dataset in the format expected by model_utils
+        # Convert messages to the dataset format
+        test_example = {
+            "messages": messages,
+            "tools": tools,
+        }
 
-        generation_kwargs = _prepare_generation_kwargs(
-            temperature, max_tokens, top_p, n, processor
+        # Create DatasetDict with test split
+        test_dataset = Dataset.from_list([test_example])
+        dataset_dict = DatasetDict({"test": test_dataset})
+
+        # Step 1: Prepare model inputs
+        model_inputs = prepare_model_inputs(
+            dataset=dataset_dict, model=model, processor=processor, stream=False
         )
 
-        # Add stop sequences like the server
-        stop_sequences = []
-        if "</tool_call>" not in stop_sequences:
-            stop_sequences.append("</tool_call>")
+        # Step 2: Process model inputs (run inference)
+        # Use DEFAULT_MAX_TOKENS (64) to match expected response length
+        generation_kwargs = {
+            "max_new_tokens": DEFAULT_MAX_TOKENS,
+            "temperature": 0.0,
+        }
 
-        if stop_sequences:
-            generation_kwargs["stopping_criteria"] = (
-                None  # We'll handle stop sequences manually
-            )
-
-        print(f"Generation kwargs: {generation_kwargs}")
-        print(f"Stop sequences: {stop_sequences}")
-
-        # Generate response
-        with torch.no_grad():
-            generated_ids = model.generate(**inputs, **generation_kwargs)
-
-        # Decode responses like the server
-        generated_texts = processor.batch_decode(
-            generated_ids,
-            skip_special_tokens=True,
+        model_outputs = process_model_inputs(
+            data_collator=model_inputs["data_collator"],
+            generation_kwargs=generation_kwargs,
+            model=model,
+            processor=processor,
+            test_dataset=model_inputs["test_dataset"],
+            stream=False,
         )
 
-        print(f"Generated text: {generated_texts[0]}")
-
-        # Process response like the chat service does
-        response_text = _process_response_text(
-            generated_texts[0], inputs, processor, stop_sequences
+        # Step 3: Process model outputs to get final response
+        results = process_model_outputs(
+            model_outputs=model_outputs, processor=processor, stream=False
         )
+
+        response_text = results["response"].strip()
 
         print(f"Processed response: {response_text}")
         print(f"Expected response: {expected_response}")
@@ -261,12 +207,6 @@ def run_direct_inference(
         return expected_response, messages
     finally:
         # Clean up generated tensors (model and processor are singletons, don't delete them)
-        if "inputs" in locals():
-            del inputs
-        if "generated_ids" in locals():
-            del generated_ids
-        if "generated_texts" in locals():
-            del generated_texts
         torch.cuda.empty_cache()
 
 

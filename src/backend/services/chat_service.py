@@ -272,9 +272,17 @@ class ChatService:
             else:
                 logger.debug("No test_dataset found in model_inputs")
 
+            # Prepare generation kwargs to pass to model_utils
+            generation_kwargs = {
+                "max_new_tokens": max_tokens,
+                "temperature": temperature,
+                "top_p": top_p,
+            }
+
             model_outputs = process_model_inputs(
                 data_collator=model_inputs["data_collator"],
                 eval_dataset=model_inputs["eval_dataset"],
+                generation_kwargs=generation_kwargs,
                 model=model,
                 processor=processor,
                 stream=stream,
@@ -453,116 +461,6 @@ class ChatService:
                 status_code=500,
                 detail=f"Failed to get chat completion messages: {str(e)}",
             ) from e
-
-    def _create_streaming_response(
-        self,
-        model,
-        processor,
-        inputs,
-        model_name,
-        max_tokens,
-        temperature,
-        top_p,
-        stop,
-        logprobs=False,
-        top_logprobs=5,
-        tool_choice=None,
-        tools=None,
-    ):
-        """Create a streaming response for chat completion."""
-        from fastapi.responses import StreamingResponse
-
-        return StreamingResponse(
-            self._streaming_event_generator(
-                model,
-                processor,
-                inputs,
-                model_name,
-                max_tokens,
-                temperature,
-                top_p,
-                stop,
-                logprobs,
-                tool_choice,
-                tools,
-            ),
-            media_type="text/event-stream",
-        )
-
-    def _streaming_event_generator(
-        self,
-        model,
-        processor,
-        inputs,
-        model_name,
-        max_tokens,
-        temperature,
-        top_p,
-        stop,
-        logprobs,
-        tool_choice,
-        tools,
-    ):
-        """Generate streaming events for chat completion."""
-        import threading
-
-        from transformers import TextIteratorStreamer
-
-        # Initialize streaming setup
-        input_ids = inputs["input_ids"]
-        input_ids.clone()
-        generated_text = ""
-
-        # Setup generation parameters
-        generation_kwargs = self._prepare_generation_kwargs(
-            processor, model, max_tokens, temperature, top_p
-        )
-
-        # Setup streamer and start generation
-        streamer = TextIteratorStreamer(processor, skip_prompt=True, timeout=10)
-        generation_kwargs["streamer"] = streamer
-
-        generation_thread = threading.Thread(
-            target=lambda: model.generate(**inputs, **generation_kwargs)
-        )
-        generation_thread.start()
-
-        # Stream tokens
-        for token in streamer:
-            if token:
-                generated_text += token
-                yield self._create_token_chunk(token, model_name, logprobs)
-
-        # Wait for generation to complete
-        generation_thread.join()
-
-        # Handle tool choice fallback
-        tool_calls = self._handle_streaming_tool_choice_fallback(
-            generated_text, tool_choice, tools
-        )
-
-        # Send final chunk
-        yield self._create_final_chunk(model_name, tool_calls)
-        yield "data: [DONE]\n\n"
-
-    def _prepare_generation_kwargs(
-        self, processor, model, max_tokens, temperature, top_p
-    ):
-        """Prepare generation parameters for streaming."""
-        eos_token_id = getattr(processor, "eos_token_id", None)
-        if eos_token_id is None and hasattr(model, "config"):
-            eos_token_id = getattr(model.config, "eos_token_id", None)
-
-        generation_kwargs = {
-            "max_new_tokens": max_tokens,
-            "do_sample": temperature > 0,
-            "temperature": temperature if temperature > 0 else 1.0,
-            "top_p": top_p,
-            "pad_token_id": getattr(processor, "pad_token_id", None),
-            "eos_token_id": eos_token_id,
-        }
-
-        return {k: v for k, v in generation_kwargs.items() if v is not None}
 
     def _create_token_chunk(self, token, model_name, logprobs) -> str:
         """Create a streaming chunk for a single token."""
