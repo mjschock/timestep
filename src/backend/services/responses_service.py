@@ -450,7 +450,7 @@ class ResponsesService:
                                                 ],
                                                 "status": "incomplete",
                                             }
-                                            yield f"event: response.function_call\ndata: {json.dumps({'type': 'response.function_call', 'function_call': function_call_event})}\n\n"
+                                            yield f"event: response.function_call\ndata: {json.dumps({'type': 'response.function_call', 'function_call': function_call_event, 'sequence_number': None})}\n\n"
 
                         except json.JSONDecodeError:
                             print(
@@ -465,7 +465,7 @@ class ResponsesService:
         yield self._create_content_part_done_event(message_id, output_text)
         yield self._create_output_item_done_event(message_id, output_text, tool_calls)
         yield self._create_response_completed_event(
-            response_id, output_text, tool_calls
+            response_id, output_text, tool_calls, message_id
         )
 
     def _create_response_created_event(
@@ -502,6 +502,11 @@ class ResponsesService:
 
     def _create_output_item_done_event(self, message_id, output_text, tool_calls):
         """Create response.output_item.done event."""
+        # Skip generating message output item when there's no content and only tool calls
+        # This prevents duplicate message output items when the agents SDK makes separate calls
+        if not output_text.strip() and tool_calls:
+            return ""
+
         item_data = {
             "id": message_id,
             "type": "message",
@@ -518,16 +523,27 @@ class ResponsesService:
 
         return f"event: response.output_item.done\ndata: {json.dumps({'type': 'response.output_item.done', 'output_index': 0, 'item': item_data})}\n\n"
 
-    def _create_response_completed_event(self, response_id, output_text, tool_calls):
+    def _create_response_completed_event(
+        self, response_id, output_text, tool_calls, message_id=None
+    ):
         """Create response.completed event."""
+        # Use the provided message_id or generate a new one
+        final_message_id = message_id or f"msg_{uuid.uuid4().hex[:16]}"
+
         response_data = {
             "id": response_id,
             "object": "response",
             "created_at": int(time.time()),
             "status": "completed",
-            "output": [
+            "output": [],
+        }
+
+        # Only add message output if there's content
+        # This prevents duplicate message output items when the agents SDK makes separate calls
+        if output_text.strip():
+            response_data["output"].append(
                 {
-                    "id": f"msg_{uuid.uuid4().hex[:16]}",
+                    "id": final_message_id,
                     "type": "message",
                     "status": "completed",
                     "role": "assistant",
@@ -535,8 +551,7 @@ class ResponsesService:
                         {"type": "output_text", "text": output_text, "annotations": []}
                     ],
                 }
-            ],
-        }
+            )
 
         # Add tool calls as proper ResponseFunctionToolCall format
         if tool_calls:
