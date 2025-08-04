@@ -1,5 +1,6 @@
 # mypy: ignore-errors
 import json
+import pprint
 import time
 import uuid
 from typing import Any
@@ -182,7 +183,7 @@ class ChatService:
         """Creates a model response for the given chat conversation."""
         try:
             logger.info("create_chat_completion called!")
-            logger.debug(f"Request params: {json.dumps(completion_create_params, indent=2, default=str)}")
+            logger.debug(f"Request params:\n{pprint.pformat(completion_create_params, width=100)}")
 
             # Extract parameters directly from validated OpenAI request
             model_name = completion_create_params.get("model", "HuggingFaceTB/SmolVLM2-256M-Video-Instruct")
@@ -210,7 +211,7 @@ class ChatService:
             )
 
             # Log messages for debugging
-            logger.debug(f"Messages: {json.dumps(messages, indent=2, default=str)}")
+            logger.debug(f"Messages:\n{pprint.pformat(messages, width=120)}")
 
             # Create DatasetDict directly for model_utils
             dataset = DatasetDict({"test": Dataset.from_list([{
@@ -226,6 +227,21 @@ class ChatService:
                 processor=processor,
                 stream=stream,
             )
+            
+            # Debug: Check what messages are actually sent to the model (including few-shot examples)
+            if "test_dataset" in model_inputs and len(model_inputs["test_dataset"]) > 0:
+                actual_messages = model_inputs["test_dataset"][0].get("messages", [])
+                
+                # Assert that we have proper chat messages (not formatted strings with <end_of_utterance>)
+                assert isinstance(actual_messages, list), f"Expected messages to be a list, got {type(actual_messages)}"
+                for i, msg in enumerate(actual_messages):
+                    assert isinstance(msg, dict), f"Message {i} should be a dict, got {type(msg)}"
+                    assert "role" in msg, f"Message {i} missing 'role' field: {msg}"
+                    assert msg["role"] in ["system", "user", "assistant", "tool"], f"Message {i} has invalid role: {msg['role']}"
+                
+                logger.debug(f"Final messages sent to model (including few-shot examples):\n{pprint.pformat(actual_messages, width=120)}")
+            else:
+                logger.debug("No test_dataset found in model_inputs")
 
             model_outputs = process_model_inputs(
                 data_collator=model_inputs["data_collator"],
@@ -265,9 +281,7 @@ class ChatService:
                     stop,
                     user,
                 )
-                logger.debug(
-                    f"DEBUG: Model response: {json.dumps(response, indent=2, default=str)}"
-                )
+                logger.debug(f"Model response:\n{pprint.pformat(response, width=120)}")
                 logger.debug("DEBUG: Response validation:")
                 logger.debug(f"  - Has 'choices' key: {'choices' in response}")
                 if "choices" in response and response["choices"]:

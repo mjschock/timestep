@@ -131,11 +131,11 @@ def _add_system_message_to_messages(
         tool_content = format_tool_definitions(merged_tools)
         if tool_content:
             parts.append(tool_content)
-            # Add n-shot example after tool definitions
+            # Add n-shot examples after tool definitions
             if DEFAULT_N_SHOT > 0:
-                n_shot_example = _create_n_shot_example(DEFAULT_N_SHOT)
-                if n_shot_example:
-                    parts.append(n_shot_example)
+                # Simply extend with the raw message lists from N_SHOT_EXAMPLES
+                for i in range(min(DEFAULT_N_SHOT, len(N_SHOT_EXAMPLES))):
+                    messages.extend(N_SHOT_EXAMPLES[i])
 
     # Check if system message already exists and merge if needed
     existing_system_messages = [
