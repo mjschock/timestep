@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-
-from backend._shared.utils.common_utils import validate_and_convert_openai_request
-from backend.services.responses_service import ResponsesService
 from openai.types.responses import Response as ResponsesAPIResponse
 from openai.types.responses.response_create_params import (
     ResponseCreateParamsNonStreaming,
     ResponseCreateParamsStreaming,
 )
+
+from backend._shared.utils.common_utils import validate_and_convert_openai_request
+from backend.services.responses_service import ResponsesService
 
 responses_router = APIRouter()
 
@@ -27,7 +27,7 @@ async def create_response(
     """
     try:
         body = await request.json()
-        print(f"=== RESPONSES API DEBUG ===")
+        print("=== RESPONSES API DEBUG ===")
         print(f"  Raw body: {body}")
         print(f"  Previous response ID: {body.get('previous_response_id', 'None')}")
 
@@ -35,15 +35,21 @@ async def create_response(
         try:
             # Check if streaming is requested to use the correct validation model
             is_streaming = body.get("stream", False)
-            
+
             if is_streaming:
-                response_create_params_streaming: ResponseCreateParamsStreaming = validate_and_convert_openai_request(
-                    body, ResponseCreateParamsStreaming, "response_create_params_streaming"
+                response_create_params_streaming: ResponseCreateParamsStreaming = (
+                    validate_and_convert_openai_request(
+                        body,
+                        ResponseCreateParamsStreaming,
+                        "response_create_params_streaming",
+                    )
                 )
                 validated_request = response_create_params_streaming
             else:
                 response_create_params_non_streaming: ResponseCreateParamsNonStreaming = validate_and_convert_openai_request(
-                    body, ResponseCreateParamsNonStreaming, "response_create_params_non_streaming"
+                    body,
+                    ResponseCreateParamsNonStreaming,
+                    "response_create_params_non_streaming",
                 )
                 validated_request = response_create_params_non_streaming
         except Exception as e:
@@ -57,10 +63,10 @@ async def create_response(
         # Validate the response using OpenAI Responses API types
         if isinstance(result, dict):
             try:
-                print(f"  Attempting to validate response...")
+                print("  Attempting to validate response...")
                 validated_response = ResponsesAPIResponse.model_validate(result)
                 result = validated_response.model_dump(exclude_unset=True)
-                print(f"  Validation successful")
+                print("  Validation successful")
             except Exception as e:
                 print(f"  Validation failed: {e}")
                 # Log the error but don't expose internal details
@@ -82,12 +88,14 @@ async def create_response(
 def get_response(
     response_id: str,
     request: Request,
-    include: list[str] = [],
+    include: list[str] = None,
     stream: str = "",
     starting_after: str = "",
     service: ResponsesService = Depends(ResponsesService),  # noqa: B008
 ):
     """Retrieves a model response with the given ID."""
+    if include is None:
+        include = []
     return service.get_response(response_id, include, stream, starting_after)
 
 

@@ -2,10 +2,10 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import Response
+from openai.types import FileObject
 
 from backend._shared.logging_config import logger
 from backend.services.files_service import FilesService
-from openai.types import FileObject
 
 files_router = APIRouter()
 

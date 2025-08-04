@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
-
-from backend._shared.logging_config import logger
-from backend._shared.utils.common_utils import validate_and_convert_openai_request
-from backend.services.chat_service import ChatService
 from openai.types.chat import ChatCompletion
 from openai.types.chat.completion_create_params import (
     CompletionCreateParamsNonStreaming,
     CompletionCreateParamsStreaming,
 )
+
+from backend._shared.logging_config import logger
+from backend._shared.utils.common_utils import validate_and_convert_openai_request
+from backend.services.chat_service import ChatService
 
 chat_router = APIRouter()
 
@@ -62,23 +62,30 @@ async def create_chat_completion(
         try:
             # Check if streaming is requested to use the correct validation model
             is_streaming = body.get("stream", False)
-            
+
             if is_streaming:
-                completion_create_params_streaming: CompletionCreateParamsStreaming = validate_and_convert_openai_request(
-                    body, CompletionCreateParamsStreaming, "completion_create_params_streaming"
+                completion_create_params_streaming: CompletionCreateParamsStreaming = (
+                    validate_and_convert_openai_request(
+                        body,
+                        CompletionCreateParamsStreaming,
+                        "completion_create_params_streaming",
+                    )
                 )
                 validated_request = completion_create_params_streaming
             else:
                 completion_create_params_non_streaming: CompletionCreateParamsNonStreaming = validate_and_convert_openai_request(
-                    body, CompletionCreateParamsNonStreaming, "completion_create_params_non_streaming"
+                    body,
+                    CompletionCreateParamsNonStreaming,
+                    "completion_create_params_non_streaming",
                 )
                 validated_request = completion_create_params_non_streaming
         except Exception as e:
             # Add detailed error logging for debugging
             import json
+
             print(f"DEBUG: Validation failed for request: {json.dumps(body, indent=2)}")
             print(f"DEBUG: Full error details: {repr(e)}")
-            if hasattr(e, 'errors'):
+            if hasattr(e, "errors"):
                 print(f"DEBUG: Validation errors: {e.errors()}")
             raise HTTPException(
                 status_code=400, detail=f"Invalid request format: {e}"

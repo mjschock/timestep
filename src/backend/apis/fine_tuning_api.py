@@ -1,8 +1,8 @@
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from openai.types.fine_tuning import FineTuningJob, JobCreateParams
 from pydantic import TypeAdapter
 
 from backend.services.fine_tuning_service import FineTuningService
-from openai.types.fine_tuning import FineTuningJob, JobCreateParams
 
 fine_tuning_router = APIRouter()
 

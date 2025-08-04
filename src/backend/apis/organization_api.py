@@ -196,9 +196,7 @@ def list_invites(
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
     """Returns a list of invites in the organization."""
-    return service.list_invites(
-        limit=int(limit) if limit else None, after=after
-    )
+    return service.list_invites(limit=int(limit) if limit else None, after=after)
 
 
 @organization_router.post("/organization/invites")
@@ -295,9 +293,7 @@ def retrieve_project_api_key(
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
     """Retrieves an API key in the project."""
-    return service.retrieve_project_api_key(
-        project_id=project_id, key_id=key_id
-    )
+    return service.retrieve_project_api_key(project_id=project_id, key_id=key_id)
 
 
 @organization_router.delete("/organization/projects/{project_id}/api_keys/{key_id}")
@@ -308,9 +304,7 @@ def delete_project_api_key(
     service: OrganizationService = Depends(),  # noqa: B008
 ) -> None:
     """Deletes an API key from the project."""
-    return service.delete_project_api_key(
-        project_id=project_id, key_id=key_id
-    )
+    return service.delete_project_api_key(project_id=project_id, key_id=key_id)
 
 
 @organization_router.post("/organization/projects/{project_id}/archive")
@@ -494,9 +488,7 @@ def retrieve_project_user(
     service: OrganizationService = Depends(OrganizationService),  # noqa: B008
 ) -> None:
     """Retrieves a user in the project."""
-    return service.retrieve_project_user(
-        project_id=project_id, user_id=user_id
-    )
+    return service.retrieve_project_user(project_id=project_id, user_id=user_id)
 
 
 @organization_router.post("/organization/projects/{project_id}/users/{user_id}")
@@ -507,9 +499,7 @@ def modify_project_user(
     service: OrganizationService = Depends(OrganizationService),  # noqa: B008
 ) -> None:
     """Modifies a user's role in the project."""
-    return service.modify_project_user(
-        project_id=project_id, user_id=user_id
-    )
+    return service.modify_project_user(project_id=project_id, user_id=user_id)
 
 
 @organization_router.delete("/organization/projects/{project_id}/users/{user_id}")
@@ -520,9 +510,7 @@ def delete_project_user(
     service: OrganizationService = Depends(OrganizationService),  # noqa: B008
 ) -> None:
     """Deletes a user from the project."""
-    return service.delete_project_user(
-        project_id=project_id, user_id=user_id
-    )
+    return service.delete_project_user(project_id=project_id, user_id=user_id)
 
 
 @organization_router.get("/organization/usage/audio_speeches")

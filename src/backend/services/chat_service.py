@@ -20,7 +20,7 @@ from backend.services.models_service import get_models_service
 
 class ChatService:
     # Class-level storage for chat completions to persist across instances
-    _stored_completions: dict[str, dict[str, Any]] = {} # TODO: Persist to DB
+    _stored_completions: dict[str, dict[str, Any]] = {}  # TODO: Persist to DB
 
     def _create_non_streaming_response_from_model_utils(
         self,
@@ -191,10 +191,14 @@ class ChatService:
         """Creates a model response for the given chat conversation."""
         try:
             logger.info("create_chat_completion called!")
-            logger.debug(f"Request params:\n{pprint.pformat(completion_create_params, width=100)}")
+            logger.debug(
+                f"Request params:\n{pprint.pformat(completion_create_params, width=100)}"
+            )
 
             # Extract parameters directly from validated OpenAI request
-            model_name = completion_create_params.get("model", "HuggingFaceTB/SmolVLM2-256M-Video-Instruct")
+            model_name = completion_create_params.get(
+                "model", "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
+            )
             messages = completion_create_params["messages"]
             stream = completion_create_params.get("stream", False)
             max_tokens = completion_create_params.get("max_tokens", 100)
@@ -204,7 +208,6 @@ class ChatService:
             stop = completion_create_params.get("stop", None)
             tools = completion_create_params.get("tools", [])
             tool_choice = completion_create_params.get("tool_choice", None)
-            parallel_tool_calls = completion_create_params.get("parallel_tool_calls", True)
             logprobs = completion_create_params.get("logprobs", False)
             top_logprobs = completion_create_params.get("top_logprobs", None)
             store = completion_create_params.get("store", False)
@@ -222,11 +225,19 @@ class ChatService:
             logger.debug(f"Messages:\n{pprint.pformat(messages, width=120)}")
 
             # Create DatasetDict directly for model_utils
-            dataset = DatasetDict({"test": Dataset.from_list([{
-                "messages": messages,
-                "tools": tools or [],
-                "parallel_tool_calls": None,
-            }])})
+            dataset = DatasetDict(
+                {
+                    "test": Dataset.from_list(
+                        [
+                            {
+                                "messages": messages,
+                                "tools": tools or [],
+                                "parallel_tool_calls": None,
+                            }
+                        ]
+                    )
+                }
+            )
 
             # Use model_utils for inference
             model_inputs = prepare_model_inputs(
@@ -235,19 +246,29 @@ class ChatService:
                 processor=processor,
                 stream=stream,
             )
-            
+
             # Debug: Check what messages are actually sent to the model (including few-shot examples)
             if "test_dataset" in model_inputs and len(model_inputs["test_dataset"]) > 0:
                 actual_messages = model_inputs["test_dataset"][0].get("messages", [])
-                
+
                 # Assert that we have proper chat messages (not formatted strings with <end_of_utterance>)
-                assert isinstance(actual_messages, list), f"Expected messages to be a list, got {type(actual_messages)}"
+                if not isinstance(actual_messages, list):
+                    raise ValueError(
+                        f"Expected messages to be a list, got {type(actual_messages)}"
+                    )
                 for i, msg in enumerate(actual_messages):
-                    assert isinstance(msg, dict), f"Message {i} should be a dict, got {type(msg)}"
-                    assert "role" in msg, f"Message {i} missing 'role' field: {msg}"
-                    assert msg["role"] in ["system", "user", "assistant", "tool"], f"Message {i} has invalid role: {msg['role']}"
-                
-                logger.debug(f"Final messages sent to model (including few-shot examples):\n{pprint.pformat(actual_messages, width=120)}")
+                    if not isinstance(msg, dict):
+                        raise ValueError(
+                            f"Message {i} should be a dict, got {type(msg)}"
+                        )
+                    if "role" not in msg:
+                        raise ValueError(f"Message {i} missing 'role' field: {msg}")
+                    if msg["role"] not in ["system", "user", "assistant", "tool"]:
+                        raise ValueError(f"Message {i} has invalid role: {msg['role']}")
+
+                logger.debug(
+                    f"Final messages sent to model (including few-shot examples):\n{pprint.pformat(actual_messages, width=120)}"
+                )
             else:
                 logger.debug("No test_dataset found in model_inputs")
 
@@ -1016,7 +1037,6 @@ class ChatService:
                 }
         return None
 
-
     def _detect_tool_calls_in_text(self, text) -> bool:
         """
         Detect if the generated text contains tool calls.
@@ -1039,9 +1059,6 @@ class ChatService:
                 return True
 
         return False
-
-
-
 
     def _ensure_tool_call_in_response(self, response, tools) -> None:
         # Handle tool_choice="required" - must have tool calls
@@ -1078,5 +1095,3 @@ class ChatService:
                 logger.info(
                     f"✅ Added deterministic fallback tool call: {fallback_tool_call['function']['name']}"
                 )
-
-

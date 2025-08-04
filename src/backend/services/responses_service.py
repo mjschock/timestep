@@ -5,7 +5,6 @@ import uuid
 from typing import Any, Never
 
 from fastapi import HTTPException
-from sqlmodel import Session
 
 from backend._shared.dao.response_dao import ResponseDAO
 from backend._shared.database import get_session
@@ -67,32 +66,42 @@ class ResponsesService:
         logger.info("Creating response")
         logger.debug("=== RESPONSES SERVICE DEBUG ===")
         logger.debug(f"  Input params: {json.dumps(response_create_params, indent=2)}")
-        
+
         chat_service = ChatService()
         stream = response_create_params.get("stream", False)
         logger.debug(f"  Stream: {stream}")
-        
+
         # Convert responses format to chat completions format
         logger.debug("  Converting responses to chat format...")
-        completion_create_params = self._convert_responses_to_chat_format(response_create_params)
+        completion_create_params = self._convert_responses_to_chat_format(
+            response_create_params
+        )
         logger.debug("Converting responses to chat format:")
         logger.debug(
             f"  Original params: {json.dumps(response_create_params, indent=2)}"
         )
-        logger.debug(f"  Converted chat params: {json.dumps(completion_create_params, indent=2)}")
-        
+        logger.debug(
+            f"  Converted chat params: {json.dumps(completion_create_params, indent=2)}"
+        )
+
         if stream:
             from fastapi.responses import StreamingResponse
 
             return StreamingResponse(
-                self._response_event_stream(chat_service, completion_create_params, response_create_params),
+                self._response_event_stream(
+                    chat_service, completion_create_params, response_create_params
+                ),
                 media_type="text/event-stream",
             )
         else:
-            chat_result = await chat_service.create_chat_completion(completion_create_params)
+            chat_result = await chat_service.create_chat_completion(
+                completion_create_params
+            )
             logger.debug("=== CHAT SERVICE RESULT ===")
-            logger.debug(f"  Raw result: {json.dumps(chat_result, indent=2) if chat_result else 'None'}")
-            
+            logger.debug(
+                f"  Raw result: {json.dumps(chat_result, indent=2) if chat_result else 'None'}"
+            )
+
             # Debug: Extract and log key parts
             if chat_result and "choices" in chat_result and chat_result["choices"]:
                 first_choice = chat_result["choices"][0]
@@ -104,27 +113,31 @@ class ResponsesService:
                 logger.debug(f"  Message keys: {list(message.keys())}")
             else:
                 logger.debug("  No choices found in chat result")
-            
+
             # Create response and store in database
-            response_data = self._create_simple_response(chat_result, response_create_params)
-            
+            response_data = self._create_simple_response(
+                chat_result, response_create_params
+            )
+
             # Store in database
             with get_session() as session:
                 response_dao = ResponseDAO(session)
                 stored_response = response_dao.create_response(response_data)
-                logger.debug(f"  Stored response in database with ID: {stored_response.id}")
-            
+                logger.debug(
+                    f"  Stored response in database with ID: {stored_response.id}"
+                )
+
             return response_data
 
     def _create_simple_response(self, chat_result, response_create_params):
         """Create a simple responses API response from chat result."""
         logger.debug("=== CREATING SIMPLE RESPONSE ===")
-        
+
         # Extract content and tool calls
         content = ""
         tool_calls = []
         usage = {}
-        
+
         if chat_result and "choices" in chat_result and chat_result["choices"]:
             first_choice = chat_result["choices"][0]
             message = first_choice.get("message", {})
@@ -133,16 +146,16 @@ class ResponsesService:
             usage = chat_result.get("usage", {})
             logger.debug(f"  Extracted content: '{content}'")
             logger.debug(f"  Extracted tool calls: {json.dumps(tool_calls, indent=2)}")
-        
+
         # Ensure content is a string, not None
         if content is None:
             content = ""
-        
+
         # Create usage object
         input_tokens = usage.get("prompt_tokens", 0)
         output_tokens = usage.get("completion_tokens", 0)
         total_tokens = usage.get("total_tokens", input_tokens + output_tokens)
-        
+
         usage_obj = {
             "input_tokens": input_tokens,
             "input_tokens_details": {
@@ -157,7 +170,7 @@ class ResponsesService:
             },
             "total_tokens": total_tokens,
         }
-        
+
         # Create response
         response = {
             "id": f"resp_{uuid.uuid4().hex[:16]}",
@@ -165,203 +178,138 @@ class ResponsesService:
             "created_at": int(time.time()),
             "model": response_create_params.get("model", "unknown-model"),
             "status": "completed",
-            "parallel_tool_calls": response_create_params.get("parallel_tool_calls", True),
+            "parallel_tool_calls": response_create_params.get(
+                "parallel_tool_calls", True
+            ),
             "tool_choice": response_create_params.get("tool_choice", "auto"),
             "tools": response_create_params.get("tools", []),
             "previous_response_id": response_create_params.get("previous_response_id"),
             "output": [],
             "usage": usage_obj,
         }
-        
+
         # Add message output if there's content
         if content:
-            response["output"].append({
-                "id": f"msg_{uuid.uuid4().hex[:16]}",
-                "type": "message",
-                "status": "completed",
-                "role": "assistant",
-                "content": [
-                    {
-                        "type": "output_text",
-                        "text": content,
-                        "annotations": [],
-                    }
-                ],
-            })
-        
+            response["output"].append(
+                {
+                    "id": f"msg_{uuid.uuid4().hex[:16]}",
+                    "type": "message",
+                    "status": "completed",
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "output_text",
+                            "text": content,
+                            "annotations": [],
+                        }
+                    ],
+                }
+            )
+
         # Add tool calls as proper ResponseFunctionToolCall format
         for tool_call in tool_calls:
-            response["output"].append({
-                "type": "function_call",
-                "call_id": tool_call.get("id", f"call_{uuid.uuid4().hex[:16]}"),
-                "name": tool_call["function"]["name"],
-                "arguments": tool_call["function"]["arguments"],
-                "status": "incomplete",
-            })
-        
+            response["output"].append(
+                {
+                    "type": "function_call",
+                    "call_id": tool_call.get("id", f"call_{uuid.uuid4().hex[:16]}"),
+                    "name": tool_call["function"]["name"],
+                    "arguments": tool_call["function"]["arguments"],
+                    "status": "incomplete",
+                }
+            )
+
         logger.debug(f"  Final response: {json.dumps(response, indent=2)}")
         return response
 
-    # COMMENTED OUT: def _extract_tool_calls(self, chat_result):
-    #     if chat_result and "choices" in chat_result and chat_result["choices"]:
-    #         first_choice = chat_result["choices"][0]
-    #         message = first_choice.get("message", {})
-    #         if "tool_calls" in message and message["tool_calls"]:
-    #             logger.debug(
-    #                 f"Found tool calls: {json.dumps(message['tool_calls'], indent=2)}"
-    #             )
-    #             return message["tool_calls"]
-    #     return None
-
-    # COMMENTED OUT: def _format_tool_call_response(self, chat_result, completion_create_params, tool_calls, response_create_params):
-        usage = chat_result.get("usage", {}) if chat_result else {}
-        input_tokens = usage.get("prompt_tokens", 0) if usage else 0
-        output_tokens = usage.get("completion_tokens", 0) if usage else 0
-        total_tokens = (
-            usage.get("total_tokens", input_tokens + output_tokens)
-            if usage
-            else (input_tokens + output_tokens)
-        )
-        usage_obj = {
-            "input_tokens": input_tokens,
-            "input_tokens_details": {
-                "audio_tokens": None,
-                "cached_tokens": 0,
-                "text_tokens": input_tokens,
-            },
-            "output_tokens": output_tokens,
-            "output_tokens_details": {
-                "reasoning_tokens": 0,
-                "text_tokens": output_tokens,
-            },
-            "total_tokens": total_tokens,
-        }
-        assistant_text = None
-        if chat_result and "choices" in chat_result and chat_result["choices"]:
-            assistant_text = chat_result["choices"][0]["message"]["content"]
-        response = {
-            "id": f"resp_{uuid.uuid4().hex[:16]}",
-            "object": "response",
-            "created_at": int(time.time()),
-            "model": completion_create_params.get("model", "unknown-model"),
-            "status": "completed",
-            "parallel_tool_calls": response_create_params.get("parallel_tool_calls", True),
-            "tool_choice": response_create_params.get("tool_choice", "auto"),
-            "tools": response_create_params.get("tools", []),
-            "output": [
-                {
-                    "id": f"msg_{uuid.uuid4().hex[:16]}",
-                    "type": "message",
-                    "status": "completed",
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "type": "output_text",
-                            "text": assistant_text or "",
-                            "annotations": [],
-                        }
-                    ],
-                    "tool_calls": tool_calls,
-                }
-            ],
-            "usage": usage_obj,
-        }
-        return response
-
-    # COMMENTED OUT: def _format_standard_response(self, chat_result, completion_create_params, response_create_params):
-        assistant_text = None
-        if chat_result and "choices" in chat_result and chat_result["choices"]:
-            assistant_text = chat_result["choices"][0]["message"]["content"]
-        usage = chat_result.get("usage", {})
-        input_tokens = usage.get("prompt_tokens", 0)
-        output_tokens = usage.get("completion_tokens", 0)
-        total_tokens = usage.get("total_tokens", input_tokens + output_tokens)
-        usage_obj = {
-            "input_tokens": input_tokens,
-            "input_tokens_details": {
-                "audio_tokens": None,
-                "cached_tokens": 0,
-                "text_tokens": input_tokens,
-            },
-            "output_tokens": output_tokens,
-            "output_tokens_details": {
-                "reasoning_tokens": 0,
-                "text_tokens": output_tokens,
-            },
-            "total_tokens": total_tokens,
-        }
-        response = {
-            "id": f"resp_{uuid.uuid4().hex[:16]}",
-            "object": "response",
-            "created_at": int(time.time()),
-            "model": completion_create_params.get("model", "unknown-model"),
-            "status": "completed",
-            "parallel_tool_calls": response_create_params.get("parallel_tool_calls", True),
-            "tool_choice": response_create_params.get("tool_choice", "auto"),
-            "tools": response_create_params.get("tools", []),
-            "output": [
-                {
-                    "id": f"msg_{uuid.uuid4().hex[:16]}",
-                    "type": "message",
-                    "status": "completed",
-                    "role": "assistant",
-                    "content": [
-                        {
-                            "type": "output_text",
-                            "text": assistant_text or "",
-                            "annotations": [],
-                        }
-                    ],
-                }
-            ],
-            "usage": usage_obj,
-        }
-        return response
-
-    def _response_event_stream(self, chat_service, completion_create_params, response_create_params):
+    def _response_event_stream(
+        self, chat_service, completion_create_params, response_create_params
+    ):
         async def event_stream():
             # Initialize response parameters
-            response_params = self._initialize_response_params(completion_create_params, response_create_params)
+            response_params = self._initialize_response_params(
+                completion_create_params, response_create_params
+            )
 
-            # Send initial events
+            # Send initial responses API events
             yield self._create_response_created_event(response_params)
             yield self._create_response_in_progress_event(response_params)
             yield self._create_output_item_added_event(response_params)
             yield self._create_content_part_added_event(response_params)
 
-            # For now, get non-streaming response and emit all content at once
-            # This is a simpler approach that leverages the working non-streaming logic
-            completion_create_params_copy = dict(completion_create_params)
-            completion_create_params_copy["stream"] = False  # Get non-streaming response
-            
-            chat_result = await chat_service.create_chat_completion(completion_create_params_copy)
-            
-            # Extract content from the chat result
+            # Get streaming response from chat service (the working implementation)
+            streaming_response = await chat_service.create_chat_completion(
+                completion_create_params
+            )
+
+            # Transform chat completions streaming to responses API format
             output_text = ""
             tool_calls = []
-            
-            if chat_result and "choices" in chat_result and chat_result["choices"]:
-                first_choice = chat_result["choices"][0]
-                message = first_choice.get("message", {})
-                content = message.get("content", "")
-                extracted_tool_calls = message.get("tool_calls", [])
-                
-                if content:
-                    output_text = content
-                    # Emit content as delta events (simulate streaming)
-                    for char in content:
-                        yield self._create_delta_event(response_params, char, 0)
-                
-                if extracted_tool_calls:
-                    tool_calls = extracted_tool_calls
 
-            # Send completion events
-            yield self._create_output_text_done_event(
-                response_params, output_text, 0
-            )
-            yield self._create_content_part_done_event(
-                response_params, output_text, 0
-            )
+            if hasattr(streaming_response, "body_iterator"):
+                async for chunk in streaming_response.body_iterator:
+                    if chunk:
+                        chunk_str = self._decode_chunk(chunk)
+                        if chunk_str.startswith("data: "):
+                            data_str = chunk_str[6:]  # Remove 'data: ' prefix
+                            if data_str.strip() == "[DONE]":
+                                break
+
+                            try:
+                                data = json.loads(data_str)
+                                if "choices" in data and data["choices"]:
+                                    choice = data["choices"][0]
+                                    delta = choice.get("delta", {})
+
+                                    # Handle content tokens
+                                    if "content" in delta and delta["content"]:
+                                        token = delta["content"]
+                                        output_text += token
+                                        # Convert to responses API delta format
+                                        yield self._create_delta_event(
+                                            response_params, token, 0
+                                        )
+
+                                    # Handle tool calls
+                                    if "tool_calls" in delta and delta["tool_calls"]:
+                                        if isinstance(delta["tool_calls"], list):
+                                            tool_calls.extend(delta["tool_calls"])
+                                        else:
+                                            tool_calls.append(delta["tool_calls"])
+
+                                        # Convert tool calls to responses API format
+                                        for tool_call in delta["tool_calls"]:
+                                            if (
+                                                isinstance(tool_call, dict)
+                                                and "function" in tool_call
+                                            ):
+                                                # Convert chat completions tool call format to responses API format
+                                                responses_tool_call = {
+                                                    "id": tool_call.get("id", ""),
+                                                    "type": "function",
+                                                    "function": {
+                                                        "name": tool_call[
+                                                            "function"
+                                                        ].get("name", ""),
+                                                        "arguments": tool_call[
+                                                            "function"
+                                                        ].get("arguments", "{}"),
+                                                    },
+                                                }
+                                                # Add to tool_calls list for final response
+                                                if (
+                                                    responses_tool_call
+                                                    not in tool_calls
+                                                ):
+                                                    tool_calls.append(
+                                                        responses_tool_call
+                                                    )
+
+                            except json.JSONDecodeError:
+                                continue  # Skip invalid JSON
+
+            # Send completion events with final state
+            yield self._create_output_text_done_event(response_params, output_text, 0)
+            yield self._create_content_part_done_event(response_params, output_text, 0)
             yield self._create_output_item_done_event(
                 response_params, output_text, tool_calls
             )
@@ -371,7 +319,9 @@ class ResponsesService:
 
         return event_stream()
 
-    def _initialize_response_params(self, completion_create_params, response_create_params):
+    def _initialize_response_params(
+        self, completion_create_params, response_create_params
+    ):
         """Initialize response parameters."""
         model_name = "HuggingFaceTB/SmolVLM2-256M-Video-Instruct"
         if response_create_params and isinstance(response_create_params, dict):
@@ -397,8 +347,14 @@ class ResponsesService:
         model = model_name
 
         # Extract tools and tool_choice from the request body
-        tools = response_create_params.get("tools", []) if response_create_params else []
-        tool_choice = response_create_params.get("tool_choice", "auto") if response_create_params else "auto"
+        tools = (
+            response_create_params.get("tools", []) if response_create_params else []
+        )
+        tool_choice = (
+            response_create_params.get("tool_choice", "auto")
+            if response_create_params
+            else "auto"
+        )
 
         return {
             "response_id": response_id,
@@ -452,7 +408,9 @@ class ResponsesService:
             "model": params["model"],
             "output": output,
             "parallel_tool_calls": False,
-            "previous_response_id": params["body"].get("previous_response_id") if params["body"] else None,
+            "previous_response_id": params["body"].get("previous_response_id")
+            if params["body"]
+            else None,
             "reasoning": {"effort": None, "summary": None},
             "store": True,
             "temperature": params["body"].get("temperature", 1.0)
@@ -515,7 +473,9 @@ class ResponsesService:
         tool_calls = []
 
         # Get the streaming response from chat service for text streaming
-        streaming_response = await chat_service.create_chat_completion(completion_create_params)
+        streaming_response = await chat_service.create_chat_completion(
+            completion_create_params
+        )
 
         # Stream through the chat service's streaming response for text content
         if hasattr(streaming_response, "body_iterator"):
@@ -584,7 +544,7 @@ class ResponsesService:
                 return None  # Signal to break
 
             data = json.loads(data_str)
-            
+
             # Extract delta content
             if "choices" not in data or not data["choices"]:
                 return content_index, output_text, tool_calls
@@ -600,7 +560,7 @@ class ResponsesService:
                 token = delta["content"]
                 output_text += token
                 content_index += 1
-                
+
                 # Return delta event
                 return self._create_delta_event(params, token, content_index - 1)
 
@@ -769,30 +729,36 @@ class ResponsesService:
             + "\n\n"
         )
 
-    def get_response(self, response_id: str, include: list[str], stream: str, starting_after: str) -> dict:
+    def get_response(
+        self, response_id: str, include: list[str], stream: str, starting_after: str
+    ) -> dict:
         """Get a response by its ID."""
         logger.info(f"Getting response with ID: {response_id}")
-        
+
         with get_session() as session:
             response_dao = ResponseDAO(session)
             response = response_dao.get_response_by_id(response_id)
-            
+
             if not response:
-                raise HTTPException(status_code=404, detail=f"Response with ID {response_id} not found")
-            
+                raise HTTPException(
+                    status_code=404, detail=f"Response with ID {response_id} not found"
+                )
+
             return response.to_dict()
 
     def delete_response(self, response_id: str) -> dict:
         """Delete a response by its ID."""
         logger.info(f"Deleting response with ID: {response_id}")
-        
+
         with get_session() as session:
             response_dao = ResponseDAO(session)
             success = response_dao.delete_response(response_id)
-            
+
             if not success:
-                raise HTTPException(status_code=404, detail=f"Response with ID {response_id} not found")
-            
+                raise HTTPException(
+                    status_code=404, detail=f"Response with ID {response_id} not found"
+                )
+
             return {"id": response_id, "object": "response", "deleted": True}
 
     def cancel_response(self, response_id) -> Never:
@@ -807,19 +773,21 @@ class ResponsesService:
         """Convert responses API format to chat completions format."""
         logger.debug("  _convert_responses_to_chat_format called")
         logger.debug(f"    Input body: {json.dumps(body, indent=2)}")
-        
+
         if not body or not isinstance(body, dict):
             logger.debug("    Body is empty or not dict, returning empty messages")
             return {"messages": []}
 
         chat_body = self._copy_common_fields(body)
         logger.debug(f"    Common fields: {json.dumps(chat_body, indent=2)}")
-        
+
         messages = self._convert_input_to_messages(body)
         logger.debug(f"    Converted messages: {json.dumps(messages, indent=2)}")
-        
+
         messages = self._add_instructions_as_system_message(body, messages)
-        logger.debug(f"    Messages with instructions: {json.dumps(messages, indent=2)}")
+        logger.debug(
+            f"    Messages with instructions: {json.dumps(messages, indent=2)}"
+        )
 
         chat_body["messages"] = messages
         logger.debug(f"    Final chat body: {json.dumps(chat_body, indent=2)}")

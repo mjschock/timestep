@@ -3,17 +3,16 @@
 import json
 import os
 import uuid
+from collections.abc import Iterable
 from copy import deepcopy
-from typing import Any, Iterable
+from typing import Any
 
-from pydantic import TypeAdapter
+import torch
+from datasets import Dataset, DatasetDict
 from openai.types.chat import (
     ChatCompletionMessageParam,
     ChatCompletionToolParam,
 )
-
-import torch
-from datasets import Dataset, DatasetDict
 from peft import (
     LoraConfig,
     PeftModel,
@@ -21,6 +20,7 @@ from peft import (
     get_peft_model,
     prepare_model_for_kbit_training,
 )
+from pydantic import TypeAdapter
 from torch.utils.data import Dataset as TorchDataset
 from torch.utils.data import IterableDataset
 from transformers import (
@@ -345,21 +345,23 @@ def get_processor():
     return PROCESSOR
 
 
-def validate_example(example: dict[str, Any], dataset_type: str, example_index: int) -> None:
+def validate_example(
+    example: dict[str, Any], dataset_type: str, example_index: int
+) -> None:
     """
     Validate that a dataset example conforms to OpenAI Chat Completions format.
-    
+
     This function ensures strict type compliance for training examples and halts
     the application if validation fails to prevent silent corruption of training data.
-    
-    TODO: Handle DPO (Direct Preference Optimization) and RFT (Reinforcement Fine-Tuning) 
+
+    TODO: Handle DPO (Direct Preference Optimization) and RFT (Reinforcement Fine-Tuning)
     formats in addition to standard SFT (Supervised Fine-Tuning) format.
-    
+
     Args:
         example: The dataset example to validate
         dataset_type: The type of dataset split ('train', 'eval', 'test')
         example_index: The index of the example in the dataset for debugging
-        
+
     Raises:
         ValueError: If the example format is invalid with detailed debugging information
     """
@@ -368,17 +370,17 @@ def validate_example(example: dict[str, Any], dataset_type: str, example_index: 
         messages = example.get("messages", [])
         if not messages:
             raise ValueError("Example must contain non-empty 'messages' field")
-            
+
         # Validate messages conform to ChatCompletionMessageParam format
         messages_adapter = TypeAdapter(Iterable[ChatCompletionMessageParam])
         messages_adapter.validate_python(messages)
-        
+
         # Validate tools field if present
         tools = example.get("tools")
         if tools is not None:
             tools_adapter = TypeAdapter(Iterable[ChatCompletionToolParam])
             tools_adapter.validate_python(tools)
-            
+
         # Validate parallel_tool_calls field if present
         parallel_tool_calls = example.get("parallel_tool_calls")
         if parallel_tool_calls is not None:
@@ -386,7 +388,7 @@ def validate_example(example: dict[str, Any], dataset_type: str, example_index: 
                 raise ValueError(
                     f"parallel_tool_calls must be bool, got {type(parallel_tool_calls)}"
                 )
-                
+
     except Exception as e:
         # Provide detailed debugging information and halt execution
         error_details = {
@@ -395,15 +397,19 @@ def validate_example(example: dict[str, Any], dataset_type: str, example_index: 
             "example_keys": list(example.keys()),
             "messages_type": str(type(example.get("messages"))),
             "messages_length": len(example.get("messages", [])),
-            "tools_type": str(type(example.get("tools"))) if "tools" in example else None,
-            "parallel_tool_calls_type": str(type(example.get("parallel_tool_calls"))) if "parallel_tool_calls" in example else None,
+            "tools_type": str(type(example.get("tools")))
+            if "tools" in example
+            else None,
+            "parallel_tool_calls_type": str(type(example.get("parallel_tool_calls")))
+            if "parallel_tool_calls" in example
+            else None,
         }
-        
+
         # Include first few characters of example for debugging (truncated to avoid large output)
         example_preview = str(example)[:500]
         if len(str(example)) > 500:
             example_preview += "... [truncated]"
-            
+
         error_msg = (
             f"CRITICAL: Invalid dataset example format detected!\n"
             f"Error: {e}\n"
@@ -411,7 +417,7 @@ def validate_example(example: dict[str, Any], dataset_type: str, example_index: 
             f"Example preview: {example_preview}\n"
             f"This indicates a serious data format issue that must be fixed before training."
         )
-        
+
         raise ValueError(error_msg) from e
 
 
@@ -459,7 +465,7 @@ def prepare_model_inputs(
         for example_index, example in enumerate(dataset_split):
             # Validate example format before processing
             validate_example(example, dataset_type, example_index)
-            
+
             # Extract components from dataset example
             messages = example.get("messages", [])
             tools = example.get("tools")
@@ -905,7 +911,9 @@ def process_model_inputs(
                 )
 
                 # Ensure generated_ids is on the same device as inference_inputs
-                generated_ids = generated_ids.to(device=inference_inputs["input_ids"].device)
+                generated_ids = generated_ids.to(
+                    device=inference_inputs["input_ids"].device
+                )
 
                 # Combine input and generated tokens to match expected format
                 model_outputs = torch.cat(
