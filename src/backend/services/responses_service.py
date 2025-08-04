@@ -1,5 +1,6 @@
 # mypy: ignore-errors
 import json
+import sys
 import time
 import uuid
 from typing import Any, Never
@@ -85,7 +86,14 @@ class ResponsesService:
         )
 
         if stream:
-            raise NotImplementedError("TODO: Streaming through the chat service, converting the stream to the responses API format")
+            from fastapi.responses import StreamingResponse
+
+            return StreamingResponse(
+                self._stream_response_events(
+                    chat_service, completion_create_params, response_create_params
+                ),
+                media_type="text/event-stream",
+            )
 
         else:
             chat_result = await chat_service.create_chat_completion(
@@ -332,7 +340,19 @@ class ResponsesService:
                 if "type" in item and item["type"] == "text":
                     messages.append({"role": "user", "content": item.get("text", "")})
                 elif "role" in item and "content" in item:
-                    messages.append(item)
+                    # Handle responses API format where content can be a list or string
+                    content = item["content"]
+                    if isinstance(content, list):
+                        # Extract text from content list (responses API format)
+                        text_parts = []
+                        for content_item in content:
+                            if (
+                                isinstance(content_item, dict)
+                                and content_item.get("type") == "output_text"
+                            ):
+                                text_parts.append(content_item.get("text", ""))
+                        content = "".join(text_parts)
+                    messages.append({"role": item["role"], "content": content})
         return messages
 
     def _add_instructions_as_system_message(self, body, messages):
@@ -340,3 +360,199 @@ class ResponsesService:
         if "instructions" in body and body["instructions"]:
             messages.insert(0, {"role": "system", "content": body["instructions"]})
         return messages
+
+    async def _stream_response_events(
+        self, chat_service, completion_create_params, response_create_params
+    ):
+        """Stream response events by delegating to chat service and converting format."""
+        # Initialize response parameters
+        response_id = f"resp_{uuid.uuid4().hex[:16]}"
+        message_id = f"msg_{uuid.uuid4().hex[:16]}"
+        created_at = int(time.time())
+
+        print(
+            f"[DEBUG] Streaming: response_id={response_id}, message_id={message_id}",
+            file=sys.stderr,
+        )
+        yield self._create_response_created_event(
+            response_id, created_at, response_create_params
+        )
+        yield self._create_response_in_progress_event(
+            response_id, created_at, response_create_params
+        )
+        yield self._create_output_item_added_event(message_id)
+        yield self._create_content_part_added_event(message_id)
+
+        # Get streaming response from chat service
+        streaming_response = await chat_service.create_chat_completion(
+            completion_create_params
+        )
+
+        # Process the chat completions stream and convert to responses API format
+        output_text = ""
+        tool_calls = []
+
+        if hasattr(streaming_response, "body_iterator"):
+            async for chunk in streaming_response.body_iterator:
+                print(f"[DEBUG] Received chunk: {chunk}", file=sys.stderr)
+                if chunk:
+                    chunk_str = self._decode_chunk(chunk)
+                    if chunk_str.startswith("data: "):
+                        data_str = chunk_str[6:]  # Remove 'data: ' prefix
+                        if data_str.strip() == "[DONE]":
+                            print("[DEBUG] Received [DONE] chunk", file=sys.stderr)
+                            break
+
+                        try:
+                            data = json.loads(data_str)
+                            print(f"[DEBUG] Decoded data: {data}", file=sys.stderr)
+                            if "choices" in data and data["choices"]:
+                                choice = data["choices"][0]
+                                delta = choice.get("delta", {})
+
+                                # Handle content tokens
+                                if "content" in delta and delta["content"]:
+                                    token = delta["content"]
+                                    output_text += token
+                                    print(
+                                        f"[DEBUG] Accumulated token: '{token}', output_text now: '{output_text}'",
+                                        file=sys.stderr,
+                                    )
+                                    # Send delta event for content
+                                    yield self._create_delta_event(message_id, token)
+
+                                # Handle tool calls
+                                if "tool_calls" in delta and delta["tool_calls"]:
+                                    print(
+                                        f"[DEBUG] Tool calls found: {delta['tool_calls']}",
+                                        file=sys.stderr,
+                                    )
+                                    if isinstance(delta["tool_calls"], list):
+                                        tool_calls.extend(delta["tool_calls"])
+                                    else:
+                                        tool_calls.append(delta["tool_calls"])
+
+                                    # Yield function_call events for each tool call
+                                    for tool_call in delta["tool_calls"]:
+                                        if (
+                                            isinstance(tool_call, dict)
+                                            and "function" in tool_call
+                                        ):
+                                            function_call_event = {
+                                                "type": "function_call",
+                                                "call_id": tool_call.get(
+                                                    "id",
+                                                    f"call_{uuid.uuid4().hex[:16]}",
+                                                ),
+                                                "name": tool_call["function"]["name"],
+                                                "arguments": tool_call["function"][
+                                                    "arguments"
+                                                ],
+                                                "status": "incomplete",
+                                            }
+                                            yield f"event: response.function_call\ndata: {json.dumps({'type': 'response.function_call', 'function_call': function_call_event})}\n\n"
+
+                        except json.JSONDecodeError:
+                            print(
+                                "[DEBUG] Skipping invalid JSON chunk", file=sys.stderr
+                            )
+                            continue  # Skip invalid JSON
+
+        print(f"[DEBUG] Final output_text: '{output_text}'", file=sys.stderr)
+        print(f"[DEBUG] Final tool_calls: {tool_calls}", file=sys.stderr)
+        # Send completion events
+        yield self._create_output_text_done_event(message_id, output_text)
+        yield self._create_content_part_done_event(message_id, output_text)
+        yield self._create_output_item_done_event(message_id, output_text, tool_calls)
+        yield self._create_response_completed_event(
+            response_id, output_text, tool_calls
+        )
+
+    def _create_response_created_event(
+        self, response_id, created_at, response_create_params
+    ):
+        """Create response.created event."""
+        return f"event: response.created\ndata: {json.dumps({'type': 'response.created', 'response': {'id': response_id, 'created_at': created_at, 'model': response_create_params.get('model', 'unknown'), 'status': 'in_progress'}})}\n\n"
+
+    def _create_response_in_progress_event(
+        self, response_id, created_at, response_create_params
+    ):
+        """Create response.in_progress event."""
+        return f"event: response.in_progress\ndata: {json.dumps({'type': 'response.in_progress', 'response': {'id': response_id, 'created_at': created_at, 'model': response_create_params.get('model', 'unknown'), 'status': 'in_progress'}})}\n\n"
+
+    def _create_output_item_added_event(self, message_id):
+        """Create response.output_item.added event."""
+        return f"event: response.output_item.added\ndata: {json.dumps({'type': 'response.output_item.added', 'output_index': 0, 'item': {'id': message_id, 'type': 'message', 'role': 'assistant', 'status': 'in_progress'}})}\n\n"
+
+    def _create_content_part_added_event(self, message_id):
+        """Create response.content_part.added event."""
+        return f"event: response.content_part.added\ndata: {json.dumps({'type': 'response.content_part.added', 'output_index': 0, 'item_id': message_id, 'content_index': 0, 'part': {'type': 'output_text', 'text': '', 'annotations': []}})}\n\n"
+
+    def _create_delta_event(self, message_id, token):
+        """Create response.output_text.delta event."""
+        return f"event: response.output_text.delta\ndata: {json.dumps({'type': 'response.output_text.delta', 'output_index': 0, 'item_id': message_id, 'content_index': 0, 'delta': {'type': 'output_text', 'text': token, 'annotations': []}})}\n\n"
+
+    def _create_output_text_done_event(self, message_id, output_text):
+        """Create response.output_text.done event."""
+        return f"event: response.output_text.done\ndata: {json.dumps({'type': 'response.output_text.done', 'output_index': 0, 'item_id': message_id, 'content_index': 0, 'text': output_text})}\n\n"
+
+    def _create_content_part_done_event(self, message_id, output_text):
+        """Create response.content_part.done event."""
+        return f"event: response.content_part.done\ndata: {json.dumps({'type': 'response.content_part.done', 'output_index': 0, 'item_id': message_id, 'content_index': 0, 'part': {'type': 'output_text', 'text': output_text, 'annotations': []}})}\n\n"
+
+    def _create_output_item_done_event(self, message_id, output_text, tool_calls):
+        """Create response.output_item.done event."""
+        item_data = {
+            "id": message_id,
+            "type": "message",
+            "status": "completed",
+            "role": "assistant",
+            "content": [
+                {"type": "output_text", "text": output_text, "annotations": []}
+            ],
+        }
+
+        # Add tool calls if present
+        if tool_calls:
+            item_data["tool_calls"] = tool_calls
+
+        return f"event: response.output_item.done\ndata: {json.dumps({'type': 'response.output_item.done', 'output_index': 0, 'item': item_data})}\n\n"
+
+    def _create_response_completed_event(self, response_id, output_text, tool_calls):
+        """Create response.completed event."""
+        response_data = {
+            "id": response_id,
+            "object": "response",
+            "created_at": int(time.time()),
+            "status": "completed",
+            "output": [
+                {
+                    "id": f"msg_{uuid.uuid4().hex[:16]}",
+                    "type": "message",
+                    "status": "completed",
+                    "role": "assistant",
+                    "content": [
+                        {"type": "output_text", "text": output_text, "annotations": []}
+                    ],
+                }
+            ],
+        }
+
+        # Add tool calls as proper ResponseFunctionToolCall format
+        if tool_calls:
+            for tool_call in tool_calls:
+                response_data["output"].append(
+                    {
+                        "type": "function_call",
+                        "call_id": tool_call.get("id", f"call_{uuid.uuid4().hex[:16]}"),
+                        "name": tool_call["function"]["name"],
+                        "arguments": tool_call["function"]["arguments"],
+                        "status": "incomplete",
+                    }
+                )
+
+        return f"event: response.completed\ndata: {json.dumps({'type': 'response.completed', 'response': response_data})}\n\n"
+
+    def _decode_chunk(self, chunk):
+        """Decode chunk to string."""
+        return chunk.decode("utf-8") if isinstance(chunk, bytes) else str(chunk)
