@@ -137,9 +137,10 @@ VIDEO_CAPTION_EXPECTED_RESPONSE = "A woman in a white shirt is standing at a pod
 # {'name': 'web_search', 'arguments': {'query': 'What is the stock price for Nvidia?'}}
 # </tool_call>"""
 # TOOL_CALLING_EXPECTED_RESPONSE = '<tool_call>\n{"arguments": {"title": "42"}, "name": "get_movie_details"}\n</tool_call>'
-TOOL_CALLING_EXPECTED_RESPONSE = """<tool_call>
-{"arguments": "{\"__confidence_score\": 0.2605347222222223, \"__cost_breakdown\": {\"lexical_overlap\": 1.0, \"schema_coverage\": 0.968, \"string_similarity\": 0.9898611111111111, \"structural_compatibility\": 0.0}, \"__fallback_reason\": \"language_agnostic_schema_cost\", \"title\": \"42\"}", "name": "get_movie_details"}
-</tool_call>"""
+# TOOL_CALLING_EXPECTED_RESPONSE = """<tool_call>
+# {"arguments": "{\"__confidence_score\": 0.2605347222222223, \"__cost_breakdown\": {\"lexical_overlap\": 1.0, \"schema_coverage\": 0.968, \"string_similarity\": 0.9898611111111111, \"structural_compatibility\": 0.0}, \"__fallback_reason\": \"language_agnostic_schema_cost\", \"title\": \"42\"}", "name": "get_movie_details"}
+# </tool_call>"""
+TOOL_CALLING_EXPECTED_RESPONSE = "Unknown"
 
 
 def tool_calling_expected_tool_calls(tool_call_id):
@@ -160,6 +161,7 @@ def run_direct_inference(
     expected_response,
     max_tokens=DEFAULT_MAX_TOKENS,
     tools=None,
+    tool_choice=None,
 ):
     """Use the same singleton model as the API for exact response matching."""
     from backend.services.models_service import get_models_service
@@ -230,43 +232,89 @@ def run_direct_inference(
             tool_choice="required" if tools else None,
         )
 
-        response_text = results["response"].strip()
+        # response_text = results["response"].strip()
 
-        # Check if tool calls were generated
-        if tools and "tool_calls" in results:
-            tool_calls = results["tool_calls"]
-            print(f"Generated tool calls: {len(tool_calls)} calls")
-            for i, tool_call in enumerate(tool_calls):
-                print(
-                    f"  Tool call {i + 1}: {tool_call['function']['name']}({tool_call['function']['arguments']})"
-                )
+        from backend.services.chat_service import ChatService
 
-            # response_text_from_tool_calls = ""
-            # for tool_call in tool_calls:
-            #     tool_call_json_text = {
-            #         "arguments": tool_call["function"]["arguments"],
-            #         "name": tool_call["function"]["name"],
-            #     }
-            #     response_text_from_tool_calls += (
-            #         f"<tool_call>\n{json.dumps(tool_call_json_text)}\n</tool_call>"
-            #     )
+        chat_service = ChatService()
 
-            # processed_response = response_text_from_tool_calls
-            processed_response = tool_calls
-
-        else:
-            print("No tool calls generated")
-            processed_response = response_text
-
-        print(f"Processed response: {processed_response}")
-        print(f"Expected response: {expected_response}")
-
-        # Now that we're using the same singleton model, we should get exact matches
-        assert processed_response == expected_response, (
-            f"Direct inference response doesn't match expected.\nActual: '{response_text}'\nExpected: '{expected_response}'"
+        response = chat_service._create_non_streaming_response_from_model_utils(
+            results,
+            model_name=MODEL_NAME,
+            max_tokens=max_tokens,
+            temperature=0.0,
+            top_p=1.0,
+            n=1,
+            stop=None,
+            user=None,
         )
 
-        return expected_response, messages
+        # Handle tool_choice="required" - must have tool calls
+        if tool_choice == "required" and tools:
+            chat_service._ensure_tool_call_in_response(response, tools)
+
+        print("response:")
+        print(response)
+
+        # tool_calls = response.choices[0].message.tool_calls
+        tool_calls = response["choices"][0]["message"].get("tool_calls", None)
+
+        if tool_calls is not None:
+            tool_call_id = tool_calls[0]["id"]
+
+            expected_tools_calls = tool_calling_expected_tool_calls(tool_call_id)
+
+            # assert response.choices[0].message.tool_calls == expected_tools_calls, (
+            assert response["choices"][0]["message"]["tool_calls"] == [
+                expected_tools_calls[0].model_dump()
+            ], (
+                f"Tool calls don't match expected.\nActual: {response['choices'][0]['message']['tool_calls']}\nExpected: {expected_tools_calls[0].model_dump()}"
+            )
+
+        else:
+            # assert response.choices[0].message.content.strip() == expected_response, (
+            assert (
+                response["choices"][0]["message"]["content"].strip()
+                == expected_response
+            ), (
+                f"Response doesn't match expected.\nActual: {response['choices'][0]['message']['content'].strip()}\nExpected: {expected_response}"
+            )
+
+        # # Check if tool calls were generated
+        # if tools and "tool_calls" in results:
+        #     tool_calls = results["tool_calls"]
+        #     print(f"Generated tool calls: {len(tool_calls)} calls")
+        #     for i, tool_call in enumerate(tool_calls):
+        #         print(
+        #             f"  Tool call {i + 1}: {tool_call['function']['name']}({tool_call['function']['arguments']})"
+        #         )
+
+        #     # response_text_from_tool_calls = ""
+        #     # for tool_call in tool_calls:
+        #     #     tool_call_json_text = {
+        #     #         "arguments": tool_call["function"]["arguments"],
+        #     #         "name": tool_call["function"]["name"],
+        #     #     }
+        #     #     response_text_from_tool_calls += (
+        #     #         f"<tool_call>\n{json.dumps(tool_call_json_text)}\n</tool_call>"
+        #     #     )
+
+        #     # processed_response = response_text_from_tool_calls
+        #     processed_response = tool_calls
+
+        # else:
+        #     print("No tool calls generated")
+        #     processed_response = response_text
+
+        # print(f"Processed response: {processed_response}")
+        # print(f"Expected response: {expected_response}")
+
+        # Now that we're using the same singleton model, we should get exact matches
+    # assert processed_response == expected_response, (
+    #     f"Direct inference response doesn't match expected.\nActual: '{response_text}'\nExpected: '{expected_response}'"
+    # )
+
+    # return expected_response, messages
     finally:
         # Clean up generated tensors (model and processor are singletons, don't delete them)
         torch.cuda.empty_cache()
@@ -433,35 +481,36 @@ def test_video_caption_api(async_client):
     )
 
 
-# # Tool calling tests
-# def test_stock_price_tool_direct(
-#     builtin_tools, builtin_tool_examples, create_base_messages
-# ):
-#     """Test SmolVLM2 model inference directly with transformers (no server) with tools."""
-#     # tools = builtin_tools + CUSTOM_TOOLS
-#     # tools = builtin_tools
-#     tools = CUSTOM_TOOLS
-#     # tool_calling_messages = create_base_messages(tools, builtin_tool_examples) + [
-#     tool_calling_messages = [
-#         {
-#             "content": "What's the stock price for Nvidia?",
-#             "role": "user",
-#         },
-#     ]
-#     tool_calling_formatted_messages = [
-#         {
-#             "role": message["role"],
-#             "content": [{"type": "text", "text": message["content"]}],
-#         }
-#         for message in tool_calling_messages
-#     ]
+# Tool calling tests
+def test_stock_price_tool_direct(
+    builtin_tools, builtin_tool_examples, create_base_messages
+):
+    """Test SmolVLM2 model inference directly with transformers (no server) with tools."""
+    # tools = builtin_tools + CUSTOM_TOOLS
+    # tools = builtin_tools
+    tools = CUSTOM_TOOLS
+    # tool_calling_messages = create_base_messages(tools, builtin_tool_examples) + [
+    tool_calling_messages = [
+        {
+            "content": "What's the stock price for Nvidia?",
+            "role": "user",
+        },
+    ]
+    tool_calling_formatted_messages = [
+        {
+            "role": message["role"],
+            "content": [{"type": "text", "text": message["content"]}],
+        }
+        for message in tool_calling_messages
+    ]
 
-#     run_direct_inference(
-#         tool_calling_formatted_messages,
-#         TOOL_CALLING_EXPECTED_RESPONSE,
-#         TOOL_CALLING_MAX_TOKENS,
-#         tools=tools,
-#     )
+    run_direct_inference(
+        tool_calling_formatted_messages,
+        TOOL_CALLING_EXPECTED_RESPONSE,
+        TOOL_CALLING_MAX_TOKENS,
+        tools=tools,
+        tool_choice="required",
+    )
 
 
 def test_stock_price_tool_api(

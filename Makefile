@@ -53,3 +53,6 @@ test-agents-sdk-openai-skip-local:
 
 up:
 	PYTHONPATH=src uv run uvicorn src.backend.main:app --host 0.0.0.0 --port 8000
+
+up-local:
+	uv run transformers chat localhost:8000 --model-name-or-path HuggingFaceTB/SmolVLM2-256M-Video-Instruct

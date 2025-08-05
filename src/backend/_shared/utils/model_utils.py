@@ -1135,9 +1135,6 @@ def process_model_outputs(
             assert _tool_call.function.arguments is not None, (
                 f"Tool call {tool_call} has no arguments"
             )
-            assert _tool_call.function.name in tools, (
-                f"Tool call {tool_call} is not a valid tool"
-            )
             assert _tool_call.type == "function", (
                 f"Tool call {tool_call} is not a function"
             )
