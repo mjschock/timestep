@@ -54,6 +54,8 @@ jobs:
           #   model_name: "gpt-4.1-mini"
           #   api_key: "OPENAI_API_KEY"
           #   run_on: "main_or_dispatch"
+      # Run tests sequentially to avoid GitHub Models rate limits
+      max-parallel: 1
       fail-fast: false
     
     steps:
