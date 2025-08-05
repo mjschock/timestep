@@ -1,0 +1,95 @@
+name: CI/CD
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ develop, main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  models: read  # Required for GitHub Models access
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        provider:
+          # External providers - only on main or manual dispatch
+          - name: "anthropic"
+            base_url: "https://api.anthropic.com/v1"
+            model_name: "claude-opus-4-0"
+            api_key: "ANTHROPIC_API_KEY"
+            run_on: "main_or_dispatch"
+          - name: "deepseek"
+            base_url: "https://api.deepseek.com/v1"
+            model_name: "deepseek-chat"
+            api_key: "DEEPSEEK_API_KEY"
+            run_on: "main_or_dispatch"
+          # GitHub Models - always run (free)
+          - name: "github-claude-3-5-sonnet"
+            base_url: "https://models.github.ai/v1"
+            model_name: "anthropic/claude-3-5-sonnet"
+            api_key: "GITHUB_TOKEN"
+            run_on: "always"
+          - name: "github-gpt-4o"
+            base_url: "https://models.github.ai/v1"
+            model_name: "openai/gpt-4o"
+            api_key: "GITHUB_TOKEN"
+            run_on: "always"
+          - name: "github-gpt-4o-mini"
+            base_url: "https://models.github.ai/v1"
+            model_name: "openai/gpt-4o-mini"
+            api_key: "GITHUB_TOKEN"
+            run_on: "always"
+          - name: "openai"
+            base_url: "https://api.openai.com/v1"
+            model_name: "gpt-4.1-mini"
+            api_key: "OPENAI_API_KEY"
+            run_on: "main_or_dispatch"
+      fail-fast: false
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+      
+      - name: Set up Python
+        run: uv python install 3.11
+      
+      - name: Install dependencies
+        run: uv sync
+      
+      - name: Test ${{ matrix.provider.name }}
+        if: >
+          matrix.provider.run_on == 'always' || 
+          (matrix.provider.run_on == 'main_or_dispatch' && 
+           (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'))
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          uv run pytest \
+            tests/test_agents_sdk.py \
+            --api-key=${{ env[matrix.provider.api_key] }} \
+            --base-url=${{ matrix.provider.base_url }} \
+            --model-name=${{ matrix.provider.model_name }} \
+            --skip-local-server
+        continue-on-error: ${{ matrix.provider.run_on == 'main_or_dispatch' }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.provider.name }}
+          path: |
+            htmlcov/
+            test_outputs/
+          retention-days: 7
