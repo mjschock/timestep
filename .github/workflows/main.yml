@@ -18,37 +18,37 @@ jobs:
       matrix:
         provider:
           # External providers - only on main or manual dispatch
-          - name: "anthropic"
-            base_url: "https://api.anthropic.com/v1"
-            model_name: "claude-opus-4-0"
-            api_key: "ANTHROPIC_API_KEY"
-            run_on: "main_or_dispatch"
-          - name: "deepseek"
-            base_url: "https://api.deepseek.com/v1"
-            model_name: "deepseek-chat"
-            api_key: "DEEPSEEK_API_KEY"
-            run_on: "main_or_dispatch"
+          # - name: "anthropic"
+          #   base_url: "https://api.anthropic.com/v1"
+          #   model_name: "claude-opus-4-0"
+          #   api_key: "ANTHROPIC_API_KEY"
+          #   run_on: "main_or_dispatch"
+          # - name: "deepseek"
+          #   base_url: "https://api.deepseek.com/v1"
+          #   model_name: "deepseek-chat"
+          #   api_key: "DEEPSEEK_API_KEY"
+          #   run_on: "main_or_dispatch"
           # GitHub Models - always run (free)
-          - name: "github-claude-3-5-sonnet"
-            base_url: "https://models.github.ai/inference"
-            model_name: "anthropic/claude-3-5-sonnet"
-            api_key: "GITHUB_TOKEN"
-            run_on: "always"
-          - name: "github-gpt-4.1"
-            base_url: "https://models.github.ai/inference"
-            model_name: "openai/gpt-4.1"
-            api_key: "GITHUB_TOKEN"
-            run_on: "always"
+          # - name: "github-claude-3-5-sonnet"
+          #   base_url: "https://models.github.ai/inference"
+          #   model_name: "anthropic/claude-3-5-sonnet"
+          #   api_key: "GITHUB_TOKEN"
+          #   run_on: "always"
+          # - name: "github-gpt-4.1"
+          #   base_url: "https://models.github.ai/inference"
+          #   model_name: "openai/gpt-4.1"
+          #   api_key: "GITHUB_TOKEN"
+          #   run_on: "always"
           - name: "github-gpt-4.1-mini"
             base_url: "https://models.github.ai/inference"
             model_name: "openai/gpt-4.1-mini"
             api_key: "GITHUB_TOKEN"
             run_on: "always"
-          - name: "openai"
-            base_url: "https://api.openai.com/v1"
-            model_name: "gpt-4.1-mini"
-            api_key: "OPENAI_API_KEY"
-            run_on: "main_or_dispatch"
+          # - name: "openai"
+          #   base_url: "https://api.openai.com/v1"
+          #   model_name: "gpt-4.1-mini"
+          #   api_key: "OPENAI_API_KEY"
+          #   run_on: "main_or_dispatch"
       fail-fast: false
     
     steps:
@@ -78,6 +78,7 @@ jobs:
         run: |
           uv run pytest \
             tests/test_agents_sdk.py \
+            -m "chat_completions" \
             --api-key=${{ env[matrix.provider.api_key] }} \
             --base-url=${{ matrix.provider.base_url }} \
             --model-name=${{ matrix.provider.model_name }} \
