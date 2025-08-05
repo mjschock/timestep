@@ -34,7 +34,10 @@ config_path = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), "..", "config.yaml"
 )
 with open(config_path) as f:
-    config = yaml.safe_load(f)
+    config_content = f.read()
+    # Expand environment variables
+    config_content = os.path.expandvars(config_content)
+    config = yaml.safe_load(config_content)
 
 app.include_router(audio_router, prefix="/v1")
 app.include_router(batches_router, prefix="/v1")
@@ -108,12 +111,20 @@ async def proxy_to_provider(
 
     base_url = provider_config["base_url"]
     api_key = provider_config["api_key"]
+    
+    logger.info(f"Proxying to {base_url}/{path} with provider config type: {provider_config['type']}")
+    logger.debug(f"API key starts with: {api_key[:10]}..." if api_key else "No API key")
 
     if "anthropic" in base_url:
         proxy_headers = {
             "anthropic-version": "2023-06-01",
             "Content-Type": "application/json",
             "x-api-key": api_key,
+        }
+    elif "github.ai" in base_url:
+        proxy_headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
         }
     else:
         proxy_headers = {
@@ -183,6 +194,12 @@ async def stream_from_provider(
             "anthropic-version": "2023-06-01",
             "Content-Type": "application/json",
             "x-api-key": api_key,
+        }
+    elif "github.ai" in base_url:
+        proxy_headers = {
+            "Accept": "text/event-stream",
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
         }
     else:
         proxy_headers = {
