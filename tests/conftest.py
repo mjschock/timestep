@@ -36,9 +36,10 @@ def pytest_addoption(parser):
     )
     parser.addoption(
         "--skip-local-server",
-        action="store_true",
-        default=False,
-        help="Skip starting local server and use external API",
+        action="store",
+        default="false",
+        choices=["true", "false"],
+        help="Skip starting local server and use external API (true/false)",
     )
 
 
@@ -67,7 +68,7 @@ def get_test_config(request=None):
         "model_name": model_name
         or os.getenv("AGENTS_SDK_MODEL_NAME")
         or DEFAULT_MODEL_NAME,
-        "skip_local_server": skip_local_server
+        "skip_local_server": (skip_local_server == "true")
         or os.getenv("AGENTS_SDK_SKIP_LOCAL_SERVER", "").lower()
         in ("true", "1", "yes"),
     }

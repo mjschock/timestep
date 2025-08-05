@@ -87,7 +87,7 @@ jobs:
             --api-key=${{ env[matrix.provider.api_key] }} \
             --base-url=${{ matrix.provider.base_url }} \
             --model-name=${{ matrix.provider.model_name }} \
-            ${{ contains(matrix.provider.base_url, 'localhost') && '' || '--skip-local-server' }}
+            --skip-local-server=${{ contains(matrix.provider.base_url, 'localhost') && 'false' || 'true' }}
         continue-on-error: ${{ matrix.provider.run_on == 'main_or_dispatch' }}
       
       - name: Upload test results
