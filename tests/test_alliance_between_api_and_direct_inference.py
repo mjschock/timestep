@@ -280,41 +280,6 @@ def run_direct_inference(
                 f"Response doesn't match expected.\nActual: {response['choices'][0]['message']['content'].strip()}\nExpected: {expected_response}"
             )
 
-        # # Check if tool calls were generated
-        # if tools and "tool_calls" in results:
-        #     tool_calls = results["tool_calls"]
-        #     print(f"Generated tool calls: {len(tool_calls)} calls")
-        #     for i, tool_call in enumerate(tool_calls):
-        #         print(
-        #             f"  Tool call {i + 1}: {tool_call['function']['name']}({tool_call['function']['arguments']})"
-        #         )
-
-        #     # response_text_from_tool_calls = ""
-        #     # for tool_call in tool_calls:
-        #     #     tool_call_json_text = {
-        #     #         "arguments": tool_call["function"]["arguments"],
-        #     #         "name": tool_call["function"]["name"],
-        #     #     }
-        #     #     response_text_from_tool_calls += (
-        #     #         f"<tool_call>\n{json.dumps(tool_call_json_text)}\n</tool_call>"
-        #     #     )
-
-        #     # processed_response = response_text_from_tool_calls
-        #     processed_response = tool_calls
-
-        # else:
-        #     print("No tool calls generated")
-        #     processed_response = response_text
-
-        # print(f"Processed response: {processed_response}")
-        # print(f"Expected response: {expected_response}")
-
-        # Now that we're using the same singleton model, we should get exact matches
-    # assert processed_response == expected_response, (
-    #     f"Direct inference response doesn't match expected.\nActual: '{response_text}'\nExpected: '{expected_response}'"
-    # )
-
-    # return expected_response, messages
     finally:
         # Clean up generated tensors (model and processor are singletons, don't delete them)
         torch.cuda.empty_cache()

@@ -1122,22 +1122,32 @@ def process_model_outputs(
                 logger.error(f"Failed to create fallback tool call: {e}")
                 tool_calls = []
 
-        results["tool_calls"] = tool_calls
-
-        # TODO: Assert that the tool calls are in the right format
+        # Validate that the tool calls are in the right format
         from openai.types.chat.chat_completion_message_tool_call import (
             ChatCompletionMessageToolCall,
         )
 
+        validated_tool_calls = []
         for tool_call in tool_calls:
-            _tool_call = ChatCompletionMessageToolCall(**tool_call)
+            try:
+                validated_tool_call = ChatCompletionMessageToolCall(**tool_call)
 
-            assert _tool_call.function.arguments is not None, (
-                f"Tool call {tool_call} has no arguments"
-            )
-            assert _tool_call.type == "function", (
-                f"Tool call {tool_call} is not a function"
-            )
+                # Validate the tool call structure
+                if validated_tool_call.function.arguments is None:
+                    logger.warning(f"Tool call {tool_call} has no arguments")
+                    continue
+
+                if validated_tool_call.type != "function":
+                    logger.warning(f"Tool call {tool_call} is not a function")
+                    continue
+
+                validated_tool_calls.append(tool_call)
+
+            except Exception as e:
+                logger.warning(f"Invalid tool call format: {e}")
+                continue
+
+        results["tool_calls"] = validated_tool_calls
 
     return results
 

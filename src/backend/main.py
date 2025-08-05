@@ -1,3 +1,4 @@
+import json
 import os
 from collections.abc import Callable
 from typing import Any
@@ -68,10 +69,20 @@ async def provider_proxy(provider: str, path: str, request: Request):
     method = request.method
     headers = dict(request.headers)
 
-    try:
-        body = await request.json() if method in ["PATCH", "POST", "PUT"] else None
-    except Exception:
-        body = None
+    body = None
+    if method in ["PATCH", "POST", "PUT"]:
+        try:
+            body = await request.json()
+        except (json.JSONDecodeError, ValueError) as e:
+            logger.error(f"Invalid JSON in request body: {e}")
+            raise HTTPException(
+                status_code=400, detail="Invalid JSON in request body."
+            ) from e
+        except Exception as e:
+            logger.error(f"Unexpected error parsing request body: {e}")
+            raise HTTPException(
+                status_code=500, detail="Unexpected error parsing request body."
+            ) from e
 
     is_streaming = body and body.get("stream", False) if body else False
 
@@ -118,9 +129,13 @@ async def proxy_to_provider(
         )
 
         if response.status_code != 200:
-            error_content = (
-                response.json() if response.content else {"error": "Unknown error"}
-            )
+            if response.content:
+                try:
+                    error_content = response.json()
+                except ValueError:
+                    error_content = {"error": response.text or "Unknown error"}
+            else:
+                error_content = {"error": "Unknown error"}
             raise HTTPException(status_code=response.status_code, detail=error_content)
 
         return JSONResponse(content=response.json())
@@ -184,10 +199,27 @@ async def stream_from_provider(
                 "POST", url, headers=proxy_headers, json=body
             ) as response:
                 if response.status_code != 200:
-                    error_content = await response.aread()
-                    raise HTTPException(
-                        status_code=response.status_code, detail=error_content.decode()
-                    )
+                    try:
+                        error_content = await response.aread()
+                        error_text = (
+                            error_content.decode() if error_content else "Unknown error"
+                        )
+                        try:
+                            error_json = json.loads(error_text)
+                            raise HTTPException(
+                                status_code=response.status_code, detail=error_json
+                            )
+                        except ValueError:
+                            raise HTTPException(
+                                status_code=response.status_code,
+                                detail={"error": error_text},
+                            ) from None
+                    except Exception as e:
+                        logger.error(f"Error reading response content: {e}")
+                        raise HTTPException(
+                            status_code=response.status_code,
+                            detail={"error": "Unknown error"},
+                        ) from e
 
                 async for chunk in response.aiter_text():
                     if chunk.strip():
