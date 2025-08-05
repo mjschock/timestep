@@ -39,6 +39,7 @@ from backend._shared.config.constants import (
     DEFAULT_TOOLS,
     N_SHOT_EXAMPLES,
 )
+from backend._shared.logging_config import logger
 
 
 def compute_lcs(seq1, seq2):
@@ -519,6 +520,32 @@ def prepare_model_inputs(
 
                 assert isinstance(content, list), "Content must be a list"
 
+                # Convert OpenAI format to model format
+                converted_content = []
+                for item in content:
+                    assert "type" in item, "Each item in content must have a type"
+
+                    # Convert OpenAI image_url format to model format
+                    if item["type"] == "image_url":
+                        converted_item = {
+                            "type": "image",
+                            "url": item["image_url"]["url"],
+                        }
+                        converted_content.append(converted_item)
+                    # Convert OpenAI video_url format to model format (using path for videos)
+                    elif item["type"] == "video_url":
+                        converted_item = {
+                            "type": "video",
+                            "path": item["video_url"]["url"],
+                        }
+                        converted_content.append(converted_item)
+                    # Keep other formats as-is
+                    else:
+                        converted_content.append(item)
+
+                content = converted_content
+
+                # Validate converted content
                 for item in content:
                     assert "type" in item, "Each item in content must have a type"
                     assert (
@@ -934,16 +961,75 @@ def process_model_inputs(
     }
 
 
-def process_model_outputs(model_outputs=None, processor=None, stream: bool = False):
+def parse_tool_calls_from_response(response_text: str) -> list[dict]:
+    """Parse tool calls from model response text.
+
+    Looks for <tool_call>...</tool_call> blocks and parses the JSON inside.
+
+    Args:
+        response_text: The text response from the model
+
+    Returns:
+        List of tool call dictionaries in OpenAI format
+    """
+    import re
+
+    tool_calls = []
+
+    # Find all tool call blocks
+    tool_call_pattern = r"<tool_call>\s*(.*?)\s*</tool_call>"
+    matches = re.findall(tool_call_pattern, response_text, re.DOTALL)
+
+    for i, match in enumerate(matches):
+        try:
+            # Parse the JSON content
+            tool_call_data = json.loads(match.strip())
+
+            # Extract function name and arguments
+            if "name" in tool_call_data and "arguments" in tool_call_data:
+                tool_call = {
+                    "id": f"call_{uuid.uuid4().hex[:8]}",
+                    "type": "function",
+                    "function": {
+                        "name": tool_call_data["name"],
+                        "arguments": json.dumps(tool_call_data["arguments"])
+                        if isinstance(tool_call_data["arguments"], dict)
+                        else tool_call_data["arguments"],
+                    },
+                }
+                tool_calls.append(tool_call)
+            else:
+                logger.warning(
+                    f"Invalid tool call format in match {i}: missing 'name' or 'arguments'"
+                )
+
+        except json.JSONDecodeError as e:
+            logger.warning(f"Failed to parse tool call JSON in match {i}: {e}")
+        except Exception as e:
+            logger.error(f"Unexpected error parsing tool call {i}: {e}")
+
+    return tool_calls
+
+
+def process_model_outputs(
+    model_outputs=None,
+    processor=None,
+    stream: bool = False,
+    tools=None,
+    tool_choice=None,
+):
     """Process results from process_model_inputs.
 
     Args:
-        result: Dictionary with 'model_outputs' and/or 'train_result' keys
+        model_outputs: Dictionary with 'model_outputs' and/or 'train_result' keys
         processor: The processor for decoding
+        stream: Whether streaming mode is enabled
+        tools: List of tools available for fallback tool call generation
+        tool_choice: Tool choice setting ("required", "auto", etc.)
 
     Returns:
         For training: {"train_result": ..., "model_path": ..., "response": ...}
-        For inference: {"response": ...}
+        For inference: {"response": ..., "tool_calls": [...]} (tool_calls only if tools provided)
     """
     # Validate required parameters
     if model_outputs is None:
@@ -1017,6 +1103,44 @@ def process_model_outputs(model_outputs=None, processor=None, stream: bool = Fal
                 )
 
             results["response"] = response
+
+    # Handle tool call parsing and fallback logic
+    if tools and tool_choice == "required":
+        # Import the fallback function
+        from backend._shared.utils.misc_utils import create_fallback_tool_call
+
+        # Parse the response to check for existing tool calls
+        response_text = results.get("response", "")
+        tool_calls = parse_tool_calls_from_response(response_text)
+
+        if not tool_calls:
+            # No tool calls found but they're required - create fallback
+            try:
+                tool_calls = create_fallback_tool_call(response_text, tools, logger)
+                logger.info(f"Created fallback tool calls: {len(tool_calls)} calls")
+            except Exception as e:
+                logger.error(f"Failed to create fallback tool call: {e}")
+                tool_calls = []
+
+        results["tool_calls"] = tool_calls
+
+        # TODO: Assert that the tool calls are in the right format
+        from openai.types.chat.chat_completion_message_tool_call import (
+            ChatCompletionMessageToolCall,
+        )
+
+        for tool_call in tool_calls:
+            _tool_call = ChatCompletionMessageToolCall(**tool_call)
+
+            assert _tool_call.function.arguments is not None, (
+                f"Tool call {tool_call} has no arguments"
+            )
+            assert _tool_call.function.name in tools, (
+                f"Tool call {tool_call} is not a valid tool"
+            )
+            assert _tool_call.type == "function", (
+                f"Tool call {tool_call} is not a function"
+            )
 
     return results
 
