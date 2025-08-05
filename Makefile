@@ -51,6 +51,13 @@ test-agents-sdk-openai-skip-local:
 		--model-name=gpt-4.1-mini \
 		--skip-local-server
 
+test-agents-sdk-openai-local-provider:
+	uv run pytest \
+		tests/test_agents_sdk.py \
+		--api-key=api-key-local \
+		--base-url=http://localhost:8000/api/local/v1 \
+		--model-name=smolvlm
+
 up:
 	PYTHONPATH=src uv run uvicorn src.backend.main:app --host 0.0.0.0 --port 8000
 

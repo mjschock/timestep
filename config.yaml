@@ -1,0 +1,15 @@
+providers:
+  anthropic:
+    api_key: "${ANTHROPIC_API_KEY}"
+    base_url: "https://api.anthropic.com/v1"
+    type: "proxy"
+  github:
+    api_key: "${GITHUB_TOKEN}"
+    base_url: "https://models.github.ai/inference"
+    type: "proxy"
+  local:
+    type: "local"
+  openai:
+    api_key: "${OPENAI_API_KEY}"
+    base_url: "https://api.openai.com/v1"
+    type: "proxy"
