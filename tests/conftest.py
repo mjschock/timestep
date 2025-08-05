@@ -412,7 +412,11 @@ def async_client(api_base_url: str, request) -> AsyncOpenAI:
     if config["skip_local_server"]:
         base_url = config["base_url"]
     else:
-        base_url = f"{api_base_url}/v1"
+        # If base_url is localhost-based, use it as-is, otherwise default to /v1
+        if "localhost" in config["base_url"]:
+            base_url = config["base_url"]
+        else:
+            base_url = f"{api_base_url}/v1"
 
     print(f"🔌 Using API: {base_url} with model: {config['model_name']}")
     return AsyncOpenAI(api_key=config["api_key"], base_url=base_url)
@@ -427,7 +431,11 @@ def sync_client(api_base_url: str, request) -> OpenAI:
     if config["skip_local_server"]:
         base_url = config["base_url"]
     else:
-        base_url = f"{api_base_url}/v1"
+        # If base_url is localhost-based, use it as-is, otherwise default to /v1
+        if "localhost" in config["base_url"]:
+            base_url = config["base_url"]
+        else:
+            base_url = f"{api_base_url}/v1"
 
     print(f"🔌 Using API: {base_url} with model: {config['model_name']}")
     return OpenAI(api_key=config["api_key"], base_url=base_url)
