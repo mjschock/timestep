@@ -27,36 +27,20 @@ default:
 		--project backend \
 		--source-roots src
 
-test-agents-sdk-anthropic-skip-local:
+test-github-gpt-4.1-mini-proxy:
 	uv run pytest \
-		tests/test_agents_sdk.py \
-		--api-key=$$ANTHROPIC_API_KEY \
-		--base-url=https://api.anthropic.com/v1 \
-		--model-name=claude-opus-4-0 \
-		--skip-local-server
+		tests/test_agents_sdk.py -m "chat_completions" \
+		--api-key=$$GITHUB_TOKEN \
+		--base-url=http://localhost:8000/api/github/v1 \
+		--model-name=openai/gpt-4.1-mini
 
-test-agents-sdk-deepseek-skip-local:
+test-github-gpt-4.1-mini-skip-local:
 	uv run pytest \
-		tests/test_agents_sdk.py \
-		--api-key=$$DEEPSEEK_API_KEY \
-		--base-url=https://api.deepseek.com/v1 \
-		--model-name=deepseek-chat \
-		--skip-local-server
-
-test-agents-sdk-openai-skip-local:
-	uv run pytest \
-		tests/test_agents_sdk.py \
-		--api-key=$$OPENAI_API_KEY \
-		--base-url=https://api.openai.com/v1 \
-		--model-name=gpt-4.1-mini \
-		--skip-local-server
-
-test-agents-sdk-openai-local-provider:
-	uv run pytest \
-		tests/test_agents_sdk.py \
-		--api-key=api-key-local \
-		--base-url=http://localhost:8000/api/local/v1 \
-		--model-name=smolvlm
+		tests/test_agents_sdk.py -m "chat_completions" \
+		--api-key=$$GITHUB_TOKEN \
+		--base-url=https://models.github.ai/inference \
+		--model-name=openai/gpt-4.1-mini \
+		--skip-local-server true
 
 up:
 	PYTHONPATH=src uv run uvicorn src.backend.main:app --host 0.0.0.0 --port 8000
