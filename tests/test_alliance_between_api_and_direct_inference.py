@@ -148,8 +148,8 @@ def tool_calling_expected_tool_calls(tool_call_id):
         ChatCompletionMessageToolCall(
             id=tool_call_id,
             function=Function(
-                arguments='{"__fallback_reason": "model_did_not_call_tool", "company": ""}',
-                name="get_stock_price",
+                arguments='{"__confidence_score": 0.2605347222222223, "__cost_breakdown": {"lexical_overlap": 1.0, "schema_coverage": 0.968, "string_similarity": 0.9898611111111111, "structural_compatibility": 0.0}, "__fallback_reason": "language_agnostic_schema_cost", "title": "42"}',
+                name="get_movie_details",
             ),
             type="function",
         )
