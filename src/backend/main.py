@@ -111,8 +111,10 @@ async def proxy_to_provider(
 
     base_url = provider_config["base_url"]
     api_key = provider_config["api_key"]
-    
-    logger.info(f"Proxying to {base_url}/{path} with provider config type: {provider_config['type']}")
+
+    logger.info(
+        f"Proxying to {base_url}/{path} with provider config type: {provider_config['type']}"
+    )
     logger.debug(f"API key starts with: {api_key[:10]}..." if api_key else "No API key")
 
     if "anthropic" in base_url:
