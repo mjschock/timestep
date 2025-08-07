@@ -39,7 +39,12 @@ jobs:
           #   model_name: "openai/gpt-4.1"
           #   api_key: "GITHUB_TOKEN"
           #   run_on: "always"
-          - name: "github-gpt-4.1-mini"
+          - name: "github-gpt-4.1-mini-proxy"
+            base_url: "http://localhost:8000/api/github/v1"
+            model_name: "openai/gpt-4.1-mini"
+            api_key: "GITHUB_TOKEN"
+            run_on: "always"
+          - name: "github-gpt-4.1-mini-skip-local"
             base_url: "https://models.github.ai/inference"
             model_name: "openai/gpt-4.1-mini"
             api_key: "GITHUB_TOKEN"
@@ -49,6 +54,8 @@ jobs:
           #   model_name: "gpt-4.1-mini"
           #   api_key: "OPENAI_API_KEY"
           #   run_on: "main_or_dispatch"
+      # Run tests sequentially to avoid GitHub Models rate limits
+      max-parallel: 1
       fail-fast: false
     
     steps:
@@ -76,13 +83,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          uv run pytest \
+          uv run pytest -vv \
             tests/test_agents_sdk.py \
             -m "chat_completions" \
             --api-key=${{ env[matrix.provider.api_key] }} \
             --base-url=${{ matrix.provider.base_url }} \
             --model-name=${{ matrix.provider.model_name }} \
-            --skip-local-server
+            --skip-local-server=${{ contains(matrix.provider.base_url, 'localhost') && 'false' || 'true' }}
         continue-on-error: ${{ matrix.provider.run_on == 'main_or_dispatch' }}
       
       - name: Upload test results

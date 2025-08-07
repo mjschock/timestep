@@ -17,7 +17,10 @@ default:
 	uv run ruff format .
 	uv run ruff check --fix . --ignore C901,S110,B018,B007
 	uv run toml-sort -ai pyproject.toml
-	uv run pytest --cov=src/backend --cov-report=term-missing --cov-fail-under=42
+	uv run pytest -vv \
+		--cov=src/backend \
+		--cov-fail-under=42 \
+		--cov-report=term-missing \
 
 	mkdir docs && uv run pyreverse src/backend/ \
 		--colorized \
@@ -27,29 +30,23 @@ default:
 		--project backend \
 		--source-roots src
 
-test-agents-sdk-anthropic-skip-local:
-	uv run pytest \
-		tests/test_agents_sdk.py \
-		--api-key=$$ANTHROPIC_API_KEY \
-		--base-url=https://api.anthropic.com/v1 \
-		--model-name=claude-opus-4-0 \
-		--skip-local-server
+test-github-gpt-4.1-mini-proxy:
+	uv run pytest -vv \
+		tests/test_agents_sdk.py -m "chat_completions" \
+		--api-key=$$GITHUB_TOKEN \
+		--base-url=http://localhost:8000/api/github/v1 \
+		--model-name=openai/gpt-4.1-mini
 
-test-agents-sdk-deepseek-skip-local:
-	uv run pytest \
-		tests/test_agents_sdk.py \
-		--api-key=$$DEEPSEEK_API_KEY \
-		--base-url=https://api.deepseek.com/v1 \
-		--model-name=deepseek-chat \
-		--skip-local-server
-
-test-agents-sdk-openai-skip-local:
-	uv run pytest \
-		tests/test_agents_sdk.py \
-		--api-key=$$OPENAI_API_KEY \
-		--base-url=https://api.openai.com/v1 \
-		--model-name=gpt-4.1-mini \
-		--skip-local-server
+test-github-gpt-4.1-mini-skip-local:
+	uv run pytest -vv \
+		tests/test_agents_sdk.py -m "chat_completions" \
+		--api-key=$$GITHUB_TOKEN \
+		--base-url=https://models.github.ai/inference \
+		--model-name=openai/gpt-4.1-mini \
+		--skip-local-server true
 
 up:
 	PYTHONPATH=src uv run uvicorn src.backend.main:app --host 0.0.0.0 --port 8000
+
+up-local:
+	uv run transformers chat localhost:8000 --model-name-or-path HuggingFaceTB/SmolVLM2-256M-Video-Instruct

@@ -6,7 +6,9 @@ async def test_audio_transcription(async_client, sample_audio):
     """Test audio transcription endpoint."""
     with open(sample_audio, "rb") as audio_file:
         response = await async_client.audio.transcriptions.create(
-            model="openai/whisper-tiny", file=audio_file, response_format="text"
+            model="HuggingFaceTB/SmolVLM2-256M-Video-Instruct-STT",
+            file=audio_file,
+            response_format="text",
         )
     assert isinstance(response, str)
 
@@ -16,7 +18,7 @@ async def test_audio_translation(async_client, sample_audio):
     """Test audio translation endpoint."""
     with open(sample_audio, "rb") as audio_file:
         response = await async_client.audio.translations.create(
-            model="openai/whisper-tiny",
+            model="HuggingFaceTB/SmolVLM2-256M-Video-Instruct-STT",
             file=audio_file,
             response_format="text",
         )
@@ -27,7 +29,7 @@ async def test_audio_translation(async_client, sample_audio):
 async def test_text_to_speech(async_client):
     """Test text-to-speech endpoint."""
     response = await async_client.audio.speech.create(
-        model="microsoft/speecht5_tts",
+        model="HuggingFaceTB/SmolVLM2-256M-Video-Instruct-TTS",
         voice="alloy",
         input="Hello, this is a test of text to speech.",
     )

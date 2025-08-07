@@ -28,6 +28,8 @@ dependencies = [
   "diffusers>=0.34.0",
   "evaluate>=0.4.5",
   "fastapi[standard]>=0.115.14",
+  "httpx>=0.25.0",
+  "librosa>=0.11.0",
   "mlflow>=3.1.1",
   "num2words>=0.5.14",
   "numpy>=1.24.0",
@@ -80,7 +82,7 @@ disallow_untyped_decorators = false
 disallow_untyped_defs = false
 mypy_path = "src"
 no_implicit_optional = false
-python_version = "3.11"
+python_version = "3.13"
 show_error_codes = true
 strict = false
 strict_equality = false
@@ -116,7 +118,10 @@ module = [
 addopts = [
   "--ruff",
   "--ruff-format",
-  "-x"
+  "-x",
+  "--cov=src/backend",
+  "--cov-fail-under=42",
+  "--cov-report=term-missing"
 ]
 asyncio_default_fixture_loop_scope = "function"
 filterwarnings = [
@@ -164,6 +169,8 @@ max-complexity = 10
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"] # Allow assert in tests
+
+
 
 [tool.uv.sources]
 openai-agents = {git = "https://github.com/openai/openai-agents-python.git"}

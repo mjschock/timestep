@@ -5,12 +5,12 @@ import time
 import uuid
 from typing import Any, Never
 
+import httpx
 from fastapi import HTTPException
 
 from backend._shared.dao.response_dao import ResponseDAO
 from backend._shared.database import get_session
 from backend._shared.logging_config import logger
-from backend.services.chat_service import ChatService
 
 
 class ResponsesService:
@@ -68,7 +68,6 @@ class ResponsesService:
         logger.debug("=== RESPONSES SERVICE DEBUG ===")
         logger.debug(f"  Input params: {json.dumps(response_create_params, indent=2)}")
 
-        chat_service = ChatService()
         stream = response_create_params.get("stream", False)
         logger.debug(f"  Stream: {stream}")
 
@@ -90,15 +89,13 @@ class ResponsesService:
 
             return StreamingResponse(
                 self._stream_response_events(
-                    chat_service, completion_create_params, response_create_params
+                    completion_create_params, response_create_params
                 ),
                 media_type="text/event-stream",
             )
 
         else:
-            chat_result = await chat_service.create_chat_completion(
-                completion_create_params
-            )
+            chat_result = await self._call_chat_api(completion_create_params)
             logger.debug("=== CHAT SERVICE RESULT ===")
             logger.debug(
                 f"  Raw result: {json.dumps(chat_result, indent=2) if chat_result else 'None'}"
@@ -130,6 +127,54 @@ class ResponsesService:
                 )
 
             return response_data
+
+    async def _call_chat_api(
+        self, completion_create_params: dict[str, Any]
+    ) -> dict[str, Any]:
+        """Call the chat API directly instead of using chat service."""
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                response = await client.post(
+                    "http://localhost:8000/v1/chat/completions",
+                    headers={"Content-Type": "application/json"},
+                    json=completion_create_params,
+                )
+
+                if response.status_code != 200:
+                    raise HTTPException(
+                        status_code=response.status_code,
+                        detail=f"Chat API call failed: {response.text}",
+                    )
+
+                return response.json()
+        except httpx.RequestError as e:
+            raise HTTPException(
+                status_code=500, detail=f"Failed to connect to chat API: {str(e)}"
+            ) from e
+
+    async def _call_chat_api_streaming(self, completion_create_params: dict[str, Any]):
+        """Call the chat API for streaming response."""
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                async with client.stream(
+                    "POST",
+                    "http://localhost:8000/v1/chat/completions",
+                    headers={"Content-Type": "application/json"},
+                    json=completion_create_params,
+                ) as response:
+                    if response.status_code != 200:
+                        raise HTTPException(
+                            status_code=response.status_code,
+                            detail=f"Chat API streaming call failed: {await response.aread()}",
+                        )
+
+                    async for chunk in response.aiter_bytes():
+                        yield chunk
+        except httpx.RequestError as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to connect to chat API for streaming: {str(e)}",
+            ) from e
 
     def _create_simple_response(self, chat_result, response_create_params):
         """Create a simple responses API response from chat result."""
@@ -314,13 +359,38 @@ class ResponsesService:
 
     def _convert_input_to_messages(self, body):
         """Convert different input formats to messages."""
+        logger.debug(
+            f"  _convert_input_to_messages called with body: {json.dumps(body, indent=2)}"
+        )
+
         if "messages" in body:
+            logger.debug("  Found 'messages' in body")
             return body["messages"]
         elif "input" in body:
+            logger.debug("  Found 'input' in body")
             return self._convert_input_data_to_messages(body["input"])
         elif "prompt" in body:
-            return [{"role": "user", "content": body["prompt"]}]
+            logger.debug("  Found 'prompt' in body")
+            prompt = body["prompt"]
+            logger.debug(f"  Prompt type: {type(prompt)}, value: {prompt}")
+            if isinstance(prompt, list):
+                logger.debug("  Converting list prompt")
+                messages = []
+                for item in prompt:
+                    if isinstance(item, dict) and "text" in item:
+                        messages.append({"role": "user", "content": item["text"]})
+                return messages
+            elif isinstance(prompt, dict) and "text" in prompt:
+                logger.debug(f"  Converting dict prompt with text: {prompt['text']}")
+                return [{"role": "user", "content": prompt["text"]}]
+            elif isinstance(prompt, str):
+                logger.debug(f"  Converting string prompt: {prompt}")
+                return [{"role": "user", "content": prompt}]
+            else:
+                logger.debug(f"  Prompt format not recognized: {prompt}")
+                return []
         else:
+            logger.debug("  No messages, input, or prompt found in body")
             return []
 
     def _convert_input_data_to_messages(self, input_data):
@@ -362,9 +432,9 @@ class ResponsesService:
         return messages
 
     async def _stream_response_events(
-        self, chat_service, completion_create_params, response_create_params
+        self, completion_create_params, response_create_params
     ):
-        """Stream response events by delegating to chat service and converting format."""
+        """Stream response events by delegating to chat API and converting format."""
         # Initialize response parameters
         response_id = f"resp_{uuid.uuid4().hex[:16]}"
         message_id = f"msg_{uuid.uuid4().hex[:16]}"
@@ -383,80 +453,75 @@ class ResponsesService:
         yield self._create_output_item_added_event(message_id)
         yield self._create_content_part_added_event(message_id)
 
-        # Get streaming response from chat service
-        streaming_response = await chat_service.create_chat_completion(
-            completion_create_params
-        )
+        # Get streaming response from chat API
+        streaming_response = self._call_chat_api_streaming(completion_create_params)
 
         # Process the chat completions stream and convert to responses API format
         output_text = ""
         tool_calls = []
 
-        if hasattr(streaming_response, "body_iterator"):
-            async for chunk in streaming_response.body_iterator:
-                print(f"[DEBUG] Received chunk: {chunk}", file=sys.stderr)
-                if chunk:
-                    chunk_str = self._decode_chunk(chunk)
-                    if chunk_str.startswith("data: "):
-                        data_str = chunk_str[6:]  # Remove 'data: ' prefix
-                        if data_str.strip() == "[DONE]":
-                            print("[DEBUG] Received [DONE] chunk", file=sys.stderr)
-                            break
+        async for chunk in streaming_response:
+            print(f"[DEBUG] Received chunk: {chunk}", file=sys.stderr)
+            if chunk:
+                chunk_str = self._decode_chunk(chunk)
+                if chunk_str.startswith("data: "):
+                    data_str = chunk_str[6:]  # Remove 'data: ' prefix
+                    if data_str.strip() == "[DONE]":
+                        print("[DEBUG] Received [DONE] chunk", file=sys.stderr)
+                        break
 
-                        try:
-                            data = json.loads(data_str)
-                            print(f"[DEBUG] Decoded data: {data}", file=sys.stderr)
-                            if "choices" in data and data["choices"]:
-                                choice = data["choices"][0]
-                                delta = choice.get("delta", {})
+                    try:
+                        data = json.loads(data_str)
+                        print(f"[DEBUG] Decoded data: {data}", file=sys.stderr)
+                        if "choices" in data and data["choices"]:
+                            choice = data["choices"][0]
+                            delta = choice.get("delta", {})
 
-                                # Handle content tokens
-                                if "content" in delta and delta["content"]:
-                                    token = delta["content"]
-                                    output_text += token
-                                    print(
-                                        f"[DEBUG] Accumulated token: '{token}', output_text now: '{output_text}'",
-                                        file=sys.stderr,
-                                    )
-                                    # Send delta event for content
-                                    yield self._create_delta_event(message_id, token)
+                            # Handle content tokens
+                            if "content" in delta and delta["content"]:
+                                token = delta["content"]
+                                output_text += token
+                                print(
+                                    f"[DEBUG] Accumulated token: '{token}', output_text now: '{output_text}'",
+                                    file=sys.stderr,
+                                )
+                                # Send delta event for content
+                                yield self._create_delta_event(message_id, token)
 
-                                # Handle tool calls
-                                if "tool_calls" in delta and delta["tool_calls"]:
-                                    print(
-                                        f"[DEBUG] Tool calls found: {delta['tool_calls']}",
-                                        file=sys.stderr,
-                                    )
-                                    if isinstance(delta["tool_calls"], list):
-                                        tool_calls.extend(delta["tool_calls"])
-                                    else:
-                                        tool_calls.append(delta["tool_calls"])
+                            # Handle tool calls
+                            if "tool_calls" in delta and delta["tool_calls"]:
+                                print(
+                                    f"[DEBUG] Tool calls found: {delta['tool_calls']}",
+                                    file=sys.stderr,
+                                )
+                                if isinstance(delta["tool_calls"], list):
+                                    tool_calls.extend(delta["tool_calls"])
+                                else:
+                                    tool_calls.append(delta["tool_calls"])
 
-                                    # Yield function_call events for each tool call
-                                    for tool_call in delta["tool_calls"]:
-                                        if (
-                                            isinstance(tool_call, dict)
-                                            and "function" in tool_call
-                                        ):
-                                            function_call_event = {
-                                                "type": "function_call",
-                                                "call_id": tool_call.get(
-                                                    "id",
-                                                    f"call_{uuid.uuid4().hex[:16]}",
-                                                ),
-                                                "name": tool_call["function"]["name"],
-                                                "arguments": tool_call["function"][
-                                                    "arguments"
-                                                ],
-                                                "status": "incomplete",
-                                            }
-                                            yield f"event: response.function_call\ndata: {json.dumps({'type': 'response.function_call', 'function_call': function_call_event, 'sequence_number': None})}\n\n"
+                                # Yield function_call events for each tool call
+                                for tool_call in delta["tool_calls"]:
+                                    if (
+                                        isinstance(tool_call, dict)
+                                        and "function" in tool_call
+                                    ):
+                                        function_call_event = {
+                                            "type": "function_call",
+                                            "call_id": tool_call.get(
+                                                "id",
+                                                f"call_{uuid.uuid4().hex[:16]}",
+                                            ),
+                                            "name": tool_call["function"]["name"],
+                                            "arguments": tool_call["function"][
+                                                "arguments"
+                                            ],
+                                            "status": "incomplete",
+                                        }
+                                        yield f"event: response.function_call\ndata: {json.dumps({'type': 'response.function_call', 'function_call': function_call_event, 'sequence_number': None})}\n\n"
 
-                        except json.JSONDecodeError:
-                            print(
-                                "[DEBUG] Skipping invalid JSON chunk", file=sys.stderr
-                            )
-                            continue  # Skip invalid JSON
+                    except json.JSONDecodeError:
+                        print("[DEBUG] Skipping invalid JSON chunk", file=sys.stderr)
+                        continue  # Skip invalid JSON
 
         print(f"[DEBUG] Final output_text: '{output_text}'", file=sys.stderr)
         print(f"[DEBUG] Final tool_calls: {tool_calls}", file=sys.stderr)

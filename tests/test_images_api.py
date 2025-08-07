@@ -5,12 +5,11 @@ import pytest
 from PIL import Image
 
 IMAGE_MODEL = (
-    "stable-diffusion-v1-5/stable-diffusion-v1-5"  # Use Stable Diffusion model
+    "HuggingFaceTB/SmolVLM2-256M-Video-Instruct-IMG"  # Use VLM-based image generation
 )
 
 
 @pytest.mark.asyncio
-@pytest.mark.xfail(reason="Image models not configured in backend")
 async def test_image_generation(async_client):
     response = await async_client.images.generate(
         model=IMAGE_MODEL,
@@ -25,18 +24,16 @@ async def test_image_generation(async_client):
 
 
 @pytest.mark.asyncio
-@pytest.mark.xfail(reason="Image models not configured in backend")
 async def test_image_variation(async_client, sample_image):
     with open(sample_image, "rb") as image_file:
         response = await async_client.images.create_variation(
-            image=image_file, n=1, size="256x256"
+            model=IMAGE_MODEL, image=image_file, n=1, size="256x256"
         )
     assert hasattr(response, "data")
     assert len(response.data) == 1
 
 
 @pytest.mark.asyncio
-@pytest.mark.xfail(reason="Image models not configured in backend")
 async def test_image_edit(async_client, sample_image):
     mask = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as mask_file:
@@ -47,6 +44,7 @@ async def test_image_edit(async_client, sample_image):
                 open(mask_file.name, "rb") as mask_f,
             ):
                 response = await async_client.images.edit(
+                    model=IMAGE_MODEL,
                     image=image_file,
                     mask=mask_f,
                     prompt="Add a red circle in the center",

@@ -10,6 +10,7 @@ from datasets import Dataset, DatasetDict
 from fastapi import HTTPException
 
 from backend._shared.logging_config import logger
+from backend._shared.utils.misc_utils import create_fallback_tool_call
 from backend._shared.utils.model_utils import (
     prepare_model_inputs,
     process_model_inputs,
@@ -514,47 +515,24 @@ class ChatService:
         logger.debug(f"🔍 Generated text: {generated_text[:200]}...")
 
         if not has_tool_calls:
-            return self._create_fallback_tool_call(tools)
+            # Convert OpenAI tool format to the format expected by create_fallback_tool_call
+            converted_tools = []
+            for tool in tools:
+                if "function" in tool:
+                    # OpenAI format: {"type": "function", "function": {"name": "...", ...}}
+                    converted_tool = {
+                        "name": tool["function"]["name"],
+                        "description": tool["function"].get("description", ""),
+                        "parameters": tool["function"].get("parameters", {}),
+                    }
+                    converted_tools.append(converted_tool)
+                else:
+                    # Already in the expected format
+                    converted_tools.append(tool)
+
+            return create_fallback_tool_call(generated_text, converted_tools, logger)
 
         return None
-
-    def _create_fallback_tool_call(self, tools):
-        """Create a deterministic fallback tool call."""
-        import json
-        import uuid
-
-        logger.warning(
-            "⚠️  WARNING: streaming tool_choice='required' but no tool calls found. Creating deterministic fallback tool call."
-        )
-        logger.debug(f"🛠️  Available tools for fallback: {len(tools)}")
-
-        fallback_tool = tools[0]
-        fallback_tool_name = fallback_tool["function"]["name"]
-        fallback_tool_parameters = fallback_tool["function"].get("parameters", {})
-
-        fallback_arguments = {"__fallback_reason": "model_did_not_call_tool"}
-
-        if fallback_tool_parameters and "properties" in fallback_tool_parameters:
-            for param, _spec in fallback_tool_parameters["properties"].items():
-                if param not in fallback_arguments:
-                    fallback_arguments[param] = ""
-
-        tool_calls = [
-            {
-                "id": f"call_{uuid.uuid4().hex[:8]}",
-                "type": "function",
-                "function": {
-                    "name": fallback_tool_name,
-                    "arguments": json.dumps(fallback_arguments),
-                },
-            }
-        ]
-
-        logger.info(
-            f"✅ Added deterministic fallback tool call for streaming: {fallback_tool_name}"
-        )
-
-        return tool_calls
 
     def _create_tool_calls_chunk(self, model_name, tool_calls) -> str:
         """Create a streaming chunk containing tool calls."""
@@ -960,7 +938,6 @@ class ChatService:
 
     def _ensure_tool_call_in_response(self, response, tools) -> None:
         # Handle tool_choice="required" - must have tool calls
-        import uuid
 
         if not response.get("choices"):
             return
@@ -969,27 +946,36 @@ class ChatService:
             for choice in response.get("choices", [])
         )
         if not has_tool_calls:
-            fallback_tool = tools[0]
-            fallback_tool_name = fallback_tool["function"]["name"]
-            fallback_tool_parameters = fallback_tool["function"].get("parameters", {})
-            fallback_arguments = {"__fallback_reason": "model_did_not_call_tool"}
-            if fallback_tool_parameters and "properties" in fallback_tool_parameters:
-                for param, _spec in fallback_tool_parameters["properties"].items():
-                    if param not in fallback_arguments:
-                        fallback_arguments[param] = ""
-            fallback_tool_call = {
-                "id": f"call_{uuid.uuid4().hex[:8]}",
-                "type": "function",
-                "function": {
-                    "name": fallback_tool_name,
-                    "arguments": json.dumps(fallback_arguments),
-                },
-            }
+            # Get the response text for fallback tool call creation
+            response_text = ""
+            if response.get("choices") and response["choices"][0].get(
+                "message", {}
+            ).get("content"):
+                response_text = response["choices"][0]["message"]["content"]
+
+            # Convert OpenAI tool format to the format expected by create_fallback_tool_call
+            converted_tools = []
+            for tool in tools:
+                if "function" in tool:
+                    # OpenAI format: {"type": "function", "function": {"name": "...", ...}}
+                    converted_tool = {
+                        "name": tool["function"]["name"],
+                        "description": tool["function"].get("description", ""),
+                        "parameters": tool["function"].get("parameters", {}),
+                    }
+                    converted_tools.append(converted_tool)
+                else:
+                    # Already in the expected format
+                    converted_tools.append(tool)
+
+            fallback_tool_calls = create_fallback_tool_call(
+                response_text, converted_tools, logger
+            )
             first_choice = response["choices"][0]
             if "message" in first_choice:
-                first_choice["message"]["tool_calls"] = [fallback_tool_call]
+                first_choice["message"]["tool_calls"] = fallback_tool_calls
                 # According to OpenAI spec: when tool_calls are present, content should be null
                 first_choice["message"]["content"] = None
                 logger.info(
-                    f"✅ Added deterministic fallback tool call: {fallback_tool_call['function']['name']}"
+                    f"✅ Added fallback tool call using create_fallback_tool_call: {fallback_tool_calls[0]['function']['name']}"
                 )

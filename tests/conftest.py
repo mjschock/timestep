@@ -36,9 +36,10 @@ def pytest_addoption(parser):
     )
     parser.addoption(
         "--skip-local-server",
-        action="store_true",
-        default=False,
-        help="Skip starting local server and use external API",
+        action="store",
+        default="false",
+        choices=["true", "false"],
+        help="Skip starting local server and use external API (true/false)",
     )
 
 
@@ -67,7 +68,7 @@ def get_test_config(request=None):
         "model_name": model_name
         or os.getenv("AGENTS_SDK_MODEL_NAME")
         or DEFAULT_MODEL_NAME,
-        "skip_local_server": skip_local_server
+        "skip_local_server": (skip_local_server == "true")
         or os.getenv("AGENTS_SDK_SKIP_LOCAL_SERVER", "").lower()
         in ("true", "1", "yes"),
     }
@@ -115,7 +116,7 @@ def wait_for_server_ready(
     return True
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session")
 def api_server_with_coverage(request) -> Generator[str, None, None]:
     """
     Automatically starts FastAPI server with coverage for all tests.
@@ -411,7 +412,11 @@ def async_client(api_base_url: str, request) -> AsyncOpenAI:
     if config["skip_local_server"]:
         base_url = config["base_url"]
     else:
-        base_url = f"{api_base_url}/v1"
+        # If base_url is localhost-based, use it as-is, otherwise default to /v1
+        if "localhost" in config["base_url"]:
+            base_url = config["base_url"]
+        else:
+            base_url = f"{api_base_url}/v1"
 
     print(f"🔌 Using API: {base_url} with model: {config['model_name']}")
     return AsyncOpenAI(api_key=config["api_key"], base_url=base_url)
@@ -426,7 +431,11 @@ def sync_client(api_base_url: str, request) -> OpenAI:
     if config["skip_local_server"]:
         base_url = config["base_url"]
     else:
-        base_url = f"{api_base_url}/v1"
+        # If base_url is localhost-based, use it as-is, otherwise default to /v1
+        if "localhost" in config["base_url"]:
+            base_url = config["base_url"]
+        else:
+            base_url = f"{api_base_url}/v1"
 
     print(f"🔌 Using API: {base_url} with model: {config['model_name']}")
     return OpenAI(api_key=config["api_key"], base_url=base_url)

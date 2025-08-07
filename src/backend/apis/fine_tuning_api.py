@@ -196,7 +196,10 @@ def list_fine_tuning_job_checkpoints(
     service: FineTuningService = Depends(),  # noqa: B008
 ):
     """List checkpoints for a fine-tuning job."""
-    return service.list_fine_tuning_job_checkpoints(fine_tuning_job_id, after, limit)
+    result = service.list_fine_tuning_job_checkpoints(fine_tuning_job_id, after, limit)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Fine-tuning job not found")
+    return result
 
 
 @fine_tuning_router.get("/fine_tuning/jobs/{fine_tuning_job_id}/events")

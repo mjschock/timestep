@@ -27,8 +27,8 @@ def expected_responses(model_name):
         return {
             "final_output_contains": "42",  # SmolVLM responds with "42" from few-shot examples
             "final_output_min_length": 2,
-            "tool_call_arguments": '{"__fallback_reason": "model_did_not_call_tool", "city": ""}',  # SmolVLM uses fallback tool calls
-            "tool_output": "The weather in  is sunny.",  # Tool output with empty city parameter
+            "tool_call_arguments": '{"__confidence_score": 0.25942460317460314, "__cost_breakdown": {"lexical_overlap": 1.0, "schema_coverage": 1.0, "string_similarity": 0.9623015873015873, "structural_compatibility": 0.0}, "__fallback_reason": "language_agnostic_schema_cost", "city": "42"}',  # SmolVLM uses fallback tool calls with new format
+            "tool_output": "The weather in 42 is sunny.",  # Tool output with extracted city parameter
         }
     else:
         # Raise exception for unknown models
