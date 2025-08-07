@@ -359,13 +359,38 @@ class ResponsesService:
 
     def _convert_input_to_messages(self, body):
         """Convert different input formats to messages."""
+        logger.debug(
+            f"  _convert_input_to_messages called with body: {json.dumps(body, indent=2)}"
+        )
+
         if "messages" in body:
+            logger.debug("  Found 'messages' in body")
             return body["messages"]
         elif "input" in body:
+            logger.debug("  Found 'input' in body")
             return self._convert_input_data_to_messages(body["input"])
         elif "prompt" in body:
-            return [{"role": "user", "content": body["prompt"]}]
+            logger.debug("  Found 'prompt' in body")
+            prompt = body["prompt"]
+            logger.debug(f"  Prompt type: {type(prompt)}, value: {prompt}")
+            if isinstance(prompt, list):
+                logger.debug("  Converting list prompt")
+                messages = []
+                for item in prompt:
+                    if isinstance(item, dict) and "text" in item:
+                        messages.append({"role": "user", "content": item["text"]})
+                return messages
+            elif isinstance(prompt, dict) and "text" in prompt:
+                logger.debug(f"  Converting dict prompt with text: {prompt['text']}")
+                return [{"role": "user", "content": prompt["text"]}]
+            elif isinstance(prompt, str):
+                logger.debug(f"  Converting string prompt: {prompt}")
+                return [{"role": "user", "content": prompt}]
+            else:
+                logger.debug(f"  Prompt format not recognized: {prompt}")
+                return []
         else:
+            logger.debug("  No messages, input, or prompt found in body")
             return []
 
     def _convert_input_data_to_messages(self, input_data):

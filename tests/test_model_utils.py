@@ -126,7 +126,10 @@ class TestMultimodalMessageProcessor:
         print("Processing outputs...")
 
         results = process_model_outputs(
-            model_outputs=model_outputs, processor=processor
+            model_outputs=model_outputs,
+            processor=processor,
+            tools=tools,
+            tool_choice="required" if tools else None,
         )
 
         response = results["response"]

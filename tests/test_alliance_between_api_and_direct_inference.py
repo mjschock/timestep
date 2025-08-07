@@ -368,6 +368,11 @@ async def run_api_test(
 # Simple inference tests
 def test_simple_inference_direct():
     """Test SmolVLM2 model inference directly with transformers (no server)."""
+    # Reset the global models service to ensure fresh state
+    from backend.services.models_service import reset_models_service
+
+    reset_models_service()
+
     run_direct_inference(SIMPLE_INFERENCE_MESSAGES, SIMPLE_INFERENCE_EXPECTED_RESPONSE)
 
 

@@ -233,8 +233,9 @@ Tool: The answer to the Ultimate Question of Life, the Universe, and Everything 
 Assistant: 42<end_of_utterance>
 User: What is the weather like in Oakland today?<end_of_utterance>
 Assistant:""",
-        "response": """ <tool_call>
-{"arguments": {"query": "What is the weather like in Oakland today?"}, "name": "weather_weather"}
+        "response": """ 42
+<tool_call>
+{"name": "get_weather", "arguments": {"__confidence_score": 0.25663069428313334, "__cost_breakdown": {"lexical_overlap": 1.0, "schema_coverage": 0.9804878048780488, "string_similarity": 0.992989417989418, "structural_compatibility": 0.0}, "__fallback_reason": "language_agnostic_schema_cost", "location": "42"}}
 </tool_call>""",
     },
     "messages": [

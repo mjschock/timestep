@@ -83,7 +83,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          uv run pytest \
+          uv run pytest -vv \
             tests/test_agents_sdk.py \
             -m "chat_completions" \
             --api-key=${{ env[matrix.provider.api_key] }} \

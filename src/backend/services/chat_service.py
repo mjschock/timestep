@@ -515,7 +515,22 @@ class ChatService:
         logger.debug(f"🔍 Generated text: {generated_text[:200]}...")
 
         if not has_tool_calls:
-            return create_fallback_tool_call(generated_text, tools, logger)
+            # Convert OpenAI tool format to the format expected by create_fallback_tool_call
+            converted_tools = []
+            for tool in tools:
+                if "function" in tool:
+                    # OpenAI format: {"type": "function", "function": {"name": "...", ...}}
+                    converted_tool = {
+                        "name": tool["function"]["name"],
+                        "description": tool["function"].get("description", ""),
+                        "parameters": tool["function"].get("parameters", {}),
+                    }
+                    converted_tools.append(converted_tool)
+                else:
+                    # Already in the expected format
+                    converted_tools.append(tool)
+
+            return create_fallback_tool_call(generated_text, converted_tools, logger)
 
         return None
 
@@ -938,8 +953,23 @@ class ChatService:
             ).get("content"):
                 response_text = response["choices"][0]["message"]["content"]
 
+            # Convert OpenAI tool format to the format expected by create_fallback_tool_call
+            converted_tools = []
+            for tool in tools:
+                if "function" in tool:
+                    # OpenAI format: {"type": "function", "function": {"name": "...", ...}}
+                    converted_tool = {
+                        "name": tool["function"]["name"],
+                        "description": tool["function"].get("description", ""),
+                        "parameters": tool["function"].get("parameters", {}),
+                    }
+                    converted_tools.append(converted_tool)
+                else:
+                    # Already in the expected format
+                    converted_tools.append(tool)
+
             fallback_tool_calls = create_fallback_tool_call(
-                response_text, tools, logger
+                response_text, converted_tools, logger
             )
             first_choice = response["choices"][0]
             if "message" in first_choice:

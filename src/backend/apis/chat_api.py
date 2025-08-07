@@ -91,6 +91,11 @@ async def create_chat_completion(
                 status_code=400, detail=f"Invalid request format: {e}"
             ) from e
 
+        # Validate messages are not empty
+        messages = validated_request.get("messages", [])
+        if not messages:
+            raise HTTPException(status_code=400, detail="messages cannot be empty")
+
         # Set proper headers for OpenAI client compatibility
         response.headers["Content-Type"] = "application/json"
         result = await service.create_chat_completion(validated_request)

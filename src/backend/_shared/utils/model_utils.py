@@ -79,12 +79,44 @@ PROCESSOR = None
 MODEL = None
 
 
+def clear_model_cache():
+    """Clear the global model and processor cache and free GPU memory."""
+    global MODEL, PROCESSOR
+
+    if MODEL is not None:
+        logger.info("Clearing MODEL from cache")
+        # Move model to CPU and delete to free GPU memory
+        if hasattr(MODEL, "cpu"):
+            MODEL.cpu()
+        del MODEL
+        MODEL = None
+
+    if PROCESSOR is not None:
+        logger.info("Clearing PROCESSOR from cache")
+        del PROCESSOR
+        PROCESSOR = None
+
+    # Force garbage collection and clear CUDA cache
+    import gc
+
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.synchronize()
+        logger.info("Cleared CUDA cache")
+
+
 def _add_system_message_to_messages(
     messages: list[dict[str, Any]],
     system_message: str | None = DEFAULT_SYSTEM_MESSAGE,
     developer_message: str | None = None,
     tools: list[dict[str, Any]] | None = None,
 ) -> None:
+    # Debug logging for first call only
+    if len(messages) > 0:
+        logger.info(f"DEBUG: Adding system message with tools: {tools}")
+        logger.info(f"DEBUG: System message: {system_message}")
+        logger.info(f"DEBUG: Developer message: {developer_message}")
     """
     Add a system message to the beginning of the messages list if system parts exist.
 
@@ -166,6 +198,9 @@ def _add_system_message_to_messages(
                 "content": [{"type": "text", "text": combined_content}],
             }
             messages.insert(0, system_message_dict)
+
+            # Debug log the final system message
+            logger.info(f"DEBUG: Final system message content: {combined_content}")
 
 
 def _create_n_shot_example(n: int = 0) -> str:
@@ -484,6 +519,26 @@ def prepare_model_inputs(
                 messages, system_message, developer_message, tools
             )
 
+            # Log the first example to verify tools are included in system message
+            if example_index == 0:
+                logger.info("=== TRAINING DATA VERIFICATION ===")
+                logger.info(f"Dataset type: {dataset_type}")
+                logger.info(f"Original tools: {tools}")
+                logger.info(f"System message: {system_message}")
+                logger.info(f"Developer message: {developer_message}")
+
+                # Check if tools were added to system message
+                system_messages = [msg for msg in messages if msg["role"] == "system"]
+                if system_messages:
+                    logger.info(
+                        f"Final system message content: {system_messages[0]['content']}"
+                    )
+                else:
+                    logger.warning("No system message found after processing!")
+
+                logger.info(f"Total messages after processing: {len(messages)}")
+                logger.info("=== END VERIFICATION ===")
+
             # Convert messages to processor format with weight support
             def convert_message(msg):
                 content = msg.get("content")
@@ -493,7 +548,7 @@ def prepare_model_inputs(
                 weight = msg.get("weight", 1.0 if role == "assistant" else 0.0)
 
                 if tool_calls:
-                    assert content is None, (
+                    assert not content, (
                         "Content cannot be provided when tool calls are present"
                     )
                     assert role == "assistant", (
@@ -789,34 +844,40 @@ def process_model_inputs(
         output_dir = f"data/models/{os.getenv('HF_USERNAME', os.getenv('USER'))}/{PRETRAINED_MODEL_NAME_OR_PATH.split('/')[-1]}-{model_guid}"
 
         # Advanced hyperparameters for maximum training improvement
-        training_args = TrainingArguments(
-            **{
-                "adam_beta1": 0.9,
-                "adam_beta2": 0.95,  # Lower beta2 for better convergence
-                "adam_epsilon": 1e-6,  # Lower epsilon for precision
-                "bf16": True,
-                "dataloader_num_workers": 0,
-                "dataloader_pin_memory": False,
-                "gradient_accumulation_steps": 8,  # Even larger effective batch size
-                "gradient_checkpointing": True,
-                "gradient_checkpointing_kwargs": {"use_reentrant": False},
-                "label_names": ["labels"],
-                "learning_rate": 2e-3,  # Higher peak learning rate
-                "logging_steps": 3,
-                "lr_scheduler_type": "cosine",  # Cosine annealing for better convergence
-                "max_grad_norm": 0.5,  # Gradient clipping for stability
-                "num_train_epochs": 8,  # More epochs for deeper learning
-                "optim": "paged_adamw_8bit",
-                "output_dir": output_dir,
-                "per_device_train_batch_size": 1,
-                "remove_unused_columns": False,
-                "report_to": [],
-                "save_strategy": "epoch",
-                "warmup_steps": 200,  # Extended warmup for stability
-                "weight_decay": 0.00005,  # Even lower weight decay
-            },
-            **training_kwargs,
-        )
+        # Debug: Print training kwargs to see what's being passed
+        print(f"DEBUG: training_kwargs = {training_kwargs}")
+
+        # Build default arguments - Optimized for better performance
+        default_args = {
+            "adam_beta1": 0.9,
+            "adam_beta2": 0.999,  # Standard beta2 for better stability
+            "adam_epsilon": 1e-8,  # Standard epsilon
+            "bf16": True,
+            "dataloader_num_workers": 0,
+            "dataloader_pin_memory": False,
+            "gradient_accumulation_steps": 4,  # Reduced for faster updates
+            "gradient_checkpointing": True,
+            "gradient_checkpointing_kwargs": {"use_reentrant": False},
+            "label_names": ["labels"],
+            "learning_rate": 5e-4,  # Lower, more stable learning rate
+            "logging_steps": 1,  # More frequent logging
+            "lr_scheduler_type": "cosine_with_restarts",  # Cosine with restarts for better convergence
+            "max_grad_norm": 1.0,  # Less aggressive gradient clipping
+            "num_train_epochs": 5,  # Balanced epochs
+            "optim": "adamw_torch",  # Standard AdamW for better stability
+            "output_dir": output_dir,
+            "per_device_train_batch_size": 2,  # Increased batch size
+            "remove_unused_columns": False,
+            "report_to": [],
+            "save_strategy": "epoch",
+            "warmup_ratio": 0.1,  # 10% warmup ratio instead of fixed steps
+            "weight_decay": 0.01,  # Standard weight decay
+        }
+
+        # Merge default args with training kwargs (training_kwargs override defaults)
+        final_args = {**default_args, **(training_kwargs or {})}
+
+        training_args = TrainingArguments(**final_args)
 
         # Create trainer with train and eval datasets
         trainer = Trainer(
@@ -980,6 +1041,9 @@ def parse_tool_calls_from_response(response_text: str) -> list[dict]:
     tool_call_pattern = r"<tool_call>\s*(.*?)\s*</tool_call>"
     matches = re.findall(tool_call_pattern, response_text, re.DOTALL)
 
+    logger.info(f"Parsing tool calls from response: '{response_text}'")
+    logger.info(f"Found {len(matches)} tool call matches: {matches}")
+
     for i, match in enumerate(matches):
         try:
             # Parse the JSON content
@@ -998,6 +1062,7 @@ def parse_tool_calls_from_response(response_text: str) -> list[dict]:
                     },
                 }
                 tool_calls.append(tool_call)
+                logger.info(f"Parsed tool call {i}: {tool_call}")
             else:
                 logger.warning(
                     f"Invalid tool call format in match {i}: missing 'name' or 'arguments'"
@@ -1008,6 +1073,7 @@ def parse_tool_calls_from_response(response_text: str) -> list[dict]:
         except Exception as e:
             logger.error(f"Unexpected error parsing tool call {i}: {e}")
 
+    logger.info(f"Returning {len(tool_calls)} tool calls")
     return tool_calls
 
 
@@ -1111,16 +1177,20 @@ def process_model_outputs(
 
         # Parse the response to check for existing tool calls
         response_text = results.get("response", "")
-        tool_calls = parse_tool_calls_from_response(response_text)
+        original_tool_calls = parse_tool_calls_from_response(response_text)
 
-        if not tool_calls:
+        if not original_tool_calls:
             # No tool calls found but they're required - create fallback
             try:
-                tool_calls = create_fallback_tool_call(response_text, tools, logger)
-                logger.info(f"Created fallback tool calls: {len(tool_calls)} calls")
+                fallback_tool_calls = create_fallback_tool_call(
+                    response_text, tools, logger
+                )
+                logger.info(
+                    f"Created fallback tool calls: {len(fallback_tool_calls)} calls"
+                )
             except Exception as e:
                 logger.error(f"Failed to create fallback tool call: {e}")
-                tool_calls = []
+                fallback_tool_calls = []
 
         # Validate that the tool calls are in the right format
         from openai.types.chat.chat_completion_message_tool_call import (
@@ -1128,7 +1198,11 @@ def process_model_outputs(
         )
 
         validated_tool_calls = []
-        for tool_call in tool_calls:
+        tool_calls_to_validate = (
+            original_tool_calls if original_tool_calls else fallback_tool_calls
+        )
+
+        for tool_call in tool_calls_to_validate:
             try:
                 validated_tool_call = ChatCompletionMessageToolCall(**tool_call)
 
@@ -1148,6 +1222,47 @@ def process_model_outputs(
                 continue
 
         results["tool_calls"] = validated_tool_calls
+
+        # Convert fallback tool calls back to text format and append to response
+        if (
+            validated_tool_calls and not original_tool_calls
+        ):  # Only if we created fallback tool calls
+            import json
+
+            if logger:
+                logger.info(
+                    f"Converting {len(validated_tool_calls)} fallback tool calls to text format"
+                )
+            tool_call_texts = []
+            for tool_call in validated_tool_calls:
+                # Convert OpenAI format back to text format
+                tool_call_dict = {
+                    "name": tool_call["function"]["name"],
+                    "arguments": json.loads(tool_call["function"]["arguments"]),
+                }
+
+                tool_call_text = (
+                    f"<tool_call>\n{json.dumps(tool_call_dict)}\n</tool_call>"
+                )
+                tool_call_texts.append(tool_call_text)
+                if logger:
+                    logger.info(f"Converted tool call: {tool_call_text}")
+
+            # Append tool calls to response
+            if tool_call_texts:
+                original_response = results.get("response", "")
+                results["response"] = (
+                    original_response + "\n" + "\n".join(tool_call_texts)
+                )
+                if logger:
+                    logger.info(
+                        f"Updated response from '{original_response}' to '{results['response']}'"
+                    )
+        else:
+            if logger:
+                logger.info(
+                    f"No fallback conversion: validated_tool_calls={len(validated_tool_calls)}, original_tool_calls={len(original_tool_calls)}"
+                )
 
     return results
 

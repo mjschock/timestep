@@ -45,7 +45,7 @@ def create_fallback_tool_call(
             "id": f"call_{uuid.uuid4().hex[:8]}",
             "type": "function",
             "function": {
-                "name": best_match.tool["function"]["name"],
+                "name": best_match.tool["name"],
                 "arguments": json.dumps(best_match.extracted_params, sort_keys=True),
             },
         }
@@ -53,7 +53,7 @@ def create_fallback_tool_call(
 
     if logger:
         logger.info(
-            f"✅ Selected tool: {best_match.tool['function']['name']} (confidence: {best_match.confidence_score:.3f})"
+            f"✅ Selected tool: {best_match.tool['name']} (confidence: {best_match.confidence_score:.3f})"
         )
 
     return tool_calls
@@ -84,7 +84,7 @@ def find_best_tool_language_agnostic(
             best_result = result
 
         if logger:
-            logger.debug(f"🎯 Tool '{tool['function']['name']}' cost: {total_cost:.3f}")
+            logger.debug(f"🎯 Tool '{tool['name']}' cost: {total_cost:.3f}")
 
     return best_result
 
@@ -101,9 +101,9 @@ def calculate_language_agnostic_cost(
     - schema_coverage: Parameter type compatibility
     - lexical_overlap: Raw character sequence matching
     """
-    tool_name = tool["function"]["name"]
-    tool_description = tool["function"].get("description", "")
-    parameters = tool["function"].get("parameters", {}).get("properties", {})
+    tool_name = tool["name"]
+    tool_description = tool.get("description", "")
+    parameters = tool.get("parameters", {}).get("properties", {})
 
     costs = {
         "string_similarity": 1.0,
@@ -355,7 +355,7 @@ def extract_parameters_language_agnostic(
     Extract parameters using only language-agnostic, universal patterns.
     """
     extracted_params = {}
-    parameters = tool["function"].get("parameters", {}).get("properties", {})
+    parameters = tool.get("parameters", {}).get("properties", {})
 
     if not parameters:
         return extracted_params

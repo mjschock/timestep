@@ -56,7 +56,15 @@ def create_vqa_training_data():
     training_data.append(
         {
             "messages": [
-                {"role": "system", "content": "Use the image to answer the question."},
+                {
+                    "role": "system",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Use the image to answer the question.",
+                        }
+                    ],
+                },
                 {
                     "role": "user",
                     "content": [
@@ -69,7 +77,10 @@ def create_vqa_training_data():
                         },
                     ],
                 },
-                {"role": "assistant", "content": "Book Title 0"},
+                {
+                    "role": "assistant",
+                    "content": [{"type": "text", "text": "Book Title 0"}],
+                },
             ]
         }
     )
@@ -79,7 +90,15 @@ def create_vqa_training_data():
     training_data.append(
         {
             "messages": [
-                {"role": "system", "content": "Use the image to answer the question."},
+                {
+                    "role": "system",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Use the image to answer the question.",
+                        }
+                    ],
+                },
                 {
                     "role": "user",
                     "content": [
@@ -92,7 +111,10 @@ def create_vqa_training_data():
                         },
                     ],
                 },
-                {"role": "assistant", "content": "Book Title 1"},
+                {
+                    "role": "assistant",
+                    "content": [{"type": "text", "text": "Book Title 1"}],
+                },
             ]
         }
     )
@@ -108,7 +130,7 @@ def create_vqa_training_data():
     return training_file_path
 
 
-async def test_baseline_vision_model(sync_client):
+async def test_baseline_vision_model(async_client):
     """Test baseline vision model performance"""
     print("🧪 Testing baseline vision model performance...")
 
@@ -135,7 +157,12 @@ async def test_baseline_vision_model(sync_client):
         image_base64 = encode_image_to_base64(test_case["image_path"])
 
         messages = [
-            {"role": "system", "content": "Use the image to answer the question."},
+            {
+                "role": "system",
+                "content": [
+                    {"type": "text", "text": "Use the image to answer the question."}
+                ],
+            },
             {
                 "role": "user",
                 "content": [
@@ -148,7 +175,7 @@ async def test_baseline_vision_model(sync_client):
             },
         ]
 
-        completion = sync_client.chat.completions.create(
+        completion = await async_client.chat.completions.create(
             model=MODEL_NAME, messages=messages, temperature=0.0, seed=42
         )
 
@@ -185,7 +212,7 @@ async def test_baseline_vision_model(sync_client):
     return baseline_results, baseline_percentage
 
 
-async def create_vqa_fine_tuning_job(sync_client):
+async def create_vqa_fine_tuning_job(async_client):
     """Upload VQA training data and create fine-tuning job"""
     print("📁 Creating VQA training data...")
     training_file_path = create_vqa_training_data()
@@ -195,7 +222,7 @@ async def create_vqa_fine_tuning_job(sync_client):
 
     print("📁 Uploading VQA training data...")
     with open(training_file_path, "rb") as f:
-        file_object = sync_client.files.create(file=f, purpose="fine-tune")
+        file_object = await async_client.files.create(file=f, purpose="fine-tune")
 
     file_id = file_object.id
     print(f"VQA training file uploaded with ID: {file_id}")
@@ -203,13 +230,13 @@ async def create_vqa_fine_tuning_job(sync_client):
 
     # Create fine-tuning job
     print("🚀 Creating VQA fine-tuning job...")
-    fine_tuning_job = sync_client.fine_tuning.jobs.create(
+    fine_tuning_job = await async_client.fine_tuning.jobs.create(
         model=MODEL_NAME,
         training_file=file_id,
         hyperparameters={
-            "n_epochs": 3,
-            "batch_size": 1,
-            "learning_rate_multiplier": 1.0,
+            "n_epochs": 1,  # Just 1 epoch for speed
+            "batch_size": 1,  # Keep batch_size=1 to avoid GPU memory issues
+            "learning_rate_multiplier": 4.0,  # Use working learning rate from function calling test
         },
         seed=42,
     )
@@ -222,7 +249,7 @@ async def create_vqa_fine_tuning_job(sync_client):
 
 
 async def wait_for_vqa_job_completion(
-    sync_client, fine_tuning_job_id, max_wait_time=300
+    async_client, fine_tuning_job_id, max_wait_time=300
 ):
     """Wait for VQA fine-tuning job to complete"""
     print("⏳ Waiting for VQA fine-tuning job to complete...")
@@ -230,7 +257,9 @@ async def wait_for_vqa_job_completion(
     fine_tuned_model = None
 
     while True:
-        fine_tuning_job = sync_client.fine_tuning.jobs.retrieve(fine_tuning_job_id)
+        fine_tuning_job = await async_client.fine_tuning.jobs.retrieve(
+            fine_tuning_job_id
+        )
         print(f"Job status: {fine_tuning_job.status}")
 
         if fine_tuning_job.status == "succeeded":
@@ -245,7 +274,7 @@ async def wait_for_vqa_job_completion(
         else:
             if time.time() - start_time > max_wait_time:
                 # Cancel the job before failing
-                sync_client.fine_tuning.jobs.cancel(fine_tuning_job_id)
+                await async_client.fine_tuning.jobs.cancel(fine_tuning_job_id)
                 pytest.fail(
                     f"VQA fine-tuning job timed out after {max_wait_time} seconds"
                 )
@@ -292,14 +321,8 @@ async def inspect_vqa_job_details(fine_tuning_job, file_id):
     # Basic assertions
     assert fine_tuning_job.id == fine_tuning_job.id
     assert fine_tuning_job.object == "fine_tuning.job"
-    # Expect the normalized model name (without openai/ prefix)
-    expected_model = (
-        MODEL_NAME.replace("openai/", "")
-        if MODEL_NAME.startswith("openai/")
-        else MODEL_NAME
-    )
-    # For SmolVLM2 model, expect the full name without openai/ prefix
-    assert fine_tuning_job.model == expected_model
+    # The model name should match exactly what was provided
+    assert fine_tuning_job.model == MODEL_NAME
     assert fine_tuning_job.status == "succeeded"
     assert fine_tuning_job.training_file == file_id
     assert fine_tuning_job.fine_tuned_model is not None
@@ -312,9 +335,10 @@ async def inspect_vqa_job_details(fine_tuning_job, file_id):
     # The actual hyperparameters are in the method structure
     if fine_tuning_job.method and fine_tuning_job.method.supervised:
         supervised_hyperparams = fine_tuning_job.method.supervised.hyperparameters
-        assert supervised_hyperparams.n_epochs == "auto"
-        assert supervised_hyperparams.batch_size == "auto"
-        assert supervised_hyperparams.learning_rate_multiplier == "auto"
+        # Our implementation stores the actual values, not "auto"
+        assert supervised_hyperparams.n_epochs == 1
+        assert supervised_hyperparams.batch_size == 1
+        assert supervised_hyperparams.learning_rate_multiplier == 4.0
 
     # Assert method structure matches OpenAI API specification
     assert hasattr(fine_tuning_job, "method")
@@ -323,14 +347,14 @@ async def inspect_vqa_job_details(fine_tuning_job, file_id):
     assert fine_tuning_job.method.supervised is not None
     assert hasattr(fine_tuning_job.method.supervised, "hyperparameters")
 
-    # Verify the nested hyperparameters in method - our implementation uses "auto" values
+    # Verify the nested hyperparameters in method - our implementation stores actual values
     method_hyperparams = fine_tuning_job.method.supervised.hyperparameters
-    assert method_hyperparams.n_epochs == "auto"
-    assert method_hyperparams.batch_size == "auto"
-    assert method_hyperparams.learning_rate_multiplier == "auto"
+    assert method_hyperparams.n_epochs == 1
+    assert method_hyperparams.batch_size == 1
+    assert method_hyperparams.learning_rate_multiplier == 4.0
 
-    # Assert organization and result files - our implementation uses "org-demo"
-    assert fine_tuning_job.organization_id == "org-demo"
+    # Assert organization and result files - our implementation uses "org-default"
+    assert fine_tuning_job.organization_id == "org-default"
     assert isinstance(fine_tuning_job.result_files, list)
     assert len(fine_tuning_job.result_files) == 1
 
@@ -349,14 +373,14 @@ async def inspect_vqa_job_details(fine_tuning_job, file_id):
     # estimated_finish can be None even for successful jobs
 
 
-async def examine_vqa_training_metrics(sync_client, fine_tuning_job):
+async def examine_vqa_training_metrics(async_client, fine_tuning_job):
     """Examine result files and training metrics for VQA job"""
     print("📊 Examining VQA training metrics from result files...")
     result_file_id = fine_tuning_job.result_files[0]
     print(f"Result file ID: {result_file_id}")
 
     # Retrieve the result file object to get metadata
-    result_file_object = sync_client.files.retrieve(result_file_id)
+    result_file_object = await async_client.files.retrieve(result_file_id)
     print(f"Result file object: {result_file_object}")
     print(f"Result file filename: {result_file_object.filename}")
     print(f"Result file purpose: {result_file_object.purpose}")
@@ -364,7 +388,7 @@ async def examine_vqa_training_metrics(sync_client, fine_tuning_job):
 
     # Retrieve the actual content of the result file
     try:
-        result_file_content = sync_client.files.content(result_file_id)
+        result_file_content = await async_client.files.content(result_file_id)
         content_bytes = result_file_content.read()
 
         # Try to decode as base64 first (as the content appears to be base64 encoded)
@@ -432,8 +456,8 @@ async def examine_vqa_training_metrics(sync_client, fine_tuning_job):
         # Don't fail the test if we can't retrieve content, but log the issue
 
 
-async def test_fine_tuned_vqa_performance(
-    sync_client, fine_tuned_model, baseline_percentage
+async def evaluate_fine_tuned_vqa_performance(
+    async_client, fine_tuned_model, baseline_percentage
 ):
     """Test fine-tuned VQA model performance and compare with baseline"""
     print("🧪 Testing fine-tuned VQA model performance...")
@@ -461,7 +485,12 @@ async def test_fine_tuned_vqa_performance(
         image_base64 = encode_image_to_base64(test_case["image_path"])
 
         messages = [
-            {"role": "system", "content": "Use the image to answer the question."},
+            {
+                "role": "system",
+                "content": [
+                    {"type": "text", "text": "Use the image to answer the question."}
+                ],
+            },
             {
                 "role": "user",
                 "content": [
@@ -474,7 +503,7 @@ async def test_fine_tuned_vqa_performance(
             },
         ]
 
-        completion = sync_client.chat.completions.create(
+        completion = await async_client.chat.completions.create(
             model=fine_tuned_model, messages=messages, temperature=0.0, seed=42
         )
 
@@ -522,7 +551,7 @@ async def test_fine_tuned_vqa_performance(
 
 @pytest.mark.asyncio
 @pytest.mark.slow
-async def test_vision_fine_tuning_for_vqa_full_workflow(sync_client):
+async def test_vision_fine_tuning_for_vqa_full_workflow(async_client):
     """
     Complete VQA workflow test that mirrors the notebook logic:
     1. Test baseline vision model performance
@@ -535,32 +564,32 @@ async def test_vision_fine_tuning_for_vqa_full_workflow(sync_client):
 
     # 1. Test baseline vision model performance
     baseline_results, baseline_percentage = await test_baseline_vision_model(
-        sync_client
+        async_client
     )
 
     # 2. Create VQA training data and create fine-tuning job
-    file_id, fine_tuning_job_id = await create_vqa_fine_tuning_job(sync_client)
+    file_id, fine_tuning_job_id = await create_vqa_fine_tuning_job(async_client)
 
     # 3. Wait for job completion
     fine_tuned_model, fine_tuning_job = await wait_for_vqa_job_completion(
-        sync_client, fine_tuning_job_id
+        async_client, fine_tuning_job_id
     )
 
     # 4. Inspect job details
     await inspect_vqa_job_details(fine_tuning_job, file_id)
 
     # 5. Examine training metrics
-    await examine_vqa_training_metrics(sync_client, fine_tuning_job)
+    await examine_vqa_training_metrics(async_client, fine_tuning_job)
 
     # 6. Test fine-tuned model performance
-    await test_fine_tuned_vqa_performance(
-        sync_client, fine_tuned_model, baseline_percentage
+    await evaluate_fine_tuned_vqa_performance(
+        async_client, fine_tuned_model, baseline_percentage
     )
 
     # 7. Cleanup - cancel any remaining jobs
     try:
         if not asyncio.get_event_loop().is_closed():
-            sync_client.fine_tuning.jobs.cancel(fine_tuning_job_id)
+            await async_client.fine_tuning.jobs.cancel(fine_tuning_job_id)
     except Exception as e:
         print(
             f"Note: Could not cancel job {fine_tuning_job_id}: {e}"

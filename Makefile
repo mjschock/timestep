@@ -17,7 +17,10 @@ default:
 	uv run ruff format .
 	uv run ruff check --fix . --ignore C901,S110,B018,B007
 	uv run toml-sort -ai pyproject.toml
-	uv run pytest --cov=src/backend --cov-report=term-missing --cov-fail-under=42
+	uv run pytest -vv \
+		--cov=src/backend \
+		--cov-fail-under=42 \
+		--cov-report=term-missing \
 
 	mkdir docs && uv run pyreverse src/backend/ \
 		--colorized \
@@ -28,14 +31,14 @@ default:
 		--source-roots src
 
 test-github-gpt-4.1-mini-proxy:
-	uv run pytest \
+	uv run pytest -vv \
 		tests/test_agents_sdk.py -m "chat_completions" \
 		--api-key=$$GITHUB_TOKEN \
 		--base-url=http://localhost:8000/api/github/v1 \
 		--model-name=openai/gpt-4.1-mini
 
 test-github-gpt-4.1-mini-skip-local:
-	uv run pytest \
+	uv run pytest -vv \
 		tests/test_agents_sdk.py -m "chat_completions" \
 		--api-key=$$GITHUB_TOKEN \
 		--base-url=https://models.github.ai/inference \

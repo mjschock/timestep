@@ -82,7 +82,11 @@ class FineTuningService:
 
         # Create hyperparameters
         supervised_hyperparams = SupervisedHyperparameters(
-            n_epochs=hyperparameters.get("n_epochs", 3)
+            n_epochs=hyperparameters.get("n_epochs", 3),
+            batch_size=hyperparameters.get("batch_size", "auto"),
+            learning_rate_multiplier=hyperparameters.get(
+                "learning_rate_multiplier", "auto"
+            ),
         )
 
         # Create method
@@ -179,6 +183,36 @@ class FineTuningService:
             print(f"Dataset keys: {list(dataset.keys())}")
             print(f"Dataset features: {dataset[list(dataset.keys())[0]].features}")
 
+            # Extract hyperparameters from job and map to TrainingArguments
+            training_kwargs = {}
+            if (
+                job.method
+                and job.method.supervised
+                and job.method.supervised.hyperparameters
+            ):
+                hyperparams = job.method.supervised.hyperparameters
+
+                # Map hyperparameters to TrainingArguments parameter names
+                if hyperparams.n_epochs and hyperparams.n_epochs != "auto":
+                    training_kwargs["num_train_epochs"] = int(hyperparams.n_epochs)
+
+                if hyperparams.batch_size and hyperparams.batch_size != "auto":
+                    training_kwargs["per_device_train_batch_size"] = int(
+                        hyperparams.batch_size
+                    )
+
+                if (
+                    hyperparams.learning_rate_multiplier
+                    and hyperparams.learning_rate_multiplier != "auto"
+                ):
+                    # learning_rate_multiplier affects the base learning rate
+                    base_learning_rate = 2e-3  # Default from model_utils.py
+                    training_kwargs["learning_rate"] = base_learning_rate * float(
+                        hyperparams.learning_rate_multiplier
+                    )
+
+            self.logger.info(f"Using training kwargs: {training_kwargs}")
+
             # Process training data
             model_inputs = prepare_model_inputs(
                 dataset=dataset,
@@ -186,26 +220,199 @@ class FineTuningService:
                 processor=processor,
             )
 
-            # Get collate function and run training
+            # Get collate function and run training with hyperparameters
             model_outputs = process_model_inputs(
                 data_collator=model_inputs["data_collator"],
                 model=model,
                 processor=processor,
                 train_dataset=model_inputs["train_dataset"],
+                training_kwargs=training_kwargs,
             )
 
             # Run training
-            _ = process_model_outputs(
+            training_results = process_model_outputs(
                 model_outputs=model_outputs,
                 processor=processor,
             )
 
             self.logger.info("Fine-tuning completed successfully")
 
-            # Update job status to "succeeded"
+            # Create result file with training metrics
+            result_file_id = None
+            if training_results and "train_result" in training_results:
+                train_result = training_results["train_result"]
+                self.logger.info(f"Train result type: {type(train_result)}")
+                self.logger.info(f"Train result attributes: {dir(train_result)}")
+
+                # Try to get log_history from trainer_state.json
+                import json
+
+                # Get the model path from training results
+                model_path = training_results.get("model_path")
+                self.logger.info(f"Model path from training results: {model_path}")
+
+                # Look for trainer_state.json in checkpoint subdirectories (like checkpoint-26)
+                trainer_state_path = None
+                if model_path and os.path.exists(model_path):
+                    import glob
+
+                    checkpoint_pattern = os.path.join(
+                        model_path, "checkpoint-*", "trainer_state.json"
+                    )
+                    checkpoint_files = glob.glob(checkpoint_pattern)
+
+                    if checkpoint_files:
+                        # Use the most recent checkpoint (highest number)
+                        trainer_state_path = max(
+                            checkpoint_files,
+                            key=lambda x: int(x.split("checkpoint-")[1].split("/")[0]),
+                        )
+                        self.logger.info(
+                            f"Found trainer_state.json at: {trainer_state_path}"
+                        )
+                    else:
+                        # Fallback: look directly in model_path
+                        direct_path = os.path.join(model_path, "trainer_state.json")
+                        if os.path.exists(direct_path):
+                            trainer_state_path = direct_path
+                            self.logger.info(
+                                f"Found trainer_state.json directly at: {trainer_state_path}"
+                            )
+                        else:
+                            self.logger.info(
+                                f"No trainer_state.json found in {model_path} or its checkpoints"
+                            )
+
+                # Read trainer_state.json if found
+                log_history = []
+                if trainer_state_path and os.path.exists(trainer_state_path):
+                    with open(trainer_state_path) as f:
+                        trainer_state = json.load(f)
+
+                    log_history = trainer_state.get("log_history", [])
+                    self.logger.info(
+                        f"Found {len(log_history)} log entries in trainer_state.json"
+                    )
+                else:
+                    self.logger.info(
+                        "Using TrainOutput data only (no trainer_state.json found)"
+                    )
+
+                # Create CSV content in OpenAI fine-tuning results format
+                import csv
+                import io
+
+                csv_buffer = io.StringIO()
+                writer = csv.writer(csv_buffer)
+
+                # Write header matching OpenAI format (as shown in the example)
+                writer.writerow(
+                    [
+                        "step",
+                        "train_loss",
+                        "train_accuracy",
+                        "valid_loss",
+                        "valid_mean_token_accuracy",
+                    ]
+                )
+
+                # Write training steps from log_history if available, otherwise use TrainOutput
+                if log_history:
+                    # Write all training steps from detailed log history
+                    for log_entry in log_history:
+                        if "loss" in log_entry:  # Only write training step entries
+                            writer.writerow(
+                                [
+                                    log_entry.get("step", ""),
+                                    log_entry.get(
+                                        "train_loss", log_entry.get("loss", "")
+                                    ),
+                                    "",  # train_accuracy not available in our training
+                                    "",  # valid_loss not available
+                                    "",  # valid_mean_token_accuracy not available
+                                ]
+                            )
+                elif hasattr(train_result, "training_loss") and hasattr(
+                    train_result, "global_step"
+                ):
+                    # Fallback: Use TrainOutput data
+                    self.logger.info(
+                        f"Using TrainOutput: loss={train_result.training_loss}, steps={train_result.global_step}"
+                    )
+                    writer.writerow(
+                        [
+                            train_result.global_step,
+                            train_result.training_loss,
+                            "",  # train_accuracy not available
+                            "",  # valid_loss not available
+                            "",  # valid_mean_token_accuracy not available
+                        ]
+                    )
+                else:
+                    # Write at least one row with placeholder data
+                    writer.writerow([1, 0.0, "", "", ""])
+
+                csv_content = csv_buffer.getvalue()
+                self.logger.info(
+                    f"Training metrics CSV content length: {len(csv_content)}"
+                )
+                self.logger.info(f"Training metrics CSV preview: {csv_content[:500]}")
+
+                # Create result file via files API (as shown in the example)
+                try:
+                    import requests
+
+                    csv_bytes = csv_content.encode("utf-8")
+                    csv_file = io.BytesIO(csv_bytes)
+                    csv_file.name = f"training_metrics_{job_id}.csv"
+
+                    # Make request to files API to create the results file
+                    files_data = {"purpose": "fine-tune-results"}
+                    files = {
+                        "file": (
+                            f"training_metrics_{job_id}.csv",
+                            csv_file,
+                            "text/csv",
+                        )
+                    }
+
+                    response = requests.post(
+                        "http://localhost:8000/v1/files",
+                        data=files_data,
+                        files=files,
+                        timeout=30,
+                    )
+                    response.raise_for_status()
+                    result_file_data = response.json()
+                    result_file_id = result_file_data["id"]
+                    self.logger.info(
+                        f"Successfully created training result file with ID: {result_file_id}"
+                    )
+                    # Now it can be retrieved like: client.files.retrieve_content(result_file_id)
+                except Exception as e:
+                    self.logger.error(
+                        f"Failed to create result file via files API: {e}"
+                    )
+                    import traceback
+
+                    self.logger.error(f"Full traceback: {traceback.format_exc()}")
+                    result_file_id = None
+            else:
+                self.logger.warning("No train_result in training_results")
+
+            # Update job status to "succeeded" and set fine_tuned_model
             if job:
                 job.status = "succeeded"
                 job.finished_at = int(time.time())
+
+                # Set the fine_tuned_model to the model path from training results
+                if training_results and "model_path" in training_results:
+                    job.fine_tuned_model = training_results["model_path"]
+
+                # Set result files
+                if result_file_id:
+                    job.result_files = [result_file_id]
+
                 self.dao.update(job_id, job)
 
         except Exception as e:
@@ -247,10 +454,56 @@ class FineTuningService:
     ) -> dict[str, Any]:
         """List paginated fine-tuning jobs."""
         jobs = self.dao.list_all()
+
+        # Apply filtering and pagination
+        filtered_jobs = jobs
+
+        # Apply 'after' filtering if specified
+        if after:
+            # Find the index of the 'after' job and take jobs after it
+            after_index = -1
+            for i, job in enumerate(jobs):
+                if job.id == after:
+                    after_index = i
+                    break
+            if after_index >= 0:
+                filtered_jobs = jobs[after_index + 1 :]
+
+        # Apply limit if specified
+        if limit:
+            try:
+                limit_int = int(limit)
+                filtered_jobs = filtered_jobs[:limit_int]
+            except ValueError:
+                # If limit is not a valid integer, ignore it
+                pass
+
+        # Determine if there are more jobs beyond the current page
+        has_more = False
+        if limit:
+            try:
+                limit_int = int(limit)
+                # Check if there are more jobs available
+                remaining_jobs = len(jobs) - len(filtered_jobs)
+                if after:
+                    # If 'after' was used, we need to account for jobs before the 'after' job
+                    after_index = -1
+                    for i, job in enumerate(jobs):
+                        if job.id == after:
+                            after_index = i
+                            break
+                    if after_index >= 0:
+                        remaining_jobs = len(jobs) - (
+                            after_index + 1 + len(filtered_jobs)
+                        )
+                has_more = remaining_jobs > 0
+            except ValueError:
+                pass
+
         return {
             "object": "list",
-            "data": [job.model_dump() for job in jobs],
-            "has_more": False,
+            "data": [job.model_dump() for job in filtered_jobs],
+            "has_more": has_more,
         }
 
     def retrieve_fine_tuning_job(self, job_id: str) -> FineTuningJob | None:
@@ -268,15 +521,55 @@ class FineTuningService:
 
     def list_fine_tuning_job_checkpoints(
         self, job_id: str, after: str = None, limit: str = None
-    ) -> dict[str, Any]:
+    ) -> dict[str, Any] | None:
         """List checkpoints for a fine-tuning job."""
-        return {"status": "not_implemented"}
+        # Check if the job exists first
+        job = self.dao.get_by_id(job_id)
+        if job is None:
+            return None
+
+        # For now, return empty list with proper pagination structure
+        checkpoints = []
+
+        # Apply limit if specified
+        if limit:
+            try:
+                limit_int = int(limit)
+                checkpoints = checkpoints[:limit_int]
+            except ValueError:
+                pass
+
+        return {
+            "object": "list",
+            "data": checkpoints,
+            "has_more": False,
+        }
 
     def list_fine_tuning_events(
         self, job_id: str, limit: str = None, after: str = None
     ) -> dict[str, Any] | None:
         """List events for a fine-tuning job."""
-        return {"status": "not_implemented"}
+        # Check if the job exists first
+        job = self.dao.get_by_id(job_id)
+        if job is None:
+            return None
+
+        # For now, return empty list with proper pagination structure
+        events = []
+
+        # Apply limit if specified
+        if limit:
+            try:
+                limit_int = int(limit)
+                events = events[:limit_int]
+            except ValueError:
+                pass
+
+        return {
+            "object": "list",
+            "data": events,
+            "has_more": False,
+        }
 
     def pause_fine_tuning_job(self) -> dict[str, Any]:
         """Pause a fine-tuning job."""

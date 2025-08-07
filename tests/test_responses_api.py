@@ -4,9 +4,9 @@ from conftest import MODEL_NAME
 
 @pytest.mark.asyncio
 async def test_responses_api(async_client):
-    # The OpenAI SDK may not accept 'messages' for responses, so use a simple prompt
+    # The OpenAI SDK may not accept 'messages' for responses, so use a simple input
     response = await async_client.responses.create(
-        model=MODEL_NAME, prompt="What is the capital of France?"
+        model=MODEL_NAME, input="What is the capital of France?"
     )
     assert hasattr(response, "object")
     assert response.object == "response"

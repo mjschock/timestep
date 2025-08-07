@@ -116,7 +116,7 @@ def wait_for_server_ready(
     return True
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session")
 def api_server_with_coverage(request) -> Generator[str, None, None]:
     """
     Automatically starts FastAPI server with coverage for all tests.
