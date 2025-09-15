@@ -10,35 +10,51 @@ const cli = meow(
 	  $ timestep [command]
 
 	Commands
-	  server     Start the agents server
-	  list-agents  List all agents from the server
-	  list-chats   List all chats from the server
-	  list-models  List all models from the server
-	  list-tools   List all tools from the server
-	  list-traces  List all traces from the server
-	  --name     Your name (for greeting)
+	  server                   Start the agents server
+	  stop                     Stop the agents server
+	  chat                     Start interactive chat with an agent
+	  list-agents              List all agents from the server
+	  list-chats               List all chats from the server
+	  list-models              List all models from the server
+	  list-tools               List all tools from the server
+	  list-traces              List all traces from the server
+	  list-settings-api-keys   List all configured API keys
+	  list-settings-mcp-servers List all configured MCP servers
+	  --name       Your name (for greeting)
 
 	Examples
 	  $ timestep --name=Jane
 	  Hello, Jane
-	  
+
 	  $ timestep server
 	  Start the agents server
-	  
+
+	  $ timestep stop
+	  Stop the agents server
+
+	  $ timestep chat
+	  Start interactive chat with an agent
+
 	  $ timestep list-agents
 	  List all agents from the server
-	  
+
 	  $ timestep list-chats
 	  List all chats from the server
-	  
+
 	  $ timestep list-models
 	  List all models from the server
-	  
+
 	  $ timestep list-tools
 	  List all tools from the server
-	  
+
 	  $ timestep list-traces
 	  List all traces from the server
+
+	  $ timestep list-settings-api-keys
+	  List all configured API keys
+
+	  $ timestep list-settings-mcp-servers
+	  List all configured MCP servers
 `,
 	{
 		importMeta: import.meta,

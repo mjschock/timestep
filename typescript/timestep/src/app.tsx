@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Text, Box} from 'ink';
 import {spawn} from 'child_process';
+import {A2AClientWrapper} from './lib/a2a-client-wrapper.js';
 
 type Props = {
 	name: string | undefined;
@@ -21,43 +22,64 @@ type Agent = {
 };
 
 type Chat = {
-	id: string;
-	title: string;
-	participants: string[];
-	lastMessage: string;
-	timestamp: string;
+	contextId: string;
+	agentId: string;
+	taskHistories: Record<string, any[]>;
+	taskStates: Record<string, any>;
+	tasks: any[];
 };
 
 type Model = {
 	id: string;
-	name: string;
-	provider: string;
-	type: string;
-	status: string;
-	capabilities: string[];
-	maxTokens: number;
-	cost: number;
+	created: number;
+	object: string;
+	owned_by: string;
 };
 
 type Tool = {
 	id: string;
 	name: string;
-	category: string;
 	description: string;
+	serverId: string;
+	serverName: string;
+	inputSchema: any;
+	category: string;
 	status: string;
-	usage: number;
-	lastUsed: string;
 };
 
 type Trace = {
 	id: string;
-	sessionId: string;
-	agentId: string;
-	action: string;
-	input: string;
-	output: string;
-	duration: number;
-	timestamp: string;
+	object: string;
+	created_at: string;
+	duration_ms: number | null;
+	first_5_agents: string[] | null;
+	group_id: string | null;
+	handoff_count: number;
+	tool_count: number;
+	workflow_name: string;
+	metadata: Record<string, unknown>;
+};
+
+type ApiKey = {
+	id: string;
+	name: string;
+	provider: string;
+	key: string;
+	active: boolean;
+	created_at: number;
+	last_used_at?: number;
+};
+
+type McpServer = {
+	id: string;
+	name: string;
+	command: string;
+	args: string[];
+	env?: Record<string, string>;
+	active: boolean;
+	port?: number;
+	created_at: number;
+	last_started_at?: number;
 	status: string;
 };
 
@@ -67,9 +89,14 @@ export default function App({name = 'Stranger', command}: Props) {
 	const [models, setModels] = useState<Model[]>([]);
 	const [tools, setTools] = useState<Tool[]>([]);
 	const [traces, setTraces] = useState<Trace[]>([]);
+	const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
+	const [mcpServers, setMcpServers] = useState<McpServer[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [serverStarted, setServerStarted] = useState(false);
+	const [serverStopped, setServerStopped] = useState(false);
+	const [chatStarted, setChatStarted] = useState(false);
+	const [availableAgents, setAvailableAgents] = useState<any[]>([]);
 
 	useEffect(() => {
 		if (command === 'list-agents') {
@@ -82,8 +109,16 @@ export default function App({name = 'Stranger', command}: Props) {
 			fetchTools();
 		} else if (command === 'list-traces') {
 			fetchTraces();
+		} else if (command === 'list-settings-api-keys') {
+			fetchApiKeys();
+		} else if (command === 'list-settings-mcp-servers') {
+			fetchMcpServers();
 		} else if (command === 'server') {
 			startServer();
+		} else if (command === 'stop') {
+			stopServer();
+		} else if (command === 'chat') {
+			startChat();
 		}
 	}, [command]);
 
@@ -98,12 +133,12 @@ export default function App({name = 'Stranger', command}: Props) {
 			
 			denoCheck.on('close', (code) => {
 				if (code === 0) {
-					// Start the server
-					const server = spawn('deno', ['run', '--allow-net', 'server.ts'], {
+					// Start the server from src/index.ts
+					const server = spawn('deno', ['run', '--allow-net', '--allow-read', '--allow-write', '--allow-env', '--allow-sys', 'src/index.ts'], {
 						stdio: 'inherit',
 						detached: true
 					});
-					
+
 					server.unref(); // Allow the parent process to exit
 					setServerStarted(true);
 				} else {
@@ -115,12 +150,94 @@ export default function App({name = 'Stranger', command}: Props) {
 		}
 	};
 
+	const stopServer = () => {
+		setLoading(true);
+		setError(null);
+		setServerStopped(false);
+
+		try {
+			const ports = [3000, 8000, 9999];
+			let processesKilled = 0;
+
+			ports.forEach(port => {
+				// Kill process on each port
+				const killProcess = spawn('lsof', ['-ti', `:${port}`], { stdio: 'pipe' });
+
+				killProcess.stdout.on('data', (data) => {
+					const pid = data.toString().trim();
+					if (pid) {
+						const killCmd = spawn('kill', ['-9', pid], { stdio: 'pipe' });
+						killCmd.on('close', (code) => {
+							if (code === 0) {
+								processesKilled++;
+								console.log(`✅ Killed process ${pid} on port ${port}`);
+							}
+						});
+					}
+				});
+
+				killProcess.on('close', () => {
+					// Check if all ports have been processed
+					if (processesKilled >= 0) { // Allow for some ports having no processes
+						setServerStopped(true);
+						setLoading(false);
+					}
+				});
+			});
+
+			// Set timeout to complete the operation
+			setTimeout(() => {
+				setServerStopped(true);
+				setLoading(false);
+			}, 2000);
+
+		} catch (err) {
+			setError('Failed to stop server');
+			setLoading(false);
+		}
+	};
+
+	const startChat = async () => {
+		setLoading(true);
+		setError(null);
+
+		try {
+			const client = new A2AClientWrapper();
+
+			// First, check if agents are available
+			const agentsResult = await client.getAvailableAgents();
+
+			if (!agentsResult.success) {
+				setError(agentsResult.error || 'Failed to load agents');
+				setLoading(false);
+				return;
+			}
+
+			setAvailableAgents(agentsResult.agents || []);
+
+			// Start the chat with the first available agent or let user choose
+			const result = await client.startChat({
+				autoApprove: false // Always ask for approval for interactive use
+			});
+
+			if (result.success) {
+				setChatStarted(true);
+			} else {
+				setError(result.error || 'Failed to start chat');
+			}
+		} catch (err) {
+			setError(err instanceof Error ? err.message : 'Failed to start chat');
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const fetchAgents = async () => {
 		setLoading(true);
 		setError(null);
 		
 		try {
-			const response = await fetch('http://localhost:8000/agents');
+			const response = await fetch('http://localhost:3000/agents');
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -138,7 +255,7 @@ export default function App({name = 'Stranger', command}: Props) {
 		setError(null);
 		
 		try {
-			const response = await fetch('http://localhost:8000/chats');
+			const response = await fetch('http://localhost:3000/chats');
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -156,7 +273,7 @@ export default function App({name = 'Stranger', command}: Props) {
 		setError(null);
 		
 		try {
-			const response = await fetch('http://localhost:8000/models');
+			const response = await fetch('http://localhost:3000/models');
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -174,7 +291,7 @@ export default function App({name = 'Stranger', command}: Props) {
 		setError(null);
 		
 		try {
-			const response = await fetch('http://localhost:8000/tools');
+			const response = await fetch('http://localhost:3000/tools');
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -190,9 +307,9 @@ export default function App({name = 'Stranger', command}: Props) {
 	const fetchTraces = async () => {
 		setLoading(true);
 		setError(null);
-		
+
 		try {
-			const response = await fetch('http://localhost:8000/traces');
+			const response = await fetch('http://localhost:3000/traces');
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -200,6 +317,42 @@ export default function App({name = 'Stranger', command}: Props) {
 			setTraces(data);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to fetch traces');
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const fetchApiKeys = async () => {
+		setLoading(true);
+		setError(null);
+
+		try {
+			const response = await fetch('http://localhost:3000/settings/api-keys');
+			if (!response.ok) {
+				throw new Error(`Server responded with ${response.status}`);
+			}
+			const data = await response.json();
+			setApiKeys(data);
+		} catch (err) {
+			setError(err instanceof Error ? err.message : 'Failed to fetch API keys');
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const fetchMcpServers = async () => {
+		setLoading(true);
+		setError(null);
+
+		try {
+			const response = await fetch('http://localhost:3000/settings/mcp-servers');
+			if (!response.ok) {
+				throw new Error(`Server responded with ${response.status}`);
+			}
+			const data = await response.json();
+			setMcpServers(data);
+		} catch (err) {
+			setError(err instanceof Error ? err.message : 'Failed to fetch MCP servers');
 		} finally {
 			setLoading(false);
 		}
@@ -218,8 +371,8 @@ export default function App({name = 'Stranger', command}: Props) {
 			return (
 				<Box flexDirection="column">
 					<Text color="green">✅ Timestep Agents Server started!</Text>
-					<Text>Server is available at: http://localhost:8000</Text>
-					<Text>Agents endpoint: http://localhost:8000/agents</Text>
+					<Text>CLI server is available at: http://localhost:3000</Text>
+					<Text>Agents endpoint: http://localhost:3000/agents</Text>
 					<Text color="blue">Use 'timestep list-agents' to fetch agents</Text>
 				</Box>
 			);
@@ -229,6 +382,86 @@ export default function App({name = 'Stranger', command}: Props) {
 			<Box flexDirection="column">
 				<Text color="green">🚀 Starting Timestep Agents Server...</Text>
 				<Text>Checking for Deno...</Text>
+			</Box>
+		);
+	}
+
+	if (command === 'stop') {
+		if (loading) {
+			return (
+				<Box flexDirection="column">
+					<Text color="blue">🛑 Stopping Timestep servers...</Text>
+					<Text>Checking ports 3000, 8000, and 9999...</Text>
+				</Box>
+			);
+		}
+
+		if (error) {
+			return (
+				<Box flexDirection="column">
+					<Text color="red">❌ Error: {error}</Text>
+				</Box>
+			);
+		}
+
+		if (serverStopped) {
+			return (
+				<Box flexDirection="column">
+					<Text color="green">✅ Timestep servers stopped successfully!</Text>
+					<Text>Processes on ports 3000, 8000, and 9999 have been terminated.</Text>
+				</Box>
+			);
+		}
+
+		return (
+			<Box flexDirection="column">
+				<Text color="blue">🛑 Preparing to stop servers...</Text>
+			</Box>
+		);
+	}
+
+	if (command === 'chat') {
+		if (loading) {
+			return <Text color="blue">Loading agents and starting chat...</Text>;
+		}
+
+		if (error) {
+			return (
+				<Box flexDirection="column">
+					<Text color="red">❌ Error: {error}</Text>
+					<Text color="yellow">Make sure your timestep configuration is set up correctly.</Text>
+					<Text color="gray">Expected config at:</Text>
+					{availableAgents.length === 0 && (
+						<Text color="gray">  - Run 'timestep list-agents' to see if agents are configured</Text>
+					)}
+				</Box>
+			);
+		}
+
+		if (chatStarted) {
+			return (
+				<Box flexDirection="column">
+					<Text color="green">🚀 Interactive chat session started!</Text>
+					<Text color="blue">You can now chat with the agent. Use Ctrl+C to exit.</Text>
+					{availableAgents.length > 0 && (
+						<Box flexDirection="column" marginTop={1}>
+							<Text color="cyan">Available agents:</Text>
+							{availableAgents.slice(0, 3).map((agent, index) => (
+								<Text key={index} color="gray">  • {agent.name}</Text>
+							))}
+							{availableAgents.length > 3 && (
+								<Text color="gray">  • ... and {availableAgents.length - 3} more</Text>
+							)}
+						</Box>
+					)}
+				</Box>
+			);
+		}
+
+		return (
+			<Box flexDirection="column">
+				<Text color="blue">🤖 Preparing to start chat...</Text>
+				<Text>Loading available agents...</Text>
 			</Box>
 		);
 	}
@@ -304,23 +537,18 @@ export default function App({name = 'Stranger', command}: Props) {
 			<Box flexDirection="column">
 				<Text color="green">💬 Available Chats:</Text>
 				{chats.map((chat) => (
-					<Box key={chat.id} flexDirection="column" marginLeft={2}>
+					<Box key={chat.contextId} flexDirection="column" marginLeft={2}>
 						<Text>
-							<Text color="blue">•</Text> <Text color="cyan">{chat.title}</Text>
+							<Text color="blue">•</Text> <Text color="cyan">Context {chat.contextId.slice(0, 8)}...</Text>
 						</Text>
 						<Box marginLeft={2}>
 							<Text color="gray">
-								Participants: {chat.participants.join(', ')}
+								Agent: {chat.agentId}
 							</Text>
 						</Box>
 						<Box marginLeft={2}>
 							<Text color="gray">
-								Last message: "{chat.lastMessage}"
-							</Text>
-						</Box>
-						<Box marginLeft={2}>
-							<Text color="gray">
-								Time: {new Date(chat.timestamp).toLocaleString()}
+								Tasks: {chat.tasks.length} | Conversations: {Object.keys(chat.taskHistories).length}
 							</Text>
 						</Box>
 					</Box>
@@ -349,22 +577,11 @@ export default function App({name = 'Stranger', command}: Props) {
 				{models.map((model) => (
 					<Box key={model.id} flexDirection="column" marginLeft={2}>
 						<Text>
-							<Text color="blue">•</Text> <Text color="cyan">{model.name}</Text>
-							<Text color="gray"> ({model.provider})</Text>
+							<Text color="blue">•</Text> <Text color="cyan">{model.id}</Text>
 						</Text>
 						<Box marginLeft={2}>
 							<Text color="gray">
-								Type: {model.type} | Status: <Text color={model.status === 'active' ? 'green' : 'yellow'}>{model.status}</Text>
-							</Text>
-						</Box>
-						<Box marginLeft={2}>
-							<Text color="gray">
-								Capabilities: {model.capabilities.join(', ')}
-							</Text>
-						</Box>
-						<Box marginLeft={2}>
-							<Text color="gray">
-								Max Tokens: {model.maxTokens.toLocaleString()} | Cost: ${model.cost}/1K tokens
+								Owner: {model.owned_by} | Created: {new Date(model.created * 1000).toLocaleDateString()}
 							</Text>
 						</Box>
 					</Box>
@@ -403,9 +620,9 @@ export default function App({name = 'Stranger', command}: Props) {
 						</Box>
 						<Box marginLeft={2}>
 							<Text color="gray">
-								Status: <Text color={tool.status === 'active' ? 'green' : 'yellow'}>{tool.status}</Text> | 
-								Usage: {tool.usage.toLocaleString()} times | 
-								Last used: {new Date(tool.lastUsed).toLocaleString()}
+								ID: {tool.id} |
+								Server: {tool.serverName} |
+								Status: <Text color={tool.status === 'available' ? 'green' : 'yellow'}>{tool.status}</Text>
 							</Text>
 						</Box>
 					</Box>
@@ -434,24 +651,96 @@ export default function App({name = 'Stranger', command}: Props) {
 				{traces.map((trace) => (
 					<Box key={trace.id} flexDirection="column" marginLeft={2}>
 						<Text>
-							<Text color="blue">•</Text> <Text color="cyan">{trace.action}</Text>
-							<Text color="gray"> (Agent {trace.agentId}, Session {trace.sessionId})</Text>
+							<Text color="blue">•</Text> <Text color="cyan">{trace.workflow_name}</Text>
+							<Text color="gray"> ({trace.id})</Text>
 						</Text>
 						<Box marginLeft={2}>
 							<Text color="gray">
-								Input: "{trace.input}"
+								Agents: {trace.first_5_agents?.join(', ') || 'None'} |
+								Tools: {trace.tool_count} |
+								Handoffs: {trace.handoff_count}
 							</Text>
 						</Box>
 						<Box marginLeft={2}>
 							<Text color="gray">
-								Output: "{trace.output}"
+								Duration: {trace.duration_ms ? `${trace.duration_ms}ms` : 'Unknown'} |
+								Created: {new Date(trace.created_at).toLocaleString()}
+							</Text>
+						</Box>
+					</Box>
+				))}
+			</Box>
+		);
+	}
+
+	if (command === 'list-settings-api-keys') {
+		if (loading) {
+			return <Text color="blue">Loading API keys...</Text>;
+		}
+
+		if (error) {
+			return (
+				<Box flexDirection="column">
+					<Text color="red">❌ Error: {error}</Text>
+					<Text color="yellow">Make sure the server is running with: timestep server</Text>
+				</Box>
+			);
+		}
+
+		return (
+			<Box flexDirection="column">
+				<Text color="green">🔑 Configured API Keys:</Text>
+				{apiKeys.map((apiKey) => (
+					<Box key={apiKey.id} flexDirection="column" marginLeft={2}>
+						<Text>
+							<Text color="blue">•</Text> <Text color="cyan">{apiKey.name}</Text>
+							<Text color="gray"> ({apiKey.provider})</Text>
+						</Text>
+						<Box marginLeft={2}>
+							<Text color="gray">
+								Key: {apiKey.key} |
+								Status: <Text color={apiKey.active ? 'green' : 'red'}>{apiKey.active ? 'Active' : 'Inactive'}</Text>
+							</Text>
+						</Box>
+					</Box>
+				))}
+			</Box>
+		);
+	}
+
+	if (command === 'list-settings-mcp-servers') {
+		if (loading) {
+			return <Text color="blue">Loading MCP servers...</Text>;
+		}
+
+		if (error) {
+			return (
+				<Box flexDirection="column">
+					<Text color="red">❌ Error: {error}</Text>
+					<Text color="yellow">Make sure the server is running with: timestep server</Text>
+				</Box>
+			);
+		}
+
+		return (
+			<Box flexDirection="column">
+				<Text color="green">🖥️ Configured MCP Servers:</Text>
+				{mcpServers.map((server) => (
+					<Box key={server.id} flexDirection="column" marginLeft={2}>
+						<Text>
+							<Text color="blue">•</Text> <Text color="cyan">{server.name}</Text>
+							<Text color="gray"> ({server.id})</Text>
+						</Text>
+						<Box marginLeft={2}>
+							<Text color="gray">
+								Command: {server.command} |
+								Status: <Text color={server.status === 'running' ? 'green' : 'yellow'}>{server.status}</Text>
 							</Text>
 						</Box>
 						<Box marginLeft={2}>
 							<Text color="gray">
-								Status: <Text color={trace.status === 'completed' ? 'green' : 'red'}>{trace.status}</Text> | 
-								Duration: {trace.duration}s | 
-								Time: {new Date(trace.timestamp).toLocaleString()}
+								Args: {server.args.join(' ')} |
+								Port: {server.port || 'N/A'}
 							</Text>
 						</Box>
 					</Box>

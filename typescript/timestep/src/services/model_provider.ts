@@ -2,8 +2,6 @@ import { Ollama } from "ollama";
 import { OllamaModel } from "./backing/models.ts";
 import { Model, ModelProvider, OpenAIChatCompletionsModel, OpenAIResponsesModel } from "@openai/agents";
 import * as fs from "node:fs";
-import * as path from "node:path";
-import process from "node:process";
 import OpenAI from "openai";
 import { getTimestepPaths } from "../utils.ts";
 

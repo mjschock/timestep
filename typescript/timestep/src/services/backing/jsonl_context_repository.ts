@@ -2,6 +2,10 @@ import { ContextRepository } from './context_repository.ts';
 import { Context } from '../../domain/context.ts';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { getTimestepPaths } from '../../utils.ts';
+
+// Get timestep configuration paths
+const timestepPaths = getTimestepPaths();
 
 /**
  * JSONL file-based implementation of ContextRepository.
@@ -10,8 +14,8 @@ import * as path from 'node:path';
 export class JsonlContextRepository implements ContextRepository {
     private readonly filePath: string;
 
-    constructor(dataPath: string) {
-        this.filePath = path.join(dataPath, 'contexts.jsonl');
+    constructor() {
+        this.filePath = timestepPaths.contexts;
     }
 
     async getOrCreate(agentId: string, contextId: string): Promise<Context> {
@@ -26,9 +30,9 @@ export class JsonlContextRepository implements ContextRepository {
 
     async save(context: Context): Promise<void> {
         // Ensure directory exists
-        const dataDir = path.dirname(this.filePath);
-        if (!fs.existsSync(dataDir)) {
-            fs.mkdirSync(dataDir, { recursive: true });
+        const configDir = path.dirname(this.filePath);
+        if (!fs.existsSync(configDir)) {
+            fs.mkdirSync(configDir, { recursive: true });
         }
 
         // Load existing contexts

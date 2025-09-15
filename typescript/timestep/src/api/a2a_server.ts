@@ -107,8 +107,7 @@ class ContextAwareRequestHandler extends DefaultRequestHandler {
     this.taskStore = taskStore;
     
     // Initialize context service with same configuration as agent executor
-    const dataPath = APP_CONFIG.contextRepositoryOptions?.dataPath || timestepPaths.dataDir;
-    const repository = new JsonlContextRepository(dataPath);
+    const repository = new JsonlContextRepository();
     this.contextService = new ContextService(repository);
   }
 

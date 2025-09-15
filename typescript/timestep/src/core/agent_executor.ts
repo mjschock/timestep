@@ -274,12 +274,7 @@ export class TimestepAIAgentExecutor implements AgentExecutor {
     }: AgentExecutorConfig = {}) {
         this.agentFactory = new AgentFactory();
         
-        // Use dataPath from contextRepositoryOptions, or from app config, or fallback to timestep data dir
-        const dataPath = (contextRepositoryOptions as any).dataPath ||
-            APP_CONFIG.contextRepositoryOptions?.dataPath ||
-            timestepPaths.dataDir;
-        
-        const repository = contextRepository || new JsonlContextRepository(dataPath);
+        const repository = contextRepository || new JsonlContextRepository();
         this.contextService = new ContextService(repository);
     }
 
