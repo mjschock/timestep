@@ -6,22 +6,31 @@ import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getTimestepPaths } from "../utils.ts";
 
-// Resolve project root relative to this module (dist/services -> project root)
-const moduleDir = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.resolve(moduleDir, '../../../../');
+// Get timestep configuration paths
+const timestepPaths = getTimestepPaths();
 
 // Load agent configuration
-const agentsConfigPath = path.resolve(projectRoot, 'conf/agents.jsonl');
+const agentsConfigPath = timestepPaths.agentsConfig;
+if (!fs.existsSync(agentsConfigPath)) {
+    throw new Error(`Agents configuration file not found. Expected at: ${agentsConfigPath}`);
+}
 const agentsConfigContent = fs.readFileSync(agentsConfigPath, 'utf8');
 const lines = agentsConfigContent.split('\n').filter(line => line.trim());
 
 // Load app configuration
-const appConfigPath = path.resolve(projectRoot, 'conf/app.json');
+const appConfigPath = timestepPaths.appConfig;
+if (!fs.existsSync(appConfigPath)) {
+    throw new Error(`App configuration file not found. Expected at: ${appConfigPath}`);
+}
 const APP_CONFIG = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
 
 // Load MCP servers configuration
-const mcpServersConfigPath = path.resolve(projectRoot, 'conf/mcp_servers.jsonl');
+const mcpServersConfigPath = timestepPaths.mcpServers;
+if (!fs.existsSync(mcpServersConfigPath)) {
+    throw new Error(`MCP servers configuration file not found. Expected at: ${mcpServersConfigPath}`);
+}
 const mcpServersConfigContent = fs.readFileSync(mcpServersConfigPath, 'utf8');
 const mcpServersLines = mcpServersConfigContent.split('\n').filter(line => line.trim());
 

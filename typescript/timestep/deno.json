@@ -11,8 +11,8 @@
     "strict": true
   },
   "tasks": {
-    "start": "deno run --allow-net --allow-read --allow-write --allow-env source/index.ts",
-    "dev": "deno run --allow-net --allow-read --allow-write --allow-env --watch source/index.ts",
+    "start": "deno run --allow-net --allow-read --allow-write --allow-env src/index.ts",
+    "dev": "deno run --allow-net --allow-read --allow-write --allow-env --watch src/index.ts",
     "add:express": "deno add npm:express"
   }
 }

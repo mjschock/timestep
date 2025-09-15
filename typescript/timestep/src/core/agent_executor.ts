@@ -35,13 +35,20 @@ import { AgentFactory } from "../services/agent_factory.ts";
 import { ContextService } from "../services/context_service.ts";
 import { ContextRepository } from "../services/backing/context_repository.ts";
 import { JsonlContextRepository } from "../services/backing/jsonl_context_repository.ts";
+import { getTimestepPaths } from "../utils.ts";
+
+// Get timestep configuration paths
+const timestepPaths = getTimestepPaths();
 
 // Load app configuration
-const appConfigPath = path.resolve(process.cwd(), '../../conf/app.json');
+const appConfigPath = timestepPaths.appConfig;
+if (!fs.existsSync(appConfigPath)) {
+    throw new Error(`App configuration file not found. Expected at: ${appConfigPath}`);
+}
 const APP_CONFIG = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
 
 // Load model providers configuration
-const modelProvidersPath = path.resolve(process.cwd(), '../../conf/model_providers.jsonl');
+const modelProvidersPath = timestepPaths.modelProviders;
 const modelProvidersContent = fs.readFileSync(modelProvidersPath, 'utf8');
 const modelProviderLines = modelProvidersContent.split('\n').filter(line => line.trim());
 console.log('🔧 Model provider lines:', modelProviderLines);
@@ -267,10 +274,10 @@ export class TimestepAIAgentExecutor implements AgentExecutor {
     }: AgentExecutorConfig = {}) {
         this.agentFactory = new AgentFactory();
         
-        // Use dataPath from contextRepositoryOptions, or from app config, or fallback to './data'
-        const dataPath = (contextRepositoryOptions as any).dataPath || 
-            APP_CONFIG.contextRepositoryOptions?.dataPath || 
-            './data';
+        // Use dataPath from contextRepositoryOptions, or from app config, or fallback to timestep data dir
+        const dataPath = (contextRepositoryOptions as any).dataPath ||
+            APP_CONFIG.contextRepositoryOptions?.dataPath ||
+            timestepPaths.dataDir;
         
         const repository = contextRepository || new JsonlContextRepository(dataPath);
         this.contextService = new ContextService(repository);

@@ -29,6 +29,7 @@ import {
 } from "@a2a-js/sdk";
 
 import { A2AClient } from "@a2a-js/sdk/client";
+import { getTimestepPaths } from "../utils.ts";
 
 // --- Types ---
 interface ToolCall {
@@ -123,46 +124,10 @@ interface AgentInfo {
   systemPrompt: string;
 }
 
-function resolveConfDir(): string {
-  // 1) Explicit override of the conf directory
-  if (process.env.TIMESTEP_CONF_DIR) {
-    const dir = path.resolve(process.env.TIMESTEP_CONF_DIR);
-    if (fs.existsSync(dir)) return dir;
-  }
-
-  // 2) Try common locations relative to current working directory
-  const cwdCandidates = [
-    path.resolve(process.cwd(), "conf"),
-    path.resolve(process.cwd(), "..", "conf"),
-    path.resolve(process.cwd(), "..", "..", "conf"),
-  ];
-  for (const dir of cwdCandidates) {
-    if (fs.existsSync(dir)) return dir;
-  }
-
-  // 3) Try locations relative to this source file's directory
-  //    source file is .../typescript/timestep/source/api → go up to repo root
-  const thisDir = path.dirname(fileURLToPath(import.meta.url));
-  const fileCandidates = [
-    path.resolve(thisDir, "..", "..", "..", "conf"), // ../../.. from source/api → repo/conf
-    path.resolve(thisDir, "..", "..", "conf"),
-  ];
-  for (const dir of fileCandidates) {
-    if (fs.existsSync(dir)) return dir;
-  }
-
-  // Fallback to ./conf under cwd (will error later if not present)
-  return path.resolve(process.cwd(), "conf");
-}
-
 function resolveAgentsFile(): string {
-  // Highest precedence: explicit agents file override
-  if (process.env.AGENTS_FILE) {
-    const p = path.resolve(process.env.AGENTS_FILE);
-    if (fs.existsSync(p)) return p;
-  }
-  const confDir = resolveConfDir();
-  return path.join(confDir, "agents.jsonl");
+  // Use timestep configuration paths
+  const timestepPaths = getTimestepPaths();
+  return timestepPaths.agentsConfig;
 }
 
 function loadAvailableAgents(): AgentInfo[] {
@@ -581,7 +546,8 @@ async function handleToolCallFromStatusMessage(messageText: string, taskId: stri
 
 // --- Tool Call Preference Management ---
 function loadToolPreferences(): Record<string, { autoApprove: boolean; autoReject: boolean }> {
-  const preferencesFile = path.join(resolveConfDir(), "preferences.json");
+  const timestepPaths = getTimestepPaths();
+  const preferencesFile = path.join(timestepPaths.configDir, "preferences.json");
   try {
     if (fs.existsSync(preferencesFile)) {
       const preferencesData = JSON.parse(fs.readFileSync(preferencesFile, 'utf8'));
@@ -594,7 +560,8 @@ function loadToolPreferences(): Record<string, { autoApprove: boolean; autoRejec
 }
 
 function saveToolPreferences(preferences: Record<string, { autoApprove: boolean; autoReject: boolean }>): boolean {
-  const preferencesFile = path.join(resolveConfDir(), "preferences.json");
+  const timestepPaths = getTimestepPaths();
+  const preferencesFile = path.join(timestepPaths.configDir, "preferences.json");
   try {
     let preferencesData: any = {};
     if (fs.existsSync(preferencesFile)) {

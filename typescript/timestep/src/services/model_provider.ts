@@ -5,14 +5,14 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import process from "node:process";
 import OpenAI from "openai";
+import { getTimestepPaths } from "../utils.ts";
 
 // Load model providers configuration
-const configuredPath = process.env.MODEL_PROVIDERS_PATH;
-const defaultPath = path.resolve(process.cwd(), 'conf/model_providers.jsonl');
-const modelProvidersPath = configuredPath && configuredPath.trim().length > 0 ? configuredPath : defaultPath;
+const timestepPaths = getTimestepPaths();
+const modelProvidersPath = timestepPaths.modelProviders;
 
 if (!fs.existsSync(modelProvidersPath)) {
-    throw new Error(`Model providers file not found at '${modelProvidersPath}'. Set MODEL_PROVIDERS_PATH or ensure 'conf/model_providers.jsonl' exists.`);
+    throw new Error(`Model providers file not found. Expected at: ${modelProvidersPath}`);
 }
 
 let modelProvidersContent = '';

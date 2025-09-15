@@ -20,13 +20,23 @@ import * as path from 'node:path';
 import * as crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import process from 'node:process';
+import { getTimestepPaths } from "../utils.ts";
+
+// Get timestep configuration paths
+const timestepPaths = getTimestepPaths();
 
 // Load app configuration
-const appConfigPath = path.resolve(process.cwd(), '../../conf/app.json');
+const appConfigPath = timestepPaths.appConfig;
+if (!fs.existsSync(appConfigPath)) {
+    throw new Error(`App configuration file not found. Expected at: ${appConfigPath}`);
+}
 const APP_CONFIG = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
 
 // Load all agents configuration
-const agentsConfigPath = path.resolve(process.cwd(), '../../conf/agents.jsonl');
+const agentsConfigPath = timestepPaths.agentsConfig;
+if (!fs.existsSync(agentsConfigPath)) {
+    throw new Error(`Agents configuration file not found. Expected at: ${agentsConfigPath}`);
+}
 const agentsConfigContent = fs.readFileSync(agentsConfigPath, 'utf8');
 const lines = agentsConfigContent.split('\n').filter(line => line.trim());
 
@@ -97,7 +107,7 @@ class ContextAwareRequestHandler extends DefaultRequestHandler {
     this.taskStore = taskStore;
     
     // Initialize context service with same configuration as agent executor
-    const dataPath = APP_CONFIG.contextRepositoryOptions?.dataPath || './data';
+    const dataPath = APP_CONFIG.contextRepositoryOptions?.dataPath || timestepPaths.dataDir;
     const repository = new JsonlContextRepository(dataPath);
     this.contextService = new ContextService(repository);
   }
