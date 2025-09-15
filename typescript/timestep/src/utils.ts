@@ -61,6 +61,7 @@ export function getTimestepPaths() {
 // MCP Server utilities
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import * as fs from 'node:fs';
 
 /**
  * Loads and parses MCP servers configuration from mcp_servers.jsonl
@@ -69,10 +70,9 @@ export function loadMcpServersConfig(): { [id: string]: any } {
     const timestepPaths = getTimestepPaths();
     const mcpServersConfigPath = timestepPaths.mcpServers;
 
-    // For Deno environment, we need to check if file exists differently
     try {
-        const mcpServersConfigContent = Deno.readTextFileSync(mcpServersConfigPath);
-        const mcpServersLines = mcpServersConfigContent.split('\n').filter(line => line.trim());
+        const mcpServersConfigContent = fs.readFileSync(mcpServersConfigPath, 'utf8');
+        const mcpServersLines = mcpServersConfigContent.split('\n').filter((line: string) => line.trim());
 
         const mcpServersById: { [id: string]: any } = {};
         for (const line of mcpServersLines) {

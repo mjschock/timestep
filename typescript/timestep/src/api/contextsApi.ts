@@ -8,8 +8,9 @@
  * - listContexts() - List all contexts from contexts.jsonl
  */
 
-import { getTimestepPaths } from "../utils.ts";
-import { Context } from "../domain/context.ts";
+import { getTimestepPaths } from "../utils.js";
+import { Context } from "../domain/context.js";
+import * as fs from 'node:fs';
 
 /**
  * Response from the list contexts endpoint
@@ -28,8 +29,8 @@ export async function listContexts(): Promise<ListContextsResponse> {
   const timestepPaths = getTimestepPaths();
 
   try {
-    const contextsContent = await Deno.readTextFile(timestepPaths.contexts);
-    const lines = contextsContent.split('\n').filter(line => line.trim());
+    const contextsContent = fs.readFileSync(timestepPaths.contexts, 'utf8');
+    const lines = contextsContent.split('\n').filter((line: string) => line.trim());
 
     const contexts: Context[] = [];
 

@@ -1,9 +1,9 @@
 import { Ollama } from "ollama";
-import { OllamaModel } from "./backing/models.ts";
+import { OllamaModel } from "./backing/models.js";
 import { Model, ModelProvider, OpenAIChatCompletionsModel, OpenAIResponsesModel } from "@openai/agents";
 import * as fs from "node:fs";
 import OpenAI from "openai";
-import { getTimestepPaths } from "../utils.ts";
+import { getTimestepPaths } from "../utils.js";
 
 // Load model providers configuration
 const timestepPaths = getTimestepPaths();

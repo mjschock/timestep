@@ -37,7 +37,8 @@ export interface ListApiKeysResponse {
   data: ApiKey[];
 }
 
-import { getTimestepPaths } from "../../utils.ts";
+import { getTimestepPaths } from "../../utils.js";
+import * as fs from 'node:fs';
 
 /**
  * List all configured API keys
@@ -48,8 +49,8 @@ export async function listApiKeys(): Promise<ListApiKeysResponse> {
   const timestepPaths = getTimestepPaths();
 
   try {
-    const modelProvidersContent = await Deno.readTextFile(timestepPaths.modelProviders);
-    const lines = modelProvidersContent.split('\n').filter(line => line.trim());
+    const modelProvidersContent = fs.readFileSync(timestepPaths.modelProviders, 'utf8');
+    const lines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
 
     const apiKeys: ApiKey[] = [];
 

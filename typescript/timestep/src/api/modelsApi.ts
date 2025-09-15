@@ -48,7 +48,8 @@ export interface DeleteModelResponse {
   object: string;
 }
 
-import { getTimestepPaths } from "../utils.ts";
+import { getTimestepPaths } from "../utils.js";
+import * as fs from 'node:fs';
 
 /**
  * List all available models from all configured providers
@@ -59,9 +60,9 @@ export async function listModels(): Promise<ListModelsResponse> {
   const timestepPaths = getTimestepPaths();
 
   try {
-    const modelProvidersContent = await Deno.readTextFile(timestepPaths.modelProviders);
-    const lines = modelProvidersContent.split('\n').filter(line => line.trim());
-    const providers = lines.map(line => {
+    const modelProvidersContent = fs.readFileSync(timestepPaths.modelProviders, 'utf8');
+    const lines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
+    const providers = lines.map((line: string) => {
       try {
         return JSON.parse(line);
       } catch {

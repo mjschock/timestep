@@ -43,7 +43,8 @@ export interface ListMcpServersResponse {
   data: McpServer[];
 }
 
-import { getTimestepPaths } from "../../utils.ts";
+import { getTimestepPaths } from "../../utils.js";
+import * as fs from 'node:fs';
 
 /**
  * List all configured MCP servers
@@ -54,8 +55,8 @@ export async function listMcpServers(): Promise<ListMcpServersResponse> {
   const timestepPaths = getTimestepPaths();
 
   try {
-    const mcpServersContent = await Deno.readTextFile(timestepPaths.mcpServers);
-    const lines = mcpServersContent.split('\n').filter(line => line.trim());
+    const mcpServersContent = fs.readFileSync(timestepPaths.mcpServers, 'utf8');
+    const lines = mcpServersContent.split('\n').filter((line: string) => line.trim());
 
     const mcpServers: McpServer[] = [];
 

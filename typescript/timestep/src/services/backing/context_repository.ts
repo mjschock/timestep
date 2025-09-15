@@ -1,4 +1,4 @@
-import { Context } from '../../domain/context.ts';
+import { Context } from '../../domain/context.js';
 
 /**
  * Repository interface for Context persistence operations.
