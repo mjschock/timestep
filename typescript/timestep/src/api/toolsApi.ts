@@ -5,7 +5,7 @@
  * in the Timestep application.
  */
 
-import { listAllMcpTools } from "../utils.js";
+import { listAllMcpTools } from "../utils.ts";
 
 /**
  * Represents a tool available in the system

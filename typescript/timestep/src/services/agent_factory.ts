@@ -4,7 +4,7 @@ import { z } from "zod";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import * as fs from 'node:fs';
-import { getTimestepPaths } from "../utils.js";
+import { getTimestepPaths } from "../utils.ts";
 
 // Get timestep configuration paths
 const timestepPaths = getTimestepPaths();

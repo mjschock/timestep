@@ -133,8 +133,8 @@ export default function App({name = 'Stranger', command}: Props) {
 			
 			denoCheck.on('close', (code) => {
 				if (code === 0) {
-					// Start the server from src/index.ts
-					const server = spawn('deno', ['run', '--allow-net', '--allow-read', '--allow-write', '--allow-env', '--allow-sys', 'src/index.ts'], {
+					// Start the server from src/server.ts
+					const server = spawn('deno', ['run', '--allow-net', '--allow-read', '--allow-write', '--allow-env', '--allow-sys', 'src/server.ts'], {
 						stdio: 'inherit',
 						detached: true
 					});

@@ -1,8 +1,16 @@
 {
 	"extends": "@sindresorhus/tsconfig",
 	"compilerOptions": {
-		"outDir": "dist"
+		"outDir": "dist",
+		"module": "ESNext",
+		"target": "ES2022",
+		"moduleResolution": "bundler",
+		"allowSyntheticDefaultImports": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"noImplicitAny": false,
+		"allowImportingTsExtensions": false
 	},
 	"include": ["src"],
-	"exclude": ["src/index.ts", "src/api/a2a_server.ts", "src/api/a2a_client.ts", "src/api/mcp_server.ts", "src/core/agent_executor.ts"]
+	"exclude": []
 }

@@ -1,16 +1,14 @@
-import express from "npm:express";
-import { v4 as uuidv4 } from "uuid";
-import type { AgentCard, AgentSkill } from "npm:@a2a-js/sdk";
-import { Task, TaskArtifactUpdateEvent, TaskStatusUpdateEvent } from "npm:@a2a-js/sdk";
+import express from "express";
+// import { v4 as uuidv4 } from "uuid";
+import type { AgentCard, AgentSkill } from "@a2a-js/sdk";
+import { Task } from "@a2a-js/sdk";
 import {
   AgentExecutor,
-  RequestContext,
-  ExecutionEventBus,
   DefaultRequestHandler,
   InMemoryTaskStore,
   TaskStore,
-} from "npm:@a2a-js/sdk/server";
-import { A2AExpressApp } from "npm:@a2a-js/sdk/server/express";
+} from "@a2a-js/sdk/server";
+import { A2AExpressApp } from "@a2a-js/sdk/server/express";
 import { TimestepAIAgentExecutor } from "../core/agent_executor.ts";
 import { ContextService } from "../services/context_service.ts";
 import { JsonlContextRepository } from "../services/backing/jsonl_context_repository.ts";
@@ -94,7 +92,6 @@ class LoggingTaskStore implements TaskStore {
 class ContextAwareRequestHandler extends DefaultRequestHandler {
   private contextService: ContextService;
   private agentId: string;
-  private taskStore: TaskStore;
 
   constructor(
     agentId: string,
@@ -104,7 +101,6 @@ class ContextAwareRequestHandler extends DefaultRequestHandler {
   ) {
     super(agentCard, taskStore, agentExecutor);
     this.agentId = agentId;
-    this.taskStore = taskStore;
     
     // Initialize context service with same configuration as agent executor
     const repository = new JsonlContextRepository();
@@ -117,7 +113,7 @@ class ContextAwareRequestHandler extends DefaultRequestHandler {
     // Generate contextId if not present (same logic as parent class)
     let task: any | undefined;
     if (incomingMessage.taskId) {
-      task = await this.taskStore.load(incomingMessage.taskId);
+      task = await (this as any).taskStore.load(incomingMessage.taskId);
     }
     
     const contextId = incomingMessage.contextId || task?.contextId || crypto.randomUUID();
@@ -125,7 +121,7 @@ class ContextAwareRequestHandler extends DefaultRequestHandler {
     // Ensure our Context domain object exists before calling parent method
     console.log(`🔍 Ensuring context ${contextId} exists for agent ${this.agentId}`);
     try {
-      const existingContext = await this.contextService.repository.load(contextId);
+      const existingContext = await (this.contextService as any).repository.load(contextId);
       if (!existingContext) {
         console.log(`🔍 Creating new context ${contextId} for agent ${this.agentId}`);
         const newContext = new Context(contextId, this.agentId);
@@ -146,6 +142,7 @@ class ContextAwareRequestHandler extends DefaultRequestHandler {
     };
     
     // Call parent method with context-updated message
+    // @ts-ignore - Accessing private method from parent class
     return super._createRequestContext(messageWithContext, taskId, isStream);
   }
 }
@@ -184,13 +181,13 @@ const publicAgentCard: AgentCard = {
 
 // This will be the authenticated extended agent card
 // It includes the additional 'extendedSkill'
-const extendedAgentCard: AgentCard = {
-  ...publicAgentCard,
-  name: `${AGENT_CONFIG.name} - Extended Edition`,
-  description: `The full-featured ${AGENT_CONFIG.name.toLowerCase()} for authenticated users.`,
-  version: '1.0.1',
-  skills: [helloSkill, extendedSkill],
-};
+// const extendedAgentCard: AgentCard = {
+//   ...publicAgentCard,
+//   name: `${AGENT_CONFIG.name} - Extended Edition`,
+//   description: `The full-featured ${AGENT_CONFIG.name.toLowerCase()} for authenticated users.`,
+//   version: '1.0.1',
+//   skills: [helloSkill, extendedSkill],
+// };
 
 // 3. Server setup with agent-specific routing
 const agentExecutor = new TimestepAIAgentExecutor();

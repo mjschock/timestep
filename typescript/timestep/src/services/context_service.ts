@@ -1,8 +1,8 @@
 import { Task } from '@a2a-js/sdk';
 import { AgentInputItem } from '@openai/agents';
 import { RunResult } from '@openai/agents-core';
-import { Context } from '../domain/context.js';
-import { ContextRepository } from './backing/context_repository.js';
+import { Context } from '../domain/context.ts';
+import { ContextRepository } from './backing/context_repository.ts';
 
 /**
  * Service for managing context operations.

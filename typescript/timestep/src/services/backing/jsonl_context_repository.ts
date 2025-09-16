@@ -1,8 +1,8 @@
-import { ContextRepository } from './context_repository.js';
-import { Context } from '../../domain/context.js';
+import { ContextRepository } from './context_repository.ts';
+import { Context } from '../../domain/context.ts';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { getTimestepPaths } from '../../utils.js';
+import { getTimestepPaths } from '../../utils.ts';
 
 // Get timestep configuration paths
 const timestepPaths = getTimestepPaths();

@@ -43,7 +43,7 @@ export interface ListMcpServersResponse {
   data: McpServer[];
 }
 
-import { getTimestepPaths } from "../../utils.js";
+import { getTimestepPaths } from "../../utils.ts";
 import * as fs from 'node:fs';
 
 /**

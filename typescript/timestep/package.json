@@ -1,6 +1,6 @@
 {
 	"name": "@timestep-ai/timestep",
-	"version": "2025.09.151542",
+	"version": "2025.09.151911",
 	"description": "A CLI tool built with Ink and React",
 	"keywords": [
 		"cli",
@@ -19,8 +19,13 @@
 		"url": "https://github.com/yourusername/timestep/issues"
 	},
 	"license": "MIT",
+	"main": "dist/index.js",
 	"bin": "dist/cli.js",
 	"type": "module",
+	"exports": {
+		".": "./dist/index.js",
+		"./server": "./dist/server.js"
+	},
 	"engines": {
 		"node": ">=16"
 	},

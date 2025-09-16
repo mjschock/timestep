@@ -8,8 +8,8 @@
  * - listContexts() - List all contexts from contexts.jsonl
  */
 
-import { getTimestepPaths } from "../utils.js";
-import { Context } from "../domain/context.js";
+import { getTimestepPaths } from "../utils.ts";
+import { Context } from "../domain/context.ts";
 import * as fs from 'node:fs';
 
 /**

@@ -5,12 +5,12 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import { fileURLToPath } from "node:url";
-import { spawn } from "node:child_process";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import { CallToolRequestSchema, CallToolResultSchema } from "@modelcontextprotocol/sdk/types.js";
+// import { fileURLToPath } from "node:url";
+// import { spawn } from "node:child_process";
+// import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+// import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+// import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+// import { CallToolRequestSchema, CallToolResultSchema } from "@modelcontextprotocol/sdk/types.js";
 
 import {
   // Specific Params/Payload types used by the CLI
@@ -20,7 +20,7 @@ import {
   Message,
   Task, // Added for direct Task events
   // Other types needed for message/part handling
-  TaskState,
+  // TaskState,
   FilePart,
   DataPart,
   // Type for the agent card
@@ -298,7 +298,7 @@ async function printAgentEvent(
       part.kind === "data" && 
       (part as DataPart).data && 
       typeof (part as DataPart).data === "object" &&
-      (part as DataPart).data.toolCall
+      (part as DataPart).data['toolCall']
     );
     
     if (isToolCallArtifact) {
@@ -373,7 +373,7 @@ async function printToolCallArtifact(artifact: any) {
   let toolCallData: any = null;
   
   // Extract tool call information first
-  artifact.parts.forEach((part: Part, index: number) => {
+  artifact.parts.forEach((part: Part, _index: number) => {
     if (part.kind === "data") {
       const dataPart = part as DataPart;
       const data = dataPart.data as any;
@@ -418,7 +418,7 @@ async function printToolCallArtifact(artifact: any) {
   pendingToolCalls = [];
   isWaitingForApproval = true;
   
-  artifact.parts.forEach((part: Part, index: number) => {
+  artifact.parts.forEach((part: Part, _index: number) => {
     if (part.kind === "data") {
       const dataPart = part as DataPart;
       const data = dataPart.data as any;
@@ -466,7 +466,7 @@ async function printToolCallArtifact(artifact: any) {
 }
 
 // --- Tool Call Parsing from Status Message ---
-async function handleToolCallFromStatusMessage(messageText: string, taskId: string, contextId: string): Promise<void> {
+async function handleToolCallFromStatusMessage(messageText: string, _taskId: string, _contextId: string): Promise<void> {
   // Parse tool call information from the status message
   // Format: "Human approval required for tool execution: get_weather({\"city\":\"Oakland\"})"
   const toolCallMatch = messageText.match(/Human approval required for tool execution: (.+)/);

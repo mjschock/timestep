@@ -1,5 +1,6 @@
 import { homedir } from 'node:os';
 import { join } from 'node:path';
+import * as fs from 'node:fs';
 
 function posixify(appName: string): string {
   return appName.toLowerCase().replace(/\s+/g, '-');
@@ -58,10 +59,43 @@ export function getTimestepPaths() {
   };
 }
 
+/**
+ * App configuration interface
+ */
+export interface AppConfig {
+  a2aServerPort?: number;
+  cliPort?: number;
+  mcpServerPort?: number;
+}
+
+/**
+ * Load app configuration from app.json with embedded defaults
+ */
+export function loadAppConfig(): AppConfig {
+  const timestepPaths = getTimestepPaths();
+  const appConfigPath = timestepPaths.appConfig;
+
+  // Embedded defaults - no file dependency needed for library usage
+  const defaults: AppConfig = {
+    a2aServerPort: 9999,
+    cliPort: 3000,
+    mcpServerPort: 8000
+  };
+
+  // Try to load user config and merge with defaults
+  try {
+    const userConfigContent = fs.readFileSync(appConfigPath, 'utf8');
+    const userConfig = JSON.parse(userConfigContent);
+    return { ...defaults, ...userConfig };
+  } catch (error) {
+    // Return defaults if user config doesn't exist
+    return defaults;
+  }
+}
+
 // MCP Server utilities
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import * as fs from 'node:fs';
 
 /**
  * Loads and parses MCP servers configuration from mcp_servers.jsonl
