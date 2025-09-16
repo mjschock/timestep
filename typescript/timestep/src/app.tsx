@@ -124,17 +124,17 @@ export default function App({name = 'Stranger', command}: Props) {
 
 	const startServer = () => {
 		try {
-			// Check if Deno is available
-			const denoCheck = spawn('deno', ['--version'], { stdio: 'pipe' });
-			
-			denoCheck.on('error', () => {
-				setError('Deno is not installed. Please install Deno from https://deno.land/');
+			// Check if Node.js is available
+			const nodeCheck = spawn('node', ['--version'], { stdio: 'pipe' });
+
+			nodeCheck.on('error', () => {
+				setError('Node.js is not installed. Please install Node.js from https://nodejs.org/');
 			});
-			
-			denoCheck.on('close', (code) => {
+
+			nodeCheck.on('close', (code) => {
 				if (code === 0) {
-					// Start the server from src/server.ts
-					const server = spawn('deno', ['run', '--allow-net', '--allow-read', '--allow-write', '--allow-env', '--allow-sys', 'src/server.ts'], {
+					// Start the server from compiled dist/server.js
+					const server = spawn('node', ['dist/server.js'], {
 						stdio: 'inherit',
 						detached: true
 					});
@@ -142,7 +142,7 @@ export default function App({name = 'Stranger', command}: Props) {
 					server.unref(); // Allow the parent process to exit
 					setServerStarted(true);
 				} else {
-					setError('Deno is not installed. Please install Deno from https://deno.land/');
+					setError('Node.js is not installed. Please install Node.js from https://nodejs.org/');
 				}
 			});
 		} catch (err) {
@@ -381,7 +381,7 @@ export default function App({name = 'Stranger', command}: Props) {
 		return (
 			<Box flexDirection="column">
 				<Text color="green">🚀 Starting Timestep Agents Server...</Text>
-				<Text>Checking for Deno...</Text>
+				<Text>Checking for Node.js...</Text>
 			</Box>
 		);
 	}

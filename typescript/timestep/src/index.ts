@@ -1,10 +1,10 @@
 // Library exports for npm module usage
-export { getTimestepPaths } from './utils';
-export { listModels } from './api/modelsApi.ts';
-export { listContexts } from './api/contextsApi.ts';
-export { listApiKeys } from './api/settings/apiKeysApi.ts';
-export { listMcpServers } from './api/settings/mcpServersApi.ts';
-export { listTraces } from './api/tracesApi.ts';
-export { listTools } from './api/toolsApi.ts';
-export { serverMain } from './api/a2a_server.ts';
-export { StatefulMCPServer } from './api/mcp_server.ts';
+export { getTimestepPaths } from './utils.js';
+export { listModels } from './api/modelsApi.js';
+export { listContexts } from './api/contextsApi.js';
+export { listApiKeys } from './api/settings/apiKeysApi.js';
+export { listMcpServers } from './api/settings/mcpServersApi.js';
+export { listTraces } from './api/tracesApi.js';
+export { listTools } from './api/toolsApi.js';
+export { serverMain } from './api/a2a_server.js';
+export { StatefulMCPServer } from './api/mcp_server.js';

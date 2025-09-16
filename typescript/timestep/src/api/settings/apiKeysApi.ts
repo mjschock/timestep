@@ -37,7 +37,7 @@ export interface ListApiKeysResponse {
   data: ApiKey[];
 }
 
-import { getTimestepPaths } from "../../utils.ts";
+import { getTimestepPaths } from "../../utils.js";
 import * as fs from 'node:fs';
 
 /**

@@ -29,7 +29,7 @@ import {
 } from "@a2a-js/sdk";
 
 import { A2AClient } from "@a2a-js/sdk/client";
-import { getTimestepPaths } from "../utils.ts";
+import { getTimestepPaths } from "../utils.js";
 
 // --- Types ---
 interface ToolCall {

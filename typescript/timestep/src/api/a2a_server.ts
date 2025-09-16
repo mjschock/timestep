@@ -3,22 +3,14 @@ import express from "express";
 import type { AgentCard, AgentSkill } from "@a2a-js/sdk";
 import { Task } from "@a2a-js/sdk";
 import {
-  AgentExecutor,
-  DefaultRequestHandler,
-  InMemoryTaskStore,
   TaskStore,
 } from "@a2a-js/sdk/server";
 import { A2AExpressApp } from "@a2a-js/sdk/server/express";
-import { TimestepAIAgentExecutor } from "../core/agent_executor.ts";
-import { ContextService } from "../services/context_service.ts";
-import { JsonlContextRepository } from "../services/backing/jsonl_context_repository.ts";
-import { Context } from "../domain/context.ts";
+import { TimestepAIAgentExecutor } from "../core/agent_executor.js";
+import { ContextAwareRequestHandler } from "./context_aware_request_handler.js";
 import * as fs from 'node:fs';
-import * as path from 'node:path';
-import * as crypto from 'node:crypto';
-import { fileURLToPath } from 'node:url';
 import process from 'node:process';
-import { getTimestepPaths } from "../utils.ts";
+import { getTimestepPaths } from "../utils.js";
 
 // Get timestep configuration paths
 const timestepPaths = getTimestepPaths();
@@ -88,64 +80,7 @@ class LoggingTaskStore implements TaskStore {
   }
 }
 
-// Context-aware request handler that ensures contexts exist before delegating
-class ContextAwareRequestHandler extends DefaultRequestHandler {
-  private contextService: ContextService;
-  private agentId: string;
-
-  constructor(
-    agentId: string,
-    agentCard: AgentCard,
-    taskStore: TaskStore,
-    agentExecutor: AgentExecutor
-  ) {
-    super(agentCard, taskStore, agentExecutor);
-    this.agentId = agentId;
-    
-    // Initialize context service with same configuration as agent executor
-    const repository = new JsonlContextRepository();
-    this.contextService = new ContextService(repository);
-  }
-
-  // Override _createRequestContext to ensure context creation
-  // @ts-ignore - Accessing private method
-  async _createRequestContext(incomingMessage: any, taskId: string, isStream: boolean): Promise<any> {
-    // Generate contextId if not present (same logic as parent class)
-    let task: any | undefined;
-    if (incomingMessage.taskId) {
-      task = await (this as any).taskStore.load(incomingMessage.taskId);
-    }
-    
-    const contextId = incomingMessage.contextId || task?.contextId || crypto.randomUUID();
-    
-    // Ensure our Context domain object exists before calling parent method
-    console.log(`🔍 Ensuring context ${contextId} exists for agent ${this.agentId}`);
-    try {
-      const existingContext = await (this.contextService as any).repository.load(contextId);
-      if (!existingContext) {
-        console.log(`🔍 Creating new context ${contextId} for agent ${this.agentId}`);
-        const newContext = new Context(contextId, this.agentId);
-        await this.contextService.save(newContext);
-        console.log(`✅ Context ${contextId} created successfully for agent ${this.agentId}`);
-      } else {
-        console.log(`🔍 Context ${contextId} already exists with agent ${existingContext.agentId}`);
-      }
-    } catch (error) {
-      console.error(`❌ Error ensuring context ${contextId} exists:`, error);
-      throw error;
-    }
-    
-    // Set contextId on the message to ensure it's used
-    const messageWithContext = {
-      ...incomingMessage,
-      contextId: contextId
-    };
-    
-    // Call parent method with context-updated message
-    // @ts-ignore - Accessing private method from parent class
-    return super._createRequestContext(messageWithContext, taskId, isStream);
-  }
-}
+// Context-aware request handler is now imported from ./context_aware_request_handler
 
 // 1. Define agent skills
 const helloSkill: AgentSkill = {
@@ -156,28 +91,8 @@ const helloSkill: AgentSkill = {
   examples: ['hi', 'hello world'],
 };
 
-const extendedSkill: AgentSkill = {
-  id: 'super_hello_world',
-  name: 'Returns a SUPER Hello World',
-  description: 'A more enthusiastic greeting, only for authenticated users.',
-  tags: ['hello world', 'super', 'extended'],
-  examples: ['super hi', 'give me a super hello'],
-};
 
 // 2. Define agent cards
-const publicAgentCard: AgentCard = {
-  name: AGENT_CONFIG.name,
-  description: `A helpful AI agent powered by ${AGENT_CONFIG.name}`,
-  url: `http://localhost:${APP_CONFIG.a2aServerPort}/`,
-  version: '1.0.0',
-  protocolVersion: '0.3.0',
-  preferredTransport: 'JSONRPC',
-  defaultInputModes: ['text'],
-  defaultOutputModes: ['text'],
-  capabilities: { streaming: true },
-  skills: [helloSkill],
-  supportsAuthenticatedExtendedCard: true,
-};
 
 // This will be the authenticated extended agent card
 // It includes the additional 'extendedSkill'
@@ -214,15 +129,6 @@ for (const [agentId, agentConfig] of Object.entries(AGENTS_BY_ID)) {
     supportsAuthenticatedExtendedCard: true,
   };
 
-  // Create extended agent card for this agent
-  const extendedAgentCard: AgentCard = {
-    ...publicAgentCard,
-    name: `${agentConfig.name} - Extended Edition`,
-    description: `The full-featured ${agentConfig.name.toLowerCase()} for authenticated users.`,
-    version: '1.0.1',
-    skills: [helloSkill, extendedSkill],
-  };
-
   // Create context-aware request handlers for this agent
   const requestHandler = new ContextAwareRequestHandler(
     agentId,
@@ -231,12 +137,6 @@ for (const [agentId, agentConfig] of Object.entries(AGENTS_BY_ID)) {
     agentExecutor
   );
 
-  const extendedRequestHandler = new ContextAwareRequestHandler(
-    agentId,
-    extendedAgentCard,
-    sharedTaskStore,
-    agentExecutor
-  );
 
   // Create A2A Express app for this agent
   const agentAppBuilder = new A2AExpressApp(requestHandler);

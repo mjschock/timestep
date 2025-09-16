@@ -28,14 +28,14 @@ let _tracingApiKey: string | undefined = undefined;
 // Note: TypeScript SDK has different API structure than Python
 // Note: defineInputGuardrail not available, creating manual input guardrail
 import { InputGuardrailTripwireTriggered } from "@openai/agents";
-import { OllamaModel } from "../services/backing/models.ts";
+import { OllamaModel } from "../services/backing/models.js";
 import { Ollama } from "ollama";
-import { TimestepAIModelProvider } from "../services/model_provider.ts";
-import { AgentFactory } from "../services/agent_factory.ts";
-import { ContextService } from "../services/context_service.ts";
-import { ContextRepository } from "../services/backing/context_repository.ts";
-import { JsonlContextRepository } from "../services/backing/jsonl_context_repository.ts";
-import { getTimestepPaths } from "../utils.ts";
+import { TimestepAIModelProvider } from "../services/model_provider.js";
+import { AgentFactory } from "../services/agent_factory.js";
+import { ContextService } from "../services/context_service.js";
+import { ContextRepository } from "../services/backing/context_repository.js";
+import { JsonlContextRepository } from "../services/backing/jsonl_context_repository.js";
+import { getTimestepPaths } from "../utils.js";
 
 // Get timestep configuration paths
 const timestepPaths = getTimestepPaths();

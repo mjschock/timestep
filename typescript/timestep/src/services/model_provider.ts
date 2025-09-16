@@ -1,9 +1,9 @@
 import { Ollama } from "ollama";
-import { OllamaModel } from "./backing/models.ts";
+import { OllamaModel } from "./backing/models.js";
 import { Model, ModelProvider, OpenAIChatCompletionsModel, OpenAIResponsesModel } from "@openai/agents";
 import * as fs from "node:fs";
 import OpenAI from "openai";
-import { getTimestepPaths } from "../utils.ts";
+import { getTimestepPaths } from "../utils.js";
 
 // Load model providers configuration
 const timestepPaths = getTimestepPaths();
@@ -91,9 +91,8 @@ export class TimestepAIModelProvider implements ModelProvider {
             }
             const openaiClient = new OpenAI({ apiKey: openaiConfig.api_key, baseURL: openaiConfig.base_url }); // TODO: Use AsyncOpenAI?
 
-            // Narrow via unknown to avoid duplicative OpenAI type private field conflict
-            // @ts-expect-error OpenAI client types from SDK differ from agents' expected type shape
-            return new OpenAIResponsesModel(openaiClient as unknown as OpenAI, modelId);
+            // Narrow via any to avoid duplicative OpenAI type private field conflict
+            return new OpenAIResponsesModel(openaiClient as any, modelId);
         } else {
             const config = this.modelProviders[modelProvider];
             if (!config) {
@@ -104,9 +103,8 @@ export class TimestepAIModelProvider implements ModelProvider {
             }
             const client = new OpenAI({ apiKey: config.api_key, baseURL: config.base_url }); // TODO: Use AsyncOpenAI?
 
-            // Narrow via unknown to avoid duplicative OpenAI type private field conflict
-            // @ts-expect-error OpenAI client types from SDK differ from agents' expected type shape
-            return new OpenAIChatCompletionsModel(client as unknown as OpenAI, modelId);
+            // Narrow via any to avoid duplicative OpenAI type private field conflict
+            return new OpenAIChatCompletionsModel(client as any, modelId);
         }
     }
 }

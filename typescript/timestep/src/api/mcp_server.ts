@@ -109,7 +109,7 @@ async function markdownToPdf({
 
     // Execute pandoc
     console.log(`Running: ${cmd.join(' ')}`);
-    const { stdout, stderr } = await execAsync(cmd.join(' '));
+    await execAsync(cmd.join(' '));
 
     // Clean up temp file if created
     if (tempFile) {
@@ -417,7 +417,7 @@ class StatefulMCPServer {
       const { name, arguments: args } = request.params;
 
       if (name === "get-alerts") {
-        const stateArg = (args?.state as string | undefined) || "";
+        const stateArg = (args?.["state"] as string | undefined) || "";
         const state = stateArg.toUpperCase();
         if (!/^[A-Z]{2}$/.test(state)) {
           return {
@@ -453,8 +453,8 @@ class StatefulMCPServer {
       }
 
       if (name === "get-forecast") {
-        const latitude = Number(args?.latitude);
-        const longitude = Number(args?.longitude);
+        const latitude = Number(args?.["latitude"]);
+        const longitude = Number(args?.["longitude"]);
 
         if (
           Number.isNaN(latitude) ||
@@ -512,12 +512,12 @@ class StatefulMCPServer {
       }
 
       if (name === "markdownToPdf") {
-        const markdownContent = args?.markdownContent as string | undefined;
-        const markdownFile = args?.markdownFile as string | undefined;
-        const outputPath = (args?.outputPath as string | undefined) || 'output.pdf';
-        const template = args?.template as string | undefined;
-        const variables = args?.variables as Record<string, string> | undefined;
-        const additionalArgs = (args?.additionalArgs as string[] | undefined) || [];
+        const markdownContent = args?.["markdownContent"] as string | undefined;
+        const markdownFile = args?.["markdownFile"] as string | undefined;
+        const outputPath = (args?.["outputPath"] as string | undefined) || 'output.pdf';
+        const template = args?.["template"] as string | undefined;
+        const variables = args?.["variables"] as Record<string, string> | undefined;
+        const additionalArgs = (args?.["additionalArgs"] as string[] | undefined) || [];
 
         if (!markdownContent && !markdownFile) {
           return {
@@ -560,7 +560,7 @@ class StatefulMCPServer {
       }
 
       if (name === "think") {
-        const thought = args?.thought as string | undefined;
+        const thought = args?.["thought"] as string | undefined;
         
         if (!thought || typeof thought !== 'string') {
           return {
@@ -653,8 +653,8 @@ class StatefulMCPServer {
       const { name, arguments: args } = request.params;
 
       if (name === "greet_user") {
-        const userName = args?.name as string;
-        const style = (args?.style as string) || "friendly";
+        const userName = args?.["name"] as string;
+        const style = (args?.["style"] as string) || "friendly";
 
         if (!userName) {
           throw new Error("Name parameter is required");
@@ -666,7 +666,7 @@ class StatefulMCPServer {
           casual: "Please write a casual, relaxed greeting",
         };
 
-        const styleText = styles[style] || styles.friendly;
+        const styleText = styles[style] || styles["friendly"];
 
         return {
           messages: [

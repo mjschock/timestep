@@ -8,8 +8,9 @@ deno-server:
 
 timestep-cli-server:
 	@echo "🚀 Starting Timestep cli server..."
-	cd typescript/timestep && npx tsx src/cli.tsx stop
-	cd typescript/timestep && npx tsx src/cli.tsx server
+	cd typescript/timestep && npm run build
+	cd typescript/timestep && node dist/cli.js stop
+	cd typescript/timestep && node dist/cli.js server
 
 timestep-cli-chat:
 	@echo "🚀 Starting Timestep cli chat..."

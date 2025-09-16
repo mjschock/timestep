@@ -2,14 +2,15 @@
 	"extends": "@sindresorhus/tsconfig",
 	"compilerOptions": {
 		"outDir": "dist",
-		"module": "ESNext",
+		"module": "Node16",
 		"target": "ES2022",
-		"moduleResolution": "bundler",
+		"moduleResolution": "node16",
 		"allowSyntheticDefaultImports": true,
 		"skipLibCheck": true,
 		"strict": false,
 		"noImplicitAny": false,
-		"allowImportingTsExtensions": false
+		"allowImportingTsExtensions": false,
+		"noEmit": false
 	},
 	"include": ["src"],
 	"exclude": []

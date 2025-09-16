@@ -9,13 +9,13 @@
 
 import express from "express";
 import { readFile } from "node:fs/promises";
-import { getTimestepPaths, loadAppConfig } from "./utils.ts";
-import { listModels } from "./api/modelsApi.ts";
-import { listContexts } from "./api/contextsApi.ts";
-import { listApiKeys } from "./api/settings/apiKeysApi.ts";
-import { listMcpServers } from "./api/settings/mcpServersApi.ts";
-import { listTraces } from "./api/tracesApi.ts";
-import { listTools } from "./api/toolsApi.ts";
+import { getTimestepPaths, loadAppConfig } from "./utils.js";
+import { listModels } from "./api/modelsApi.js";
+import { listContexts } from "./api/contextsApi.js";
+import { listApiKeys } from "./api/settings/apiKeysApi.js";
+import { listMcpServers } from "./api/settings/mcpServersApi.js";
+import { listTraces } from "./api/tracesApi.js";
+import { listTools } from "./api/toolsApi.js";
 
 // Get timestep configuration paths and app config
 const timestepPaths = getTimestepPaths();
@@ -29,12 +29,14 @@ app.use((_req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
 
-// Handle OPTIONS requests
-app.options("*", (_req, res) => {
-  res.sendStatus(200);
+  // Handle OPTIONS requests in middleware
+  if (_req.method === 'OPTIONS') {
+    res.sendStatus(200);
+    return;
+  }
+
+  next();
 });
 
 // Agents endpoint
@@ -136,8 +138,8 @@ app.listen(appConfig.cliPort, () => {
 });
 
 // Import and start the A2A server and MCP server
-const { serverMain } = await import("./api/a2a_server.ts");
-const { StatefulMCPServer } = await import("./api/mcp_server.ts");
+const { serverMain } = await import("./api/a2a_server.js");
+const { StatefulMCPServer } = await import("./api/mcp_server.js");
 
 console.log("🚀 Starting A2A Agent Server with Express");
 console.log("📦 Using Express server from a2a_server.ts");
