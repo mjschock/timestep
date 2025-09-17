@@ -11,18 +11,63 @@ import express from "express";
 import { loadAppConfig } from "./utils.js";
 import { listModels } from "./api/modelsApi.js";
 import { listContexts } from "./api/contextsApi.js";
-import { listAgents } from "./api/agentsApi.js";
+import { handleListAgents, handleAgentRequest } from "./api/agentsApi.js";
 import { listApiKeys } from "./api/settings/apiKeysApi.js";
 import { listMcpServers } from "./api/settings/mcpServersApi.js";
 import { listModelProviders } from "./api/settings/modelProvidersApi.js";
 import { listTraces } from "./api/tracesApi.js";
 import { listTools } from "./api/toolsApi.js";
+import { TimestepAIAgentExecutor } from "./core/agent_executor.js";
+import { Task } from "@a2a-js/sdk";
+import { TaskStore } from "@a2a-js/sdk/server";
 
 // Get app config
 const appConfig = loadAppConfig();
 
-// Create Express app for CLI endpoints
+// Custom task store with detailed logging
+class LoggingTaskStore implements TaskStore {
+  private store: Map<string, Task> = new Map();
+
+  load(taskId: string): Promise<Task | undefined> {
+    console.log(`📋 TaskStore.load(${taskId})`);
+    const entry = this.store.get(taskId);
+    if (entry) {
+      console.log(`📋 TaskStore.load(${taskId}) -> FOUND:`, {
+        id: entry.id,
+        contextId: entry.contextId,
+        kind: entry.kind,
+        status: entry.status
+      });
+      // Return copies to prevent external mutation
+      return Promise.resolve({...entry});
+    } else {
+      console.log(`📋 TaskStore.load(${taskId}) -> NOT FOUND`);
+      console.log(`📋 TaskStore current keys:`, Array.from(this.store.keys()));
+      return Promise.resolve(undefined);
+    }
+  }
+
+  save(task: Task): Promise<void> {
+    console.log(`📋 TaskStore.save(${task.id})`, {
+      id: task.id,
+      contextId: task.contextId,
+      kind: task.kind,
+      status: task.status
+    });
+    // Store copies to prevent internal mutation if caller reuses objects
+    this.store.set(task.id, {...task});
+    console.log(`📋 TaskStore.save(${task.id}) -> SAVED`);
+    console.log(`📋 TaskStore current keys after save:`, Array.from(this.store.keys()));
+    return Promise.resolve();
+  }
+}
+
+// Create Express app for CLI endpoints and A2A server
 const app = express();
+
+// A2A server components
+const agentExecutor = new TimestepAIAgentExecutor();
+const sharedTaskStore = new LoggingTaskStore();
 
 // Add CORS middleware
 app.use((_req, res, next) => {
@@ -37,18 +82,6 @@ app.use((_req, res, next) => {
   }
 
   next();
-});
-
-// Agents endpoint
-app.get("/agents", async (_req, res) => {
-  try {
-    const response = await listAgents();
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({
-      error: error instanceof Error ? error.message : 'Failed to load agents'
-    });
-  }
 });
 
 // Chats endpoint
@@ -135,20 +168,38 @@ app.get("/settings/model-providers", async (_req, res) => {
   }
 });
 
-// Start the CLI endpoints server
-app.listen(appConfig.cliPort, () => {
-  console.log(`🌐 CLI endpoints server running on http://localhost:${appConfig.cliPort}`);
+// A2A Server Routes
+// Add debugging middleware
+app.use((req, _res, next) => {
+  console.log(`🔍 Request received: ${req.method} ${req.path}`);
+  next();
 });
 
-// Import and start the A2A server and MCP server
-const { serverMain } = await import("./api/a2a_server.js");
+// Test route first
+app.get('/test-agent', (_req, res) => {
+  console.log(`🔍 Test route called`);
+  res.json({ message: 'Test route working' });
+});
+
+// Dynamic agent route handler - use middleware to catch all paths under /agents/:agentId
+app.use('/agents/:agentId', async (req, res, next) => {
+  console.log(`🔍 A2A route handler called for: ${req.method} ${req.path} (originalUrl: ${req.originalUrl})`);
+  await handleAgentRequest(req, res, next, sharedTaskStore, agentExecutor, appConfig.appPort!);
+});
+
+// Agents list endpoint - must come after dynamic routes to avoid conflicts
+app.get("/agents", handleListAgents);
+
+// Start the unified server
+app.listen(appConfig.appPort, () => {
+  console.log(`🌐 Unified server running on http://localhost:${appConfig.appPort}`);
+  console.log(`📚 CLI endpoints available at http://localhost:${appConfig.appPort}/`);
+  console.log(`🤖 A2A agents available at http://localhost:${appConfig.appPort}/agents/{agentId}/`);
+  console.log(`📚 Dynamic agent routing enabled - agents loaded on-demand`);
+});
+
+// Import and start the MCP server
 const { StatefulMCPServer } = await import("./api/mcp_server.js");
-
-console.log("🚀 Starting A2A Agent Server with Express");
-console.log("📦 Using Express server from a2a_server.ts");
-
-// Start the A2A server - it will use its own port configuration
-serverMain();
 
 // Start the MCP server
 const mcpServer = new StatefulMCPServer(appConfig.mcpServerPort!);

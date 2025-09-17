@@ -10,5 +10,5 @@ export { listModelProviders, getModelProvider } from './api/settings/modelProvid
 export type { ModelProvider, ListModelProvidersResponse } from './api/settings/modelProvidersApi.js';
 export { listTraces } from './api/tracesApi.js';
 export { listTools } from './api/toolsApi.js';
-export { serverMain } from './api/a2a_server.js';
+// A2A server functionality is now integrated into server.ts
 export { StatefulMCPServer } from './api/mcp_server.js';

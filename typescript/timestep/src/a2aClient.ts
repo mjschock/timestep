@@ -29,7 +29,7 @@ import {
 } from "@a2a-js/sdk";
 
 import { A2AClient } from "@a2a-js/sdk/client";
-import { getTimestepPaths } from "../utils.js";
+import { getTimestepPaths, loadAppConfig } from "./utils.js";
 
 // --- Types ---
 interface ToolCall {
@@ -68,7 +68,8 @@ let currentContextId: string | undefined = undefined; // Initialize as undefined
 let pendingToolCalls: ToolCall[] = []; // Track pending tool calls awaiting approval
 let isWaitingForApproval = false; // Track if we're waiting for user approval
 let selectedAgentId: string | undefined = undefined; // Track selected agent ID
-let baseServerUrl = "http://localhost:9999"; // Base server URL without agent-specific path
+const appConfig = loadAppConfig();
+let baseServerUrl = `http://localhost:${appConfig.appPort}`; // Base server URL without agent-specific path
 let serverUrl: string; // Will be set after agent selection
 
 // Command line argument parsing
@@ -127,7 +128,7 @@ interface AgentInfo {
 async function loadAvailableAgents(): Promise<AgentInfo[]> {
   try {
     // Fetch agents from the /agents endpoint
-    const response = await fetch('http://localhost:3000/agents');
+    const response = await fetch(`http://localhost:${appConfig.appPort}/agents`);
     if (response.ok) {
       const agents = await response.json();
       console.log(`📋 Loaded ${agents.length} agents from /agents endpoint`);

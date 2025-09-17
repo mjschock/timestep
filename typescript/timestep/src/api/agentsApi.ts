@@ -9,6 +9,11 @@
 import { getTimestepPaths } from "../utils.js";
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import type { AgentCard, AgentSkill } from "@a2a-js/sdk";
+import { TaskStore } from "@a2a-js/sdk/server";
+import { AgentExecutor } from "@a2a-js/sdk/server";
+import { ContextAwareRequestHandler } from "./context_aware_request_handler.js";
+import { Request, Response, NextFunction } from "express";
 
 /**
  * Represents an agent configuration
@@ -200,4 +205,149 @@ export async function listAgents(): Promise<ListAgentsResponse> {
 export async function getAgent(agentId: string): Promise<Agent | null> {
   const response = await listAgents();
   return response.data.find(agent => agent.id === agentId) || null;
+}
+
+/**
+ * Check if an agent is available
+ *
+ * @param agentId - The ID of the agent to check
+ * @returns Promise resolving to true if agent exists, false otherwise
+ */
+export async function isAgentAvailable(agentId: string): Promise<boolean> {
+  const agent = await getAgent(agentId);
+  return agent !== null;
+}
+
+/**
+ * Create an agent card for a specific agent
+ *
+ * @param agentId - The ID of the agent
+ * @param serverPort - The server port for the agent URL
+ * @returns Promise resolving to the agent card
+ */
+export async function getAgentCard(agentId: string, serverPort: number): Promise<AgentCard> {
+  const agent = await getAgent(agentId);
+  if (!agent) {
+    throw new Error(`Agent with ID ${agentId} not found`);
+  }
+
+  // Define agent skills
+  const helloSkill: AgentSkill = {
+    id: 'hello_world',
+    name: 'Returns hello world',
+    description: 'just returns hello world',
+    tags: ['hello world'],
+    examples: ['hi', 'hello world'],
+  };
+
+  const publicAgentCard: AgentCard = {
+    name: agent.name,
+    description: `A helpful AI agent powered by ${agent.name}`,
+    url: `http://localhost:${serverPort}/agents/${agentId}/`,
+    version: '1.0.0',
+    protocolVersion: '0.3.0',
+    preferredTransport: 'JSONRPC',
+    defaultInputModes: ['text'],
+    defaultOutputModes: ['text'],
+    capabilities: { streaming: true },
+    skills: [helloSkill],
+    supportsAuthenticatedExtendedCard: true,
+  };
+
+  return publicAgentCard;
+}
+
+/**
+ * Create a context-aware request handler for a specific agent
+ *
+ * @param agentId - The ID of the agent
+ * @param taskStore - The shared task store
+ * @param agentExecutor - The agent executor
+ * @param serverPort - The server port for the agent URL
+ * @returns Promise resolving to the configured request handler
+ */
+export async function createAgentRequestHandler(
+  agentId: string,
+  taskStore: TaskStore,
+  agentExecutor: AgentExecutor,
+  serverPort: number
+): Promise<ContextAwareRequestHandler> {
+  const agent = await getAgent(agentId);
+  if (!agent) {
+    throw new Error(`Agent with ID ${agentId} not found`);
+  }
+
+  const agentCard = await getAgentCard(agentId, serverPort);
+
+  return new ContextAwareRequestHandler(
+    agentId,
+    agentCard,
+    taskStore,
+    agentExecutor
+  );
+}
+
+/**
+ * Express route handler for listing agents
+ */
+export async function handleListAgents(_req: Request, res: Response): Promise<void> {
+  try {
+    const response = await listAgents();
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({
+      error: error instanceof Error ? error.message : 'Failed to load agents'
+    });
+  }
+}
+
+/**
+ * Express route handler for dynamic agent requests
+ */
+export async function handleAgentRequest(
+  req: Request, 
+  res: Response, 
+  next: NextFunction,
+  taskStore: TaskStore,
+  agentExecutor: AgentExecutor,
+  serverPort: number
+): Promise<void> {
+  console.log(`🔍 Dynamic route handler called for agent: ${req.params['agentId']}, method: ${req.method}, path: ${req.path}`);
+  try {
+    const agentId = req.params['agentId'];
+    
+    // Check if agent exists
+    if (!(await isAgentAvailable(agentId))) {
+      console.log(`❌ Agent ${agentId} not found`);
+      res.status(404).json({ 
+        error: 'Agent not found',
+        agentId: agentId 
+      });
+      return;
+    }
+    
+    // Create request handler dynamically
+    const requestHandler = await createAgentRequestHandler(
+      agentId, 
+      taskStore, 
+      agentExecutor, 
+      serverPort
+    );
+    
+    // Create A2A Express app and delegate
+    const { A2AExpressApp } = await import("@a2a-js/sdk/server/express");
+    const agentAppBuilder = new A2AExpressApp(requestHandler);
+    const agentApp = (await import("express")).default();
+    agentAppBuilder.setupRoutes(agentApp);
+    
+    // Delegate to the agent-specific app
+    agentApp(req, res, next);
+    
+  } catch (error) {
+    console.error(`Error handling request for agent ${req.params['agentId']}:`, error);
+    res.status(500).json({ 
+      error: 'Internal server error',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
 }

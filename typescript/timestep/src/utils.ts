@@ -63,8 +63,7 @@ export function getTimestepPaths() {
  * App configuration interface
  */
 export interface AppConfig {
-  a2aServerPort?: number;
-  cliPort?: number;
+  appPort?: number;
   mcpServerPort?: number;
 }
 
@@ -77,8 +76,7 @@ export function loadAppConfig(): AppConfig {
 
   // Embedded defaults - no file dependency needed for library usage
   const defaults: AppConfig = {
-    a2aServerPort: 9999,
-    cliPort: 3000,
+    appPort: 3000,
     mcpServerPort: 8000
   };
 

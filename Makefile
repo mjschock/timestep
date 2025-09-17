@@ -56,7 +56,7 @@ run-a2a-inspector:
 
 test-built-in-weather:
 	@echo "📘 Running TypeScript A2A Client tests..."
-	cd typescript/timestep && npx tsx src/api/a2a_client.ts --agentId 00000000-0000-0000-0000-000000000000 --auto-approve --user-input "What's the weather in Oakland and San Francisco?"
+	cd typescript/timestep && npx tsx src/a2aClient.ts --agentId 00000000-0000-0000-0000-000000000000 --auto-approve --user-input "What's the weather in Oakland and San Francisco?"
 
 test-built-in-weather-cli:
 	@echo "📘 Running TypeScript A2A Client tests..."

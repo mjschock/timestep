@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Text, Box} from 'ink';
 import {spawn, ChildProcess} from 'child_process';
-import {getTimestepPaths} from './utils.js';
+import {getTimestepPaths, loadAppConfig} from './utils.js';
 
 type Props = {
 	name: string | undefined;
@@ -93,6 +93,7 @@ type ModelProvider = {
 };
 
 export default function App({name = 'Stranger', command, flags}: Props) {
+	const appConfig = loadAppConfig();
 	const [agents, setAgents] = useState<Agent[]>([]);
 	const [chats, setChats] = useState<Chat[]>([]);
 	const [models, setModels] = useState<Model[]>([]);
@@ -167,8 +168,8 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		try {
 			const timestepPaths = getTimestepPaths();
 
-			// Build arguments for the a2a_client
-			const args = ['src/api/a2a_client.ts'];
+			// Build arguments for the a2aClient
+			const args = ['src/a2aClient.ts'];
 
 			if (options.agentId) {
 				args.push('--agentId', options.agentId);
@@ -191,7 +192,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 				};
 			}
 
-			// Start the a2a_client process using tsx (TypeScript runner)
+			// Start the a2aClient process using tsx (TypeScript runner)
 			const childProcess = spawn('npx', ['tsx', ...args], {
 				stdio: 'inherit',
 				cwd: process.cwd()
@@ -262,7 +263,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setServerStopped(false);
 
 		try {
-			const ports = [3000, 8000, 9999];
+			const ports = [appConfig.appPort!, appConfig.mcpServerPort!];
 			let processesKilled = 0;
 
 			ports.forEach(port => {
@@ -343,7 +344,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setError(null);
 		
 		try {
-			const response = await fetch('http://localhost:3000/agents');
+			const response = await fetch(`http://localhost:${appConfig.appPort}/agents`);
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -361,7 +362,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setError(null);
 		
 		try {
-			const response = await fetch('http://localhost:3000/chats');
+			const response = await fetch(`http://localhost:${appConfig.appPort}/chats`);
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -379,7 +380,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setError(null);
 		
 		try {
-			const response = await fetch('http://localhost:3000/models');
+			const response = await fetch(`http://localhost:${appConfig.appPort}/models`);
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -397,7 +398,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setError(null);
 		
 		try {
-			const response = await fetch('http://localhost:3000/tools');
+			const response = await fetch(`http://localhost:${appConfig.appPort}/tools`);
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -415,7 +416,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setError(null);
 
 		try {
-			const response = await fetch('http://localhost:3000/traces');
+			const response = await fetch(`http://localhost:${appConfig.appPort}/traces`);
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -433,7 +434,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setError(null);
 
 		try {
-			const response = await fetch('http://localhost:3000/settings/api-keys');
+			const response = await fetch(`http://localhost:${appConfig.appPort}/settings/api-keys`);
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -451,7 +452,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setError(null);
 
 		try {
-			const response = await fetch('http://localhost:3000/settings/mcp-servers');
+			const response = await fetch(`http://localhost:${appConfig.appPort}/settings/mcp-servers`);
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -469,7 +470,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setError(null);
 
 		try {
-			const response = await fetch('http://localhost:3000/settings/model-providers');
+			const response = await fetch(`http://localhost:${appConfig.appPort}/settings/model-providers`);
 			if (!response.ok) {
 				throw new Error(`Server responded with ${response.status}`);
 			}
@@ -495,8 +496,8 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 			return (
 				<Box flexDirection="column">
 					<Text color="green">✅ Timestep Agents Server started!</Text>
-					<Text>CLI server is available at: http://localhost:3000</Text>
-					<Text>Agents endpoint: http://localhost:3000/agents</Text>
+					<Text>CLI server is available at: http://localhost:{appConfig.appPort}</Text>
+					<Text>Agents endpoint: http://localhost:{appConfig.appPort}/agents</Text>
 					<Text color="blue">Use 'timestep list-agents' to fetch agents</Text>
 				</Box>
 			);
@@ -515,7 +516,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 			return (
 				<Box flexDirection="column">
 					<Text color="blue">🛑 Stopping Timestep servers...</Text>
-					<Text>Checking ports 3000, 8000, and 9999...</Text>
+					<Text>Checking ports {appConfig.appPort} and {appConfig.mcpServerPort}...</Text>
 				</Box>
 			);
 		}
@@ -532,7 +533,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 			return (
 				<Box flexDirection="column">
 					<Text color="green">✅ Timestep servers stopped successfully!</Text>
-					<Text>Processes on ports 3000, 8000, and 9999 have been terminated.</Text>
+					<Text>Processes on ports {appConfig.appPort} and {appConfig.mcpServerPort} have been terminated.</Text>
 				</Box>
 			);
 		}
