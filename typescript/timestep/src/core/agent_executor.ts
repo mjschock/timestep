@@ -14,8 +14,7 @@ import {
     AgentInputItem,
 } from "@openai/agents";
 import { setTracingDisabled, withTrace, getOrCreateTrace, TraceOptions, Trace, RunContext, withNewSpanContext, setCurrentSpan, resetCurrentSpan, RunHookEvents, getCurrentSpan } from '@openai/agents-core';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+// fs and path imports removed - no longer needed for app config loading
 import * as crypto from 'node:crypto';
 import { AgentConfiguration, RunConfig } from '@openai/agents-core';
 import { getGlobalTraceProvider } from '@openai/agents';
@@ -36,17 +35,8 @@ import { AgentFactory } from "../services/agent_factory.js";
 import { ContextService } from "../services/context_service.js";
 import { ContextRepository } from "../services/backing/context_repository.js";
 import { JsonlContextRepository } from "../services/backing/jsonl_context_repository.js";
-import { getTimestepPaths } from "../utils.js";
 
-// Get timestep configuration paths
-const timestepPaths = getTimestepPaths();
-
-// Load app configuration
-const appConfigPath = timestepPaths.appConfig;
-if (!fs.existsSync(appConfigPath)) {
-    throw new Error(`App configuration file not found. Expected at: ${appConfigPath}`);
-}
-const APP_CONFIG = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
+// App configuration is now loaded dynamically when needed via loadAppConfig() function
 
 // Function to load model providers using the API
 async function loadModelProviders(): Promise<{ [key: string]: any }> {
