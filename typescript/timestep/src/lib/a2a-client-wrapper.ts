@@ -13,6 +13,7 @@ export class A2AClientWrapper {
   async startChat(options: {
     agentId?: string;
     autoApprove?: boolean;
+    userInput?: string;
   } = {}): Promise<{ success: boolean; error?: string }> {
     try {
       const timestepPaths = getTimestepPaths();
@@ -26,6 +27,10 @@ export class A2AClientWrapper {
 
       if (options.autoApprove) {
         args.push('--auto-approve');
+      }
+
+      if (options.userInput) {
+        args.push('--user-input', options.userInput);
       }
 
       // Check if agents config exists

@@ -6,6 +6,11 @@ import {A2AClientWrapper} from './lib/a2a-client-wrapper.js';
 type Props = {
 	name: string | undefined;
 	command?: string;
+	flags?: {
+		agentId?: string;
+		autoApprove?: boolean;
+		userInput?: string;
+	};
 };
 
 type Agent = {
@@ -87,7 +92,7 @@ type ModelProvider = {
 	models_url: string;
 };
 
-export default function App({name = 'Stranger', command}: Props) {
+export default function App({name = 'Stranger', command, flags}: Props) {
 	const [agents, setAgents] = useState<Agent[]>([]);
 	const [chats, setChats] = useState<Chat[]>([]);
 	const [models, setModels] = useState<Model[]>([]);
@@ -224,7 +229,9 @@ export default function App({name = 'Stranger', command}: Props) {
 
 			// Start the chat with the first available agent or let user choose
 			const result = await client.startChat({
-				autoApprove: false // Always ask for approval for interactive use
+				agentId: flags?.agentId,
+				autoApprove: flags?.autoApprove || false,
+				userInput: flags?.userInput
 			});
 
 			if (result.success) {

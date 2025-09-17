@@ -21,7 +21,12 @@ const cli = meow(
 	  list-settings-api-keys   List all configured API keys
 	  list-settings-mcp-servers List all configured MCP servers
 	  list-settings-model-providers List all configured model providers
-	  --name       Your name (for greeting)
+
+	Options
+	  --name                   Your name (for greeting)
+	  --agentId                Agent ID to use for chat command
+	  --auto-approve           Auto-approve tool calls for chat command
+	  --user-input             User input to send automatically for chat command
 
 	Examples
 	  $ timestep --name=Jane
@@ -35,6 +40,9 @@ const cli = meow(
 
 	  $ timestep chat
 	  Start interactive chat with an agent
+
+	  $ timestep chat --agentId 00000000-0000-0000-0000-000000000000 --auto-approve --user-input "What's the weather?"
+	  Start chat with specific agent, auto-approve tools, and send message
 
 	  $ timestep list-agents
 	  List all agents from the server
@@ -66,10 +74,21 @@ const cli = meow(
 			name: {
 				type: 'string',
 			},
+			agentId: {
+				type: 'string',
+			},
+			autoApprove: {
+				type: 'boolean',
+				alias: 'auto-approve',
+			},
+			userInput: {
+				type: 'string',
+				alias: 'user-input',
+			},
 		},
 	},
 );
 
 const command = cli.input[0];
 
-render(<App name={cli.flags.name} command={command} />);
+render(<App name={cli.flags.name} command={command} flags={cli.flags} />);
