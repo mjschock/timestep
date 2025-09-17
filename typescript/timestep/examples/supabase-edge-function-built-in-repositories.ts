@@ -1,9 +1,9 @@
 /**
- * Alternative Supabase Edge Function using individual @timestep-ai/timestep functions
+ * Supabase Edge Function with Built-in Repositories
  *
- * This demonstrates how to manually build endpoints using individual library functions
- * instead of using the pre-built Express app. Use this approach when you need more
- * control over request handling or want to integrate with Supabase-specific features.
+ * This demonstrates how to build a complete Timestep server using the built-in JSONL repositories.
+ * This is the simplest approach - just import the library functions and use them directly.
+ * Data will be stored in JSONL files in the default Timestep configuration directory.
  *
  * Place this file in your Supabase project at: supabase/functions/timestep-server/index.ts
  *
@@ -11,6 +11,8 @@
  * 1. deno add npm:@timestep-ai/timestep
  * 2. Copy this code to supabase/functions/timestep-server/index.ts
  * 3. Deploy with: supabase functions deploy timestep-server
+ *
+ * For custom Supabase database storage, see: supabase-edge-function-custom-repositories.ts
  */
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
@@ -56,7 +58,7 @@ const taskStore = new SupabaseTaskStore();
 // Configure the port from environment or default
 const port = parseInt(Deno.env.get("PORT") || "3000");
 
-console.log("🦕 Starting Timestep Server in Supabase Edge Function (Manual Mode)");
+console.log("🦕 Starting Timestep Server in Supabase Edge Function (Built-in Repositories)");
 console.log(`🌐 Server will run on port ${port}`);
 
 // Start the server with manual request handling
@@ -68,7 +70,7 @@ Deno.serve({ port }, async (request: Request) => {
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Content-Type": "application/json",
-    "X-Runtime": "Supabase-Edge-Function-Manual",
+    "X-Runtime": "Supabase-Edge-Function-Built-in-Repositories",
     "X-Deployment-ID": Deno.env.get("DENO_DEPLOYMENT_ID") || "local"
   };
 
@@ -81,7 +83,7 @@ Deno.serve({ port }, async (request: Request) => {
     if (url.pathname === "/health" || url.pathname === "/supabase-health") {
       return new Response(JSON.stringify({
         status: 'healthy',
-        runtime: 'Supabase Edge Function (Manual)',
+        runtime: 'Supabase Edge Function (Built-in Repositories)',
         timestamp: new Date().toISOString(),
         denoVersion: Deno.version.deno,
         deploymentId: Deno.env.get("DENO_DEPLOYMENT_ID") || "local",
@@ -164,7 +166,7 @@ Deno.serve({ port }, async (request: Request) => {
   }
 });
 
-console.log("🚀 Timestep Server running in Supabase Edge Function (Manual Mode)");
+console.log("🚀 Timestep Server running in Supabase Edge Function (Built-in Repositories)");
 console.log("📚 Available endpoints:");
 console.log("  - GET /health - Health check");
 console.log("  - GET /supabase-health - Supabase-specific health check");

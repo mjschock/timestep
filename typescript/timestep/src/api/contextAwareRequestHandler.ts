@@ -13,8 +13,8 @@ import { InMemoryPushNotificationStore, PushNotificationStore } from "@a2a-js/sd
 import { PushNotificationSender } from "@a2a-js/sdk/server";
 import { DefaultPushNotificationSender } from "@a2a-js/sdk/server";
 import { RequestContext } from "@a2a-js/sdk/server";
-import { ContextService } from "../services/context_service.js";
-import { JsonlContextRepository } from "../services/backing/jsonl_context_repository.js";
+import { ContextService } from "../services/contextService.js";
+import { JsonlContextRepository } from "../services/backing/jsonlContextRepository.js";
 import { Context } from "../types/context.js";
 
 const terminalStates: TaskState[] = ["completed", "failed", "canceled", "rejected"];

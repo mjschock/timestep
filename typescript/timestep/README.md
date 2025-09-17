@@ -73,20 +73,15 @@ startDenoServer(3000);
 ### Library Usage (Deno/Supabase)
 
 ```typescript
-// Simple approach - use pre-built Express app
-import { denoApp } from 'npm:@timestep-ai/timestep@latest';
-
-const port = parseInt(Deno.env.get("PORT") || "3000");
-Deno.serve({ port }, denoApp);
-```
-
-```typescript
-// Advanced approach - use individual functions
+// Use individual library functions for full control
 import {
   listAgents,
   listModels,
-  handleAgentRequest
+  handleAgentRequest,
+  TimestepAIAgentExecutor
 } from 'npm:@timestep-ai/timestep@latest';
+
+const agentExecutor = new TimestepAIAgentExecutor();
 
 Deno.serve({ port }, async (request: Request) => {
   const url = new URL(request.url);
@@ -95,7 +90,26 @@ Deno.serve({ port }, async (request: Request) => {
     const result = await listAgents();
     return new Response(JSON.stringify(result.data));
   }
-  // Handle other endpoints...
+
+  if (url.pathname === "/models") {
+    const result = await listModels();
+    return new Response(JSON.stringify(result.data));
+  }
+
+  // Handle dynamic agent A2A endpoints
+  const agentMatch = url.pathname.match(/^\/agents\/([^\/]+)(?:\/.*)?$/);
+  if (agentMatch) {
+    const mockReq = {
+      method: request.method,
+      path: url.pathname,
+      params: { agentId: agentMatch[1] },
+      body: await request.json().catch(() => ({}))
+    };
+    const result = await handleAgentRequest(mockReq, null, null, taskStore, agentExecutor, port);
+    return new Response(JSON.stringify(result));
+  }
+
+  return new Response("Not found", { status: 404 });
 });
 ```
 
@@ -169,21 +183,31 @@ deno task deno-server:dev
 
 ### Supabase Edge Functions
 
-Two approaches for Supabase deployment:
+Deploy Timestep in Supabase Edge Functions using individual library functions:
 
-**Automatic (Recommended):**
 ```typescript
-import { denoApp } from 'npm:@timestep-ai/timestep@latest';
-Deno.serve({ port }, denoApp);
+import {
+  listAgents,
+  listModels,
+  handleAgentRequest,
+  TimestepAIAgentExecutor
+} from 'npm:@timestep-ai/timestep@latest';
+
+// Custom task store for Supabase environment
+class SupabaseTaskStore {
+  // Implementation for your specific storage needs
+}
+
+const agentExecutor = new TimestepAIAgentExecutor();
+const taskStore = new SupabaseTaskStore();
+
+Deno.serve({ port }, async (request: Request) => {
+  // Handle all Timestep endpoints with full control
+  // Integrate with Supabase auth, database, etc.
+});
 ```
 
-**Manual (Custom Control):**
-```typescript
-import { listAgents, handleAgentRequest } from 'npm:@timestep-ai/timestep@latest';
-// Custom request handling...
-```
-
-See `examples/supabase-edge-function-automatic.ts` and `examples/supabase-edge-function-manual.ts` for complete examples.
+See `examples/supabase-edge-function.ts` for a complete working example.
 
 ## Development
 
@@ -263,8 +287,7 @@ src/
 
 The `examples/` directory contains:
 
-- `supabase-edge-function-automatic.ts` - Simple Supabase deployment using pre-built Express app
-- `supabase-edge-function-manual.ts` - Advanced Supabase deployment with custom request handling
+- `supabase-edge-function.ts` - Complete Supabase Edge Function implementation with custom request handling and A2A protocol support
 
 ## Contributing
 

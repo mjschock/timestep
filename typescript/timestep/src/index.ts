@@ -10,8 +10,7 @@ export { listModelProviders, getModelProvider } from './api/settings/modelProvid
 export type { ModelProvider, ListModelProvidersResponse } from './api/settings/modelProvidersApi.js';
 export { listTraces } from './api/tracesApi.js';
 export { listTools } from './api/toolsApi.js';
-// A2A server functionality is now integrated into server.ts
-export { StatefulMCPServer } from './api/mcp_server.js';
-export { TimestepAIAgentExecutor } from './core/agent_executor.js';
+// MCP server functionality is now integrated into server.ts
+export { TimestepAIAgentExecutor } from './core/agentExecutor.js';
 // Deno-optimized server
 export { startDenoServer, denoApp } from './denoServer.js';

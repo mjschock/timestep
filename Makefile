@@ -61,3 +61,5 @@ test-built-in-weather:
 test-built-in-weather-cli:
 	@echo "📘 Running TypeScript A2A Client tests..."
 	cd typescript/timestep && npx tsx src/cli.tsx chat --agentId 00000000-0000-0000-0000-000000000000 --auto-approve --user-input "What's the weather in Oakland and San Francisco?"
+
+test-e2e: timestep-cli-server timestep-cli-list-all test-built-in-weather-cli

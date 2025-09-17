@@ -54,7 +54,7 @@ export function getTimestepPaths() {
     appConfig: join(configDir, 'app.json'),
     agentsConfig: join(configDir, 'agents.jsonl'),
     modelProviders: join(configDir, 'model_providers.jsonl'),
-    mcpServers: join(configDir, 'mcp_servers.jsonl'),
+    mcpServers: join(configDir, 'mcpServers.jsonl'),
     contexts: join(configDir, 'contexts.jsonl'),
   };
 }
@@ -76,7 +76,7 @@ export function loadAppConfig(): AppConfig {
 
   // Embedded defaults - no file dependency needed for library usage
   const defaults: AppConfig = {
-    appPort: 3000,
+    appPort: 8080,
     mcpServerPort: 8000
   };
 

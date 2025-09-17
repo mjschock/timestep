@@ -32,9 +32,9 @@ import { OllamaModel } from "../services/backing/models.js";
 import { Ollama } from "ollama";
 import { TimestepAIModelProvider } from "../services/model_provider.js";
 import { AgentFactory } from "../services/agent_factory.js";
-import { ContextService } from "../services/context_service.js";
-import { ContextRepository } from "../services/backing/context_repository.js";
-import { JsonlContextRepository } from "../services/backing/jsonl_context_repository.js";
+import { ContextService } from "../services/contextService.js";
+import { Repository } from "../services/backing/repository.js";
+import { JsonlContextRepository } from "../services/backing/jsonlContextRepository.js";
 
 // App configuration is now loaded dynamically when needed via loadAppConfig() function
 
@@ -247,7 +247,7 @@ export interface ContextRepositoryOptions {
 }
 
 export interface AgentExecutorConfig {
-    contextRepository?: ContextRepository;
+    contextRepository?: Repository<any, string>;
     contextRepositoryOptions?: ContextRepositoryOptions;
 }
 

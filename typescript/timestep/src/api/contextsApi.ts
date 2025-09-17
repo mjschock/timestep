@@ -5,12 +5,13 @@
  * conversation contexts and chat sessions.
  *
  * Functions:
- * - listContexts() - List all contexts from contexts.jsonl
+ * - listContexts() - List all contexts using the context service
  */
 
-import { getTimestepPaths } from "../utils.js";
 import { Context } from "../types/context.js";
-import * as fs from 'node:fs';
+import { ContextService } from "../services/contextService.js";
+import { JsonlContextRepository } from "../services/backing/jsonlContextRepository.js";
+import { Repository } from "../services/backing/repository.js";
 
 /**
  * Response from the list contexts endpoint
@@ -21,29 +22,17 @@ export interface ListContextsResponse {
 }
 
 /**
- * List all contexts from the contexts.jsonl file
+ * List all contexts using the context service
  *
+ * @param repository Optional repository for dependency injection. Defaults to JsonlContextRepository
  * @returns Promise resolving to the list of contexts
  */
-export async function listContexts(): Promise<ListContextsResponse> {
-  const timestepPaths = getTimestepPaths();
+export async function listContexts(repository?: Repository<Context, string>): Promise<ListContextsResponse> {
+  const repo = repository || new JsonlContextRepository();
+  const contextService = new ContextService(repo);
 
   try {
-    const contextsContent = fs.readFileSync(timestepPaths.contexts, 'utf8');
-    const lines = contextsContent.split('\n').filter((line: string) => line.trim());
-
-    const contexts: Context[] = [];
-
-    for (const line of lines) {
-      try {
-        const contextData = JSON.parse(line);
-        const context = Context.fromJSON(contextData);
-        contexts.push(context);
-      } catch (error) {
-        console.warn('Failed to parse context line:', line, error);
-      }
-    }
-
+    const contexts = await contextService.listContexts();
     return {
       data: contexts,
     };

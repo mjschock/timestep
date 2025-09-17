@@ -26,7 +26,7 @@ import { listMcpServers } from "./api/settings/mcpServersApi.js";
 import { listModelProviders } from "./api/settings/modelProvidersApi.js";
 import { listTraces } from "./api/tracesApi.js";
 import { listTools } from "./api/toolsApi.js";
-import { TimestepAIAgentExecutor } from "./core/agent_executor.js";
+import { TimestepAIAgentExecutor } from "./core/agentExecutor.js";
 import { Task } from "@a2a-js/sdk";
 import { TaskStore } from "@a2a-js/sdk/server";
 
@@ -226,7 +226,7 @@ app.get('/health', (_req: Request, res: Response) => {
 
 // Function to start the server (can be called programmatically)
 export function startDenoServer(port?: number): void {
-  const serverPort = port || appConfig.appPort || 3000;
+  const serverPort = port || appConfig.appPort || 8080;
 
   app.listen(serverPort, () => {
     console.log(`🌐 Deno Unified server running on http://localhost:${serverPort}`);
@@ -250,14 +250,5 @@ if (import.meta.main) {
   // Start the main Express server
   startDenoServer();
 
-  // Optionally start the MCP server
-  try {
-    const { StatefulMCPServer } = await import("./api/mcp_server.js");
-    const mcpServer = new StatefulMCPServer(appConfig.mcpServerPort!);
-    mcpServer.run().catch((error: Error) => {
-      console.error("Failed to start MCP server:", error);
-    });
-  } catch (error) {
-    console.warn("MCP server not available in Deno environment:", error);
-  }
+  // MCP server is now integrated into the main server, no separate server needed
 }

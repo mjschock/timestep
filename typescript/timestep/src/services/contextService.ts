@@ -2,14 +2,21 @@ import { Task } from '@a2a-js/sdk';
 import { AgentInputItem } from '@openai/agents';
 import { RunResult } from '@openai/agents-core';
 import { Context } from '../types/context.js';
-import { ContextRepository } from './backing/context_repository.js';
+import { Repository } from './backing/repository.js';
 
 /**
  * Service for managing context operations.
  * Handles business logic for context management and delegates persistence to repository.
  */
 export class ContextService {
-    constructor(private repository: ContextRepository) {}
+    constructor(private repository: Repository<Context, string>) {}
+
+    /**
+     * List all contexts
+     */
+    async listContexts(): Promise<Context[]> {
+        return await this.repository.list();
+    }
 
     /**
      * Get or create a context by ID
