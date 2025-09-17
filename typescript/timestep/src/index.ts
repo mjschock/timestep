@@ -5,7 +5,7 @@ export { listContexts } from './api/contextsApi.js';
 export { listAgents, getAgent, handleAgentRequest, handleListAgents } from './api/agentsApi.js';
 export type { Agent, ListAgentsResponse } from './api/agentsApi.js';
 export { listApiKeys } from './api/settings/apiKeysApi.js';
-export { listMcpServers } from './api/settings/mcpServersApi.js';
+export { listMcpServers, getMcpServer } from './api/settings/mcpServersApi.js';
 export { listModelProviders, getModelProvider } from './api/settings/modelProvidersApi.js';
 export type { ModelProvider, ListModelProvidersResponse } from './api/settings/modelProvidersApi.js';
 export { listTraces } from './api/tracesApi.js';

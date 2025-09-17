@@ -95,32 +95,7 @@ export function loadAppConfig(): AppConfig {
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
-/**
- * Loads and parses MCP servers configuration from mcp_servers.jsonl
- */
-export function loadMcpServersConfig(): { [id: string]: any } {
-    const timestepPaths = getTimestepPaths();
-    const mcpServersConfigPath = timestepPaths.mcpServers;
-
-    try {
-        const mcpServersConfigContent = fs.readFileSync(mcpServersConfigPath, 'utf8');
-        const mcpServersLines = mcpServersConfigContent.split('\n').filter((line: string) => line.trim());
-
-        const mcpServersById: { [id: string]: any } = {};
-        for (const line of mcpServersLines) {
-            try {
-                const server = JSON.parse(line);
-                mcpServersById[server.id] = server;
-            } catch (error) {
-                console.warn('Failed to parse MCP server line:', line, error);
-            }
-        }
-
-        return mcpServersById;
-    } catch (error) {
-        throw new Error(`MCP servers configuration file not found at: ${mcpServersConfigPath}`);
-    }
-}
+// loadMcpServersConfig function removed - now using MCP servers API instead
 
 /**
  * Creates an MCP client and connects to a server
@@ -168,7 +143,9 @@ export async function listAllMcpTools(): Promise<Array<{
     serverName: string;
     inputSchema: any;
 }>> {
-    const mcpServers = loadMcpServersConfig();
+    // Use the MCP servers API instead of direct file access
+    const { listMcpServers } = await import('./api/settings/mcpServersApi.js');
+    const mcpServersResponse = await listMcpServers();
     const allTools: Array<{
         id: string;
         name: string;
@@ -178,14 +155,14 @@ export async function listAllMcpTools(): Promise<Array<{
         inputSchema: any;
     }> = [];
 
-    for (const [serverId, server] of Object.entries(mcpServers)) {
+    for (const server of mcpServersResponse.data) {
         if (!server.enabled) {
-            console.log(`Skipping disabled MCP server: ${serverId}`);
+            console.log(`Skipping disabled MCP server: ${server.id}`);
             continue;
         }
 
         try {
-            console.log(`🔌 Connecting to MCP server ${serverId} at ${server.serverUrl}`);
+            console.log(`🔌 Connecting to MCP server ${server.id} at ${server.serverUrl}`);
 
             const client = await createMcpClient(server.serverUrl, server.authToken);
 
@@ -196,21 +173,21 @@ export async function listAllMcpTools(): Promise<Array<{
             // Add tools with namespaced IDs
             for (const mcpTool of mcpTools.tools) {
                 allTools.push({
-                    id: `${serverId}.${mcpTool.name}`, // Namespaced tool ID
+                    id: `${server.id}.${mcpTool.name}`, // Namespaced tool ID
                     name: mcpTool.name,
                     description: mcpTool.description || 'No description available',
-                    serverId: serverId,
-                    serverName: server.name || serverId,
+                    serverId: server.id,
+                    serverName: server.name || server.id,
                     inputSchema: mcpTool.inputSchema
                 });
             }
 
-            console.log(`✅ Loaded ${mcpTools.tools.length} tools from MCP server ${serverId}`);
+            console.log(`✅ Loaded ${mcpTools.tools.length} tools from MCP server ${server.id}`);
         } catch (error) {
-            console.error(`❌ Error loading tools from MCP server ${serverId}:`, error);
+            console.error(`❌ Error loading tools from MCP server ${server.id}:`, error);
         }
     }
 
-    console.log(`✅ Total tools loaded: ${allTools.length} from ${Object.keys(mcpServers).length} servers`);
+    console.log(`✅ Total tools loaded: ${allTools.length} from ${mcpServersResponse.data.length} servers`);
     return allTools;
 }

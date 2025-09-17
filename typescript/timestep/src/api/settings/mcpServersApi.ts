@@ -135,3 +135,13 @@ export async function listMcpServers(): Promise<ListMcpServersResponse> {
     data: mcpServers,
   };
 }
+
+/**
+ * Get a specific MCP server by ID
+ * @param serverId The ID of the MCP server to retrieve
+ * @returns The MCP server if found, undefined otherwise
+ */
+export async function getMcpServer(serverId: string): Promise<McpServer | undefined> {
+  const response = await listMcpServers();
+  return response.data.find(server => server.id === serverId);
+}

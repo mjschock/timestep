@@ -3,12 +3,8 @@ import { AgentConfiguration } from '@openai/agents-core';
 import { z } from "zod";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import * as fs from 'node:fs';
-import { getTimestepPaths } from "../utils.js";
 import { listAgents, Agent as AgentConfig } from "../api/agentsApi.js";
-
-// Get timestep configuration paths
-const timestepPaths = getTimestepPaths();
+import { getMcpServer } from "../api/settings/mcpServersApi.js";
 
 // Load agents using the agents API
 async function loadAgents(): Promise<AgentConfig[]> {
@@ -23,20 +19,7 @@ async function loadAgents(): Promise<AgentConfig[]> {
 }
 
 
-// Load MCP servers configuration
-const mcpServersConfigPath = timestepPaths.mcpServers;
-if (!fs.existsSync(mcpServersConfigPath)) {
-    throw new Error(`MCP servers configuration file not found. Expected at: ${mcpServersConfigPath}`);
-}
-const mcpServersConfigContent = fs.readFileSync(mcpServersConfigPath, 'utf8');
-const mcpServersLines = mcpServersConfigContent.split('\n').filter(line => line.trim());
-
-// Create MCP servers lookup map by ID
-const MCP_SERVERS_BY_ID: { [id: string]: any } = {};
-for (const line of mcpServersLines) {
-    const server = JSON.parse(line);
-    MCP_SERVERS_BY_ID[server.id] = server;
-}
+// MCP servers are now loaded dynamically via API calls
 
 // Create agent lookup map by ID
 async function createAgentsLookup(): Promise<{ [id: string]: AgentConfig }> {
@@ -118,29 +101,38 @@ async function loadToolsForAgent(toolIds: string[]): Promise<any[]> {
     
     // Group tools by MCP server - only include servers that are actually referenced
     const serverToolsMap: { [serverId: string]: { serverUrl: string, toolNames: string[], authToken?: string } } = {};
-    
+
+    // First pass: collect all unique server IDs
+    const serverIds = new Set<string>();
+    const toolsByServer: { [serverId: string]: string[] } = {};
+
     for (const toolId of toolIds) {
         const [serverId, toolName] = toolId.split('.');
         if (!serverId || !toolName) {
             console.warn(`⚠️  Invalid toolId format: ${toolId}. Expected format: serverId.toolName`);
             continue;
         }
-        
-        const server = MCP_SERVERS_BY_ID[serverId];
+
+        serverIds.add(serverId);
+        if (!toolsByServer[serverId]) {
+            toolsByServer[serverId] = [];
+        }
+        toolsByServer[serverId].push(toolName);
+    }
+
+    // Second pass: lookup each server and validate
+    for (const serverId of serverIds) {
+        const server = await getMcpServer(serverId);
         if (!server || !server.enabled) {
             console.warn(`⚠️  MCP server with ID ${serverId} not found or disabled`);
             continue;
         }
-        
-        if (!serverToolsMap[serverId]) {
-            serverToolsMap[serverId] = {
-                serverUrl: server.serverUrl,
-                toolNames: [],
-                authToken: server.authToken
-            };
-        }
-        
-        serverToolsMap[serverId].toolNames.push(toolName);
+
+        serverToolsMap[serverId] = {
+            serverUrl: server.serverUrl,
+            toolNames: toolsByServer[serverId],
+            authToken: server.authToken
+        };
     }
     
     // Only connect to servers that have tools referenced in toolIds
