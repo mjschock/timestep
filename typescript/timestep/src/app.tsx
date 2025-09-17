@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Text, Box} from 'ink';
-import {spawn} from 'child_process';
-import {A2AClientWrapper} from './lib/a2a-client-wrapper.js';
+import {spawn, ChildProcess} from 'child_process';
+import {getTimestepPaths} from './utils.js';
 
 type Props = {
 	name: string | undefined;
@@ -107,6 +107,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 	const [serverStopped, setServerStopped] = useState(false);
 	const [chatStarted, setChatStarted] = useState(false);
 	const [availableAgents, setAvailableAgents] = useState<any[]>([]);
+	const [chatProcess, setChatProcess] = useState<ChildProcess | null>(null);
 
 	useEffect(() => {
 		if (command === 'list-agents') {
@@ -134,6 +135,99 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		}
 	}, [command]);
 
+	// Cleanup chat process on unmount
+	useEffect(() => {
+		return () => {
+			if (chatProcess) {
+				chatProcess.kill();
+			}
+		};
+	}, [chatProcess]);
+
+	// Helper function to get available agents
+	const getAvailableAgents = async (): Promise<{ success: boolean; agents?: any[]; error?: string }> => {
+		try {
+			const { listAgents } = await import('./api/agentsApi.js');
+			const response = await listAgents();
+			return { success: true, agents: response.data };
+		} catch (error) {
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : 'Failed to load agents'
+			};
+		}
+	};
+
+	// Helper function to start chat process
+	const startChatProcess = async (options: {
+		agentId?: string;
+		autoApprove?: boolean;
+		userInput?: string;
+	} = {}): Promise<{ success: boolean; error?: string }> => {
+		try {
+			const timestepPaths = getTimestepPaths();
+
+			// Build arguments for the a2a_client
+			const args = ['src/api/a2a_client.ts'];
+
+			if (options.agentId) {
+				args.push('--agentId', options.agentId);
+			}
+
+			if (options.autoApprove) {
+				args.push('--auto-approve');
+			}
+
+			if (options.userInput) {
+				args.push('--user-input', options.userInput);
+			}
+
+			// Check if agents config exists
+			const fs = await import('node:fs');
+			if (!fs.existsSync(timestepPaths.agentsConfig)) {
+				return {
+					success: false,
+					error: `Agents configuration not found at: ${timestepPaths.agentsConfig}`
+				};
+			}
+
+			// Start the a2a_client process using tsx (TypeScript runner)
+			const childProcess = spawn('npx', ['tsx', ...args], {
+				stdio: 'inherit',
+				cwd: process.cwd()
+			});
+
+			setChatProcess(childProcess);
+
+			return new Promise((resolve) => {
+				childProcess.on('error', (error: Error) => {
+					resolve({
+						success: false,
+						error: `Failed to start A2A client: ${error.message}`
+					});
+				});
+
+				childProcess.on('spawn', () => {
+					resolve({ success: true });
+				});
+
+				childProcess.on('exit', (code: number | null) => {
+					if (code !== 0) {
+						resolve({
+							success: false,
+							error: `A2A client exited with code ${code}`
+						});
+					}
+				});
+			});
+		} catch (error) {
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : 'Unknown error'
+			};
+		}
+	};
+
 	const startServer = () => {
 		try {
 			// Check if Node.js is available
@@ -157,7 +251,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 					setError('Node.js is not installed. Please install Node.js from https://nodejs.org/');
 				}
 			});
-		} catch (err) {
+		} catch (_err) {
 			setError('Failed to start server');
 		}
 	};
@@ -203,7 +297,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 				setLoading(false);
 			}, 2000);
 
-		} catch (err) {
+		} catch (_err) {
 			setError('Failed to stop server');
 			setLoading(false);
 		}
@@ -214,10 +308,8 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setError(null);
 
 		try {
-			const client = new A2AClientWrapper();
-
 			// First, check if agents are available
-			const agentsResult = await client.getAvailableAgents();
+			const agentsResult = await getAvailableAgents();
 
 			if (!agentsResult.success) {
 				setError(agentsResult.error || 'Failed to load agents');
@@ -228,7 +320,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 			setAvailableAgents(agentsResult.agents || []);
 
 			// Start the chat with the first available agent or let user choose
-			const result = await client.startChat({
+			const result = await startChatProcess({
 				agentId: flags?.agentId,
 				autoApprove: flags?.autoApprove || false,
 				userInput: flags?.userInput
