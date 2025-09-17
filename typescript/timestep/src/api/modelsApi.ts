@@ -59,16 +59,25 @@ import * as fs from 'node:fs';
 export async function listModels(): Promise<ListModelsResponse> {
   const timestepPaths = getTimestepPaths();
 
+  let providers: any[] = [];
+
   try {
-    const modelProvidersContent = fs.readFileSync(timestepPaths.modelProviders, 'utf8');
-    const lines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
-    const providers = lines.map((line: string) => {
-      try {
-        return JSON.parse(line);
-      } catch {
-        return null;
-      }
-    }).filter(Boolean);
+    if (fs.existsSync(timestepPaths.modelProviders)) {
+      const modelProvidersContent = fs.readFileSync(timestepPaths.modelProviders, 'utf8');
+      const lines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
+      providers = lines.map((line: string) => {
+        try {
+          return JSON.parse(line);
+        } catch {
+          return null;
+        }
+      }).filter(Boolean);
+    } else {
+      console.warn(`Model providers file not found at: ${timestepPaths.modelProviders}. Returning empty models list.`);
+    }
+  } catch (error) {
+    console.warn(`Failed to read model providers from '${timestepPaths.modelProviders}': ${error}. Returning empty models list.`);
+  }
 
     const allModels: Model[] = [];
 
@@ -112,13 +121,10 @@ export async function listModels(): Promise<ListModelsResponse> {
       }
     }
 
-    return {
-      object: 'list',
-      data: allModels,
-    };
-  } catch (error) {
-    throw new Error(`Failed to read model providers: ${error}`);
-  }
+  return {
+    object: 'list',
+    data: allModels,
+  };
 }
 
 /**

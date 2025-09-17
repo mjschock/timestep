@@ -48,9 +48,18 @@ import * as fs from 'node:fs';
 export async function listApiKeys(): Promise<ListApiKeysResponse> {
   const timestepPaths = getTimestepPaths();
 
+  let lines: string[] = [];
+
   try {
-    const modelProvidersContent = fs.readFileSync(timestepPaths.modelProviders, 'utf8');
-    const lines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
+    if (fs.existsSync(timestepPaths.modelProviders)) {
+      const modelProvidersContent = fs.readFileSync(timestepPaths.modelProviders, 'utf8');
+      lines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
+    } else {
+      console.warn(`Model providers file not found at: ${timestepPaths.modelProviders}. Returning empty API keys list.`);
+    }
+  } catch (error) {
+    console.warn(`Failed to read model providers from '${timestepPaths.modelProviders}': ${error}. Returning empty API keys list.`);
+  }
 
     const apiKeys: ApiKey[] = [];
 
@@ -72,11 +81,8 @@ export async function listApiKeys(): Promise<ListApiKeysResponse> {
       }
     }
 
-    return {
-      object: 'list',
-      data: apiKeys,
-    };
-  } catch (error) {
-    throw new Error(`Failed to read model providers: ${error}`);
-  }
+  return {
+    object: 'list',
+    data: apiKeys,
+  };
 }

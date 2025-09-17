@@ -5,22 +5,6 @@ import * as fs from "node:fs";
 import OpenAI from "openai";
 import { getTimestepPaths } from "../utils.js";
 
-// Load model providers configuration
-const timestepPaths = getTimestepPaths();
-const modelProvidersPath = timestepPaths.modelProviders;
-
-if (!fs.existsSync(modelProvidersPath)) {
-    throw new Error(`Model providers file not found. Expected at: ${modelProvidersPath}`);
-}
-
-let modelProvidersContent = '';
-try {
-    modelProvidersContent = fs.readFileSync(modelProvidersPath, 'utf8');
-} catch (err) {
-    throw new Error(`Failed to read model providers from '${modelProvidersPath}': ${(err as Error).message}`);
-}
-
-const modelProviderLines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
 type ProviderConfig = {
     id?: string;
     provider?: string;
@@ -30,16 +14,41 @@ type ProviderConfig = {
     models_url?: string;
 };
 
-const MODEL_PROVIDERS: Record<string, ProviderConfig> = {};
+function loadModelProviders(): Record<string, ProviderConfig> {
+    const timestepPaths = getTimestepPaths();
+    const modelProvidersPath = timestepPaths.modelProviders;
 
-for (const line of modelProviderLines) {
-    const provider = JSON.parse(line);
-    const key = provider.name || provider.provider;
-    if (!key) {
-        console.warn('Skipping model provider entry without a name/provider field:', provider);
-        continue;
+    let modelProviderLines: string[] = [];
+
+    if (fs.existsSync(modelProvidersPath)) {
+        try {
+            const modelProvidersContent = fs.readFileSync(modelProvidersPath, 'utf8');
+            modelProviderLines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
+        } catch (err) {
+            console.warn(`Failed to read model providers from '${modelProvidersPath}': ${(err as Error).message}. Using empty configuration.`);
+            modelProviderLines = [];
+        }
+    } else {
+        console.warn(`Model providers file not found at: ${modelProvidersPath}. Using empty configuration.`);
     }
-    MODEL_PROVIDERS[key] = provider;
+
+    const MODEL_PROVIDERS: Record<string, ProviderConfig> = {};
+
+    for (const line of modelProviderLines) {
+        try {
+            const provider = JSON.parse(line);
+            const key = provider.name || provider.provider;
+            if (!key) {
+                console.warn('Skipping model provider entry without a name/provider field:', provider);
+                continue;
+            }
+            MODEL_PROVIDERS[key] = provider;
+        } catch (err) {
+            console.warn(`Failed to parse model provider line: ${line}`, err);
+        }
+    }
+
+    return MODEL_PROVIDERS;
 }
 
 export class TimestepAIModelProvider implements ModelProvider {
@@ -47,8 +56,8 @@ export class TimestepAIModelProvider implements ModelProvider {
     private modelProviders: Record<string, ProviderConfig>;
 
     constructor() {
-        console.log(`Loading model providers from ${modelProvidersPath}`);
-        this.modelProviders = MODEL_PROVIDERS;
+        console.log(`Loading model providers configuration`);
+        this.modelProviders = loadModelProviders();
         console.log(`Model providers loaded: ${JSON.stringify(this.modelProviders)}`);
     }
 
@@ -65,6 +74,12 @@ export class TimestepAIModelProvider implements ModelProvider {
 
         if (!modelId) {
             throw new Error('Model ID not specified');
+        }
+
+        // Check if any providers are configured
+        if (Object.keys(this.modelProviders).length === 0) {
+            const timestepPaths = getTimestepPaths();
+            throw new Error(`No model providers configured. Please set up model providers configuration file at: ${timestepPaths.modelProviders}`);
         }
 
         if (modelProvider === 'ollama') {

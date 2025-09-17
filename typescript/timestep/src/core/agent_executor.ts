@@ -16,6 +16,7 @@ import {
 import { setTracingDisabled, withTrace, getOrCreateTrace, TraceOptions, Trace, RunContext, withNewSpanContext, setCurrentSpan, resetCurrentSpan, RunHookEvents, getCurrentSpan } from '@openai/agents-core';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import * as crypto from 'node:crypto';
 import { AgentConfiguration, RunConfig } from '@openai/agents-core';
 import { getGlobalTraceProvider } from '@openai/agents';
 import { RunState, RunResult } from '@openai/agents-core';
@@ -49,16 +50,32 @@ const APP_CONFIG = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
 
 // Load model providers configuration
 const modelProvidersPath = timestepPaths.modelProviders;
-const modelProvidersContent = fs.readFileSync(modelProvidersPath, 'utf8');
-const modelProviderLines = modelProvidersContent.split('\n').filter(line => line.trim());
-console.log('🔧 Model provider lines:', modelProviderLines);
+let modelProviderLines: string[] = [];
+
+if (fs.existsSync(modelProvidersPath)) {
+    try {
+        const modelProvidersContent = fs.readFileSync(modelProvidersPath, 'utf8');
+        modelProviderLines = modelProvidersContent.split('\n').filter(line => line.trim());
+        console.log('🔧 Model provider lines:', modelProviderLines);
+    } catch (err) {
+        console.warn(`Failed to read model providers from '${modelProvidersPath}': ${err}. Using empty configuration.`);
+        modelProviderLines = [];
+    }
+} else {
+    console.warn(`Model providers file not found at: ${modelProvidersPath}. Using empty configuration.`);
+}
+
 const MODEL_PROVIDERS: { [key: string]: any } = {};
 for (const line of modelProviderLines) {
     if (line.trim()) {
-        console.log('🔧 Parsing line:', line);
-        const provider = JSON.parse(line);
-        console.log('🔧 Parsed provider:', provider);
-        MODEL_PROVIDERS[provider.provider] = provider;
+        try {
+            console.log('🔧 Parsing line:', line);
+            const provider = JSON.parse(line);
+            console.log('🔧 Parsed provider:', provider);
+            MODEL_PROVIDERS[provider.provider] = provider;
+        } catch (err) {
+            console.warn(`Failed to parse model provider line: ${line}`, err);
+        }
     }
 }
 
@@ -101,7 +118,12 @@ function createCompletedStatusUpdate(taskId: string, contextId: string, finalMes
         state: "completed",
         timestamp: new Date().toISOString()
     };
-    
+
+    // Include finalMessage in the status if provided
+    if (finalMessage) {
+        status.result = finalMessage;
+    }
+
     return {
         kind: "status-update",
         taskId: taskId,
@@ -111,22 +133,6 @@ function createCompletedStatusUpdate(taskId: string, contextId: string, finalMes
     };
 }
 
-function createAgentMessage(taskId: string, contextId: string, text: string): any {
-    return {
-        kind: "message",
-        messageId: crypto.randomUUID(),
-        role: "agent",
-        parts: [
-            {
-                kind: "text",
-                text: text
-            }
-        ],
-        taskId: taskId,
-        contextId: contextId,
-        timestamp: new Date().toISOString()
-    };
-}
 
 function createInputRequiredStatusUpdate(taskId: string, contextId: string, interruptions?: any[]): TaskStatusUpdateEvent {
     let messageText = "Human approval required for tool execution";
@@ -393,18 +399,43 @@ export class TimestepAIAgentExecutor implements AgentExecutor {
                 
                 const finalOutput = result.finalOutput || "";
                 console.log('🔍 Agent result:', finalOutput);
-                
-                // Publish the agent message first
-                if (finalOutput) {
-                    const agentMessage = createAgentMessage(taskId, context.contextId, finalOutput);
-                    console.log('🔍 Publishing agent message:', JSON.stringify(agentMessage, null, 2));
-                    eventBus.publish(agentMessage);
+
+                // For task-generating agents, publish the completed Task object (not just status)
+                // Retrieve the updated task from the context service
+                const completedTask = await this.contextService.getTask(context.contextId, taskId);
+                if (completedTask) {
+                    // Update the task status to completed and add the final output
+                    completedTask.status = {
+                        state: "completed",
+                        timestamp: new Date().toISOString()
+                    };
+
+                    // Add the final result to task.status.message (expected by client)
+                    // Client expects a Message object with parts array, not a plain string
+                    if (finalOutput) {
+                        completedTask.status.message = {
+                            messageId: crypto.randomUUID(),
+                            kind: "message",
+                            role: "agent",
+                            parts: [
+                                {
+                                    kind: "text",
+                                    text: finalOutput
+                                }
+                            ],
+                            contextId: context.contextId,
+                            timestamp: new Date().toISOString()
+                        };
+                    }
+
+                    console.log('🔍 Publishing completed task:', JSON.stringify(completedTask, null, 2));
+                    eventBus.publish(completedTask);
+                } else {
+                    console.warn('🔍 Could not retrieve completed task, falling back to status update');
+                    const completedStatusUpdate = createCompletedStatusUpdate(taskId, context.contextId, finalOutput);
+                    console.log('🔍 Publishing completed status update:', JSON.stringify(completedStatusUpdate, null, 2));
+                    eventBus.publish(completedStatusUpdate);
                 }
-                
-                // Then publish the completed status update
-                const completedStatusUpdate = createCompletedStatusUpdate(taskId, context.contextId);
-                console.log('🔍 Publishing completed status update:', JSON.stringify(completedStatusUpdate, null, 2));
-                eventBus.publish(completedStatusUpdate);
                 
                 // Signal that the stream is complete
                 eventBus.finished();

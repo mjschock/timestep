@@ -44,6 +44,8 @@ timestep-cli-list-settings-mcp-servers:
 	@echo "🚀 Starting Timestep cli list-settings-mcp-servers..."
 	cd typescript/timestep && npx tsx src/cli.tsx list-settings-mcp-servers
 
+timestep-cli-list-all: timestep-cli-list-agents timestep-cli-list-chats timestep-cli-list-models timestep-cli-list-tools timestep-cli-list-traces timestep-cli-list-settings-api-keys timestep-cli-list-settings-mcp-servers
+
 run-a2a-inspector:
 	@echo "🔍 Running A2A Inspector..."
 	cd bash && ./run-a2a-inspector.sh
