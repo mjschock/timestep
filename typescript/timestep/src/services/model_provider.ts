@@ -1,7 +1,6 @@
 import { Ollama } from "ollama";
 import { OllamaModel } from "./backing/models.js";
 import { Model, ModelProvider, OpenAIChatCompletionsModel, OpenAIResponsesModel } from "@openai/agents";
-import * as fs from "node:fs";
 import OpenAI from "openai";
 import { getTimestepPaths } from "../utils.js";
 
@@ -14,54 +13,55 @@ type ProviderConfig = {
     models_url?: string;
 };
 
-function loadModelProviders(): Record<string, ProviderConfig> {
-    const timestepPaths = getTimestepPaths();
-    const modelProvidersPath = timestepPaths.modelProviders;
+async function loadModelProviders(): Promise<Record<string, ProviderConfig>> {
+    try {
+        const { listModelProviders } = await import('../api/settings/modelProvidersApi.js');
+        const response = await listModelProviders();
+        const MODEL_PROVIDERS: Record<string, ProviderConfig> = {};
 
-    let modelProviderLines: string[] = [];
-
-    if (fs.existsSync(modelProvidersPath)) {
-        try {
-            const modelProvidersContent = fs.readFileSync(modelProvidersPath, 'utf8');
-            modelProviderLines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
-        } catch (err) {
-            console.warn(`Failed to read model providers from '${modelProvidersPath}': ${(err as Error).message}. Using empty configuration.`);
-            modelProviderLines = [];
-        }
-    } else {
-        console.warn(`Model providers file not found at: ${modelProvidersPath}. Using empty configuration.`);
-    }
-
-    const MODEL_PROVIDERS: Record<string, ProviderConfig> = {};
-
-    for (const line of modelProviderLines) {
-        try {
-            const provider = JSON.parse(line);
-            const key = provider.name || provider.provider;
+        for (const provider of response.data) {
+            const key = provider.provider;
             if (!key) {
-                console.warn('Skipping model provider entry without a name/provider field:', provider);
+                console.warn('Skipping model provider entry without a provider field:', provider);
                 continue;
             }
             MODEL_PROVIDERS[key] = provider;
-        } catch (err) {
-            console.warn(`Failed to parse model provider line: ${line}`, err);
         }
-    }
 
-    return MODEL_PROVIDERS;
+        return MODEL_PROVIDERS;
+    } catch (error) {
+        console.warn(`Failed to load model providers: ${error}. Using empty configuration.`);
+        return {};
+    }
 }
 
 export class TimestepAIModelProvider implements ModelProvider {
 
-    private modelProviders: Record<string, ProviderConfig>;
+    private modelProviders: Record<string, ProviderConfig> | null = null;
+    private loadingPromise: Promise<Record<string, ProviderConfig>> | null = null;
 
     constructor() {
-        console.log(`Loading model providers configuration`);
-        this.modelProviders = loadModelProviders();
-        console.log(`Model providers loaded: ${JSON.stringify(this.modelProviders)}`);
+        console.log(`Model provider service initialized`);
     }
 
-    getModel(_modelName?: string): Promise<Model> | Model {
+    private async ensureModelProvidersLoaded(): Promise<Record<string, ProviderConfig>> {
+        if (this.modelProviders !== null) {
+            return this.modelProviders;
+        }
+
+        if (this.loadingPromise === null) {
+            console.log(`Loading model providers configuration`);
+            this.loadingPromise = loadModelProviders().then(providers => {
+                this.modelProviders = providers;
+                console.log(`Model providers loaded: ${JSON.stringify(this.modelProviders)}`);
+                return providers;
+            });
+        }
+
+        return this.loadingPromise;
+    }
+
+    async getModel(_modelName?: string): Promise<Model> {
         const parts = _modelName?.split('/') || [];
         const modelProvider = parts.length > 1 ? parts[0] : 'openai';
         const modelId = parts.length > 1 ? parts.slice(1).join('/') : _modelName;
@@ -76,16 +76,19 @@ export class TimestepAIModelProvider implements ModelProvider {
             throw new Error('Model ID not specified');
         }
 
+        // Load model providers
+        const modelProviders = await this.ensureModelProvidersLoaded();
+
         // Check if any providers are configured
-        if (Object.keys(this.modelProviders).length === 0) {
+        if (Object.keys(modelProviders).length === 0) {
             const timestepPaths = getTimestepPaths();
             throw new Error(`No model providers configured. Please set up model providers configuration file at: ${timestepPaths.modelProviders}`);
         }
 
         if (modelProvider === 'ollama') {
-            const ollamaConfig = this.modelProviders[modelProvider];
+            const ollamaConfig = modelProviders[modelProvider];
             if (!ollamaConfig) {
-                throw new Error(`Model provider configuration for '${modelProvider}' not found. Available providers: ${Object.keys(this.modelProviders).join(', ')}`);
+                throw new Error(`Model provider configuration for '${modelProvider}' not found. Available providers: ${Object.keys(modelProviders).join(', ')}`);
             }
             if (!ollamaConfig.base_url) {
                 throw new Error(`Missing 'base_url' for provider '${modelProvider}' in configuration`);
@@ -97,9 +100,9 @@ export class TimestepAIModelProvider implements ModelProvider {
 
             return new OllamaModel(ollamaClient, modelId);
         } else if (modelProvider === 'openai') {
-            const openaiConfig = this.modelProviders[modelProvider];
+            const openaiConfig = modelProviders[modelProvider];
             if (!openaiConfig) {
-                throw new Error(`Model provider configuration for '${modelProvider}' not found. Available providers: ${Object.keys(this.modelProviders).join(', ')}`);
+                throw new Error(`Model provider configuration for '${modelProvider}' not found. Available providers: ${Object.keys(modelProviders).join(', ')}`);
             }
             if (!openaiConfig.api_key) {
                 throw new Error(`Missing 'api_key' for provider '${modelProvider}' in configuration`);
@@ -109,9 +112,9 @@ export class TimestepAIModelProvider implements ModelProvider {
             // Narrow via any to avoid duplicative OpenAI type private field conflict
             return new OpenAIResponsesModel(openaiClient as any, modelId);
         } else {
-            const config = this.modelProviders[modelProvider];
+            const config = modelProviders[modelProvider];
             if (!config) {
-                throw new Error(`Model provider configuration for '${modelProvider}' not found. Available providers: ${Object.keys(this.modelProviders).join(', ')}`);
+                throw new Error(`Model provider configuration for '${modelProvider}' not found. Available providers: ${Object.keys(modelProviders).join(', ')}`);
             }
             if (!config.api_key) {
                 throw new Error(`Missing 'api_key' for provider '${modelProvider}' in configuration`);

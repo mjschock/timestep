@@ -5,24 +5,23 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import * as fs from 'node:fs';
 import { getTimestepPaths } from "../utils.js";
+import { listAgents, Agent as AgentConfig } from "../api/agentsApi.js";
 
 // Get timestep configuration paths
 const timestepPaths = getTimestepPaths();
 
-// Load agent configuration
-const agentsConfigPath = timestepPaths.agentsConfig;
-if (!fs.existsSync(agentsConfigPath)) {
-    throw new Error(`Agents configuration file not found. Expected at: ${agentsConfigPath}`);
+// Load agents using the agents API
+async function loadAgents(): Promise<AgentConfig[]> {
+    try {
+        const response = await listAgents();
+        console.log(`📋 Loaded ${response.data.length} agents from agents API`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error loading agents from API: ${error}`);
+        throw new Error(`Unable to load agents: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
 }
-const agentsConfigContent = fs.readFileSync(agentsConfigPath, 'utf8');
-const lines = agentsConfigContent.split('\n').filter(line => line.trim());
 
-// Load app configuration
-const appConfigPath = timestepPaths.appConfig;
-if (!fs.existsSync(appConfigPath)) {
-    throw new Error(`App configuration file not found. Expected at: ${appConfigPath}`);
-}
-const APP_CONFIG = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
 
 // Load MCP servers configuration
 const mcpServersConfigPath = timestepPaths.mcpServers;
@@ -40,17 +39,17 @@ for (const line of mcpServersLines) {
 }
 
 // Create agent lookup map by ID
-const AGENTS_BY_ID: { [id: string]: any } = {};
-for (const line of lines) {
-    const agent = JSON.parse(line);
-    AGENTS_BY_ID[agent.id] = agent;
+async function createAgentsLookup(): Promise<{ [id: string]: AgentConfig }> {
+    const agents = await loadAgents();
+    const agentsById: { [id: string]: AgentConfig } = {};
+    
+    for (const agent of agents) {
+        agentsById[agent.id] = agent;
+    }
+    
+    return agentsById;
 }
 
-// Get the default agent configuration
-const AGENT_CONFIG = AGENTS_BY_ID[APP_CONFIG.defaultAgentId];
-if (!AGENT_CONFIG) {
-    throw new Error(`Agent with ID ${APP_CONFIG.defaultAgentId} not found in agents.jsonl`);
-}
 
 
 // MCP client function to invoke a tool with specific server
@@ -247,10 +246,13 @@ function createZodSchemaFromJsonSchema(jsonSchema: any): z.ZodSchema {
 async function getContext(agentId: string) {
     console.log('🔍 Getting context for agent ID:', agentId);
     
-    // Get the specific agent configuration by ID, fallback to default if not found
-    const context = AGENTS_BY_ID[agentId] || AGENT_CONFIG;
-    if (!AGENTS_BY_ID[agentId]) {
-        console.warn(`⚠️  Agent with ID ${agentId} not found, using default agent`);
+    // Get the agents lookup map
+    const agentsById = await createAgentsLookup();
+    
+    // Get the specific agent configuration by ID
+    const context = agentsById[agentId];
+    if (!context) {
+        throw new Error(`Agent with ID ${agentId} not found in agents configuration`);
     }
     
     const handoffs: Agent[] = [];
@@ -258,7 +260,7 @@ async function getContext(agentId: string) {
     // Resolve handoff agents by their IDs and load their tools
     if (context.handoffIds && Array.isArray(context.handoffIds)) {
         for (const handoffId of context.handoffIds) {
-            const handoffConfig = AGENTS_BY_ID[handoffId];
+            const handoffConfig = agentsById[handoffId];
             if (handoffConfig) {
                 // Load tools for this handoff agent based on its toolIds
                 const handoffTools = await loadToolsForAgent(handoffConfig.toolIds || []);
@@ -274,7 +276,7 @@ async function getContext(agentId: string) {
                 });
                 handoffs.push(agent);
             } else {
-                console.warn(`⚠️  Handoff agent with ID ${handoffId} not found in agents.jsonl`);
+                console.warn(`⚠️  Handoff agent with ID ${handoffId} not found in agents configuration`);
             }
         }
     }
@@ -291,14 +293,7 @@ async function getContext(agentId: string) {
 
 export class AgentFactory {
     async buildAgentConfig(agentId: string) {
-        let context;
-        try {
-            context = await getContext(agentId);
-        } catch (e) {
-            console.error('🔍 Error in buildAgentConfig:', e);
-            console.log('🔍 Using default agent');
-            context = await getContext(APP_CONFIG.defaultAgentId);
-        }
+        const context = await getContext(agentId);
 
         // Load tools based on agent's toolIds
         const tools = await loadToolsForAgent(context.toolIds || []);

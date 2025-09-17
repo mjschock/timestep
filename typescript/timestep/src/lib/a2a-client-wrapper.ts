@@ -73,36 +73,17 @@ export class A2AClientWrapper {
   }
 
   /**
-   * Check if agents are available by trying to load the config
+   * Get available agents using the API endpoint
    */
   async getAvailableAgents(): Promise<{ success: boolean; agents?: any[]; error?: string }> {
     try {
-      const timestepPaths = getTimestepPaths();
-      const fs = await import('node:fs');
-
-      if (!fs.existsSync(timestepPaths.agentsConfig)) {
-        return {
-          success: false,
-          error: `Agents configuration not found at: ${timestepPaths.agentsConfig}`
-        };
-      }
-
-      const content = fs.readFileSync(timestepPaths.agentsConfig, 'utf8');
-      const lines = content.split('\n').filter(line => line.trim());
-
-      const agents = lines.map(line => {
-        try {
-          return JSON.parse(line);
-        } catch {
-          return null;
-        }
-      }).filter(Boolean);
-
-      return { success: true, agents };
+      const { listAgents } = await import('../api/agentsApi.js');
+      const response = await listAgents();
+      return { success: true, agents: response.data };
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Failed to load agents'
       };
     }
   }

@@ -9,7 +9,7 @@
  */
 
 import { getTimestepPaths } from "../utils.js";
-import { Context } from "../domain/context.js";
+import { Context } from "../types/context.js";
 import * as fs from 'node:fs';
 
 /**

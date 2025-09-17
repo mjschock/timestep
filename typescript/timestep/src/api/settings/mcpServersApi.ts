@@ -15,22 +15,14 @@ export interface McpServer {
   id: string;
   /** The name/label for the MCP server */
   name: string;
-  /** The command to start the MCP server */
-  command: string;
-  /** Command line arguments for the MCP server */
-  args: string[];
-  /** Environment variables for the MCP server */
-  env?: Record<string, string>;
-  /** Whether the MCP server is currently active */
-  active: boolean;
-  /** The port the MCP server is running on (if applicable) */
-  port?: number;
-  /** When the MCP server was created */
-  created_at: number;
-  /** When the MCP server was last started */
-  last_started_at?: number;
-  /** Current status of the MCP server */
-  status: 'stopped' | 'starting' | 'running' | 'error';
+  /** Description of the MCP server */
+  description: string;
+  /** The URL of the MCP server */
+  serverUrl: string;
+  /** Whether the MCP server is enabled */
+  enabled: boolean;
+  /** Authentication token for the MCP server */
+  authToken?: string;
 }
 
 /**
@@ -45,6 +37,56 @@ export interface ListMcpServersResponse {
 
 import { getTimestepPaths } from "../../utils.js";
 import * as fs from 'node:fs';
+import * as path from 'node:path';
+
+// Default MCP servers configuration
+const DEFAULT_MCP_SERVERS: McpServer[] = [
+  {
+    "id": "00000000-0000-0000-0000-000000000000",
+    "name": "Built-in MCP Server",
+    "description": "Built-in MCP server providing weather data, document tools, and thinking capabilities",
+    "serverUrl": "http://localhost:8000/mcp",
+    "enabled": true
+  },
+  {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "name": "Rube MCP Server",
+    "description": "Rube MCP server for advanced automation and workflow tools",
+    "serverUrl": "https://rube.app/mcp",
+    "enabled": false,
+    "authToken": undefined
+  },
+  {
+    "id": "22222222-2222-2222-2222-222222222222",
+    "name": "Beeper Desktop MCP Server",
+    "description": "Beeper Desktop MCP server for messaging and communication tools",
+    "serverUrl": "http://localhost:23373/v0/mcp",
+    "enabled": false,
+    "authToken": undefined
+  }
+];
+
+/**
+ * Create the MCP servers configuration file with default servers
+ *
+ * @param mcpServersPath - Path to the MCP servers configuration file
+ */
+function createDefaultMcpServersFile(mcpServersPath: string): void {
+  try {
+    // Ensure the directory exists
+    const dir = path.dirname(mcpServersPath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    // Write the default MCP servers as JSONL
+    const content = DEFAULT_MCP_SERVERS.map(server => JSON.stringify(server)).join('\n');
+    fs.writeFileSync(mcpServersPath, content, 'utf8');
+    console.log(`🔌 Created default MCP servers configuration at: ${mcpServersPath}`);
+  } catch (error) {
+    console.warn(`Failed to create default MCP servers configuration at '${mcpServersPath}': ${error}`);
+  }
+}
 
 /**
  * List all configured MCP servers
@@ -53,39 +95,43 @@ import * as fs from 'node:fs';
  */
 export async function listMcpServers(): Promise<ListMcpServersResponse> {
   const timestepPaths = getTimestepPaths();
+  const mcpServersPath = timestepPaths.mcpServers;
+
+  let mcpServers: McpServer[] = [];
 
   try {
-    const mcpServersContent = fs.readFileSync(timestepPaths.mcpServers, 'utf8');
-    const lines = mcpServersContent.split('\n').filter((line: string) => line.trim());
-
-    const mcpServers: McpServer[] = [];
-
-    for (const line of lines) {
+    if (fs.existsSync(mcpServersPath)) {
       try {
-        const serverConfig = JSON.parse(line);
-        const mcpServer: McpServer = {
-          id: serverConfig.name || 'unknown',
-          name: serverConfig.name || 'Unknown Server',
-          command: serverConfig.command || '',
-          args: serverConfig.args || [],
-          env: serverConfig.env || {},
-          active: true, // Assume active if configured
-          port: serverConfig.port || undefined,
-          created_at: Date.now(), // We don't have this info, use current time
-          last_started_at: undefined, // We don't track this
-          status: 'stopped' // Default status
-        };
-        mcpServers.push(mcpServer);
-      } catch (error) {
-        console.warn('Failed to parse MCP server line:', line, error);
-      }
-    }
+        const content = fs.readFileSync(mcpServersPath, 'utf8');
+        const lines = content.split('\n').filter(line => line.trim());
 
-    return {
-      object: 'list',
-      data: mcpServers,
-    };
+        mcpServers = lines.map(line => {
+          try {
+            return JSON.parse(line) as McpServer;
+          } catch (err) {
+            console.warn(`Failed to parse MCP server line: ${line}`, err);
+            return null;
+          }
+        }).filter(Boolean) as McpServer[];
+
+        console.log(`🔌 Loaded ${mcpServers.length} MCP servers from ${mcpServersPath}`);
+      } catch (error) {
+        console.warn(`Failed to read MCP servers configuration from '${mcpServersPath}': ${error}. Creating default configuration.`);
+        createDefaultMcpServersFile(mcpServersPath);
+        mcpServers = DEFAULT_MCP_SERVERS;
+      }
+    } else {
+      console.warn(`MCP servers configuration file not found at: ${mcpServersPath}. Creating default configuration.`);
+      createDefaultMcpServersFile(mcpServersPath);
+      mcpServers = DEFAULT_MCP_SERVERS;
+    }
   } catch (error) {
-    throw new Error(`Failed to read MCP servers: ${error}`);
+    console.warn(`Error loading MCP servers configuration: ${error}. Using default servers.`);
+    mcpServers = DEFAULT_MCP_SERVERS;
   }
+
+  return {
+    object: 'list',
+    data: mcpServers,
+  };
 }

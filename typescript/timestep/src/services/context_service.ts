@@ -1,7 +1,7 @@
 import { Task } from '@a2a-js/sdk';
 import { AgentInputItem } from '@openai/agents';
 import { RunResult } from '@openai/agents-core';
-import { Context } from '../domain/context.js';
+import { Context } from '../types/context.js';
 import { ContextRepository } from './backing/context_repository.js';
 
 /**

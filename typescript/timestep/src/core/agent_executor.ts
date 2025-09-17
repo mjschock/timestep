@@ -48,41 +48,34 @@ if (!fs.existsSync(appConfigPath)) {
 }
 const APP_CONFIG = JSON.parse(fs.readFileSync(appConfigPath, 'utf8'));
 
-// Load model providers configuration
-const modelProvidersPath = timestepPaths.modelProviders;
-let modelProviderLines: string[] = [];
-
-if (fs.existsSync(modelProvidersPath)) {
+// Function to load model providers using the API
+async function loadModelProviders(): Promise<{ [key: string]: any }> {
     try {
-        const modelProvidersContent = fs.readFileSync(modelProvidersPath, 'utf8');
-        modelProviderLines = modelProvidersContent.split('\n').filter(line => line.trim());
-        console.log('🔧 Model provider lines:', modelProviderLines);
-    } catch (err) {
-        console.warn(`Failed to read model providers from '${modelProvidersPath}': ${err}. Using empty configuration.`);
-        modelProviderLines = [];
-    }
-} else {
-    console.warn(`Model providers file not found at: ${modelProvidersPath}. Using empty configuration.`);
-}
+        const { listModelProviders } = await import('../api/settings/modelProvidersApi.js');
+        const response = await listModelProviders();
+        const MODEL_PROVIDERS: { [key: string]: any } = {};
 
-const MODEL_PROVIDERS: { [key: string]: any } = {};
-for (const line of modelProviderLines) {
-    if (line.trim()) {
-        try {
-            console.log('🔧 Parsing line:', line);
-            const provider = JSON.parse(line);
-            console.log('🔧 Parsed provider:', provider);
+        for (const provider of response.data) {
             MODEL_PROVIDERS[provider.provider] = provider;
-        } catch (err) {
-            console.warn(`Failed to parse model provider line: ${line}`, err);
         }
+
+        console.log('🔧 Loaded model providers:', Object.keys(MODEL_PROVIDERS));
+        console.log('🔧 MODEL_PROVIDERS.openai:', MODEL_PROVIDERS.openai);
+
+        return MODEL_PROVIDERS;
+    } catch (error) {
+        console.warn(`Failed to load model providers: ${error}. Using empty configuration.`);
+        return {};
     }
 }
 
-console.log('🔧 Loaded model providers:', Object.keys(MODEL_PROVIDERS));
-console.log('🔧 MODEL_PROVIDERS.openai:', MODEL_PROVIDERS.openai);
-
-const tracing_api_key = MODEL_PROVIDERS.openai?.api_key;
+// Load model providers and get OpenAI API key for tracing
+let tracing_api_key: string | undefined;
+loadModelProviders().then(providers => {
+    tracing_api_key = providers.openai?.api_key;
+}).catch(error => {
+    console.warn('Failed to load model providers for tracing:', error);
+});
 console.log('🔑 Setting tracing export API key:', tracing_api_key ? `${tracing_api_key.substring(0, 10)}...` : 'undefined');
 setTracingExportApiKey(tracing_api_key);
 

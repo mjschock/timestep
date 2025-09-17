@@ -73,14 +73,18 @@ type ApiKey = {
 type McpServer = {
 	id: string;
 	name: string;
-	command: string;
-	args: string[];
-	env?: Record<string, string>;
-	active: boolean;
-	port?: number;
-	created_at: number;
-	last_started_at?: number;
-	status: string;
+	description: string;
+	serverUrl: string;
+	enabled: boolean;
+	authToken?: string;
+};
+
+type ModelProvider = {
+	id: string;
+	provider: string;
+	api_key?: string;
+	base_url: string;
+	models_url: string;
 };
 
 export default function App({name = 'Stranger', command}: Props) {
@@ -91,6 +95,7 @@ export default function App({name = 'Stranger', command}: Props) {
 	const [traces, setTraces] = useState<Trace[]>([]);
 	const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
 	const [mcpServers, setMcpServers] = useState<McpServer[]>([]);
+	const [modelProviders, setModelProviders] = useState<ModelProvider[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [serverStarted, setServerStarted] = useState(false);
@@ -113,6 +118,8 @@ export default function App({name = 'Stranger', command}: Props) {
 			fetchApiKeys();
 		} else if (command === 'list-settings-mcp-servers') {
 			fetchMcpServers();
+		} else if (command === 'list-settings-model-providers') {
+			fetchModelProviders();
 		} else if (command === 'server') {
 			startServer();
 		} else if (command === 'stop') {
@@ -353,6 +360,24 @@ export default function App({name = 'Stranger', command}: Props) {
 			setMcpServers(data);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to fetch MCP servers');
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const fetchModelProviders = async () => {
+		setLoading(true);
+		setError(null);
+
+		try {
+			const response = await fetch('http://localhost:3000/settings/model-providers');
+			if (!response.ok) {
+				throw new Error(`Server responded with ${response.status}`);
+			}
+			const data = await response.json();
+			setModelProviders(data);
+		} catch (err) {
+			setError(err instanceof Error ? err.message : 'Failed to fetch model providers');
 		} finally {
 			setLoading(false);
 		}
@@ -733,16 +758,68 @@ export default function App({name = 'Stranger', command}: Props) {
 						</Text>
 						<Box marginLeft={2}>
 							<Text color="gray">
-								Command: {server.command} |
-								Status: <Text color={server.status === 'running' ? 'green' : 'yellow'}>{server.status}</Text>
+								Description: {server.description || 'N/A'}
 							</Text>
 						</Box>
 						<Box marginLeft={2}>
 							<Text color="gray">
-								Args: {server.args.join(' ')} |
-								Port: {server.port || 'N/A'}
+								URL: {server.serverUrl || 'N/A'} |
+								Status: <Text color={server.enabled ? 'green' : 'yellow'}>{server.enabled ? 'enabled' : 'disabled'}</Text>
 							</Text>
 						</Box>
+						{server.authToken && (
+							<Box marginLeft={2}>
+								<Text color="gray">
+									Auth Token: {server.authToken ? '***' : 'N/A'}
+								</Text>
+							</Box>
+						)}
+					</Box>
+				))}
+			</Box>
+		);
+	}
+
+	if (command === 'list-settings-model-providers') {
+		if (loading) {
+			return <Text color="blue">Loading model providers...</Text>;
+		}
+
+		if (error) {
+			return (
+				<Box flexDirection="column">
+					<Text color="red">❌ Error: {error}</Text>
+					<Text color="yellow">Make sure the server is running with: timestep server</Text>
+				</Box>
+			);
+		}
+
+		return (
+			<Box flexDirection="column">
+				<Text color="green">🤖 Configured Model Providers:</Text>
+				{modelProviders.map((provider) => (
+					<Box key={provider.id} flexDirection="column" marginLeft={2}>
+						<Text>
+							<Text color="blue">•</Text> <Text color="cyan">{provider.provider}</Text>
+							<Text color="gray"> ({provider.id})</Text>
+						</Text>
+						<Box marginLeft={2}>
+							<Text color="gray">
+								Base URL: {provider.base_url || 'N/A'}
+							</Text>
+						</Box>
+						<Box marginLeft={2}>
+							<Text color="gray">
+								Models URL: {provider.models_url || 'N/A'}
+							</Text>
+						</Box>
+						{provider.api_key && (
+							<Box marginLeft={2}>
+								<Text color="gray">
+									API Key: {provider.api_key ? '***' : 'N/A'}
+								</Text>
+							</Box>
+						)}
 					</Box>
 				))}
 			</Box>
@@ -756,3 +833,4 @@ export default function App({name = 'Stranger', command}: Props) {
 		</Text>
 	);
 }
+

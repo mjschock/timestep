@@ -8,17 +8,17 @@
  */
 
 import express from "express";
-import { readFile } from "node:fs/promises";
-import { getTimestepPaths, loadAppConfig } from "./utils.js";
+import { loadAppConfig } from "./utils.js";
 import { listModels } from "./api/modelsApi.js";
 import { listContexts } from "./api/contextsApi.js";
+import { listAgents } from "./api/agentsApi.js";
 import { listApiKeys } from "./api/settings/apiKeysApi.js";
 import { listMcpServers } from "./api/settings/mcpServersApi.js";
+import { listModelProviders } from "./api/settings/modelProvidersApi.js";
 import { listTraces } from "./api/tracesApi.js";
 import { listTools } from "./api/toolsApi.js";
 
-// Get timestep configuration paths and app config
-const timestepPaths = getTimestepPaths();
+// Get app config
 const appConfig = loadAppConfig();
 
 // Create Express app for CLI endpoints
@@ -42,20 +42,11 @@ app.use((_req, res, next) => {
 // Agents endpoint
 app.get("/agents", async (_req, res) => {
   try {
-    const agentsContent = await readFile(timestepPaths.agentsConfig, 'utf-8');
-    const lines = agentsContent.split('\n').filter(line => line.trim());
-    const agents = lines.map(line => {
-      try {
-        return JSON.parse(line);
-      } catch {
-        return null;
-      }
-    }).filter(Boolean);
-
-    res.json(agents);
+    const response = await listAgents();
+    res.json(response.data);
   } catch (error) {
-    res.status(404).json({
-      error: `Agents configuration not found at: ${timestepPaths.agentsConfig}`
+    res.status(500).json({
+      error: error instanceof Error ? error.message : 'Failed to load agents'
     });
   }
 });
@@ -128,6 +119,18 @@ app.get("/settings/mcp-servers", async (_req, res) => {
   } catch (error) {
     res.status(500).json({
       error: error instanceof Error ? error.message : "Failed to fetch MCP servers"
+    });
+  }
+});
+
+// Model Providers endpoint
+app.get("/settings/model-providers", async (_req, res) => {
+  try {
+    const modelProvidersResponse = await listModelProviders();
+    res.json(modelProvidersResponse.data);
+  } catch (error) {
+    res.status(500).json({
+      error: error instanceof Error ? error.message : "Failed to fetch model providers"
     });
   }
 });

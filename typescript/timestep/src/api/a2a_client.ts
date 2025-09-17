@@ -124,34 +124,32 @@ interface AgentInfo {
   systemPrompt: string;
 }
 
-function resolveAgentsFile(): string {
-  // Use timestep configuration paths
-  const timestepPaths = getTimestepPaths();
-  return timestepPaths.agentsConfig;
+async function loadAvailableAgents(): Promise<AgentInfo[]> {
+  try {
+    // Fetch agents from the /agents endpoint
+    const response = await fetch('http://localhost:3000/agents');
+    if (response.ok) {
+      const agents = await response.json();
+      console.log(`📋 Loaded ${agents.length} agents from /agents endpoint`);
+
+      return agents.map((agent: any) => ({
+        id: agent.id,
+        name: agent.name,
+        description: agent.handoffDescription || agent.instructions || agent.name,
+        systemPrompt: agent.instructions
+      }));
+    } else {
+      throw new Error(`Failed to fetch agents from endpoint (${response.status})`);
+    }
+  } catch (error) {
+    console.error(`Error fetching agents from endpoint: ${error}`);
+    throw new Error(`Unable to load agents: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
-function loadAvailableAgents(): AgentInfo[] {
-  const agentsConfigPath = resolveAgentsFile();
-  const agentsConfigContent = fs.readFileSync(agentsConfigPath, 'utf8');
-  const lines = agentsConfigContent.split('\n').filter(line => line.trim());
-  
-  const agents: AgentInfo[] = [];
-  for (const line of lines) {
-    const agent = JSON.parse(line);
-    agents.push({
-      id: agent.id,
-      name: agent.name,
-      description: agent.description,
-      systemPrompt: agent.systemPrompt
-    });
-  }
-  
-  console.log('🔍 Debug - loaded agents:', agents.length);
-  return agents;
-}
 
 async function selectAgent(): Promise<string> {
-  const agents = loadAvailableAgents();
+  const agents = await loadAvailableAgents();
   
   // If agentId provided via CLI, validate and use it
   if (cliArgs.agentId) {

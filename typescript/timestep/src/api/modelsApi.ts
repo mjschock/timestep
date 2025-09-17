@@ -48,8 +48,6 @@ export interface DeleteModelResponse {
   object: string;
 }
 
-import { getTimestepPaths } from "../utils.js";
-import * as fs from 'node:fs';
 
 /**
  * List all available models from all configured providers
@@ -57,26 +55,14 @@ import * as fs from 'node:fs';
  * @returns Promise resolving to the list of models
  */
 export async function listModels(): Promise<ListModelsResponse> {
-  const timestepPaths = getTimestepPaths();
-
   let providers: any[] = [];
 
   try {
-    if (fs.existsSync(timestepPaths.modelProviders)) {
-      const modelProvidersContent = fs.readFileSync(timestepPaths.modelProviders, 'utf8');
-      const lines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
-      providers = lines.map((line: string) => {
-        try {
-          return JSON.parse(line);
-        } catch {
-          return null;
-        }
-      }).filter(Boolean);
-    } else {
-      console.warn(`Model providers file not found at: ${timestepPaths.modelProviders}. Returning empty models list.`);
-    }
+    const { listModelProviders } = await import('./settings/modelProvidersApi.js');
+    const response = await listModelProviders();
+    providers = response.data;
   } catch (error) {
-    console.warn(`Failed to read model providers from '${timestepPaths.modelProviders}': ${error}. Returning empty models list.`);
+    console.warn(`Failed to load model providers: ${error}. Returning empty models list.`);
   }
 
     const allModels: Model[] = [];

@@ -37,8 +37,6 @@ export interface ListApiKeysResponse {
   data: ApiKey[];
 }
 
-import { getTimestepPaths } from "../../utils.js";
-import * as fs from 'node:fs';
 
 /**
  * List all configured API keys
@@ -46,40 +44,27 @@ import * as fs from 'node:fs';
  * @returns Promise resolving to the list of API keys
  */
 export async function listApiKeys(): Promise<ListApiKeysResponse> {
-  const timestepPaths = getTimestepPaths();
-
-  let lines: string[] = [];
+  const apiKeys: ApiKey[] = [];
 
   try {
-    if (fs.existsSync(timestepPaths.modelProviders)) {
-      const modelProvidersContent = fs.readFileSync(timestepPaths.modelProviders, 'utf8');
-      lines = modelProvidersContent.split('\n').filter((line: string) => line.trim());
-    } else {
-      console.warn(`Model providers file not found at: ${timestepPaths.modelProviders}. Returning empty API keys list.`);
+    const { listModelProviders } = await import('./modelProvidersApi.js');
+    const response = await listModelProviders();
+
+    for (const provider of response.data) {
+      const apiKey: ApiKey = {
+        id: provider.provider || 'unknown',
+        name: provider.provider || 'Unknown Provider',
+        provider: provider.provider || 'unknown',
+        key: provider.api_key ? `${provider.api_key.substring(0, 10)}...` : 'Not configured',
+        active: !!provider.api_key,
+        created_at: Date.now(), // We don't have this info, use current time
+        last_used_at: undefined // We don't track this
+      };
+      apiKeys.push(apiKey);
     }
   } catch (error) {
-    console.warn(`Failed to read model providers from '${timestepPaths.modelProviders}': ${error}. Returning empty API keys list.`);
+    console.warn('Failed to load model providers for API keys:', error);
   }
-
-    const apiKeys: ApiKey[] = [];
-
-    for (const line of lines) {
-      try {
-        const provider = JSON.parse(line);
-        const apiKey: ApiKey = {
-          id: provider.provider || 'unknown',
-          name: provider.provider || 'Unknown Provider',
-          provider: provider.provider || 'unknown',
-          key: provider.api_key ? `${provider.api_key.substring(0, 10)}...` : 'Not configured',
-          active: !!provider.api_key,
-          created_at: Date.now(), // We don't have this info, use current time
-          last_used_at: undefined // We don't track this
-        };
-        apiKeys.push(apiKey);
-      } catch (error) {
-        console.warn('Failed to parse model provider line:', line, error);
-      }
-    }
 
   return {
     object: 'list',

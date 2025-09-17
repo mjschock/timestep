@@ -20,6 +20,7 @@ const cli = meow(
 	  list-traces              List all traces from the server
 	  list-settings-api-keys   List all configured API keys
 	  list-settings-mcp-servers List all configured MCP servers
+	  list-settings-model-providers List all configured model providers
 	  --name       Your name (for greeting)
 
 	Examples
@@ -55,6 +56,9 @@ const cli = meow(
 
 	  $ timestep list-settings-mcp-servers
 	  List all configured MCP servers
+
+	  $ timestep list-settings-model-providers
+	  List all configured model providers
 `,
 	{
 		importMeta: import.meta,
