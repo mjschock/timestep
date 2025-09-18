@@ -28,24 +28,13 @@ import {
 	TimestepAIAgentExecutor,
 	Context,
 	getVersion,
-	getDefaultMcpServers,
-	// MCP SDK re-exports
-	Server,
-	StreamableHTTPServerTransport,
-	CallToolRequestSchema,
-	ListToolsRequestSchema,
-	McpTool,
-	ListResourcesRequestSchema,
-	ReadResourceRequestSchema,
-	ListPromptsRequestSchema,
-	GetPromptRequestSchema,
 	// Types
 	type Agent,
 	type ModelProvider,
 	type McpServer,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.181624';
+} from 'npm:@timestep-ai/timestep@2025.9.181645';
 
 /**
  * Supabase Agent Repository Implementation
@@ -267,7 +256,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 		if (servers.length === 0) {
 			// Import the default MCP servers configuration
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.181624'
+				'npm:@timestep-ai/timestep@2025.9.181645'
 			);
 			const defaultServers = getDefaultMcpServers(this.baseUrl);
 
@@ -569,7 +558,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181624'
+					'npm:@timestep-ai/timestep@2025.9.181645'
 				);
 
 				if (request.method === 'POST') {
@@ -587,7 +576,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// GET request - health check
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181624'
+					'npm:@timestep-ai/timestep@2025.9.181645'
 				);
 				const server = await getMcpServer(serverId, repositories);
 

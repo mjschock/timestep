@@ -199,7 +199,10 @@ export async function listAllMcpTools(mcpServerRepository?: any): Promise<
 	}>
 > {
 	// Use the MCP servers API instead of direct file access
-	const {listMcpServers} = await import('./api/mcpServersApi.js');
+	const {listMcpServers, handleMcpServerRequest} = await import(
+		'./api/mcpServersApi.js'
+	);
+	const {getBuiltinMcpServer} = await import('./config/defaultMcpServers.js');
 	const mcpServersResponse = await listMcpServers(mcpServerRepository);
 	const allTools: Array<{
 		id: string;
@@ -210,6 +213,8 @@ export async function listAllMcpTools(mcpServerRepository?: any): Promise<
 		inputSchema: any;
 	}> = [];
 
+	const builtinServer = getBuiltinMcpServer();
+
 	for (const server of mcpServersResponse.data) {
 		if (!server.enabled) {
 			console.log(`Skipping disabled MCP server: ${server.id}`);
@@ -217,15 +222,36 @@ export async function listAllMcpTools(mcpServerRepository?: any): Promise<
 		}
 
 		try {
-			console.log(
-				`🔌 Connecting to MCP server ${server.id} at ${server.serverUrl}`,
-			);
+			let mcpTools: any;
 
-			const client = await createMcpClient(server.serverUrl, server.authToken);
+			if (server.id === builtinServer.id) {
+				// Handle built-in MCP server - call handleMcpServerRequest directly
+				console.log(`🔌 Using built-in MCP server ${server.id}`);
+				const response = await handleMcpServerRequest(
+					server.id,
+					{
+						jsonrpc: '2.0',
+						method: 'tools/list',
+						id: 'list-tools-request',
+					},
+					mcpServerRepository,
+				);
+				mcpTools = response.result;
+			} else {
+				// Handle remote MCP server - connect via HTTP
+				console.log(
+					`🔌 Connecting to MCP server ${server.id} at ${server.serverUrl}`,
+				);
 
-			// List tools from this server
-			const mcpTools = await client.listTools();
-			await client.close();
+				const client = await createMcpClient(
+					server.serverUrl,
+					server.authToken,
+				);
+
+				// List tools from this server
+				mcpTools = await client.listTools();
+				await client.close();
+			}
 
 			// Add tools with namespaced IDs
 			for (const mcpTool of mcpTools.tools) {
