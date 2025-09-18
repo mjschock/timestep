@@ -268,10 +268,21 @@ export class TimestepAIAgentExecutor implements AgentExecutor {
     constructor({
         repositories
     }: AgentExecutorConfig = {}) {
-        this.repositories = repositories || new DefaultRepositoryContainer();
+        // Check if we're in a restricted environment (Supabase Edge Functions)
+        const isRestrictedEnvironment = typeof Deno !== 'undefined' && Deno.env.get('DENO_DEPLOYMENT_ID');
+
+        if (repositories) {
+            this.repositories = repositories;
+        } else if (isRestrictedEnvironment) {
+            // In restricted environments, throw an error if no repositories provided
+            throw new Error('Custom repositories must be provided in restricted environments (Supabase Edge Functions). Cannot use default file-based repositories.');
+        } else {
+            this.repositories = new DefaultRepositoryContainer();
+        }
+
         this.agentFactory = new AgentFactory(this.repositories);
         this.contextService = new ContextService(this.repositories.contexts);
-        
+
         // Set tracing API key from repositories (async, but don't wait)
         setTracingApiKeyFromRepositories(this.repositories).catch(error => {
             console.warn('Failed to set tracing API key:', error);

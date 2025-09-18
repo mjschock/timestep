@@ -40,7 +40,7 @@ import {
   type Repository,
   type Agent,
   type ModelProvider,
-  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180819';
+  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180831';
 
 /**
  * Supabase Agent Repository Implementation
