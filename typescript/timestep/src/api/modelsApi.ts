@@ -49,13 +49,15 @@ export interface DeleteModelResponse {
 }
 
 
+import { RepositoryContainer, DefaultRepositoryContainer } from '../services/backing/repositoryContainer.js';
+
 /**
  * List all available models from all configured providers
  *
  * @param repositories - Optional repository container for dependency injection
  * @returns Promise resolving to the list of models
  */
-export async function listModels(repositories: any = {}): Promise<ListModelsResponse> {
+export async function listModels(repositories: RepositoryContainer = new DefaultRepositoryContainer()): Promise<ListModelsResponse> {
   let providers: any[] = [];
 
   try {

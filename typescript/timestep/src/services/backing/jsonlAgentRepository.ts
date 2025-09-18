@@ -114,12 +114,19 @@ export class JsonlAgentRepository extends JsonlRepository<Agent, string> impleme
                 return agents;
             }
         } catch (error) {
-            console.warn(`Failed to read agents configuration from '${this.filePath}': ${error}. Creating default configuration.`);
+            console.warn(`Failed to read agents configuration from '${this.filePath}': ${error}. Using default configuration.`);
         }
 
-        // If no agents found or error reading, create default configuration
-        await this.createDefaultAgentsFile();
-        console.log(`📋 Created default agents configuration with ${DEFAULT_AGENTS.length} agents`);
+        // If no agents found or error reading, try to create default configuration
+        // In restricted environments (like Supabase Edge Functions), this will fail gracefully
+        try {
+            await this.createDefaultAgentsFile();
+            console.log(`📋 Created default agents configuration with ${DEFAULT_AGENTS.length} agents`);
+        } catch (error) {
+            console.warn(`Unable to create default configuration file (restricted environment): ${error}`);
+            console.log(`📋 Using in-memory default agents configuration with ${DEFAULT_AGENTS.length} agents`);
+        }
+
         return DEFAULT_AGENTS;
     }
 

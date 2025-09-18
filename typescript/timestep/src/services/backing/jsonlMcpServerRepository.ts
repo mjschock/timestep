@@ -65,12 +65,19 @@ export class JsonlMcpServerRepository extends JsonlRepository<McpServer, string>
                 return servers;
             }
         } catch (error) {
-            console.warn(`Failed to read MCP servers configuration from '${this.filePath}': ${error}. Creating default configuration.`);
+            console.warn(`Failed to read MCP servers configuration from '${this.filePath}': ${error}. Using default configuration.`);
         }
 
-        // If no servers found or error reading, create default configuration
-        await this.createDefaultMcpServersFile();
-        console.log(`🔌 Created default MCP servers configuration with ${DEFAULT_MCP_SERVERS.length} servers`);
+        // If no servers found or error reading, try to create default configuration
+        // In restricted environments (like Supabase Edge Functions), this will fail gracefully
+        try {
+            await this.createDefaultMcpServersFile();
+            console.log(`🔌 Created default MCP servers configuration with ${DEFAULT_MCP_SERVERS.length} servers`);
+        } catch (error) {
+            console.warn(`Unable to create default configuration file (restricted environment): ${error}`);
+            console.log(`🔌 Using in-memory default MCP servers configuration with ${DEFAULT_MCP_SERVERS.length} servers`);
+        }
+
         return DEFAULT_MCP_SERVERS;
     }
 

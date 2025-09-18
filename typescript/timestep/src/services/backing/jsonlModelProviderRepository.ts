@@ -63,12 +63,19 @@ export class JsonlModelProviderRepository extends JsonlRepository<ModelProvider,
                 return providers;
             }
         } catch (error) {
-            console.warn(`Failed to read model providers configuration from '${this.filePath}': ${error}. Creating default configuration.`);
+            console.warn(`Failed to read model providers configuration from '${this.filePath}': ${error}. Using default configuration.`);
         }
 
-        // If no providers found or error reading, create default configuration
-        await this.createDefaultModelProvidersFile();
-        console.log(`🤖 Created default model providers configuration with ${DEFAULT_MODEL_PROVIDERS.length} providers`);
+        // If no providers found or error reading, try to create default configuration
+        // In restricted environments (like Supabase Edge Functions), this will fail gracefully
+        try {
+            await this.createDefaultModelProvidersFile();
+            console.log(`🤖 Created default model providers configuration with ${DEFAULT_MODEL_PROVIDERS.length} providers`);
+        } catch (error) {
+            console.warn(`Unable to create default configuration file (restricted environment): ${error}`);
+            console.log(`🤖 Using in-memory default model providers configuration with ${DEFAULT_MODEL_PROVIDERS.length} providers`);
+        }
+
         return DEFAULT_MODEL_PROVIDERS;
     }
 
