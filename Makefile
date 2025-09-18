@@ -1,3 +1,5 @@
+default: publish
+
 deno-server-dev:
 	@echo "🦕 Starting Deno/Oak A2A Server with auto-reload..."
 	cd typescript/timestep && deno task dev
@@ -70,9 +72,9 @@ test-e2e: timestep-cli-server timestep-cli-list-all test-built-in-weather-cli
 
 publish:
 	@echo "📘 Publishing Timestep..."
+	./bash/bump-version.sh
 	cd typescript/timestep/examples && deno run --allow-read --allow-write --allow-run check-examples.ts
 	make test-e2e
-	./bash/bump-version.sh
 	git add .
 	git commit -m "Bump version to $(cat typescript/timestep/package.json | jq -r '.version')"
 	git push

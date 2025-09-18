@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Timestep Version Bump Script
-# Automatically bumps the version in package.json and package-lock.json using yyyy.mm.ddhhmm format
+# Automatically bumps the version in package.json, package-lock.json, and example files using yyyy.mm.ddhhmm format
 
 set -e  # Exit on any error
 
@@ -17,6 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")/typescript/timestep"
 PACKAGE_JSON="$PROJECT_DIR/package.json"
 PACKAGE_LOCK="$PROJECT_DIR/package-lock.json"
+EXAMPLES_DIR="$PROJECT_DIR/examples"
 
 echo -e "${BLUE}🔧 Timestep Version Bump Tool${NC}"
 echo "==============================================="
@@ -45,11 +46,17 @@ echo -e "${YELLOW}🚀 New version: ${NEW_VERSION}${NC}"
 if [[ "$CURRENT_VERSION" == "$NEW_VERSION" ]]; then
     echo -e "${YELLOW}⚠️  Warning: Version unchanged (${NEW_VERSION})${NC}"
     echo "   This can happen if you run the script multiple times in the same minute"
-    read -p "   Continue anyway? (y/N): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "${BLUE}🛑 Version bump cancelled${NC}"
-        exit 0
+    
+    # Check if running in non-interactive mode (e.g., from make)
+    if [[ ! -t 0 ]]; then
+        echo -e "${YELLOW}   Non-interactive mode detected, continuing anyway...${NC}"
+    else
+        read -p "   Continue anyway? (y/N): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            echo -e "${BLUE}🛑 Version bump cancelled${NC}"
+            exit 0
+        fi
     fi
 fi
 
@@ -60,6 +67,12 @@ echo -e "${BLUE}📝 Updating version files...${NC}"
 echo -e "${YELLOW}💾 Creating backups...${NC}"
 cp "$PACKAGE_JSON" "$PACKAGE_JSON.backup"
 cp "$PACKAGE_LOCK" "$PACKAGE_LOCK.backup"
+
+# Create backup of examples directory if it exists
+if [[ -d "$EXAMPLES_DIR" ]]; then
+    cp -r "$EXAMPLES_DIR" "$EXAMPLES_DIR.backup"
+    echo -e "${YELLOW}💾 Examples directory backed up${NC}"
+fi
 
 # Update package.json
 echo -e "${YELLOW}📦 Updating package.json...${NC}"
@@ -81,6 +94,35 @@ else
     exit 1
 fi
 
+# Update example files
+echo -e "${YELLOW}📚 Updating example files...${NC}"
+EXAMPLE_FILES_UPDATED=0
+if [[ -d "$EXAMPLES_DIR" ]]; then
+    # Find all .ts files in examples directory
+    for file in "$EXAMPLES_DIR"/*.ts; do
+        if [[ -f "$file" ]]; then
+            echo -e "${YELLOW}   Checking $(basename "$file")...${NC}"
+            if grep -q "npm:@timestep-ai/timestep@" "$file"; then
+                echo -e "${YELLOW}   Updating $(basename "$file")...${NC}"
+                sed -i.tmp "s/npm:@timestep-ai\/timestep@[^']*/npm:@timestep-ai\/timestep@$NEW_VERSION/g" "$file"
+                rm "$file.tmp" 2>/dev/null || true
+                echo -e "${GREEN}   ✅ $(basename "$file") updated${NC}"
+                EXAMPLE_FILES_UPDATED=$((EXAMPLE_FILES_UPDATED + 1))
+            else
+                echo -e "${YELLOW}   Skipping $(basename "$file") - no version references${NC}"
+            fi
+        fi
+    done
+    
+    if [[ $EXAMPLE_FILES_UPDATED -gt 0 ]]; then
+        echo -e "${GREEN}✅ Updated $EXAMPLE_FILES_UPDATED example file(s)${NC}"
+    else
+        echo -e "${YELLOW}⚠️  No example files found with version references${NC}"
+    fi
+else
+    echo -e "${YELLOW}⚠️  Examples directory not found: $EXAMPLES_DIR${NC}"
+fi
+
 # Verify the changes
 echo
 echo -e "${BLUE}🔍 Verifying changes...${NC}"
@@ -89,6 +131,7 @@ if [[ "$NEW_PACKAGE_VERSION" == "$NEW_VERSION" ]]; then
     echo -e "${GREEN}✅ package.json version confirmed: ${NEW_VERSION}${NC}"
 else
     echo -e "${RED}❌ package.json version verification failed${NC}"
+    echo -e "${RED}   Expected: ${NEW_VERSION}, Got: ${NEW_PACKAGE_VERSION}${NC}"
     exit 1
 fi
 
@@ -103,12 +146,20 @@ else
     echo -e "${YELLOW}🔄 Restoring backup files...${NC}"
     mv "$PACKAGE_JSON.backup" "$PACKAGE_JSON"
     mv "$PACKAGE_LOCK.backup" "$PACKAGE_LOCK"
+    if [[ -d "$EXAMPLES_DIR.backup" ]]; then
+        rm -rf "$EXAMPLES_DIR"
+        mv "$EXAMPLES_DIR.backup" "$EXAMPLES_DIR"
+        echo -e "${YELLOW}💾 Examples directory restored${NC}"
+    fi
     echo -e "${YELLOW}💾 Backup files restored${NC}"
     exit 1
 fi
 
 # Clean up backup files
 rm "$PACKAGE_JSON.backup" "$PACKAGE_LOCK.backup"
+if [[ -d "$EXAMPLES_DIR.backup" ]]; then
+    rm -rf "$EXAMPLES_DIR.backup"
+fi
 
 # Success message
 echo
@@ -118,6 +169,9 @@ echo
 echo -e "${BLUE}📋 Summary:${NC}"
 echo -e "${BLUE}   • package.json updated${NC}"
 echo -e "${BLUE}   • package-lock.json updated${NC}"
+if [[ $EXAMPLE_FILES_UPDATED -gt 0 ]]; then
+    echo -e "${BLUE}   • $EXAMPLE_FILES_UPDATED example file(s) updated${NC}"
+fi
 echo -e "${BLUE}   • Build verified${NC}"
 echo -e "${BLUE}   • Backup files cleaned up${NC}"
 echo

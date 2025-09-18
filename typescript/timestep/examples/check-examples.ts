@@ -16,7 +16,7 @@ const __dirname = dirname(__filename);
 // Function to replace npm imports with local imports
 function replaceImportsWithLocal(content: string): string {
   return content.replace(
-    /from 'npm:@timestep-ai\/timestep@latest'/g,
+    /from 'npm:@timestep-ai\/timestep@[^']*'/g,
     "from '../src/index.ts'"
   );
 }

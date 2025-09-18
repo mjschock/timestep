@@ -27,7 +27,7 @@ import {
   listModelProviders,
   handleAgentRequest,
   TimestepAIAgentExecutor,
-  getVersion} from 'npm:@timestep-ai/timestep@latest';
+  getVersion} from 'npm:@timestep-ai/timestep@2025.09.172123';
 
 // Custom task store for Supabase environment
 class SupabaseTaskStore {
