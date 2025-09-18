@@ -143,7 +143,7 @@ Deno.serve({ port }, async (request: Request) => {
         originalUrl: url.pathname + url.search,
         params: { agentId: agentMatch[1] },
         body: request.method !== 'GET' ? await request.json().catch(() => ({})) : {},
-        headers: Object.fromEntries(request.headers.entries())
+        headers: Object.fromEntries(Array.from(request.headers.entries()))
       };
 
       try {

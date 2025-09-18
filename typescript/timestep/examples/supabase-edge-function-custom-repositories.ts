@@ -34,15 +34,16 @@ import {
   listMcpServers,
   listModelProviders,
   handleAgentRequest,
-  TimestepAIAgentExecutor
+  TimestepAIAgentExecutor,
+  Context,
+  type Repository,
+  type Agent,
+  type ModelProvider,
+  type McpServer,
+  type ApiKey,
+  type Tool,
+  type Trace
 } from 'npm:@timestep-ai/timestep@latest';
-
-// Import repository interface and base classes
-import { Repository } from '../src/services/backing/repository.js';
-import { Agent } from '../src/api/agentsApi.js';
-import { Context } from '../src/types/context.js';
-import { ModelProvider } from '../src/api/settings/modelProvidersApi.js';
-import { McpServer } from '../src/api/settings/mcpServersApi.js';
 
 /**
  * Supabase Agent Repository Implementation
@@ -236,6 +237,246 @@ class SupabaseModelProviderRepository implements Repository<ModelProvider, strin
 }
 
 /**
+ * Supabase MCP Server Repository Implementation
+ */
+class SupabaseMcpServerRepository implements Repository<McpServer, string> {
+  constructor(private supabase: any) {}
+
+  async list(): Promise<McpServer[]> {
+    const { data, error } = await this.supabase
+      .from('mcp_servers')
+      .select('*');
+
+    if (error) throw new Error(`Failed to list MCP servers: ${error.message}`);
+    return data || [];
+  }
+
+  async load(id: string): Promise<McpServer | null> {
+    const { data, error } = await this.supabase
+      .from('mcp_servers')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      throw new Error(`Failed to load MCP server: ${error.message}`);
+    }
+    return data || null;
+  }
+
+  async save(server: McpServer): Promise<void> {
+    const { error } = await this.supabase
+      .from('mcp_servers')
+      .upsert([server]);
+
+    if (error) throw new Error(`Failed to save MCP server: ${error.message}`);
+  }
+
+  async delete(id: string): Promise<void> {
+    const { error } = await this.supabase
+      .from('mcp_servers')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw new Error(`Failed to delete MCP server: ${error.message}`);
+  }
+
+  async exists(id: string): Promise<boolean> {
+    const server = await this.load(id);
+    return server !== null;
+  }
+
+  async getOrCreate(id: string, ...createArgs: any[]): Promise<McpServer> {
+    const existing = await this.load(id);
+    if (existing) {
+      return existing;
+    }
+
+    throw new Error('Auto-creation of MCP servers not supported - please create servers explicitly');
+  }
+}
+
+/**
+ * Supabase API Key Repository Implementation
+ */
+class SupabaseApiKeyRepository implements Repository<ApiKey, string> {
+  constructor(private supabase: any) {}
+
+  async list(): Promise<ApiKey[]> {
+    const { data, error } = await this.supabase
+      .from('api_keys')
+      .select('*');
+
+    if (error) throw new Error(`Failed to list API keys: ${error.message}`);
+    return data || [];
+  }
+
+  async load(id: string): Promise<ApiKey | null> {
+    const { data, error } = await this.supabase
+      .from('api_keys')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      throw new Error(`Failed to load API key: ${error.message}`);
+    }
+    return data || null;
+  }
+
+  async save(apiKey: ApiKey): Promise<void> {
+    const { error } = await this.supabase
+      .from('api_keys')
+      .upsert([apiKey]);
+
+    if (error) throw new Error(`Failed to save API key: ${error.message}`);
+  }
+
+  async delete(id: string): Promise<void> {
+    const { error } = await this.supabase
+      .from('api_keys')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw new Error(`Failed to delete API key: ${error.message}`);
+  }
+
+  async exists(id: string): Promise<boolean> {
+    const apiKey = await this.load(id);
+    return apiKey !== null;
+  }
+
+  async getOrCreate(id: string, ...createArgs: any[]): Promise<ApiKey> {
+    const existing = await this.load(id);
+    if (existing) {
+      return existing;
+    }
+
+    throw new Error('Auto-creation of API keys not supported - please create keys explicitly');
+  }
+}
+
+/**
+ * Supabase Tool Repository Implementation
+ */
+class SupabaseToolRepository implements Repository<Tool, string> {
+  constructor(private supabase: any) {}
+
+  async list(): Promise<Tool[]> {
+    const { data, error } = await this.supabase
+      .from('tools')
+      .select('*');
+
+    if (error) throw new Error(`Failed to list tools: ${error.message}`);
+    return data || [];
+  }
+
+  async load(id: string): Promise<Tool | null> {
+    const { data, error } = await this.supabase
+      .from('tools')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      throw new Error(`Failed to load tool: ${error.message}`);
+    }
+    return data || null;
+  }
+
+  async save(tool: Tool): Promise<void> {
+    const { error } = await this.supabase
+      .from('tools')
+      .upsert([tool]);
+
+    if (error) throw new Error(`Failed to save tool: ${error.message}`);
+  }
+
+  async delete(id: string): Promise<void> {
+    const { error } = await this.supabase
+      .from('tools')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw new Error(`Failed to delete tool: ${error.message}`);
+  }
+
+  async exists(id: string): Promise<boolean> {
+    const tool = await this.load(id);
+    return tool !== null;
+  }
+
+  async getOrCreate(id: string, ...createArgs: any[]): Promise<Tool> {
+    const existing = await this.load(id);
+    if (existing) {
+      return existing;
+    }
+
+    throw new Error('Auto-creation of tools not supported - please create tools explicitly');
+  }
+}
+
+/**
+ * Supabase Trace Repository Implementation
+ */
+class SupabaseTraceRepository implements Repository<Trace, string> {
+  constructor(private supabase: any) {}
+
+  async list(): Promise<Trace[]> {
+    const { data, error } = await this.supabase
+      .from('traces')
+      .select('*');
+
+    if (error) throw new Error(`Failed to list traces: ${error.message}`);
+    return data || [];
+  }
+
+  async load(id: string): Promise<Trace | null> {
+    const { data, error } = await this.supabase
+      .from('traces')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      throw new Error(`Failed to load trace: ${error.message}`);
+    }
+    return data || null;
+  }
+
+  async save(trace: Trace): Promise<void> {
+    const { error } = await this.supabase
+      .from('traces')
+      .upsert([trace]);
+
+    if (error) throw new Error(`Failed to save trace: ${error.message}`);
+  }
+
+  async delete(id: string): Promise<void> {
+    const { error } = await this.supabase
+      .from('traces')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw new Error(`Failed to delete trace: ${error.message}`);
+  }
+
+  async exists(id: string): Promise<boolean> {
+    const trace = await this.load(id);
+    return trace !== null;
+  }
+
+  async getOrCreate(id: string, ...createArgs: any[]): Promise<Trace> {
+    const existing = await this.load(id);
+    if (existing) {
+      return existing;
+    }
+
+    throw new Error('Auto-creation of traces not supported - please create traces explicitly');
+  }
+}
+
+/**
  * Custom task store for Supabase environment
  */
 class SupabaseTaskStore {
@@ -269,6 +510,10 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const agentRepository = new SupabaseAgentRepository(supabase);
 const contextRepository = new SupabaseContextRepository(supabase);
 const modelProviderRepository = new SupabaseModelProviderRepository(supabase);
+const mcpServerRepository = new SupabaseMcpServerRepository(supabase);
+const apiKeyRepository = new SupabaseApiKeyRepository(supabase);
+const toolRepository = new SupabaseToolRepository(supabase);
+const traceRepository = new SupabaseTraceRepository(supabase);
 
 // Initialize components
 const agentExecutor = new TimestepAIAgentExecutor();
@@ -308,7 +553,7 @@ Deno.serve({ port }, async (request: Request) => {
         deploymentId: Deno.env.get("DENO_DEPLOYMENT_ID") || "local",
         region: Deno.env.get("DENO_REGION") || "unknown",
         path: url.pathname,
-        repositories: ['agents', 'contexts', 'model_providers']
+        repositories: ['agents', 'contexts', 'model_providers', 'mcp_servers', 'api_keys', 'tools', 'traces']
       }), { status: 200, headers });
     }
 
@@ -328,34 +573,34 @@ Deno.serve({ port }, async (request: Request) => {
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    // Other endpoints using default repositories
+    if (url.pathname === "/settings/mcp-servers") {
+      const result = await listMcpServers(mcpServerRepository);
+      return new Response(JSON.stringify(result.data), { status: 200, headers });
+    }
+
+    if (url.pathname === "/settings/api-keys") {
+      const result = await listApiKeys(apiKeyRepository);
+      return new Response(JSON.stringify(result.data), { status: 200, headers });
+    }
+
+    if (url.pathname === "/tools") {
+      const result = await listTools(toolRepository);
+      return new Response(JSON.stringify(result.data), { status: 200, headers });
+    }
+
+    if (url.pathname === "/traces") {
+      const result = await listTraces(traceRepository);
+      return new Response(JSON.stringify(result.data), { status: 200, headers });
+    }
+
+    // Other endpoints using default repositories (models don't have custom storage)
     if (url.pathname === "/models") {
       const result = await listModels();
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    if (url.pathname === "/tools") {
-      const result = await listTools();
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
-
-    if (url.pathname === "/traces") {
-      const result = await listTraces();
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
-
-    if (url.pathname === "/settings/api-keys") {
-      const result = await listApiKeys();
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
-
-    if (url.pathname === "/settings/mcp-servers") {
-      const result = await listMcpServers();
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
-
     // Handle dynamic agent routes with custom repository
-    const agentMatch = url.pathname.match(/^\\/agents\\/([^\\/]+)(?:\\/.*)?$/);
+    const agentMatch = url.pathname.match(/^\/agents\/([^\/]+)(?:\/.*)?$/);
     if (agentMatch) {
       const mockReq = {
         method: request.method,
@@ -363,7 +608,7 @@ Deno.serve({ port }, async (request: Request) => {
         originalUrl: url.pathname + url.search,
         params: { agentId: agentMatch[1] },
         body: request.method !== 'GET' ? await request.json().catch(() => ({})) : {},
-        headers: Object.fromEntries(request.headers.entries())
+        headers: Object.fromEntries(Array.from(request.headers.entries()))
       };
 
       try {
@@ -392,11 +637,11 @@ console.log("  - GET /health - Health check with repository info");
 console.log("  - GET /agents - List agents (using SupabaseAgentRepository)");
 console.log("  - GET /chats - List chats (using SupabaseContextRepository)");
 console.log("  - GET /settings/model-providers - List model providers (using SupabaseModelProviderRepository)");
+console.log("  - GET /settings/mcp-servers - List MCP servers (using SupabaseMcpServerRepository)");
+console.log("  - GET /settings/api-keys - List API keys (using SupabaseApiKeyRepository)");
+console.log("  - GET /tools - List tools (using SupabaseToolRepository)");
+console.log("  - GET /traces - List traces (using SupabaseTraceRepository)");
 console.log("  - GET /models - List models (using default repository)");
-console.log("  - GET /tools - List tools (using default repository)");
-console.log("  - GET /traces - List traces (using default repository)");
-console.log("  - GET /settings/api-keys - List API keys (using default repository)");
-console.log("  - GET /settings/mcp-servers - List MCP servers (using default repository)");
 console.log("  - /agents/{agentId}/* - Dynamic agent A2A endpoints");
 
 /*
@@ -439,20 +684,78 @@ CREATE TABLE model_providers (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Create mcp_servers table
+CREATE TABLE mcp_servers (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  command TEXT NOT NULL,
+  args JSONB,
+  env JSONB,
+  disabled BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create api_keys table
+CREATE TABLE api_keys (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  key_value TEXT NOT NULL,
+  service TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create tools table
+CREATE TABLE tools (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  input_schema JSONB,
+  function_implementation TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create traces table
+CREATE TABLE traces (
+  id TEXT PRIMARY KEY,
+  agent_id TEXT,
+  context_id TEXT,
+  trace_data JSONB NOT NULL,
+  timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Create indexes for better performance
 CREATE INDEX idx_agents_name ON agents(name);
 CREATE INDEX idx_contexts_agent_id ON contexts(agent_id);
 CREATE INDEX idx_model_providers_provider ON model_providers(provider);
+CREATE INDEX idx_mcp_servers_name ON mcp_servers(name);
+CREATE INDEX idx_api_keys_service ON api_keys(service);
+CREATE INDEX idx_tools_name ON tools(name);
+CREATE INDEX idx_traces_agent_id ON traces(agent_id);
+CREATE INDEX idx_traces_context_id ON traces(context_id);
+CREATE INDEX idx_traces_timestamp ON traces(timestamp);
 
 -- Enable Row Level Security (optional)
 ALTER TABLE agents ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contexts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE model_providers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE mcp_servers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE api_keys ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tools ENABLE ROW LEVEL SECURITY;
+ALTER TABLE traces ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for authenticated users (optional)
 CREATE POLICY "Users can access agents" ON agents FOR ALL TO authenticated USING (true);
 CREATE POLICY "Users can access contexts" ON contexts FOR ALL TO authenticated USING (true);
 CREATE POLICY "Users can access model_providers" ON model_providers FOR ALL TO authenticated USING (true);
+CREATE POLICY "Users can access mcp_servers" ON mcp_servers FOR ALL TO authenticated USING (true);
+CREATE POLICY "Users can access api_keys" ON api_keys FOR ALL TO authenticated USING (true);
+CREATE POLICY "Users can access tools" ON tools FOR ALL TO authenticated USING (true);
+CREATE POLICY "Users can access traces" ON traces FOR ALL TO authenticated USING (true);
 `;
 
 /*
