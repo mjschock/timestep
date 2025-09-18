@@ -42,16 +42,15 @@ timestep-cli-list-traces:
 	@echo "🚀 Starting Timestep cli list-traces..."
 	cd typescript/timestep && npx tsx src/cli.tsx list-traces
 
+timestep-cli-list-mcp-servers:
+	@echo "🚀 Starting Timestep cli list-mcp-servers..."
+	cd typescript/timestep && npx tsx src/cli.tsx list-mcp-servers
 
-timestep-cli-list-settings-mcp-servers:
-	@echo "🚀 Starting Timestep cli list-settings-mcp-servers..."
-	cd typescript/timestep && npx tsx src/cli.tsx list-settings-mcp-servers
+timestep-cli-list-model-providers:
+	@echo "🚀 Starting Timestep cli list-model-providers..."
+	cd typescript/timestep && npx tsx src/cli.tsx list-model-providers
 
-timestep-cli-list-settings-model-providers:
-	@echo "🚀 Starting Timestep cli list-settings-model-providers..."
-	cd typescript/timestep && npx tsx src/cli.tsx list-settings-model-providers
-
-timestep-cli-list-all: timestep-cli-list-agents timestep-cli-list-chats timestep-cli-list-models timestep-cli-list-tools timestep-cli-list-traces timestep-cli-list-settings-mcp-servers timestep-cli-list-settings-model-providers
+timestep-cli-list-all: timestep-cli-list-agents timestep-cli-list-chats timestep-cli-list-models timestep-cli-list-tools timestep-cli-list-traces timestep-cli-list-mcp-servers timestep-cli-list-model-providers
 
 run-a2a-inspector:
 	@echo "🔍 Running A2A Inspector..."
@@ -70,6 +69,7 @@ test-e2e: timestep-cli-server timestep-cli-list-all test-built-in-weather-cli
 publish:
 	@echo "📘 Publishing Timestep..."
 	./bash/bump-version.sh
+	cd typescript/timestep && npx prettier --write .
 	cd typescript/timestep/examples && deno run --allow-read --allow-write --allow-run check-examples.ts
 	make test-e2e
 	git add .

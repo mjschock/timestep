@@ -13,351 +13,377 @@
  * Access endpoints like: https://YOUR_PROJECT.supabase.co/functions/v1/YOUR_FUNCTION_NAME/agents
  */
 
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import 'https://deno.land/x/xhr@0.1.0/mod.ts';
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
+// Import everything from timestep library (includes MCP SDK re-exports)
 import {
-  listAgents,
-  listModels,
-  listTools,
-  listTraces,
-  listContexts,
-  listMcpServers,
-  listModelProviders,
-  handleAgentRequest,
-  TimestepAIAgentExecutor,
-  Context,
-  getVersion,
-  type RepositoryContainer,
-  type Repository,
-  type Agent,
-  type ModelProvider,
-  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180938';
+	listAgents,
+	listModels,
+	listTools,
+	listTraces,
+	listContexts,
+	listMcpServers,
+	listModelProviders,
+	handleAgentRequest,
+	TimestepAIAgentExecutor,
+	Context,
+	getVersion,
+	getDefaultMcpServers,
+	// MCP SDK re-exports
+	Server,
+	StreamableHTTPServerTransport,
+	CallToolRequestSchema,
+	ListToolsRequestSchema,
+	McpTool,
+	ListResourcesRequestSchema,
+	ReadResourceRequestSchema,
+	ListPromptsRequestSchema,
+	GetPromptRequestSchema,
+	// Types
+	type Agent,
+	type ModelProvider,
+	type McpServer,
+	type Repository,
+	type RepositoryContainer,
+} from 'npm:@timestep-ai/timestep@2025.9.181621';
 
 /**
  * Supabase Agent Repository Implementation
  */
 class SupabaseAgentRepository implements Repository<Agent, string> {
-  constructor(private supabase: any) {}
+	constructor(private supabase: any) {}
 
-  async list(): Promise<Agent[]> {
-    const { data, error } = await this.supabase
-      .from('agents')
-      .select('*');
+	async list(): Promise<Agent[]> {
+		const {data, error} = await this.supabase.from('agents').select('*');
 
-    if (error) throw new Error(`Failed to list agents: ${error.message}`);
-    return data || [];
-  }
+		if (error) throw new Error(`Failed to list agents: ${error.message}`);
+		return data || [];
+	}
 
-  async load(id: string): Promise<Agent | null> {
-    const { data, error } = await this.supabase
-      .from('agents')
-      .select('*')
-      .eq('id', id)
-      .single();
+	async load(id: string): Promise<Agent | null> {
+		const {data, error} = await this.supabase
+			.from('agents')
+			.select('*')
+			.eq('id', id)
+			.single();
 
-    if (error && error.code !== 'PGRST116') {
-      throw new Error(`Failed to load agent: ${error.message}`);
-    }
-    return data || null;
-  }
+		if (error && error.code !== 'PGRST116') {
+			throw new Error(`Failed to load agent: ${error.message}`);
+		}
+		return data || null;
+	}
 
-  async save(agent: Agent): Promise<void> {
-    const { error } = await this.supabase
-      .from('agents')
-      .upsert([agent]);
+	async save(agent: Agent): Promise<void> {
+		const {error} = await this.supabase.from('agents').upsert([agent]);
 
-    if (error) throw new Error(`Failed to save agent: ${error.message}`);
-  }
+		if (error) throw new Error(`Failed to save agent: ${error.message}`);
+	}
 
-  async delete(id: string): Promise<void> {
-    const { error } = await this.supabase
-      .from('agents')
-      .delete()
-      .eq('id', id);
+	async delete(id: string): Promise<void> {
+		const {error} = await this.supabase.from('agents').delete().eq('id', id);
 
-    if (error) throw new Error(`Failed to delete agent: ${error.message}`);
-  }
+		if (error) throw new Error(`Failed to delete agent: ${error.message}`);
+	}
 
-  async exists(id: string): Promise<boolean> {
-    const agent = await this.load(id);
-    return agent !== null;
-  }
+	async exists(id: string): Promise<boolean> {
+		const agent = await this.load(id);
+		return agent !== null;
+	}
 
-  async getOrCreate(id: string, ...createArgs: any[]): Promise<Agent> {
-    const existing = await this.load(id);
-    if (existing) {
-      return existing;
-    }
+	async getOrCreate(id: string, ...createArgs: any[]): Promise<Agent> {
+		const existing = await this.load(id);
+		if (existing) {
+			return existing;
+		}
 
-    // For demonstration - in real implementation, you'd create a proper agent
-    // based on createArgs or throw an error for agents since they shouldn't be auto-created
-    throw new Error('Auto-creation of agents not supported - please create agents explicitly');
-  }
+		// For demonstration - in real implementation, you'd create a proper agent
+		// based on createArgs or throw an error for agents since they shouldn't be auto-created
+		throw new Error(
+			'Auto-creation of agents not supported - please create agents explicitly',
+		);
+	}
 }
 
 /**
  * Supabase Context Repository Implementation
  */
 class SupabaseContextRepository implements Repository<Context, string> {
-  constructor(private supabase: any) {}
+	constructor(private supabase: any) {}
 
-  async list(): Promise<Context[]> {
-    const { data, error } = await this.supabase
-      .from('contexts')
-      .select('*');
+	async list(): Promise<Context[]> {
+		const {data, error} = await this.supabase.from('contexts').select('*');
 
-    if (error) throw new Error(`Failed to list contexts: ${error.message}`);
-    return (data || []).map((item: any) => {
-      const context = new Context(item.context_id, item.agent_id);
-      context.taskHistories = item.task_histories || {};
-      context.taskStates = item.task_states || {};
-      context.tasks = item.tasks || [];
-      return context;
-    });
-  }
+		if (error) throw new Error(`Failed to list contexts: ${error.message}`);
+		return (data || []).map((item: any) => {
+			const context = new Context(item.context_id, item.agent_id);
+			context.taskHistories = item.task_histories || {};
+			context.taskStates = item.task_states || {};
+			context.tasks = item.tasks || [];
+			return context;
+		});
+	}
 
-  async load(id: string): Promise<Context | null> {
-    const { data, error } = await this.supabase
-      .from('contexts')
-      .select('*')
-      .eq('context_id', id)
-      .single();
+	async load(id: string): Promise<Context | null> {
+		const {data, error} = await this.supabase
+			.from('contexts')
+			.select('*')
+			.eq('context_id', id)
+			.single();
 
-    if (error && error.code !== 'PGRST116') {
-      throw new Error(`Failed to load context: ${error.message}`);
-    }
-    if (!data) return null;
+		if (error && error.code !== 'PGRST116') {
+			throw new Error(`Failed to load context: ${error.message}`);
+		}
+		if (!data) return null;
 
-    const context = new Context(data.context_id, data.agent_id);
-    context.taskHistories = data.task_histories || {};
-    context.taskStates = data.task_states || {};
-    context.tasks = data.tasks || [];
-    return context;
-  }
+		const context = new Context(data.context_id, data.agent_id);
+		context.taskHistories = data.task_histories || {};
+		context.taskStates = data.task_states || {};
+		context.tasks = data.tasks || [];
+		return context;
+	}
 
-  async save(context: Context): Promise<void> {
-    const { error } = await this.supabase
-      .from('contexts')
-      .upsert([{
-        context_id: context.contextId,
-        agent_id: context.agentId,
-        task_histories: context.taskHistories,
-        created_at: new Date().toISOString()
-      }]);
+	async save(context: Context): Promise<void> {
+		const {error} = await this.supabase.from('contexts').upsert([
+			{
+				context_id: context.contextId,
+				agent_id: context.agentId,
+				task_histories: context.taskHistories,
+				created_at: new Date().toISOString(),
+			},
+		]);
 
-    if (error) throw new Error(`Failed to save context: ${error.message}`);
-  }
+		if (error) throw new Error(`Failed to save context: ${error.message}`);
+	}
 
-  async delete(id: string): Promise<void> {
-    const { error } = await this.supabase
-      .from('contexts')
-      .delete()
-      .eq('context_id', id);
+	async delete(id: string): Promise<void> {
+		const {error} = await this.supabase
+			.from('contexts')
+			.delete()
+			.eq('context_id', id);
 
-    if (error) throw new Error(`Failed to delete context: ${error.message}`);
-  }
+		if (error) throw new Error(`Failed to delete context: ${error.message}`);
+	}
 
-  async exists(id: string): Promise<boolean> {
-    const context = await this.load(id);
-    return context !== null;
-  }
+	async exists(id: string): Promise<boolean> {
+		const context = await this.load(id);
+		return context !== null;
+	}
 
-  async getOrCreate(contextId: string, agentId: string): Promise<Context> {
-    const existing = await this.load(contextId);
-    if (existing) {
-      return existing;
-    }
+	async getOrCreate(contextId: string, agentId: string): Promise<Context> {
+		const existing = await this.load(contextId);
+		if (existing) {
+			return existing;
+		}
 
-    const newContext = new Context(contextId, agentId);
-    await this.save(newContext);
-    return newContext;
-  }
+		const newContext = new Context(contextId, agentId);
+		await this.save(newContext);
+		return newContext;
+	}
 }
 
 /**
  * Supabase Model Provider Repository Implementation
  */
-class SupabaseModelProviderRepository implements Repository<ModelProvider, string> {
-  constructor(private supabase: any) {}
+class SupabaseModelProviderRepository
+	implements Repository<ModelProvider, string>
+{
+	constructor(private supabase: any) {}
 
-  async list(): Promise<ModelProvider[]> {
-    const { data, error } = await this.supabase
-      .from('model_providers')
-      .select('*');
+	async list(): Promise<ModelProvider[]> {
+		const {data, error} = await this.supabase
+			.from('model_providers')
+			.select('*');
 
-    if (error) throw new Error(`Failed to list model providers: ${error.message}`);
-    return data || [];
-  }
+		if (error)
+			throw new Error(`Failed to list model providers: ${error.message}`);
+		return data || [];
+	}
 
-  async load(id: string): Promise<ModelProvider | null> {
-    const { data, error } = await this.supabase
-      .from('model_providers')
-      .select('*')
-      .eq('id', id)
-      .single();
+	async load(id: string): Promise<ModelProvider | null> {
+		const {data, error} = await this.supabase
+			.from('model_providers')
+			.select('*')
+			.eq('id', id)
+			.single();
 
-    if (error && error.code !== 'PGRST116') {
-      throw new Error(`Failed to load model provider: ${error.message}`);
-    }
-    return data || null;
-  }
+		if (error && error.code !== 'PGRST116') {
+			throw new Error(`Failed to load model provider: ${error.message}`);
+		}
+		return data || null;
+	}
 
-  async save(provider: ModelProvider): Promise<void> {
-    const { error } = await this.supabase
-      .from('model_providers')
-      .upsert([provider]);
+	async save(provider: ModelProvider): Promise<void> {
+		const {error} = await this.supabase
+			.from('model_providers')
+			.upsert([provider]);
 
-    if (error) throw new Error(`Failed to save model provider: ${error.message}`);
-  }
+		if (error)
+			throw new Error(`Failed to save model provider: ${error.message}`);
+	}
 
-  async delete(id: string): Promise<void> {
-    const { error } = await this.supabase
-      .from('model_providers')
-      .delete()
-      .eq('id', id);
+	async delete(id: string): Promise<void> {
+		const {error} = await this.supabase
+			.from('model_providers')
+			.delete()
+			.eq('id', id);
 
-    if (error) throw new Error(`Failed to delete model provider: ${error.message}`);
-  }
+		if (error)
+			throw new Error(`Failed to delete model provider: ${error.message}`);
+	}
 
-  async exists(id: string): Promise<boolean> {
-    const provider = await this.load(id);
-    return provider !== null;
-  }
+	async exists(id: string): Promise<boolean> {
+		const provider = await this.load(id);
+		return provider !== null;
+	}
 
-  async getOrCreate(id: string, ...createArgs: any[]): Promise<ModelProvider> {
-    const existing = await this.load(id);
-    if (existing) {
-      return existing;
-    }
+	async getOrCreate(id: string, ...createArgs: any[]): Promise<ModelProvider> {
+		const existing = await this.load(id);
+		if (existing) {
+			return existing;
+		}
 
-    // For demonstration - in real implementation, you'd create a proper model provider
-    // based on createArgs or throw an error since they usually shouldn't be auto-created
-    throw new Error('Auto-creation of model providers not supported - please create providers explicitly');
-  }
+		// For demonstration - in real implementation, you'd create a proper model provider
+		// based on createArgs or throw an error since they usually shouldn't be auto-created
+		throw new Error(
+			'Auto-creation of model providers not supported - please create providers explicitly',
+		);
+	}
 }
 
 /**
  * Supabase MCP Server Repository Implementation
  */
 class SupabaseMcpServerRepository implements Repository<McpServer, string> {
-  constructor(private supabase: any, private baseUrl?: string) {}
+	constructor(private supabase: any, private baseUrl?: string) {}
 
-  async list(): Promise<McpServer[]> {
-    const { data, error } = await this.supabase
-      .from('mcp_servers')
-      .select('*');
+	async list(): Promise<McpServer[]> {
+		const {data, error} = await this.supabase.from('mcp_servers').select('*');
 
-    if (error) throw new Error(`Failed to list MCP servers: ${error.message}`);
+		if (error) throw new Error(`Failed to list MCP servers: ${error.message}`);
 
-    const servers = data || [];
+		const servers = data || [];
 
-    // If no servers exist, create and return default servers
-    if (servers.length === 0) {
-      // Import the default MCP servers configuration
-      const { getDefaultMcpServers } = await import('npm:@timestep-ai/timestep@2025.9.180938');
-      const defaultServers = getDefaultMcpServers(this.baseUrl);
+		// If no servers exist, create and return default servers
+		if (servers.length === 0) {
+			// Import the default MCP servers configuration
+			const {getDefaultMcpServers} = await import(
+				'npm:@timestep-ai/timestep@2025.9.181621'
+			);
+			const defaultServers = getDefaultMcpServers(this.baseUrl);
 
-      // Try to save them to the database for future use
-      try {
-        for (const server of defaultServers) {
-          await this.save(server);
-        }
-        console.log(`🔌 Created ${defaultServers.length} default MCP servers in database`);
-      } catch (saveError) {
-        console.warn(`Failed to save default MCP servers to database: ${saveError}`);
-      }
+			// Try to save them to the database for future use
+			try {
+				for (const server of defaultServers) {
+					await this.save(server);
+				}
+				console.log(
+					`🔌 Created ${defaultServers.length} default MCP servers in database`,
+				);
+			} catch (saveError) {
+				console.warn(
+					`Failed to save default MCP servers to database: ${saveError}`,
+				);
+			}
 
-      return defaultServers;
-    }
+			return defaultServers;
+		}
 
-    return servers;
-  }
+		return servers;
+	}
 
-  async load(id: string): Promise<McpServer | null> {
-    const { data, error } = await this.supabase
-      .from('mcp_servers')
-      .select('*')
-      .eq('id', id)
-      .single();
+	async load(id: string): Promise<McpServer | null> {
+		const {data, error} = await this.supabase
+			.from('mcp_servers')
+			.select('*')
+			.eq('id', id)
+			.single();
 
-    if (error && error.code !== 'PGRST116') {
-      throw new Error(`Failed to load MCP server: ${error.message}`);
-    }
-    return data || null;
-  }
+		if (error && error.code !== 'PGRST116') {
+			throw new Error(`Failed to load MCP server: ${error.message}`);
+		}
+		return data || null;
+	}
 
-  async save(server: McpServer): Promise<void> {
-    const { error } = await this.supabase
-      .from('mcp_servers')
-      .upsert([server]);
+	async save(server: McpServer): Promise<void> {
+		const {error} = await this.supabase.from('mcp_servers').upsert([server]);
 
-    if (error) throw new Error(`Failed to save MCP server: ${error.message}`);
-  }
+		if (error) throw new Error(`Failed to save MCP server: ${error.message}`);
+	}
 
-  async delete(id: string): Promise<void> {
-    const { error } = await this.supabase
-      .from('mcp_servers')
-      .delete()
-      .eq('id', id);
+	async delete(id: string): Promise<void> {
+		const {error} = await this.supabase
+			.from('mcp_servers')
+			.delete()
+			.eq('id', id);
 
-    if (error) throw new Error(`Failed to delete MCP server: ${error.message}`);
-  }
+		if (error) throw new Error(`Failed to delete MCP server: ${error.message}`);
+	}
 
-  async exists(id: string): Promise<boolean> {
-    const server = await this.load(id);
-    return server !== null;
-  }
+	async exists(id: string): Promise<boolean> {
+		const server = await this.load(id);
+		return server !== null;
+	}
 
-  async getOrCreate(id: string, ...createArgs: any[]): Promise<McpServer> {
-    const existing = await this.load(id);
-    if (existing) {
-      return existing;
-    }
+	async getOrCreate(id: string, ...createArgs: any[]): Promise<McpServer> {
+		const existing = await this.load(id);
+		if (existing) {
+			return existing;
+		}
 
-    throw new Error('Auto-creation of MCP servers not supported - please create servers explicitly');
-  }
+		throw new Error(
+			'Auto-creation of MCP servers not supported - please create servers explicitly',
+		);
+	}
 }
 
 /**
  * Supabase Repository Container Implementation
  */
 class SupabaseRepositoryContainer implements RepositoryContainer {
-  constructor(private supabase: any, private baseUrl?: string) {}
+	constructor(private supabase: any, private baseUrl?: string) {}
 
-  get agents() { return new SupabaseAgentRepository(this.supabase); }
-  get contexts() { return new SupabaseContextRepository(this.supabase); }
-  get modelProviders() { return new SupabaseModelProviderRepository(this.supabase); }
-  get mcpServers() { return new SupabaseMcpServerRepository(this.supabase, this.baseUrl); }
+	get agents() {
+		return new SupabaseAgentRepository(this.supabase);
+	}
+	get contexts() {
+		return new SupabaseContextRepository(this.supabase);
+	}
+	get modelProviders() {
+		return new SupabaseModelProviderRepository(this.supabase);
+	}
+	get mcpServers() {
+		return new SupabaseMcpServerRepository(this.supabase, this.baseUrl);
+	}
 }
 
 /**
  * Custom task store for Supabase environment
  */
 class SupabaseTaskStore {
-  private store: Map<string, any> = new Map();
+	private store: Map<string, any> = new Map();
 
-  async load(taskId: string): Promise<any | undefined> {
-    console.log(`📋 SupabaseTaskStore.load(${taskId})`);
-    const entry = this.store.get(taskId);
-    if (entry) {
-      console.log(`📋 SupabaseTaskStore.load(${taskId}) -> FOUND`);
-      return {...entry};
-    } else {
-      console.log(`📋 SupabaseTaskStore.load(${taskId}) -> NOT FOUND`);
-      return undefined;
-    }
-  }
+	async load(taskId: string): Promise<any | undefined> {
+		console.log(`📋 SupabaseTaskStore.load(${taskId})`);
+		const entry = this.store.get(taskId);
+		if (entry) {
+			console.log(`📋 SupabaseTaskStore.load(${taskId}) -> FOUND`);
+			return {...entry};
+		} else {
+			console.log(`📋 SupabaseTaskStore.load(${taskId}) -> NOT FOUND`);
+			return undefined;
+		}
+	}
 
-  async save(task: any): Promise<void> {
-    console.log(`📋 SupabaseTaskStore.save(${task.id})`);
-    this.store.set(task.id, {...task});
-    console.log(`📋 SupabaseTaskStore.save(${task.id}) -> SAVED`);
-  }
+	async save(task: any): Promise<void> {
+		console.log(`📋 SupabaseTaskStore.save(${task.id})`);
+		this.store.set(task.id, {...task});
+		console.log(`📋 SupabaseTaskStore.save(${task.id}) -> SAVED`);
+	}
 }
 
 // Initialize Supabase client
-const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Create repository container with dynamic base URL
@@ -367,249 +393,382 @@ let agentExecutor: TimestepAIAgentExecutor;
 const taskStore = new SupabaseTaskStore();
 
 // Configure the port from environment or default
-const port = parseInt(Deno.env.get("PORT") || "3000");
+const port = parseInt(Deno.env.get('PORT') || '3000');
 
-console.log("🦕 Starting Timestep Server with Custom Supabase Repositories");
+console.log('🦕 Starting Timestep Server with Custom Supabase Repositories');
 console.log(`🌐 Server will run on port ${port}`);
 
 // Start the server with custom repositories
-Deno.serve({ port }, async (request: Request) => {
-  const url = new URL(request.url);
+Deno.serve({port}, async (request: Request) => {
+	const url = new URL(request.url);
 
-  // Extract the path after the Supabase function name first
-  // Supabase Edge Functions receive URLs like /server/agents (not /functions/v1/server/agents)
-  // The /functions/v1/ part is already stripped by Supabase before reaching our code
-  const pathParts = url.pathname.split('/');
+	// Extract the path after the Supabase function name first
+	// Supabase Edge Functions receive URLs like /server/agents (not /functions/v1/server/agents)
+	// The /functions/v1/ part is already stripped by Supabase before reaching our code
+	const pathParts = url.pathname.split('/');
 
-  // For Edge Functions, the URL pattern is: /FUNCTION_NAME/api_path
-  // So we need to extract everything after the function name (index 1)
-  let cleanPath = '/';
-  let functionName = 'unknown';
+	// For Edge Functions, the URL pattern is: /FUNCTION_NAME/api_path
+	// So we need to extract everything after the function name (index 1)
+	let cleanPath = '/';
+	let functionName = 'unknown';
 
-  if (pathParts.length > 1 && pathParts[1]) {
-    functionName = pathParts[1]; // First part is the function name
-    const apiParts = pathParts.slice(2); // Everything after the function name
-    cleanPath = apiParts.length > 0 ? '/' + apiParts.join('/') : '/';
-  }
+	if (pathParts.length > 1 && pathParts[1]) {
+		functionName = pathParts[1]; // First part is the function name
+		const apiParts = pathParts.slice(2); // Everything after the function name
+		cleanPath = apiParts.length > 0 ? '/' + apiParts.join('/') : '/';
+	}
 
-  // Initialize repositories and components if not already done
-  if (!repositories) {
-    // Generate base URL for MCP servers from the current request
-    const baseUrl = `${url.protocol}//${url.host}/${functionName}`;
+	// Initialize repositories and components if not already done
+	if (!repositories) {
+		// Generate base URL for MCP servers from the current request
+		const baseUrl = `${url.protocol}//${url.host}/${functionName}`;
 
-    repositories = new SupabaseRepositoryContainer(supabase, baseUrl);
-    agentExecutor = new TimestepAIAgentExecutor({
-      repositories: repositories
-    });
+		repositories = new SupabaseRepositoryContainer(supabase, baseUrl);
+		agentExecutor = new TimestepAIAgentExecutor({
+			repositories: repositories,
+		});
 
-    console.log(`🔧 Initialized repositories with base URL: ${baseUrl}`);
-  }
+		console.log(`🔧 Initialized repositories with base URL: ${baseUrl}`);
+	}
 
-  // Remove trailing slash except for root
-  cleanPath = cleanPath === '/' ? '/' : cleanPath.replace(/\/$/, '');
+	// Remove trailing slash except for root
+	cleanPath = cleanPath === '/' ? '/' : cleanPath.replace(/\/$/, '');
 
-  console.log(`🔍 Request: ${request.method} ${url.pathname} -> mapped to: ${cleanPath}`);
+	console.log(
+		`🔍 Request: ${request.method} ${url.pathname} -> mapped to: ${cleanPath}`,
+	);
 
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-    "Content-Type": "application/json",
-    "X-Runtime": "Supabase-Edge-Function-Custom-Repositories",
-    "X-Deployment-ID": Deno.env.get("DENO_DEPLOYMENT_ID") || "local"
-  };
+	const headers = {
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+		'Access-Control-Allow-Headers':
+			'authorization, x-client-info, apikey, content-type',
+		'Content-Type': 'application/json',
+		'X-Runtime': 'Supabase-Edge-Function-Custom-Repositories',
+		'X-Deployment-ID': Deno.env.get('DENO_DEPLOYMENT_ID') || 'local',
+	};
 
-  if (request.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers });
-  }
+	if (request.method === 'OPTIONS') {
+		return new Response(null, {status: 200, headers});
+	}
 
-  try {
-    // Root endpoint - useful for debugging path mapping
-    if (cleanPath === "/" || cleanPath === "") {
-      return new Response(JSON.stringify({
-        message: "Timestep Server is running",
-        runtime: "Supabase Edge Function with Custom Repositories",
-        detectedFunctionName: functionName,
-        originalPath: url.pathname,
-        mappedPath: cleanPath,
-        availableEndpoints: [
-          "/version", "/health", "/agents", "/chats",
-          "/settings/model-providers", "/settings/mcp-servers",
-          "/tools", "/traces", "/models", "/agents/{agentId}"
-        ]
-      }), { status: 200, headers });
-    }
+	try {
+		// Root endpoint - useful for debugging path mapping
+		if (cleanPath === '/' || cleanPath === '') {
+			return new Response(
+				JSON.stringify({
+					message: 'Timestep Server is running',
+					runtime: 'Supabase Edge Function with Custom Repositories',
+					detectedFunctionName: functionName,
+					originalPath: url.pathname,
+					mappedPath: cleanPath,
+					availableEndpoints: [
+						'/version',
+						'/health',
+						'/agents',
+						'/chats',
+						'/model_providers',
+						'/mcp_servers',
+						'/tools',
+						'/traces',
+						'/models',
+						'/agents/{agentId}',
+						'/mcp_servers/{serverId}',
+					],
+				}),
+				{status: 200, headers},
+			);
+		}
 
-    // Version endpoint - returns timestep package version info
-    if (cleanPath === "/version") {
-      try {
-        const versionInfo = await getVersion();
-        return new Response(JSON.stringify({
-          ...versionInfo,
-          runtime: "Supabase Edge Function with Custom Repositories"
-        }), { status: 200, headers });
-      } catch (error) {
-        return new Response(JSON.stringify({
-          error: error instanceof Error ? error.message : "Failed to read version information"
-        }), { status: 500, headers });
-      }
-    }
+		// Version endpoint - returns timestep package version info
+		if (cleanPath === '/version') {
+			try {
+				const versionInfo = await getVersion();
+				return new Response(
+					JSON.stringify({
+						...versionInfo,
+						runtime: 'Supabase Edge Function with Custom Repositories',
+					}),
+					{status: 200, headers},
+				);
+			} catch (error) {
+				return new Response(
+					JSON.stringify({
+						error:
+							error instanceof Error
+								? error.message
+								: 'Failed to read version information',
+					}),
+					{status: 500, headers},
+				);
+			}
+		}
 
-    // Health check endpoints
-    if (cleanPath === "/health" || cleanPath === "/supabase-health") {
-      return new Response(JSON.stringify({
-        status: 'healthy',
-        runtime: 'Supabase Edge Function with Custom Repositories',
-        timestamp: new Date().toISOString(),
-        denoVersion: Deno.version.deno,
-        deploymentId: Deno.env.get("DENO_DEPLOYMENT_ID") || "local",
-        region: Deno.env.get("DENO_REGION") || "unknown",
-        path: cleanPath,
-        repositories: ['agents', 'contexts', 'model_providers', 'mcp_servers']
-      }), { status: 200, headers });
-    }
+		// Health check endpoints
+		if (cleanPath === '/health' || cleanPath === '/supabase-health') {
+			return new Response(
+				JSON.stringify({
+					status: 'healthy',
+					runtime: 'Supabase Edge Function with Custom Repositories',
+					timestamp: new Date().toISOString(),
+					denoVersion: Deno.version.deno,
+					deploymentId: Deno.env.get('DENO_DEPLOYMENT_ID') || 'local',
+					region: Deno.env.get('DENO_REGION') || 'unknown',
+					path: cleanPath,
+					repositories: [
+						'agents',
+						'contexts',
+						'model_providers',
+						'mcp_servers',
+					],
+				}),
+				{status: 200, headers},
+			);
+		}
 
-    // API endpoints using custom repositories
-    if (cleanPath === "/agents") {
-      const result = await listAgents(repositories);
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
+		// API endpoints using custom repositories
+		if (cleanPath === '/agents') {
+			const result = await listAgents(repositories);
+			return new Response(JSON.stringify(result.data), {status: 200, headers});
+		}
 
-    if (cleanPath === "/chats") {
-      const result = await listContexts(repositories);
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
+		if (cleanPath === '/chats') {
+			const result = await listContexts(repositories);
+			return new Response(JSON.stringify(result.data), {status: 200, headers});
+		}
 
-    if (cleanPath === "/settings/model-providers") {
-      const result = await listModelProviders(repositories);
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
+		if (cleanPath === '/model_providers') {
+			const result = await listModelProviders(repositories);
+			return new Response(JSON.stringify(result.data), {status: 200, headers});
+		}
 
-    if (cleanPath === "/settings/mcp-servers") {
-      const result = await listMcpServers(repositories);
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
+		if (cleanPath === '/mcp_servers') {
+			const result = await listMcpServers(repositories);
+			return new Response(JSON.stringify(result.data), {status: 200, headers});
+		}
 
-    if (cleanPath === "/tools") {
-      const result = await listTools(repositories);
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
+		if (cleanPath === '/tools') {
+			const result = await listTools(repositories);
+			return new Response(JSON.stringify(result.data), {status: 200, headers});
+		}
 
-    if (cleanPath === "/traces") {
-      const result = await listTraces();
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
+		if (cleanPath === '/traces') {
+			const result = await listTraces();
+			return new Response(JSON.stringify(result.data), {status: 200, headers});
+		}
 
-    if (cleanPath === "/models") {
-      const result = await listModels(repositories);
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
+		if (cleanPath === '/models') {
+			const result = await listModels(repositories);
+			return new Response(JSON.stringify(result.data), {status: 200, headers});
+		}
 
-    // Handle dynamic agent routes with custom repository
-    const agentMatch = cleanPath.match(/^\/agents\/([^\/]+)(?:\/.*)?$/);
-    if (agentMatch) {
-      // Create a mock Express-style request object that satisfies the Request interface
-      const mockReq = {
-        method: request.method,
-        path: cleanPath,
-        originalUrl: cleanPath + url.search,
-        params: { agentId: agentMatch[1] },
-        body: request.method !== 'GET' ? await request.json().catch(() => ({})) : {},
-        headers: Object.fromEntries(Array.from(request.headers.entries())),
-        // Add required Express Request methods as stubs
-        get: (name: string) => request.headers.get(name),
-        header: (name: string) => request.headers.get(name),
-        accepts: () => false,
-        acceptsCharsets: () => false,
-        acceptsEncodings: () => false,
-        acceptsLanguages: () => false,
-        range: () => undefined,
-        param: (name: string) => name === 'agentId' ? agentMatch[1] : undefined,
-        is: () => false,
-        protocol: 'https',
-        secure: true,
-        ip: '127.0.0.1',
-        ips: [],
-        subdomains: [],
-        hostname: url.hostname,
-        fresh: false,
-        stale: true,
-        xhr: false,
-        route: undefined,
-        signedCookies: {},
-        url: cleanPath + url.search,
-        baseUrl: '',
-        app: {} as any,
-        res: {} as any,
-        next: (() => {}) as any,
-        query: Object.fromEntries(url.searchParams),
-        cookies: {},
-        secret: undefined
-      } as any;
+		// Handle MCP server routes
+		const mcpServerMatch = cleanPath.match(/^\/mcp_servers\/(.+)$/);
+		if (mcpServerMatch) {
+			const serverId = mcpServerMatch[1];
 
-      // Create a mock response object
-      const mockRes = {
-        status: (code: number) => ({ json: (data: any) => data }),
-        json: (data: any) => data,
-        send: (data: any) => data,
-        end: () => {},
-        setHeader: () => {},
-        getHeader: () => undefined,
-        removeHeader: () => {},
-        locals: {},
-        append: () => {},
-        attachment: () => {},
-        cookie: () => {},
-        clearCookie: () => {},
-        download: () => {},
-        format: () => {},
-        get: () => undefined,
-        header: () => {},
-        links: () => {},
-        location: () => {},
-        redirect: () => {},
-        render: () => {},
-        sendFile: () => {},
-        sendStatus: () => {},
-        set: () => {},
-        type: () => {},
-        vary: () => {}
-      } as any;
+			try {
+				const {handleMcpServerRequest} = await import(
+					'npm:@timestep-ai/timestep@2025.9.181621'
+				);
 
-      const mockNext = () => {};
+				if (request.method === 'POST') {
+					const body = await request.json().catch(() => ({}));
+					const result = await handleMcpServerRequest(
+						serverId,
+						body,
+						repositories,
+					);
+					return new Response(JSON.stringify(result), {
+						status: 200,
+						headers: {...headers, 'Content-Type': 'application/json'},
+					});
+				}
 
-      try {
-        await handleAgentRequest(mockReq, mockRes, mockNext, taskStore, agentExecutor, port, repositories);
-        return new Response(JSON.stringify({ success: true }), { status: 200, headers });
-      } catch (error) {
-        console.error('Error in agent request handler:', error);
-        return new Response(JSON.stringify({
-          error: error instanceof Error ? error.message : "Failed to handle agent request"
-        }), { status: 500, headers });
-      }
-    }
+				// GET request - health check
+				const {getMcpServer} = await import(
+					'npm:@timestep-ai/timestep@2025.9.181621'
+				);
+				const server = await getMcpServer(serverId, repositories);
 
-    return new Response("Not found", { status: 404, headers });
-  } catch (error) {
-    console.error('Error in Supabase Edge Function:', error);
-    return new Response(JSON.stringify({
-      error: error instanceof Error ? error.message : "Internal server error"
-    }), { status: 500, headers });
-  }
+				if (!server) {
+					return new Response(
+						JSON.stringify({
+							error: `MCP server ${serverId} not found`,
+						}),
+						{status: 404, headers},
+					);
+				}
+
+				return new Response(
+					JSON.stringify({
+						status: 'healthy',
+						server: server.name,
+						serverId: serverId,
+						enabled: server.enabled,
+					}),
+					{status: 200, headers},
+				);
+			} catch (error) {
+				console.error(
+					`Error handling MCP server request for ${serverId}:`,
+					error,
+				);
+				return new Response(
+					JSON.stringify({
+						jsonrpc: '2.0',
+						error: {
+							code: -32603,
+							message:
+								error instanceof Error
+									? error.message
+									: 'Internal server error',
+						},
+						id: null,
+					}),
+					{
+						status: 500,
+						headers: {...headers, 'Content-Type': 'application/json'},
+					},
+				);
+			}
+		}
+
+		// Handle dynamic agent routes with custom repository
+		const agentMatch = cleanPath.match(/^\/agents\/([^\/]+)(?:\/.*)?$/);
+		if (agentMatch) {
+			// Create a mock Express-style request object that satisfies the Request interface
+			const mockReq = {
+				method: request.method,
+				path: cleanPath,
+				originalUrl: cleanPath + url.search,
+				params: {agentId: agentMatch[1]},
+				body:
+					request.method !== 'GET'
+						? await request.json().catch(() => ({}))
+						: {},
+				headers: Object.fromEntries(Array.from(request.headers.entries())),
+				// Add required Express Request methods as stubs
+				get: (name: string) => request.headers.get(name),
+				header: (name: string) => request.headers.get(name),
+				accepts: () => false,
+				acceptsCharsets: () => false,
+				acceptsEncodings: () => false,
+				acceptsLanguages: () => false,
+				range: () => undefined,
+				param: (name: string) =>
+					name === 'agentId' ? agentMatch[1] : undefined,
+				is: () => false,
+				protocol: 'https',
+				secure: true,
+				ip: '127.0.0.1',
+				ips: [],
+				subdomains: [],
+				hostname: url.hostname,
+				fresh: false,
+				stale: true,
+				xhr: false,
+				route: undefined,
+				signedCookies: {},
+				url: cleanPath + url.search,
+				baseUrl: '',
+				app: {} as any,
+				res: {} as any,
+				next: (() => {}) as any,
+				query: Object.fromEntries(url.searchParams),
+				cookies: {},
+				secret: undefined,
+			} as any;
+
+			// Create a mock response object
+			const mockRes = {
+				status: (code: number) => ({json: (data: any) => data}),
+				json: (data: any) => data,
+				send: (data: any) => data,
+				end: () => {},
+				setHeader: () => {},
+				getHeader: () => undefined,
+				removeHeader: () => {},
+				locals: {},
+				append: () => {},
+				attachment: () => {},
+				cookie: () => {},
+				clearCookie: () => {},
+				download: () => {},
+				format: () => {},
+				get: () => undefined,
+				header: () => {},
+				links: () => {},
+				location: () => {},
+				redirect: () => {},
+				render: () => {},
+				sendFile: () => {},
+				sendStatus: () => {},
+				set: () => {},
+				type: () => {},
+				vary: () => {},
+			} as any;
+
+			const mockNext = () => {};
+
+			try {
+				await handleAgentRequest(
+					mockReq,
+					mockRes,
+					mockNext,
+					taskStore,
+					agentExecutor,
+					port,
+					repositories,
+				);
+				return new Response(JSON.stringify({success: true}), {
+					status: 200,
+					headers,
+				});
+			} catch (error) {
+				console.error('Error in agent request handler:', error);
+				return new Response(
+					JSON.stringify({
+						error:
+							error instanceof Error
+								? error.message
+								: 'Failed to handle agent request',
+					}),
+					{status: 500, headers},
+				);
+			}
+		}
+
+		return new Response('Not found', {status: 404, headers});
+	} catch (error) {
+		console.error('Error in Supabase Edge Function:', error);
+		return new Response(
+			JSON.stringify({
+				error: error instanceof Error ? error.message : 'Internal server error',
+			}),
+			{status: 500, headers},
+		);
+	}
 });
 
-console.log("🚀 Timestep Server running with Custom Supabase Repositories");
-console.log("📚 Available endpoints:");
-console.log("  - GET /version - Timestep package version information");
-console.log("  - GET /health - Health check with repository info");
-console.log("  - GET /agents - List agents (using SupabaseAgentRepository)");
-console.log("  - GET /chats - List chats (using SupabaseContextRepository)");
-console.log("  - GET /settings/model-providers - List model providers (using SupabaseModelProviderRepository)");
-console.log("  - GET /settings/mcp-servers - List MCP servers (using SupabaseMcpServerRepository)");
-console.log("  - GET /tools - List tools (via SupabaseMcpServerRepository)");
-console.log("  - GET /models - List models (via SupabaseModelProviderRepository)");
-console.log("  - GET /traces - List traces (using default hardcoded data)");
-console.log("  - /agents/{agentId}/* - Dynamic agent A2A endpoints");
+console.log('🚀 Timestep Server running with Custom Supabase Repositories');
+console.log('📚 Available endpoints:');
+console.log('  - GET /version - Timestep package version information');
+console.log('  - GET /health - Health check with repository info');
+console.log('  - GET /agents - List agents (using SupabaseAgentRepository)');
+console.log('  - GET /chats - List chats (using SupabaseContextRepository)');
+console.log(
+	'  - GET /model_providers - List model providers (using SupabaseModelProviderRepository)',
+);
+console.log(
+	'  - GET /mcp_servers - List MCP servers (using SupabaseMcpServerRepository)',
+);
+console.log('  - GET /tools - List tools (via SupabaseMcpServerRepository)');
+console.log(
+	'  - GET /models - List models (via SupabaseModelProviderRepository)',
+);
+console.log('  - GET /traces - List traces (using default hardcoded data)');
+console.log('  - /agents/{agentId}/* - Dynamic agent A2A endpoints');
 
 /*
  * SQL Schema for Supabase Tables

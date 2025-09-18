@@ -1,18 +1,19 @@
 # @timestep-ai/timestep
 
-A comprehensive TypeScript library and CLI for building AI agent systems with A2A (Agent-to-Agent) protocol support. Works seamlessly in both Node.js and Deno environments.
+A comprehensive TypeScript library and CLI for building AI agent systems with A2A (Agent-to-Agent) protocol support. Features built-in MCP (Model Context Protocol) server integration, tool management, and works seamlessly in Node.js, Deno, and Supabase Edge Functions.
 
 ## Features
 
 - 🤖 **Agent Management** - Create, configure, and manage AI agents with JSONL-based configuration
 - 🔄 **A2A Protocol** - Full Agent-to-Agent protocol implementation with streaming support
-- 🛠️ **Tool Integration** - MCP (Model Context Protocol) server support for external tools
+- 🛠️ **Tool Integration** - Built-in MCP server with weather, document, and thinking tools plus external MCP server support
 - 🌐 **Multi-Runtime** - Works in Node.js, Deno, and Supabase Edge Functions
 - 📊 **Model Provider Support** - Supports OpenAI, Anthropic, Ollama, and custom providers
 - 🎛️ **CLI Interface** - Beautiful terminal UI for agent interaction and management
 - 📚 **API Server** - RESTful API server with Express.js
 - 💾 **Context Management** - Persistent conversation contexts and task tracking
 - 🔍 **Tracing & Debugging** - Built-in execution tracing and logging
+- ⚡ **Built-in Tools** - Weather forecasting, document processing, and advanced reasoning capabilities
 
 ## Installation
 
@@ -40,11 +41,35 @@ deno add npm:@timestep-ai/timestep
 # Start the server
 timestep server
 
+# Stop the server
+timestep stop
+
 # List available agents
 timestep list-agents
 
 # Start an interactive chat
 timestep chat
+
+# List available tools
+timestep list-tools
+
+# List MCP servers
+timestep list-mcp-servers
+
+# List model providers
+timestep list-model-providers
+
+# List available models
+timestep list-models
+
+# List chat contexts
+timestep list-chats
+
+# List execution traces
+timestep list-traces
+
+# Get version information
+timestep get-version
 
 # List all available commands
 timestep --help
@@ -54,9 +79,9 @@ timestep --help
 
 ```typescript
 import {
-  listAgents,
-  TimestepAIAgentExecutor,
-  startDenoServer
+	listAgents,
+	TimestepAIAgentExecutor,
+	startDenoServer,
 } from '@timestep-ai/timestep';
 
 // List configured agents
@@ -75,41 +100,48 @@ startDenoServer(3000);
 ```typescript
 // Use individual library functions for full control
 import {
-  listAgents,
-  listModels,
-  handleAgentRequest,
-  TimestepAIAgentExecutor
+	listAgents,
+	listModels,
+	handleAgentRequest,
+	TimestepAIAgentExecutor,
 } from 'npm:@timestep-ai/timestep@latest';
 
 const agentExecutor = new TimestepAIAgentExecutor();
 
-Deno.serve({ port }, async (request: Request) => {
-  const url = new URL(request.url);
+Deno.serve({port}, async (request: Request) => {
+	const url = new URL(request.url);
 
-  if (url.pathname === "/agents") {
-    const result = await listAgents();
-    return new Response(JSON.stringify(result.data));
-  }
+	if (url.pathname === '/agents') {
+		const result = await listAgents();
+		return new Response(JSON.stringify(result.data));
+	}
 
-  if (url.pathname === "/models") {
-    const result = await listModels();
-    return new Response(JSON.stringify(result.data));
-  }
+	if (url.pathname === '/models') {
+		const result = await listModels();
+		return new Response(JSON.stringify(result.data));
+	}
 
-  // Handle dynamic agent A2A endpoints
-  const agentMatch = url.pathname.match(/^\/agents\/([^\/]+)(?:\/.*)?$/);
-  if (agentMatch) {
-    const mockReq = {
-      method: request.method,
-      path: url.pathname,
-      params: { agentId: agentMatch[1] },
-      body: await request.json().catch(() => ({}))
-    };
-    const result = await handleAgentRequest(mockReq, null, null, taskStore, agentExecutor, port);
-    return new Response(JSON.stringify(result));
-  }
+	// Handle dynamic agent A2A endpoints
+	const agentMatch = url.pathname.match(/^\/agents\/([^\/]+)(?:\/.*)?$/);
+	if (agentMatch) {
+		const mockReq = {
+			method: request.method,
+			path: url.pathname,
+			params: {agentId: agentMatch[1]},
+			body: await request.json().catch(() => ({})),
+		};
+		const result = await handleAgentRequest(
+			mockReq,
+			null,
+			null,
+			taskStore,
+			agentExecutor,
+			port,
+		);
+		return new Response(JSON.stringify(result));
+	}
 
-  return new Response("Not found", { status: 404 });
+	return new Response('Not found', {status: 404});
 });
 ```
 
@@ -118,23 +150,28 @@ Deno.serve({ port }, async (request: Request) => {
 When running the server, the following endpoints are available:
 
 ### Core Endpoints
+
 - `GET /agents` - List available agents
 - `GET /models` - List available models
 - `GET /tools` - List available tools
 - `GET /traces` - List execution traces
 - `GET /chats` - List chat contexts
+- `GET /model_providers` - List model providers
+- `GET /mcp_servers` - List MCP servers
 
-### Settings Endpoints
-- `GET /settings/api-keys` - List API keys
-- `GET /settings/mcp-servers` - List MCP servers
-- `GET /settings/model-providers` - List model providers
+### MCP Server Endpoints
+
+- `GET /mcp_servers/{serverId}` - Health check for specific MCP server
+- `POST /mcp_servers/{serverId}` - Execute MCP server requests
+- `DELETE /mcp_servers/{serverId}` - Disable MCP server
 
 ### A2A Protocol Endpoints
+
 - `/agents/{agentId}/*` - Dynamic agent endpoints following A2A protocol
 
 ### Utility Endpoints
-- `GET /health` - Health check
-- `GET /test-agent` - Test endpoint
+
+- `GET /version` - Get version information
 
 ## Configuration
 
@@ -155,13 +192,26 @@ Timestep uses a configuration directory structure:
 ### Example Agent Configuration
 
 ```json
-{"id":"assistant","name":"General Assistant","instructions":"You are a helpful AI assistant.","toolIds":["web_search","file_operations"],"model":"gpt-4","modelSettings":{"temperature":0.7}}
+{
+	"id": "assistant",
+	"name": "General Assistant",
+	"instructions": "You are a helpful AI assistant.",
+	"toolIds": ["get-alerts", "get-forecast", "think", "markdownToPdf"],
+	"model": "gpt-4",
+	"modelSettings": {"temperature": 0.7}
+}
 ```
 
 ### Example Model Provider Configuration
 
 ```json
-{"id":"openai","provider":"openai","api_key":"your-api-key","base_url":"https://api.openai.com/v1","models_url":"https://api.openai.com/v1/models"}
+{
+	"id": "openai",
+	"provider": "openai",
+	"api_key": "your-api-key",
+	"base_url": "https://api.openai.com/v1",
+	"models_url": "https://api.openai.com/v1/models"
+}
 ```
 
 ## Deno Support
@@ -187,23 +237,23 @@ Deploy Timestep in Supabase Edge Functions using individual library functions:
 
 ```typescript
 import {
-  listAgents,
-  listModels,
-  handleAgentRequest,
-  TimestepAIAgentExecutor
+	listAgents,
+	listModels,
+	handleAgentRequest,
+	TimestepAIAgentExecutor,
 } from 'npm:@timestep-ai/timestep@latest';
 
 // Custom task store for Supabase environment
 class SupabaseTaskStore {
-  // Implementation for your specific storage needs
+	// Implementation for your specific storage needs
 }
 
 const agentExecutor = new TimestepAIAgentExecutor();
 const taskStore = new SupabaseTaskStore();
 
-Deno.serve({ port }, async (request: Request) => {
-  // Handle all Timestep endpoints with full control
-  // Integrate with Supabase auth, database, etc.
+Deno.serve({port}, async (request: Request) => {
+	// Handle all Timestep endpoints with full control
+	// Integrate with Supabase auth, database, etc.
 });
 ```
 
@@ -288,6 +338,17 @@ src/
 The `examples/` directory contains:
 
 - `supabase-edge-function.ts` - Complete Supabase Edge Function implementation with custom request handling and A2A protocol support
+
+### Built-in Tools
+
+Timestep includes a built-in MCP server with the following tools:
+
+- **`get-alerts`** - Get weather alerts for a specific location
+- **`get-forecast`** - Get weather forecast for coordinates
+- **`think`** - Advanced reasoning and problem-solving tool
+- **`markdownToPdf`** - Convert markdown content to PDF
+
+These tools are automatically available to all agents and can be used alongside external MCP servers.
 
 ## Contributing
 
