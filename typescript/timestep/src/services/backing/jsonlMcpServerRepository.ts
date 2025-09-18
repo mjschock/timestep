@@ -2,47 +2,23 @@ import { Repository } from './repository.js';
 import { McpServer } from '../../api/settings/mcpServersApi.js';
 import { JsonlRepository } from './jsonlRepository.js';
 import { getTimestepPaths } from '../../utils.js';
+import { getDefaultMcpServers } from '../../config/defaultMcpServers.js';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 // Get timestep configuration paths
 const timestepPaths = getTimestepPaths();
 
-// Default MCP servers configuration
-const DEFAULT_MCP_SERVERS: McpServer[] = [
-  {
-    "id": "00000000-0000-0000-0000-000000000000",
-    "name": "Built-in MCP Server",
-    "description": "Built-in MCP server providing weather data, document tools, and thinking capabilities",
-    "serverUrl": "http://localhost:8080/mcp_servers/00000000-0000-0000-0000-000000000000",
-    "enabled": true
-  },
-  {
-    "id": "11111111-1111-1111-1111-111111111111",
-    "name": "Rube MCP Server",
-    "description": "Rube MCP server for advanced automation and workflow tools",
-    "serverUrl": "https://rube.app/mcp",
-    "enabled": false,
-    "authToken": undefined
-  },
-  {
-    "id": "22222222-2222-2222-2222-222222222222",
-    "name": "Beeper Desktop MCP Server",
-    "description": "Beeper Desktop MCP server for messaging and communication tools",
-    "serverUrl": "http://localhost:23373/v0/mcp",
-    "enabled": false,
-    "authToken": undefined
-  }
-];
-
 /**
  * JSONL file-based implementation of McpServerRepository.
  * Stores MCP servers as JSON objects in a .jsonl file, one server per line.
  */
 export class JsonlMcpServerRepository extends JsonlRepository<McpServer, string> implements Repository<McpServer, string> {
+    private baseUrl?: string;
 
-    constructor() {
+    constructor(baseUrl?: string) {
         super(timestepPaths.mcpServers);
+        this.baseUrl = baseUrl;
     }
 
     protected serialize(server: McpServer): string {
@@ -70,21 +46,22 @@ export class JsonlMcpServerRepository extends JsonlRepository<McpServer, string>
 
         // If no servers found or error reading, try to create default configuration
         // In restricted environments (like Supabase Edge Functions), this will fail gracefully
+        const defaultServers = getDefaultMcpServers(this.baseUrl);
         try {
-            await this.createDefaultMcpServersFile();
-            console.log(`🔌 Created default MCP servers configuration with ${DEFAULT_MCP_SERVERS.length} servers`);
+            await this.createDefaultMcpServersFile(defaultServers);
+            console.log(`🔌 Created default MCP servers configuration with ${defaultServers.length} servers`);
         } catch (error) {
             console.warn(`Unable to create default configuration file (restricted environment): ${error}`);
-            console.log(`🔌 Using in-memory default MCP servers configuration with ${DEFAULT_MCP_SERVERS.length} servers`);
+            console.log(`🔌 Using in-memory default MCP servers configuration with ${defaultServers.length} servers`);
         }
 
-        return DEFAULT_MCP_SERVERS;
+        return defaultServers;
     }
 
     /**
      * Create the MCP servers configuration file with default servers
      */
-    private async createDefaultMcpServersFile(): Promise<void> {
+    private async createDefaultMcpServersFile(servers: McpServer[]): Promise<void> {
         try {
             // Ensure the directory exists
             const dir = path.dirname(this.filePath);
@@ -93,7 +70,7 @@ export class JsonlMcpServerRepository extends JsonlRepository<McpServer, string>
             }
 
             // Write the default MCP servers as JSONL
-            const lines = DEFAULT_MCP_SERVERS.map(server => this.serialize(server));
+            const lines = servers.map(server => this.serialize(server));
             await this.writeLines(lines);
             console.log(`🔌 Created default MCP servers configuration at: ${this.filePath}`);
         } catch (error) {

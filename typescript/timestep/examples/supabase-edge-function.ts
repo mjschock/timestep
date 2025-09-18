@@ -31,7 +31,7 @@ import {
   type Repository,
   type Agent,
   type ModelProvider,
-  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180919';
+  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180938';
 
 /**
  * Supabase Agent Repository Implementation
@@ -240,7 +240,7 @@ class SupabaseModelProviderRepository implements Repository<ModelProvider, strin
  * Supabase MCP Server Repository Implementation
  */
 class SupabaseMcpServerRepository implements Repository<McpServer, string> {
-  constructor(private supabase: any) {}
+  constructor(private supabase: any, private baseUrl?: string) {}
 
   async list(): Promise<McpServer[]> {
     const { data, error } = await this.supabase
@@ -248,7 +248,29 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
       .select('*');
 
     if (error) throw new Error(`Failed to list MCP servers: ${error.message}`);
-    return data || [];
+
+    const servers = data || [];
+
+    // If no servers exist, create and return default servers
+    if (servers.length === 0) {
+      // Import the default MCP servers configuration
+      const { getDefaultMcpServers } = await import('npm:@timestep-ai/timestep@2025.9.180938');
+      const defaultServers = getDefaultMcpServers(this.baseUrl);
+
+      // Try to save them to the database for future use
+      try {
+        for (const server of defaultServers) {
+          await this.save(server);
+        }
+        console.log(`🔌 Created ${defaultServers.length} default MCP servers in database`);
+      } catch (saveError) {
+        console.warn(`Failed to save default MCP servers to database: ${saveError}`);
+      }
+
+      return defaultServers;
+    }
+
+    return servers;
   }
 
   async load(id: string): Promise<McpServer | null> {
@@ -300,12 +322,12 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
  * Supabase Repository Container Implementation
  */
 class SupabaseRepositoryContainer implements RepositoryContainer {
-  constructor(private supabase: any) {}
+  constructor(private supabase: any, private baseUrl?: string) {}
 
   get agents() { return new SupabaseAgentRepository(this.supabase); }
   get contexts() { return new SupabaseContextRepository(this.supabase); }
   get modelProviders() { return new SupabaseModelProviderRepository(this.supabase); }
-  get mcpServers() { return new SupabaseMcpServerRepository(this.supabase); }
+  get mcpServers() { return new SupabaseMcpServerRepository(this.supabase, this.baseUrl); }
 }
 
 /**
@@ -338,13 +360,10 @@ const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Create repository container
-const repositories = new SupabaseRepositoryContainer(supabase);
-
-// Initialize components
-const agentExecutor = new TimestepAIAgentExecutor({
-  repositories: repositories
-});
+// Create repository container with dynamic base URL
+// Note: The base URL will be determined from the first request
+let repositories: SupabaseRepositoryContainer;
+let agentExecutor: TimestepAIAgentExecutor;
 const taskStore = new SupabaseTaskStore();
 
 // Configure the port from environment or default
@@ -357,7 +376,7 @@ console.log(`🌐 Server will run on port ${port}`);
 Deno.serve({ port }, async (request: Request) => {
   const url = new URL(request.url);
 
-  // Extract the path after the Supabase function name
+  // Extract the path after the Supabase function name first
   // Supabase Edge Functions receive URLs like /server/agents (not /functions/v1/server/agents)
   // The /functions/v1/ part is already stripped by Supabase before reaching our code
   const pathParts = url.pathname.split('/');
@@ -371,6 +390,19 @@ Deno.serve({ port }, async (request: Request) => {
     functionName = pathParts[1]; // First part is the function name
     const apiParts = pathParts.slice(2); // Everything after the function name
     cleanPath = apiParts.length > 0 ? '/' + apiParts.join('/') : '/';
+  }
+
+  // Initialize repositories and components if not already done
+  if (!repositories) {
+    // Generate base URL for MCP servers from the current request
+    const baseUrl = `${url.protocol}//${url.host}/${functionName}`;
+
+    repositories = new SupabaseRepositoryContainer(supabase, baseUrl);
+    agentExecutor = new TimestepAIAgentExecutor({
+      repositories: repositories
+    });
+
+    console.log(`🔧 Initialized repositories with base URL: ${baseUrl}`);
   }
 
   // Remove trailing slash except for root

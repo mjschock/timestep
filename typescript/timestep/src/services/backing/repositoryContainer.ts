@@ -37,7 +37,11 @@ export class DefaultRepositoryContainer implements RepositoryContainer {
   private _contexts?: Repository<Context, string>;
   private _modelProviders?: Repository<ModelProvider, string>;
   private _mcpServers?: Repository<McpServer, string>;
+  private baseUrl?: string;
 
+  constructor(baseUrl?: string) {
+    this.baseUrl = baseUrl;
+  }
 
   get agents(): Repository<Agent, string> {
     if (!this._agents) {
@@ -62,7 +66,7 @@ export class DefaultRepositoryContainer implements RepositoryContainer {
 
   get mcpServers(): Repository<McpServer, string> {
     if (!this._mcpServers) {
-      this._mcpServers = new JsonlMcpServerRepository();
+      this._mcpServers = new JsonlMcpServerRepository(this.baseUrl);
     }
     return this._mcpServers;
   }
