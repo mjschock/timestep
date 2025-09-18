@@ -106,7 +106,6 @@ export function getTimestepPaths() {
  */
 export interface AppConfig {
   appPort?: number;
-  mcpServerPort?: number;
 }
 
 /**
@@ -118,8 +117,7 @@ export function loadAppConfig(): AppConfig {
 
   // Embedded defaults - no file dependency needed for library usage
   const defaults: AppConfig = {
-    appPort: 8080,
-    mcpServerPort: 8000
+    appPort: 8080
   };
 
   // Try to load user config and merge with defaults

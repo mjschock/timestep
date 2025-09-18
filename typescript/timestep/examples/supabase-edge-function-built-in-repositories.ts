@@ -22,12 +22,11 @@ import {
   listTools,
   listTraces,
   listContexts,
-  listApiKeys,
   listMcpServers,
   listModelProviders,
   handleAgentRequest,
   TimestepAIAgentExecutor,
-  getVersion} from 'npm:@timestep-ai/timestep@2025.9.180812';
+  getVersion} from 'npm:@timestep-ai/timestep@2025.9.180819';
 
 // Custom task store for Supabase environment
 class SupabaseTaskStore {
@@ -134,10 +133,6 @@ Deno.serve({ port }, async (request: Request) => {
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    if (url.pathname === "/settings/api-keys") {
-      const result = await listApiKeys();
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
 
     if (url.pathname === "/settings/mcp-servers") {
       const result = await listMcpServers();
@@ -252,7 +247,6 @@ console.log("  - GET /models - List models");
 console.log("  - GET /tools - List tools");
 console.log("  - GET /traces - List traces");
 console.log("  - GET /chats - List chats");
-console.log("  - GET /settings/api-keys - List API keys");
 console.log("  - GET /settings/mcp-servers - List MCP servers");
 console.log("  - GET /settings/model-providers - List model providers");
 console.log("  - /agents/{agentId}/* - Dynamic agent A2A endpoints");

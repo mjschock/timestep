@@ -30,7 +30,6 @@ import {
   listTools,
   listTraces,
   listContexts,
-  listApiKeys,
   listMcpServers,
   listModelProviders,
   handleAgentRequest,
@@ -41,7 +40,7 @@ import {
   type Repository,
   type Agent,
   type ModelProvider,
-  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180812';
+  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180819';
 
 /**
  * Supabase Agent Repository Implementation
@@ -407,7 +406,7 @@ Deno.serve({ port }, async (request: Request) => {
         deploymentId: Deno.env.get("DENO_DEPLOYMENT_ID") || "local",
         region: Deno.env.get("DENO_REGION") || "unknown",
         path: url.pathname,
-        repositories: ['agents', 'contexts', 'model_providers', 'mcp_servers', 'api_keys']
+        repositories: ['agents', 'contexts', 'model_providers', 'mcp_servers']
       }), { status: 200, headers });
     }
 
@@ -432,10 +431,6 @@ Deno.serve({ port }, async (request: Request) => {
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    if (url.pathname === "/settings/api-keys") {
-      const result = await listApiKeys(repositories);
-      return new Response(JSON.stringify(result.data), { status: 200, headers });
-    }
 
     if (url.pathname === "/tools") {
       const result = await listTools(repositories);
@@ -553,7 +548,6 @@ console.log("  - GET /agents - List agents (using SupabaseAgentRepository)");
 console.log("  - GET /chats - List chats (using SupabaseContextRepository)");
 console.log("  - GET /settings/model-providers - List model providers (using SupabaseModelProviderRepository)");
 console.log("  - GET /settings/mcp-servers - List MCP servers (using SupabaseMcpServerRepository)");
-console.log("  - GET /settings/api-keys - List API keys (derived from SupabaseModelProviderRepository)");
 console.log("  - GET /tools - List tools (via SupabaseMcpServerRepository)");
 console.log("  - GET /models - List models (via SupabaseModelProviderRepository)");
 console.log("  - GET /traces - List traces (using default hardcoded data)");

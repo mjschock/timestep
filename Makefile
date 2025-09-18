@@ -42,9 +42,6 @@ timestep-cli-list-traces:
 	@echo "🚀 Starting Timestep cli list-traces..."
 	cd typescript/timestep && npx tsx src/cli.tsx list-traces
 
-timestep-cli-list-settings-api-keys:
-	@echo "🚀 Starting Timestep cli list-settings-api-keys..."
-	cd typescript/timestep && npx tsx src/cli.tsx list-settings-api-keys
 
 timestep-cli-list-settings-mcp-servers:
 	@echo "🚀 Starting Timestep cli list-settings-mcp-servers..."
@@ -54,7 +51,7 @@ timestep-cli-list-settings-model-providers:
 	@echo "🚀 Starting Timestep cli list-settings-model-providers..."
 	cd typescript/timestep && npx tsx src/cli.tsx list-settings-model-providers
 
-timestep-cli-list-all: timestep-cli-list-agents timestep-cli-list-chats timestep-cli-list-models timestep-cli-list-tools timestep-cli-list-traces timestep-cli-list-settings-api-keys timestep-cli-list-settings-mcp-servers timestep-cli-list-settings-model-providers
+timestep-cli-list-all: timestep-cli-list-agents timestep-cli-list-chats timestep-cli-list-models timestep-cli-list-tools timestep-cli-list-traces timestep-cli-list-settings-mcp-servers timestep-cli-list-settings-model-providers
 
 run-a2a-inspector:
 	@echo "🔍 Running A2A Inspector..."

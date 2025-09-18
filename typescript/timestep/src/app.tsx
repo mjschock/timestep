@@ -263,7 +263,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		setServerStopped(false);
 
 		try {
-			const ports = [appConfig.appPort!, appConfig.mcpServerPort!];
+			const ports = [appConfig.appPort!];
 			let processesKilled = 0;
 
 			ports.forEach(port => {
@@ -516,7 +516,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 			return (
 				<Box flexDirection="column">
 					<Text color="blue">🛑 Stopping Timestep servers...</Text>
-					<Text>Checking ports {appConfig.appPort} and {appConfig.mcpServerPort}...</Text>
+					<Text>Checking port {appConfig.appPort}...</Text>
 				</Box>
 			);
 		}
@@ -533,7 +533,7 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 			return (
 				<Box flexDirection="column">
 					<Text color="green">✅ Timestep servers stopped successfully!</Text>
-					<Text>Processes on ports {appConfig.appPort} and {appConfig.mcpServerPort} have been terminated.</Text>
+					<Text>Process on port {appConfig.appPort} has been terminated.</Text>
 				</Box>
 			);
 		}
