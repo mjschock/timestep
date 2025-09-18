@@ -31,7 +31,7 @@ import {
   type Repository,
   type Agent,
   type ModelProvider,
-  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180906';
+  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180918';
 
 /**
  * Supabase Agent Repository Implementation
@@ -358,15 +358,18 @@ Deno.serve({ port }, async (request: Request) => {
   const url = new URL(request.url);
 
   // Extract the path after the Supabase function name
-  // For URL like /functions/v1/my-function/agents, we want just /agents
-  // This automatically detects the function name from the URL structure
+  // Supabase Edge Functions receive URLs like /server/agents (not /functions/v1/server/agents)
+  // The /functions/v1/ part is already stripped by Supabase before reaching our code
   const pathParts = url.pathname.split('/');
 
-  // Supabase URLs follow the pattern: /functions/v1/FUNCTION_NAME/api_path
-  // So we extract everything after the function name (index 3)
+  // For Edge Functions, the URL pattern is: /FUNCTION_NAME/api_path
+  // So we need to extract everything after the function name (index 1)
   let cleanPath = '/';
-  if (pathParts.length > 3 && pathParts[1] === 'functions' && pathParts[2] === 'v1') {
-    const apiParts = pathParts.slice(4); // Skip /functions/v1/FUNCTION_NAME
+  let functionName = 'unknown';
+
+  if (pathParts.length > 1 && pathParts[1]) {
+    functionName = pathParts[1]; // First part is the function name
+    const apiParts = pathParts.slice(2); // Everything after the function name
     cleanPath = apiParts.length > 0 ? '/' + apiParts.join('/') : '/';
   }
 
