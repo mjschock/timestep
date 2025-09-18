@@ -2,6 +2,48 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 import * as fs from 'node:fs';
 
+/**
+ * Get version information from package.json
+ */
+export async function getVersion(): Promise<{
+    version: string;
+    name: string;
+    description: string;
+    timestamp: string;
+}> {
+    try {
+        // Read package.json to get the current version
+        const { readFile } = await import('fs/promises');
+        const { join } = await import('path');
+        const { fileURLToPath } = await import('url');
+        const { dirname } = await import('path');
+
+        // Get the directory of the current module
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = dirname(__filename);
+
+        // Read package.json from the project root
+        const packageJsonPath = join(__dirname, '..', 'package.json');
+        const packageJsonContent = await readFile(packageJsonPath, 'utf-8');
+        const packageJson = JSON.parse(packageJsonContent);
+
+        return {
+            version: packageJson.version,
+            name: packageJson.name,
+            description: packageJson.description,
+            timestamp: new Date().toISOString()
+        };
+    } catch (error) {
+        // Fallback if we can't read package.json
+        return {
+            version: "unknown",
+            name: "@timestep-ai/timestep",
+            description: "A CLI tool built with Ink and React",
+            timestamp: new Date().toISOString()
+        };
+    }
+}
+
 function posixify(appName: string): string {
   return appName.toLowerCase().replace(/\s+/g, '-');
 }

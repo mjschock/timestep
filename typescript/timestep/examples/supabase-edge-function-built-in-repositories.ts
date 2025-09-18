@@ -26,7 +26,8 @@ import {
   listMcpServers,
   listModelProviders,
   handleAgentRequest,
-  TimestepAIAgentExecutor} from 'npm:@timestep-ai/timestep@latest';
+  TimestepAIAgentExecutor,
+  getVersion} from 'npm:@timestep-ai/timestep@latest';
 
 // Custom task store for Supabase environment
 class SupabaseTaskStore {
@@ -79,6 +80,21 @@ Deno.serve({ port }, async (request: Request) => {
   }
 
   try {
+    // Version endpoint - returns timestep package version info
+    if (url.pathname === "/version") {
+      try {
+        const versionInfo = await getVersion();
+        return new Response(JSON.stringify({
+          ...versionInfo,
+          runtime: "Supabase Edge Function with Built-in Repositories"
+        }), { status: 200, headers });
+      } catch (error) {
+        return new Response(JSON.stringify({
+          error: error instanceof Error ? error.message : "Failed to read version information"
+        }), { status: 500, headers });
+      }
+    }
+
     // Health check endpoints
     if (url.pathname === "/health" || url.pathname === "/supabase-health") {
       return new Response(JSON.stringify({
@@ -168,6 +184,7 @@ Deno.serve({ port }, async (request: Request) => {
 
 console.log("🚀 Timestep Server running in Supabase Edge Function (Built-in Repositories)");
 console.log("📚 Available endpoints:");
+console.log("  - GET /version - Timestep package version information");
 console.log("  - GET /health - Health check");
 console.log("  - GET /supabase-health - Supabase-specific health check");
 console.log("  - GET /agents - List agents");

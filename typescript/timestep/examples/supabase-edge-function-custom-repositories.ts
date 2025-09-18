@@ -36,7 +36,8 @@ import {
   handleAgentRequest,
   TimestepAIAgentExecutor,
   Context,
-  type Repository,
+  getVersion,
+  type RepositoryContainer,
   type Agent,
   type ModelProvider,
   type McpServer,
@@ -306,65 +307,6 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
   }
 }
 
-/**
- * Supabase API Key Repository Implementation
- */
-class SupabaseApiKeyRepository implements Repository<ApiKey, string> {
-  constructor(private supabase: any) {}
-
-  async list(): Promise<ApiKey[]> {
-    const { data, error } = await this.supabase
-      .from('api_keys')
-      .select('*');
-
-    if (error) throw new Error(`Failed to list API keys: ${error.message}`);
-    return data || [];
-  }
-
-  async load(id: string): Promise<ApiKey | null> {
-    const { data, error } = await this.supabase
-      .from('api_keys')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error && error.code !== 'PGRST116') {
-      throw new Error(`Failed to load API key: ${error.message}`);
-    }
-    return data || null;
-  }
-
-  async save(apiKey: ApiKey): Promise<void> {
-    const { error } = await this.supabase
-      .from('api_keys')
-      .upsert([apiKey]);
-
-    if (error) throw new Error(`Failed to save API key: ${error.message}`);
-  }
-
-  async delete(id: string): Promise<void> {
-    const { error } = await this.supabase
-      .from('api_keys')
-      .delete()
-      .eq('id', id);
-
-    if (error) throw new Error(`Failed to delete API key: ${error.message}`);
-  }
-
-  async exists(id: string): Promise<boolean> {
-    const apiKey = await this.load(id);
-    return apiKey !== null;
-  }
-
-  async getOrCreate(id: string, ...createArgs: any[]): Promise<ApiKey> {
-    const existing = await this.load(id);
-    if (existing) {
-      return existing;
-    }
-
-    throw new Error('Auto-creation of API keys not supported - please create keys explicitly');
-  }
-}
 
 /**
  * Custom task store for Supabase environment
@@ -391,20 +333,30 @@ class SupabaseTaskStore {
   }
 }
 
+/**
+ * Supabase Repository Container Implementation
+ */
+class SupabaseRepositoryContainer implements RepositoryContainer {
+  constructor(private supabase: any) {}
+
+  get agents() { return new SupabaseAgentRepository(this.supabase); }
+  get contexts() { return new SupabaseContextRepository(this.supabase); }
+  get modelProviders() { return new SupabaseModelProviderRepository(this.supabase); }
+  get mcpServers() { return new SupabaseMcpServerRepository(this.supabase); }
+}
+
 // Initialize Supabase client
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Create custom repositories
-const agentRepository = new SupabaseAgentRepository(supabase);
-const contextRepository = new SupabaseContextRepository(supabase);
-const modelProviderRepository = new SupabaseModelProviderRepository(supabase);
-const mcpServerRepository = new SupabaseMcpServerRepository(supabase);
-const apiKeyRepository = new SupabaseApiKeyRepository(supabase);
+// Create repository container
+const repositories = new SupabaseRepositoryContainer(supabase);
 
 // Initialize components
-const agentExecutor = new TimestepAIAgentExecutor();
+const agentExecutor = new TimestepAIAgentExecutor({
+  repositories: repositories
+});
 const taskStore = new SupabaseTaskStore();
 
 // Configure the port from environment or default
@@ -431,6 +383,21 @@ Deno.serve({ port }, async (request: Request) => {
   }
 
   try {
+    // Version endpoint - returns timestep package version info
+    if (url.pathname === "/version") {
+      try {
+        const versionInfo = await getVersion();
+        return new Response(JSON.stringify({
+          ...versionInfo,
+          runtime: "Supabase Edge Function with Custom Repositories"
+        }), { status: 200, headers });
+      } catch (error) {
+        return new Response(JSON.stringify({
+          error: error instanceof Error ? error.message : "Failed to read version information"
+        }), { status: 500, headers });
+      }
+    }
+
     // Health check endpoints
     if (url.pathname === "/health" || url.pathname === "/supabase-health") {
       return new Response(JSON.stringify({
@@ -447,32 +414,32 @@ Deno.serve({ port }, async (request: Request) => {
 
     // API endpoints using custom repositories
     if (url.pathname === "/agents") {
-      const result = await listAgents(agentRepository);
+      const result = await listAgents(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
     if (url.pathname === "/chats") {
-      const result = await listContexts(contextRepository);
+      const result = await listContexts(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
     if (url.pathname === "/settings/model-providers") {
-      const result = await listModelProviders(modelProviderRepository);
+      const result = await listModelProviders(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
     if (url.pathname === "/settings/mcp-servers") {
-      const result = await listMcpServers(mcpServerRepository);
+      const result = await listMcpServers(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
     if (url.pathname === "/settings/api-keys") {
-      const result = await listApiKeys(apiKeyRepository);
+      const result = await listApiKeys(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
     if (url.pathname === "/tools") {
-      const result = await listTools(mcpServerRepository);
+      const result = await listTools(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
@@ -482,7 +449,7 @@ Deno.serve({ port }, async (request: Request) => {
     }
 
     if (url.pathname === "/models") {
-      const result = await listModels(modelProviderRepository);
+      const result = await listModels(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
@@ -499,7 +466,7 @@ Deno.serve({ port }, async (request: Request) => {
       };
 
       try {
-        const result = await handleAgentRequest(mockReq, null, null, taskStore, agentExecutor, port);
+        const result = await handleAgentRequest(mockReq, null, null, taskStore, agentExecutor, port, repositories);
         return new Response(JSON.stringify(result), { status: 200, headers });
       } catch (error) {
         console.error('Error in agent request handler:', error);
@@ -520,12 +487,13 @@ Deno.serve({ port }, async (request: Request) => {
 
 console.log("🚀 Timestep Server running with Custom Supabase Repositories");
 console.log("📚 Available endpoints:");
+console.log("  - GET /version - Timestep package version information");
 console.log("  - GET /health - Health check with repository info");
 console.log("  - GET /agents - List agents (using SupabaseAgentRepository)");
 console.log("  - GET /chats - List chats (using SupabaseContextRepository)");
 console.log("  - GET /settings/model-providers - List model providers (using SupabaseModelProviderRepository)");
 console.log("  - GET /settings/mcp-servers - List MCP servers (using SupabaseMcpServerRepository)");
-console.log("  - GET /settings/api-keys - List API keys (using SupabaseApiKeyRepository)");
+console.log("  - GET /settings/api-keys - List API keys (derived from SupabaseModelProviderRepository)");
 console.log("  - GET /tools - List tools (via SupabaseMcpServerRepository)");
 console.log("  - GET /models - List models (via SupabaseModelProviderRepository)");
 console.log("  - GET /traces - List traces (using default hardcoded data)");

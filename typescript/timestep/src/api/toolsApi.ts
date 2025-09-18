@@ -42,12 +42,12 @@ export interface ListToolsResponse {
 /**
  * List all available tools from all enabled MCP servers
  *
- * @param mcpServerRepository - Optional custom repository for MCP servers
+ * @param repositories - Optional repository container for dependency injection
  * @returns Promise resolving to the list of tools
  */
-export async function listTools(mcpServerRepository?: any): Promise<ListToolsResponse> {
+export async function listTools(repositories?: any): Promise<ListToolsResponse> {
   try {
-    const mcpTools = await listAllMcpTools(mcpServerRepository);
+    const mcpTools = await listAllMcpTools(repositories);
 
     const tools: Tool[] = mcpTools.map(mcpTool => ({
       id: mcpTool.id,

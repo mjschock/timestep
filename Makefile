@@ -16,6 +16,10 @@ timestep-cli-chat:
 	@echo "🚀 Starting Timestep cli chat..."
 	cd typescript/timestep && npx tsx src/cli.tsx chat
 
+timestep-cli-get-version:
+	@echo "🚀 Starting Timestep cli get-version..."
+	cd typescript/timestep && npx tsx src/cli.tsx get-version
+
 timestep-cli-list-agents:
 	@echo "🚀 Starting Timestep cli list-agents..."
 	cd typescript/timestep && npx tsx src/cli.tsx list-agents

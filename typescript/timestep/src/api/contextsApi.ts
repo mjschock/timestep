@@ -10,8 +10,7 @@
 
 import { Context } from "../types/context.js";
 import { ContextService } from "../services/contextService.js";
-import { JsonlContextRepository } from "../services/backing/jsonlContextRepository.js";
-import { Repository } from "../services/backing/repository.js";
+import { RepositoryContainer, DefaultRepositoryContainer } from "../services/backing/repositoryContainer.js";
 
 /**
  * Response from the list contexts endpoint
@@ -24,12 +23,12 @@ export interface ListContextsResponse {
 /**
  * List all contexts using the context service
  *
- * @param repository Optional repository for dependency injection. Defaults to JsonlContextRepository
+ * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the list of contexts
  */
-export async function listContexts(repository?: Repository<Context, string>): Promise<ListContextsResponse> {
-  const repo = repository || new JsonlContextRepository();
-  const contextService = new ContextService(repo);
+export async function listContexts(repositories?: RepositoryContainer): Promise<ListContextsResponse> {
+  const repos = repositories || new DefaultRepositoryContainer();
+  const contextService = new ContextService(repos.contexts);
 
   try {
     const contexts = await contextService.listContexts();

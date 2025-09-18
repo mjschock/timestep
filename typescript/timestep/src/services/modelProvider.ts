@@ -3,6 +3,7 @@ import { OllamaModel } from "./backing/models.js";
 import { Model, ModelProvider, OpenAIChatCompletionsModel, OpenAIResponsesModel } from "@openai/agents";
 import OpenAI from "openai";
 import { getTimestepPaths } from "../utils.js";
+import { RepositoryContainer, DefaultRepositoryContainer } from "./backing/repositoryContainer.js";
 
 type ProviderConfig = {
     id?: string;
@@ -13,10 +14,10 @@ type ProviderConfig = {
     models_url?: string;
 };
 
-async function loadModelProviders(): Promise<Record<string, ProviderConfig>> {
+async function loadModelProviders(repositories?: RepositoryContainer): Promise<Record<string, ProviderConfig>> {
     try {
         const { listModelProviders } = await import('../api/settings/modelProvidersApi.js');
-        const response = await listModelProviders();
+        const response = await listModelProviders(repositories);
         const MODEL_PROVIDERS: Record<string, ProviderConfig> = {};
 
         for (const provider of response.data) {
@@ -39,8 +40,10 @@ export class TimestepAIModelProvider implements ModelProvider {
 
     private modelProviders: Record<string, ProviderConfig> | null = null;
     private loadingPromise: Promise<Record<string, ProviderConfig>> | null = null;
+    private repositories: RepositoryContainer;
 
-    constructor() {
+    constructor(repositories?: RepositoryContainer) {
+        this.repositories = repositories || new DefaultRepositoryContainer();
         console.log(`Model provider service initialized`);
     }
 
@@ -51,7 +54,7 @@ export class TimestepAIModelProvider implements ModelProvider {
 
         if (this.loadingPromise === null) {
             console.log(`Loading model providers configuration`);
-            this.loadingPromise = loadModelProviders().then(providers => {
+            this.loadingPromise = loadModelProviders(this.repositories).then(providers => {
                 this.modelProviders = providers;
                 console.log(`Model providers loaded: ${JSON.stringify(this.modelProviders)}`);
                 return providers;

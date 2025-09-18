@@ -33,16 +33,15 @@ import { Ollama } from "ollama";
 import { TimestepAIModelProvider } from "../services/model_provider.js";
 import { AgentFactory } from "../services/agent_factory.js";
 import { ContextService } from "../services/contextService.js";
-import { Repository } from "../services/backing/repository.js";
-import { JsonlContextRepository } from "../services/backing/jsonlContextRepository.js";
+import { RepositoryContainer, DefaultRepositoryContainer } from "../services/backing/repositoryContainer.js";
 
 // App configuration is now loaded dynamically when needed via loadAppConfig() function
 
 // Function to load model providers using the API
-async function loadModelProviders(): Promise<{ [key: string]: any }> {
+async function loadModelProviders(repositories?: RepositoryContainer): Promise<{ [key: string]: any }> {
     try {
         const { listModelProviders } = await import('../api/settings/modelProvidersApi.js');
-        const response = await listModelProviders();
+        const response = await listModelProviders(repositories);
         const MODEL_PROVIDERS: { [key: string]: any } = {};
 
         for (const provider of response.data) {
@@ -247,8 +246,7 @@ export interface ContextRepositoryOptions {
 }
 
 export interface AgentExecutorConfig {
-    contextRepository?: Repository<any, string>;
-    contextRepositoryOptions?: ContextRepositoryOptions;
+    repositories?: RepositoryContainer;
 }
 
 // getContext function and AgentFactory class moved to agent_factory.ts
@@ -256,15 +254,14 @@ export interface AgentExecutorConfig {
 export class TimestepAIAgentExecutor implements AgentExecutor {
     agentFactory: AgentFactory;
     contextService: ContextService;
+    repositories: RepositoryContainer;
 
     constructor({
-        contextRepository,
-        contextRepositoryOptions = {}
+        repositories
     }: AgentExecutorConfig = {}) {
-        this.agentFactory = new AgentFactory();
-        
-        const repository = contextRepository || new JsonlContextRepository();
-        this.contextService = new ContextService(repository);
+        this.repositories = repositories || new DefaultRepositoryContainer();
+        this.agentFactory = new AgentFactory(this.repositories);
+        this.contextService = new ContextService(this.repositories.contexts);
     }
 
     async execute(
@@ -320,7 +317,7 @@ export class TimestepAIAgentExecutor implements AgentExecutor {
                 eventBus.publish(workingStatusUpdate);
                 
                 const runConfig: RunConfig = {
-                    modelProvider: new TimestepAIModelProvider(),
+                    modelProvider: new TimestepAIModelProvider(this.repositories),
                     groupId: contextId,
                     traceId: trace.traceId, // Since we're associating the traceId with the run, then the history will be associated with the trace (task)
                     traceIncludeSensitiveData: true,

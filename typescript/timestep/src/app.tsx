@@ -926,6 +926,62 @@ export default function App({name = 'Stranger', command, flags}: Props) {
 		);
 	}
 
+	if (command === 'get-version') {
+		const [versionInfo, setVersionInfo] = useState<{
+			version: string;
+			name: string;
+			description: string;
+			timestamp: string;
+		} | null>(null);
+		const [versionError, setVersionError] = useState<string | null>(null);
+
+		useEffect(() => {
+			const fetchVersion = async () => {
+				try {
+					const { getVersion } = await import('./utils.js');
+					const info = await getVersion();
+					setVersionInfo(info);
+				} catch (error) {
+					setVersionError(error instanceof Error ? error.message : 'Failed to get version');
+				}
+			};
+
+			fetchVersion();
+		}, []);
+
+		if (versionError) {
+			return (
+				<Box flexDirection="column">
+					<Text color="red">❌ Error: {versionError}</Text>
+				</Box>
+			);
+		}
+
+		if (!versionInfo) {
+			return <Text color="blue">Loading version information...</Text>;
+		}
+
+		return (
+			<Box flexDirection="column">
+				<Text color="cyan">📦 Timestep Version Information</Text>
+				<Box marginLeft={2} flexDirection="column">
+					<Text>
+						<Text color="blue">Name:</Text> <Text color="white">{versionInfo.name}</Text>
+					</Text>
+					<Text>
+						<Text color="blue">Version:</Text> <Text color="green">{versionInfo.version}</Text>
+					</Text>
+					<Text>
+						<Text color="blue">Description:</Text> <Text color="white">{versionInfo.description}</Text>
+					</Text>
+					<Text>
+						<Text color="blue">Timestamp:</Text> <Text color="gray">{versionInfo.timestamp}</Text>
+					</Text>
+				</Box>
+			</Box>
+		);
+	}
+
 	// Default greeting
 	return (
 		<Text>

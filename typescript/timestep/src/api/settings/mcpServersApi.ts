@@ -6,8 +6,7 @@
  */
 
 import { McpServerService } from "../../services/mcpServerService.js";
-import { JsonlMcpServerRepository } from "../../services/backing/jsonlMcpServerRepository.js";
-import { Repository } from "../../services/backing/repository.js";
+import { RepositoryContainer, DefaultRepositoryContainer } from "../../services/backing/repositoryContainer.js";
 
 /**
  * Represents an MCP server configuration
@@ -41,12 +40,12 @@ export interface ListMcpServersResponse {
 /**
  * List all configured MCP servers using the MCP server service
  *
- * @param repository Optional repository for dependency injection. Defaults to JsonlMcpServerRepository
+ * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the list of MCP servers
  */
-export async function listMcpServers(repository?: Repository<McpServer, string>): Promise<ListMcpServersResponse> {
-  const repo = repository || new JsonlMcpServerRepository();
-  const mcpServerService = new McpServerService(repo);
+export async function listMcpServers(repositories?: RepositoryContainer): Promise<ListMcpServersResponse> {
+  const repos = repositories || new DefaultRepositoryContainer();
+  const mcpServerService = new McpServerService(repos.mcpServers);
 
   try {
     const mcpServers = await mcpServerService.listMcpServers();
@@ -65,9 +64,9 @@ export async function listMcpServers(repository?: Repository<McpServer, string>)
  * @param repository Optional repository for dependency injection. Defaults to JsonlMcpServerRepository
  * @returns The MCP server if found, null otherwise
  */
-export async function getMcpServer(serverId: string, repository?: Repository<McpServer, string>): Promise<McpServer | null> {
-  const repo = repository || new JsonlMcpServerRepository();
-  const mcpServerService = new McpServerService(repo);
+export async function getMcpServer(serverId: string, repositories?: RepositoryContainer): Promise<McpServer | null> {
+  const repos = repositories || new DefaultRepositoryContainer();
+  const mcpServerService = new McpServerService(repos.mcpServers);
 
   try {
     return await mcpServerService.getMcpServer(serverId);

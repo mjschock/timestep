@@ -5,11 +5,12 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { listAgents, Agent as AgentConfig } from "../api/agentsApi.js";
 import { getMcpServer } from "../api/settings/mcpServersApi.js";
+import { RepositoryContainer, DefaultRepositoryContainer } from "../services/backing/repositoryContainer.js";
 
 // Load agents using the agents API
-async function loadAgents(): Promise<AgentConfig[]> {
+async function loadAgents(repositories?: RepositoryContainer): Promise<AgentConfig[]> {
     try {
-        const response = await listAgents();
+        const response = await listAgents(repositories);
         console.log(`📋 Loaded ${response.data.length} agents from agents API`);
         return response.data;
     } catch (error) {
@@ -22,14 +23,14 @@ async function loadAgents(): Promise<AgentConfig[]> {
 // MCP servers are now loaded dynamically via API calls
 
 // Create agent lookup map by ID
-async function createAgentsLookup(): Promise<{ [id: string]: AgentConfig }> {
-    const agents = await loadAgents();
+async function createAgentsLookup(repositories?: RepositoryContainer): Promise<{ [id: string]: AgentConfig }> {
+    const agents = await loadAgents(repositories);
     const agentsById: { [id: string]: AgentConfig } = {};
-    
+
     for (const agent of agents) {
         agentsById[agent.id] = agent;
     }
-    
+
     return agentsById;
 }
 
@@ -96,7 +97,7 @@ async function invokeMcpTool(serverUrl: string, toolName: string, parameters: an
 }
 
 // Function to load specific tools based on toolIds - only connects to referenced servers
-async function loadToolsForAgent(toolIds: string[]): Promise<any[]> {
+async function loadToolsForAgent(toolIds: string[], repositories?: RepositoryContainer): Promise<any[]> {
     const tools = [];
     
     // Group tools by MCP server - only include servers that are actually referenced
@@ -122,7 +123,7 @@ async function loadToolsForAgent(toolIds: string[]): Promise<any[]> {
 
     // Second pass: lookup each server and validate
     for (const serverId of serverIds) {
-        const server = await getMcpServer(serverId);
+        const server = await getMcpServer(serverId, repositories);
         if (!server || !server.enabled) {
             console.warn(`⚠️  MCP server with ID ${serverId} not found or disabled`);
             continue;
@@ -235,12 +236,12 @@ function createZodSchemaFromJsonSchema(jsonSchema: any): z.ZodSchema {
     return z.object(shape);
 }
 
-async function getContext(agentId: string) {
+async function getContext(agentId: string, repositories?: RepositoryContainer) {
     console.log('🔍 Getting context for agent ID:', agentId);
-    
+
     // Get the agents lookup map
-    const agentsById = await createAgentsLookup();
-    
+    const agentsById = await createAgentsLookup(repositories);
+
     // Get the specific agent configuration by ID
     const context = agentsById[agentId];
     if (!context) {
@@ -284,11 +285,17 @@ async function getContext(agentId: string) {
 }
 
 export class AgentFactory {
+    repositories: RepositoryContainer;
+
+    constructor(repositories?: RepositoryContainer) {
+        this.repositories = repositories || new DefaultRepositoryContainer();
+    }
+
     async buildAgentConfig(agentId: string) {
-        const context = await getContext(agentId);
+        const context = await getContext(agentId, this.repositories);
 
         // Load tools based on agent's toolIds
-        const tools = await loadToolsForAgent(context.toolIds || []);
+        const tools = await loadToolsForAgent(context.toolIds || [], this.repositories);
 
         const agentConfig: AgentConfiguration = {
             name: context.name,

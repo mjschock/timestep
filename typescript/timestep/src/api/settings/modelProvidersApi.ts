@@ -6,8 +6,7 @@
  */
 
 import { ModelProviderService } from "../../services/modelProviderService.js";
-import { JsonlModelProviderRepository } from "../../services/backing/jsonlModelProviderRepository.js";
-import { Repository } from "../../services/backing/repository.js";
+import { RepositoryContainer, DefaultRepositoryContainer } from "../../services/backing/repositoryContainer.js";
 
 /**
  * Represents a model provider configuration
@@ -39,12 +38,12 @@ export interface ListModelProvidersResponse {
 /**
  * List all available model providers using the model provider service
  *
- * @param repository Optional repository for dependency injection. Defaults to JsonlModelProviderRepository
+ * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the list of model providers
  */
-export async function listModelProviders(repository?: Repository<ModelProvider, string>): Promise<ListModelProvidersResponse> {
-  const repo = repository || new JsonlModelProviderRepository();
-  const modelProviderService = new ModelProviderService(repo);
+export async function listModelProviders(repositories?: RepositoryContainer): Promise<ListModelProvidersResponse> {
+  const repos = repositories || new DefaultRepositoryContainer();
+  const modelProviderService = new ModelProviderService(repos.modelProviders);
 
   try {
     const modelProviders = await modelProviderService.listModelProviders();
@@ -61,12 +60,12 @@ export async function listModelProviders(repository?: Repository<ModelProvider, 
  * Retrieve a specific model provider by ID using the model provider service
  *
  * @param providerId - The ID of the model provider to retrieve
- * @param repository Optional repository for dependency injection. Defaults to JsonlModelProviderRepository
+ * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the model provider details or null if not found
  */
-export async function getModelProvider(providerId: string, repository?: Repository<ModelProvider, string>): Promise<ModelProvider | null> {
-  const repo = repository || new JsonlModelProviderRepository();
-  const modelProviderService = new ModelProviderService(repo);
+export async function getModelProvider(providerId: string, repositories?: RepositoryContainer): Promise<ModelProvider | null> {
+  const repos = repositories || new DefaultRepositoryContainer();
+  const modelProviderService = new ModelProviderService(repos.modelProviders);
 
   try {
     return await modelProviderService.getModelProvider(providerId);

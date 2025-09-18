@@ -13,6 +13,7 @@ const cli = meow(
 	  server                   Start the agents server
 	  stop                     Stop the agents server
 	  chat                     Start interactive chat with an agent
+	  get-version              Show version information
 	  list-agents              List all agents from the server
 	  list-chats               List all chats from the server
 	  list-models              List all models from the server

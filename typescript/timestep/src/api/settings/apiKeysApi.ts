@@ -41,14 +41,15 @@ export interface ListApiKeysResponse {
 /**
  * List all configured API keys
  *
+ * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the list of API keys
  */
-export async function listApiKeys(): Promise<ListApiKeysResponse> {
+export async function listApiKeys(repositories?: any): Promise<ListApiKeysResponse> {
   const apiKeys: ApiKey[] = [];
 
   try {
     const { listModelProviders } = await import('./modelProvidersApi.js');
-    const response = await listModelProviders();
+    const response = await listModelProviders(repositories);
 
     for (const provider of response.data) {
       const apiKey: ApiKey = {

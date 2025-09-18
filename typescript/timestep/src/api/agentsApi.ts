@@ -11,8 +11,7 @@ import { AgentExecutor } from "@a2a-js/sdk/server";
 import { ContextAwareRequestHandler } from "./contextAwareRequestHandler.js";
 import { Request, Response, NextFunction } from "express";
 import { AgentService } from "../services/agentService.js";
-import { JsonlAgentRepository } from "../services/backing/jsonlAgentRepository.js";
-import { Repository } from "../services/backing/repository.js";
+import { RepositoryContainer, DefaultRepositoryContainer } from "../services/backing/repositoryContainer.js";
 
 /**
  * Represents an agent configuration
@@ -53,12 +52,12 @@ export interface ListAgentsResponse {
 /**
  * List all available agents using the agent service
  *
- * @param repository Optional repository for dependency injection. Defaults to JsonlAgentRepository
+ * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the list of agents
  */
-export async function listAgents(repository?: Repository<Agent, string>): Promise<ListAgentsResponse> {
-  const repo = repository || new JsonlAgentRepository();
-  const agentService = new AgentService(repo);
+export async function listAgents(repositories?: RepositoryContainer): Promise<ListAgentsResponse> {
+  const repos = repositories || new DefaultRepositoryContainer();
+  const agentService = new AgentService(repos.agents);
 
   try {
     const agents = await agentService.listAgents();
@@ -75,12 +74,12 @@ export async function listAgents(repository?: Repository<Agent, string>): Promis
  * Retrieve a specific agent by ID using the agent service
  *
  * @param agentId - The ID of the agent to retrieve
- * @param repository Optional repository for dependency injection. Defaults to JsonlAgentRepository
+ * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the agent details or null if not found
  */
-export async function getAgent(agentId: string, repository?: Repository<Agent, string>): Promise<Agent | null> {
-  const repo = repository || new JsonlAgentRepository();
-  const agentService = new AgentService(repo);
+export async function getAgent(agentId: string, repositories?: RepositoryContainer): Promise<Agent | null> {
+  const repos = repositories || new DefaultRepositoryContainer();
+  const agentService = new AgentService(repos.agents);
 
   try {
     return await agentService.getAgent(agentId);
@@ -93,12 +92,12 @@ export async function getAgent(agentId: string, repository?: Repository<Agent, s
  * Check if an agent is available using the agent service
  *
  * @param agentId - The ID of the agent to check
- * @param repository Optional repository for dependency injection. Defaults to JsonlAgentRepository
+ * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to true if agent exists, false otherwise
  */
-export async function isAgentAvailable(agentId: string, repository?: Repository<Agent, string>): Promise<boolean> {
-  const repo = repository || new JsonlAgentRepository();
-  const agentService = new AgentService(repo);
+export async function isAgentAvailable(agentId: string, repositories?: RepositoryContainer): Promise<boolean> {
+  const repos = repositories || new DefaultRepositoryContainer();
+  const agentService = new AgentService(repos.agents);
 
   try {
     return await agentService.isAgentAvailable(agentId);
@@ -112,10 +111,11 @@ export async function isAgentAvailable(agentId: string, repository?: Repository<
  *
  * @param agentId - The ID of the agent
  * @param serverPort - The server port for the agent URL
+ * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the agent card
  */
-export async function getAgentCard(agentId: string, serverPort: number): Promise<AgentCard> {
-  const agent = await getAgent(agentId);
+export async function getAgentCard(agentId: string, serverPort: number, repositories?: RepositoryContainer): Promise<AgentCard> {
+  const agent = await getAgent(agentId, repositories);
   if (!agent) {
     throw new Error(`Agent with ID ${agentId} not found`);
   }
@@ -153,20 +153,22 @@ export async function getAgentCard(agentId: string, serverPort: number): Promise
  * @param taskStore - The shared task store
  * @param agentExecutor - The agent executor
  * @param serverPort - The server port for the agent URL
+ * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the configured request handler
  */
 export async function createAgentRequestHandler(
   agentId: string,
   taskStore: TaskStore,
   agentExecutor: AgentExecutor,
-  serverPort: number
+  serverPort: number,
+  repositories?: RepositoryContainer
 ): Promise<ContextAwareRequestHandler> {
-  const agent = await getAgent(agentId);
+  const agent = await getAgent(agentId, repositories);
   if (!agent) {
     throw new Error(`Agent with ID ${agentId} not found`);
   }
 
-  const agentCard = await getAgentCard(agentId, serverPort);
+  const agentCard = await getAgentCard(agentId, serverPort, repositories);
 
   return new ContextAwareRequestHandler(
     agentId,
@@ -194,33 +196,35 @@ export async function handleListAgents(_req: Request, res: Response): Promise<vo
  * Express route handler for dynamic agent requests
  */
 export async function handleAgentRequest(
-  req: Request, 
-  res: Response, 
+  req: Request,
+  res: Response,
   next: NextFunction,
   taskStore: TaskStore,
   agentExecutor: AgentExecutor,
-  serverPort: number
+  serverPort: number,
+  repositories?: RepositoryContainer
 ): Promise<void> {
   console.log(`🔍 Dynamic route handler called for agent: ${req.params['agentId']}, method: ${req.method}, path: ${req.path}`);
   try {
     const agentId = req.params['agentId'];
-    
+
     // Check if agent exists
-    if (!(await isAgentAvailable(agentId))) {
+    if (!(await isAgentAvailable(agentId, repositories))) {
       console.log(`❌ Agent ${agentId} not found`);
-      res.status(404).json({ 
+      res.status(404).json({
         error: 'Agent not found',
-        agentId: agentId 
+        agentId: agentId
       });
       return;
     }
-    
+
     // Create request handler dynamically
     const requestHandler = await createAgentRequestHandler(
-      agentId, 
-      taskStore, 
-      agentExecutor, 
-      serverPort
+      agentId,
+      taskStore,
+      agentExecutor,
+      serverPort,
+      repositories
     );
     
     // Create A2A Express app and delegate

@@ -1,5 +1,5 @@
 // Library exports for npm module usage
-export { getTimestepPaths } from './utils.js';
+export { getTimestepPaths, getVersion } from './utils.js';
 export { listModels } from './api/modelsApi.js';
 export { listContexts } from './api/contextsApi.js';
 export { listAgents, getAgent, handleAgentRequest, handleListAgents } from './api/agentsApi.js';
@@ -16,6 +16,8 @@ export { listTools } from './api/toolsApi.js';
 export type { Tool } from './api/toolsApi.js';
 export { Context } from './types/context.js';
 export type { Repository } from './services/backing/repository.js';
+export type { RepositoryContainer } from './services/backing/repositoryContainer.js';
+export { DefaultRepositoryContainer } from './services/backing/repositoryContainer.js';
 // MCP server functionality is now integrated into server.ts
 export { TimestepAIAgentExecutor } from './core/agentExecutor.js';
 // Deno-optimized server

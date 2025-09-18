@@ -775,6 +775,19 @@ app.delete('/mcp_servers/:serverId', async (req, res) => {
   }
 });
 
+// Version endpoint - dynamically reads from package.json
+app.get("/version", async (_req, res) => {
+  try {
+    const { getVersion } = await import('./utils.js');
+    const versionInfo = await getVersion();
+    res.json(versionInfo);
+  } catch (error) {
+    res.status(500).json({
+      error: error instanceof Error ? error.message : "Failed to read version information"
+    });
+  }
+});
+
 // Chats endpoint
 app.get("/chats", async (_req, res) => {
   try {

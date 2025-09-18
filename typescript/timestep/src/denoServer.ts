@@ -96,6 +96,19 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
 // Parse JSON bodies
 app.use(express.json());
 
+// Version endpoint - dynamically reads from package.json
+app.get("/version", async (_req: Request, res: Response) => {
+  try {
+    const { getVersion } = await import('./utils.js');
+    const versionInfo = await getVersion();
+    res.json(versionInfo);
+  } catch (error) {
+    res.status(500).json({
+      error: error instanceof Error ? error.message : "Failed to read version information"
+    });
+  }
+});
+
 // Chats endpoint
 app.get("/chats", async (_req: Request, res: Response) => {
   try {
