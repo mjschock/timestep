@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Timestep Version Bump Script
-# Automatically bumps the version in package.json, package-lock.json, and example files using yyyy.mm.ddhhmm format
+# Automatically bumps the version in package.json, package-lock.json, and example files using yyyy.m.ddhhmm format (semver-compliant)
 
 set -e  # Exit on any error
 
@@ -38,8 +38,8 @@ fi
 CURRENT_VERSION=$(grep '"version":' "$PACKAGE_JSON" | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
 echo -e "${YELLOW}📦 Current version: ${CURRENT_VERSION}${NC}"
 
-# Generate new version using current timestamp
-NEW_VERSION=$(date '+%Y.%m.%d%H%M')
+# Generate new version using current timestamp (semver-compliant format)
+NEW_VERSION=$(date '+%Y.%-m.%d%H%M')
 echo -e "${YELLOW}🚀 New version: ${NEW_VERSION}${NC}"
 
 # Check if version actually changed
