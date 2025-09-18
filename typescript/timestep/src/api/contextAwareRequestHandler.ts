@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
+// Use crypto.randomUUID() instead of external UUID library for better Deno compatibility
 
 import { Message, AgentCard, Task, MessageSendParams, TaskState, TaskStatusUpdateEvent, TaskArtifactUpdateEvent, TaskQueryParams, TaskIdParams, TaskPushNotificationConfig, DeleteTaskPushNotificationConfigParams, GetTaskPushNotificationConfigParams, ListTaskPushNotificationConfigParams } from "@a2a-js/sdk";
 import { AgentExecutor } from "@a2a-js/sdk/server";
@@ -107,7 +107,7 @@ export class ContextAwareRequestHandler implements A2ARequestHandler {
         }
 
         // Ensure contextId is present
-        const contextId = incomingMessage.contextId || task?.contextId || uuidv4();
+        const contextId = incomingMessage.contextId || task?.contextId || crypto.randomUUID();
 
         // Ensure our Context domain object exists before proceeding
         console.log(`🔍 Ensuring context ${contextId} exists for agent ${this.agentId}`);
@@ -188,7 +188,7 @@ export class ContextAwareRequestHandler implements A2ARequestHandler {
 
         // Default to blocking behavior if 'blocking' is not explicitly false.
         const isBlocking = params.configuration?.blocking !== false;
-        const taskId = incomingMessage.taskId || uuidv4();
+        const taskId = incomingMessage.taskId || crypto.randomUUID();
 
         // Instantiate ResultManager before creating RequestContext
         const resultManager = new ResultManager(this.taskStore);
@@ -215,14 +215,14 @@ export class ContextAwareRequestHandler implements A2ARequestHandler {
             // Publish a synthetic error event, which will be handled by the ResultManager
             // and will also settle the firstResultPromise for non-blocking calls.
             const errorTask: Task = {
-                id: requestContext.task?.id || uuidv4(), // Use existing task ID or generate new
+                id: requestContext.task?.id || crypto.randomUUID(), // Use existing task ID or generate new
                 contextId: finalMessageForAgent.contextId!,
                 status: {
                     state: "failed",
                     message: {
                         kind: "message",
                         role: "agent",
-                        messageId: uuidv4(),
+                        messageId: crypto.randomUUID(),
                         parts: [{ kind: "text", text: `Agent execution error: ${err.message}` }],
                         taskId: requestContext.task?.id,
                         contextId: finalMessageForAgent.contextId!,
@@ -285,7 +285,7 @@ export class ContextAwareRequestHandler implements A2ARequestHandler {
             throw A2AError.invalidParams('message.messageId is required for streaming.');
         }
 
-        const taskId = incomingMessage.taskId || uuidv4();
+        const taskId = incomingMessage.taskId || crypto.randomUUID();
 
         // Instantiate ResultManager before creating RequestContext
         const resultManager = new ResultManager(this.taskStore);
@@ -309,14 +309,14 @@ export class ContextAwareRequestHandler implements A2ARequestHandler {
             // Publish a synthetic error event if needed
             const errorTaskStatus: TaskStatusUpdateEvent = {
                 kind: "status-update",
-                taskId: requestContext.task?.id || uuidv4(), // Use existing or a placeholder
+                taskId: requestContext.task?.id || crypto.randomUUID(), // Use existing or a placeholder
                 contextId: finalMessageForAgent.contextId!,
                 status: {
                     state: "failed",
                     message: {
                         kind: "message",
                         role: "agent",
-                        messageId: uuidv4(),
+                        messageId: crypto.randomUUID(),
                         parts: [{ kind: "text", text: `Agent execution error: ${err.message}` }],
                         taskId: requestContext.task?.id,
                         contextId: finalMessageForAgent.contextId!,
@@ -380,7 +380,7 @@ export class ContextAwareRequestHandler implements A2ARequestHandler {
                 message: { // Optional: Add a system message indicating cancellation
                     kind: "message",
                     role: "agent",
-                    messageId: uuidv4(),
+                    messageId: crypto.randomUUID(),
                     parts: [{ kind: "text", text: "Task cancellation requested by user." }],
                     taskId: task.id,
                     contextId: task.contextId,
@@ -388,12 +388,17 @@ export class ContextAwareRequestHandler implements A2ARequestHandler {
                 timestamp: new Date().toISOString(),
             };
             // Add cancellation message to history
-            task.history = [...(task.history || []), task.status.message];
+            if (task.status.message) {
+                task.history = [...(task.history || []), task.status.message];
+            }
 
             await this.taskStore.save(task);
         }
 
         const latestTask = await this.taskStore.load(params.id);
+        if (!latestTask) {
+            throw A2AError.taskNotFound(params.id);
+        }
         return latestTask;
     }
 
@@ -558,7 +563,7 @@ export class ContextAwareRequestHandler implements A2ARequestHandler {
             const task = event as Task;
             taskId = task.id;
         } else {
-            taskId = event.taskId;
+            taskId = event.taskId || "";
         }
 
         if (!taskId) {

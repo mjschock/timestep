@@ -83,7 +83,7 @@ export interface IngestTracesResponse {
  * @param _params - Optional parameters for filtering and including specific fields
  * @returns Promise resolving to the list of traces
  */
-export function listTraces(_params?: ListTracesParams): Promise<ListTracesResponse> {
+export function listTraces(_params: ListTracesParams = {}): Promise<ListTracesResponse> {
   // This is a stub implementation that returns hardcoded data
   // In a real implementation, you would query a database or API
   

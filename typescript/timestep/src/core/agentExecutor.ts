@@ -30,8 +30,8 @@ let _tracingApiKey: string | undefined = undefined;
 import { InputGuardrailTripwireTriggered } from "@openai/agents";
 import { OllamaModel } from "../services/backing/models.js";
 import { Ollama } from "ollama";
-import { TimestepAIModelProvider } from "../services/model_provider.js";
-import { AgentFactory } from "../services/agent_factory.js";
+import { TimestepAIModelProvider } from "../services/modelProvider.js";
+import { AgentFactory } from "../services/agentFactory.js";
 import { ContextService } from "../services/contextService.js";
 import { RepositoryContainer, DefaultRepositoryContainer } from "../services/backing/repositoryContainer.js";
 

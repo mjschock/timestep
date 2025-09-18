@@ -45,7 +45,7 @@ export interface ListToolsResponse {
  * @param repositories - Optional repository container for dependency injection
  * @returns Promise resolving to the list of tools
  */
-export async function listTools(repositories?: any): Promise<ListToolsResponse> {
+export async function listTools(repositories: any = {}): Promise<ListToolsResponse> {
   try {
     const mcpTools = await listAllMcpTools(repositories);
 

@@ -44,7 +44,7 @@ export interface ListApiKeysResponse {
  * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the list of API keys
  */
-export async function listApiKeys(repositories?: any): Promise<ListApiKeysResponse> {
+export async function listApiKeys(repositories: any = {}): Promise<ListApiKeysResponse> {
   const apiKeys: ApiKey[] = [];
 
   try {

@@ -55,7 +55,7 @@ export interface DeleteModelResponse {
  * @param repositories - Optional repository container for dependency injection
  * @returns Promise resolving to the list of models
  */
-export async function listModels(repositories?: any): Promise<ListModelsResponse> {
+export async function listModels(repositories: any = {}): Promise<ListModelsResponse> {
   let providers: any[] = [];
 
   try {

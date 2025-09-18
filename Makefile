@@ -70,6 +70,7 @@ test-e2e: timestep-cli-server timestep-cli-list-all test-built-in-weather-cli
 
 publish:
 	@echo "📘 Publishing Timestep..."
+	cd typescript/timestep/examples && deno run --allow-read --allow-write --allow-run check-examples.ts
 	make test-e2e
 	./bash/bump-version.sh
 	git add .

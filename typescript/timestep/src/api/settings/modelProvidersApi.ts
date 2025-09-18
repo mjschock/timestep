@@ -41,9 +41,8 @@ export interface ListModelProvidersResponse {
  * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the list of model providers
  */
-export async function listModelProviders(repositories?: RepositoryContainer): Promise<ListModelProvidersResponse> {
-  const repos = repositories || new DefaultRepositoryContainer();
-  const modelProviderService = new ModelProviderService(repos.modelProviders);
+export async function listModelProviders(repositories: RepositoryContainer = new DefaultRepositoryContainer()): Promise<ListModelProvidersResponse> {
+  const modelProviderService = new ModelProviderService(repositories.modelProviders);
 
   try {
     const modelProviders = await modelProviderService.listModelProviders();
@@ -63,9 +62,8 @@ export async function listModelProviders(repositories?: RepositoryContainer): Pr
  * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the model provider details or null if not found
  */
-export async function getModelProvider(providerId: string, repositories?: RepositoryContainer): Promise<ModelProvider | null> {
-  const repos = repositories || new DefaultRepositoryContainer();
-  const modelProviderService = new ModelProviderService(repos.modelProviders);
+export async function getModelProvider(providerId: string, repositories: RepositoryContainer = new DefaultRepositoryContainer()): Promise<ModelProvider | null> {
+  const modelProviderService = new ModelProviderService(repositories.modelProviders);
 
   try {
     return await modelProviderService.getModelProvider(providerId);

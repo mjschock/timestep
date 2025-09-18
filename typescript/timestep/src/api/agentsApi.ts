@@ -55,9 +55,8 @@ export interface ListAgentsResponse {
  * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the list of agents
  */
-export async function listAgents(repositories?: RepositoryContainer): Promise<ListAgentsResponse> {
-  const repos = repositories || new DefaultRepositoryContainer();
-  const agentService = new AgentService(repos.agents);
+export async function listAgents(repositories: RepositoryContainer = new DefaultRepositoryContainer()): Promise<ListAgentsResponse> {
+  const agentService = new AgentService(repositories.agents);
 
   try {
     const agents = await agentService.listAgents();
@@ -77,9 +76,8 @@ export async function listAgents(repositories?: RepositoryContainer): Promise<Li
  * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the agent details or null if not found
  */
-export async function getAgent(agentId: string, repositories?: RepositoryContainer): Promise<Agent | null> {
-  const repos = repositories || new DefaultRepositoryContainer();
-  const agentService = new AgentService(repos.agents);
+export async function getAgent(agentId: string, repositories: RepositoryContainer = new DefaultRepositoryContainer()): Promise<Agent | null> {
+  const agentService = new AgentService(repositories.agents);
 
   try {
     return await agentService.getAgent(agentId);
@@ -95,9 +93,8 @@ export async function getAgent(agentId: string, repositories?: RepositoryContain
  * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to true if agent exists, false otherwise
  */
-export async function isAgentAvailable(agentId: string, repositories?: RepositoryContainer): Promise<boolean> {
-  const repos = repositories || new DefaultRepositoryContainer();
-  const agentService = new AgentService(repos.agents);
+export async function isAgentAvailable(agentId: string, repositories: RepositoryContainer = new DefaultRepositoryContainer()): Promise<boolean> {
+  const agentService = new AgentService(repositories.agents);
 
   try {
     return await agentService.isAgentAvailable(agentId);
@@ -114,7 +111,7 @@ export async function isAgentAvailable(agentId: string, repositories?: Repositor
  * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the agent card
  */
-export async function getAgentCard(agentId: string, serverPort: number, repositories?: RepositoryContainer): Promise<AgentCard> {
+export async function getAgentCard(agentId: string, serverPort: number, repositories: RepositoryContainer = new DefaultRepositoryContainer()): Promise<AgentCard> {
   const agent = await getAgent(agentId, repositories);
   if (!agent) {
     throw new Error(`Agent with ID ${agentId} not found`);
@@ -161,7 +158,7 @@ export async function createAgentRequestHandler(
   taskStore: TaskStore,
   agentExecutor: AgentExecutor,
   serverPort: number,
-  repositories?: RepositoryContainer
+  repositories: RepositoryContainer = new DefaultRepositoryContainer()
 ): Promise<ContextAwareRequestHandler> {
   const agent = await getAgent(agentId, repositories);
   if (!agent) {
@@ -202,7 +199,7 @@ export async function handleAgentRequest(
   taskStore: TaskStore,
   agentExecutor: AgentExecutor,
   serverPort: number,
-  repositories?: RepositoryContainer
+  repositories: RepositoryContainer = new DefaultRepositoryContainer()
 ): Promise<void> {
   console.log(`🔍 Dynamic route handler called for agent: ${req.params['agentId']}, method: ${req.method}, path: ${req.path}`);
   try {

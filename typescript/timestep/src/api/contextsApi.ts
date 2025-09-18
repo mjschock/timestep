@@ -26,9 +26,8 @@ export interface ListContextsResponse {
  * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the list of contexts
  */
-export async function listContexts(repositories?: RepositoryContainer): Promise<ListContextsResponse> {
-  const repos = repositories || new DefaultRepositoryContainer();
-  const contextService = new ContextService(repos.contexts);
+export async function listContexts(repositories: RepositoryContainer = new DefaultRepositoryContainer()): Promise<ListContextsResponse> {
+  const contextService = new ContextService(repositories.contexts);
 
   try {
     const contexts = await contextService.listContexts();

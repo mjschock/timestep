@@ -43,9 +43,8 @@ export interface ListMcpServersResponse {
  * @param repositories Optional repository container for dependency injection. Defaults to DefaultRepositoryContainer
  * @returns Promise resolving to the list of MCP servers
  */
-export async function listMcpServers(repositories?: RepositoryContainer): Promise<ListMcpServersResponse> {
-  const repos = repositories || new DefaultRepositoryContainer();
-  const mcpServerService = new McpServerService(repos.mcpServers);
+export async function listMcpServers(repositories: RepositoryContainer = new DefaultRepositoryContainer()): Promise<ListMcpServersResponse> {
+  const mcpServerService = new McpServerService(repositories.mcpServers);
 
   try {
     const mcpServers = await mcpServerService.listMcpServers();
@@ -64,9 +63,8 @@ export async function listMcpServers(repositories?: RepositoryContainer): Promis
  * @param repository Optional repository for dependency injection. Defaults to JsonlMcpServerRepository
  * @returns The MCP server if found, null otherwise
  */
-export async function getMcpServer(serverId: string, repositories?: RepositoryContainer): Promise<McpServer | null> {
-  const repos = repositories || new DefaultRepositoryContainer();
-  const mcpServerService = new McpServerService(repos.mcpServers);
+export async function getMcpServer(serverId: string, repositories: RepositoryContainer = new DefaultRepositoryContainer()): Promise<McpServer | null> {
+  const mcpServerService = new McpServerService(repositories.mcpServers);
 
   try {
     return await mcpServerService.getMcpServer(serverId);

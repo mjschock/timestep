@@ -11,10 +11,7 @@
 import express from "express";
 import type { Request, Response, NextFunction } from "express";
 
-// Declare Deno global for TypeScript compilation
-declare global {
-  const Deno: any;
-}
+// Deno global is already available in Deno environment
 
 // Regular imports that work in both Node.js and Deno
 import { loadAppConfig } from "./utils.js";
@@ -226,8 +223,8 @@ app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
 
 // Health check endpoint for Deno environments
 app.get('/health', (_req: Request, res: Response) => {
-  const runtime = typeof Deno !== 'undefined' ? 'Deno' : 'Node.js';
-  const version = typeof Deno !== 'undefined' ? (Deno as any).version?.deno : process.version;
+  const runtime = typeof (globalThis as any).Deno !== 'undefined' ? 'Deno' : 'Node.js';
+  const version = typeof (globalThis as any).Deno !== 'undefined' ? (globalThis as any).Deno.version?.deno : process.version;
 
   res.json({
     status: 'healthy',
@@ -246,8 +243,8 @@ export function startDenoServer(port?: number): void {
     console.log(`📚 CLI endpoints available at http://localhost:${serverPort}/`);
     console.log(`🤖 A2A agents available at http://localhost:${serverPort}/agents/{agentId}/`);
     console.log(`📚 Dynamic agent routing enabled - agents loaded on-demand`);
-    const runtime = typeof Deno !== 'undefined' ? 'Deno' : 'Node.js';
-    const version = typeof Deno !== 'undefined' ? (Deno as any).version?.deno : process.version;
+    const runtime = typeof (globalThis as any).Deno !== 'undefined' ? 'Deno' : 'Node.js';
+    const version = typeof (globalThis as any).Deno !== 'undefined' ? (globalThis as any).Deno.version?.deno : process.version;
     console.log(`🦕 Runtime: ${runtime} ${version}`);
     console.log(`⚡ Health check: http://localhost:${serverPort}/health`);
   });
