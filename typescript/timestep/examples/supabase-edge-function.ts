@@ -31,7 +31,7 @@ import {
   type Repository,
   type Agent,
   type ModelProvider,
-  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180918';
+  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180919';
 
 /**
  * Supabase Agent Repository Implementation
@@ -394,9 +394,6 @@ Deno.serve({ port }, async (request: Request) => {
   try {
     // Root endpoint - useful for debugging path mapping
     if (cleanPath === "/" || cleanPath === "") {
-      const functionName = pathParts.length > 3 && pathParts[1] === 'functions' && pathParts[2] === 'v1'
-        ? pathParts[3] : 'unknown';
-
       return new Response(JSON.stringify({
         message: "Timestep Server is running",
         runtime: "Supabase Edge Function with Custom Repositories",
