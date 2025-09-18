@@ -45,7 +45,7 @@ import {
 	type McpServer,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.181621';
+} from 'npm:@timestep-ai/timestep@2025.9.181624';
 
 /**
  * Supabase Agent Repository Implementation
@@ -267,7 +267,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 		if (servers.length === 0) {
 			// Import the default MCP servers configuration
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.181621'
+				'npm:@timestep-ai/timestep@2025.9.181624'
 			);
 			const defaultServers = getDefaultMcpServers(this.baseUrl);
 
@@ -569,7 +569,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181621'
+					'npm:@timestep-ai/timestep@2025.9.181624'
 				);
 
 				if (request.method === 'POST') {
@@ -587,7 +587,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// GET request - health check
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181621'
+					'npm:@timestep-ai/timestep@2025.9.181624'
 				);
 				const server = await getMcpServer(serverId, repositories);
 
