@@ -63,3 +63,11 @@ test-built-in-weather-cli:
 	cd typescript/timestep && npx tsx src/cli.tsx chat --agentId 00000000-0000-0000-0000-000000000000 --auto-approve --user-input "What's the weather in Oakland and San Francisco?"
 
 test-e2e: timestep-cli-server timestep-cli-list-all test-built-in-weather-cli
+
+publish:
+	@echo "📘 Publishing Timestep..."
+	./bash/bump-version.sh
+	git add .
+	git commit -m "Bump version to $(cat typescript/timestep/package.json | jq -r '.version')"
+	git push
+	cd typescript/timestep && npm publish

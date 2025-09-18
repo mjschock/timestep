@@ -40,9 +40,7 @@ import {
   type Agent,
   type ModelProvider,
   type McpServer,
-  type ApiKey,
-  type Tool,
-  type Trace
+  type ApiKey
 } from 'npm:@timestep-ai/timestep@latest';
 
 /**
@@ -119,7 +117,13 @@ class SupabaseContextRepository implements Repository<Context, string> {
       .select('*');
 
     if (error) throw new Error(`Failed to list contexts: ${error.message}`);
-    return (data || []).map((item: any) => Context.fromJSON(item));
+    return (data || []).map((item: any) => {
+      const context = new Context(item.context_id, item.agent_id);
+      context.taskHistories = item.task_histories || {};
+      context.taskStates = item.task_states || {};
+      context.tasks = item.tasks || [];
+      return context;
+    });
   }
 
   async load(id: string): Promise<Context | null> {
@@ -132,7 +136,13 @@ class SupabaseContextRepository implements Repository<Context, string> {
     if (error && error.code !== 'PGRST116') {
       throw new Error(`Failed to load context: ${error.message}`);
     }
-    return data ? Context.fromJSON(data) : null;
+    if (!data) return null;
+
+    const context = new Context(data.context_id, data.agent_id);
+    context.taskHistories = data.task_histories || {};
+    context.taskStates = data.task_states || {};
+    context.tasks = data.tasks || [];
+    return context;
   }
 
   async save(context: Context): Promise<void> {
@@ -357,126 +367,6 @@ class SupabaseApiKeyRepository implements Repository<ApiKey, string> {
 }
 
 /**
- * Supabase Tool Repository Implementation
- */
-class SupabaseToolRepository implements Repository<Tool, string> {
-  constructor(private supabase: any) {}
-
-  async list(): Promise<Tool[]> {
-    const { data, error } = await this.supabase
-      .from('tools')
-      .select('*');
-
-    if (error) throw new Error(`Failed to list tools: ${error.message}`);
-    return data || [];
-  }
-
-  async load(id: string): Promise<Tool | null> {
-    const { data, error } = await this.supabase
-      .from('tools')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error && error.code !== 'PGRST116') {
-      throw new Error(`Failed to load tool: ${error.message}`);
-    }
-    return data || null;
-  }
-
-  async save(tool: Tool): Promise<void> {
-    const { error } = await this.supabase
-      .from('tools')
-      .upsert([tool]);
-
-    if (error) throw new Error(`Failed to save tool: ${error.message}`);
-  }
-
-  async delete(id: string): Promise<void> {
-    const { error } = await this.supabase
-      .from('tools')
-      .delete()
-      .eq('id', id);
-
-    if (error) throw new Error(`Failed to delete tool: ${error.message}`);
-  }
-
-  async exists(id: string): Promise<boolean> {
-    const tool = await this.load(id);
-    return tool !== null;
-  }
-
-  async getOrCreate(id: string, ...createArgs: any[]): Promise<Tool> {
-    const existing = await this.load(id);
-    if (existing) {
-      return existing;
-    }
-
-    throw new Error('Auto-creation of tools not supported - please create tools explicitly');
-  }
-}
-
-/**
- * Supabase Trace Repository Implementation
- */
-class SupabaseTraceRepository implements Repository<Trace, string> {
-  constructor(private supabase: any) {}
-
-  async list(): Promise<Trace[]> {
-    const { data, error } = await this.supabase
-      .from('traces')
-      .select('*');
-
-    if (error) throw new Error(`Failed to list traces: ${error.message}`);
-    return data || [];
-  }
-
-  async load(id: string): Promise<Trace | null> {
-    const { data, error } = await this.supabase
-      .from('traces')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error && error.code !== 'PGRST116') {
-      throw new Error(`Failed to load trace: ${error.message}`);
-    }
-    return data || null;
-  }
-
-  async save(trace: Trace): Promise<void> {
-    const { error } = await this.supabase
-      .from('traces')
-      .upsert([trace]);
-
-    if (error) throw new Error(`Failed to save trace: ${error.message}`);
-  }
-
-  async delete(id: string): Promise<void> {
-    const { error } = await this.supabase
-      .from('traces')
-      .delete()
-      .eq('id', id);
-
-    if (error) throw new Error(`Failed to delete trace: ${error.message}`);
-  }
-
-  async exists(id: string): Promise<boolean> {
-    const trace = await this.load(id);
-    return trace !== null;
-  }
-
-  async getOrCreate(id: string, ...createArgs: any[]): Promise<Trace> {
-    const existing = await this.load(id);
-    if (existing) {
-      return existing;
-    }
-
-    throw new Error('Auto-creation of traces not supported - please create traces explicitly');
-  }
-}
-
-/**
  * Custom task store for Supabase environment
  */
 class SupabaseTaskStore {
@@ -512,8 +402,6 @@ const contextRepository = new SupabaseContextRepository(supabase);
 const modelProviderRepository = new SupabaseModelProviderRepository(supabase);
 const mcpServerRepository = new SupabaseMcpServerRepository(supabase);
 const apiKeyRepository = new SupabaseApiKeyRepository(supabase);
-const toolRepository = new SupabaseToolRepository(supabase);
-const traceRepository = new SupabaseTraceRepository(supabase);
 
 // Initialize components
 const agentExecutor = new TimestepAIAgentExecutor();
@@ -553,7 +441,7 @@ Deno.serve({ port }, async (request: Request) => {
         deploymentId: Deno.env.get("DENO_DEPLOYMENT_ID") || "local",
         region: Deno.env.get("DENO_REGION") || "unknown",
         path: url.pathname,
-        repositories: ['agents', 'contexts', 'model_providers', 'mcp_servers', 'api_keys', 'tools', 'traces']
+        repositories: ['agents', 'contexts', 'model_providers', 'mcp_servers', 'api_keys']
       }), { status: 200, headers });
     }
 
@@ -584,18 +472,17 @@ Deno.serve({ port }, async (request: Request) => {
     }
 
     if (url.pathname === "/tools") {
-      const result = await listTools(toolRepository);
+      const result = await listTools(mcpServerRepository);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
     if (url.pathname === "/traces") {
-      const result = await listTraces(traceRepository);
+      const result = await listTraces();
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    // Other endpoints using default repositories (models don't have custom storage)
     if (url.pathname === "/models") {
-      const result = await listModels();
+      const result = await listModels(modelProviderRepository);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
@@ -639,9 +526,9 @@ console.log("  - GET /chats - List chats (using SupabaseContextRepository)");
 console.log("  - GET /settings/model-providers - List model providers (using SupabaseModelProviderRepository)");
 console.log("  - GET /settings/mcp-servers - List MCP servers (using SupabaseMcpServerRepository)");
 console.log("  - GET /settings/api-keys - List API keys (using SupabaseApiKeyRepository)");
-console.log("  - GET /tools - List tools (using SupabaseToolRepository)");
-console.log("  - GET /traces - List traces (using SupabaseTraceRepository)");
-console.log("  - GET /models - List models (using default repository)");
+console.log("  - GET /tools - List tools (via SupabaseMcpServerRepository)");
+console.log("  - GET /models - List models (via SupabaseModelProviderRepository)");
+console.log("  - GET /traces - List traces (using default hardcoded data)");
 console.log("  - /agents/{agentId}/* - Dynamic agent A2A endpoints");
 
 /*
@@ -706,38 +593,12 @@ CREATE TABLE api_keys (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create tools table
-CREATE TABLE tools (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  description TEXT,
-  input_schema JSONB,
-  function_implementation TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Create traces table
-CREATE TABLE traces (
-  id TEXT PRIMARY KEY,
-  agent_id TEXT,
-  context_id TEXT,
-  trace_data JSONB NOT NULL,
-  timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
 -- Create indexes for better performance
 CREATE INDEX idx_agents_name ON agents(name);
 CREATE INDEX idx_contexts_agent_id ON contexts(agent_id);
 CREATE INDEX idx_model_providers_provider ON model_providers(provider);
 CREATE INDEX idx_mcp_servers_name ON mcp_servers(name);
 CREATE INDEX idx_api_keys_service ON api_keys(service);
-CREATE INDEX idx_tools_name ON tools(name);
-CREATE INDEX idx_traces_agent_id ON traces(agent_id);
-CREATE INDEX idx_traces_context_id ON traces(context_id);
-CREATE INDEX idx_traces_timestamp ON traces(timestamp);
 
 -- Enable Row Level Security (optional)
 ALTER TABLE agents ENABLE ROW LEVEL SECURITY;
@@ -745,8 +606,6 @@ ALTER TABLE contexts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE model_providers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mcp_servers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE api_keys ENABLE ROW LEVEL SECURITY;
-ALTER TABLE tools ENABLE ROW LEVEL SECURITY;
-ALTER TABLE traces ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for authenticated users (optional)
 CREATE POLICY "Users can access agents" ON agents FOR ALL TO authenticated USING (true);
@@ -754,8 +613,6 @@ CREATE POLICY "Users can access contexts" ON contexts FOR ALL TO authenticated U
 CREATE POLICY "Users can access model_providers" ON model_providers FOR ALL TO authenticated USING (true);
 CREATE POLICY "Users can access mcp_servers" ON mcp_servers FOR ALL TO authenticated USING (true);
 CREATE POLICY "Users can access api_keys" ON api_keys FOR ALL TO authenticated USING (true);
-CREATE POLICY "Users can access tools" ON tools FOR ALL TO authenticated USING (true);
-CREATE POLICY "Users can access traces" ON traces FOR ALL TO authenticated USING (true);
 `;
 
 /*

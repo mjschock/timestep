@@ -135,7 +135,7 @@ export async function createMcpClient(serverUrl: string, authToken?: string): Pr
 /**
  * Lists all tools from all enabled MCP servers with namespaced IDs
  */
-export async function listAllMcpTools(): Promise<Array<{
+export async function listAllMcpTools(mcpServerRepository?: any): Promise<Array<{
     id: string;
     name: string;
     description: string;
@@ -145,7 +145,7 @@ export async function listAllMcpTools(): Promise<Array<{
 }>> {
     // Use the MCP servers API instead of direct file access
     const { listMcpServers } = await import('./api/settings/mcpServersApi.js');
-    const mcpServersResponse = await listMcpServers();
+    const mcpServersResponse = await listMcpServers(mcpServerRepository);
     const allTools: Array<{
         id: string;
         name: string;

@@ -52,14 +52,15 @@ export interface DeleteModelResponse {
 /**
  * List all available models from all configured providers
  *
+ * @param modelProviderRepository - Optional custom repository for model providers
  * @returns Promise resolving to the list of models
  */
-export async function listModels(): Promise<ListModelsResponse> {
+export async function listModels(modelProviderRepository?: any): Promise<ListModelsResponse> {
   let providers: any[] = [];
 
   try {
     const { listModelProviders } = await import('./settings/modelProvidersApi.js');
-    const response = await listModelProviders();
+    const response = await listModelProviders(modelProviderRepository);
     providers = response.data;
   } catch (error) {
     console.warn(`Failed to load model providers: ${error}. Returning empty models list.`);
