@@ -1,25 +1,15 @@
 /**
- * Supabase Edge Function with Custom Repositories
+ * Supabase Edge Function for Timestep Server
  *
- * This demonstrates how to replace the built-in JSONL repositories with custom
- * Supabase database repositories. This approach stores all data in your Supabase
- * database instead of JSONL files.
- *
- * This example shows the complete integration of:
- * 1. Custom Supabase repository implementations for all entities
- * 2. Dependency injection to replace built-in repositories
- * 3. Full Supabase Edge Function setup with database storage
- * 4. SQL schema for required database tables
- *
- * Place this file in your Supabase project at: supabase/functions/timestep-server/index.ts
+ * This is a complete, self-contained Timestep server for Supabase Edge Functions.
+ * It uses Supabase database repositories since Edge Functions can't access the filesystem.
  *
  * To set up this function:
- * 1. deno add npm:@timestep-ai/timestep
- * 2. Run the SQL schema (provided at bottom) in your Supabase SQL editor
- * 3. Copy this code to supabase/functions/timestep-server/index.ts
- * 4. Deploy with: supabase functions deploy timestep-server
+ * 1. Run the SQL schema (provided at bottom) in your Supabase SQL editor
+ * 2. Copy this entire file to supabase/functions/timestep-server/index.ts
+ * 3. Deploy with: supabase functions deploy timestep-server
  *
- * For simpler setup with built-in repositories, see: supabase-edge-function-built-in-repositories.ts
+ * That's it! No other files needed.
  */
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
@@ -40,7 +30,7 @@ import {
   type Repository,
   type Agent,
   type ModelProvider,
-  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180831';
+  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180851';
 
 /**
  * Supabase Agent Repository Implementation
@@ -305,6 +295,17 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
   }
 }
 
+/**
+ * Supabase Repository Container Implementation
+ */
+class SupabaseRepositoryContainer implements RepositoryContainer {
+  constructor(private supabase: any) {}
+
+  get agents() { return new SupabaseAgentRepository(this.supabase); }
+  get contexts() { return new SupabaseContextRepository(this.supabase); }
+  get modelProviders() { return new SupabaseModelProviderRepository(this.supabase); }
+  get mcpServers() { return new SupabaseMcpServerRepository(this.supabase); }
+}
 
 /**
  * Custom task store for Supabase environment
@@ -329,18 +330,6 @@ class SupabaseTaskStore {
     this.store.set(task.id, {...task});
     console.log(`📋 SupabaseTaskStore.save(${task.id}) -> SAVED`);
   }
-}
-
-/**
- * Supabase Repository Container Implementation
- */
-class SupabaseRepositoryContainer implements RepositoryContainer {
-  constructor(private supabase: any) {}
-
-  get agents() { return new SupabaseAgentRepository(this.supabase); }
-  get contexts() { return new SupabaseContextRepository(this.supabase); }
-  get modelProviders() { return new SupabaseModelProviderRepository(this.supabase); }
-  get mcpServers() { return new SupabaseMcpServerRepository(this.supabase); }
 }
 
 // Initialize Supabase client
@@ -430,7 +419,6 @@ Deno.serve({ port }, async (request: Request) => {
       const result = await listMcpServers(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
-
 
     if (url.pathname === "/tools") {
       const result = await listTools(repositories);

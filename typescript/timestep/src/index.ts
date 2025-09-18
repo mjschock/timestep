@@ -18,5 +18,3 @@ export type { RepositoryContainer } from './services/backing/repositoryContainer
 export { DefaultRepositoryContainer } from './services/backing/repositoryContainer.js';
 // MCP server functionality is now integrated into server.ts
 export { TimestepAIAgentExecutor } from './core/agentExecutor.js';
-// Deno-optimized server
-export { startDenoServer, denoApp } from './denoServer.js';

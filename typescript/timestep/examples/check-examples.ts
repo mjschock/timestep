@@ -72,11 +72,10 @@ async function checkExample(filename: string) {
 
 // Check all examples
 const examples = [
-  'supabase-edge-function-built-in-repositories.ts',
-  'supabase-edge-function-custom-repositories.ts'
+  'supabase-edge-function.ts'
 ];
 
-console.log('🚀 Checking Supabase Edge Function examples syntax...\n');
+console.log('🚀 Checking Supabase Edge Function example syntax...\n');
 
 let allPass = true;
 for (const example of examples) {
@@ -86,9 +85,9 @@ for (const example of examples) {
 }
 
 if (allPass) {
-  console.log('🎉 All examples passed syntax checks!');
+  console.log('🎉 Example passed syntax check!');
   Deno.exit(0);
 } else {
-  console.log('💥 Some examples have syntax errors!');
+  console.log('💥 Example has syntax errors!');
   Deno.exit(1);
 }
