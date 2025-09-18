@@ -256,7 +256,7 @@ async function getContext(agentId: string, repositories?: RepositoryContainer) {
             const handoffConfig = agentsById[handoffId];
             if (handoffConfig) {
                 // Load tools for this handoff agent based on its toolIds
-                const handoffTools = await loadToolsForAgent(handoffConfig.toolIds || []);
+                const handoffTools = await loadToolsForAgent(handoffConfig.toolIds || [], repositories);
                 console.log(`🔄 Loaded ${handoffTools.length} tools for handoff agent ${handoffConfig.name}`);
                 
                 const agent = new Agent({

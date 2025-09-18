@@ -58,19 +58,28 @@ async function loadModelProviders(repositories?: RepositoryContainer): Promise<{
     }
 }
 
-// Load model providers and get OpenAI API key for tracing
+// Tracing API key will be set when repositories are available
 let tracing_api_key: string | undefined;
-loadModelProviders().then(providers => {
-    tracing_api_key = providers.openai?.api_key;
-}).catch(error => {
-    console.warn('Failed to load model providers for tracing:', error);
-});
-console.log('🔑 Setting tracing export API key:', tracing_api_key ? `${tracing_api_key.substring(0, 10)}...` : 'undefined');
-setTracingExportApiKey(tracing_api_key);
+let tracing_api_key_set = false;
 
-// Store the API key locally for verification
-_tracingApiKey = tracing_api_key;
-console.log('✅ Tracing export API key set successfully. Stored key:', _tracingApiKey ? `${_tracingApiKey.substring(0, 10)}...` : 'undefined');
+// Function to set tracing API key when repositories are available
+async function setTracingApiKeyFromRepositories(repositories?: RepositoryContainer) {
+    if (tracing_api_key_set) return;
+    
+    try {
+        const providers = await loadModelProviders(repositories);
+        tracing_api_key = providers.openai?.api_key;
+        console.log('🔑 Setting tracing export API key:', tracing_api_key ? `${tracing_api_key.substring(0, 10)}...` : 'undefined');
+        setTracingExportApiKey(tracing_api_key);
+        
+        // Store the API key locally for verification
+        _tracingApiKey = tracing_api_key;
+        console.log('✅ Tracing export API key set successfully. Stored key:', _tracingApiKey ? `${_tracingApiKey.substring(0, 10)}...` : 'undefined');
+        tracing_api_key_set = true;
+    } catch (error) {
+        console.warn('Failed to load model providers for tracing:', error);
+    }
+}
 
 
 // Function to check for tool call approval in message
@@ -262,6 +271,11 @@ export class TimestepAIAgentExecutor implements AgentExecutor {
         this.repositories = repositories || new DefaultRepositoryContainer();
         this.agentFactory = new AgentFactory(this.repositories);
         this.contextService = new ContextService(this.repositories.contexts);
+        
+        // Set tracing API key from repositories (async, but don't wait)
+        setTracingApiKeyFromRepositories(this.repositories).catch(error => {
+            console.warn('Failed to set tracing API key:', error);
+        });
     }
 
     async execute(
