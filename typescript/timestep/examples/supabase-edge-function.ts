@@ -6,10 +6,11 @@
  *
  * To set up this function:
  * 1. Run the SQL schema (provided at bottom) in your Supabase SQL editor
- * 2. Copy this entire file to supabase/functions/timestep-server/index.ts
- * 3. Deploy with: supabase functions deploy timestep-server
+ * 2. Copy this entire file to supabase/functions/YOUR_FUNCTION_NAME/index.ts
+ * 3. Deploy with: supabase functions deploy YOUR_FUNCTION_NAME
  *
- * That's it! No other files needed.
+ * That's it! The function automatically detects its name from the URL.
+ * Access endpoints like: https://YOUR_PROJECT.supabase.co/functions/v1/YOUR_FUNCTION_NAME/agents
  */
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
@@ -30,7 +31,7 @@ import {
   type Repository,
   type Agent,
   type ModelProvider,
-  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180851';
+  type McpServer} from 'npm:@timestep-ai/timestep@2025.9.180906';
 
 /**
  * Supabase Agent Repository Implementation
@@ -356,6 +357,24 @@ console.log(`🌐 Server will run on port ${port}`);
 Deno.serve({ port }, async (request: Request) => {
   const url = new URL(request.url);
 
+  // Extract the path after the Supabase function name
+  // For URL like /functions/v1/my-function/agents, we want just /agents
+  // This automatically detects the function name from the URL structure
+  const pathParts = url.pathname.split('/');
+
+  // Supabase URLs follow the pattern: /functions/v1/FUNCTION_NAME/api_path
+  // So we extract everything after the function name (index 3)
+  let cleanPath = '/';
+  if (pathParts.length > 3 && pathParts[1] === 'functions' && pathParts[2] === 'v1') {
+    const apiParts = pathParts.slice(4); // Skip /functions/v1/FUNCTION_NAME
+    cleanPath = apiParts.length > 0 ? '/' + apiParts.join('/') : '/';
+  }
+
+  // Remove trailing slash except for root
+  cleanPath = cleanPath === '/' ? '/' : cleanPath.replace(/\/$/, '');
+
+  console.log(`🔍 Request: ${request.method} ${url.pathname} -> mapped to: ${cleanPath}`);
+
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -370,8 +389,27 @@ Deno.serve({ port }, async (request: Request) => {
   }
 
   try {
+    // Root endpoint - useful for debugging path mapping
+    if (cleanPath === "/" || cleanPath === "") {
+      const functionName = pathParts.length > 3 && pathParts[1] === 'functions' && pathParts[2] === 'v1'
+        ? pathParts[3] : 'unknown';
+
+      return new Response(JSON.stringify({
+        message: "Timestep Server is running",
+        runtime: "Supabase Edge Function with Custom Repositories",
+        detectedFunctionName: functionName,
+        originalPath: url.pathname,
+        mappedPath: cleanPath,
+        availableEndpoints: [
+          "/version", "/health", "/agents", "/chats",
+          "/settings/model-providers", "/settings/mcp-servers",
+          "/tools", "/traces", "/models", "/agents/{agentId}"
+        ]
+      }), { status: 200, headers });
+    }
+
     // Version endpoint - returns timestep package version info
-    if (url.pathname === "/version") {
+    if (cleanPath === "/version") {
       try {
         const versionInfo = await getVersion();
         return new Response(JSON.stringify({
@@ -386,7 +424,7 @@ Deno.serve({ port }, async (request: Request) => {
     }
 
     // Health check endpoints
-    if (url.pathname === "/health" || url.pathname === "/supabase-health") {
+    if (cleanPath === "/health" || cleanPath === "/supabase-health") {
       return new Response(JSON.stringify({
         status: 'healthy',
         runtime: 'Supabase Edge Function with Custom Repositories',
@@ -394,55 +432,55 @@ Deno.serve({ port }, async (request: Request) => {
         denoVersion: Deno.version.deno,
         deploymentId: Deno.env.get("DENO_DEPLOYMENT_ID") || "local",
         region: Deno.env.get("DENO_REGION") || "unknown",
-        path: url.pathname,
+        path: cleanPath,
         repositories: ['agents', 'contexts', 'model_providers', 'mcp_servers']
       }), { status: 200, headers });
     }
 
     // API endpoints using custom repositories
-    if (url.pathname === "/agents") {
+    if (cleanPath === "/agents") {
       const result = await listAgents(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    if (url.pathname === "/chats") {
+    if (cleanPath === "/chats") {
       const result = await listContexts(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    if (url.pathname === "/settings/model-providers") {
+    if (cleanPath === "/settings/model-providers") {
       const result = await listModelProviders(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    if (url.pathname === "/settings/mcp-servers") {
+    if (cleanPath === "/settings/mcp-servers") {
       const result = await listMcpServers(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    if (url.pathname === "/tools") {
+    if (cleanPath === "/tools") {
       const result = await listTools(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    if (url.pathname === "/traces") {
+    if (cleanPath === "/traces") {
       const result = await listTraces();
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
-    if (url.pathname === "/models") {
+    if (cleanPath === "/models") {
       const result = await listModels(repositories);
       return new Response(JSON.stringify(result.data), { status: 200, headers });
     }
 
     // Handle dynamic agent routes with custom repository
-    const agentMatch = url.pathname.match(/^\/agents\/([^\/]+)(?:\/.*)?$/);
+    const agentMatch = cleanPath.match(/^\/agents\/([^\/]+)(?:\/.*)?$/);
     if (agentMatch) {
       // Create a mock Express-style request object that satisfies the Request interface
       const mockReq = {
         method: request.method,
-        path: url.pathname,
-        originalUrl: url.pathname + url.search,
+        path: cleanPath,
+        originalUrl: cleanPath + url.search,
         params: { agentId: agentMatch[1] },
         body: request.method !== 'GET' ? await request.json().catch(() => ({})) : {},
         headers: Object.fromEntries(Array.from(request.headers.entries())),
@@ -467,7 +505,7 @@ Deno.serve({ port }, async (request: Request) => {
         xhr: false,
         route: undefined,
         signedCookies: {},
-        url: url.pathname + url.search,
+        url: cleanPath + url.search,
         baseUrl: '',
         app: {} as any,
         res: {} as any,
