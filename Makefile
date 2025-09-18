@@ -66,6 +66,7 @@ test-e2e: timestep-cli-server timestep-cli-list-all test-built-in-weather-cli
 
 publish:
 	@echo "📘 Publishing Timestep..."
+	make test-e2e
 	./bash/bump-version.sh
 	git add .
 	git commit -m "Bump version to $(cat typescript/timestep/package.json | jq -r '.version')"
