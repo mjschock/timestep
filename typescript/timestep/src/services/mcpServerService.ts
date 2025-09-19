@@ -766,7 +766,26 @@ export class McpServerService {
 				throw new Error(`HTTP ${response.status}: ${response.statusText}`);
 			}
 
-			return await response.json();
+			const responseText = await response.text();
+
+			// Check if response is Server-Sent Events (SSE) format
+			if (
+				responseText.startsWith('event:') ||
+				responseText.includes('data: {')
+			) {
+				// Parse SSE format: extract JSON from data: field
+				const lines = responseText.split('\n');
+				for (const line of lines) {
+					if (line.startsWith('data: ')) {
+						const jsonData = line.substring(6); // Remove 'data: ' prefix
+						return JSON.parse(jsonData);
+					}
+				}
+				throw new Error('No valid JSON data found in SSE response');
+			} else {
+				// Regular JSON response
+				return JSON.parse(responseText);
+			}
 		} catch (error) {
 			throw new Error(
 				`Failed to proxy to MCP server ${serverId}: ${
