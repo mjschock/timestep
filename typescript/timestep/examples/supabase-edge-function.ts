@@ -36,21 +36,20 @@ import {
 	type ModelProvider,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.190250';
+} from 'npm:@timestep-ai/timestep@2025.9.190322';
 
 /**
  * Supabase Agent Repository Implementation
  */
 class SupabaseAgentRepository implements Repository<Agent, string> {
-	constructor(private supabase: any) {}
+	constructor(private supabase: any, private userId: string | null) {}
 
 	async list(): Promise<Agent[]> {
-		const userId =
-			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
-		// Always upsert defaults
+		if (!this.userId) return [];
+		// Upsert defaults for this user
 		try {
 			const {getDefaultAgents} = await import(
-				'npm:@timestep-ai/timestep@2025.9.190250'
+				'npm:@timestep-ai/timestep@2025.9.190322'
 			);
 			const defaultAgents = getDefaultAgents();
 			for (const agent of defaultAgents) {
@@ -63,7 +62,7 @@ class SupabaseAgentRepository implements Repository<Agent, string> {
 		const {data, error} = await this.supabase
 			.from('agents')
 			.select('*')
-			.eq('user_id', userId);
+			.eq('user_id', this.userId);
 		if (error) throw new Error(`Failed to list agents: ${error.message}`);
 		return data || [];
 	}
@@ -82,11 +81,10 @@ class SupabaseAgentRepository implements Repository<Agent, string> {
 	}
 
 	async save(agent: Agent): Promise<void> {
-		const defaultUser =
-			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
+		if (!this.userId) throw new Error('Unauthenticated: user_id required');
 		const toSave: any = {
 			id: (agent as any).id,
-			user_id: defaultUser,
+			user_id: this.userId,
 			name: (agent as any).name,
 			instructions: (agent as any).instructions,
 			handoff_description: (agent as any).handoffDescription ?? null,
@@ -102,12 +100,11 @@ class SupabaseAgentRepository implements Repository<Agent, string> {
 	}
 
 	async delete(id: string): Promise<void> {
-		const userId =
-			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
+		if (!this.userId) throw new Error('Unauthenticated: user_id required');
 		const {error} = await this.supabase
 			.from('agents')
 			.delete()
-			.eq('user_id', userId)
+			.eq('user_id', this.userId)
 			.eq('id', id);
 
 		if (error) throw new Error(`Failed to delete agent: ${error.message}`);
@@ -136,10 +133,14 @@ class SupabaseAgentRepository implements Repository<Agent, string> {
  * Supabase Context Repository Implementation
  */
 class SupabaseContextRepository implements Repository<Context, string> {
-	constructor(private supabase: any) {}
+	constructor(private supabase: any, private userId: string | null) {}
 
 	async list(): Promise<Context[]> {
-		const {data, error} = await this.supabase.from('contexts').select('*');
+		if (!this.userId) return [];
+		const {data, error} = await this.supabase
+			.from('contexts')
+			.select('*')
+			.eq('user_id', this.userId);
 
 		if (error) throw new Error(`Failed to list contexts: ${error.message}`);
 		return (data || []).map((item: any) => {
@@ -152,9 +153,11 @@ class SupabaseContextRepository implements Repository<Context, string> {
 	}
 
 	async load(id: string): Promise<Context | null> {
+		if (!this.userId) return null;
 		const {data, error} = await this.supabase
 			.from('contexts')
 			.select('*')
+			.eq('user_id', this.userId)
 			.eq('context_id', id)
 			.single();
 
@@ -171,8 +174,11 @@ class SupabaseContextRepository implements Repository<Context, string> {
 	}
 
 	async save(context: Context): Promise<void> {
+		if (!this.userId) throw new Error('Unauthenticated: user_id required');
 		const {error} = await this.supabase.from('contexts').upsert([
 			{
+				id: crypto.randomUUID(),
+				user_id: this.userId,
 				context_id: context.contextId,
 				agent_id: context.agentId,
 				task_histories: context.taskHistories,
@@ -184,9 +190,11 @@ class SupabaseContextRepository implements Repository<Context, string> {
 	}
 
 	async delete(id: string): Promise<void> {
+		if (!this.userId) throw new Error('Unauthenticated: user_id required');
 		const {error} = await this.supabase
 			.from('contexts')
 			.delete()
+			.eq('user_id', this.userId)
 			.eq('context_id', id);
 
 		if (error) throw new Error(`Failed to delete context: ${error.message}`);
@@ -213,15 +221,18 @@ class SupabaseContextRepository implements Repository<Context, string> {
  * Supabase Model Provider Repository Implementation
  */
 class SupabaseMcpServerRepository implements Repository<McpServer, string> {
-	constructor(private supabase: any, private baseUrl?: string) {}
+	constructor(
+		private supabase: any,
+		private baseUrl: string | undefined,
+		private userId: string | null,
+	) {}
 
 	async list(): Promise<McpServer[]> {
-		const userId =
-			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
-		// Always upsert defaults for MCP servers
+		if (!this.userId) return [];
+		// Always upsert defaults for this user
 		try {
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.190250'
+				'npm:@timestep-ai/timestep@2025.9.190322'
 			);
 			const defaults = getDefaultMcpServers(this.baseUrl);
 			for (const server of defaults) {
@@ -234,7 +245,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 		const {data, error} = await this.supabase
 			.from('mcp_servers')
 			.select('*')
-			.eq('user_id', userId);
+			.eq('user_id', this.userId);
 		if (error) throw new Error(`Failed to list MCP servers: ${error.message}`);
 
 		const servers = (data || []).map((row: any) => {
@@ -252,7 +263,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 
 		if (servers.length === 0) {
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.190250'
+				'npm:@timestep-ai/timestep@2025.9.190322'
 			);
 			const defaultServers = getDefaultMcpServers(this.baseUrl);
 			try {
@@ -287,12 +298,11 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 	}
 
 	async save(server: McpServer): Promise<void> {
+		if (!this.userId) throw new Error('Unauthenticated: user_id required');
 		// Persist server using snake_case and env JSONB for flexible fields
 		const toSave: any = {
 			id: server.id,
-			user_id:
-				Deno.env.get('DEFAULT_USER_ID') ||
-				'00000000-0000-0000-0000-000000000000',
+			user_id: this.userId,
 			name: server.name,
 			description: (server as any).description ?? server.name,
 			// keep disabled/enabled compatibility flags
@@ -301,7 +311,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 			env: {},
 		};
 		const {isEncryptedSecret, encryptSecret} = await import(
-			'npm:@timestep-ai/timestep@2025.9.190250'
+			'npm:@timestep-ai/timestep@2025.9.190322'
 		);
 		if ((server as any).serverUrl) {
 			toSave.env.server_url = (server as any).serverUrl;
@@ -322,12 +332,11 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 	}
 
 	async delete(id: string): Promise<void> {
-		const userId =
-			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
+		if (!this.userId) throw new Error('Unauthenticated: user_id required');
 		const {error} = await this.supabase
 			.from('mcp_servers')
 			.delete()
-			.eq('user_id', userId)
+			.eq('user_id', this.userId)
 			.eq('id', id);
 		if (error) throw new Error(`Failed to delete MCP server: ${error.message}`);
 	}
@@ -349,15 +358,14 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 class SupabaseModelProviderRepository
 	implements Repository<ModelProvider, string>
 {
-	constructor(private supabase: any) {}
+	constructor(private supabase: any, private userId: string | null) {}
 
 	async list(): Promise<ModelProvider[]> {
-		const userId =
-			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
-		// Always upsert defaults for model providers
+		if (!this.userId) return [];
+		// Always upsert defaults for this user
 		try {
 			const {getDefaultModelProviders} = await import(
-				'npm:@timestep-ai/timestep@2025.9.190250'
+				'npm:@timestep-ai/timestep@2025.9.190322'
 			);
 			const defaults = getDefaultModelProviders();
 			for (const p of defaults) {
@@ -370,7 +378,7 @@ class SupabaseModelProviderRepository
 		const {data, error} = await this.supabase
 			.from('model_providers')
 			.select('*')
-			.eq('user_id', userId);
+			.eq('user_id', this.userId);
 
 		if (error)
 			throw new Error(`Failed to list model providers: ${error.message}`);
@@ -400,18 +408,17 @@ class SupabaseModelProviderRepository
 	}
 
 	async save(provider: ModelProvider): Promise<void> {
+		if (!this.userId) throw new Error('Unauthenticated: user_id required');
 		// Map to snake_case; encrypt apiKey if provided
 		const toSave: any = {
 			id: provider.id,
-			user_id:
-				Deno.env.get('DEFAULT_USER_ID') ||
-				'00000000-0000-0000-0000-000000000000',
+			user_id: this.userId,
 			provider: provider.provider,
 			base_url: (provider as any).baseUrl ?? (provider as any).base_url,
 			models_url: (provider as any).modelsUrl ?? (provider as any).models_url,
 		};
 		const {isEncryptedSecret, encryptSecret} = await import(
-			'npm:@timestep-ai/timestep@2025.9.190250'
+			'npm:@timestep-ai/timestep@2025.9.190322'
 		);
 		if ((provider as any).apiKey !== undefined) {
 			let key = (provider as any).apiKey as string | undefined;
@@ -431,12 +438,11 @@ class SupabaseModelProviderRepository
 	}
 
 	async delete(id: string): Promise<void> {
-		const userId =
-			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
+		if (!this.userId) throw new Error('Unauthenticated: user_id required');
 		const {error} = await this.supabase
 			.from('model_providers')
 			.delete()
-			.eq('user_id', userId)
+			.eq('user_id', this.userId)
 			.eq('id', id);
 
 		if (error)
@@ -468,19 +474,27 @@ class SupabaseModelProviderRepository
  * Supabase Repository Container Implementation
  */
 class SupabaseRepositoryContainer implements RepositoryContainer {
-	constructor(private supabase: any, private baseUrl?: string) {}
+	constructor(
+		private supabase: any,
+		private baseUrl: string | undefined,
+		private userId: string | null,
+	) {}
 
 	get agents() {
-		return new SupabaseAgentRepository(this.supabase);
+		return new SupabaseAgentRepository(this.supabase, this.userId);
 	}
 	get contexts() {
-		return new SupabaseContextRepository(this.supabase);
+		return new SupabaseContextRepository(this.supabase, this.userId);
 	}
 	get modelProviders() {
-		return new SupabaseModelProviderRepository(this.supabase);
+		return new SupabaseModelProviderRepository(this.supabase, this.userId);
 	}
 	get mcpServers() {
-		return new SupabaseMcpServerRepository(this.supabase, this.baseUrl);
+		return new SupabaseMcpServerRepository(
+			this.supabase,
+			this.baseUrl,
+			this.userId,
+		);
 	}
 }
 
@@ -517,10 +531,7 @@ const supabaseKey =
 	supabaseServiceRoleKey || Deno.env.get('SUPABASE_ANON_KEY')!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Create repository container with dynamic base URL
-// Note: The base URL will be determined from the first request
-let repositories: SupabaseRepositoryContainer;
-let agentExecutor: TimestepAIAgentExecutor;
+// Task store and server config
 const taskStore = new SupabaseTaskStore();
 
 // Configure the port from environment or default
@@ -549,18 +560,37 @@ Deno.serve({port}, async (request: Request) => {
 		cleanPath = apiParts.length > 0 ? '/' + apiParts.join('/') : '/';
 	}
 
-	// Initialize repositories and components if not already done
-	if (!repositories) {
-		// Generate base URL for MCP servers from the current request
-		const baseUrl = `${url.protocol}//${url.host}/${functionName}`;
+	// Generate base URL for MCP servers from the current request
+	const baseUrl = `${url.protocol}//${url.host}/${functionName}`;
 
-		repositories = new SupabaseRepositoryContainer(supabase, baseUrl);
-		agentExecutor = new TimestepAIAgentExecutor({
-			repositories: repositories,
-		});
-
-		console.log(`🔧 Initialized repositories with base URL: ${baseUrl}`);
+	// Derive user from Authorization header (Bearer JWT)
+	const authHeader = request.headers.get('Authorization') || '';
+	const jwt = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : null;
+	let userId: string | null = null;
+	if (jwt) {
+		try {
+			const {
+				data: {user},
+				error,
+			} = await supabase.auth.getUser(jwt);
+			if (!error && user) userId = user.id as string;
+		} catch (_e) {
+			// ignore; userId stays null
+		}
 	}
+
+	// Create repositories and executor per request so user scoping is correct
+	const repositories = new SupabaseRepositoryContainer(
+		supabase,
+		baseUrl,
+		userId,
+	);
+	const agentExecutor = new TimestepAIAgentExecutor({
+		repositories,
+	});
+	console.log(
+		`🔧 Using base URL: ${baseUrl} | userId: ${userId ?? 'anonymous'}`,
+	);
 
 	// Remove trailing slash except for root
 	cleanPath = cleanPath === '/' ? '/' : cleanPath.replace(/\/$/, '');
@@ -799,7 +829,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// Get tool information from the MCP server
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.190250'
+					'npm:@timestep-ai/timestep@2025.9.190322'
 				);
 
 				// First, get the list of tools from the server
@@ -901,7 +931,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				const [serverId, toolName] = parts;
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.190250'
+					'npm:@timestep-ai/timestep@2025.9.190322'
 				);
 
 				const result = await handleMcpServerRequest(
@@ -944,7 +974,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.190250'
+					'npm:@timestep-ai/timestep@2025.9.190322'
 				);
 
 				if (request.method === 'POST') {
@@ -987,7 +1017,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// GET request - return full MCP server record
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.190250'
+					'npm:@timestep-ai/timestep@2025.9.190322'
 				);
 				const server = await getMcpServer(serverId, repositories);
 
