@@ -36,7 +36,7 @@ import {
 	type ModelProvider,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.182234';
+} from 'npm:@timestep-ai/timestep@2025.9.182242';
 
 /**
  * Supabase Agent Repository Implementation
@@ -53,7 +53,7 @@ class SupabaseAgentRepository implements Repository<Agent, string> {
 
 		if (agents.length === 0) {
 			const {getDefaultAgents} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182234'
+				'npm:@timestep-ai/timestep@2025.9.182242'
 			);
 			const defaultAgents = getDefaultAgents();
 			try {
@@ -219,7 +219,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 
 		if (servers.length === 0) {
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182234'
+				'npm:@timestep-ai/timestep@2025.9.182242'
 			);
 			const defaultServers = getDefaultMcpServers(this.baseUrl);
 			try {
@@ -265,7 +265,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 			env: {},
 		};
 		const {isEncryptedSecret, encryptSecret} = await import(
-			'npm:@timestep-ai/timestep@2025.9.182234'
+			'npm:@timestep-ai/timestep@2025.9.182242'
 		);
 		if ((server as any).serverUrl) {
 			toSave.env.server_url = (server as any).serverUrl;
@@ -328,7 +328,7 @@ class SupabaseModelProviderRepository
 
 		if (providers.length === 0) {
 			const {getDefaultModelProviders} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182234'
+				'npm:@timestep-ai/timestep@2025.9.182242'
 			);
 			const defaultProviders = getDefaultModelProviders();
 			try {
@@ -371,7 +371,7 @@ class SupabaseModelProviderRepository
 			models_url: (provider as any).modelsUrl ?? (provider as any).models_url,
 		};
 		const {isEncryptedSecret, encryptSecret} = await import(
-			'npm:@timestep-ai/timestep@2025.9.182234'
+			'npm:@timestep-ai/timestep@2025.9.182242'
 		);
 		if ((provider as any).apiKey !== undefined) {
 			let key = (provider as any).apiKey as string | undefined;
@@ -468,8 +468,11 @@ class SupabaseTaskStore {
 
 // Initialize Supabase client
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Prefer service role key (bypasses RLS) for server-side operations; fallback to anon key if not set
+const supabaseServiceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+const supabaseKey =
+	supabaseServiceRoleKey || Deno.env.get('SUPABASE_ANON_KEY')!;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Create repository container with dynamic base URL
 // Note: The base URL will be determined from the first request
@@ -753,7 +756,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// Get tool information from the MCP server
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182234'
+					'npm:@timestep-ai/timestep@2025.9.182242'
 				);
 
 				// First, get the list of tools from the server
@@ -855,7 +858,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				const [serverId, toolName] = parts;
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182234'
+					'npm:@timestep-ai/timestep@2025.9.182242'
 				);
 
 				const result = await handleMcpServerRequest(
@@ -898,7 +901,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182234'
+					'npm:@timestep-ai/timestep@2025.9.182242'
 				);
 
 				if (request.method === 'POST') {
@@ -941,7 +944,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// GET request - return full MCP server record
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182234'
+					'npm:@timestep-ai/timestep@2025.9.182242'
 				);
 				const server = await getMcpServer(serverId, repositories);
 
