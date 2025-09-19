@@ -7,6 +7,7 @@ export {
 	decryptSecret,
 	isEncryptedSecret,
 	maskSecret,
+	getCurrentUserId,
 } from './utils.js';
 export {listModels} from './api/modelsApi.js';
 export {listContexts} from './api/contextsApi.js';

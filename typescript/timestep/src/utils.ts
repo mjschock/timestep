@@ -90,16 +90,37 @@ export function getAppDir(
  * Get configuration paths for the timestep application
  */
 export function getTimestepPaths() {
-	const configDir = getAppDir('timestep');
+	const baseDir = getAppDir('timestep');
+	// Optional per-user scoping for local dev
+	let userDir = baseDir;
+	const explicit = process.env['TIMESTEP_USER_ID'];
+	if (explicit && explicit.trim() !== '') {
+		userDir = join(baseDir, 'users', explicit.trim());
+	}
 
 	return {
-		configDir,
-		appConfig: join(configDir, 'app.json'),
-		agentsConfig: join(configDir, 'agents.jsonl'),
-		modelProviders: join(configDir, 'modelProviders.jsonl'),
-		mcpServers: join(configDir, 'mcpServers.jsonl'),
-		contexts: join(configDir, 'contexts.jsonl'),
+		configDir: userDir,
+		appConfig: join(userDir, 'app.json'),
+		agentsConfig: join(userDir, 'agents.jsonl'),
+		modelProviders: join(userDir, 'modelProviders.jsonl'),
+		mcpServers: join(userDir, 'mcpServers.jsonl'),
+		contexts: join(userDir, 'contexts.jsonl'),
 	};
+}
+
+/**
+ * Get current user ID (for RLS and per-user scoping)
+ * Priority: TIMESTEP_USER_ID env > OS username
+ */
+export function getCurrentUserId(): string {
+	const fromEnv = process.env['TIMESTEP_USER_ID'];
+	if (fromEnv && fromEnv.trim() !== '') return fromEnv.trim();
+	try {
+		const osUser = process.env['USER'] || process.env['USERNAME'] || 'unknown';
+		return osUser;
+	} catch {
+		return 'unknown';
+	}
 }
 
 /**

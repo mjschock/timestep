@@ -36,7 +36,7 @@ import {
 	type ModelProvider,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.182257';
+} from 'npm:@timestep-ai/timestep@2025.9.190250';
 
 /**
  * Supabase Agent Repository Implementation
@@ -45,31 +45,27 @@ class SupabaseAgentRepository implements Repository<Agent, string> {
 	constructor(private supabase: any) {}
 
 	async list(): Promise<Agent[]> {
-		const {data, error} = await this.supabase.from('agents').select('*');
-
-		if (error) throw new Error(`Failed to list agents: ${error.message}`);
-
-		const agents = data || [];
-
-		if (agents.length === 0) {
+		const userId =
+			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
+		// Always upsert defaults
+		try {
 			const {getDefaultAgents} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182257'
+				'npm:@timestep-ai/timestep@2025.9.190250'
 			);
 			const defaultAgents = getDefaultAgents();
-			try {
-				for (const agent of defaultAgents) {
-					await this.save(agent);
-				}
-				console.log(
-					`📋 Created ${defaultAgents.length} default agents in database`,
-				);
-			} catch (saveError) {
-				console.warn(`Failed to save default agents to database: ${saveError}`);
+			for (const agent of defaultAgents) {
+				await this.save(agent);
 			}
-			return defaultAgents;
+		} catch (saveError) {
+			console.warn(`Failed to upsert default agents: ${saveError}`);
 		}
 
-		return agents;
+		const {data, error} = await this.supabase
+			.from('agents')
+			.select('*')
+			.eq('user_id', userId);
+		if (error) throw new Error(`Failed to list agents: ${error.message}`);
+		return data || [];
 	}
 
 	async load(id: string): Promise<Agent | null> {
@@ -86,13 +82,33 @@ class SupabaseAgentRepository implements Repository<Agent, string> {
 	}
 
 	async save(agent: Agent): Promise<void> {
-		const {error} = await this.supabase.from('agents').upsert([agent]);
-
+		const defaultUser =
+			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
+		const toSave: any = {
+			id: (agent as any).id,
+			user_id: defaultUser,
+			name: (agent as any).name,
+			instructions: (agent as any).instructions,
+			handoff_description: (agent as any).handoffDescription ?? null,
+			handoff_ids: (agent as any).handoffIds ?? [],
+			tool_ids: (agent as any).toolIds ?? [],
+			model: (agent as any).model,
+			model_settings: (agent as any).modelSettings ?? {},
+		};
+		const {error} = await this.supabase
+			.from('agents')
+			.upsert([toSave], {onConflict: 'user_id,id'});
 		if (error) throw new Error(`Failed to save agent: ${error.message}`);
 	}
 
 	async delete(id: string): Promise<void> {
-		const {error} = await this.supabase.from('agents').delete().eq('id', id);
+		const userId =
+			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
+		const {error} = await this.supabase
+			.from('agents')
+			.delete()
+			.eq('user_id', userId)
+			.eq('id', id);
 
 		if (error) throw new Error(`Failed to delete agent: ${error.message}`);
 	}
@@ -200,8 +216,25 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 	constructor(private supabase: any, private baseUrl?: string) {}
 
 	async list(): Promise<McpServer[]> {
-		const {data, error} = await this.supabase.from('mcp_servers').select('*');
+		const userId =
+			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
+		// Always upsert defaults for MCP servers
+		try {
+			const {getDefaultMcpServers} = await import(
+				'npm:@timestep-ai/timestep@2025.9.190250'
+			);
+			const defaults = getDefaultMcpServers(this.baseUrl);
+			for (const server of defaults) {
+				await this.save(server);
+			}
+		} catch (e) {
+			console.warn(`Failed to upsert default MCP servers: ${e}`);
+		}
 
+		const {data, error} = await this.supabase
+			.from('mcp_servers')
+			.select('*')
+			.eq('user_id', userId);
 		if (error) throw new Error(`Failed to list MCP servers: ${error.message}`);
 
 		const servers = (data || []).map((row: any) => {
@@ -219,7 +252,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 
 		if (servers.length === 0) {
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182257'
+				'npm:@timestep-ai/timestep@2025.9.190250'
 			);
 			const defaultServers = getDefaultMcpServers(this.baseUrl);
 			try {
@@ -257,6 +290,9 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 		// Persist server using snake_case and env JSONB for flexible fields
 		const toSave: any = {
 			id: server.id,
+			user_id:
+				Deno.env.get('DEFAULT_USER_ID') ||
+				'00000000-0000-0000-0000-000000000000',
 			name: server.name,
 			description: (server as any).description ?? server.name,
 			// keep disabled/enabled compatibility flags
@@ -265,7 +301,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 			env: {},
 		};
 		const {isEncryptedSecret, encryptSecret} = await import(
-			'npm:@timestep-ai/timestep@2025.9.182257'
+			'npm:@timestep-ai/timestep@2025.9.190250'
 		);
 		if ((server as any).serverUrl) {
 			toSave.env.server_url = (server as any).serverUrl;
@@ -279,14 +315,19 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 			}
 			toSave.env.auth_token = token ?? null;
 		}
-		const {error} = await this.supabase.from('mcp_servers').upsert([toSave]);
+		const {error} = await this.supabase
+			.from('mcp_servers')
+			.upsert([toSave], {onConflict: 'user_id,id'});
 		if (error) throw new Error(`Failed to save MCP server: ${error.message}`);
 	}
 
 	async delete(id: string): Promise<void> {
+		const userId =
+			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
 		const {error} = await this.supabase
 			.from('mcp_servers')
 			.delete()
+			.eq('user_id', userId)
 			.eq('id', id);
 		if (error) throw new Error(`Failed to delete MCP server: ${error.message}`);
 	}
@@ -311,9 +352,25 @@ class SupabaseModelProviderRepository
 	constructor(private supabase: any) {}
 
 	async list(): Promise<ModelProvider[]> {
+		const userId =
+			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
+		// Always upsert defaults for model providers
+		try {
+			const {getDefaultModelProviders} = await import(
+				'npm:@timestep-ai/timestep@2025.9.190250'
+			);
+			const defaults = getDefaultModelProviders();
+			for (const p of defaults) {
+				await this.save(p);
+			}
+		} catch (e) {
+			console.warn(`Failed to upsert default model providers: ${e}`);
+		}
+
 		const {data, error} = await this.supabase
 			.from('model_providers')
-			.select('*');
+			.select('*')
+			.eq('user_id', userId);
 
 		if (error)
 			throw new Error(`Failed to list model providers: ${error.message}`);
@@ -325,26 +382,6 @@ class SupabaseModelProviderRepository
 			baseUrl: row.base_url,
 			modelsUrl: row.models_url,
 		}));
-
-		if (providers.length === 0) {
-			const {getDefaultModelProviders} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182257'
-			);
-			const defaultProviders = getDefaultModelProviders();
-			try {
-				for (const provider of defaultProviders) {
-					await this.save(provider);
-				}
-				console.log(
-					`🤖 Created ${defaultProviders.length} default model providers in database`,
-				);
-			} catch (saveError) {
-				console.warn(
-					`Failed to save default model providers to database: ${saveError}`,
-				);
-			}
-			return defaultProviders;
-		}
 
 		return providers;
 	}
@@ -366,12 +403,15 @@ class SupabaseModelProviderRepository
 		// Map to snake_case; encrypt apiKey if provided
 		const toSave: any = {
 			id: provider.id,
+			user_id:
+				Deno.env.get('DEFAULT_USER_ID') ||
+				'00000000-0000-0000-0000-000000000000',
 			provider: provider.provider,
 			base_url: (provider as any).baseUrl ?? (provider as any).base_url,
 			models_url: (provider as any).modelsUrl ?? (provider as any).models_url,
 		};
 		const {isEncryptedSecret, encryptSecret} = await import(
-			'npm:@timestep-ai/timestep@2025.9.182257'
+			'npm:@timestep-ai/timestep@2025.9.190250'
 		);
 		if ((provider as any).apiKey !== undefined) {
 			let key = (provider as any).apiKey as string | undefined;
@@ -384,16 +424,19 @@ class SupabaseModelProviderRepository
 		}
 		const {error} = await this.supabase
 			.from('model_providers')
-			.upsert([toSave]);
+			.upsert([toSave], {onConflict: 'user_id,id'});
 
 		if (error)
 			throw new Error(`Failed to save model provider: ${error.message}`);
 	}
 
 	async delete(id: string): Promise<void> {
+		const userId =
+			Deno.env.get('DEFAULT_USER_ID') || '00000000-0000-0000-0000-000000000000';
 		const {error} = await this.supabase
 			.from('model_providers')
 			.delete()
+			.eq('user_id', userId)
 			.eq('id', id);
 
 		if (error)
@@ -756,7 +799,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// Get tool information from the MCP server
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182257'
+					'npm:@timestep-ai/timestep@2025.9.190250'
 				);
 
 				// First, get the list of tools from the server
@@ -858,7 +901,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				const [serverId, toolName] = parts;
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182257'
+					'npm:@timestep-ai/timestep@2025.9.190250'
 				);
 
 				const result = await handleMcpServerRequest(
@@ -901,7 +944,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182257'
+					'npm:@timestep-ai/timestep@2025.9.190250'
 				);
 
 				if (request.method === 'POST') {
@@ -944,7 +987,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// GET request - return full MCP server record
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182257'
+					'npm:@timestep-ai/timestep@2025.9.190250'
 				);
 				const server = await getMcpServer(serverId, repositories);
 
@@ -1143,9 +1186,13 @@ console.log('  - GET /version - Timestep package version information');
  * Run these commands in your Supabase SQL editor to create the required tables:
  */
 export const supabaseSchemaSQL = `
+-- Enable extension for UUIDs
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 -- Create agents table
 CREATE TABLE agents (
-  id TEXT PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL,
   name TEXT NOT NULL,
   instructions TEXT NOT NULL,
   handoff_description TEXT,
@@ -1159,8 +1206,9 @@ CREATE TABLE agents (
 
 -- Create contexts table
 CREATE TABLE contexts (
-  context_id TEXT PRIMARY KEY,
-  agent_id TEXT NOT NULL,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL,
+  agent_id UUID NOT NULL,
   task_histories JSONB DEFAULT '{}',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -1168,9 +1216,10 @@ CREATE TABLE contexts (
 
 -- Create mcp_servers table
 CREATE TABLE mcp_servers (
-  id TEXT PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL,
   name TEXT NOT NULL,
-  command TEXT NOT NULL,
+  command TEXT,
   args JSONB,
   env JSONB,
   disabled BOOLEAN DEFAULT FALSE,
@@ -1180,7 +1229,8 @@ CREATE TABLE mcp_servers (
 
 -- Create model_providers table
 CREATE TABLE model_providers (
-  id TEXT PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL,
   provider TEXT NOT NULL,
   api_key TEXT,
   base_url TEXT NOT NULL,
@@ -1190,9 +1240,13 @@ CREATE TABLE model_providers (
 );
 
 -- Create indexes for better performance
+CREATE INDEX idx_agents_user_id ON agents(user_id);
 CREATE INDEX idx_agents_name ON agents(name);
+CREATE INDEX idx_contexts_user_id ON contexts(user_id);
 CREATE INDEX idx_contexts_agent_id ON contexts(agent_id);
+CREATE INDEX idx_mcp_servers_user_id ON mcp_servers(user_id);
 CREATE INDEX idx_mcp_servers_name ON mcp_servers(name);
+CREATE INDEX idx_model_providers_user_id ON model_providers(user_id);
 CREATE INDEX idx_model_providers_provider ON model_providers(provider);
 
 -- Enable Row Level Security (optional)
@@ -1202,10 +1256,11 @@ ALTER TABLE mcp_servers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE model_providers ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for authenticated users (optional)
-CREATE POLICY "Users can access agents" ON agents FOR ALL TO authenticated USING (true);
-CREATE POLICY "Users can access contexts" ON contexts FOR ALL TO authenticated USING (true);
-CREATE POLICY "Users can access mcp_servers" ON mcp_servers FOR ALL TO authenticated USING (true);
-CREATE POLICY "Users can access model_providers" ON model_providers FOR ALL TO authenticated USING (true);
+-- Basic per-user RLS: require matching user_id
+CREATE POLICY "Users can access agents" ON agents FOR ALL TO authenticated USING (user_id = auth.uid());
+CREATE POLICY "Users can access contexts" ON contexts FOR ALL TO authenticated USING (user_id = auth.uid());
+CREATE POLICY "Users can access mcp_servers" ON mcp_servers FOR ALL TO authenticated USING (user_id = auth.uid());
+CREATE POLICY "Users can access model_providers" ON model_providers FOR ALL TO authenticated USING (user_id = auth.uid());
 `;
 
 /*
