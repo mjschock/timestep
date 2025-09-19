@@ -17,24 +17,24 @@ import 'https://deno.land/x/xhr@0.1.0/mod.ts';
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
 // Import everything from timestep library (includes MCP SDK re-exports)
 import {
+	Context,
+	TimestepAIAgentExecutor,
+	getVersion,
+	handleAgentRequest,
 	listAgents,
-	listModels,
-	listTools,
-	listTraces,
 	listContexts,
 	listMcpServers,
 	listModelProviders,
-	handleAgentRequest,
-	TimestepAIAgentExecutor,
-	Context,
-	getVersion,
+	listModels,
+	listTools,
+	listTraces,
 	// Types
 	type Agent,
-	type ModelProvider,
 	type McpServer,
+	type ModelProvider,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.181854';
+} from 'npm:@timestep-ai/timestep@2025.9.181915';
 
 /**
  * Supabase Agent Repository Implementation
@@ -185,7 +185,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 
 		if (servers.length === 0) {
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.181854'
+				'npm:@timestep-ai/timestep@2025.9.181915'
 			);
 			const defaultServers = getDefaultMcpServers(this.baseUrl);
 			try {
@@ -537,7 +537,7 @@ Deno.serve({port}, async (request: Request) => {
 
 		// Handle individual tool requests (GET /tools/{toolId})
 		const toolMatch = cleanPath.match(/^\/tools\/(.+)$/);
-		if (toolMatch) {
+		if (toolMatch && request.method === 'GET') {
 			const toolId = toolMatch[1];
 
 			try {
@@ -558,7 +558,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// Get tool information from the MCP server
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181854'
+					'npm:@timestep-ai/timestep@2025.9.181915'
 				);
 
 				// First, get the list of tools from the server
@@ -660,7 +660,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				const [serverId, toolName] = parts;
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181854'
+					'npm:@timestep-ai/timestep@2025.9.181915'
 				);
 
 				const result = await handleMcpServerRequest(
@@ -703,7 +703,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181854'
+					'npm:@timestep-ai/timestep@2025.9.181915'
 				);
 
 				if (request.method === 'POST') {
@@ -721,7 +721,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// GET request - health check
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181854'
+					'npm:@timestep-ai/timestep@2025.9.181915'
 				);
 				const server = await getMcpServer(serverId, repositories);
 
