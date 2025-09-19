@@ -7,6 +7,9 @@ import {getBuiltinMcpServer} from '../config/defaultMcpServers.js';
  * Handles business logic for MCP server management and delegates persistence to repository.
  */
 export class McpServerService {
+	private sessionCache = new Map<string, string>(); // serverId -> sessionId
+	private clientCache = new Map<string, any>(); // serverId -> MCP client
+
 	constructor(private repository: Repository<McpServer, string>) {}
 
 	/**
@@ -734,6 +737,34 @@ export class McpServerService {
 	}
 
 	/**
+	 * Initialize a session with an MCP server
+	 */
+	private async initializeSession(
+		serverId: string,
+		server: McpServer,
+	): Promise<string> {
+		// For servers that require session management, we need to use the MCP client
+		// with proper session handling
+		try {
+			const {createMcpClient} = await import('../utils.js');
+			const client = await createMcpClient(server.serverUrl, server.authToken);
+
+			// Generate a session ID for our internal tracking
+			const sessionId = `session-${Date.now()}-${Math.random()
+				.toString(36)
+				.substring(7)}`;
+			this.sessionCache.set(serverId, sessionId);
+
+			// Store the client for future use
+			this.clientCache.set(serverId, client);
+
+			return sessionId;
+		} catch (error) {
+			throw new Error(`Failed to initialize MCP client: ${error}`);
+		}
+	}
+
+	/**
 	 * Proxy requests to remote MCP servers
 	 */
 	private async proxyToRemoteMcpServer(
@@ -747,44 +778,46 @@ export class McpServerService {
 		}
 
 		try {
-			const headers: Record<string, string> = {
-				'Content-Type': 'application/json',
-				Accept: 'application/json, text/event-stream',
-			};
-
-			if (server.authToken) {
-				headers['Authorization'] = `Bearer ${server.authToken}`;
+			// For servers that require session management, use the MCP client
+			let client = this.clientCache.get(serverId);
+			if (!client) {
+				// Initialize session and get client
+				await this.initializeSession(serverId, server);
+				client = this.clientCache.get(serverId);
 			}
 
-			const response = await fetch(server.serverUrl, {
-				method: 'POST',
-				headers,
-				body: JSON.stringify(request),
-			});
-
-			if (!response.ok) {
-				throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-			}
-
-			const responseText = await response.text();
-
-			// Check if response is Server-Sent Events (SSE) format
-			if (
-				responseText.startsWith('event:') ||
-				responseText.includes('data: {')
-			) {
-				// Parse SSE format: extract JSON from data: field
-				const lines = responseText.split('\n');
-				for (const line of lines) {
-					if (line.startsWith('data: ')) {
-						const jsonData = line.substring(6); // Remove 'data: ' prefix
-						return JSON.parse(jsonData);
-					}
+			// Use the MCP client to make the request
+			if (client) {
+				switch (request.method) {
+					case 'tools/list':
+						const tools = await client.listTools();
+						return {result: tools};
+					case 'tools/call':
+						const result = await client.callTool(
+							request.params.name,
+							request.params.arguments,
+						);
+						return {result: result};
+					case 'resources/list':
+						const resources = await client.listResources();
+						return {result: resources};
+					case 'resources/read':
+						const resource = await client.readResource(request.params.uri);
+						return {result: resource};
+					case 'prompts/list':
+						const prompts = await client.listPrompts();
+						return {result: prompts};
+					case 'prompts/get':
+						const prompt = await client.getPrompt(
+							request.params.name,
+							request.params.arguments,
+						);
+						return {result: prompt};
+					default:
+						throw new Error(`Unsupported method: ${request.method}`);
 				}
-				throw new Error('No valid JSON data found in SSE response');
 			} else {
-				// Regular JSON response
-				return JSON.parse(responseText);
+				throw new Error('Failed to get MCP client');
 			}
 		} catch (error) {
 			throw new Error(
