@@ -90,8 +90,95 @@ app.use((_req, res, next) => {
 	next();
 });
 
+app.get('/agents', handleListAgents);
+
+app.get('/chats', async (_req, res) => {
+	try {
+		const {listContexts} = await import('./api/contextsApi.js');
+		const result = await listContexts(repositories);
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing contexts:', error);
+		res.status(500).json({
+			error: error instanceof Error ? error.message : 'Failed to list contexts',
+		});
+	}
+});
+
+app.get('/mcp_servers', async (_req, res) => {
+	try {
+		const {listMcpServers} = await import('./api/mcpServersApi.js');
+		const result = await listMcpServers(repositories);
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing MCP servers:', error);
+		res.status(500).json({
+			error:
+				error instanceof Error ? error.message : 'Failed to list MCP servers',
+		});
+	}
+});
+
+app.get('/model_providers', async (_req, res) => {
+	try {
+		const {listModelProviders} = await import('./api/modelProvidersApi.js');
+		const result = await listModelProviders(repositories);
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing model providers:', error);
+		res.status(500).json({
+			error:
+				error instanceof Error
+					? error.message
+					: 'Failed to list model providers',
+		});
+	}
+});
+
+app.get('/models', async (_req, res) => {
+	try {
+		const {listModels} = await import('./api/modelsApi.js');
+		const result = await listModels(repositories);
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing models:', error);
+		res.status(500).json({
+			error: error instanceof Error ? error.message : 'Failed to list models',
+		});
+	}
+});
+
+app.get('/tools', async (_req, res) => {
+	try {
+		const {listTools} = await import('./api/toolsApi.js');
+		const result = await listTools(repositories);
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing tools:', error);
+		res.status(500).json({
+			error: error instanceof Error ? error.message : 'Failed to list tools',
+		});
+	}
+});
+
+app.get('/traces', async (_req, res) => {
+	try {
+		const {listTraces} = await import('./api/tracesApi.js');
+		const result = await listTraces();
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing traces:', error);
+		res.status(500).json({
+			error: error instanceof Error ? error.message : 'Failed to list traces',
+		});
+	}
+});
+
+// version added at end to keep path order
+
 // MCP Routes
 // MCP POST endpoint for specific server - delegates to API
+/* MCP server routes */
 app.post('/mcp_servers/:serverId', async (req, res) => {
 	const {serverId} = req.params;
 
@@ -113,7 +200,45 @@ app.post('/mcp_servers/:serverId', async (req, res) => {
 	}
 });
 
-// Handle GET requests for MCP server health check
+// Convenience endpoint: call a tool on a specific MCP server
+app.post('/mcp_servers/:serverId/call', async (req, res) => {
+	const {serverId} = req.params;
+	const {name, arguments: args, id} = req.body || {};
+
+	if (!name) {
+		res.status(400).json({
+			jsonrpc: '2.0',
+			error: {code: -32602, message: 'Missing required field: name'},
+			id: id || null,
+		});
+		return;
+	}
+
+	try {
+		const {callMcpTool} = await import('./api/mcpServersApi.js');
+		const result = await callMcpTool(
+			serverId,
+			name,
+			args || {},
+			id || 'tools-call',
+			repositories,
+		);
+		res.json(result);
+	} catch (error) {
+		console.error('Error calling MCP tool:', error);
+		res.status(500).json({
+			jsonrpc: '2.0',
+			error: {
+				code: -32603,
+				message:
+					error instanceof Error ? error.message : 'Internal server error',
+			},
+			id: id || null,
+		});
+	}
+});
+
+// MCP GET server health
 app.get('/mcp_servers/:serverId', async (req, res) => {
 	const {serverId} = req.params;
 
@@ -142,7 +267,7 @@ app.get('/mcp_servers/:serverId', async (req, res) => {
 	}
 });
 
-// Handle DELETE requests for MCP server removal
+// MCP DELETE server
 app.delete('/mcp_servers/:serverId', async (req, res) => {
 	const {serverId} = req.params;
 
@@ -158,110 +283,34 @@ app.delete('/mcp_servers/:serverId', async (req, res) => {
 	}
 });
 
+// Convenience endpoint: call a tool by namespaced toolId "{serverId}.{toolName}"
+app.post('/tools/:toolId/call', async (req, res) => {
+	const {toolId} = req.params;
+	const {arguments: args, id} = req.body || {};
+
+	try {
+		const {callToolById} = await import('./api/toolsApi.js');
+		const result = await callToolById(
+			toolId,
+			args || {},
+			id || 'tools-call',
+			repositories,
+		);
+		res.json(result);
+	} catch (error) {
+		console.error('Error calling tool via /tools/:toolId/call:', error);
+		res.status(400).json({
+			jsonrpc: '2.0',
+			error: {
+				code: -32602,
+				message: error instanceof Error ? error.message : 'Invalid tool call',
+			},
+			id: id || null,
+		});
+	}
+});
+
 // Version endpoint - dynamically reads from package.json
-app.get('/version', async (_req, res) => {
-	try {
-		const {getVersion} = await import('./utils.js');
-		const versionInfo = await getVersion();
-		res.json(versionInfo);
-	} catch (error) {
-		res.status(500).json({
-			error:
-				error instanceof Error
-					? error.message
-					: 'Failed to read version information',
-		});
-	}
-});
-
-// Context (Chats) endpoint
-app.get('/chats', async (_req, res) => {
-	try {
-		const {listContexts} = await import('./api/contextsApi.js');
-		const result = await listContexts(repositories);
-		res.json(result.data);
-	} catch (error) {
-		console.error('Error listing contexts:', error);
-		res.status(500).json({
-			error: error instanceof Error ? error.message : 'Failed to list contexts',
-		});
-	}
-});
-
-// Models endpoint
-app.get('/models', async (_req, res) => {
-	try {
-		const {listModels} = await import('./api/modelsApi.js');
-		const result = await listModels(repositories);
-		res.json(result.data);
-	} catch (error) {
-		console.error('Error listing models:', error);
-		res.status(500).json({
-			error: error instanceof Error ? error.message : 'Failed to list models',
-		});
-	}
-});
-
-// Tools endpoint
-app.get('/tools', async (_req, res) => {
-	try {
-		const {listTools} = await import('./api/toolsApi.js');
-		const result = await listTools(repositories);
-		res.json(result.data);
-	} catch (error) {
-		console.error('Error listing tools:', error);
-		res.status(500).json({
-			error: error instanceof Error ? error.message : 'Failed to list tools',
-		});
-	}
-});
-
-// Traces endpoint
-app.get('/traces', async (_req, res) => {
-	try {
-		const {listTraces} = await import('./api/tracesApi.js');
-		const result = await listTraces();
-		res.json(result.data);
-	} catch (error) {
-		console.error('Error listing traces:', error);
-		res.status(500).json({
-			error: error instanceof Error ? error.message : 'Failed to list traces',
-		});
-	}
-});
-
-// MCP Servers endpoint
-app.get('/mcp_servers', async (_req, res) => {
-	try {
-		const {listMcpServers} = await import('./api/mcpServersApi.js');
-		const result = await listMcpServers(repositories);
-		res.json(result.data);
-	} catch (error) {
-		console.error('Error listing MCP servers:', error);
-		res.status(500).json({
-			error:
-				error instanceof Error ? error.message : 'Failed to list MCP servers',
-		});
-	}
-});
-
-// Model providers endpoint
-app.get('/model_providers', async (_req, res) => {
-	try {
-		const {listModelProviders} = await import('./api/modelProvidersApi.js');
-		const result = await listModelProviders(repositories);
-		res.json(result.data);
-	} catch (error) {
-		console.error('Error listing model providers:', error);
-		res.status(500).json({
-			error:
-				error instanceof Error
-					? error.message
-					: 'Failed to list model providers',
-		});
-	}
-});
-
 // Request logging middleware
 app.use((req, _res, next) => {
 	console.log(`Request: ${req.method} ${req.path}`);
@@ -281,8 +330,98 @@ app.use('/agents/:agentId', async (req, res, next) => {
 	);
 });
 
-// List agents endpoint
+// Re-add ordered GET routes
 app.get('/agents', handleListAgents);
+app.get('/chats', async (_req, res) => {
+	try {
+		const {listContexts} = await import('./api/contextsApi.js');
+		const result = await listContexts(repositories);
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing contexts:', error);
+		res.status(500).json({
+			error: error instanceof Error ? error.message : 'Failed to list contexts',
+		});
+	}
+});
+app.get('/mcp_servers', async (_req, res) => {
+	try {
+		const {listMcpServers} = await import('./api/mcpServersApi.js');
+		const result = await listMcpServers(repositories);
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing MCP servers:', error);
+		res.status(500).json({
+			error:
+				error instanceof Error ? error.message : 'Failed to list MCP servers',
+		});
+	}
+});
+app.get('/model_providers', async (_req, res) => {
+	try {
+		const {listModelProviders} = await import('./api/modelProvidersApi.js');
+		const result = await listModelProviders(repositories);
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing model providers:', error);
+		res.status(500).json({
+			error:
+				error instanceof Error
+					? error.message
+					: 'Failed to list model providers',
+		});
+	}
+});
+app.get('/models', async (_req, res) => {
+	try {
+		const {listModels} = await import('./api/modelsApi.js');
+		const result = await listModels(repositories);
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing models:', error);
+		res.status(500).json({
+			error: error instanceof Error ? error.message : 'Failed to list models',
+		});
+	}
+});
+app.get('/tools', async (_req, res) => {
+	try {
+		const {listTools} = await import('./api/toolsApi.js');
+		const result = await listTools(repositories);
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing tools:', error);
+		res.status(500).json({
+			error: error instanceof Error ? error.message : 'Failed to list tools',
+		});
+	}
+});
+app.get('/traces', async (_req, res) => {
+	try {
+		const {listTraces} = await import('./api/tracesApi.js');
+		const result = await listTraces();
+		res.json(result.data);
+	} catch (error) {
+		console.error('Error listing traces:', error);
+		res.status(500).json({
+			error: error instanceof Error ? error.message : 'Failed to list traces',
+		});
+	}
+});
+app.get('/version', async (_req, res) => {
+	try {
+		const {getVersion} = await import('./utils.js');
+		const versionInfo = await getVersion();
+		res.json(versionInfo);
+	} catch (error) {
+		res.status(500).json({
+			error:
+				error instanceof Error
+					? error.message
+					: 'Failed to read version information',
+		});
+	}
+});
 
 // Start the server
 app.listen(appConfig.appPort, () => {

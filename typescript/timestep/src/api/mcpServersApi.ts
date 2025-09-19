@@ -128,3 +128,27 @@ export async function handleMcpServerRequest(
 		throw new Error(`Failed to handle MCP server request: ${error}`);
 	}
 }
+
+/**
+ * Call a tool on a specific MCP server
+ */
+export async function callMcpTool(
+	serverId: string,
+	name: string,
+	args: any = {},
+	id: string = 'tools-call',
+	repositories: RepositoryContainer = new DefaultRepositoryContainer(),
+): Promise<any> {
+	const mcpServerService = new McpServerService(repositories.mcpServers);
+
+	try {
+		return await mcpServerService.handleMcpServerRequest(serverId, {
+			jsonrpc: '2.0',
+			method: 'tools/call',
+			params: {name, arguments: args},
+			id,
+		});
+	} catch (error) {
+		throw new Error(`Failed to call MCP tool: ${error}`);
+	}
+}

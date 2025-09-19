@@ -34,7 +34,7 @@ import {
 	type McpServer,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.181751';
+} from 'npm:@timestep-ai/timestep@2025.9.181854';
 
 /**
  * Supabase Agent Repository Implementation
@@ -173,6 +173,79 @@ class SupabaseContextRepository implements Repository<Context, string> {
 /**
  * Supabase Model Provider Repository Implementation
  */
+class SupabaseMcpServerRepository implements Repository<McpServer, string> {
+	constructor(private supabase: any, private baseUrl?: string) {}
+
+	async list(): Promise<McpServer[]> {
+		const {data, error} = await this.supabase.from('mcp_servers').select('*');
+
+		if (error) throw new Error(`Failed to list MCP servers: ${error.message}`);
+
+		const servers = data || [];
+
+		if (servers.length === 0) {
+			const {getDefaultMcpServers} = await import(
+				'npm:@timestep-ai/timestep@2025.9.181854'
+			);
+			const defaultServers = getDefaultMcpServers(this.baseUrl);
+			try {
+				for (const server of defaultServers) {
+					await this.save(server);
+				}
+				console.log(
+					`🔌 Created ${defaultServers.length} default MCP servers in database`,
+				);
+			} catch (saveError) {
+				console.warn(
+					`Failed to save default MCP servers to database: ${saveError}`,
+				);
+			}
+			return defaultServers;
+		}
+
+		return servers;
+	}
+
+	async load(id: string): Promise<McpServer | null> {
+		const {data, error} = await this.supabase
+			.from('mcp_servers')
+			.select('*')
+			.eq('id', id)
+			.single();
+
+		if (error && error.code !== 'PGRST116') {
+			throw new Error(`Failed to load MCP server: ${error.message}`);
+		}
+		return data || null;
+	}
+
+	async save(server: McpServer): Promise<void> {
+		const {error} = await this.supabase.from('mcp_servers').upsert([server]);
+		if (error) throw new Error(`Failed to save MCP server: ${error.message}`);
+	}
+
+	async delete(id: string): Promise<void> {
+		const {error} = await this.supabase
+			.from('mcp_servers')
+			.delete()
+			.eq('id', id);
+		if (error) throw new Error(`Failed to delete MCP server: ${error.message}`);
+	}
+
+	async exists(id: string): Promise<boolean> {
+		const server = await this.load(id);
+		return server !== null;
+	}
+
+	async getOrCreate(id: string, ...createArgs: any[]): Promise<McpServer> {
+		const existing = await this.load(id);
+		if (existing) return existing;
+		throw new Error(
+			'Auto-creation of MCP servers not supported - please create servers explicitly',
+		);
+	}
+}
+
 class SupabaseModelProviderRepository
 	implements Repository<ModelProvider, string>
 {
@@ -239,91 +312,7 @@ class SupabaseModelProviderRepository
 	}
 }
 
-/**
- * Supabase MCP Server Repository Implementation
- */
-class SupabaseMcpServerRepository implements Repository<McpServer, string> {
-	constructor(private supabase: any, private baseUrl?: string) {}
-
-	async list(): Promise<McpServer[]> {
-		const {data, error} = await this.supabase.from('mcp_servers').select('*');
-
-		if (error) throw new Error(`Failed to list MCP servers: ${error.message}`);
-
-		const servers = data || [];
-
-		// If no servers exist, create and return default servers
-		if (servers.length === 0) {
-			// Import the default MCP servers configuration
-			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.181751'
-			);
-			const defaultServers = getDefaultMcpServers(this.baseUrl);
-
-			// Try to save them to the database for future use
-			try {
-				for (const server of defaultServers) {
-					await this.save(server);
-				}
-				console.log(
-					`🔌 Created ${defaultServers.length} default MCP servers in database`,
-				);
-			} catch (saveError) {
-				console.warn(
-					`Failed to save default MCP servers to database: ${saveError}`,
-				);
-			}
-
-			return defaultServers;
-		}
-
-		return servers;
-	}
-
-	async load(id: string): Promise<McpServer | null> {
-		const {data, error} = await this.supabase
-			.from('mcp_servers')
-			.select('*')
-			.eq('id', id)
-			.single();
-
-		if (error && error.code !== 'PGRST116') {
-			throw new Error(`Failed to load MCP server: ${error.message}`);
-		}
-		return data || null;
-	}
-
-	async save(server: McpServer): Promise<void> {
-		const {error} = await this.supabase.from('mcp_servers').upsert([server]);
-
-		if (error) throw new Error(`Failed to save MCP server: ${error.message}`);
-	}
-
-	async delete(id: string): Promise<void> {
-		const {error} = await this.supabase
-			.from('mcp_servers')
-			.delete()
-			.eq('id', id);
-
-		if (error) throw new Error(`Failed to delete MCP server: ${error.message}`);
-	}
-
-	async exists(id: string): Promise<boolean> {
-		const server = await this.load(id);
-		return server !== null;
-	}
-
-	async getOrCreate(id: string, ...createArgs: any[]): Promise<McpServer> {
-		const existing = await this.load(id);
-		if (existing) {
-			return existing;
-		}
-
-		throw new Error(
-			'Auto-creation of MCP servers not supported - please create servers explicitly',
-		);
-	}
-}
+/** End reordering: McpServer before ModelProvider to match alphabetical by class name */
 
 /**
  * Supabase Repository Container Implementation
@@ -452,17 +441,17 @@ Deno.serve({port}, async (request: Request) => {
 					originalPath: url.pathname,
 					mappedPath: cleanPath,
 					availableEndpoints: [
-						'/version',
-						'/health',
 						'/agents',
+						'/agents/{agentId}',
 						'/chats',
-						'/model_providers',
+						'/health',
 						'/mcp_servers',
+						'/mcp_servers/{serverId}',
+						'/models',
+						'/model_providers',
 						'/tools',
 						'/traces',
-						'/models',
-						'/agents/{agentId}',
-						'/mcp_servers/{serverId}',
+						'/version',
 					],
 				}),
 				{status: 200, headers},
@@ -526,13 +515,18 @@ Deno.serve({port}, async (request: Request) => {
 			return new Response(JSON.stringify(result.data), {status: 200, headers});
 		}
 
+		if (cleanPath === '/mcp_servers') {
+			const result = await listMcpServers(repositories);
+			return new Response(JSON.stringify(result.data), {status: 200, headers});
+		}
+
 		if (cleanPath === '/model_providers') {
 			const result = await listModelProviders(repositories);
 			return new Response(JSON.stringify(result.data), {status: 200, headers});
 		}
 
-		if (cleanPath === '/mcp_servers') {
-			const result = await listMcpServers(repositories);
+		if (cleanPath === '/models') {
+			const result = await listModels(repositories);
 			return new Response(JSON.stringify(result.data), {status: 200, headers});
 		}
 
@@ -564,7 +558,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// Get tool information from the MCP server
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181751'
+					'npm:@timestep-ai/timestep@2025.9.181854'
 				);
 
 				// First, get the list of tools from the server
@@ -639,9 +633,67 @@ Deno.serve({port}, async (request: Request) => {
 			return new Response(JSON.stringify(result.data), {status: 200, headers});
 		}
 
-		if (cleanPath === '/models') {
-			const result = await listModels(repositories);
-			return new Response(JSON.stringify(result.data), {status: 200, headers});
+		// Handle tool invocation (POST /tools/{toolId}/call)
+		const toolCallMatch = cleanPath.match(/^\/tools\/(.+)\/call$/);
+		if (toolCallMatch && request.method === 'POST') {
+			const toolId = toolCallMatch[1];
+			try {
+				const body = await request.json().catch(() => ({}));
+				const args = body?.arguments || {};
+				const id = body?.id || 'tools-call';
+
+				const parts = toolId.split('.');
+				if (parts.length !== 2) {
+					return new Response(
+						JSON.stringify({
+							jsonrpc: '2.0',
+							error: {
+								code: -32602,
+								message:
+									'Invalid toolId format. Expected {serverId}.{toolName}',
+							},
+							id,
+						}),
+						{status: 400, headers},
+					);
+				}
+
+				const [serverId, toolName] = parts;
+				const {handleMcpServerRequest} = await import(
+					'npm:@timestep-ai/timestep@2025.9.181854'
+				);
+
+				const result = await handleMcpServerRequest(
+					serverId,
+					{
+						jsonrpc: '2.0',
+						method: 'tools/call',
+						params: {name: toolName, arguments: args},
+						id,
+					},
+					repositories,
+				);
+
+				return new Response(JSON.stringify(result), {
+					status: 200,
+					headers: {...headers, 'Content-Type': 'application/json'},
+				});
+			} catch (error) {
+				return new Response(
+					JSON.stringify({
+						jsonrpc: '2.0',
+						error: {
+							code: -32603,
+							message:
+								error instanceof Error
+									? error.message
+									: 'Internal server error',
+						},
+						id: null,
+					}),
+					{status: 500, headers},
+				);
+			}
 		}
 
 		// Handle MCP server routes
@@ -651,7 +703,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181751'
+					'npm:@timestep-ai/timestep@2025.9.181854'
 				);
 
 				if (request.method === 'POST') {
@@ -669,7 +721,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// GET request - health check
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181751'
+					'npm:@timestep-ai/timestep@2025.9.181854'
 				);
 				const server = await getMcpServer(serverId, repositories);
 
@@ -835,23 +887,24 @@ Deno.serve({port}, async (request: Request) => {
 
 console.log('🚀 Timestep Server running with Custom Supabase Repositories');
 console.log('📚 Available endpoints:');
-console.log('  - GET /version - Timestep package version information');
-console.log('  - GET /health - Health check with repository info');
 console.log('  - GET /agents - List agents (using SupabaseAgentRepository)');
+console.log('  - /agents/{agentId}/* - Dynamic agent A2A endpoints');
 console.log('  - GET /chats - List chats (using SupabaseContextRepository)');
+console.log('  - GET /health - Health check with repository info');
+console.log(
+	'  - GET /mcp_servers - List MCP servers (using SupabaseMcpServerRepository)',
+);
+console.log('  - GET /mcp_servers/{serverId} - MCP server health');
 console.log(
 	'  - GET /model_providers - List model providers (using SupabaseModelProviderRepository)',
 );
 console.log(
-	'  - GET /mcp_servers - List MCP servers (using SupabaseMcpServerRepository)',
+	'  - GET /models - List models (via SupabaseModelProviderRepository)',
 );
 console.log('  - GET /tools - List tools (via SupabaseMcpServerRepository)');
 console.log('  - GET /tools/{toolId} - Get specific tool information');
-console.log(
-	'  - GET /models - List models (via SupabaseModelProviderRepository)',
-);
 console.log('  - GET /traces - List traces (using default hardcoded data)');
-console.log('  - /agents/{agentId}/* - Dynamic agent A2A endpoints');
+console.log('  - GET /version - Timestep package version information');
 
 /*
  * SQL Schema for Supabase Tables
@@ -882,17 +935,6 @@ CREATE TABLE contexts (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create model_providers table
-CREATE TABLE model_providers (
-  id TEXT PRIMARY KEY,
-  provider TEXT NOT NULL,
-  api_key TEXT,
-  base_url TEXT NOT NULL,
-  models_url TEXT NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
 -- Create mcp_servers table
 CREATE TABLE mcp_servers (
   id TEXT PRIMARY KEY,
@@ -905,12 +947,13 @@ CREATE TABLE mcp_servers (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create api_keys table
-CREATE TABLE api_keys (
+-- Create model_providers table
+CREATE TABLE model_providers (
   id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  key_value TEXT NOT NULL,
-  service TEXT NOT NULL,
+  provider TEXT NOT NULL,
+  api_key TEXT,
+  base_url TEXT NOT NULL,
+  models_url TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -918,23 +961,20 @@ CREATE TABLE api_keys (
 -- Create indexes for better performance
 CREATE INDEX idx_agents_name ON agents(name);
 CREATE INDEX idx_contexts_agent_id ON contexts(agent_id);
-CREATE INDEX idx_model_providers_provider ON model_providers(provider);
 CREATE INDEX idx_mcp_servers_name ON mcp_servers(name);
-CREATE INDEX idx_api_keys_service ON api_keys(service);
+CREATE INDEX idx_model_providers_provider ON model_providers(provider);
 
 -- Enable Row Level Security (optional)
 ALTER TABLE agents ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contexts ENABLE ROW LEVEL SECURITY;
-ALTER TABLE model_providers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mcp_servers ENABLE ROW LEVEL SECURITY;
-ALTER TABLE api_keys ENABLE ROW LEVEL SECURITY;
+ALTER TABLE model_providers ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for authenticated users (optional)
 CREATE POLICY "Users can access agents" ON agents FOR ALL TO authenticated USING (true);
 CREATE POLICY "Users can access contexts" ON contexts FOR ALL TO authenticated USING (true);
-CREATE POLICY "Users can access model_providers" ON model_providers FOR ALL TO authenticated USING (true);
 CREATE POLICY "Users can access mcp_servers" ON mcp_servers FOR ALL TO authenticated USING (true);
-CREATE POLICY "Users can access api_keys" ON api_keys FOR ALL TO authenticated USING (true);
+CREATE POLICY "Users can access model_providers" ON model_providers FOR ALL TO authenticated USING (true);
 `;
 
 /*

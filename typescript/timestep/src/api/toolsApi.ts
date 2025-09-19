@@ -7,6 +7,7 @@
 
 import {listAllMcpTools} from '../utils.js';
 import {DefaultRepositoryContainer} from '../services/backing/repositoryContainer.js';
+import {callMcpTool} from './mcpServersApi.js';
 
 /**
  * Represents a tool available in the system
@@ -70,4 +71,22 @@ export async function listTools(
 	} catch (error) {
 		throw new Error(`Failed to list tools: ${error}`);
 	}
+}
+
+/**
+ * Call a tool by namespaced toolId "{serverId}.{toolName}"
+ */
+export async function callToolById(
+	toolId: string,
+	args: any = {},
+	id: string = 'tools-call',
+	repositories: any = new DefaultRepositoryContainer(),
+): Promise<any> {
+	const dotIndex = toolId.indexOf('.');
+	if (dotIndex === -1) {
+		throw new Error('Invalid toolId format. Expected {serverId}.{toolName}');
+	}
+	const serverId = toolId.substring(0, dotIndex);
+	const toolName = toolId.substring(dotIndex + 1);
+	return callMcpTool(serverId, toolName, args, id, repositories);
 }
