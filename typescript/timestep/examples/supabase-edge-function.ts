@@ -34,7 +34,7 @@ import {
 	type ModelProvider,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.181915';
+} from 'npm:@timestep-ai/timestep@2025.9.182000';
 
 /**
  * Supabase Agent Repository Implementation
@@ -46,7 +46,28 @@ class SupabaseAgentRepository implements Repository<Agent, string> {
 		const {data, error} = await this.supabase.from('agents').select('*');
 
 		if (error) throw new Error(`Failed to list agents: ${error.message}`);
-		return data || [];
+
+		const agents = data || [];
+
+		if (agents.length === 0) {
+			const {getDefaultAgents} = await import(
+				'npm:@timestep-ai/timestep@2025.9.182000'
+			);
+			const defaultAgents = getDefaultAgents();
+			try {
+				for (const agent of defaultAgents) {
+					await this.save(agent);
+				}
+				console.log(
+					`📋 Created ${defaultAgents.length} default agents in database`,
+				);
+			} catch (saveError) {
+				console.warn(`Failed to save default agents to database: ${saveError}`);
+			}
+			return defaultAgents;
+		}
+
+		return agents;
 	}
 
 	async load(id: string): Promise<Agent | null> {
@@ -185,7 +206,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 
 		if (servers.length === 0) {
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.181915'
+				'npm:@timestep-ai/timestep@2025.9.182000'
 			);
 			const defaultServers = getDefaultMcpServers(this.baseUrl);
 			try {
@@ -258,7 +279,30 @@ class SupabaseModelProviderRepository
 
 		if (error)
 			throw new Error(`Failed to list model providers: ${error.message}`);
-		return data || [];
+
+		const providers = data || [];
+
+		if (providers.length === 0) {
+			const {getDefaultModelProviders} = await import(
+				'npm:@timestep-ai/timestep@2025.9.182000'
+			);
+			const defaultProviders = getDefaultModelProviders();
+			try {
+				for (const provider of defaultProviders) {
+					await this.save(provider);
+				}
+				console.log(
+					`🤖 Created ${defaultProviders.length} default model providers in database`,
+				);
+			} catch (saveError) {
+				console.warn(
+					`Failed to save default model providers to database: ${saveError}`,
+				);
+			}
+			return defaultProviders;
+		}
+
+		return providers;
 	}
 
 	async load(id: string): Promise<ModelProvider | null> {
@@ -558,7 +602,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// Get tool information from the MCP server
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181915'
+					'npm:@timestep-ai/timestep@2025.9.182000'
 				);
 
 				// First, get the list of tools from the server
@@ -660,7 +704,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				const [serverId, toolName] = parts;
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181915'
+					'npm:@timestep-ai/timestep@2025.9.182000'
 				);
 
 				const result = await handleMcpServerRequest(
@@ -703,7 +747,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181915'
+					'npm:@timestep-ai/timestep@2025.9.182000'
 				);
 
 				if (request.method === 'POST') {
@@ -721,7 +765,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// GET request - health check
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181915'
+					'npm:@timestep-ai/timestep@2025.9.182000'
 				);
 				const server = await getMcpServer(serverId, repositories);
 

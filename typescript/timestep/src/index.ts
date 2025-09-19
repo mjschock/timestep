@@ -35,6 +35,8 @@ export {
 	getDefaultMcpServers,
 	getBuiltinMcpServer,
 } from './config/defaultMcpServers.js';
+export {getDefaultAgents} from './config/defaultAgents.js';
+export {getDefaultModelProviders} from './config/defaultModelProviders.js';
 
 // TypeScript types
 export type {Agent, ListAgentsResponse} from './api/agentsApi.js';
