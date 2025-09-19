@@ -74,9 +74,6 @@ async function loadModelProviders(
 			MODEL_PROVIDERS[provider.provider] = provider;
 		}
 
-		console.log('🔧 Loaded model providers:', Object.keys(MODEL_PROVIDERS));
-		console.log('🔧 MODEL_PROVIDERS.openai:', MODEL_PROVIDERS.openai);
-
 		return MODEL_PROVIDERS;
 	} catch (error) {
 		console.warn(
@@ -257,8 +254,6 @@ async function getAgentInput(
 	const userMessage = context.userMessage;
 	const contextId = context.contextId;
 	const taskId = context.taskId;
-	console.log('🔍 Processing user message:', userMessage);
-	console.log('🔍 Context ID:', contextId, 'Task ID:', taskId);
 
 	const isToolApproval = checkForToolCallApproval(userMessage);
 
@@ -305,13 +300,11 @@ async function getAgentInput(
 
 		const messageText =
 			userMessage.parts?.[0]?.text || userMessage.text || 'Hello';
-		console.log('🔍 Extracted message text:', messageText);
 
 		let history = await contextService.getTaskHistory(contextId, taskId);
 
 		history.push(user(messageText));
 
-		console.log('🔍 Final history for agent input:', history.length, 'items');
 		return history;
 	}
 }
@@ -380,7 +373,6 @@ export class TimestepAIAgentExecutor implements AgentExecutor {
 				const contextId = context.contextId;
 
 				if (!existingTask) {
-					console.log('🔍 Publishing initial task for:', taskId);
 					const initialTask: any = {
 						kind: 'task',
 						id: taskId,
@@ -396,7 +388,6 @@ export class TimestepAIAgentExecutor implements AgentExecutor {
 				}
 
 				// 2. Publish working status
-				console.log('🔍 Publishing working status for:', taskId);
 				const workingStatusUpdate: any = {
 					kind: 'status-update',
 					taskId: taskId,
@@ -427,24 +418,11 @@ export class TimestepAIAgentExecutor implements AgentExecutor {
 					);
 				}
 				const agentId = contextObj.agentId;
-				console.log('🔍 Using agent ID from existing context:', agentId);
 
-				console.log(`🔧 Building agent config for agentId: ${agentId}`);
 				const agentConfigResult = await this.agentFactory.buildAgentConfig(
 					agentId,
 				);
-				console.log(
-					`🔧 Agent config built. Tools count: ${
-						agentConfigResult.config.tools?.length || 0
-					}`,
-				);
-				console.log(
-					`🔧 Tool names: ${
-						agentConfigResult.config.tools?.map(t => t.name) || []
-					}`,
-				);
 				const agent = agentConfigResult.createAgent();
-				console.log(`🔧 Agent created successfully`);
 
 				// Ensure the context has this task
 				if (!contextObj.getTask(taskId)) {
@@ -503,7 +481,6 @@ export class TimestepAIAgentExecutor implements AgentExecutor {
 				}
 
 				const finalOutput = result.finalOutput || '';
-				console.log('🔍 Agent result:', finalOutput);
 
 				// For task-generating agents, publish the completed Task object (not just status)
 				// Retrieve the updated task from the context service

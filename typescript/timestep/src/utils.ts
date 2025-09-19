@@ -226,7 +226,6 @@ export async function listAllMcpTools(mcpServerRepository?: any): Promise<
 
 			if (server.id === builtinServer.id) {
 				// Handle built-in MCP server - call handleMcpServerRequest directly
-				console.log(`🔌 Using built-in MCP server ${server.id}`);
 				const response = await handleMcpServerRequest(
 					server.id,
 					{

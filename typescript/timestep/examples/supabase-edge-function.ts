@@ -34,7 +34,7 @@ import {
 	type McpServer,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.181645';
+} from 'npm:@timestep-ai/timestep@2025.9.181714';
 
 /**
  * Supabase Agent Repository Implementation
@@ -256,7 +256,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 		if (servers.length === 0) {
 			// Import the default MCP servers configuration
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.181645'
+				'npm:@timestep-ai/timestep@2025.9.181714'
 			);
 			const defaultServers = getDefaultMcpServers(this.baseUrl);
 
@@ -541,6 +541,99 @@ Deno.serve({port}, async (request: Request) => {
 			return new Response(JSON.stringify(result.data), {status: 200, headers});
 		}
 
+		// Handle individual tool requests (GET /tools/{toolId})
+		const toolMatch = cleanPath.match(/^\/tools\/(.+)$/);
+		if (toolMatch) {
+			const toolId = toolMatch[1];
+
+			try {
+				// Parse toolId to extract serverId and tool name
+				// Format: {serverId}.{toolName}
+				const parts = toolId.split('.');
+				if (parts.length !== 2) {
+					return new Response(
+						JSON.stringify({
+							error: 'Invalid tool ID format. Expected: {serverId}.{toolName}',
+							toolId: toolId,
+						}),
+						{status: 400, headers},
+					);
+				}
+
+				const [serverId, toolName] = parts;
+
+				// Get tool information from the MCP server
+				const {handleMcpServerRequest} = await import(
+					'npm:@timestep-ai/timestep@2025.9.181714'
+				);
+
+				// First, get the list of tools from the server
+				const listRequest = {
+					jsonrpc: '2.0',
+					method: 'tools/list',
+					id: 'get-tool-info',
+				};
+
+				const listResponse = await handleMcpServerRequest(
+					serverId,
+					listRequest,
+					repositories,
+				);
+
+				if (listResponse.error) {
+					return new Response(
+						JSON.stringify({
+							error: `Failed to list tools from server ${serverId}`,
+							details: listResponse.error,
+						}),
+						{status: 500, headers},
+					);
+				}
+
+				// Find the specific tool
+				const tools = listResponse.result?.tools || [];
+				const tool = tools.find((t: any) => t.name === toolName);
+
+				if (!tool) {
+					return new Response(
+						JSON.stringify({
+							error: `Tool '${toolName}' not found in server ${serverId}`,
+							toolId: toolId,
+							serverId: serverId,
+							toolName: toolName,
+							availableTools: tools.map((t: any) => t.name),
+						}),
+						{status: 404, headers},
+					);
+				}
+
+				// Return tool information
+				const toolInfo = {
+					id: toolId,
+					name: tool.name,
+					description: tool.description || 'No description available',
+					serverId: serverId,
+					inputSchema: tool.inputSchema,
+					status: 'available',
+				};
+
+				return new Response(JSON.stringify(toolInfo), {
+					status: 200,
+					headers: {...headers, 'Content-Type': 'application/json'},
+				});
+			} catch (error) {
+				console.error(`Error getting tool info for ${toolId}:`, error);
+				return new Response(
+					JSON.stringify({
+						error: 'Internal server error',
+						message: error instanceof Error ? error.message : 'Unknown error',
+						toolId: toolId,
+					}),
+					{status: 500, headers},
+				);
+			}
+		}
+
 		if (cleanPath === '/traces') {
 			const result = await listTraces();
 			return new Response(JSON.stringify(result.data), {status: 200, headers});
@@ -558,7 +651,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181645'
+					'npm:@timestep-ai/timestep@2025.9.181714'
 				);
 
 				if (request.method === 'POST') {
@@ -576,7 +669,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// GET request - health check
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.181645'
+					'npm:@timestep-ai/timestep@2025.9.181714'
 				);
 				const server = await getMcpServer(serverId, repositories);
 
@@ -753,6 +846,7 @@ console.log(
 	'  - GET /mcp_servers - List MCP servers (using SupabaseMcpServerRepository)',
 );
 console.log('  - GET /tools - List tools (via SupabaseMcpServerRepository)');
+console.log('  - GET /tools/{toolId} - Get specific tool information');
 console.log(
 	'  - GET /models - List models (via SupabaseModelProviderRepository)',
 );

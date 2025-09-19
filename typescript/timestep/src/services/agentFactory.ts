@@ -95,7 +95,6 @@ async function loadToolsForAgent(
 	toolIds: string[],
 	repositories?: RepositoryContainer,
 ): Promise<any[]> {
-	console.log(`🔧 loadToolsForAgent called with toolIds:`, toolIds);
 	const tools = [];
 	const {handleMcpServerRequest} = await import('../api/mcpServersApi.js');
 
@@ -119,17 +118,9 @@ async function loadToolsForAgent(
 		toolsByServer[serverId].push(toolName);
 	}
 
-	console.log(`🔧 Grouped tools by server:`, toolsByServer);
-
 	// Load tools from each server using the API endpoints
 	for (const serverId of serverIds) {
 		try {
-			console.log(
-				`🔌 Loading tools from MCP server ${serverId} for tools: ${toolsByServer[
-					serverId
-				].join(', ')}`,
-			);
-
 			// Call the tools/list endpoint through the API
 			const listRequest = {
 				jsonrpc: '2.0',
@@ -137,18 +128,12 @@ async function loadToolsForAgent(
 				id: Math.random().toString(36).substring(7),
 			};
 
-			console.log(`🔌 Making MCP request to server ${serverId}:`, listRequest);
 			const listResult = await handleMcpServerRequest(
 				serverId,
 				listRequest,
 				repositories,
 			);
-			console.log(`🔌 MCP response from server ${serverId}:`, listResult);
 			const availableTools = listResult.result?.tools || [];
-			console.log(
-				`🔌 Available tools from server ${serverId}:`,
-				availableTools.length,
-			);
 
 			// Filter to only include requested tools
 			const requestedToolNames = toolsByServer[serverId];
@@ -158,9 +143,6 @@ async function loadToolsForAgent(
 
 			// Create tool wrappers for each available tool
 			for (const mcpTool of mcpTools) {
-				console.log(`🔧 Loading tool: ${serverId}.${mcpTool.name}`);
-				console.log(`🔧 MCP tool name: "${mcpTool.name}"`);
-
 				const dynamicTool = tool({
 					name: mcpTool.name,
 					description: mcpTool.description || 'No description available',
@@ -168,23 +150,17 @@ async function loadToolsForAgent(
 						mcpTool.inputSchema,
 					) as z.ZodObject<any>,
 					async execute(params: any) {
-						console.log(
-							`🔧 Executing MCP tool ${mcpTool.name} with params:`,
-							params,
-						);
 						const result = await invokeMcpTool(
 							serverId,
 							mcpTool.name,
 							params,
 							repositories,
 						);
-						console.log(`🔧 MCP tool ${mcpTool.name} result:`, result);
 						return result;
 					},
 					needsApproval: true,
 				});
 
-				console.log(`🔧 Created tool with name: "${dynamicTool.name}"`);
 				tools.push(dynamicTool);
 			}
 		} catch (error) {
@@ -243,8 +219,6 @@ function createZodSchemaFromJsonSchema(jsonSchema: any): z.ZodSchema {
 }
 
 async function getContext(agentId: string, repositories?: RepositoryContainer) {
-	console.log('🔍 Getting context for agent ID:', agentId);
-
 	// Get the agents lookup map
 	const agentsById = await createAgentsLookup(repositories);
 

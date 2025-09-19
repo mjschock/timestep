@@ -40,7 +40,6 @@ export class JsonlContextRepository
 			return existing;
 		}
 
-		console.log(`🔍 Creating new context ${contextId} for agent ${agentId}`);
 		return new Context(contextId, agentId);
 	}
 

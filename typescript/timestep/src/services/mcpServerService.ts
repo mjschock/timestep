@@ -64,7 +64,6 @@ export class McpServerService {
 	 */
 	private async handleBuiltinMcpServerRequest(request: any): Promise<any> {
 		const {method, params, id} = request;
-		console.log(`🔍 Built-in MCP server handling method: ${method}`);
 
 		switch (method) {
 			case 'initialize':
