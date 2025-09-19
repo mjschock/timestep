@@ -145,6 +145,14 @@ export async function createMcpClient(
 	serverUrl: string,
 	authToken?: string,
 ): Promise<Client> {
+	// Decrypt auth token if it is encrypted
+	if (authToken && isEncryptedSecret(authToken)) {
+		try {
+			authToken = await decryptSecret(authToken);
+		} catch (error) {
+			console.warn('Failed to decrypt MCP server auth token:', error);
+		}
+	}
 	const transportUrl = new URL(serverUrl);
 	const transportOptions: any = {};
 
@@ -279,4 +287,147 @@ export async function listAllMcpTools(mcpServerRepository?: any): Promise<
 		`✅ Total tools loaded: ${allTools.length} from ${mcpServersResponse.data.length} servers`,
 	);
 	return allTools;
+}
+
+// Secret encryption utilities (Node and Deno compatible)
+
+function getCrypto(): Crypto {
+	// @ts-ignore - Deno provides globalThis.crypto
+	if (typeof globalThis !== 'undefined' && (globalThis as any).crypto) {
+		// @ts-ignore
+		return (globalThis as any).crypto as Crypto;
+	}
+	throw new Error('Web Crypto API is not available in this runtime');
+}
+
+function getPassphrase(): string {
+	try {
+		const denoEnvGet = (globalThis as any)?.Deno?.env?.get?.bind(
+			(globalThis as any)?.Deno?.env,
+		);
+		if (typeof denoEnvGet === 'function') {
+			const v = denoEnvGet('ENCRYPTION_PASSPHRASE');
+			if (v) return v;
+		}
+	} catch {}
+	if (typeof process !== 'undefined' && process.env) {
+		const v = process.env['ENCRYPTION_PASSPHRASE'];
+		if (v) return v;
+	}
+	throw new Error('ENCRYPTION_PASSPHRASE is not set');
+}
+
+function utf8Encode(input: string): Uint8Array {
+	return new TextEncoder().encode(input);
+}
+
+function utf8Decode(bytes: ArrayBuffer): string {
+	return new TextDecoder().decode(bytes);
+}
+
+async function deriveKey(
+	passphrase: string,
+	salt: Uint8Array,
+): Promise<CryptoKey> {
+	const crypto = getCrypto();
+	const keyMaterial = await crypto.subtle.importKey(
+		'raw',
+		utf8Encode(passphrase).buffer as ArrayBuffer,
+		{name: 'PBKDF2'},
+		false,
+		['deriveKey'],
+	);
+	return crypto.subtle.deriveKey(
+		{
+			name: 'PBKDF2',
+			// deno dom types can be picky about BufferSource
+			salt: salt.buffer as ArrayBuffer,
+			iterations: 100_000,
+			hash: 'SHA-256',
+		},
+		keyMaterial,
+		{name: 'AES-GCM', length: 256},
+		false,
+		['encrypt', 'decrypt'],
+	);
+}
+
+function b64(bytes: ArrayBuffer | Uint8Array): string {
+	const arr = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+	// Browser and Deno have btoa on strings; Node 18 has Buffer
+	const maybeBuffer = (globalThis as any).Buffer as
+		| {from: (data: Uint8Array, encoding?: string) => any}
+		| undefined;
+	if (maybeBuffer) {
+		return maybeBuffer.from(arr).toString('base64');
+	}
+	let binary = '';
+	for (let i = 0; i < arr.byteLength; i++)
+		binary += String.fromCharCode(arr[i]);
+	// @ts-ignore
+	return btoa(binary);
+}
+
+function fromB64(data: string): Uint8Array {
+	const maybeBuffer = (globalThis as any).Buffer as
+		| {from: (data: string, encoding: string) => any}
+		| undefined;
+	if (maybeBuffer) {
+		return new Uint8Array(maybeBuffer.from(data, 'base64'));
+	}
+	// @ts-ignore
+	const binary = atob(data);
+	const arr = new Uint8Array(binary.length);
+	for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+	return arr;
+}
+
+export function isEncryptedSecret(value: string): boolean {
+	return typeof value === 'string' && value.startsWith('enc.v1.');
+}
+
+export async function encryptSecret(plaintext: string): Promise<string> {
+	const crypto = getCrypto();
+	const passphrase = getPassphrase();
+	const salt = new Uint8Array(16);
+	crypto.getRandomValues(salt);
+	const key = await deriveKey(passphrase, salt);
+	const iv = new Uint8Array(12);
+	crypto.getRandomValues(iv);
+	const ct = await crypto.subtle.encrypt(
+		{name: 'AES-GCM', iv: iv.buffer as ArrayBuffer},
+		key,
+		utf8Encode(plaintext).buffer as ArrayBuffer,
+	);
+	return `enc.v1.${b64(salt)}.${b64(iv)}.${b64(ct)}`;
+}
+
+export async function decryptSecret(encoded: string): Promise<string> {
+	if (!isEncryptedSecret(encoded)) return encoded;
+	const parts = encoded.split('.');
+	if (parts.length !== 5) throw new Error('Invalid encrypted secret format');
+	const [, , saltB64, ivB64, ctB64] = parts;
+	const salt = fromB64(saltB64);
+	const iv = fromB64(ivB64);
+	const ct = fromB64(ctB64);
+	const key = await deriveKey(getPassphrase(), salt);
+	const pt = await getCrypto().subtle.decrypt(
+		{name: 'AES-GCM', iv: iv.buffer as ArrayBuffer},
+		key,
+		ct.buffer as ArrayBuffer,
+	);
+	return utf8Decode(pt);
+}
+
+export function maskSecret(value?: string): string | undefined {
+	if (!value) return undefined;
+	if (!isEncryptedSecret(value)) {
+		const tail = value.slice(-4);
+		return `****${tail}`;
+	}
+	// Use ciphertext tail to avoid decryption
+	const parts = value.split('.');
+	const tailB64 = parts[4] || '';
+	const tail = tailB64.slice(-4);
+	return `****${tail}`;
 }

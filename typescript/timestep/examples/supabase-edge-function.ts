@@ -19,6 +19,7 @@ import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
 import {
 	Context,
 	TimestepAIAgentExecutor,
+	getModelProvider,
 	getVersion,
 	handleAgentRequest,
 	listAgents,
@@ -34,7 +35,7 @@ import {
 	type ModelProvider,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.182000';
+} from 'npm:@timestep-ai/timestep@2025.9.182228';
 
 /**
  * Supabase Agent Repository Implementation
@@ -51,7 +52,7 @@ class SupabaseAgentRepository implements Repository<Agent, string> {
 
 		if (agents.length === 0) {
 			const {getDefaultAgents} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182000'
+				'npm:@timestep-ai/timestep@2025.9.182228'
 			);
 			const defaultAgents = getDefaultAgents();
 			try {
@@ -202,11 +203,22 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 
 		if (error) throw new Error(`Failed to list MCP servers: ${error.message}`);
 
-		const servers = data || [];
+		const servers = (data || []).map((row: any) => {
+			const env = row.env || {};
+			const enabled = row.disabled === true ? false : row.enabled ?? true;
+			return {
+				id: row.id,
+				name: row.name,
+				description: row.description ?? row.name,
+				serverUrl: env.server_url ?? row.server_url ?? '',
+				enabled,
+				authToken: env.auth_token ?? row.auth_token,
+			} as McpServer;
+		});
 
 		if (servers.length === 0) {
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182000'
+				'npm:@timestep-ai/timestep@2025.9.182228'
 			);
 			const defaultServers = getDefaultMcpServers(this.baseUrl);
 			try {
@@ -241,7 +253,32 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 	}
 
 	async save(server: McpServer): Promise<void> {
-		const {error} = await this.supabase.from('mcp_servers').upsert([server]);
+		// Persist server using snake_case and env JSONB for flexible fields
+		const toSave: any = {
+			id: server.id,
+			name: server.name,
+			description: (server as any).description ?? server.name,
+			// keep disabled/enabled compatibility flags
+			disabled: server.enabled === false,
+			enabled: server.enabled !== false,
+			env: {},
+		};
+		const {isEncryptedSecret, encryptSecret} = await import(
+			'npm:@timestep-ai/timestep@2025.9.182228'
+		);
+		if ((server as any).serverUrl) {
+			toSave.env.server_url = (server as any).serverUrl;
+		}
+		if ((server as any).authToken !== undefined) {
+			let token = (server as any).authToken as string | undefined;
+			if (token && !isEncryptedSecret(token)) {
+				try {
+					token = await encryptSecret(token);
+				} catch {}
+			}
+			toSave.env.auth_token = token ?? null;
+		}
+		const {error} = await this.supabase.from('mcp_servers').upsert([toSave]);
 		if (error) throw new Error(`Failed to save MCP server: ${error.message}`);
 	}
 
@@ -280,11 +317,17 @@ class SupabaseModelProviderRepository
 		if (error)
 			throw new Error(`Failed to list model providers: ${error.message}`);
 
-		const providers = data || [];
+		const providers = (data || []).map((row: any) => ({
+			id: row.id,
+			provider: row.provider,
+			apiKey: row.api_key,
+			baseUrl: row.base_url,
+			modelsUrl: row.models_url,
+		}));
 
 		if (providers.length === 0) {
 			const {getDefaultModelProviders} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182000'
+				'npm:@timestep-ai/timestep@2025.9.182228'
 			);
 			const defaultProviders = getDefaultModelProviders();
 			try {
@@ -319,9 +362,28 @@ class SupabaseModelProviderRepository
 	}
 
 	async save(provider: ModelProvider): Promise<void> {
+		// Map to snake_case; encrypt apiKey if provided
+		const toSave: any = {
+			id: provider.id,
+			provider: provider.provider,
+			base_url: (provider as any).baseUrl ?? (provider as any).base_url,
+			models_url: (provider as any).modelsUrl ?? (provider as any).models_url,
+		};
+		const {isEncryptedSecret, encryptSecret} = await import(
+			'npm:@timestep-ai/timestep@2025.9.182228'
+		);
+		if ((provider as any).apiKey !== undefined) {
+			let key = (provider as any).apiKey as string | undefined;
+			if (key && !isEncryptedSecret(key)) {
+				try {
+					key = await encryptSecret(key);
+				} catch {}
+			}
+			toSave.api_key = key ?? null;
+		}
 		const {error} = await this.supabase
 			.from('model_providers')
-			.upsert([provider]);
+			.upsert([toSave]);
 
 		if (error)
 			throw new Error(`Failed to save model provider: ${error.message}`);
@@ -493,6 +555,7 @@ Deno.serve({port}, async (request: Request) => {
 						'/mcp_servers/{serverId}',
 						'/models',
 						'/model_providers',
+						'/model_providers/{providerId}',
 						'/tools',
 						'/traces',
 						'/version',
@@ -569,6 +632,63 @@ Deno.serve({port}, async (request: Request) => {
 			return new Response(JSON.stringify(result.data), {status: 200, headers});
 		}
 
+		// Get or update a specific model provider by ID
+		const modelProviderMatch = cleanPath.match(/^\/model_providers\/([^\/]+)$/);
+		if (modelProviderMatch) {
+			const providerId = modelProviderMatch[1];
+			if (request.method === 'PUT') {
+				try {
+					const body = await request.json().catch(() => ({}));
+					const provider = {
+						...(body || {}),
+						id: providerId,
+					} as ModelProvider;
+					await repositories.modelProviders.save(provider);
+					return new Response(JSON.stringify(provider), {
+						status: 200,
+						headers: {...headers, 'Content-Type': 'application/json'},
+					});
+				} catch (error) {
+					return new Response(
+						JSON.stringify({
+							error: 'Failed to save model provider',
+							message: error instanceof Error ? error.message : 'Unknown error',
+							providerId,
+						}),
+						{status: 500, headers},
+					);
+				}
+			}
+
+			if (request.method === 'GET') {
+				try {
+					const provider = await getModelProvider(providerId, repositories);
+					if (!provider) {
+						return new Response(
+							JSON.stringify({
+								error: `Model provider ${providerId} not found`,
+								providerId,
+							}),
+							{status: 404, headers},
+						);
+					}
+					return new Response(JSON.stringify(provider), {
+						status: 200,
+						headers: {...headers, 'Content-Type': 'application/json'},
+					});
+				} catch (error) {
+					return new Response(
+						JSON.stringify({
+							error: 'Internal server error',
+							message: error instanceof Error ? error.message : 'Unknown error',
+							providerId,
+						}),
+						{status: 500, headers},
+					);
+				}
+			}
+		}
+
 		if (cleanPath === '/models') {
 			const result = await listModels(repositories);
 			return new Response(JSON.stringify(result.data), {status: 200, headers});
@@ -602,7 +722,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// Get tool information from the MCP server
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182000'
+					'npm:@timestep-ai/timestep@2025.9.182228'
 				);
 
 				// First, get the list of tools from the server
@@ -704,7 +824,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				const [serverId, toolName] = parts;
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182000'
+					'npm:@timestep-ai/timestep@2025.9.182228'
 				);
 
 				const result = await handleMcpServerRequest(
@@ -747,7 +867,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182000'
+					'npm:@timestep-ai/timestep@2025.9.182228'
 				);
 
 				if (request.method === 'POST') {
@@ -763,9 +883,34 @@ Deno.serve({port}, async (request: Request) => {
 					});
 				}
 
-				// GET request - health check
+				if (request.method === 'PUT') {
+					try {
+						const body = await request.json().catch(() => ({}));
+						const server = {
+							...(body || {}),
+							id: serverId,
+						} as McpServer;
+						await repositories.mcpServers.save(server);
+						return new Response(JSON.stringify(server), {
+							status: 200,
+							headers: {...headers, 'Content-Type': 'application/json'},
+						});
+					} catch (error) {
+						return new Response(
+							JSON.stringify({
+								error: 'Failed to save MCP server',
+								message:
+									error instanceof Error ? error.message : 'Unknown error',
+								serverId,
+							}),
+							{status: 500, headers},
+						);
+					}
+				}
+
+				// GET request - return full MCP server record
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182000'
+					'npm:@timestep-ai/timestep@2025.9.182228'
 				);
 				const server = await getMcpServer(serverId, repositories);
 
@@ -778,15 +923,10 @@ Deno.serve({port}, async (request: Request) => {
 					);
 				}
 
-				return new Response(
-					JSON.stringify({
-						status: 'healthy',
-						server: server.name,
-						serverId: serverId,
-						enabled: server.enabled,
-					}),
-					{status: 200, headers},
-				);
+				return new Response(JSON.stringify(server), {
+					status: 200,
+					headers: {...headers, 'Content-Type': 'application/json'},
+				});
 			} catch (error) {
 				console.error(
 					`Error handling MCP server request for ${serverId}:`,
@@ -941,6 +1081,9 @@ console.log(
 console.log('  - GET /mcp_servers/{serverId} - MCP server health');
 console.log(
 	'  - GET /model_providers - List model providers (using SupabaseModelProviderRepository)',
+);
+console.log(
+	'  - GET /model_providers/{providerId} - Get a specific model provider',
 );
 console.log(
 	'  - GET /models - List models (via SupabaseModelProviderRepository)',

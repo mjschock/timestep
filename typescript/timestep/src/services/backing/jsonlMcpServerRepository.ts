@@ -36,6 +36,21 @@ export class JsonlMcpServerRepository
 		return server.id;
 	}
 
+	override async save(server: McpServer): Promise<void> {
+		const toSave: McpServer = {...server};
+		if (toSave.authToken) {
+			const {isEncryptedSecret, encryptSecret} = await import('../../utils.js');
+			if (!isEncryptedSecret(toSave.authToken)) {
+				try {
+					toSave.authToken = await encryptSecret(toSave.authToken);
+				} catch (error) {
+					console.warn('Failed to encrypt MCP server auth token:', error);
+				}
+			}
+		}
+		return super.save(toSave);
+	}
+
 	override async list(): Promise<McpServer[]> {
 		try {
 			const servers = await super.list();

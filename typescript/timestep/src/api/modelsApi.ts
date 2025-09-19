@@ -83,11 +83,21 @@ export async function listModels(
 				'Content-Type': 'application/json',
 			};
 
-			if (provider.api_key) {
-				headers['Authorization'] = `Bearer ${provider.api_key}`;
+			let token = provider.apiKey as string | undefined;
+			if (!token && (provider as any).api_key)
+				token = (provider as any).api_key;
+			if (token) {
+				const {isEncryptedSecret, decryptSecret} = await import('../utils.js');
+				if (isEncryptedSecret(token)) {
+					try {
+						token = await decryptSecret(token);
+					} catch {}
+				}
+				headers['Authorization'] = `Bearer ${token}`;
 			}
 
-			const response = await fetch(provider.models_url, {headers});
+			const url = (provider as any).modelsUrl || (provider as any).models_url;
+			const response = await fetch(url, {headers});
 
 			if (response.ok) {
 				const data = await response.json();

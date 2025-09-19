@@ -37,6 +37,7 @@ export class JsonlModelProviderRepository
 		try {
 			const providers = await super.list();
 			if (providers.length > 0) {
+				// Mask secrets at rest if any plaintext values exist; migrate to encrypted on next save elsewhere
 				console.log(
 					`🤖 Loaded ${providers.length} model providers from ${this.filePath}`,
 				);
@@ -66,6 +67,22 @@ export class JsonlModelProviderRepository
 		}
 
 		return defaultProviders;
+	}
+
+	override async save(provider: ModelProvider): Promise<void> {
+		const toSave: ModelProvider = {...provider};
+		if ((toSave as any).apiKey) {
+			const {isEncryptedSecret, encryptSecret} = await import('../../utils.js');
+			const value = (toSave as any).apiKey as string;
+			if (!isEncryptedSecret(value)) {
+				try {
+					(toSave as any).apiKey = await encryptSecret(value);
+				} catch (error) {
+					console.warn('Failed to encrypt model provider apiKey:', error);
+				}
+			}
+		}
+		return super.save(toSave);
 	}
 
 	/**

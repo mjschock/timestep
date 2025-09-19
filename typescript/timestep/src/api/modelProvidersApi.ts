@@ -19,12 +19,12 @@ export interface ModelProvider {
 	id: string;
 	/** The provider name */
 	provider: string;
-	/** API key for the provider */
-	api_key?: string;
+	/** API key for the provider (masked in API responses) */
+	apiKey?: string;
 	/** Base URL for the provider */
-	base_url: string;
+	baseUrl: string;
 	/** Models endpoint URL for the provider */
-	models_url: string;
+	modelsUrl: string;
 }
 
 /**

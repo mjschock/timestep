@@ -2,6 +2,12 @@
 
 // Core functions
 export {getTimestepPaths, getVersion} from './utils.js';
+export {
+	encryptSecret,
+	decryptSecret,
+	isEncryptedSecret,
+	maskSecret,
+} from './utils.js';
 export {listModels} from './api/modelsApi.js';
 export {listContexts} from './api/contextsApi.js';
 export {listTraces} from './api/tracesApi.js';
