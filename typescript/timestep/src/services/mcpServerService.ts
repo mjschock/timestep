@@ -749,6 +749,7 @@ export class McpServerService {
 		try {
 			const headers: Record<string, string> = {
 				'Content-Type': 'application/json',
+				Accept: 'application/json, text/event-stream',
 			};
 
 			if (server.authToken) {

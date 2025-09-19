@@ -6,6 +6,7 @@
  */
 
 import {listAllMcpTools} from '../utils.js';
+import {DefaultRepositoryContainer} from '../services/backing/repositoryContainer.js';
 
 /**
  * Represents a tool available in the system
@@ -46,7 +47,7 @@ export interface ListToolsResponse {
  * @returns Promise resolving to the list of tools
  */
 export async function listTools(
-	repositories: any = {},
+	repositories: any = new DefaultRepositoryContainer(),
 ): Promise<ListToolsResponse> {
 	try {
 		const mcpTools = await listAllMcpTools(repositories);
