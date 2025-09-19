@@ -229,6 +229,16 @@ export async function listAllMcpTools(mcpServerRepository?: any): Promise<
 			continue;
 		}
 
+		// Skip non-built-in servers without a valid URL
+		const isBuiltin = server.id === builtinServer.id;
+		if (!isBuiltin) {
+			const url = (server as any).serverUrl as string | undefined;
+			if (!url || url.trim() === '') {
+				console.warn(`Skipping MCP server ${server.id} - missing serverUrl`);
+				continue;
+			}
+		}
+
 		try {
 			let mcpTools: any;
 
