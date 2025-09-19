@@ -20,6 +20,7 @@ import {
 	Context,
 	TimestepAIAgentExecutor,
 	getModelProvider,
+	maskSecret,
 	getVersion,
 	handleAgentRequest,
 	listAgents,
@@ -35,7 +36,7 @@ import {
 	type ModelProvider,
 	type Repository,
 	type RepositoryContainer,
-} from 'npm:@timestep-ai/timestep@2025.9.182228';
+} from 'npm:@timestep-ai/timestep@2025.9.182232';
 
 /**
  * Supabase Agent Repository Implementation
@@ -52,7 +53,7 @@ class SupabaseAgentRepository implements Repository<Agent, string> {
 
 		if (agents.length === 0) {
 			const {getDefaultAgents} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182228'
+				'npm:@timestep-ai/timestep@2025.9.182232'
 			);
 			const defaultAgents = getDefaultAgents();
 			try {
@@ -218,7 +219,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 
 		if (servers.length === 0) {
 			const {getDefaultMcpServers} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182228'
+				'npm:@timestep-ai/timestep@2025.9.182232'
 			);
 			const defaultServers = getDefaultMcpServers(this.baseUrl);
 			try {
@@ -264,7 +265,7 @@ class SupabaseMcpServerRepository implements Repository<McpServer, string> {
 			env: {},
 		};
 		const {isEncryptedSecret, encryptSecret} = await import(
-			'npm:@timestep-ai/timestep@2025.9.182228'
+			'npm:@timestep-ai/timestep@2025.9.182232'
 		);
 		if ((server as any).serverUrl) {
 			toSave.env.server_url = (server as any).serverUrl;
@@ -327,7 +328,7 @@ class SupabaseModelProviderRepository
 
 		if (providers.length === 0) {
 			const {getDefaultModelProviders} = await import(
-				'npm:@timestep-ai/timestep@2025.9.182228'
+				'npm:@timestep-ai/timestep@2025.9.182232'
 			);
 			const defaultProviders = getDefaultModelProviders();
 			try {
@@ -370,7 +371,7 @@ class SupabaseModelProviderRepository
 			models_url: (provider as any).modelsUrl ?? (provider as any).models_url,
 		};
 		const {isEncryptedSecret, encryptSecret} = await import(
-			'npm:@timestep-ai/timestep@2025.9.182228'
+			'npm:@timestep-ai/timestep@2025.9.182232'
 		);
 		if ((provider as any).apiKey !== undefined) {
 			let key = (provider as any).apiKey as string | undefined;
@@ -624,12 +625,29 @@ Deno.serve({port}, async (request: Request) => {
 
 		if (cleanPath === '/mcp_servers') {
 			const result = await listMcpServers(repositories);
-			return new Response(JSON.stringify(result.data), {status: 200, headers});
+			const masked = result.data.map((s: any) => ({
+				id: s.id,
+				name: s.name,
+				description: s.description,
+				serverUrl: s.serverUrl,
+				enabled: s.enabled,
+				hasAuthToken: !!s.authToken,
+				maskedAuthToken: maskSecret(s.authToken),
+			}));
+			return new Response(JSON.stringify(masked), {status: 200, headers});
 		}
 
 		if (cleanPath === '/model_providers') {
 			const result = await listModelProviders(repositories);
-			return new Response(JSON.stringify(result.data), {status: 200, headers});
+			const masked = result.data.map((p: any) => ({
+				id: p.id,
+				provider: p.provider,
+				baseUrl: p.baseUrl ?? p.base_url,
+				modelsUrl: p.modelsUrl ?? p.models_url,
+				hasApiKey: !!(p.apiKey ?? p.api_key),
+				maskedApiKey: maskSecret(p.apiKey ?? p.api_key),
+			}));
+			return new Response(JSON.stringify(masked), {status: 200, headers});
 		}
 
 		// Get or update a specific model provider by ID
@@ -672,7 +690,20 @@ Deno.serve({port}, async (request: Request) => {
 							{status: 404, headers},
 						);
 					}
-					return new Response(JSON.stringify(provider), {
+					const responseBody = {
+						id: provider.id,
+						provider: provider.provider,
+						baseUrl: (provider as any).baseUrl ?? (provider as any).base_url,
+						modelsUrl:
+							(provider as any).modelsUrl ?? (provider as any).models_url,
+						hasApiKey: !!(
+							(provider as any).apiKey ?? (provider as any).api_key
+						),
+						maskedApiKey: maskSecret(
+							(provider as any).apiKey ?? (provider as any).api_key,
+						),
+					};
+					return new Response(JSON.stringify(responseBody), {
 						status: 200,
 						headers: {...headers, 'Content-Type': 'application/json'},
 					});
@@ -722,7 +753,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// Get tool information from the MCP server
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182228'
+					'npm:@timestep-ai/timestep@2025.9.182232'
 				);
 
 				// First, get the list of tools from the server
@@ -824,7 +855,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				const [serverId, toolName] = parts;
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182228'
+					'npm:@timestep-ai/timestep@2025.9.182232'
 				);
 
 				const result = await handleMcpServerRequest(
@@ -867,7 +898,7 @@ Deno.serve({port}, async (request: Request) => {
 
 			try {
 				const {handleMcpServerRequest} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182228'
+					'npm:@timestep-ai/timestep@2025.9.182232'
 				);
 
 				if (request.method === 'POST') {
@@ -910,7 +941,7 @@ Deno.serve({port}, async (request: Request) => {
 
 				// GET request - return full MCP server record
 				const {getMcpServer} = await import(
-					'npm:@timestep-ai/timestep@2025.9.182228'
+					'npm:@timestep-ai/timestep@2025.9.182232'
 				);
 				const server = await getMcpServer(serverId, repositories);
 
@@ -923,7 +954,17 @@ Deno.serve({port}, async (request: Request) => {
 					);
 				}
 
-				return new Response(JSON.stringify(server), {
+				const responseBody = {
+					id: server.id,
+					name: server.name,
+					description: (server as any).description,
+					serverUrl: (server as any).serverUrl,
+					enabled: (server as any).enabled,
+					hasAuthToken: !!(server as any).authToken,
+					maskedAuthToken: maskSecret((server as any).authToken),
+				};
+
+				return new Response(JSON.stringify(responseBody), {
 					status: 200,
 					headers: {...headers, 'Content-Type': 'application/json'},
 				});
