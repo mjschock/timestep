@@ -1,6 +1,6 @@
 {
 	"name": "@timestep-ai/timestep",
-	"version": "2025.9.191823",
+	"version": "2025.9.191829",
 	"description": "A CLI tool built with Ink and React",
 	"keywords": [
 		"cli",
@@ -9,14 +9,14 @@
 		"terminal",
 		"interactive"
 	],
-	"author": "Your Name <your.email@example.com>",
-	"homepage": "https://github.com/yourusername/timestep#readme",
+	"author": "Mike Schock <m@mjschock.com>",
+	"homepage": "https://github.com/Timestep-AI/timestep#readme",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/yourusername/timestep.git"
+		"url": "git+https://github.com/Timestep-AI/timestep.git"
 	},
 	"bugs": {
-		"url": "https://github.com/yourusername/timestep/issues"
+		"url": "https://github.com/Timestep-AI/timestep/issues"
 	},
 	"license": "MIT",
 	"main": "dist/index.js",
