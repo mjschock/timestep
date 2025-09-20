@@ -73,6 +73,6 @@ publish:
 	cd typescript/timestep/examples && deno run --allow-read --allow-write --allow-run check-examples.ts
 	make test-e2e
 	git add .
-	git commit -m "Bump version to $(cat typescript/timestep/package.json | jq -r '.version')"
+	git commit -m "Bump version to $$(grep '\"version\"' typescript/timestep/package.json | sed 's/.*\"version\": *\"\\([^\"]*\\)\".*/\\1/')"
 	git push
 	cd typescript/timestep && npm publish

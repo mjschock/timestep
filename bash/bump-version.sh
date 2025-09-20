@@ -55,7 +55,7 @@ if [[ "$CURRENT_VERSION" == "$NEW_VERSION" ]]; then
         echo
         if [[ ! $REPLY =~ ^[Yy]$ ]]; then
             echo -e "${BLUE}🛑 Version bump cancelled${NC}"
-            exit 0
+            exit 1
         fi
     fi
 fi
